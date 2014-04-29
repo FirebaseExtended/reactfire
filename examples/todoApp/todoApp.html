@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>reactFire Example</title>
+
+    <!-- React JS -->
+    <script src="http://fb.me/react-0.10.0.min.js"></script>
+    <script src="http://fb.me/JSXTransformer-0.10.0.js"></script>
+
+    <!-- Firebase JS -->
+    <script src="https://cdn.firebase.com/js/client/1.0.11/firebase.js"></script>
+
+    <!-- reactFire Mixin -->
+    <script type="text/jsx" src="../../reactFireMixin.js"></script>
+
+    <!-- Custom JS -->
+    <script type="text/jsx" src="js/todoListOriginal.js"></script>
+    <script type="text/jsx" src="js/todoListFirebaseExplicit.js"></script>
+    <script type="text/jsx" src="js/todoListFirebaseImplicit.js"></script>
+  </head>
+  <body>
+    <h1>Plain React</h1>
+    <div id="todoList1"></div>
+
+    <h1>React with explicit Firebase calls</h1>
+    <div id="todoList2"></div>
+
+    <h1>React with reactFire mixin</h1>
+    <div id="todoList3"></div>
+  </body>
+</html>
