@@ -1,0 +1,21 @@
+{
+  "name": "ReactFire",
+  "version": "0.0.0",
+  "homepage": "https://github.com/firebase/ReactFire",
+  "authors": [
+    "jacobawenger <jacob@firebase.com>"
+  ],
+  "description": "Firebase mixin for ReactJS",
+  "main": "ReactFireMixin.js",
+  "keywords": [
+    "react",
+    "firebase"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "examples",
+    "node_modules",
+    "bower_components"
+  ]
+}
