@@ -7,15 +7,22 @@ persistent, realtime backend to effortlessly keep all of your clients in sync!
 
 Read our [blog post](https://firebase.com/blog/2014-05-01-using-firebase-with-react.html) on using Firebase with React and check out our [live Todo app demo](https://reactfiretodoapp.firebaseapp.com/) to get started!
 
-API Reference
--------------
-To add the ReactFireMixin to your component, add the ReactFireMixin's JavaScript file to your project and then update the component's mixins property:
+Usage
+-----
+The ReactFireMixin can be added to you project in two ways:
+
+* Manually copy ReactFireMixin.js from GitHub to you local directory.
+* Use bower: `bower install ReactFire`
+
+To use the ReactFireMixin in a React component, update the component's mixins property:
 
     var ExampleComponent = React.createClass({
       mixins: [ReactFireMixin],
       ...
     });
 
+API Reference
+-------------
 ###bindAsArray(firebaseRef, bindVar)
 
 Creates a binding between Firebase and the inputted bind variable as an array. The Firebase
