@@ -1,0 +1,13 @@
+#demoContainer {
+    width: 950px;
+    margin: auto;
+}
+
+#demoContainer h1 {
+    text-align: center;
+}
+
+.todoAppContainer {
+    float: left;
+    width: 300px;
+}

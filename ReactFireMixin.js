@@ -1,4 +1,4 @@
-var reactFireMixin = {
+var ReactFireMixin = {
   /********************/
   /*  MIXIN LIFETIME  */
   /********************/
@@ -19,12 +19,12 @@ var reactFireMixin = {
   /*  BINDING  */
   /*************/
   /* Creates a binding between Firebase and the inputted bind variable as an array */
-  bindToArray: function(firebaseRef, bindVar) {
+  bindAsArray: function(firebaseRef, bindVar) {
     this._bind(firebaseRef, bindVar, true);
   },
 
   /* Creates a binding between Firebase and the inputted bind variable as an object */
-  bindToObject: function(firebaseRef, bindVar) {
+  bindAsObject: function(firebaseRef, bindVar) {
     this._bind(firebaseRef, bindVar, false);
   },
 

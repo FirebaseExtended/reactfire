@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-var TodoList2 = React.createClass({
+var TodoList3 = React.createClass({
   render: function() {
     var createItem = function(item) {
       return <li>{item.text}</li>;
@@ -8,24 +8,15 @@ var TodoList2 = React.createClass({
   }
 });
 
-var TodoApp2 = React.createClass({
+var TodoApp3 = React.createClass({
+  mixins: [ReactFireMixin],
+
   getInitialState: function() {
-    this.items = [];
     return {items: [], text: ""};
   },
 
   componentWillMount: function() {
-    this.firebaseRef = new Firebase("https://reactFireTodoList.firebaseio-demo.com/items/");
-    this.firebaseRef.on("child_added", function(dataSnapshot) {
-      this.items.push(dataSnapshot.val());
-      this.setState({
-        items: this.items
-      });
-    }.bind(this));
-  },
-
-  componentWillUnmount: function() {
-    this.firebaseRef.off();
+    this.bindAsArray(new Firebase("https://ReactFireTodoApp.firebaseio.com/items/"), "items");
   },
 
   onChange: function(e) {
@@ -34,7 +25,7 @@ var TodoApp2 = React.createClass({
 
   handleSubmit: function(e) {
     e.preventDefault();
-    this.firebaseRef.push({
+    this.firebaseRefs["items"].push({
       text: this.state.text
     });
     this.setState({text: ""});
@@ -43,7 +34,7 @@ var TodoApp2 = React.createClass({
   render: function() {
     return (
       <div>
-        <TodoList2 items={this.state.items} />
+        <TodoList3 items={this.state.items} />
         <form onSubmit={this.handleSubmit}>
           <input onChange={this.onChange} value={this.state.text} />
           <button>{"Add #" + (this.state.items.length + 1)}</button>
@@ -53,4 +44,4 @@ var TodoApp2 = React.createClass({
   }
 });
 
-React.renderComponent(<TodoApp2 />, document.getElementById("todoList2"));
+React.renderComponent(<TodoApp3 />, document.getElementById("todoApp3"));

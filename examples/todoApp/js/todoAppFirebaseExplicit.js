@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-var TodoList1 = React.createClass({
+var TodoList2 = React.createClass({
   render: function() {
     var createItem = function(item) {
       return <li>{item.text}</li>;
@@ -8,9 +8,24 @@ var TodoList1 = React.createClass({
   }
 });
 
-var TodoApp1 = React.createClass({
+var TodoApp2 = React.createClass({
   getInitialState: function() {
+    this.items = [];
     return {items: [], text: ""};
+  },
+
+  componentWillMount: function() {
+    this.firebaseRef = new Firebase("https://ReactFireTodoApp.firebaseio.com/items/");
+    this.firebaseRef.on("child_added", function(dataSnapshot) {
+      this.items.push(dataSnapshot.val());
+      this.setState({
+        items: this.items
+      });
+    }.bind(this));
+  },
+
+  componentWillUnmount: function() {
+    this.firebaseRef.off();
   },
 
   onChange: function(e) {
@@ -19,19 +34,16 @@ var TodoApp1 = React.createClass({
 
   handleSubmit: function(e) {
     e.preventDefault();
-    var nextItems = this.state.items.concat([{
+    this.firebaseRef.push({
       text: this.state.text
-    }]);
-    this.setState({
-      items: nextItems,
-      text: ""
     });
+    this.setState({text: ""});
   },
 
   render: function() {
     return (
       <div>
-        <TodoList1 items={this.state.items} />
+        <TodoList2 items={this.state.items} />
         <form onSubmit={this.handleSubmit}>
           <input onChange={this.onChange} value={this.state.text} />
           <button>{"Add #" + (this.state.items.length + 1)}</button>
@@ -41,4 +53,4 @@ var TodoApp1 = React.createClass({
   }
 });
 
-React.renderComponent(<TodoApp1 />, document.getElementById("todoList1"));
+React.renderComponent(<TodoApp2 />, document.getElementById("todoApp2"));

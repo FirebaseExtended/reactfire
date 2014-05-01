@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>reactFire Example</title>
+
+    <!-- React JS -->
+    <!--<script src="https://fb.me/react-0.10.0.min.js"></script>
+    <script src="https://fb.me/JSXTransformer-0.10.0.js"></script>-->
+    <script src="react/react-0.10.0.min.js"></script>
+    <script src="react/JSXTransformer-0.10.0.js"></script>
+
+    <!-- Firebase JS -->
+    <script src="https://cdn.firebase.com/js/client/1.0.11/firebase.js"></script>
+
+    <!-- reactFire Mixin -->
+    <script src="ReactFireMixin.js"></script>
+
+    <!-- Custom JS -->
+    <script type="text/jsx" src="js/todoAppOriginal.js"></script>
+    <script type="text/jsx" src="js/todoAppFirebaseExplicit.js"></script>
+    <script type="text/jsx" src="js/todoAppFirebaseImplicit.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+
+    <div id="demoContainer">
+    <h1>ReactFireMixin Demo</h1>
+        <p>
+            ReactFireMixin is a <a href="http://facebook.github.io/react/">ReactJS</a> mixin which allows for easy integration of <a href="http://www.firebase.com/">Firebase</a> into your React apps. See how this was made by reading the <a href="https://firebase.com/blog/2014-05-01-using-firebase-with-react.html">blog post</a> or checking out the <a href="https://github.com/firebase/reactFire">source code on GitHub</a>.
+        </p>
+
+        <div class="todoAppContainer">
+            <h2>Plain React</h2>
+            <div id="todoApp1"></div>
+        </div>
+
+        <div class="todoAppContainer">
+            <h2>React + Plain Firebase</h2>
+            <div id="todoApp2"></div>
+        </div>
+
+        <div class="todoAppContainer">
+            <h2>React + ReactFireMixin</h2>
+            <div id="todoApp3"></div>
+        </div>
+    </div>
+  </body>
+</html>

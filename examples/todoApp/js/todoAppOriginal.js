@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-var TodoList3 = React.createClass({
+var TodoList1 = React.createClass({
   render: function() {
     var createItem = function(item) {
       return <li>{item.text}</li>;
@@ -8,15 +8,9 @@ var TodoList3 = React.createClass({
   }
 });
 
-var TodoApp3 = React.createClass({
-  mixins: [reactFireMixin],
-
+var TodoApp1 = React.createClass({
   getInitialState: function() {
     return {items: [], text: ""};
-  },
-
-  componentWillMount: function() {
-    this.bindToArray(new Firebase("https://reactFireTodoList.firebaseio-demo.com/items/"), "items");
   },
 
   onChange: function(e) {
@@ -25,16 +19,19 @@ var TodoApp3 = React.createClass({
 
   handleSubmit: function(e) {
     e.preventDefault();
-    this.firebaseRefs["items"].push({
+    var nextItems = this.state.items.concat([{
       text: this.state.text
+    }]);
+    this.setState({
+      items: nextItems,
+      text: ""
     });
-    this.setState({text: ""});
   },
 
   render: function() {
     return (
       <div>
-        <TodoList3 items={this.state.items} />
+        <TodoList1 items={this.state.items} />
         <form onSubmit={this.handleSubmit}>
           <input onChange={this.onChange} value={this.state.text} />
           <button>{"Add #" + (this.state.items.length + 1)}</button>
@@ -44,4 +41,4 @@ var TodoApp3 = React.createClass({
   }
 });
 
-React.renderComponent(<TodoApp3 />, document.getElementById("todoList3"));
+React.renderComponent(<TodoApp1 />, document.getElementById("todoApp1"));
