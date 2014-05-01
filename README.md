@@ -1,4 +1,4 @@
-ReactFireMixin
+ReactFire
 =========
 
 ReactFireMixin is an officially supported [ReactJS](http://facebook.github.io/react/) mixin
