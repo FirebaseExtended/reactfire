@@ -22,6 +22,7 @@
   ],
   "dependencies": {
     "react": "~0.10.0",
-    "firebase": "~1.0.12"
+    "firebase": "~1.0.12",
+    "ReactFire": "~0.1.0"
   }
 }
