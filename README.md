@@ -14,7 +14,7 @@ The ReactFireMixin can be added to you project in two ways:
 * Manually copy ReactFireMixin.js from GitHub to you local directory.
 * Use bower: `bower install ReactFire`
 
-To use the ReactFireMixin in a React component, update the component's mixins property:
+To use the ReactFireMixin in a React component, add it to the component's mixins property:
 
     var ExampleComponent = React.createClass({
       mixins: [ReactFireMixin],
