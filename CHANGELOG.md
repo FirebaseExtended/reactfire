@@ -1,3 +1,9 @@
+v0.1.2
+-------------
+Release Date: 2014-05-02
+
+  * Fixed typo in bower.json
+
 v0.1.1
 -------------
 Release Date: 2014-05-02

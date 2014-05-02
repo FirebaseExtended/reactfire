@@ -1,6 +1,6 @@
 {
   "name": "ReactFire",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/firebase/ReactFire",
   "authors": [
     "jacobawenger <jacob@firebase.com>"
@@ -14,7 +14,7 @@
   "license": "MIT",
   "ignore": [
     "**/.*",
-    "./CHANGELOG.md"
+    "./CHANGELOG.md",
     "examples",
     "node_modules",
     "bower_components"
