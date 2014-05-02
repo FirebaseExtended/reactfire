@@ -53,45 +53,22 @@ var ReactFireMixin = {
   /*************/
   /*  HELPERS  */
   /*************/
-  /* Returns true if the inputted object is a number */
-  _isNumeric: function(obj) {
-    try {
-      return (((obj - 0) == obj) && (obj.length > 0));
-    } catch (e) {
-      return false;
-    } // try
-  }, // isNumeric()
-
   /* Returns true if the inputted object is a JavaScript array */
   _isArray: function(obj) {
-    if (!obj) { return false; }
-    try {
-      if (!(obj.propertyIsEnumerable("length"))
-        && (typeof obj === "object")
-        && (typeof obj.length === "number")) {
-          for (var idx in obj) {
-            if (!this._isNumeric(idx)) { return false; }
-          } // for (var idx in object)
-          return true;
-      } else {
-        return false;
-      } // if (!(obj.propertyIsEnumerable("length"))...
-    } catch (e) {
-      return false;
-    } // try
-  }, // isArray()
+    return (obj && typeof obj === "object" && obj instanceof Array);
+  },
 
-  /* Converts a Firebase list to a JavaScript array */
-  _toArray: function(list) {
-    var k, out = [];
-    if (list) {
-      if (this._isArray(list)) {
+  /* Converts a Firebase object to a JavaScript array */
+  _toArray: function(obj) {
+    var out = [];
+    if (obj) {
+      if (this._isArray(obj)) {
         out = list;
       }
-      else if (typeof(list) === "object") {
-        for (k in list) {
-          if (list.hasOwnProperty(k)) {
-            out.push(list[k]);
+      else if (typeof(obj) === "object") {
+        for (var key in obj) {
+          if (obj.hasOwnProperty(key)) {
+            out.push(obj[key]);
           }
         }
       }

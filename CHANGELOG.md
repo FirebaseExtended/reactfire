@@ -1,3 +1,9 @@
+v0.1.1
+-------------
+Release Date: 2014-05-02
+
+  * Better implementation of _isArray() and _toArray() helpers
+
 v0.1.0
 -------------
 Release Date: 2014-04-30
