@@ -25,10 +25,12 @@ var TodoApp3 = React.createClass({
 
   handleSubmit: function(e) {
     e.preventDefault();
-    this.firebaseRefs["items"].push({
-      text: this.state.text
-    });
-    this.setState({text: ""});
+    if (this.state.text) {
+      this.firebaseRefs["items"].push({
+        text: this.state.text
+      });
+      this.setState({text: ""});
+    }
   },
 
   render: function() {
