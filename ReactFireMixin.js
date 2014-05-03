@@ -63,7 +63,7 @@ var ReactFireMixin = {
     var out = [];
     if (obj) {
       if (this._isArray(obj)) {
-        out = list;
+        out = obj;
       }
       else if (typeof(obj) === "object") {
         for (var key in obj) {
