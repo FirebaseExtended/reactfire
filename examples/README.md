@@ -1,5 +1,4 @@
-ReactFire Examples
-==================
+# ReactFire Examples
 
 Have you come up with a cool example that uses the ReactFireMixin? Submit a pull request and share
 it with everyone else by putting in this /examples/ directory. Please make sure to include a README.md
