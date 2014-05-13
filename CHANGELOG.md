@@ -1,3 +1,9 @@
+v0.1.4
+-------------
+Release Date: 2014-05-13
+
+  * Added node.js support
+
 v0.1.3
 -------------
 Release Date: 2014-05-03

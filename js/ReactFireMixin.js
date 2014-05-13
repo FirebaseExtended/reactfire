@@ -84,3 +84,8 @@ var ReactFireMixin;
     }
   };
 })();
+
+/* jshint -W117 */
+if (typeof module !== "undefined") {
+  module.exports = ReactFireMixin;
+}
