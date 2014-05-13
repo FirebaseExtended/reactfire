@@ -1,5 +1,5 @@
 {
-  "name": "ReactFire",
+  "name": "reactfire",
   "description": "Firebase mixin for ReactJS",
   "main": "js/ReactFireMixin.min.js",
   "repository": {
@@ -9,7 +9,6 @@
   "bugs": {
     "url": "https://github.com/firebase/ReactFire/issues"
   },
-  "private": true,
   "licenses": [
     {
       "type": "MIT",
