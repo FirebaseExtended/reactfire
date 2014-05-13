@@ -4,12 +4,18 @@ var uglify = require("gulp-uglify");
 var extReplace = require("gulp-ext-replace");
 
 gulp.task("scripts", function() {
-  // Load the code, and process it.
   var code = gulp.src("js/ReactFireMixin.js")
+    // Lint
     .pipe(jshint())
     .pipe(jshint.reporter("jshint-stylish"))
+
+    // Minify
     .pipe(uglify())
+
+    // Change extensions
     .pipe(extReplace(".min.js"))
+
+    // Write output
     .pipe(gulp.dest("js"));
 });
 

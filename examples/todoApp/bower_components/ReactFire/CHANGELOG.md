@@ -1,6 +1,12 @@
+v0.1.4
+-------------
+Release Date: 2014-05-13
+
+  * Added node.js support
+
 v0.1.3
 -------------
-Release Date: 2014-05-02
+Release Date: 2014-05-03
 
   * Bug fix for misnamed variable in _toArray() method (submitted by @danielmahal)
   * Added gulp integration to lint, minify, and test code
