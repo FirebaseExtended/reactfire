@@ -1,7 +1,7 @@
 {
   "name": "ReactFire",
   "description": "Firebase mixin for ReactJS",
-  "main": "ReactFireMixin.js",
+  "main": "js/ReactFireMixin.min.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/firebase/ReactFire.git"
