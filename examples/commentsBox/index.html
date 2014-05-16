@@ -19,15 +19,18 @@
 
   </head>
   <body>
-        <div id="content"></div>
+  
+    <div id="content"></div>
+    
     <script type="text/jsx">
       /**
        * @jsx React.DOM
        */
       // The above declaration must remain intact at the top of the script.
 
-      var firebaseApp = "https://my-firebase-app.firebaseio.com/"
-
+      // IMPORTANT: Replace below with your Firebase app URL
+      var firebaseApp = "https://my-firebase-app.firebaseio.com/";
+  
       var converter = new Showdown.converter();
 
       var Comment = React.createClass({
@@ -78,12 +81,16 @@
           var comments = this.state.data;
           comments.push(comment);
           this.setState({data: comments});
+          
+          // Here we push the update out to Firebase
           this.firebaseRefs["data"].push(comment);
         },
         getInitialState: function() {
           return {data: []};
         },
         componentWillMount: function() {
+          // Here we bind the component to Firebase and it handles all data updates,
+          // no need to poll as in the React example.
           this.bindAsArray(new Firebase(firebaseApp + "commentBox"), "data");
         },
         render: function() {
