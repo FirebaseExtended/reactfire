@@ -26,5 +26,7 @@ Now you should be able to visit the example in the browser of your choice at [ht
 
 ## Description
 The official [React tutorial](http://facebook.github.io/react/docs/tutorial.html) is
-a great introduction to how to think in React.  This example replaces the REST-like server
+a great introduction to React.  This example replaces the REST-like server
 with Firebase and the ReactFireMixin.
+
+The ReactFireMixin allows us to strip out the polling concept as well as the JQuery AJAX calls. The mixin allows you to bind right to your Firebase data and everything is kept in sync in real-time.
