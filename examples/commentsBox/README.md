@@ -1,4 +1,4 @@
-# ReactFire CommentBox Component Example
+# CommentBox Example
 
 ## Setup Instructions
 
