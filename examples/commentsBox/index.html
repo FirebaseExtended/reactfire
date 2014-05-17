@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <title>Hello React</title>
+
+    <!-- React JS -->
+    <script src="bower_components/react/react.js"></script>
+    <script src="bower_components/react/JSXTransformer.js"></script>
+
+    <!-- Firebase JS -->
+    <script src="bower_components/firebase/firebase.js"></script>
+
+    <!-- ReactFireMixin -->
+    <script src="bower_components/ReactFire/js/ReactFireMixin.js"></script>
+
+    <!-- Markdown -->
+    <script src="bower_components/showdown/compressed/showdown.js"></script>
+
+  </head>
+  <body>
+  
+    <div id="content"></div>
+    
+    <script type="text/jsx">
+      /**
+       * @jsx React.DOM
+       */
+      // The above declaration must remain intact at the top of the script.
+
+      // IMPORTANT: Replace below with your Firebase app URL
+      var firebaseApp = "https://my-firebase-app.firebaseio.com/";
+  
+      var converter = new Showdown.converter();
+
+      var Comment = React.createClass({
+        render: function() {
+          var rawMarkup = converter.makeHtml(this.props.children.toString());
+          return (
+            <div className="comment">
+              <h2 className="commentAuthor">{this.props.author}</h2>
+              <span dangerouslySetInnerHTML={{__html: rawMarkup}} />
+            </div>
+          );
+        }
+      });
+
+      var CommentList = React.createClass({
+        render: function() {
+          var commentNodes = this.props.data.map(function (comment, index) {
+            return <Comment key={index} author={comment.author}>{comment.text}</Comment>;
+          });
+          return <div className="commentList">{commentNodes}</div>;
+        }
+      });
+
+      var CommentForm = React.createClass({
+        handleSubmit: function() {
+          var author = this.refs.author.getDOMNode().value.trim();
+          var text = this.refs.text.getDOMNode().value.trim();
+          this.props.onCommentSubmit({author: author, text: text});
+          this.refs.author.getDOMNode().value = '';
+          this.refs.text.getDOMNode().value = '';
+          return false;
+        },
+        render: function() {
+          return (
+            <form className="commentForm" onSubmit={this.handleSubmit}>
+              <input type="text" placeholder="Your name" ref="author" />
+              <input type="text" placeholder="Say something..." ref="text" />
+              <input type="submit" value="Post" />
+            </form>
+          );
+        }
+      });
+
+      var CommentBox = React.createClass({
+        mixins: [ReactFireMixin],
+
+        handleCommentSubmit: function(comment) {
+          var comments = this.state.data;
+          comments.push(comment);
+          this.setState({data: comments});
+          
+          // Here we push the update out to Firebase
+          this.firebaseRefs["data"].push(comment);
+        },
+        getInitialState: function() {
+          return {data: []};
+        },
+        componentWillMount: function() {
+          // Here we bind the component to Firebase and it handles all data updates,
+          // no need to poll as in the React example.
+          this.bindAsArray(new Firebase(firebaseApp + "commentBox"), "data");
+        },
+        render: function() {
+          return (
+            <div className="commentBox">
+              <h1>Comments</h1>
+              <CommentList data={this.state.data} />
+              <CommentForm onCommentSubmit={this.handleCommentSubmit} />
+            </div>
+          );
+        }
+      });
+
+      React.renderComponent(
+        <CommentBox />,
+        document.getElementById('content')
+      );
+
+
+    </script>
+
+  </body>
+</html>

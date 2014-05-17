@@ -1,0 +1,32 @@
+{
+  "name": "commentsBox",
+  "version": "0.1.0",
+  "homepage": "https://github.com/llad/ReactFire",
+  "authors": [
+    "Mark Woodall <mwdll@icloud.com>"
+  ],
+  "description": "react.js comment tutorial updated for ReactFire mixin",
+  "main": "index.html",
+  "keywords": [
+    "react",
+    "firebase",
+    "reactfire",
+    "mixin",
+    "tutorial"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "react": "~0.10.0",
+    "ReactFire": "~0.1.4",
+    "firebase": "~1.0.15",
+    "showdown": "~0.3.1"
+  }
+}
