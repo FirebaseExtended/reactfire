@@ -8,10 +8,11 @@ Read our [blog post](https://firebase.com/blog/2014-05-01-using-firebase-with-re
 
 ## Usage
 
-The ReactFireMixin can be added to you project in two ways:
+The ReactFireMixin can be added to you project in three ways:
 
 * Manually copy ReactFireMixin.js from GitHub to you local directory.
 * Use bower: `bower install ReactFire`
+* Use npm: `npm install reactfire`
 
 To use the ReactFireMixin in a React component, add it to the component's mixins property:
 

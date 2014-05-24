@@ -1,3 +1,9 @@
+v0.1.5
+-------------
+Release Date: 2014-05-23
+
+  * Used safe isArray() function thanks to @mjackson
+
 v0.1.4
 -------------
 Release Date: 2014-05-13

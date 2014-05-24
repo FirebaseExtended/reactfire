@@ -1,6 +1,6 @@
 {
   "name": "ReactFire",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "homepage": "https://github.com/firebase/ReactFire",
   "authors": [
     "jacobawenger <jacob@firebase.com>"
@@ -21,11 +21,11 @@
     "node_modules",
     "bower_components"
   ],
-  "_release": "0.1.4",
+  "_release": "0.1.5",
   "_resolution": {
     "type": "version",
-    "tag": "v0.1.4",
-    "commit": "9bbe56e368442a1f75eedf65de45fd2428392910"
+    "tag": "v0.1.5",
+    "commit": "5cbe9d7fb6ccf55fa9d1a969b582e6f9d4829bdd"
   },
   "_source": "git://github.com/firebase/ReactFire.git",
   "_target": "~0.1.4",
