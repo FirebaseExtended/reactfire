@@ -62,7 +62,7 @@ var ReactFireMixin;
     /*************/
     /* Returns true if the inputted object is a JavaScript array */
     _isArray: function(obj) {
-      return (obj && typeof obj === "object" && obj instanceof Array);
+      return Object.prototype.toString.call(obj) === "[object Array]";
     },
 
     /* Converts a Firebase object to a JavaScript array */
