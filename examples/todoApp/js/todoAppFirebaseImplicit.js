@@ -16,7 +16,8 @@ var TodoApp3 = React.createClass({
   },
 
   componentWillMount: function() {
-    this.bindAsArray(new Firebase("https://ReactFireTodoApp.firebaseio.com/items/"), "items");
+    var firebaseRef = new Firebase("https://ReactFireTodoApp.firebaseio.com/items/");
+    this.bindAsArray(firebaseRef.limit(100), "items");
   },
 
   onChange: function(e) {
@@ -25,7 +26,8 @@ var TodoApp3 = React.createClass({
 
   handleSubmit: function(e) {
     e.preventDefault();
-    if (this.state.text) {
+    if (this.state.text && this.state.text.trim().length !== 0) {
+      console.log(this.firebaseRefs instanceof Firebase);
       this.firebaseRefs["items"].push({
         text: this.state.text
       });
