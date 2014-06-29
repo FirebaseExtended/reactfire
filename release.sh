@@ -26,6 +26,7 @@ if [[ $PARSED_CLIENT_VERSION != $CHANGELOG_VERSION ]]; then
   exit 1
 fi
 
+# Ensure the README has been updated for the newest version
 README_VERSION="$(grep '<script src=\"https://cdn.firebase.com/libs/reactfire/' README.md | awk -F '/' '{print $6}')"
 if [[ $PARSED_CLIENT_VERSION != $README_VERSION ]]; then
   echo "Error: Script tag version in README (${README_VERSION}) does not match version you are releasing (${VERSION})."
