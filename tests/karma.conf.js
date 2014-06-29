@@ -9,6 +9,6 @@ module.exports = function(config) {
     coverageReporter: {
       type: "html"
     },
-    browsers: ["Chrome"]
+    browsers: ["PhantomJS"]
   });
 };

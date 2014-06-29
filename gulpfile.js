@@ -38,6 +38,7 @@ var paths = {
     config: "tests/karma.conf.js",
     files: [
       "bower_components/firebase/firebase.js",
+      "tests/phantomjs-es5-shim.js",
       "bower_components/react/react-with-addons.js",
       "bower_components/react/JSXTransformer.js",
       "src/*.js",
