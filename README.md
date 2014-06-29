@@ -94,4 +94,4 @@ $ gulp watch           # watch for source file changes
 
 `gulp watch` will watch for changes in the `/src/` directory and lint, concatenate, and minify the source files when a change occurs. The output files - `reactfire.js` and `reactfire.min.js` - are written to the `/dist/` directory.
 
-You can run the test suite by navigating to `file:///path/to/tests/TestRunner.html` or run the tests via the command line using `gulp test`.
+You can run the test suite by navigating to `file:///path/to/reactfire/tests/TestRunner.html` or via the command line using `gulp test`.

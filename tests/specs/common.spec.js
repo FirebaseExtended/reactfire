@@ -39,7 +39,15 @@ function afterEachHelper(done) {
 
 /* Returns a random alphabetic string of variable length */
 function generateRandomString() {
-  return (Math.random() + 1).toString(36).substring(7);
+  var possibleCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  var numPossibleCharacters = possibleCharacters.length;
+
+  var text = "";
+  for (var i = 0; i < 10; i++) {
+    text += possibleCharacters.charAt(Math.floor(Math.random() * numPossibleCharacters));
+  }
+
+  return text;
 }
 
 /* Returns the current data in the Firebase */
