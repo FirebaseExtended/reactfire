@@ -59,7 +59,8 @@ The following APIs will then be available from the `this` object inside of `Exam
 Creates a binding between Firebase and the inputted bind variable as an array. The Firebase reference will be stored in `this.firebaseRefs[bindVar]`.
 
 ```javascript
-this.bindAsArray(new Firebase("https://<YOUR_FIREBASE>/"), "items");
+var firebaseRef = new Firebase("https://<YOUR_FIREBASE>/");
+this.bindAsArray(firebaseRef, "items");
 ```
 
 ### bindAsObject(firebaseRef, bindVar)
@@ -67,7 +68,8 @@ this.bindAsArray(new Firebase("https://<YOUR_FIREBASE>/"), "items");
 Creates a binding between Firebase and the inputted bind variable as an object. The Firebase reference will be stored in `this.firebaseRefs[bindVar]`.
 
 ```javascript
-this.bindAsObject(new Firebase("https://<YOUR_FIREBASE>/"), "items");
+var firebaseRef = new Firebase("https://<YOUR_FIREBASE>/");
+this.bindAsObject(firebaseRef, "items");
 ```
 
 ### unbind(bindVar)
