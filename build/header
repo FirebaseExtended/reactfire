@@ -1,0 +1,10 @@
+// ReactFire is an officially supported ReactJS mixin for Firebase. Firebase
+// provides your React app with a persistent, realtime backend to effortlessly
+// keep all of your clients in sync!
+//
+//   ReactFire 0.1.6
+//   https://github.com/firebase/reactfire/
+//   License: MIT
+
+var ReactFireMixin = (function() {
+  "use strict";

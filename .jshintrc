@@ -1,4 +1,8 @@
 {
+  "predef": [
+    "module",
+    "Firebase"
+  ],
   "bitwise": true,
   "curly": true,
   "eqeqeq": true,

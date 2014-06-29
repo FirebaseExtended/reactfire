@@ -28,6 +28,6 @@
     "commit": "5cbe9d7fb6ccf55fa9d1a969b582e6f9d4829bdd"
   },
   "_source": "git://github.com/firebase/ReactFire.git",
-  "_target": "~0.1.4",
+  "_target": "0.x.x",
   "_originalSource": "ReactFire"
 }

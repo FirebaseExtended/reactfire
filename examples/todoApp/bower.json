@@ -1,28 +1,14 @@
 {
   "name": "todoApp",
-  "version": "0.0.0",
-  "homepage": "https://github.com/firebase/ReactFire",
+  "description": "ReactFireMixin Todo app demo",
+  "version": "0.1.6",
+  "main": "index.html",
+  "license": "MIT",
   "authors": [
     "jacobawenger <jacob@firebase.com>"
   ],
-  "description": "ReactFireMixin Todo app demo",
-  "main": "index.html",
-  "keywords": [
-    "react",
-    "firebase"
-  ],
-  "license": "MIT",
-  "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
   "dependencies": {
-    "react": "~0.10.0",
-    "firebase": "~1.0.12",
-    "ReactFire": "~0.1.4"
-  }
+    "reactfire": "0.x.x"
+  },
+  "private": true
 }
