@@ -1,33 +1,44 @@
 {
-  "name": "ReactFire",
-  "version": "0.1.5",
-  "homepage": "https://github.com/firebase/ReactFire",
+  "name": "reactfire",
+  "description": "Firebase mixin for ReactJS",
+  "version": "0.1.6",
+  "main": "./dist/reactfire.min.js",
+  "homepage": "https://github.com/firebase/reactfire/",
+  "license": "MIT",
   "authors": [
     "jacobawenger <jacob@firebase.com>"
   ],
-  "description": "Firebase mixin for ReactJS",
-  "main": "js/ReactFireMixin.min.js",
   "keywords": [
     "react",
-    "firebase"
+    "firebase",
+    "mixin"
   ],
-  "license": "MIT",
   "ignore": [
     "**/.*",
-    "./CHANGELOG.md",
-    "./gulpfile.js",
-    "./package.json",
-    "examples",
+    "src",
+    "build",
+    "tests",
     "node_modules",
-    "bower_components"
+    "bower_components",
+    "firebase.json",
+    "package.json",
+    "gulpfile.js",
+    "examples"
   ],
-  "_release": "0.1.5",
+  "dependencies": {
+    "react": "~0.10.0",
+    "firebase": "1.0.x"
+  },
+  "devDependencies": {
+    "jasmine": "~2.0.0"
+  },
+  "_release": "0.1.6",
   "_resolution": {
     "type": "version",
-    "tag": "v0.1.5",
-    "commit": "5cbe9d7fb6ccf55fa9d1a969b582e6f9d4829bdd"
+    "tag": "v0.1.6",
+    "commit": "667aa5a9a995fe3aa0c44684df9e0ba7c019baef"
   },
-  "_source": "git://github.com/firebase/ReactFire.git",
+  "_source": "git://github.com/firebase/reactfire.git",
   "_target": "0.x.x",
-  "_originalSource": "ReactFire"
+  "_originalSource": "reactfire"
 }

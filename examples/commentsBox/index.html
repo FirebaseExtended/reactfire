@@ -12,16 +12,16 @@
     <script src="bower_components/firebase/firebase.js"></script>
 
     <!-- ReactFireMixin -->
-    <script src="bower_components/ReactFire/js/ReactFireMixin.js"></script>
+    <script src="bower_components/reactfire/dist/reactfire.min.js"></script>
 
     <!-- Markdown -->
     <script src="bower_components/showdown/compressed/showdown.js"></script>
 
   </head>
   <body>
-  
+
     <div id="content"></div>
-    
+
     <script type="text/jsx">
       /**
        * @jsx React.DOM
@@ -30,7 +30,7 @@
 
       // IMPORTANT: Replace below with your Firebase app URL
       var firebaseApp = "https://my-firebase-app.firebaseio.com/";
-  
+
       var converter = new Showdown.converter();
 
       var Comment = React.createClass({
@@ -81,7 +81,7 @@
           var comments = this.state.data;
           comments.push(comment);
           this.setState({data: comments});
-          
+
           // Here we push the update out to Firebase
           this.firebaseRefs["data"].push(comment);
         },

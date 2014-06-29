@@ -6,6 +6,7 @@ Release Date: 2014-06-29
   * Added error checking
   * Added basic test suite
   * Added distribution files to Firebase CDN
+  * Change Bower package name to reactfire (used to be ReactFire)
 
 v0.1.5
 -------------

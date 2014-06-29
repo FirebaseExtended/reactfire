@@ -85,9 +85,9 @@ If you'd like to contribute to ReactFire, you'll need to run the following comma
 ```bash
 $ git clone https://github.com/firebase/reactfire.git
 $ npm install -g gulp  # globally intall gulp task runnger
-$ npm install        # install local npm build / test dependencies
-$ bower install      # install local JavaScript dependencies
-$ gulp watch         # watch for source file changes
+$ npm install          # install local npm build / test dependencies
+$ bower install        # install local JavaScript dependencies
+$ gulp watch           # watch for source file changes
 ```
 
 `gulp watch` will watch for changes in the `/src/` directory and lint, concatenate, and minify the source files when a change occurs. The output files - `reactfire.js` and `reactfire.min.js` - are written to the `/dist/` directory.

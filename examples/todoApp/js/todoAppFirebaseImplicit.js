@@ -27,7 +27,6 @@ var TodoApp3 = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
     if (this.state.text && this.state.text.trim().length !== 0) {
-      console.log(this.firebaseRefs instanceof Firebase);
       this.firebaseRefs["items"].push({
         text: this.state.text
       });

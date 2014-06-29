@@ -95,6 +95,7 @@ echo
 
 # Push the new files to the firebase-clients repo
 cd ${STANDALONE_DEST}/
+git pull
 git add .
 git commit -am "[firebase-release] Updated ReactFire to $VERSION"
 git push
