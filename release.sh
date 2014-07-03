@@ -94,14 +94,31 @@ cp CHANGELOG.md $STANDALONE_DEST/changelog.txt
 echo "*** ReactFire changelog copied to firebase-clients ***"
 echo
 
-# Push the new files to the firebase-clients repo
+# Go to the firebase-clients repo
 cd ${STANDALONE_DEST}/
-git pull
-git add .
-git commit -am "[firebase-release] Updated ReactFire to $VERSION"
-git push
+
+# Make sure the checked-out firebase-clients branch is master
+FIREBASE_CLIENTS_BRANCH="$(git branch | grep "*" | awk -F ' ' '{print $2}')"
+if [[ $FIREBASE_CLIENTS_BRANCH != "master" ]]; then
+  echo "Error: Your firebase-clients repo is not on the master branch. You will need to push the new files to it manually."
+  exit 1
+fi
+
+# Pull any changes to the firebase-clients repo
+git pull origin master
 if [[ $? -ne 0 ]]; then
-  echo "Error pushing firebase-clients."
+  echo "Error pulling firebase-clients repo."
+  exit 1
+fi
+
+# Commit to the firebase-clients repo
+git add .
+git commit -am "[firebase-release] Updated Firebase $DESCRIPTION to $VERSION"
+
+# Push the new files to the firebase-clients repo
+git push origin master
+if [[ $? -ne 0 ]]; then
+  echo "Error pushing firebase-clients repo."
   exit 1
 fi
 echo

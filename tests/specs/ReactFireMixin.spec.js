@@ -1,5 +1,4 @@
 describe("ReactFireMixin Tests:", function() {
-  // Reset the Firebase before each test
   beforeEach(function(done) {
     beforeEachHelper(done);
   });
