@@ -2,7 +2,8 @@
   "name": "reactfire",
   "description": "Firebase mixin for ReactJS",
   "version": "0.1.6",
-  "main": "./dist/reactfire.min.js",
+  "author": "Firebase <support@firebase.com> (https://www.firebase.com/)",
+  "homepage": "https://github.com/firebase/reactfire/",
   "repository": {
     "type": "git",
     "url": "https://github.com/firebase/reactfire.git"
@@ -15,6 +16,18 @@
       "type": "MIT",
       "url": "http://firebase.mit-license.org/"
     }
+  ],
+  "keywords": [
+    "react",
+    "mixin",
+    "firebase",
+    "realtime"
+  ],
+  "main": "dist/reactfire.min.js",
+  "files": [
+    "dist/**",
+    "README.md",
+    "CHANGELOG.md"
   ],
   "dependencies": {
     "react": "^0.10.0",
