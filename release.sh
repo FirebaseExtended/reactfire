@@ -21,35 +21,35 @@ echo
 
 # Ensure the changelog has been updated for the newest version
 CHANGELOG_VERSION="$(head -1 CHANGELOG.md | awk -F 'v' '{print $2}')"
-if [[ $PARSED_CLIENT_VERSION != $CHANGELOG_VERSION ]]; then
+if [[ $VERSION != $CHANGELOG_VERSION ]]; then
   echo "Error: Most recent version in changelog (${CHANGELOG_VERSION}) does not match version you are releasing (${VERSION})."
   exit 1
 fi
 
 # Ensure the README has been updated for the newest version
 README_VERSION="$(grep '<script src=\"https://cdn.firebase.com/libs/reactfire/' README.md | awk -F '/' '{print $6}')"
-if [[ $PARSED_CLIENT_VERSION != $README_VERSION ]]; then
+if [[ $VERSION != $README_VERSION ]]; then
   echo "Error: Script tag version in README (${README_VERSION}) does not match version you are releasing (${VERSION})."
   exit 1
 fi
 
 # Ensure the version number in the package.json is correct
 NPM_VERSION=$(grep "version" package.json | head -1 | awk -F '"' '{print $4}')
-if [[ $PARSED_CLIENT_VERSION != $NPM_VERSION ]]; then
+if [[ $VERSION != $NPM_VERSION ]]; then
   echo "Error: npm version specified in package.json (${NPM_VERSION}) does not match version you are releasing (${VERSION})."
   exit 1
 fi
 
 # Ensure the version number in the bower.json is correct
 BOWER_VERSION=$(grep "version" bower.json | head -1 | awk -F '"' '{print $4}')
-if [[ $PARSED_CLIENT_VERSION != $BOWER_VERSION ]]; then
+if [[ $VERSION != $BOWER_VERSION ]]; then
   echo "Error: Bower version specified in bower.json (${BOWER_VERSION}) does not match version you are releasing (${VERSION})."
   exit 1
 fi
 
 # Create a new git tag if they have not already done so
 LAST_GIT_TAG="$(git tag --list | tail -1 | awk -F 'v' '{print $2}')"
-if [[ $PARSED_CLIENT_VERSION != $LAST_GIT_TAG ]]; then
+if [[ $VERSION != $LAST_GIT_TAG ]]; then
   git tag v$VERSION
   git push --tags
 
