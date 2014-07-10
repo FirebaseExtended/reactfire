@@ -14,7 +14,7 @@ PARSED_CLIENT_VERSION=$(head -5 dist/reactfire.js | tail -1 | awk -F ' ' '{print
 
 # Ensure this is the correct version number
 read -p "What version of ReactFire are we releasing? ($PARSED_CLIENT_VERSION) " VERSION
-if [[ -z $VER ]]; then
+if [[ -z $VERSION ]]; then
   VERSION=$PARSED_CLIENT_VERSION
 fi
 echo
