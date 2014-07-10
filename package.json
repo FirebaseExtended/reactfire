@@ -26,6 +26,7 @@
   "main": "dist/reactfire.min.js",
   "files": [
     "dist/**",
+    "LICENSE",
     "README.md",
     "CHANGELOG.md"
   ],
