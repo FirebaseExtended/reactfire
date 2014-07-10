@@ -23,7 +23,7 @@ In order to use the `ReactFireMixin` in your project, you need to include the fo
 <script src="https://cdn.firebase.com/libs/reactfire/0.1.6/reactfire.min.js"></script>
 ```
 
-Use the URL above to download both the minified and non-minifed versions of ReactFire from the Firebase CDN. You can also download them from the `/dist/` directory of this GitHub repository. [Firebase](https://www.firebase.com/docs/web-quickstart.html) and [React](http://facebook.github.io/react/downloads.html) can be downloaded directly from their respective websites.
+Use the URL above to download both the minified and non-minified versions of ReactFire from the Firebase CDN. You can also download them from the `/dist/` directory of this GitHub repository. [Firebase](https://www.firebase.com/docs/web-quickstart.html) and [React](http://facebook.github.io/react/downloads.html) can be downloaded directly from their respective websites.
 
 You can also install ReactFire via npm or Bower and the dependencies will be downloaded automatically:
 
@@ -86,7 +86,7 @@ If you'd like to contribute to ReactFire, you'll need to run the following comma
 
 ```bash
 $ git clone https://github.com/firebase/reactfire.git
-$ npm install -g gulp  # globally intall gulp task runner
+$ npm install -g gulp  # globally install gulp task runner
 $ npm install          # install local npm build / test dependencies
 $ bower install        # install local JavaScript dependencies
 $ gulp watch           # watch for source file changes
