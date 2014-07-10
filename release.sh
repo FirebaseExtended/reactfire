@@ -47,7 +47,21 @@ if [[ $VERSION != $BOWER_VERSION ]]; then
   exit 1
 fi
 
-# Create a new git tag if they have not already done so
+# Ensure the checked out branch is master
+CHECKED_OUT_BRANCH="$(git branch | grep "*" | awk -F ' ' '{print $2}')"
+if [[ $CHECKED_OUT_BRANCH != "master" ]]; then
+  echo "Error: Your reactfire repo is not on the master branch."
+  exit 1
+fi
+
+# Pull any changes to the reactfire repo
+git pull origin master
+if [[ $? -ne 0 ]]; then
+  echo "Error: Failed to do git pull from reactfire repo."
+  exit 1
+fi
+
+# Create a git tag for the new version
 LAST_GIT_TAG="$(git tag --list | tail -1 | awk -F 'v' '{print $2}')"
 if [[ $VERSION != $LAST_GIT_TAG ]]; then
   git tag v$VERSION
@@ -56,8 +70,8 @@ if [[ $VERSION != $LAST_GIT_TAG ]]; then
   echo "*** Last commit tagged as v${VERSION} ***"
   echo
 else
-  echo "*** Git tag v${VERSION} already created ***"
-  echo
+  echo "Error: git tag v${VERSION} already exists. Make sure you are not releasing an already-released version."
+  exit 1
 fi
 
 # Changing the git tag publishes the new version to Bower automatically
@@ -65,11 +79,14 @@ echo "*** v${VERSION} of reactfire published to Bower ***"
 echo
 
 # Publish the new version to npm
-# TODO: what if this fails?
 npm publish
-
-echo "*** v${VERSION} of reactfire published to npm ***"
-echo
+if [[ $? -ne 0 ]]; then
+  echo "!!! Error publishing to npm! You must do this manually by running 'npm publish'. !!!"
+  exit 1
+else
+  echo "*** v${VERSION} of reactfire published to npm ***"
+  echo
+fi
 
 # Check if we already have this as a standalone
 STANDALONE_TARGET_DIR="${STANDALONE_DEST}/${VERSION}/"
@@ -107,7 +124,7 @@ fi
 # Pull any changes to the firebase-clients repo
 git pull origin master
 if [[ $? -ne 0 ]]; then
-  echo "Error pulling firebase-clients repo."
+  echo "Error: Failed to do git pull from firebase-clients repo."
   exit 1
 fi
 
@@ -118,12 +135,12 @@ git commit -am "[firebase-release] Updated Firebase $DESCRIPTION to $VERSION"
 # Push the new files to the firebase-clients repo
 git push origin master
 if [[ $? -ne 0 ]]; then
-  echo "Error pushing firebase-clients repo."
+  echo "Error: Failed to do git push to firebase-clients repo."
   exit 1
 fi
 echo
 
-echo "*** Changes pushed to firebase-client ***"
+echo "*** Changes pushed to firebase-clients repo ***"
 echo
 
 # Go back to starting directory
