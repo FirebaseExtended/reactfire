@@ -86,6 +86,7 @@ If you'd like to contribute to ReactFire, you'll need to run the following comma
 
 ```bash
 $ git clone https://github.com/firebase/reactfire.git
+$ cd reactfire         # go to the reactfire directory
 $ npm install -g gulp  # globally install gulp task runner
 $ npm install          # install local npm build / test dependencies
 $ bower install        # install local JavaScript dependencies
