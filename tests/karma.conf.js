@@ -5,7 +5,7 @@ module.exports = function(config) {
     preprocessors: {
       "../src/*.js": "coverage"
     },
-    reporters: ["dots", "coverage"],
+    reporters: ["dots", "failed", "coverage"],
     coverageReporter: {
       type: "html"
     },
