@@ -3,9 +3,9 @@
 [![Build Status](https://travis-ci.org/firebase/reactfire.svg)](https://travis-ci.org/firebase/reactfire)
 [![GitHub version](https://badge.fury.io/gh/firebase%2Freactfire.svg)](http://badge.fury.io/gh/firebase%2Freactfire)
 
-[ReactJS](http://facebook.github.io/react/) is a framework for building large, complex user interfaces. [Firebase](http://www.firebase.com/) complements it perfectly by providing an easy-to-use, realtime data source for populating the `state` of React components. With ReactFire, it only takes a few lines of JavaScript to integrate Firebase into React apps via the `ReactFireMixin`.
+[ReactJS](http://facebook.github.io/react/) is a framework for building large, complex user interfaces. [Firebase](http://www.firebase.com/?utm_source=reactfire) complements it perfectly by providing an easy-to-use, realtime data source for populating the `state` of React components. With ReactFire, it only takes a few lines of JavaScript to integrate Firebase into React apps via the `ReactFireMixin`.
 
-[Read our blog post](https://firebase.com/blog/2014-05-01-using-firebase-with-react.html) on using Firebase with React and [check out our live Todo app demo](https://reactfiretodoapp.firebaseapp.com/) to get started!
+[Read our blog post](https://firebase.com/blog/2014-05-01-using-firebase-with-react.html?utm_source=reactfire) on using Firebase with React and [check out our live Todo app demo](https://reactfiretodoapp.firebaseapp.com/) to get started!
 
 ## Downloading ReactFire
 
@@ -23,7 +23,7 @@ In order to use the `ReactFireMixin` in your project, you need to include the fo
 <script src="https://cdn.firebase.com/libs/reactfire/0.1.6/reactfire.min.js"></script>
 ```
 
-Use the URL above to download both the minified and non-minified versions of ReactFire from the Firebase CDN. You can also download them from the `/dist/` directory of this GitHub repository. [Firebase](https://www.firebase.com/docs/web-quickstart.html) and [React](http://facebook.github.io/react/downloads.html) can be downloaded directly from their respective websites.
+Use the URL above to download both the minified and non-minified versions of ReactFire from the Firebase CDN. You can also download them from the `/dist/` directory of this GitHub repository. [Firebase](https://www.firebase.com/docs/web-quickstart.html?utm_source=reactfire) and [React](http://facebook.github.io/react/downloads.html) can be downloaded directly from their respective websites.
 
 You can also install ReactFire via npm or Bower and the dependencies will be downloaded automatically:
 
@@ -37,7 +37,7 @@ $ bower install reactfire --save
 
 ## Getting Started with Firebase
 
-ReactFire requires Firebase in order to store data. You can [sign up here](https://www.firebase.com/signup/) for a free account.
+ReactFire requires Firebase in order to store data. You can [sign up here](https://www.firebase.com/signup/?utm_source=reactfire) for a free account.
 
 ## Usage
 
