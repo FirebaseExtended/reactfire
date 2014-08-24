@@ -1,6 +1,6 @@
 # ReactFire
 
-[![Build Status](https://travis-ci.org/firebase/reactfire.svg)](https://travis-ci.org/firebase/reactfire)
+[![Build Status](https://travis-ci.org/firebase/reactfire.svg?branch=master)](https://travis-ci.org/firebase/reactfire)
 [![GitHub version](https://badge.fury.io/gh/firebase%2Freactfire.svg)](http://badge.fury.io/gh/firebase%2Freactfire)
 
 [ReactJS](http://facebook.github.io/react/) is a framework for building large, complex user interfaces. [Firebase](http://www.firebase.com/?utm_source=reactfire) complements it perfectly by providing an easy-to-use, realtime data source for populating the `state` of React components. With ReactFire, it only takes a few lines of JavaScript to integrate Firebase into React apps via the `ReactFireMixin`.
