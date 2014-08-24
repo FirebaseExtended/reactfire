@@ -50,6 +50,7 @@
     "jshint-stylish": "^0.2.0"
   },
   "scripts": {
-    "test": "gulp"
+    "test": "gulp test",
+    "travis": "gulp"
   }
 }
