@@ -1,7 +1,7 @@
 {
   "name": "reactfire",
   "description": "Firebase mixin for ReactJS",
-  "version": "0.1.6",
+  "version": "XXX_VERSION_XXX",
   "author": "Firebase <support@firebase.com> (https://www.firebase.com/)",
   "homepage": "https://github.com/firebase/reactfire/",
   "repository": {
@@ -28,7 +28,6 @@
     "dist/**",
     "LICENSE",
     "README.md",
-    "CHANGELOG.md",
     "package.json"
   ],
   "dependencies": {
@@ -51,6 +50,6 @@
     "jshint-stylish": "^0.2.0"
   },
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp"
   }
 }

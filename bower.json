@@ -1,7 +1,7 @@
 {
   "name": "reactfire",
   "description": "Firebase mixin for ReactJS",
-  "version": "0.1.6",
+  "version": "XXX_VERSION_XXX",
   "authors": [
     "Firebase <support@firebase.com>"
   ],
@@ -29,7 +29,7 @@
     "firebase.json",
     "package.json",
     "gulpfile.js",
-    "release.sh"
+    "changelog.txt"
   ],
   "dependencies": {
     "react": "~0.10.0",
