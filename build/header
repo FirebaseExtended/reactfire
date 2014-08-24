@@ -1,10 +1,11 @@
-/*! ReactFire is an open-source JavaScript library that allows you to add a
- *  realtime data source to your React apps by providing and easy way to let
- *  Firebase populate the state of React components.
+/*!
+ * ReactFire is an open-source JavaScript library that allows you to add a
+ * realtime data source to your React apps by providing and easy way to let
+ * Firebase populate the state of React components.
  *
- *  ReactFire 0.0.0
- *  https://github.com/firebase/reactfire/
- *  License: MIT
+ * ReactFire 0.0.0
+ * https://github.com/firebase/reactfire/
+ * License: MIT
  */
 
 var ReactFireMixin = (function() {
