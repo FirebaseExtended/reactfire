@@ -1,4 +1,4 @@
-node_modules
-bower_components
-firebase.json
+dist/
+node_modules/
+bower_components/
 tests/coverage

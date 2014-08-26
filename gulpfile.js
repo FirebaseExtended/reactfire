@@ -71,7 +71,9 @@ gulp.task("scripts", function() {
     .pipe(gulp.dest(paths.scripts.dest.dir))
 
     // Minify
-    .pipe(uglify())
+    .pipe(uglify({
+      preserveComments: "some"
+    }))
 
     // Rename file
     .pipe(concat(paths.scripts.dest.files.minified))
@@ -96,6 +98,9 @@ gulp.task("test", function() {
 gulp.task("watch", function() {
   gulp.watch(["build/*", paths.scripts.src.dir + "/**/*"], ["scripts"]);
 });
+
+/* Builds the distribution files */
+gulp.task("build", ["scripts"]);
 
 /* Runs the "test" and "scripts" tasks by default */
 gulp.task("default", ["test", "scripts"]);
