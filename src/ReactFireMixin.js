@@ -5,6 +5,7 @@ var ReactFireMixin = {
   /* Initializes the Firebase binding refs array */
   componentWillMount: function() {
     this.firebaseRefs = {};
+    this.firebaseListeners = {};
   },
 
   /* Removes any remaining Firebase bindings */
@@ -47,7 +48,7 @@ var ReactFireMixin = {
     }
 
     this.firebaseRefs[bindVar] = firebaseRef.ref();
-    firebaseRef.on("value", function(dataSnapshot) {
+    this.firebaseListeners[bindVar] = firebaseRef.on("value", function(dataSnapshot) {
       var newState = {};
       if (bindAsArray) {
         newState[bindVar] = this._toArray(dataSnapshot.val());
@@ -67,8 +68,9 @@ var ReactFireMixin = {
       throw new Error("unexpected value for bindVar. \"" + bindVar + "\" was either never bound or has already been unbound");
     }
 
-    this.firebaseRefs[bindVar].off("value");
+    this.firebaseRefs[bindVar].off("value", this.firebaseListeners[bindVar]);
     delete this.firebaseRefs[bindVar];
+    delete this.firebaseListeners[bindVar];
   },
 
 
