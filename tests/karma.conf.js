@@ -2,13 +2,26 @@
 module.exports = function(config) {
   config.set({
     frameworks: ["jasmine"],
+    browsers: ["PhantomJS"],
+    autowatch: false,
+    singleRun: true,
+
     preprocessors: {
       "../src/*.js": "coverage"
     },
-    reporters: ["dots", "failed", "coverage"],
+
+    reporters: ["spec", "failed", "coverage"],
     coverageReporter: {
-      type: "html"
+      reporters: [
+        {
+          type: "lcovonly",
+          dir: "coverage",
+          subdir: "."
+        },
+        {
+          type: "text-summary"
+        }
+      ]
     },
-    browsers: ["PhantomJS"]
   });
 };
