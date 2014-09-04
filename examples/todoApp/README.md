@@ -29,8 +29,8 @@ code with no Firebase code at all. Changes made to this example are not persiste
 2. __React + Plain Firebase:__ A version of the first example with explicit Firebase calls. Changes
 made to this example are persistent.
 
-3. __ReactFireMixin:__ A version of the first example which uses the ReactFire mixin. Changes made
-to this example are persistent.
+3. __ReactFire:__ A version of the first example which uses the ReactFire mixin. Changes made to
+this example are persistent.
 
 
 ## Walkthrough
