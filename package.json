@@ -37,6 +37,7 @@
     "react": "^0.11.1"
   },
   "devDependencies": {
+    "coveralls": "^2.11.1",
     "gulp": "^3.8.7",
     "gulp-concat": "^2.2.0",
     "gulp-jshint": "^1.5.1",
