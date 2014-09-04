@@ -32,9 +32,9 @@
     "package.json"
   ],
   "dependencies": {
-    "react": "^0.10.0",
-    "envify": "^1.2.1",
-    "firebase": "1.0.x"
+    "envify": "^2.0.0",
+    "firebase": "1.0.x",
+    "react": "^0.11.1"
   },
   "devDependencies": {
     "karma": "^0.12.16",
@@ -42,7 +42,7 @@
     "karma-coverage": "^0.2.4",
     "karma-failed-reporter": "0.0.2",
     "karma-phantomjs-launcher": "~0.1.4",
-    "gulp": "^3.5.6",
+    "gulp": "^3.8.7",
     "gulp-karma": "0.0.4",
     "gulp-uglify": "^0.2.1",
     "gulp-jshint": "^1.5.1",

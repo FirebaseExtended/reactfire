@@ -32,7 +32,7 @@
     "changelog.txt"
   ],
   "dependencies": {
-    "react": "~0.10.0",
+    "react": "^0.11.1",
     "firebase": "1.0.x"
   },
   "devDependencies": {
