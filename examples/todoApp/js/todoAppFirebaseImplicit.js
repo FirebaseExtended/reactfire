@@ -1,10 +1,10 @@
 /** @jsx React.DOM */
 var TodoList3 = React.createClass({
   render: function() {
-    var createItem = function(item) {
-      return <li>{item.text}</li>;
+    var createItem = function(item, index) {
+      return <li key={ index }>{ item.text }</li>;
     };
-    return <ul>{this.props.items.map(createItem)}</ul>;
+    return <ul>{ this.props.items.map(createItem) }</ul>;
   }
 });
 
@@ -17,7 +17,7 @@ var TodoApp3 = React.createClass({
 
   componentWillMount: function() {
     var firebaseRef = new Firebase("https://ReactFireTodoApp.firebaseio.com/items/");
-    this.bindAsArray(firebaseRef.limit(100), "items");
+    this.bindAsArray(firebaseRef.limit(25), "items");
   },
 
   onChange: function(e) {
@@ -37,10 +37,10 @@ var TodoApp3 = React.createClass({
   render: function() {
     return (
       <div>
-        <TodoList3 items={this.state.items} />
-        <form onSubmit={this.handleSubmit}>
-          <input onChange={this.onChange} value={this.state.text} />
-          <button>{"Add #" + (this.state.items.length + 1)}</button>
+        <TodoList3 items={ this.state.items } />
+        <form onSubmit={ this.handleSubmit }>
+          <input onChange={ this.onChange } value={ this.state.text } />
+          <button>{ "Add #" + (this.state.items.length + 1) }</button>
         </form>
       </div>
     );

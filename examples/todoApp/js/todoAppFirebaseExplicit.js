@@ -1,10 +1,10 @@
 /** @jsx React.DOM */
 var TodoList2 = React.createClass({
   render: function() {
-    var createItem = function(item) {
-      return <li>{item.text}</li>;
+    var createItem = function(item, index) {
+      return <li key={ index }>{ item.text }</li>;
     };
-    return <ul>{this.props.items.map(createItem)}</ul>;
+    return <ul>{ this.props.items.map(createItem) }</ul>;
   }
 });
 
@@ -16,7 +16,12 @@ var TodoApp2 = React.createClass({
 
   componentWillMount: function() {
     this.firebaseRef = new Firebase("https://ReactFireTodoApp.firebaseio.com/items/");
-    this.firebaseRef.limit(100).on("child_added", function(dataSnapshot) {
+    this.firebaseRef.limit(25).on("child_added", function(dataSnapshot) {
+      // Only keep track of 25 items at a time
+      if (this.items.length === 25) {
+        this.items.splice(0, 1);
+      }
+
       this.items.push(dataSnapshot.val());
       this.setState({
         items: this.items
@@ -45,10 +50,10 @@ var TodoApp2 = React.createClass({
   render: function() {
     return (
       <div>
-        <TodoList2 items={this.state.items} />
-        <form onSubmit={this.handleSubmit}>
-          <input onChange={this.onChange} value={this.state.text} />
-          <button>{"Add #" + (this.state.items.length + 1)}</button>
+        <TodoList2 items={ this.state.items } />
+        <form onSubmit={ this.handleSubmit }>
+          <input onChange={ this.onChange } value={ this.state.text } />
+          <button>{ "Add #" + (this.state.items.length + 1) }</button>
         </form>
       </div>
     );
