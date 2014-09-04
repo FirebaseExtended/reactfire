@@ -21,7 +21,8 @@
     "react",
     "mixin",
     "firebase",
-    "realtime"
+    "realtime",
+    "react-component"
   ],
   "main": "dist/reactfire.min.js",
   "files": [
