@@ -1,1 +1,0 @@
-feature - Added ability to have multiple listeners of the same type at the same Firebase node (submitted by @danielmahal).
