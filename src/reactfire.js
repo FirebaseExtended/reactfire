@@ -152,7 +152,7 @@ var ReactFireMixin = {
 			else {
 				newStore[bindVar] = dataSnapshot.val();
 			}
-	      	options.store ? this.setState(newStore); : this.setProps(newStore);
+	      	options.store ? this.setState(newStore) : this.setProps(newStore);
 	    }.bind(this));
 	}
   },
@@ -248,7 +248,7 @@ var ReactFireMixin = {
 
   /* Validate if type is string */
   _validateType: function(type){
-  	if (typeof type !== "undefined" ) {
+  	if (typeof type === "undefined" ) {
   		return true;
   	}
 	else if (typeof type !== "string" || type.length === 0) {
@@ -261,7 +261,7 @@ var ReactFireMixin = {
 
   /* Validate if type is string */
   _validateEventType: function(eventType){
-  	if (typeof type !== "undefined" ) {
+  	if (typeof type === "undefined" ) {
   		return "value";
   	}
 	if (typeof eventType !== "string" || eventType.length === 0) {
