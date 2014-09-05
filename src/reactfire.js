@@ -45,7 +45,7 @@ var ReactFireMixin = {
   /* Creates a binding between Firebase and the inputted bind variable as an object or array */
   /* On child_removed  */
   bindOnRemoved: function(firebaseRef, bindVar, asArray) {
-  	var options;
+  	var options = [];
   	options[0] = false;
   	options[1] = "state";
   	options[2] = "child_removed";
@@ -56,7 +56,7 @@ var ReactFireMixin = {
   /* Creates a binding between Firebase and the inputted bind variable as an object or array */
   /* On child_changed  */
   bindOnChanged: function(firebaseRef, bindVar, asArray) {
-  	var options;
+  	var options = [];
   	options[0] = false;
   	options[1] = "state";
   	options[2] = "child_changed";
@@ -67,7 +67,7 @@ var ReactFireMixin = {
   /* Creates a binding between Firebase and the inputted bind variable as an object or array */
   /* On child_moved */
   bindOnMoved: function(firebaseRef, bindVar, asArray) {
-  	var options;
+  	var options = [];
   	options[0] = false;
   	options[1] = "state";
   	options[2] = "child_moved";
@@ -77,6 +77,7 @@ var ReactFireMixin = {
 
   /* Creates a one-time exchange between Firebase and the inputted bind variable as an array */
   onceAsArray: function(firebaseRef, bindVar, options) {
+  	options = (typeof options !== "undefined" && this._isArray(options) ) ? options : [];
   	options[1] = options[0];
   	options[2] = options[1];
   	options[0] = true;
@@ -85,6 +86,7 @@ var ReactFireMixin = {
 
   /* Creates a one-time exchange between Firebase and the inputted bind variable as an object */
   onceAsObject: function(firebaseRef, bindVar, options) {
+  	options = (typeof options !== "undefined" && this._isArray(options) ) ? options : [];
   	options[1] = options[0];
   	options[2] = options[1];
   	options[0] = true;
@@ -93,6 +95,7 @@ var ReactFireMixin = {
 
   /* Creates a one-time props exchange between Firebase and the inputted bind variable as an array */
   propAsArray: function(firebaseRef, bindVar, options) {
+  	options = (typeof options !== "undefined" && this._isArray(options) ) ? options : [];
   	options[2] = options[0];
   	options[0] = true;
   	options[1] = "props";
@@ -101,6 +104,7 @@ var ReactFireMixin = {
 
   /* Creates a one-time props exchange between Firebase and the inputted bind variable as an object */
   propAsObject: function(firebaseRef, bindVar, options) {
+  	options = (typeof options !== "undefined" && this._isArray(options) ) ? options : [];
   	options[2] = options[0];
   	options[0] = true;
   	options[1] = "props";
@@ -148,7 +152,7 @@ var ReactFireMixin = {
 			else {
 				newStore[bindVar] = dataSnapshot.val();
 			}
-	      	options.store ? this.setState(newStore) : this.setProps(newStore);
+	      	options.store ? this.setState(newStore); : this.setProps(newStore);
 	    }.bind(this));
 	}
   },
