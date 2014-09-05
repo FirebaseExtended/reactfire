@@ -34,6 +34,7 @@ var ReactFireMixin = {
   /* Creates a binding between Firebase and the inputted bind variable as an object or array */
   /* On child_added  */
   bindOnAdded: function(firebaseRef, bindVar, asArray) {
+  	var options;
   	options[0] = false;
   	options[1] = "state";
   	options[2] = "child_added";
@@ -44,6 +45,7 @@ var ReactFireMixin = {
   /* Creates a binding between Firebase and the inputted bind variable as an object or array */
   /* On child_removed  */
   bindOnRemoved: function(firebaseRef, bindVar, asArray) {
+  	var options;
   	options[0] = false;
   	options[1] = "state";
   	options[2] = "child_removed";
@@ -54,6 +56,7 @@ var ReactFireMixin = {
   /* Creates a binding between Firebase and the inputted bind variable as an object or array */
   /* On child_changed  */
   bindOnChanged: function(firebaseRef, bindVar, asArray) {
+  	var options;
   	options[0] = false;
   	options[1] = "state";
   	options[2] = "child_changed";
@@ -64,6 +67,7 @@ var ReactFireMixin = {
   /* Creates a binding between Firebase and the inputted bind variable as an object or array */
   /* On child_moved */
   bindOnMoved: function(firebaseRef, bindVar, asArray) {
+  	var options;
   	options[0] = false;
   	options[1] = "state";
   	options[2] = "child_moved";
