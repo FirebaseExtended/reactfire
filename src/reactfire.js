@@ -34,72 +34,72 @@ var ReactFireMixin = {
   /* Creates a binding between Firebase and the inputted bind variable as an object or array */
   /* On child_added  */
   bindOnAdded: function(firebaseRef, bindVar, asArray) {
-  	options[0] = false
-  	options[1] = 'state'
-  	options[2] = 'child_added'
-  	asArray = (typeof asArray === 'boolean' ) ? asArray : false
+  	options[0] = false;
+  	options[1] = "state";
+  	options[2] = "child_added";
+  	asArray = (typeof asArray === "boolean" ) ? asArray : false;
     this._bind(firebaseRef, bindVar, asArray, options);
   },
 
   /* Creates a binding between Firebase and the inputted bind variable as an object or array */
   /* On child_removed  */
   bindOnRemoved: function(firebaseRef, bindVar, asArray) {
-  	options[0] = false
-  	options[1] = 'state'
-  	options[2] = 'child_removed'
-  	asArray = (typeof asArray === 'boolean' ) ? asArray : false
+  	options[0] = false;
+  	options[1] = "state";
+  	options[2] = "child_removed";
+  	asArray = (typeof asArray === "boolean" ) ? asArray : false;
     this._bind(firebaseRef, bindVar, asArray, options);
   },
 
   /* Creates a binding between Firebase and the inputted bind variable as an object or array */
   /* On child_changed  */
   bindOnChanged: function(firebaseRef, bindVar, asArray) {
-  	options[0] = false
-  	options[1] = 'state'
-  	options[2] = 'child_changed'
-  	asArray = (typeof asArray === 'boolean' ) ? asArray : false
+  	options[0] = false;
+  	options[1] = "state";
+  	options[2] = "child_changed";
+  	asArray = (typeof asArray === "boolean" ) ? asArray : false;
     this._bind(firebaseRef, bindVar, asArray, options);
   },
 
   /* Creates a binding between Firebase and the inputted bind variable as an object or array */
   /* On child_moved */
   bindOnMoved: function(firebaseRef, bindVar, asArray) {
-  	options[0] = false
-  	options[1] = 'state'
-  	options[2] = 'child_moved'
-  	asArray = (typeof asArray === 'boolean' ) ? asArray : false
+  	options[0] = false;
+  	options[1] = "state";
+  	options[2] = "child_moved";
+  	asArray = (typeof asArray === "boolean" ) ? asArray : false;
     this._bind(firebaseRef, bindVar, asArray, options);
   },
 
   /* Creates a one-time exchange between Firebase and the inputted bind variable as an array */
   onceAsArray: function(firebaseRef, bindVar, options) {
-  	options[1] = options[0]
-  	options[2] = options[1]
-  	options[0] = true
+  	options[1] = options[0];
+  	options[2] = options[1];
+  	options[0] = true;
     this._bind(firebaseRef, bindVar, true, options);
   },
 
   /* Creates a one-time exchange between Firebase and the inputted bind variable as an object */
   onceAsObject: function(firebaseRef, bindVar, options) {
-  	options[1] = options[0]
-  	options[2] = options[1]
-  	options[0] = true
+  	options[1] = options[0];
+  	options[2] = options[1];
+  	options[0] = true;
     this._bind(firebaseRef, bindVar, false, options);
   },
 
   /* Creates a one-time props exchange between Firebase and the inputted bind variable as an array */
   propAsArray: function(firebaseRef, bindVar, options) {
-  	options[2] = options[0]
-  	options[0] = true
-  	options[1] = 'props'
+  	options[2] = options[0];
+  	options[0] = true;
+  	options[1] = "props";
     this._bind(firebaseRef, bindVar, true, options);
   },
 
   /* Creates a one-time props exchange between Firebase and the inputted bind variable as an object */
   propAsObject: function(firebaseRef, bindVar, options) {
-  	options[2] = options[0]
-  	options[0] = true
-  	options[1] = 'props'
+  	options[2] = options[0];
+  	options[0] = true;
+  	options[1] = "props";
     this._bind(firebaseRef, bindVar, false, options);
   },
 
@@ -107,8 +107,8 @@ var ReactFireMixin = {
   /* Creates a binding between Firebase and the inputted bind variable as either an array or object */
   _bind: function(firebaseRef, bindVar, bindAsArray, options) {
     this._validateBindVar(bindVar);
-    var error,
-        options = this._validateOptions(options)
+    var error;
+    options = this._validateOptions(options);
 
     if (typeof firebaseRef.ref === "undefined" || firebaseRef.ref() instanceof Firebase === false) {
       error = "firebaseRef must be an instance of Firebase";
@@ -216,8 +216,8 @@ var ReactFireMixin = {
 
   /* Validates options  */
   _validateOptions: function(options){
-		var _defaultOptions = [false, 'state', 'value'];
-		options = (typeof options !== 'undefined' && this._isArray(options) ) ? options : _defaultOptions;
+		var _defaultOptions = [false, "state", "value"];
+		options = (typeof options !== "undefined" && this._isArray(options) ) ? options : _defaultOptions;
 		options[0] = this._validateOnce(options[0]) || _defaultOptions[0];
 		options[1] = this._validateType(options[1]) || this._validateType(_defaultOptions[1]); // returns true
 		options[2] = this._validateEventType(options[2]) || _defaultOptions[2];
@@ -244,20 +244,20 @@ var ReactFireMixin = {
   		return true
   	}
 	else if (typeof type !== "string" || type.length === 0) {
-		// Forcing to write out 'state' or `props` out in code, for better readability
+		// Forcing to write out "state" or `props` out in code, for better readability
       	throw new Error("ReactFire: 2nd `type` option must be either `state` or `props`; default: `state`");
     } else {
-    	return (type === 'state');
+    	return (type === "state");
     }
   },
 
   /* Validate if type is string */
   _validateEventType: function(eventType){
   	if (typeof type !== "undefined" ) {
-  		return 'value'
+  		return "value"
   	}
 	if (typeof eventType !== "string" || eventType.length === 0) {
-      	throw new Error('ReactFire: 3rd `eventType` option must be either "value", "child_added", "child_changed", "child_removed", or "child_moved".; default: `value`"');
+      	throw new Error("ReactFire: 3rd `eventType` option must be either 'value', 'child_added', 'child_changed', 'child_removed', or 'child_moved'.; default: `value`'");
     } else {
     	// Firebase should catch any unknown eventTypes
     	return eventType;
