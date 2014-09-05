@@ -245,7 +245,7 @@ var ReactFireMixin = {
   /* Validate if type is string */
   _validateType: function(type){
   	if (typeof type !== "undefined" ) {
-  		return true
+  		return true;
   	}
 	else if (typeof type !== "string" || type.length === 0) {
 		// Forcing to write out "state" or `props` out in code, for better readability
@@ -258,7 +258,7 @@ var ReactFireMixin = {
   /* Validate if type is string */
   _validateEventType: function(eventType){
   	if (typeof type !== "undefined" ) {
-  		return "value"
+  		return "value";
   	}
 	if (typeof eventType !== "string" || eventType.length === 0) {
       	throw new Error("ReactFire: 3rd `eventType` option must be either 'value', 'child_added', 'child_changed', 'child_removed', or 'child_moved'.; default: `value`'");
@@ -269,7 +269,6 @@ var ReactFireMixin = {
   },
   /* Validate if no on listener is attempted on props  */
   _validatePropState: function(options){
-  	var error;
   	if (options[0] === false && options[1] === false) {
   		 throw new Error("ReactFire: binding to props is considered bad practice in React, any frequent changing to props should probably be state!");
   	}
