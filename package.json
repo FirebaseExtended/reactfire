@@ -54,6 +54,6 @@
   },
   "scripts": {
     "test": "gulp test",
-    "travis": "gulp"
+    "travis": "gulp --travis"
   }
 }
