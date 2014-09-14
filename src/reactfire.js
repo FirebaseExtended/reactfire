@@ -36,7 +36,7 @@ var ReactFireMixin = {
     this._validateBindVar(bindVar);
 
     var error;
-    if (typeof firebaseRef.ref === "undefined" || firebaseRef.ref() instanceof Firebase === false) {
+    if (Object.prototype.toString.call(firebaseRef) !== "[object Object]") {
       error = "firebaseRef must be an instance of Firebase";
     }
     else if (typeof bindAsArray !== "boolean") {

@@ -44,7 +44,6 @@ var paths = {
       "bower_components/firebase/firebase.js",
       "tests/phantomjs-es5-shim.js",
       "bower_components/react/react-with-addons.js",
-      "bower_components/react/JSXTransformer.js",
       "src/*.js",
       "tests/specs/*.spec.js"
     ]
