@@ -440,10 +440,8 @@ describe("ReactFireMixin Tests:", function() {
         componentWillMount: function() {
           var _this = this;
 
-          nonBooleanParams.forEach(function(nonBooleanParam) {
-            expect(function() { _this._bind(firebaseRef, "items", true); }).not.toThrow();
-            expect(function() { _this._bind(firebaseRef, "items", false); }).not.toThrow();
-          });
+          expect(function() { _this._bind(firebaseRef, "items", true); }).not.toThrow();
+          expect(function() { _this._bind(firebaseRef, "items", false); }).not.toThrow();
         },
 
         render: function() {
