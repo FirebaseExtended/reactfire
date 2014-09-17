@@ -9,8 +9,6 @@ describe("ReactFireMixin Tests:", function() {
 
   describe("bindAsArray():", function() {
     it("bindAsArray() throws errors given invalid Firebase refs", function() {
-      var expectedError = new Error("ReactFire: firebaseRef must be an instance of Firebase");
-
       var TestComponent = React.createClass({
         mixins: [ReactFireMixin],
 
@@ -18,7 +16,12 @@ describe("ReactFireMixin Tests:", function() {
           var _this = this;
 
           invalidFirebaseRefs.forEach(function(invalidFirebaseRef) {
-            expect(function() { _this.bindAsArray(invalidFirebaseRef, "items"); }).toThrow(expectedError);
+            try {
+              _this.bindAsArray(invalidFirebaseRef, "items");
+              expect("Function should throw error given parameter: " + invalidFirebaseRef).toBeFalsy();
+            } catch (error) {
+              expect(error.code).toEqual("INVALID_FIREBASE_REF");
+            }
           });
         },
 
@@ -38,7 +41,12 @@ describe("ReactFireMixin Tests:", function() {
           var _this = this;
 
           invalidBindVars.forEach(function(invalidBindVar) {
-            expect(function() { _this.bindAsArray(firebaseRef, invalidBindVar); }).toThrow();
+            try {
+              _this.bindAsArray(firebaseRef, invalidBindVar);
+              expect("Function should throw error given parameter: " + invalidBindVar).toBeFalsy();
+            } catch (error) {
+              expect(error.code).toEqual("INVALID_BIND_VARIABLE");
+            }
           });
         },
 
@@ -141,8 +149,6 @@ describe("ReactFireMixin Tests:", function() {
 
   describe("bindAsObject():", function() {
     it("bindAsObject() throws errors given invalid Firebase refs", function() {
-      var expectedError = new Error("ReactFire: firebaseRef must be an instance of Firebase");
-
       var TestComponent = React.createClass({
         mixins: [ReactFireMixin],
 
@@ -150,7 +156,12 @@ describe("ReactFireMixin Tests:", function() {
           var _this = this;
 
           invalidFirebaseRefs.forEach(function(invalidFirebaseRef) {
-            expect(function() { _this.bindAsObject(invalidFirebaseRef, "items"); }).toThrow(expectedError);
+            try {
+              _this.bindAsObject(invalidFirebaseRef, "items");
+              expect("Function should throw error given parameter: " + invalidFirebaseRef).toBeFalsy();
+            } catch (error) {
+              expect(error.code).toEqual("INVALID_FIREBASE_REF");
+            }
           });
         },
 
@@ -170,7 +181,12 @@ describe("ReactFireMixin Tests:", function() {
           var _this = this;
 
           invalidBindVars.forEach(function(invalidBindVar) {
-            expect(function() { _this.bindAsObject(firebaseRef, invalidBindVar); }).toThrow();
+            try {
+              _this.bindAsObject(firebaseRef, invalidBindVar);
+              expect("Function should throw error given parameter: " + invalidBindVar).toBeFalsy();
+            } catch (error) {
+              expect(error.code).toEqual("INVALID_BIND_VARIABLE");
+            }
           });
         },
 
@@ -280,7 +296,12 @@ describe("ReactFireMixin Tests:", function() {
           var _this = this;
 
           invalidBindVars.forEach(function(invalidBindVar) {
-            expect(function() { _this.unbind(invalidBindVar); }).toThrow();
+            try {
+              _this.unbind(invalidBindVar);
+              expect("Function should throw error given parameter: " + invalidBindVar).toBeFalsy();
+            } catch (error) {
+              expect(error.code).toEqual("INVALID_BIND_VARIABLE");
+            }
           });
         },
 
@@ -300,7 +321,12 @@ describe("ReactFireMixin Tests:", function() {
           var _this = this;
 
           validBindVars.forEach(function(validBindVar) {
-            expect(function() { _this.unbind(validBindVar); }).toThrow();
+            try {
+              _this.unbind(validBindVar);
+              expect("Function should throw error given parameter: " + validBindVar).toBeFalsy();
+            } catch (error) {
+              expect(error.code).toEqual("UNBOUND_BIND_VARIABLE");
+            }
           });
         },
 
@@ -420,8 +446,12 @@ describe("ReactFireMixin Tests:", function() {
           var _this = this;
 
           nonBooleanParams.forEach(function(nonBooleanParam) {
-            var expectedError = new Error("ReactFire: bindAsArray must be a boolean. Got: " + nonBooleanParam);
-            expect(function() { _this._bind(firebaseRef, "items", nonBooleanParam); }).toThrow(expectedError);
+            try {
+              _this._bind(firebaseRef, "items", nonBooleanParam);
+              expect("Function should throw error given parameter: " + nonBooleanParam).toBeFalsy();
+            } catch (error) {
+              expect(error.code).toEqual("INVALID_BIND_AS_ARRAY");
+            }
           });
         },
 
