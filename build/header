@@ -9,6 +9,7 @@
  */
 
 ;(function (root, factory) {
+  "use strict";
   if (typeof exports === "object") {
     // CommonJS
     module.exports = factory();
@@ -18,7 +19,7 @@
       return (root.ReactFireMixin = factory());
     });
   } else {
-    // Global Variables
+    // Global variables
     root.ReactFireMixin = factory();
   }
 }(this, function() {

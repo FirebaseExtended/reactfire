@@ -1,5 +1,6 @@
 {
   "predef": [
+    "define",
     "module",
     "Firebase"
   ],
