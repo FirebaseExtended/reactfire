@@ -8,5 +8,18 @@
  * License: MIT
  */
 
-var ReactFireMixin = (function() {
+;(function (root, factory) {
+  if (typeof exports === "object") {
+    // CommonJS
+    module.exports = factory();
+  } else if (typeof define === "function" && define.amd) {
+    // AMD
+    define([], function() {
+      return (root.ReactFireMixin = factory());
+    });
+  } else {
+    // Global Variables
+    root.ReactFireMixin = factory();
+  }
+}(this, function() {
   "use strict";

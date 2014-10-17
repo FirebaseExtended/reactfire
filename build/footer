@@ -1,7 +1,2 @@
   return ReactFireMixin;
-})();
-
-// Export ReactFireMixin if this is being run in node
-if (typeof module !== "undefined" && typeof process !== "undefined") {
-  module.exports = ReactFireMixin;
-}
+}));
