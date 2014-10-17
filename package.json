@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "envify": "^2.0.0",
-    "firebase": "1.0.x",
+    "firebase": "1.1.x",
     "react": "^0.11.1"
   },
   "devDependencies": {
