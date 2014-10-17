@@ -1,1 +1,3 @@
+feature - ReactFire can now be used by Browserify and AMD users (thanks to @insin).
+feature - Upgraded Firebase dependency to 1.1.x.
 fixed - Fixed Node.js bug which caused Firebase references to be validated improperly.
