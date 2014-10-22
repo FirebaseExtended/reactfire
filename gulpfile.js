@@ -39,10 +39,7 @@ var paths = {
   },
 
   tests: {
-    configs: {
-      local: "tests/karma.conf.js",
-      travis: "tests/karma-travis.conf.js"
-    },
+    config: "tests/karma.conf.js",
     files: [
       "bower_components/firebase/firebase.js",
       "tests/phantomjs-es5-shim.js",
@@ -97,10 +94,10 @@ gulp.task("scripts", function() {
 
 /* Uses the Karma test runner to run the Jasmine tests */
 gulp.task("test", function() {
-  var configFile = travis ? paths.tests.configs.travis : paths.tests.configs.local;
   return gulp.src(paths.tests.files)
     .pipe(karma({
-      configFile: configFile,
+      configFile: paths.tests.config,
+      browsers: travis ? ["Firefox"] : ["Chrome"],
       action: "run"
     }))
     .on("error", function(error) {
