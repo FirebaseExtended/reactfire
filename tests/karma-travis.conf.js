@@ -2,7 +2,7 @@
 module.exports = function(config) {
   config.set({
     frameworks: ["jasmine"],
-    browsers: ["Chrome"],
+    browsers: ["Firefox"],
     autowatch: false,
     singleRun: true,
 

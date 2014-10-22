@@ -13,7 +13,7 @@ var uglify = require("gulp-uglify");
 var karma = require("gulp-karma");
 
 // Determine if this is being run in Travis
-var travis = (process.argv.indexOf('--travis') > -1);
+var travis = false;
 
 
 /****************/
@@ -39,7 +39,10 @@ var paths = {
   },
 
   tests: {
-    config: "tests/karma.conf.js",
+    configs: {
+      local: "tests/karma.conf.js",
+      travis: "tests/karam-travis.conf.js"
+    },
     files: [
       "bower_components/firebase/firebase.js",
       "tests/phantomjs-es5-shim.js",
@@ -94,9 +97,10 @@ gulp.task("scripts", function() {
 
 /* Uses the Karma test runner to run the Jasmine tests */
 gulp.task("test", function() {
+  var configFile = travis ? paths.tests.configs.travis : paths.tests.configs.local;
   return gulp.src(paths.tests.files)
     .pipe(karma({
-      configFile: paths.tests.config,
+      configFile: configFile,
       action: "run"
     }))
     .on("error", function(error) {
@@ -112,5 +116,11 @@ gulp.task("watch", function() {
 /* Builds the distribution files */
 gulp.task("build", ["scripts"]);
 
-/* Runs the "test" and "scripts" tasks by default */
-gulp.task("default", ["test", "scripts"]);
+/* Tasks to be run within Travis CI */
+gulp.task("travis", function() {
+  travis = true;
+  gulp.start("build", "test");
+});
+
+/* Runs the "scripts" and "test" tasks by default */
+gulp.task("default", ["build", "test"]);
