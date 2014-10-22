@@ -24,7 +24,7 @@
     "realtime",
     "react-component"
   ],
-  "main": "dist/reactfire.min.js",
+  "main": "dist/reactfire.js",
   "files": [
     "dist/**",
     "LICENSE",
