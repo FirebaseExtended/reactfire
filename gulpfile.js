@@ -41,7 +41,7 @@ var paths = {
   tests: {
     configs: {
       local: "tests/karma.conf.js",
-      travis: "tests/karam-travis.conf.js"
+      travis: "tests/karma-travis.conf.js"
     },
     files: [
       "bower_components/firebase/firebase.js",
