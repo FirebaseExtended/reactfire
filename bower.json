@@ -17,7 +17,7 @@
     "firebase",
     "realtime"
   ],
-  "main": "dist/reactfire.min.js",
+  "main": "dist/reactfire.js",
   "ignore": [
     "**/.*",
     "src",
