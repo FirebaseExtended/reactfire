@@ -4,9 +4,6 @@
 // Override the default timeout interval for Jasmine
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 5000;
 
-// Get a reference to a random demo Firebase
-var demoFirebaseUrl = "https://" + generateRandomString() + ".firebaseio-demo.com";
-
 // React test addon
 var ReactTestUtils = React.addons.TestUtils;
 
@@ -21,7 +18,7 @@ var invalidBindVars = ["", 1, true, false, [], {}, [1, 2], {a: 1}, null, undefin
 /* Helper function which runs before each Jasmine test has started */
 function beforeEachHelper(done) {
   // Create a new firebase ref with a new context
-  firebaseRef = new Firebase(demoFirebaseUrl, Firebase.Context());
+  firebaseRef = new Firebase("https://tests.firebaseio.com", Firebase.Context());
 
   // Reset the Firebase
   firebaseRef.remove(function() {

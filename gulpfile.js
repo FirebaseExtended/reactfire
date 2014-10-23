@@ -13,7 +13,7 @@ var uglify = require("gulp-uglify");
 var karma = require("gulp-karma");
 
 // Determine if this is being run in Travis
-var travis = (process.argv.indexOf('--travis') > -1);
+var travis = false;
 
 
 /****************/
@@ -97,6 +97,7 @@ gulp.task("test", function() {
   return gulp.src(paths.tests.files)
     .pipe(karma({
       configFile: paths.tests.config,
+      browsers: travis ? ["Firefox"] : ["Chrome"],
       action: "run"
     }))
     .on("error", function(error) {
@@ -112,5 +113,11 @@ gulp.task("watch", function() {
 /* Builds the distribution files */
 gulp.task("build", ["scripts"]);
 
-/* Runs the "test" and "scripts" tasks by default */
-gulp.task("default", ["test", "scripts"]);
+/* Tasks to be run within Travis CI */
+gulp.task("travis", function() {
+  travis = true;
+  gulp.start("build", "test");
+});
+
+/* Runs the "scripts" and "test" tasks by default */
+gulp.task("default", ["build", "test"]);
