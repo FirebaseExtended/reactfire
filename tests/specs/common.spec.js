@@ -5,7 +5,7 @@
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 5000;
 
 // Get a reference to a random demo Firebase
-var demoFirebaseUrl = "https://" + generateRandomString() + ".firebaseio-demo.com";
+var demoFirebaseUrl = "https://tests.firebaseio.com";
 
 // React test addon
 var ReactTestUtils = React.addons.TestUtils;
