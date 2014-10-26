@@ -125,6 +125,7 @@ var ReactFireMixin = {
       else if (typeof(obj) === "object") {
         for (var key in obj) {
           if (obj.hasOwnProperty(key)) {
+            obj[key]['_refName'] = key;
             out.push(obj[key]);
           }
         }
