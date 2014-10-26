@@ -470,8 +470,8 @@ describe("ReactFireMixin Tests:", function() {
         componentWillMount: function() {
           var _this = this;
 
-          expect(function() { _this._bind(firebaseRef, "items", true); }).not.toThrow();
-          expect(function() { _this._bind(firebaseRef, "items", false); }).not.toThrow();
+          expect(function() { _this._bind(firebaseRef, "items", function() {}, true); }).not.toThrow();
+          expect(function() { _this._bind(firebaseRef, "items", function() {}, false); }).not.toThrow();
         },
 
         render: function() {
