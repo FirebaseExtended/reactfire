@@ -22,17 +22,17 @@ var ReactFireMixin = {
   /*  BINDING  */
   /*************/
   /* Creates a binding between Firebase and the inputted bind variable as an array */
-  bindAsArray: function(firebaseRef, bindVar) {
-    this._bind(firebaseRef, bindVar, true);
+  bindAsArray: function(firebaseRef, bindVar, cancelCallback) {
+    this._bind(firebaseRef, bindVar, cancelCallback, true);
   },
 
   /* Creates a binding between Firebase and the inputted bind variable as an object */
-  bindAsObject: function(firebaseRef, bindVar) {
-    this._bind(firebaseRef, bindVar, false);
+  bindAsObject: function(firebaseRef, bindVar, cancelCallback) {
+    this._bind(firebaseRef, bindVar, cancelCallback, false);
   },
 
   /* Creates a binding between Firebase and the inputted bind variable as either an array or object */
-  _bind: function(firebaseRef, bindVar, bindAsArray) {
+  _bind: function(firebaseRef, bindVar, cancelCallback, bindAsArray) {
     this._validateBindVar(bindVar);
 
     var errorMessage, errorCode;
@@ -61,7 +61,7 @@ var ReactFireMixin = {
         newState[bindVar] = dataSnapshot.val();
       }
       this.setState(newState);
-    }.bind(this));
+    }.bind(this), cancelCallback);
   },
 
   /* Removes the binding between Firebase and the inputted bind variable */
