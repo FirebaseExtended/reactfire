@@ -31,6 +31,31 @@ var ReactFireMixin = {
     this._bind(firebaseRef, bindVar, cancelCallback, false);
   },
 
+  /* Uses the firebaseRef to create specific bindings to foreignRef */
+  bindForeignAsObject: function(firebaseRef, foreignRef, bindVar) {
+    this.firebaseRefs[bindVar] = firebaseRef.ref();
+
+    this.firebaseListeners[bindVar + "/add"] = firebaseRef.on("child_added", function(snap) {
+      this.firebaseRefs[bindVar + "/" + snap.name()] = foreignRef.child(snap.name());
+
+      this.firebaseListeners[bindVar + "/" + snap.name()] = this.firebaseRefs[bindVar + "/" + snap.name()].on("value", function(snap) {
+        var newState = {};
+        newState[bindVar] = this.state && this.state[bindVar] ? this.state[bindVar] : {};
+        newState[bindVar][snap.name()] = snap.val();
+        this.setState(newState);
+      }.bind(this));
+    }.bind(this));
+
+    this.firebaseListeners[bindVar + "/remove"] = firebaseRef.on("child_removed", function(snap) {
+      this.firebaseRefs[bindVar + "/" + snap.name()].off("value", this.firebaseListeners[bindVar + "/" + snap.name()]);
+
+      var newState = {};
+      newState[bindVar] = this.state && this.state[bindVar] ? this.state[bindVar] : {};
+      delete newState[bindVar][snap.name()];
+      this.setState(newState);
+    }.bind(this));
+  },
+
   /* Creates a binding between Firebase and the inputted bind variable as either an array or object */
   _bind: function(firebaseRef, bindVar, cancelCallback, bindAsArray) {
     this._validateBindVar(bindVar);
