@@ -17,7 +17,7 @@ var TodoApp3 = React.createClass({
 
   componentWillMount: function() {
     var firebaseRef = new Firebase("https://ReactFireTodoApp.firebaseio.com/items/");
-    this.bindAsArray(firebaseRef.limit(25), "items");
+    this.bindAsArray(firebaseRef.limitToLast(25), "items");
   },
 
   onChange: function(e) {

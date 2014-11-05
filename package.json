@@ -32,9 +32,8 @@
     "package.json"
   ],
   "dependencies": {
-    "envify": "^2.0.0",
-    "firebase": "1.1.x",
-    "react": "^0.11.1"
+    "firebase": "2.0.x",
+    "react": "0.12.x"
   },
   "devDependencies": {
     "coveralls": "^2.11.1",

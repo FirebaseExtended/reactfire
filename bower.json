@@ -32,8 +32,8 @@
     "changelog.txt"
   ],
   "dependencies": {
-    "react": "^0.11.1",
-    "firebase": "1.1.x"
+    "react": "0.12.x",
+    "firebase": "2.0.x"
   },
   "devDependencies": {
     "jasmine": "~2.0.0"

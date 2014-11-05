@@ -85,7 +85,7 @@ describe("ReactFireMixin Tests:", function() {
         componentWillMount: function() {
           var _this = this;
 
-          expect(function() { _this.bindAsArray(firebaseRef.limit(10), "items"); }).not.toThrow();
+          expect(function() { _this.bindAsArray(firebaseRef.limitToLast(10), "items"); }).not.toThrow();
         },
 
         render: function() {
@@ -126,7 +126,7 @@ describe("ReactFireMixin Tests:", function() {
         mixins: [ReactFireMixin],
 
         componentWillMount: function() {
-          this.bindAsArray(firebaseRef.limit(2), "items");
+          this.bindAsArray(firebaseRef.limitToLast(2), "items");
         },
 
         componentDidMount: function() {
@@ -225,7 +225,7 @@ describe("ReactFireMixin Tests:", function() {
         componentWillMount: function() {
           var _this = this;
 
-          expect(function() { _this.bindAsObject(firebaseRef.limit(10), "items"); }).not.toThrow();
+          expect(function() { _this.bindAsObject(firebaseRef.limitToLast(10), "items"); }).not.toThrow();
         },
 
         render: function() {
@@ -266,7 +266,7 @@ describe("ReactFireMixin Tests:", function() {
         mixins: [ReactFireMixin],
 
         componentWillMount: function() {
-          this.bindAsObject(firebaseRef.limit(2), "items");
+          this.bindAsObject(firebaseRef.limitToLast(2), "items");
         },
 
         componentDidMount: function() {
@@ -367,7 +367,7 @@ describe("ReactFireMixin Tests:", function() {
           var _this = this;
 
           validBindVars.forEach(function(validBindVar) {
-            _this.bindAsArray(firebaseRef.limit(10), validBindVar);
+            _this.bindAsArray(firebaseRef.limitToLast(10), validBindVar);
             expect(function() { _this.unbind(validBindVar); }).not.toThrow();
           });
         },
