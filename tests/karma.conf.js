@@ -20,6 +20,6 @@ module.exports = function(config) {
           type: "text-summary"
         }
       ]
-    },
+    }
   });
 };
