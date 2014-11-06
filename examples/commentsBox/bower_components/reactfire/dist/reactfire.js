@@ -3,13 +3,28 @@
  * realtime data source to your React apps by providing and easy way to let
  * Firebase populate the state of React components.
  *
- * ReactFire 0.2.0
+ * ReactFire 0.4.0
  * https://github.com/firebase/reactfire/
  * License: MIT
  */
 
-var ReactFireMixin = (function() {
+;(function (root, factory) {
   "use strict";
+  if (typeof define === "function" && define.amd) {
+    // AMD
+    define([], function() {
+      return (root.ReactFireMixin = factory());
+    });
+  } else if (typeof exports === "object") {
+    // CommonJS
+    module.exports = factory();
+  } else {
+    // Global variables
+    root.ReactFireMixin = factory();
+  }
+}(this, function() {
+  "use strict";
+
 var ReactFireMixin = {
   /********************/
   /*  MIXIN LIFETIME  */
@@ -34,29 +49,33 @@ var ReactFireMixin = {
   /*  BINDING  */
   /*************/
   /* Creates a binding between Firebase and the inputted bind variable as an array */
-  bindAsArray: function(firebaseRef, bindVar) {
-    this._bind(firebaseRef, bindVar, true);
+  bindAsArray: function(firebaseRef, bindVar, cancelCallback) {
+    this._bind(firebaseRef, bindVar, cancelCallback, true);
   },
 
   /* Creates a binding between Firebase and the inputted bind variable as an object */
-  bindAsObject: function(firebaseRef, bindVar) {
-    this._bind(firebaseRef, bindVar, false);
+  bindAsObject: function(firebaseRef, bindVar, cancelCallback) {
+    this._bind(firebaseRef, bindVar, cancelCallback, false);
   },
 
   /* Creates a binding between Firebase and the inputted bind variable as either an array or object */
-  _bind: function(firebaseRef, bindVar, bindAsArray) {
+  _bind: function(firebaseRef, bindVar, cancelCallback, bindAsArray) {
     this._validateBindVar(bindVar);
 
-    var error;
-    if (typeof firebaseRef.ref === "undefined" || firebaseRef.ref() instanceof Firebase === false) {
-      error = "firebaseRef must be an instance of Firebase";
+    var errorMessage, errorCode;
+    if (Object.prototype.toString.call(firebaseRef) !== "[object Object]") {
+      errorMessage = "firebaseRef must be an instance of Firebase";
+      errorCode = "INVALID_FIREBASE_REF";
     }
     else if (typeof bindAsArray !== "boolean") {
-      error = "bindAsArray must be a boolean. Got: " + bindAsArray;
+      errorMessage = "bindAsArray must be a boolean. Got: " + bindAsArray;
+      errorCode = "INVALID_BIND_AS_ARRAY";
     }
 
-    if (typeof error !== "undefined") {
-      throw new Error("ReactFire: " + error);
+    if (typeof errorMessage !== "undefined") {
+      var error = new Error("ReactFire: " + errorMessage);
+      error.code = errorCode;
+      throw error;
     }
 
     this.firebaseRefs[bindVar] = firebaseRef.ref();
@@ -69,7 +88,7 @@ var ReactFireMixin = {
         newState[bindVar] = dataSnapshot.val();
       }
       this.setState(newState);
-    }.bind(this));
+    }.bind(this), cancelCallback);
   },
 
   /* Removes the binding between Firebase and the inputted bind variable */
@@ -77,7 +96,9 @@ var ReactFireMixin = {
     this._validateBindVar(bindVar);
 
     if (typeof this.firebaseRefs[bindVar] === "undefined") {
-      throw new Error("unexpected value for bindVar. \"" + bindVar + "\" was either never bound or has already been unbound");
+      var error = new Error("ReactFire: unexpected value for bindVar. \"" + bindVar + "\" was either never bound or has already been unbound");
+      error.code = "UNBOUND_BIND_VARIABLE";
+      throw error;
     }
 
     this.firebaseRefs[bindVar].off("value", this.firebaseListeners[bindVar]);
@@ -91,25 +112,27 @@ var ReactFireMixin = {
   /*************/
   /* Validates the name of the variable which is being bound */
   _validateBindVar: function(bindVar) {
-    var error;
+    var errorMessage;
 
     if (typeof bindVar !== "string") {
-      error = "bindVar must be a string. Got: " + bindVar;
+      errorMessage = "bindVar must be a string. Got: " + bindVar;
     }
     else if (bindVar.length === 0) {
-      error = "bindVar must be a non-empty string. Got: \"\"";
+      errorMessage = "bindVar must be a non-empty string. Got: \"\"";
     }
     else if (bindVar.length > 768) {
       // Firebase can only stored child paths up to 768 characters
-      error = "bindVar is too long to be stored in Firebase. Got: " + bindVar;
+      errorMessage = "bindVar is too long to be stored in Firebase. Got: " + bindVar;
     }
     else if (/[\[\].#$\/\u0000-\u001F\u007F]/.test(bindVar)) {
       // Firebase does not allow node keys to contain the following characters
-      error = "bindVar cannot contain any of the following characters: . # $ ] [ /. Got: " + bindVar;
+      errorMessage = "bindVar cannot contain any of the following characters: . # $ ] [ /. Got: " + bindVar;
     }
 
-    if (typeof error !== "undefined") {
-      throw new Error("ReactFire: " + error);
+    if (typeof errorMessage !== "undefined") {
+      var error = new Error("ReactFire: " + errorMessage);
+      error.code = "INVALID_BIND_VARIABLE";
+      throw error;
     }
   },
 
@@ -139,9 +162,4 @@ var ReactFireMixin = {
 };
 
   return ReactFireMixin;
-})();
-
-// Export ReactFireMixin if this is being run in node
-if (typeof module !== "undefined" && typeof process !== "undefined") {
-  module.exports = ReactFireMixin;
-}
+}));

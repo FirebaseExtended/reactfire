@@ -7,37 +7,39 @@
 [ReactJS](http://facebook.github.io/react/) is a framework for building large, complex user
 interfaces. [Firebase](http://www.firebase.com/?utm_source=reactfire) complements it perfectly
 by providing an easy-to-use, realtime data source for populating the `state` of React components.
-With ReactFire, it only takes a few lines of JavaScript to integrate Firebase into React apps via
-the `ReactFireMixin`.
+With [ReactFire](https://www.firebase.com/docs/web/libraries/react/?utm_source=reactfire), it only
+takes a few lines of JavaScript to integrate Firebase into React apps via the `ReactFireMixin`.
 
-[Read our blog post](https://firebase.com/blog/2014-05-01-using-firebase-with-react.html?utm_source=reactfire)
+[Read through our documentation](https://www.firebase.com/docs/web/libraries/react/?utm_source=reactfire)
 on using Firebase with React and [check out our live Todo app demo](https://reactfiretodoapp.firebaseapp.com/)
 to get started!
 
+
 ## Downloading ReactFire
 
-In order to use the `ReactFireMixin` in your project, you need to include the following files in your HTML:
+In order to use ReactFire in your project, you need to include the following files in your HTML:
 
 ```html
 <!-- React JS -->
-<script src="http://fb.me/react-0.10.0.min.js"></script>
-<script src="http://fb.me/JSXTransformer-0.10.0.js"></script>
+<script src="https://fb.me/react-0.12.0.min.js"></script>
+<script src="https://fb.me/JSXTransformer-0.12.0.js"></script>
 
 <!-- Firebase -->
-<script src="https://cdn.firebase.com/js/client/1.0.21/firebase.js"></script>
+<script src="https://cdn.firebase.com/js/client/2.0.1/firebase.js"></script>
 
 <!-- ReactFire -->
-<script src="https://cdn.firebase.com/libs/reactfire/0.1.6/reactfire.min.js"></script>
+<script src="https://cdn.firebase.com/libs/reactfire/0.4.0/reactfire.min.js"></script>
 ```
 
 Use the URL above to download both the minified and non-minified versions of ReactFire from the
 Firebase CDN. You can also download them from the
 [releases page of this GitHub repository](https://github.com/firebase/reactfire/releases).
-[Firebase](https://www.firebase.com/docs/web/quickstart.html?utm_source=geofire-js) and
+[Firebase](https://www.firebase.com/docs/web/quickstart.html?utm_source=reactfire) and
 [React](http://facebook.github.io/react/downloads.html) can be downloaded directly from their
 respective websites.
 
-You can also install ReactFire via npm or Bower and its dependencies will be downloaded automatically:
+You can also install ReactFire via npm or Bower and its dependencies will be downloaded
+automatically:
 
 ```bash
 $ npm install reactfire --save
@@ -47,14 +49,16 @@ $ npm install reactfire --save
 $ bower install reactfire --save
 ```
 
+
 ## Getting Started with Firebase
 
 ReactFire requires Firebase in order to store data. You can
-[sign up here](https://www.firebase.com/signup/?utm_source=reactfire) for a free account.
+[sign up here for a free account](https://www.firebase.com/signup/?utm_source=reactfire).
+
 
 ## Usage
 
-To use the `ReactFireMixin` in a React component, add it to the component's mixins property:
+To use the `ReactFireMixin` in a React component, add it to the component's `mixins` property:
 
 ```javascript
 var ExampleComponent = React.createClass({
@@ -63,39 +67,18 @@ var ExampleComponent = React.createClass({
 });
 ```
 
-The following APIs will then be available from the `this` object inside of `ExampleComponent`.
+The ReactFire APIs will then be available from the `this` object inside of `ExampleComponent`.
 
-## API Reference
 
-### bindAsArray(firebaseRef, bindVar)
+## Documentation and API Reference
 
-Creates a binding between Firebase and the inputted bind variable as an array. The Firebase
-reference will be stored in `this.firebaseRefs[bindVar]`.
+The [ReactFire quickstart](https://www.firebase.com/docs/web/libraries/react/quickstart.html?utm_source=reactfire)
+is a great place to get started. There is a walkthrough on how to create the
+[Todo app demo](https://reactfiretodoapp.firebaseapp.com/) in the
+[ReactFire guide](https://www.firebase.com/docs/web/libraries/react/guide.html?utm_source=reactfire).
+Finally, there is a [full API reference](https://www.firebase.com/docs/web/libraries/react/api.html?utm_source=reactfire)
+as well.
 
-```javascript
-var firebaseRef = new Firebase("https://<YOUR_FIREBASE>/");
-this.bindAsArray(firebaseRef, "items");
-```
-
-### bindAsObject(firebaseRef, bindVar)
-
-Creates a binding between Firebase and the inputted bind variable as an object. The Firebase
-reference will be stored in `this.firebaseRefs[bindVar]`.
-
-```javascript
-var firebaseRef = new Firebase("https://<YOUR_FIREBASE>/");
-this.bindAsObject(firebaseRef, "items");
-```
-
-### unbind(bindVar)
-
-Removes the binding between Firebase and the inputted bind variable. This removes the stored
-Firebase reference in `this.firebaseRefs[bindVar]` and cleans up any event handlers associated
-with that Firebase reference.
-
-```javascript
-this.unbind("items");
-```
 
 ## Contributing
 

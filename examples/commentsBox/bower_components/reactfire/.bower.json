@@ -1,7 +1,7 @@
 {
   "name": "reactfire",
   "description": "Firebase mixin for ReactJS",
-  "version": "0.2.0",
+  "version": "0.4.0",
   "authors": [
     "Firebase <support@firebase.com>"
   ],
@@ -17,7 +17,7 @@
     "firebase",
     "realtime"
   ],
-  "main": "dist/reactfire.min.js",
+  "main": "dist/reactfire.js",
   "ignore": [
     "**/.*",
     "src",
@@ -32,17 +32,17 @@
     "changelog.txt"
   ],
   "dependencies": {
-    "react": "^0.11.1",
-    "firebase": "1.0.x"
+    "react": "0.12.x",
+    "firebase": "2.0.x"
   },
   "devDependencies": {
     "jasmine": "~2.0.0"
   },
-  "_release": "0.2.0",
+  "_release": "0.4.0",
   "_resolution": {
     "type": "version",
-    "tag": "v0.2.0",
-    "commit": "ba9578e4ddc2c3a88ac3b82a1bcbe21eeb12b10e"
+    "tag": "v0.4.0",
+    "commit": "373a0683c83942ca52c64983705bd8d808f8c17c"
   },
   "_source": "git://github.com/firebase/reactfire.git",
   "_target": "0.x.x",
