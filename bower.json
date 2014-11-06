@@ -1,7 +1,7 @@
 {
   "name": "reactfire",
   "description": "Firebase mixin for ReactJS",
-  "version": "0.0.0",
+  "version": "0.4.0",
   "authors": [
     "Firebase <support@firebase.com>"
   ],
