@@ -1,2 +1,0 @@
-feature - Added optional cancel callback to `bindAsObject()` and `bindAsArray()` to handle cases where reading from Firebase fails.
-feature - Upgraded Firebase dependency to 2.0.x.
