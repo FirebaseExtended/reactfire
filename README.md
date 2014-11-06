@@ -7,11 +7,11 @@
 [ReactJS](http://facebook.github.io/react/) is a framework for building large, complex user
 interfaces. [Firebase](http://www.firebase.com/?utm_source=reactfire) complements it perfectly
 by providing an easy-to-use, realtime data source for populating the `state` of React components.
-With [ReactFire](https://www.firebase.com/docs/web/libraries/react/), it only takes a few lines of
-JavaScript to integrate Firebase into React apps via the `ReactFireMixin`.
+With [ReactFire](https://www.firebase.com/docs/web/libraries/react/?utm_source=reactfire), it only
+takes a few lines of JavaScript to integrate Firebase into React apps via the `ReactFireMixin`.
 
-[Read through our documentation](https://www.firebase.com/docs/web/libraries/react/) on using
-Firebase with React and [check out our live Todo app demo](https://reactfiretodoapp.firebaseapp.com/)
+[Read through our documentation](https://www.firebase.com/docs/web/libraries/react/?utm_source=reactfire)
+on using Firebase with React and [check out our live Todo app demo](https://reactfiretodoapp.firebaseapp.com/)
 to get started!
 
 
@@ -21,11 +21,11 @@ In order to use ReactFire in your project, you need to include the following fil
 
 ```html
 <!-- React JS -->
-<script src="http://fb.me/react-0.11.1.min.js"></script>
-<script src="http://fb.me/JSXTransformer-0.11.1.js"></script>
+<script src="https://fb.me/react-0.12.0.min.js"></script>
+<script src="https://fb.me/JSXTransformer-0.12.0.js"></script>
 
 <!-- Firebase -->
-<script src="https://cdn.firebase.com/js/client/1.0.21/firebase.js"></script>
+<script src="https://cdn.firebase.com/js/client/2.0.1/firebase.js"></script>
 
 <!-- ReactFire -->
 <script src="https://cdn.firebase.com/libs/reactfire/0.3.0/reactfire.min.js"></script>
@@ -34,7 +34,7 @@ In order to use ReactFire in your project, you need to include the following fil
 Use the URL above to download both the minified and non-minified versions of ReactFire from the
 Firebase CDN. You can also download them from the
 [releases page of this GitHub repository](https://github.com/firebase/reactfire/releases).
-[Firebase](https://www.firebase.com/docs/web/quickstart.html?utm_source=geofire-js) and
+[Firebase](https://www.firebase.com/docs/web/quickstart.html?utm_source=reactfire) and
 [React](http://facebook.github.io/react/downloads.html) can be downloaded directly from their
 respective websites.
 
@@ -53,7 +53,7 @@ $ bower install reactfire --save
 ## Getting Started with Firebase
 
 ReactFire requires Firebase in order to store data. You can
-[sign up here](https://www.firebase.com/signup/?utm_source=reactfire) for a free account.
+[sign up here for a free account](https://www.firebase.com/signup/?utm_source=reactfire).
 
 
 ## Usage
@@ -72,11 +72,12 @@ The ReactFire APIs will then be available from the `this` object inside of `Exam
 
 ## Documentation and API Reference
 
-The [ReactFire quickstart](https://www.firebase.com/docs/web/libraries/react/quickstart.html) is a
-great place to get started. There is a walkthrough on how to create the
+The [ReactFire quickstart](https://www.firebase.com/docs/web/libraries/react/quickstart.html?utm_source=reactfire)
+is a great place to get started. There is a walkthrough on how to create the
 [Todo app demo](https://reactfiretodoapp.firebaseapp.com/) in the
-[ReactFire guide](https://www.firebase.com/docs/web/libraries/react/guide.html). Finally, there is
-a [full API reference](https://www.firebase.com/docs/web/libraries/react/api.html) as well.
+[ReactFire guide](https://www.firebase.com/docs/web/libraries/react/guide.html?utm_source=reactfire).
+Finally, there is a [full API reference](https://www.firebase.com/docs/web/libraries/react/api.html?utm_source=reactfire)
+as well.
 
 
 ## Contributing
