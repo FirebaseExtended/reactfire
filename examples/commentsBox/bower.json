@@ -1,7 +1,7 @@
 {
   "name": "commentsBox",
   "description": "react.js comment tutorial updated for ReactFire mixin",
-  "version": "0.1.6",
+  "version": "0.4.0",
   "homepage": "https://github.com/llad/ReactFire",
   "authors": [
     "Mark Woodall <mwdll@icloud.com>"
