@@ -1,0 +1,41 @@
+{
+  "name": "reactfire",
+  "description": "Firebase mixin for ReactJS",
+  "version": "0.4.0",
+  "authors": [
+    "Firebase <support@firebase.com>"
+  ],
+  "homepage": "https://github.com/firebase/reactfire/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/firebase/reactfire.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "mixin",
+    "firebase",
+    "realtime"
+  ],
+  "main": "dist/reactfire.js",
+  "ignore": [
+    "**/.*",
+    "src",
+    "build",
+    "tests",
+    "examples",
+    "node_modules",
+    "bower_components",
+    "firebase.json",
+    "package.json",
+    "gulpfile.js",
+    "changelog.txt"
+  ],
+  "dependencies": {
+    "react": "0.12.x",
+    "firebase": "2.0.x"
+  },
+  "devDependencies": {
+    "jasmine": "~2.0.0"
+  }
+}
