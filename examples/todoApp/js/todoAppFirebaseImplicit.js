@@ -47,4 +47,4 @@ var TodoApp3 = React.createClass({
   }
 });
 
-React.renderComponent(<TodoApp3 />, document.getElementById("todoApp3"));
+React.render(<TodoApp3 />, document.getElementById("todoApp3"));

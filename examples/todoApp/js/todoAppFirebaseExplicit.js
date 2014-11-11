@@ -60,4 +60,4 @@ var TodoApp2 = React.createClass({
   }
 });
 
-React.renderComponent(<TodoApp2 />, document.getElementById("todoApp2"));
+React.render(<TodoApp2 />, document.getElementById("todoApp2"));
