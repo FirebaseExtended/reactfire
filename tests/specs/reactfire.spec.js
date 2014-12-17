@@ -121,6 +121,27 @@ describe("ReactFireMixin Tests:", function() {
       React.render(new TestComponent(), document.body);
     });
 
+    it("bindAsArray() static call binds to remote Firebase data as an array", function(done) {
+      var TestComponent = React.createClass({
+        mixins: [ReactFireMixin.bindAsArray(firebaseRef,"items")],
+
+        componentDidMount: function() {
+          firebaseRef.set({ a: 1, b: 2, c: 3 });
+        },
+
+        componentDidUpdate: function(prevProps, prevState) {
+          expect(this.state).toEqual({ items: [1, 2, 3] });
+          done();
+        },
+
+        render: function() {
+          return React.DOM.div(null, "Testing");
+        }
+      });
+
+      React.render(new TestComponent(), document.body);
+    });
+
     it("bindAsArray() binds to remote Firebase data as an array (limit query)", function(done) {
       var TestComponent = React.createClass({
         mixins: [ReactFireMixin],
@@ -243,6 +264,27 @@ describe("ReactFireMixin Tests:", function() {
         componentWillMount: function() {
           this.bindAsObject(firebaseRef, "items");
         },
+
+        componentDidMount: function() {
+          firebaseRef.set({ a: 1, b: 2, c: 3 });
+        },
+
+        componentDidUpdate: function(prevProps, prevState) {
+          expect(this.state).toEqual({ items: { a: 1, b: 2, c: 3 } });
+          done();
+        },
+
+        render: function() {
+          return React.DOM.div(null, "Testing");
+        }
+      });
+
+      React.render(new TestComponent(), document.body);
+    });
+
+    it("bindAsObject() static binds to remote Firebase data as an object", function(done) {
+      var TestComponent = React.createClass({
+        mixins: [ReactFireMixin.bindAsObject(firebaseRef, "items")],
 
         componentDidMount: function() {
           firebaseRef.set({ a: 1, b: 2, c: 3 });

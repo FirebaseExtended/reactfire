@@ -1,3 +1,18 @@
+function StaticMaker(method,firebaseRef,bindVar,cancelCallback){
+  return {
+    componentWillMount: function(){
+      this.firebaseRefs = this.firebaseRefs || {};
+      this.firebaseListeners = this.firebaseListeners || {};
+      var tosteal = ["bindAsArray","bindAsObject","_bind","_validateBindVar","unbind","_isArray","_toArray"];
+      for(var m in tosteal){
+        this[tosteal[m]] = ReactFireMixin[tosteal[m]];
+      }
+      this[method](firebaseRef,bindVar,cancelCallback);
+    },
+    componentWillUnmount: ReactFireMixin.componentWillUnmount
+  };
+}
+
 var ReactFireMixin = {
   /********************/
   /*  MIXIN LIFETIME  */
@@ -23,12 +38,20 @@ var ReactFireMixin = {
   /*************/
   /* Creates a binding between Firebase and the inputted bind variable as an array */
   bindAsArray: function(firebaseRef, bindVar, cancelCallback) {
-    this._bind(firebaseRef, bindVar, cancelCallback, true);
+    if (!this.setState){
+      return StaticMaker("bindAsArray",firebaseRef,bindVar,cancelCallback);
+    } else {
+      this._bind(firebaseRef, bindVar, cancelCallback, true);
+    }
   },
 
   /* Creates a binding between Firebase and the inputted bind variable as an object */
   bindAsObject: function(firebaseRef, bindVar, cancelCallback) {
-    this._bind(firebaseRef, bindVar, cancelCallback, false);
+    if (!this.setState){
+      return StaticMaker("bindAsObject",firebaseRef,bindVar,cancelCallback);
+    } else {
+      this._bind(firebaseRef, bindVar, cancelCallback, false);
+    }
   },
 
   /* Creates a binding between Firebase and the inputted bind variable as either an array or object */
@@ -61,7 +84,7 @@ var ReactFireMixin = {
         newState[bindVar] = dataSnapshot.val();
       }
       this.setState(newState);
-    }.bind(this), cancelCallback);
+    }.bind(this), this[cancelCallback] || cancelCallback);
   },
 
   /* Removes the binding between Firebase and the inputted bind variable */
