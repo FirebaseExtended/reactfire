@@ -30,7 +30,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
 
     it("bindAsArray() throws errors given invalid bind variables", function() {
@@ -55,7 +55,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
 
     it("bindAsArray() does not throw errors given valid inputs", function() {
@@ -75,7 +75,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
 
     it("bindAsArray() does not throw an error given a limit query", function() {
@@ -93,7 +93,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
 
     it("bindAsArray() binds to remote Firebase data as an array", function(done) {
@@ -118,7 +118,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
 
     it("bindAsArray() binds to remote Firebase data as an array (limit query)", function(done) {
@@ -143,7 +143,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
   });
 
@@ -170,7 +170,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
 
     it("bindAsObject() throws errors given invalid bind variables", function() {
@@ -195,7 +195,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
 
     it("bindAsObject() does not throw errors given valid inputs", function() {
@@ -215,7 +215,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
 
     it("bindAsObject() does not throw an error given a limit query", function() {
@@ -233,7 +233,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
 
     it("bindAsObject() binds to remote Firebase data as an object", function(done) {
@@ -258,7 +258,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
 
     it("bindAsObject() binds to remote Firebase data as an object (limit query)", function(done) {
@@ -283,7 +283,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
   });
 
@@ -310,7 +310,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
 
     it("unbind() throws errors given unbound bind variable", function() {
@@ -335,7 +335,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
 
     it("unbind() does not throw errors given valid bind variables", function() {
@@ -356,7 +356,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
 
     it("unbind() does not throw an error given a limit query", function() {
@@ -377,7 +377,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
 
     it("unbind() unbinds the state bound to Firebase as an array", function(done) {
@@ -404,7 +404,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
 
     it("unbind() unbinds the state bound to Firebase as an object", function(done) {
@@ -431,7 +431,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
   });
 
@@ -460,7 +460,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
 
     it("_bind() does not throw error given valid inputs", function() {
@@ -479,7 +479,7 @@ describe("ReactFireMixin Tests:", function() {
         }
       });
 
-      ReactTestUtils.renderIntoDocument(new TestComponent());
+      React.render(new TestComponent(), document.body);
     });
   });
 });
