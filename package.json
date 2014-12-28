@@ -33,6 +33,7 @@
   ],
   "dependencies": {
     "firebase": "2.0.x",
+    "immutable": "3.4.x",
     "react": "0.12.x"
   },
   "devDependencies": {

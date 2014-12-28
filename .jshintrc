@@ -5,6 +5,7 @@
     "Firebase",
     "Immutable"
   ],
+  "node": true,
   "bitwise": true,
   "curly": true,
   "eqeqeq": true,
