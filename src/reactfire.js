@@ -70,10 +70,10 @@ var ReactFireMixin = {
     this.firebaseListeners[bindVar] = firebaseRef.on("value", function(dataSnapshot) {
       var newState = {};
       if (bindAsArray) {
-        newState[bindVar] = this._toList(dataSnapshot.val());
+        newState[bindVar] = this._toList(dataSnapshot);
       }
       else {
-        newState[bindVar] = Immutable.fromJS(dataSnapshot.val());
+        newState[bindVar] = this._toOrderedMap(dataSnapshot);
       }
       this.setState(newState);
     }.bind(this), cancelCallback);
@@ -124,20 +124,35 @@ var ReactFireMixin = {
     }
   },
 
-  /* Converts a Firebase object to an Immutable List */
-  _toList: function(obj) {
-    var out = Immutable.List();
-    if (obj) {
-      if (Immutable.List.isList(obj)) {
-        out = obj;
+  _toOrderedMap: function(snapshot) {
+    var out = Immutable.OrderedMap();
+    if (snapshot) {
+      if (Immutable.OrderedMap.isOrderedMap(snapshot)) {
+        out = snapshot;
       }
-      else if (typeof(obj) === "object") {
+      else if (typeof(snapshot) === "object") {
+        out = out.withMutations(function(map) {
+          snapshot.forEach(function(child) {
+            map.set(child.key(), Immutable.fromJS(child.val()));
+          });
+        });
+      }
+    }
+    return out;
+  },
+
+  /* Converts a Firebase object to an Immutable List */
+  _toList: function(snapshot) {
+    var out = Immutable.List();
+    if (snapshot) {
+      if (Immutable.List.isList(snapshot)) {
+        out = snapshot;
+      }
+      else if (typeof(snapshot) === "object") {
         out = out.withMutations(function(list) {
-          for (var key in obj) {
-            if (obj.hasOwnProperty(key)) {
-              list.push(obj[key]);
-            }
-          }
+          snapshot.forEach(function(child) {
+            list.push(Immutable.fromJS(child.val()));
+          });
         });
       }
     }

@@ -97,7 +97,7 @@ describe("ReactFireMixin Tests:", function() {
     });
 
     it("bindAsArray() binds to remote Firebase data as an array", function(done) {
-      var result = Immutable.fromJS([1, 2, 3]);
+      var result = Immutable.List([1, 2, 3]);
       var TestComponent = React.createClass({
         mixins: [ReactFireMixin],
 
@@ -239,7 +239,7 @@ describe("ReactFireMixin Tests:", function() {
     });
 
     it("bindAsObject() binds to remote Firebase data as an object", function(done) {
-      var result = Immutable.fromJS({ a: 1, b: 2, c: 3 });
+      var result = Immutable.OrderedMap({ a: 1, b: 2, c: 3 });
       var TestComponent = React.createClass({
         mixins: [ReactFireMixin],
 
@@ -265,7 +265,7 @@ describe("ReactFireMixin Tests:", function() {
     });
 
     it("bindAsObject() binds to remote Firebase data as an object (limit query)", function(done) {
-      var result = Immutable.Map({ b: 2, c: 3 });
+      var result = Immutable.OrderedMap({ b: 2, c: 3 });
       var TestComponent = React.createClass({
         mixins: [ReactFireMixin],
 
@@ -455,7 +455,7 @@ describe("ReactFireMixin Tests:", function() {
 
         componentDidUpdate: function(prevProps, prevState) {
           expect(this.boundVarsHaveUpdated({
-            items: Immutable.Map(data)
+            items: Immutable.OrderedMap(data)
           })).toBe(false);
           done();
         },
