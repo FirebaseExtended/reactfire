@@ -2,7 +2,8 @@
   "predef": [
     "define",
     "module",
-    "Firebase"
+    "Firebase",
+    "Immutable"
   ],
   "bitwise": true,
   "curly": true,

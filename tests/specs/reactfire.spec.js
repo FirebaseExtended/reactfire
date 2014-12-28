@@ -97,6 +97,7 @@ describe("ReactFireMixin Tests:", function() {
     });
 
     it("bindAsArray() binds to remote Firebase data as an array", function(done) {
+      var result = Immutable.fromJS([1, 2, 3]);
       var TestComponent = React.createClass({
         mixins: [ReactFireMixin],
 
@@ -109,7 +110,7 @@ describe("ReactFireMixin Tests:", function() {
         },
 
         componentDidUpdate: function(prevProps, prevState) {
-          expect(this.state).toEqual({ items: [1, 2, 3] });
+          expect(Immutable.is(this.state.items, result)).toBe(true);
           done();
         },
 
@@ -122,6 +123,7 @@ describe("ReactFireMixin Tests:", function() {
     });
 
     it("bindAsArray() binds to remote Firebase data as an array (limit query)", function(done) {
+      var result = Immutable.List([2, 3]);
       var TestComponent = React.createClass({
         mixins: [ReactFireMixin],
 
@@ -134,7 +136,7 @@ describe("ReactFireMixin Tests:", function() {
         },
 
         componentDidUpdate: function(prevProps, prevState) {
-          expect(this.state).toEqual({ items: [2, 3] });
+          expect(Immutable.is(this.state.items, result)).toBe(true);
           done();
         },
 
@@ -237,6 +239,7 @@ describe("ReactFireMixin Tests:", function() {
     });
 
     it("bindAsObject() binds to remote Firebase data as an object", function(done) {
+      var result = Immutable.fromJS({ a: 1, b: 2, c: 3 });
       var TestComponent = React.createClass({
         mixins: [ReactFireMixin],
 
@@ -249,7 +252,7 @@ describe("ReactFireMixin Tests:", function() {
         },
 
         componentDidUpdate: function(prevProps, prevState) {
-          expect(this.state).toEqual({ items: { a: 1, b: 2, c: 3 } });
+          expect(Immutable.is(this.state.items, result)).toBe(true);
           done();
         },
 
@@ -262,6 +265,7 @@ describe("ReactFireMixin Tests:", function() {
     });
 
     it("bindAsObject() binds to remote Firebase data as an object (limit query)", function(done) {
+      var result = Immutable.Map({ b: 2, c: 3 });
       var TestComponent = React.createClass({
         mixins: [ReactFireMixin],
 
@@ -274,7 +278,7 @@ describe("ReactFireMixin Tests:", function() {
         },
 
         componentDidUpdate: function(prevProps, prevState) {
-          expect(this.state).toEqual({ items: { b: 2, c: 3 } });
+          expect(Immutable.is(this.state.items, result)).toBe(true);
           done();
         },
 
@@ -435,6 +439,64 @@ describe("ReactFireMixin Tests:", function() {
     });
   });
 
+  describe("boundVarsHaveUpdated(): ", function() {
+    it("boundVarsHaveUpdated() returns false if bound objects haven't changed", function(done) {
+      var data = { a: 1, b: 2, c: 3 };
+      var TestComponent = React.createClass({
+        mixins: [ReactFireMixin],
+
+        componentWillMount: function() {
+          this.bindAsObject(firebaseRef, "items");
+        },
+
+        componentDidMount: function() {
+          firebaseRef.set(data);
+        },
+
+        componentDidUpdate: function(prevProps, prevState) {
+          expect(this.boundVarsHaveUpdated({
+            items: Immutable.Map(data)
+          })).toBe(false);
+          done();
+        },
+
+        render: function() {
+          return React.DOM.div(null, "Testing");
+        }
+      });
+
+      React.render(new TestComponent(), document.body);
+    });
+
+    it("boundVarsHaveUpdated() returns true if bound objects have changed", function(done) {
+      var data = { a: 1, b: 2, c: 3 };
+      var TestComponent = React.createClass({
+        mixins: [ReactFireMixin],
+
+        componentWillMount: function() {
+          this.bindAsObject(firebaseRef, "items");
+        },
+
+        componentDidMount: function() {
+          firebaseRef.set(data);
+        },
+
+        componentDidUpdate: function(prevProps, prevState) {
+          expect(this.boundVarsHaveUpdated({
+            items: Immutable.Map({ a: 5, b: 6 })
+          })).toBe(true);
+          done();
+        },
+
+        render: function() {
+          return React.DOM.div(null, "Testing");
+        }
+      });
+
+      React.render(new TestComponent(), document.body);
+    });
+  });
+
   describe("_bind():", function() {
     it("_bind() throws errors given invalid third input parameter", function() {
       var nonBooleanParams = [null, undefined, [], {}, 0, 5, "", "a", {a : 1}, ["hi", 1]];
@@ -482,4 +544,5 @@ describe("ReactFireMixin Tests:", function() {
       React.render(new TestComponent(), document.body);
     });
   });
+
 });

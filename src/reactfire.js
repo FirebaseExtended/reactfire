@@ -31,6 +31,21 @@ var ReactFireMixin = {
     this._bind(firebaseRef, bindVar, cancelCallback, false);
   },
 
+  /* Checks all bound vars to see if they have changed. The check is cheap
+   * because we are using immutable data structures. Returns true if any of
+   * the bound vars are updated in `nextState`, otherwise false.
+   *
+   * This is intended to be used in a more comprehensive `shouldComponentUpdate`.
+   */
+  boundVarsHaveUpdated: function(nextState) {
+    for (var varName in nextState) {
+      if (this.firebaseRefs[varName] && !Immutable.is(this.state && this.state[varName], nextState[varName])) {
+        return true;
+      }
+    }
+    return false;
+  },
+
   /* Creates a binding between Firebase and the inputted bind variable as either an array or object */
   _bind: function(firebaseRef, bindVar, cancelCallback, bindAsArray) {
     this._validateBindVar(bindVar);
@@ -55,10 +70,10 @@ var ReactFireMixin = {
     this.firebaseListeners[bindVar] = firebaseRef.on("value", function(dataSnapshot) {
       var newState = {};
       if (bindAsArray) {
-        newState[bindVar] = this._toArray(dataSnapshot.val());
+        newState[bindVar] = this._toList(dataSnapshot.val());
       }
       else {
-        newState[bindVar] = dataSnapshot.val();
+        newState[bindVar] = Immutable.fromJS(dataSnapshot.val());
       }
       this.setState(newState);
     }.bind(this), cancelCallback);
@@ -109,25 +124,21 @@ var ReactFireMixin = {
     }
   },
 
-
-  /* Returns true if the inputted object is a JavaScript array */
-  _isArray: function(obj) {
-    return (Object.prototype.toString.call(obj) === "[object Array]");
-  },
-
-  /* Converts a Firebase object to a JavaScript array */
-  _toArray: function(obj) {
-    var out = [];
+  /* Converts a Firebase object to an Immutable List */
+  _toList: function(obj) {
+    var out = Immutable.List();
     if (obj) {
-      if (this._isArray(obj)) {
+      if (Immutable.List.isList(obj)) {
         out = obj;
       }
       else if (typeof(obj) === "object") {
-        for (var key in obj) {
-          if (obj.hasOwnProperty(key)) {
-            out.push(obj[key]);
+        out = out.withMutations(function(list) {
+          for (var key in obj) {
+            if (obj.hasOwnProperty(key)) {
+              list.push(obj[key]);
+            }
           }
-        }
+        });
       }
     }
     return out;
