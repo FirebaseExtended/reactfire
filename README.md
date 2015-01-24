@@ -1,7 +1,7 @@
 # ReactFire
 
 [![Build Status](https://travis-ci.org/firebase/reactfire.svg?branch=master)](https://travis-ci.org/firebase/reactfire)
-[![Coverage Status](https://img.shields.io/coveralls/firebase/reactfire.svg)](https://coveralls.io/r/firebase/reactfire)
+[![Coverage Status](https://img.shields.io/coveralls/firebase/reactfire.svg?style=flat)](https://coveralls.io/r/firebase/reactfire)
 [![GitHub version](https://badge.fury.io/gh/firebase%2Freactfire.svg)](http://badge.fury.io/gh/firebase%2Freactfire)
 
 [ReactJS](http://facebook.github.io/react/) is a framework for building large, complex user
