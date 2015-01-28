@@ -133,7 +133,9 @@ var ReactFireMixin = {
       else if (typeof(snapshot) === "object") {
         out = out.withMutations(function(map) {
           snapshot.forEach(function(child) {
-            map.set(child.key(), Immutable.fromJS(child.val()));
+            var immutableChild = Immutable.fromJS(child.val());
+            immutableChild.snapshot = child;
+            map.set(child.key(), immutableChild);
           });
         });
       }
@@ -151,7 +153,9 @@ var ReactFireMixin = {
       else if (typeof(snapshot) === "object") {
         out = out.withMutations(function(list) {
           snapshot.forEach(function(child) {
-            list.push(Immutable.fromJS(child.val()));
+            var immutableChild = Immutable.fromJS(child.val());
+            immutableChild.snapshot = child;
+            list.push(immutableChild);
           });
         });
       }
