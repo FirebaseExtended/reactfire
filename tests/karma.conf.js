@@ -2,7 +2,7 @@ module.exports = function(config) {
   config.set({
     frameworks: ["jasmine"],
     autowatch: false,
-    singleRun: true,
+    singleRun: false,
 
     preprocessors: {
       "../src/*.js": "coverage"

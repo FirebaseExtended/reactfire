@@ -2,8 +2,10 @@
   "predef": [
     "define",
     "module",
-    "Firebase"
+    "Firebase",
+    "Immutable"
   ],
+  "node": true,
   "bitwise": true,
   "curly": true,
   "eqeqeq": true,

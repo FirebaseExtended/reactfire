@@ -10,17 +10,19 @@
 
 ;(function (root, factory) {
   "use strict";
+  var Immutable = root.Immutable;
   if (typeof define === "function" && define.amd) {
     // AMD
-    define([], function() {
-      return (root.ReactFireMixin = factory());
+    define(["../bower_components/immutable/dist/immutable.min.js"], function(Immutable) {
+      return (root.ReactFireMixin = factory(Immutable));
     });
   } else if (typeof exports === "object") {
     // CommonJS
-    module.exports = factory();
+    Immutable = require("immutable");
+    module.exports = factory(Immutable);
   } else {
     // Global variables
-    root.ReactFireMixin = factory();
+    root.ReactFireMixin = factory(Immutable);
   }
-}(this, function() {
+}(this, function(Immutable) {
   "use strict";

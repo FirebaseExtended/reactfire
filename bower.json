@@ -33,7 +33,8 @@
   ],
   "dependencies": {
     "react": "0.12.x",
-    "firebase": "2.0.x"
+    "firebase": "2.0.x",
+    "immutable": "3.4.x"
   },
   "devDependencies": {
     "jasmine": "~2.0.0"
