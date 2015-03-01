@@ -125,7 +125,9 @@ var ReactFireMixin = {
       else if (typeof(obj) === "object") {
         for (var key in obj) {
           if (obj.hasOwnProperty(key)) {
-            out.push(obj[key]);
+            var child = obj[key];
+            child['_ref'] = key;  
+            out.push(child);
           }
         }
       }
