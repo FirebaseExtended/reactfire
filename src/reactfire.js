@@ -125,7 +125,9 @@ var ReactFireMixin = {
       else if (typeof(obj) === "object") {
         for (var key in obj) {
           if (obj.hasOwnProperty(key)) {
-            out.push(obj[key]);
+            var item = obj[key];
+            item['$id'] = key;
+            out.push(item);
           }
         }
       }
