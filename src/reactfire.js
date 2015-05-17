@@ -54,11 +54,17 @@ var ReactFireMixin = {
     this.firebaseRefs[bindVar] = firebaseRef.ref();
     this.firebaseListeners[bindVar] = firebaseRef.on("value", function(dataSnapshot) {
       var newState = {};
+      var data = {};
+
+      dataSnapshot.forEach(function(child) {
+        data[child.key()] = child.val();
+      });
+
       if (bindAsArray) {
-        newState[bindVar] = this._toArray(dataSnapshot.val());
+        newState[bindVar] = this._toArray(data);
       }
       else {
-        newState[bindVar] = dataSnapshot.val();
+        newState[bindVar] = data;
       }
       this.setState(newState);
     }.bind(this), cancelCallback);
