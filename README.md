@@ -8,7 +8,7 @@
 interfaces. [Firebase](http://www.firebase.com/?utm_source=reactfire) complements it perfectly
 by providing an easy-to-use, realtime data source for populating the `state` of React components.
 With [ReactFire](https://www.firebase.com/docs/web/libraries/react/?utm_source=reactfire), it only
-takes a few lines of JavaScript to integrate Firebase into React apps via the `ReactFireMixin`.
+takes a few lines of JavaScript to integrate Firebase data into React apps via the `ReactFireMixin`.
 
 [Read through our documentation](https://www.firebase.com/docs/web/libraries/react/?utm_source=reactfire)
 on using Firebase with React and [check out our live Todo app demo](https://reactfiretodoapp.firebaseapp.com/)
@@ -25,7 +25,7 @@ In order to use ReactFire in your project, you need to include the following fil
 <script src="https://fb.me/JSXTransformer-0.12.0.js"></script>
 
 <!-- Firebase -->
-<script src="https://cdn.firebase.com/js/client/2.0.1/firebase.js"></script>
+<script src="https://cdn.firebase.com/js/client/2.2.5/firebase.js"></script>
 
 <!-- ReactFire -->
 <script src="https://cdn.firebase.com/libs/reactfire/0.4.0/reactfire.min.js"></script>
