@@ -109,7 +109,7 @@ describe("ReactFireMixin Tests:", function() {
         },
 
         componentDidUpdate: function(prevProps, prevState) {
-          expect(this.state).toEqual({ items: [1, 2, 3] });
+          expect(this.state).toEqual({ items: [{ $id: 'a', $value: 1 }, { $id: 'b', $value: 2 }, { $id:'c', $value: 3 }] });
           done();
         },
 
@@ -134,7 +134,7 @@ describe("ReactFireMixin Tests:", function() {
         },
 
         componentDidUpdate: function(prevProps, prevState) {
-          expect(this.state).toEqual({ items: [2, 3] });
+          expect(this.state).toEqual({ items: [{ $id: 'b', $value: 2 }, { $id:'c', $value: 3 }] });
           done();
         },
 
@@ -145,6 +145,48 @@ describe("ReactFireMixin Tests:", function() {
 
       React.render(new TestComponent(), document.body);
     });
+
+    it("bindAsArray() makes $id available on array items when they are objects", function(done) {
+      var TestComponent = React.createClass({
+        mixins: [ReactFireMixin],
+        componentWillMount: function() {
+          this.bindAsArray(firebaseRef, "items");
+        },
+        componentDidMount: function() {
+          firebaseRef.set({ first: { index: 1 }, second: { index: 2 }, third: { index: 3 } });
+        },
+        componentDidUpdate: function(prevProps, prevState) {
+          expect(this.state.items.map(function(item) { return item.$id; })).toEqual(['first', 'second', 'third']);
+          done();
+        },
+        render: function() {
+          return React.DOM.div(null, "Testing");
+        }
+      });
+      React.render(new TestComponent(), document.body);
+    })
+
+    it("bindAsArray() makes $id available on array items when they are primitives", function(done) {
+      var TestComponent = React.createClass({
+        mixins: [ReactFireMixin],
+        componentWillMount: function() {
+          this.bindAsArray(firebaseRef, "items");
+        },
+        componentDidMount: function() {
+          firebaseRef.set(["first", "second", "third"]);
+        },
+        componentDidUpdate: function(prevProps, prevState) {
+          console.log(JSON.stringify(this.state));
+          expect(this.state.items.map(function(item) { return item.$id; })).toEqual([0, 1, 2]);
+          expect(this.state.items.map(function(item) { return item.$value; })).toEqual(['first', 'second', 'third']);
+          done();
+        },
+        render: function() {
+          return React.DOM.div(null, "Testing");
+        }
+      });
+      React.render(new TestComponent(), document.body);
+    })
   });
 
   describe("bindAsObject():", function() {
