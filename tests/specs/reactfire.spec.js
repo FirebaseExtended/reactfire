@@ -109,7 +109,7 @@ describe("ReactFireMixin Tests:", function() {
         },
 
         componentDidUpdate: function(prevProps, prevState) {
-          expect(this.state).toEqual({ items: [{ $id: 'a', $value: 1 }, { $id: 'b', $value: 2 }, { $id:'c', $value: 3 }] });
+          expect(this.state).toEqual({ items: [{ $id: "a", $value: 1 }, { $id: "b", $value: 2 }, { $id: "c", $value: 3 }] });
           done();
         },
 
@@ -134,7 +134,7 @@ describe("ReactFireMixin Tests:", function() {
         },
 
         componentDidUpdate: function(prevProps, prevState) {
-          expect(this.state).toEqual({ items: [{ $id: 'b', $value: 2 }, { $id:'c', $value: 3 }] });
+          expect(this.state).toEqual({ items: [{ $id: "b", $value: 2 }, { $id: "c", $value: 3 }] });
           done();
         },
 
@@ -156,7 +156,7 @@ describe("ReactFireMixin Tests:", function() {
           firebaseRef.set({ first: { index: 1 }, second: { index: 2 }, third: { index: 3 } });
         },
         componentDidUpdate: function(prevProps, prevState) {
-          expect(this.state.items.map(function(item) { return item.$id; })).toEqual(['first', 'second', 'third']);
+          expect(this.state.items.map(function(item) { return item.$id; })).toEqual(["first", "second", "third"]);
           done();
         },
         render: function() {
@@ -178,7 +178,7 @@ describe("ReactFireMixin Tests:", function() {
         componentDidUpdate: function(prevProps, prevState) {
           console.log(JSON.stringify(this.state));
           expect(this.state.items.map(function(item) { return item.$id; })).toEqual([0, 1, 2]);
-          expect(this.state.items.map(function(item) { return item.$value; })).toEqual(['first', 'second', 'third']);
+          expect(this.state.items.map(function(item) { return item.$value; })).toEqual(["first", "second", "third"]);
           done();
         },
         render: function() {
