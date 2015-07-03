@@ -109,7 +109,13 @@ describe("ReactFireMixin Tests:", function() {
         },
 
         componentDidUpdate: function(prevProps, prevState) {
-          expect(this.state).toEqual({ items: [1, 2, 3] });
+          expect(this.state).toEqual({
+            items: [
+              { $key: "a", $value: 1 },
+              { $key: "b", $value: 2 },
+              { $key: "c", $value: 3 }
+            ]
+          });
           done();
         },
 
@@ -134,7 +140,84 @@ describe("ReactFireMixin Tests:", function() {
         },
 
         componentDidUpdate: function(prevProps, prevState) {
-          expect(this.state).toEqual({ items: [2, 3] });
+          expect(this.state).toEqual({
+            items: [
+              { $key: "b", $value: 2 },
+              { $key: "c", $value: 3 }
+            ]
+          });
+          done();
+        },
+
+        render: function() {
+          return React.DOM.div(null, "Testing");
+        }
+      });
+
+      React.render(new TestComponent(), document.body);
+    });
+
+    it("bindAsArray() makes $key available on array items when they are objects", function(done) {
+      var TestComponent = React.createClass({
+        mixins: [ReactFireMixin],
+        componentWillMount: function() {
+          this.bindAsArray(firebaseRef, "items");
+        },
+        componentDidMount: function() {
+          firebaseRef.set({ first: { index: 1 }, second: { index: 2 }, third: { index: 3 } });
+        },
+        componentDidUpdate: function(prevProps, prevState) {
+          expect(this.state.items.map(function(item) { return item.$key; })).toEqual(["first", "second", "third"]);
+          done();
+        },
+        render: function() {
+          return React.DOM.div(null, "Testing");
+        }
+      });
+      React.render(new TestComponent(), document.body);
+    });
+
+    it("bindAsArray() makes $key available on array items when they are primitives", function(done) {
+      var TestComponent = React.createClass({
+        mixins: [ReactFireMixin],
+        componentWillMount: function() {
+          this.bindAsArray(firebaseRef, "items");
+        },
+        componentDidMount: function() {
+          firebaseRef.set(["first", "second", "third"]);
+        },
+        componentDidUpdate: function(prevProps, prevState) {
+          expect(this.state.items.map(function(item) { return item.$key; })).toEqual([0, 1, 2]);
+          expect(this.state.items.map(function(item) { return item.$value; })).toEqual(["first", "second", "third"]);
+          done();
+        },
+        render: function() {
+          return React.DOM.div(null, "Testing");
+        }
+      });
+      React.render(new TestComponent(), document.body);
+    });
+
+    it("bindAsArray() properly binds to sparse arrays", function(done) {
+      var TestComponent = React.createClass({
+        mixins: [ReactFireMixin],
+
+        componentWillMount: function() {
+          this.bindAsArray(firebaseRef, "items");
+        },
+
+        componentDidMount: function() {
+          firebaseRef.set({ 0: 'a', 2: 'b', 5: 'c' });
+        },
+
+        componentDidUpdate: function(prevProps, prevState) {
+          expect(this.state).toEqual({
+            items: [
+              { $key: 0, $value: 'a' },
+              { $key: 2, $value: 'b' },
+              { $key: 5, $value: 'c' }
+            ]
+          });
           done();
         },
 
