@@ -120,12 +120,19 @@ var ReactFireMixin = {
     var out = [];
     if (obj) {
       if (this._isArray(obj)) {
-        out = obj;
+        for (var i=0; i < obj.length; i++) {
+          out.push({ $id: i, $value: obj[i] });
+        }
       }
       else if (typeof(obj) === "object") {
         for (var key in obj) {
           if (obj.hasOwnProperty(key)) {
-            out.push(obj[key]);
+            var item = obj[key];
+            if (typeof(item) !== "object") {
+              item = { $value: item };
+            }
+            item.$id = key;
+            out.push(item);
           }
         }
       }
