@@ -117,21 +117,25 @@ var ReactFireMixin = {
 
   /* Converts a Firebase object to a JavaScript array */
   _toArray: function(obj) {
+    var item;
     var out = [];
     if (obj) {
       if (this._isArray(obj)) {
-        for (var i=0; i < obj.length; i++) {
-          out.push({ $id: i, $value: obj[i] });
+        for (var i = 0, length = obj.length; i < length; i++) {
+          item = obj[i];
+          if (item !== undefined && item !== null) {
+            out.push({ $key: i, $value: item });
+          }
         }
       }
       else if (typeof(obj) === "object") {
         for (var key in obj) {
           if (obj.hasOwnProperty(key)) {
-            var item = obj[key];
-            if (typeof(item) !== "object") {
+            item = obj[key];
+            if (typeof item !== "object") {
               item = { $value: item };
             }
-            item.$id = key;
+            item.$key = key;
             out.push(item);
           }
         }
