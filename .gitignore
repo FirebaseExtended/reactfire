@@ -1,4 +1,4 @@
-/dist/
+dist/
+coverage/
 node_modules/
-/bower_components/
-tests/coverage
+bower_components/
