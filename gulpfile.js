@@ -1,123 +1,94 @@
+'use strict';
+
 /**************/
 /*  REQUIRES  */
 /**************/
-var gulp = require("gulp");
+var gulp = require('gulp');
+var runSequence = require('run-sequence');
 
 // File IO
-var streamqueue = require("streamqueue");
-var concat = require("gulp-concat");
-var jshint = require("gulp-jshint");
-var uglify = require("gulp-uglify");
+var exit = require('gulp-exit');
+var eslint = require('gulp-eslint');
+var uglify = require('gulp-uglify');
+var extReplace = require('gulp-ext-replace');
 
 // Testing
-var karma = require("gulp-karma");
-
-// Determine if this is being run in Travis
-var travis = false;
+var mocha = require('gulp-mocha');
+var istanbul = require('gulp-istanbul');
 
 
 /****************/
 /*  FILE PATHS  */
 /****************/
 var paths = {
-  destDir: "dist",
+  destDir: 'dist',
 
-  scripts: {
-    src: {
-      dir: "src",
-      files: [
-        "src/*.js"
-      ]
-    },
-    dest: {
-      dir: "dist",
-      files: {
-        unminified: "reactfire.js",
-        minified: "reactfire.min.js"
-      }
-    }
-  },
+  srcFiles: [
+    'src/reactfire.js'
+  ],
 
-  tests: {
-    config: "tests/karma.conf.js",
-    files: [
-      "bower_components/firebase/firebase.js",
-      "tests/phantomjs-es5-shim.js",
-      "bower_components/react/react-with-addons.js",
-      "src/*.js",
-      "tests/specs/*.spec.js"
-    ]
-  }
+  testFiles: [
+    'tests/helpers.js',
+    'tests/reactfire.spec.js'
+  ]
 };
 
 
 /***********/
 /*  TASKS  */
 /***********/
-/* Lints, minifies, and concatenates the script files */
-gulp.task("scripts", function() {
-  // Concatenate all src files together
-  var stream = streamqueue({ objectMode: true });
-  stream.queue(gulp.src("build/header"));
-  stream.queue(gulp.src(paths.scripts.src.files));
-  stream.queue(gulp.src("build/footer"));
+// Lints the JavaScript files
+gulp.task('lint', function() {
+  var filesToLint = paths.srcFiles.concat(paths.testFiles).concat(['gulpfile.js']);
+  return gulp.src(filesToLint)
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
+});
 
-  // Output the final concatenated script file
-  return stream.done()
-    // Rename file
-    .pipe(concat(paths.scripts.dest.files.unminified))
 
-    // Lint
-    .pipe(jshint())
-    .pipe(jshint.reporter("jshint-stylish"))
-    .pipe(jshint.reporter("fail"))
-    .on("error", function(error) {
-      if (travis) {
-        throw error;
-      }
-    })
-
+/* Builds the distribution files */
+gulp.task('build', function() {
+  return gulp.src(paths.srcFiles)
     // Write un-minified version
-    .pipe(gulp.dest(paths.scripts.dest.dir))
+    .pipe(gulp.dest(paths.destDir))
 
     // Minify
     .pipe(uglify({
-      preserveComments: "some"
+      preserveComments: 'some'
     }))
 
-    // Rename file
-    .pipe(concat(paths.scripts.dest.files.minified))
+    // Change the file extension
+    .pipe(extReplace('.min.js'))
 
-    // Write minified version to the distribution directory
-    .pipe(gulp.dest(paths.scripts.dest.dir));
+    // Write minified version
+    .pipe(gulp.dest(paths.destDir));
 });
 
-/* Uses the Karma test runner to run the Jasmine tests */
-gulp.task("test", function() {
-  return gulp.src(paths.tests.files)
-    .pipe(karma({
-      configFile: paths.tests.config,
-      browsers: travis ? ["Firefox"] : ["Chrome"],
-      action: "run"
-    }))
-    .on("error", function(error) {
-      throw error;
+// Runs the Mocha test suite
+gulp.task('test', function() {
+  return gulp.src(paths.srcFiles)
+    .pipe(istanbul())
+    .pipe(istanbul.hookRequire())
+    .on('finish', function() {
+      gulp.src(paths.testFiles)
+        .pipe(mocha({
+          reporter: 'spec',
+          timeout: 5000
+        }))
+        .pipe(istanbul.writeReports())
+        .pipe(exit());
     });
 });
 
-/* Re-runs the "scripts" task every time a script file changes */
-gulp.task("watch", function() {
-  gulp.watch(["build/*", paths.scripts.src.dir + "/**/*"], ["scripts"]);
+// Re-lints and re-builds every time a source file changes
+gulp.task('watch', function() {
+  gulp.watch([paths.srcFiles], ['lint', 'build']);
 });
 
-/* Builds the distribution files */
-gulp.task("build", ["scripts"]);
-
-/* Tasks to be run within Travis CI */
-gulp.task("travis", function() {
-  travis = true;
-  gulp.start("build", "test");
+// Default task
+gulp.task('default', function(done) {
+  runSequence('lint', 'build', 'test', function(error) {
+    done(error && error.err);
+  });
 });
-
-/* Runs the "scripts" and "test" tasks by default */
-gulp.task("default", ["build", "test"]);
