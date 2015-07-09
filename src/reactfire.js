@@ -41,7 +41,7 @@
    */
   function _indexForKey(list, key) {
     for (var i = 0, length = list.length; i < length; ++i) {
-      if (list[i].$key === key) {
+      if (list[i]['.key'] === key) {
         return i;
       }
     }
@@ -96,9 +96,9 @@
     if (typeof value === 'object' && value !== null) {
       record = value;
     } else {
-      record.$value = value;
+      record['.value'] = value;
     }
-    record.$key = key;
+    record['.key'] = key;
 
     return record;
   }

@@ -124,9 +124,9 @@ describe('ReactFire', function() {
             third: { index: 2 }
           }, function() {
             expect(this.state.items).to.deep.equal([
-              { '$key': 'first', index: 0 },
-              { '$key': 'second', index: 1 },
-              { '$key': 'third', index: 2 }
+              { '.key': 'first', index: 0 },
+              { '.key': 'second', index: 1 },
+              { '.key': 'third', index: 2 }
             ]);
 
             done();
@@ -150,9 +150,9 @@ describe('ReactFire', function() {
 
           firebaseRef.set(['first', 'second', 'third'], function() {
             expect(this.state.items).to.deep.equal([
-              { '$key': '0', '$value': 'first' },
-              { '$key': '1', '$value': 'second' },
-              { '$key': '2', '$value': 'third' }
+              { '.key': '0', '.value': 'first' },
+              { '.key': '1', '.value': 'second' },
+              { '.key': '2', '.value': 'third' }
             ]);
 
             done();
@@ -180,9 +180,9 @@ describe('ReactFire', function() {
             third: { index: 2 }
           }, function() {
             expect(this.state.items).to.deep.equal([
-              { '$key': '0', '$value': 'first' },
-              { '$key': '1', '$value': 'second' },
-              { '$key': 'third', index: 2 }
+              { '.key': '0', '.value': 'first' },
+              { '.key': '1', '.value': 'second' },
+              { '.key': 'third', index: 2 }
             ]);
 
             done();
@@ -228,9 +228,9 @@ describe('ReactFire', function() {
 
           firebaseRef.set({ 0: 'a', 2: 'b', 5: 'c' }, function() {
             expect(this.state.items).to.deep.equal([
-              { $key: '0', $value: 'a' },
-              { $key: '2', $value: 'b' },
-              { $key: '5', $value: 'c' }
+              { '.key': '0', '.value': 'a' },
+              { '.key': '2', '.value': 'b' },
+              { '.key': '5', '.value': 'c' }
             ]);
 
             done();
@@ -254,8 +254,8 @@ describe('ReactFire', function() {
 
           firebaseRef.set({ a: 1, b: 2, c: 3 }, function() {
             expect(this.state.items).to.deep.equal([
-              { $key: 'b', $value: 2 },
-              { $key: 'c', $value: 3 }
+              { '.key': 'b', '.value': 2 },
+              { '.key': 'c', '.value': 3 }
             ]);
 
             done();
@@ -280,8 +280,8 @@ describe('ReactFire', function() {
           firebaseRef.set({ a: 1, b: 2, c: 3 }, function() {
             firebaseRef.child('d').set(4, function() {
               expect(this.state.items).to.deep.equal([
-                { $key: 'c', $value: 3 },
-                { $key: 'd', $value: 4 }
+                { '.key': 'c', '.value': 3 },
+                { '.key': 'd', '.value': 4 }
               ]);
 
               done();
@@ -307,8 +307,8 @@ describe('ReactFire', function() {
           firebaseRef.set({ a: 1, b: 2, c: 3 }, function() {
             firebaseRef.child('b').remove(function() {
               expect(this.state.items).to.deep.equal([
-                { $key: 'a', $value: 1 },
-                { $key: 'c', $value: 3 }
+                { '.key': 'a', '.value': 1 },
+                { '.key': 'c', '.value': 3 }
               ]);
 
               done();
@@ -333,9 +333,9 @@ describe('ReactFire', function() {
 
           firebaseRef.set({ a: 2, b: 1, c: 3 }, function() {
             expect(this.state.items).to.deep.equal([
-              { $key: 'b', $value: 1 },
-              { $key: 'a', $value: 2 },
-              { $key: 'c', $value: 3 }
+              { '.key': 'b', '.value': 1 },
+              { '.key': 'a', '.value': 2 },
+              { '.key': 'c', '.value': 3 }
             ]);
 
             done();
@@ -367,15 +367,15 @@ describe('ReactFire', function() {
             items1: ['first', 'second', 'third']
           }, function() {
             expect(this.state.bindVar0).to.deep.equal([
-              { '$key': 'first', index: 0 },
-              { '$key': 'second', index: 1 },
-              { '$key': 'third', index: 2 }
+              { '.key': 'first', index: 0 },
+              { '.key': 'second', index: 1 },
+              { '.key': 'third', index: 2 }
             ]);
 
             expect(this.state.bindVar1).to.deep.equal([
-              { '$key': '0', '$value': 'first' },
-              { '$key': '1', '$value': 'second' },
-              { '$key': '2', '$value': 'third' }
+              { '.key': '0', '.value': 'first' },
+              { '.key': '1', '.value': 'second' },
+              { '.key': '2', '.value': 'third' }
             ]);
 
             done();
@@ -401,9 +401,9 @@ describe('ReactFire', function() {
           firebaseRef.set({ a: 1, b: 2, c: 3 }, function() {
             firebaseRef.child('b').set({ foo: 'bar' }, function() {
               expect(_this.state.items).to.deep.equal([
-                { $key: 'a', $value: 1 },
-                { $key: 'b', foo: 'bar' },
-                { $key: 'c', $value: 3 }
+                { '.key': 'a', '.value': 1 },
+                { '.key': 'b', foo: 'bar' },
+                { '.key': 'c', '.value': 3 }
               ]);
 
               done();
@@ -430,8 +430,8 @@ describe('ReactFire', function() {
           firebaseRef.set({ a: 1, b: 2, c: 3 }, function() {
             firebaseRef.child('b').remove(function() {
               expect(_this.state.items).to.deep.equal([
-                { $key: 'a', $value: 1 },
-                { $key: 'c', $value: 3 }
+                { '.key': 'a', '.value': 1 },
+                { '.key': 'c', '.value': 3 }
               ]);
 
               done();
@@ -458,9 +458,9 @@ describe('ReactFire', function() {
           firebaseRef.set({ a: 2, b: 3, c: 2 }, function() {
             firebaseRef.child('b').set(1, function() {
               expect(_this.state.items).to.deep.equal([
-                { $key: 'b', $value: 1 },
-                { $key: 'a', $value: 2 },
-                { $key: 'c', $value: 2 }
+                { '.key': 'b', '.value': 1 },
+                { '.key': 'a', '.value': 2 },
+                { '.key': 'c', '.value': 2 }
               ]);
 
               done();
@@ -487,9 +487,9 @@ describe('ReactFire', function() {
           firebaseRef.set({ a: 2, b: 1, c: 4 }, function() {
             firebaseRef.child('b').set(3, function() {
               expect(_this.state.items).to.deep.equal([
-                { $key: 'a', $value: 2 },
-                { $key: 'b', $value: 3 },
-                { $key: 'c', $value: 4 }
+                { '.key': 'a', '.value': 2 },
+                { '.key': 'b', '.value': 3 },
+                { '.key': 'c', '.value': 4 }
               ]);
 
               done();
@@ -516,9 +516,9 @@ describe('ReactFire', function() {
           firebaseRef.set({ a: 2, b: 1, c: 3 }, function() {
             firebaseRef.child('b').set(4, function() {
               expect(_this.state.items).to.deep.equal([
-                { $key: 'a', $value: 2 },
-                { $key: 'c', $value: 3 },
-                { $key: 'b', $value: 4 }
+                { '.key': 'a', '.value': 2 },
+                { '.key': 'c', '.value': 3 },
+                { '.key': 'b', '.value': 4 }
               ]);
 
               done();
@@ -616,7 +616,7 @@ describe('ReactFire', function() {
           };
 
           firebaseRef.child('items').set(obj, function() {
-            obj.$key = 'items';
+            obj['.key'] = 'items';
             expect(this.state.items).to.deep.equal(obj);
 
             done();
@@ -640,8 +640,8 @@ describe('ReactFire', function() {
 
           firebaseRef.child('items').set('foo', function() {
             expect(this.state.items).to.deep.equal({
-              $key: 'items',
-              $value: 'foo'
+              '.key': 'items',
+              '.value': 'foo'
             });
 
             done();
@@ -665,8 +665,8 @@ describe('ReactFire', function() {
 
           firebaseRef.child('items').set(null, function() {
             expect(this.state.items).to.deep.equal({
-              $key: 'items',
-              $value: null
+              '.key': 'items',
+              '.value': null
             });
 
             done();
@@ -694,7 +694,7 @@ describe('ReactFire', function() {
             third: { index: 2 }
           }, function() {
             expect(this.state.items).to.deep.equal({
-              $key: 'items',
+              '.key': 'items',
               second: { index: 1 },
               third: { index: 2 }
             });
@@ -737,10 +737,10 @@ describe('ReactFire', function() {
             items0: items0,
             items1: items1
           }, function() {
-            items0.$key = 'items0';
+            items0['.key'] = 'items0';
             expect(this.state.bindVar0).to.deep.equal(items0);
 
-            items1.$key = 'items1';
+            items1['.key'] = 'items1';
             expect(this.state.bindVar1).to.deep.equal(items1);
 
             done();
@@ -781,13 +781,13 @@ describe('ReactFire', function() {
             items0: items0,
             items1: items1
           }, function() {
-            items0.$key = 'items0';
+            items0['.key'] = 'items0';
             expect(this.state.bindVar0).to.deep.equal(items0);
 
             expect(this.state.bindVar1).to.deep.equal([
-              { $key: 'bar', foo: 'baz' },
-              { $key: 'baz', $value: true },
-              { $key: 'foo', $value: 100 }
+              { '.key': 'bar', foo: 'baz' },
+              { '.key': 'baz', '.value': true },
+              { '.key': 'foo', '.value': 100 }
             ]);
 
             done();
