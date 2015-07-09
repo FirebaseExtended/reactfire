@@ -85,7 +85,7 @@
   }
 
   /**
-   * Creates a new array record record given a key-value pair.
+   * Creates a new record given a key-value pair.
    *
    * @param {string} key The new record's key.
    * @param {any} value The new record's value.
