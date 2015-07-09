@@ -84,6 +84,25 @@
     }
   }
 
+  /**
+   * Creates a new array record record given a key-value pair.
+   *
+   * @param {string} key The new record's key.
+   * @param {any} value The new record's value.
+   * @return {Object} The new record.
+   */
+  function _createRecord(key, value) {
+    var record = {};
+    if (typeof value === 'object' && value !== null) {
+      record = value;
+    } else {
+      record.$value = value;
+    }
+    record.$key = key;
+
+    return record;
+  }
+
 
   /******************************/
   /*  BIND AS OBJECT LISTENERS  */
@@ -95,7 +114,11 @@
    * @param {Firebase.DataSnapshot} snapshot A snapshot of the data being bound.
    */
   function _objectValue(bindVar, snapshot) {
-    this.data[bindVar] = snapshot.val();
+    var key = snapshot.key();
+    var value = snapshot.val();
+
+    this.data[bindVar] = _createRecord(key, value);
+
     this.setState(this.data);
   }
 
@@ -103,25 +126,6 @@
   /*****************************/
   /*  BIND AS ARRAY LISTENERS  */
   /*****************************/
-  /**
-   * Creates a new array record record given a key-value pair.
-   *
-   * @param {string} key The new record's key.
-   * @param {any} value The new record's value.
-   * @return {Object} The new record.
-   */
-  function _createRecord(key, value) {
-    var record = {};
-    if (typeof value === 'object') {
-      record = value;
-    } else {
-      record.$value = value;
-    }
-    record.$key = key;
-
-    return record;
-  }
-
   /**
    * 'child_added' listener which adds a new record to the bound array.
    *
@@ -291,6 +295,7 @@
      */
     componentWillUnmount: function() {
       for (var bindVar in this.firebaseRefs) {
+        /* istanbul ignore else */
         if (this.firebaseRefs.hasOwnProperty(bindVar)) {
           this.unbind(bindVar);
         }
@@ -340,6 +345,7 @@
 
       // Turn off all Firebase listeners
       for (var event in this.firebaseListeners[bindVar]) {
+        /* istanbul ignore else */
         if (this.firebaseListeners[bindVar].hasOwnProperty(event)) {
           var offListener = this.firebaseListeners[bindVar][event];
           this.firebaseRefs[bindVar].off(event, offListener);
