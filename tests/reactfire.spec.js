@@ -607,7 +607,7 @@ describe('ReactFire', function() {
         mixins: [ReactFireMixin],
 
         componentWillMount: function() {
-          this.bindAsObject(firebaseRef, 'items');
+          this.bindAsObject(firebaseRef.child('items'), 'items');
 
           var obj = {
             first: { index: 0 },
@@ -615,7 +615,8 @@ describe('ReactFire', function() {
             third: { index: 2 }
           };
 
-          firebaseRef.set(obj, function() {
+          firebaseRef.child('items').set(obj, function() {
+            obj.$key = 'items';
             expect(this.state.items).to.deep.equal(obj);
 
             done();
@@ -635,10 +636,13 @@ describe('ReactFire', function() {
         mixins: [ReactFireMixin],
 
         componentWillMount: function() {
-          this.bindAsObject(firebaseRef, 'items');
+          this.bindAsObject(firebaseRef.child('items'), 'items');
 
-          firebaseRef.set('foo', function() {
-            expect(this.state.items).to.deep.equal('foo');
+          firebaseRef.child('items').set('foo', function() {
+            expect(this.state.items).to.deep.equal({
+              $key: 'items',
+              $value: 'foo'
+            });
 
             done();
           }.bind(this));
@@ -652,15 +656,18 @@ describe('ReactFire', function() {
       shallowRenderer.render(React.createElement(TestComponent));
     });
 
-    it('binds as null for Firebase references with no data', function(done) {
+    it('binds to Firebase references with no data', function(done) {
       var TestComponent = React.createClass({
         mixins: [ReactFireMixin],
 
         componentWillMount: function() {
-          this.bindAsObject(firebaseRef, 'items');
+          this.bindAsObject(firebaseRef.child('items'), 'items');
 
-          firebaseRef.set(null, function() {
-            expect(this.state.items).to.be.null;
+          firebaseRef.child('items').set(null, function() {
+            expect(this.state.items).to.deep.equal({
+              $key: 'items',
+              $value: null
+            });
 
             done();
           }.bind(this));
@@ -679,14 +686,15 @@ describe('ReactFire', function() {
         mixins: [ReactFireMixin],
 
         componentWillMount: function() {
-          this.bindAsObject(firebaseRef.limitToLast(2), 'items');
+          this.bindAsObject(firebaseRef.child('items').limitToLast(2), 'items');
 
-          firebaseRef.set({
+          firebaseRef.child('items').set({
             first: { index: 0 },
             second: { index: 1 },
             third: { index: 2 }
           }, function() {
             expect(this.state.items).to.deep.equal({
+              $key: 'items',
               second: { index: 1 },
               third: { index: 2 }
             });
@@ -729,7 +737,10 @@ describe('ReactFire', function() {
             items0: items0,
             items1: items1
           }, function() {
+            items0.$key = 'items0';
             expect(this.state.bindVar0).to.deep.equal(items0);
+
+            items1.$key = 'items1';
             expect(this.state.bindVar1).to.deep.equal(items1);
 
             done();
@@ -770,7 +781,9 @@ describe('ReactFire', function() {
             items0: items0,
             items1: items1
           }, function() {
+            items0.$key = 'items0';
             expect(this.state.bindVar0).to.deep.equal(items0);
+
             expect(this.state.bindVar1).to.deep.equal([
               { $key: 'bar', foo: 'baz' },
               { $key: 'baz', $value: true },
