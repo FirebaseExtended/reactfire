@@ -1,7 +1,7 @@
 {
   "name": "reactfire",
   "description": "Firebase mixin for ReactJS",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "authors": [
     "Firebase <support@firebase.com>"
   ],
@@ -32,10 +32,7 @@
     "changelog.txt"
   ],
   "dependencies": {
-    "react": "0.12.x",
-    "firebase": "2.0.x"
-  },
-  "devDependencies": {
-    "jasmine": "~2.0.0"
+    "react": "0.13.x",
+    "firebase": "2.2.x"
   }
 }

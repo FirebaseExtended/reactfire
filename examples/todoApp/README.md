@@ -35,4 +35,8 @@ this example are persistent.
 
 ## Walkthrough
 
-To learn more about how this example works, see the [blog post on the official Firebase blog](https://www.firebase.com/blog/2014-05-01-using-firebase-with-react.html).
+To learn more about how this example works, see the following blog posts on the official Firebase
+blog:
+* [Using Firebase With React](https://www.firebase.com/blog/2014-05-01-using-firebase-with-react.html)
+* [ReactFire 0.5.0](https://www.firebase.com/blog/2015-07-16-reactfire-0-5-0).
+
