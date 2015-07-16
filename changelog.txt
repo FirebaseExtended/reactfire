@@ -1,0 +1,7 @@
+important - This release brings some new functionality but also contains some breaking changes.
+feature - Added `.key` to every record bound via `bindAsArray()` or `bindAsObject()` which contains the key of the data's corresponding node in the Firebase database.
+feature - Improved performance of `bindAsArray()`, especially with large data sets.
+feature - Upgraded Firebase dependency to 2.2.x.
+feature - Upgraded React dependency to 0.13.x.
+changed - Primitive values are now stored in an object containing `.key` and `.value` instead of as the primitive value itself.
+fixed - `bindAsArray()` now properly handles all types of Firebase queries, including limit and order by queries.
