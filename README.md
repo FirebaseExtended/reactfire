@@ -28,7 +28,7 @@ In order to use ReactFire in your project, you need to include the following fil
 <script src="https://cdn.firebase.com/js/client/2.2.7/firebase.js"></script>
 
 <!-- ReactFire -->
-<script src="https://cdn.firebase.com/libs/reactfire/0.4.0/reactfire.min.js"></script>
+<script src="https://cdn.firebase.com/libs/reactfire/0.5.0/reactfire.min.js"></script>
 ```
 
 Use the URL above to download both the minified and non-minified versions of ReactFire from the
