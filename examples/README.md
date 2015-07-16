@@ -5,4 +5,8 @@ it with everyone else by putting in this `/examples/` directory. Please make sur
 `README.md` file in your example's base directory which explains what the example is and how to run
 it.
 
-Check out the [Todo app example](./todoApp/) to see how to structure your example.
+Check out the [Todo app example](./todoApp) to see how to structure your example.
+
+Examples:
+* [Todo app](./todoApp) - [Jacob Wenger](https://github.com/jwngr)
+* [Comments box](./commentsBox) - [Mark Woodall](https://github.com/llad)

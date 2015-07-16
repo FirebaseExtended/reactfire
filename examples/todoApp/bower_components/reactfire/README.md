@@ -1,14 +1,14 @@
 # ReactFire
 
 [![Build Status](https://travis-ci.org/firebase/reactfire.svg?branch=master)](https://travis-ci.org/firebase/reactfire)
-[![Coverage Status](https://img.shields.io/coveralls/firebase/reactfire.svg)](https://coveralls.io/r/firebase/reactfire)
+[![Coverage Status](https://img.shields.io/coveralls/firebase/reactfire.svg?branch=master&style=flat)](https://coveralls.io/r/firebase/reactfire)
 [![GitHub version](https://badge.fury.io/gh/firebase%2Freactfire.svg)](http://badge.fury.io/gh/firebase%2Freactfire)
 
 [ReactJS](http://facebook.github.io/react/) is a framework for building large, complex user
 interfaces. [Firebase](http://www.firebase.com/?utm_source=reactfire) complements it perfectly
 by providing an easy-to-use, realtime data source for populating the `state` of React components.
 With [ReactFire](https://www.firebase.com/docs/web/libraries/react/?utm_source=reactfire), it only
-takes a few lines of JavaScript to integrate Firebase into React apps via the `ReactFireMixin`.
+takes a few lines of JavaScript to integrate Firebase data into React apps via the `ReactFireMixin`.
 
 [Read through our documentation](https://www.firebase.com/docs/web/libraries/react/?utm_source=reactfire)
 on using Firebase with React and [check out our live Todo app demo](https://reactfiretodoapp.firebaseapp.com/)
@@ -21,14 +21,14 @@ In order to use ReactFire in your project, you need to include the following fil
 
 ```html
 <!-- React JS -->
-<script src="https://fb.me/react-0.12.0.min.js"></script>
-<script src="https://fb.me/JSXTransformer-0.12.0.js"></script>
+<script src="https://fb.me/react-0.13.3.min.js"></script>
+<script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
 
 <!-- Firebase -->
-<script src="https://cdn.firebase.com/js/client/2.0.1/firebase.js"></script>
+<script src="https://cdn.firebase.com/js/client/2.2.7/firebase.js"></script>
 
 <!-- ReactFire -->
-<script src="https://cdn.firebase.com/libs/reactfire/0.4.0/reactfire.min.js"></script>
+<script src="https://cdn.firebase.com/libs/reactfire/0.5.0/reactfire.min.js"></script>
 ```
 
 Use the URL above to download both the minified and non-minified versions of ReactFire from the

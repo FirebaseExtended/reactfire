@@ -1,20 +1,13 @@
 {
-  "name": "commentsBox",
-  "description": "react.js comment tutorial updated for ReactFire mixin",
-  "version": "0.4.0",
+  "name": "ReactFireCommentsBox",
+  "description": "React comment tutorial updated for ReactFire mixin",
+  "version": "0.5.0",
   "homepage": "https://github.com/llad/ReactFire",
   "authors": [
     "Mark Woodall <mwdll@icloud.com>"
   ],
   "main": "index.html",
   "license": "MIT",
-  "keywords": [
-    "react",
-    "firebase",
-    "reactfire",
-    "mixin",
-    "tutorial"
-  ],
   "dependencies": {
     "reactfire": "0.x.x",
     "showdown": "~0.3.1"
