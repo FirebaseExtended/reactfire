@@ -681,6 +681,33 @@ describe('ReactFire', function() {
       shallowRenderer.render(React.createElement(TestComponent));
     });
 
+    it('sets the key as null when bound to the root of the database', function(done) {
+      var TestComponent = React.createClass({
+        mixins: [ReactFireMixin],
+
+        componentWillMount: function() {
+          var rootRef = firebaseRef.root();
+
+          this.bindAsObject(rootRef, 'item');
+
+          rootRef.set('foo', function() {
+            expect(this.state.item).to.deep.equal({
+              '.key': null,
+              '.value': 'foo'
+            });
+
+            done();
+          }.bind(this));
+        },
+
+        render: function() {
+          return React.DOM.div(null);
+        }
+      });
+
+      shallowRenderer.render(React.createElement(TestComponent));
+    });
+
     it('binds with limit queries', function(done) {
       var TestComponent = React.createClass({
         mixins: [ReactFireMixin],
