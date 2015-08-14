@@ -1,4 +1,5 @@
 {
+  "root": true,
   "env": {
     "node": true,
     "browser": true
@@ -10,7 +11,7 @@
     /**
      * Strict mode
      */
-    "strict": [2, "global"],       // http://eslint.org/docs/rules/strict
+    "strict": [2, "global"],         // http://eslint.org/docs/rules/strict
 
     /**
      * Variables
