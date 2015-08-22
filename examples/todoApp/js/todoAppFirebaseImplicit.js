@@ -6,7 +6,7 @@ var TodoList3 = React.createClass({
       return (
         <li key={ index }>
           { item.text }
-          <span onClick={ _this.props.removeItem.bind(_this, item['.key']) }
+          <span onClick={ _this.props.removeItem.bind(null, item['.key']) }
                 style={{ color: 'red', marginLeft: '10px', cursor: 'pointer' }}>
             X
           </span>
