@@ -6,7 +6,7 @@ var TodoList2 = React.createClass({
       return (
         <li key={ index }>
           { item.text }
-          <span onClick={ _this.props.removeItem.bind(_this, item['.key']) }
+          <span onClick={ _this.props.removeItem.bind(null, item['.key']) }
                 style={{ color: 'red', marginLeft: '10px', cursor: 'pointer' }}>
             X
           </span>
@@ -50,7 +50,6 @@ var TodoApp2 = React.createClass({
   },
 
   removeItem: function(key) {
-    console.log('removeItem()', key);
     var firebaseRef = new Firebase('https://ReactFireTodoApp.firebaseio.com/items/');
     firebaseRef.child(key).remove();
   },
