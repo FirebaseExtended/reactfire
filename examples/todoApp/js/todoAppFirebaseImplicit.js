@@ -37,7 +37,6 @@ var TodoApp3 = React.createClass({
   },
 
   removeItem: function(key) {
-    console.log('removeItem()', key);
     var firebaseRef = new Firebase('https://ReactFireTodoApp.firebaseio.com/items/');
     firebaseRef.child(key).remove();
   },
