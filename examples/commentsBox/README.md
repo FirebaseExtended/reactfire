@@ -18,9 +18,8 @@ $ python -m SimpleHTTPServer 8080
 
 You can then visit the example in the browser of your choice at [http://127.0.0.1:8080/](http://127.0.0.1:8080/).
 
-If you have downloaded the entire repository visit the examples at
-[http://127.0.0.1:8080/examples/commentsBox/](http://127.0.0.1:8080/examples/commentsBox/), 
-[http://127.0.0.1:8080/examples/todoApp/](http://127.0.0.1:8080/examples/todoApp/)
+If you have downloaded the entire repository visit the example at [http://127.0.0.1:8080/examples/commentsBox/](http://127.0.0.1:8080/examples/commentsBox/) 
+
 
 ## Description
 
