@@ -447,7 +447,7 @@ describe('ReactFire', function() {
       shallowRenderer.render(React.createElement(TestComponent));
     });
 
-    it('moves an array record when it\'s order changes (moved to start of array)', function(done) {
+    it('moves an array record when it\'s order changes (moved to start of array) [orderByValue()]', function(done) {
       var TestComponent = React.createClass({
         mixins: [ReactFireMixin],
 
@@ -476,7 +476,7 @@ describe('ReactFire', function() {
       shallowRenderer.render(React.createElement(TestComponent));
     });
 
-    it('moves an array record when it\'s order changes (moved to middle of array)', function(done) {
+    it('moves an array record when it\'s order changes (moved to middle of array) [orderByValue()]', function(done) {
       var TestComponent = React.createClass({
         mixins: [ReactFireMixin],
 
@@ -505,7 +505,7 @@ describe('ReactFire', function() {
       shallowRenderer.render(React.createElement(TestComponent));
     });
 
-    it('moves an array record when it\'s order changes (moved to end of array)', function(done) {
+    it('moves an array record when it\'s order changes (moved to end of array) [orderByValue()]', function(done) {
       var TestComponent = React.createClass({
         mixins: [ReactFireMixin],
 
@@ -519,6 +519,124 @@ describe('ReactFire', function() {
                 { '.key': 'a', '.value': 2 },
                 { '.key': 'c', '.value': 3 },
                 { '.key': 'b', '.value': 4 }
+              ]);
+
+              done();
+            });
+          });
+        },
+
+        render: function() {
+          return React.DOM.div(null);
+        }
+      });
+
+      shallowRenderer.render(React.createElement(TestComponent));
+    });
+
+    it('moves an array record when it\'s order changes (moved to start of array) [orderByChild()]', function(done) {
+      var TestComponent = React.createClass({
+        mixins: [ReactFireMixin],
+
+        componentWillMount: function() {
+          this.bindAsArray(firebaseRef.orderByChild('value'), 'items');
+
+          var _this = this;
+          firebaseRef.set({ a: { value: 2 }, b: { value: 3 }, c: { value: 2 } }, function() {
+            firebaseRef.child('b').set({ value: 1 }, function() {
+              expect(_this.state.items).to.deep.equal([
+                { '.key': 'b', value: 1 },
+                { '.key': 'a', value: 2 },
+                { '.key': 'c', value: 2 }
+              ]);
+
+              done();
+            });
+          });
+        },
+
+        render: function() {
+          return React.DOM.div(null);
+        }
+      });
+
+      shallowRenderer.render(React.createElement(TestComponent));
+    });
+
+    it('moves an array record when it\'s order changes (moved to middle of array) [orderByChild()]', function(done) {
+      var TestComponent = React.createClass({
+        mixins: [ReactFireMixin],
+
+        componentWillMount: function() {
+          this.bindAsArray(firebaseRef.orderByChild('value'), 'items');
+
+          var _this = this;
+          firebaseRef.set({ a: { value: 2 }, b: { value: 1 }, c: { value: 4 } }, function() {
+            firebaseRef.child('b').set({ value: 3 }, function() {
+              expect(_this.state.items).to.deep.equal([
+                { '.key': 'a', value: 2 },
+                { '.key': 'b', value: 3 },
+                { '.key': 'c', value: 4 }
+              ]);
+
+              done();
+            });
+          });
+        },
+
+        render: function() {
+          return React.DOM.div(null);
+        }
+      });
+
+      shallowRenderer.render(React.createElement(TestComponent));
+    });
+
+    it('moves an array record when it\'s order changes (moved to end of array) [orderByChild()]', function(done) {
+      var TestComponent = React.createClass({
+        mixins: [ReactFireMixin],
+
+        componentWillMount: function() {
+          this.bindAsArray(firebaseRef.orderByChild('value'), 'items');
+
+          var _this = this;
+          firebaseRef.set({ a: {value: 2 }, b: { value: 1 }, c: { value: 3 } }, function() {
+            firebaseRef.child('b').set({ value: 4 }, function() {
+              expect(_this.state.items).to.deep.equal([
+                { '.key': 'a', value: 2 },
+                { '.key': 'c', value: 3 },
+                { '.key': 'b', value: 4 }
+              ]);
+
+              done();
+            });
+          });
+        },
+
+        render: function() {
+          return React.DOM.div(null);
+        }
+      });
+
+      shallowRenderer.render(React.createElement(TestComponent));
+    });
+
+    it('works with orderByKey() queries', function(done) {
+      var TestComponent = React.createClass({
+        mixins: [ReactFireMixin],
+
+        componentWillMount: function() {
+          this.bindAsArray(firebaseRef.orderByKey(), 'items');
+
+          var _this = this;
+          firebaseRef.set({ b: 2, c: 1, d: 3 }, function() {
+            firebaseRef.update({ a: 4, d: 4, e: 0 }, function() {
+              expect(_this.state.items).to.deep.equal([
+                { '.key': 'a', '.value': 4 },
+                { '.key': 'b', '.value': 2 },
+                { '.key': 'c', '.value': 1 },
+                { '.key': 'd', '.value': 4 },
+                { '.key': 'e', '.value': 0 }
               ]);
 
               done();
