@@ -296,7 +296,7 @@
     componentWillUnmount: function() {
       for (var bindVar in this.firebaseRefs) {
         /* istanbul ignore else */
-        if (this.firebaseRefs.hasOwnProperty(bindVar)) {
+        if (this.firebaseRefs.hasOwnProperty(bindVar) && this.firebaseRefs[bindVar] !== undefined) {
           this.unbind(bindVar);
         }
       }
