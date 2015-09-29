@@ -351,8 +351,8 @@
           this.firebaseRefs[bindVar].off(event, offListener);
         }
       }
-      this.firebaseRefs[bindVar] = undefined;
-      this.firebaseListeners[bindVar] = undefined;
+      delete this.firebaseRefs[bindVar];
+      delete this.firebaseListeners[bindVar];
 
       // Update state
       var newState = {};
