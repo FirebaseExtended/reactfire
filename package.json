@@ -11,12 +11,7 @@
   "bugs": {
     "url": "https://github.com/firebase/reactfire/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://firebase.mit-license.org/"
-    }
-  ],
+  "license": "MIT",
   "keywords": [
     "react",
     "mixin",
