@@ -17,7 +17,6 @@ var ReactFireMixin = require('../src/reactfire.js');
 // JSDom
 var jsdom = require('jsdom');
 global.document = jsdom.jsdom();  // Needed for ReactTestUtils shallow renderer
-document.createElement = null;  // Needed for Firebase
 
 // Test helpers
 var TH = require('./helpers.js');
