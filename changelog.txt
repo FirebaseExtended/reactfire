@@ -1,2 +1,0 @@
-feature - Upgraded Firebase dependency to 2.x.x.
-fixed - Fixed bug which caused `unbind()` to be called on a previously unbound reference when a component was unmounted.
