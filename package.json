@@ -32,7 +32,7 @@
     "package.json"
   ],
   "dependencies": {
-    "firebase": "2.2.x",
+    "firebase": "2.x.x",
     "react": "0.13.x"
   },
   "devDependencies": {
