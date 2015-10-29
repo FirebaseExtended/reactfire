@@ -118,6 +118,7 @@
     var value = snapshot.val();
 
     this.data[bindVar] = _createRecord(key, value);
+    this.firebaseLoads[bindVar] = true;
 
     this.setState(this.data);
   }
@@ -229,6 +230,15 @@
     this.setState(this.data);
   }
 
+  /**
+   * 'value' listener which updates the 'load' state of the bound state variable.
+   *
+   * @param {string} bindVar The state variable to which the data is being bound.
+   */
+  function _arrayValue(bindVar) {
+    this.firebaseLoads[bindVar] = true;
+    this.setState(this.data);
+  }
 
   /*************/
   /*  BINDING  */
@@ -266,7 +276,8 @@
         child_added: firebaseRef.on('child_added', _arrayChildAdded.bind(this, bindVar), cancelCallback),
         child_removed: firebaseRef.on('child_removed', _arrayChildRemoved.bind(this, bindVar), cancelCallback),
         child_changed: firebaseRef.on('child_changed', _arrayChildChanged.bind(this, bindVar), cancelCallback),
-        child_moved: firebaseRef.on('child_moved', _arrayChildMoved.bind(this, bindVar), cancelCallback)
+        child_moved: firebaseRef.on('child_moved', _arrayChildMoved.bind(this, bindVar), cancelCallback),
+        value: firebaseRef.on('value', _arrayValue.bind(this, bindVar), cancelCallback)
       };
     } else {
       // Add listener for 'value' event
@@ -288,6 +299,7 @@
       this.data = {};
       this.firebaseRefs = {};
       this.firebaseListeners = {};
+      this.firebaseLoads = {};
     },
 
     /**
