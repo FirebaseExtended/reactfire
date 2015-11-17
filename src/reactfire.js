@@ -31,26 +31,6 @@
   /*  HELPERS  */
   /*************/
   /**
-   * Returns the index of the key in the list. If an item with the key is not in the list, -1 is
-   * returned.
-   *
-   * @param {Array<any>} list A list of items.
-   * @param {string} key The key for which to search.
-   * @return {number} The index of the item which has the provided key or -1 if no items have the
-   * provided key.
-   */
-  function _indexForKey(list, key) {
-    for (var i = 0, length = list.length; i < length; ++i) {
-      if (list[i]['.key'] === key) {
-        return i;
-      }
-    }
-
-    /* istanbul ignore next */
-    return -1;
-  }
-
-  /**
    * Throws a formatted error message.
    *
    * @param {string} message The error message to throw.
@@ -127,108 +107,24 @@
   /*  BIND AS ARRAY LISTENERS  */
   /*****************************/
   /**
-   * 'child_added' listener which adds a new record to the bound array.
+   * 'value' listener which ensures empty array if still undefined.
    *
    * @param {string} bindVar The state variable to which the data is being bound.
    * @param {Firebase.DataSnapshot} snapshot A snapshot of the data being bound.
-   * @param {string|null} previousChildKey The key of the child after which the provided snapshot
-   * is positioned; null if the provided snapshot is in the first position.
    */
-  function _arrayChildAdded(bindVar, snapshot, previousChildKey) {
-    var key = snapshot.key();
-    var value = snapshot.val();
-    var array = this.data[bindVar];
+  function _arrayValue(bindVar, snapshot) {
+    var array = [];
+    
+    snapshot.forEach(function (child) {
+      var key = child.key();
+      var value = child.val();
+      array.push(_createRecord(key, value));
+    });
 
-    // Determine where to insert the new record
-    var insertionIndex;
-    if (previousChildKey === null) {
-      insertionIndex = 0;
-    } else {
-      var previousChildIndex = _indexForKey(array, previousChildKey);
-      insertionIndex = previousChildIndex + 1;
-    }
+    this.data[bindVar] = array;
 
-    // Add the new record to the array
-    array.splice(insertionIndex, 0, _createRecord(key, value));
-
-    // Update state
     this.setState(this.data);
   }
-
-  /**
-   * 'child_removed' listener which removes a record from the bound array.
-   *
-   * @param {string} bindVar The state variable to which the data is bound.
-   * @param {Firebase.DataSnapshot} snapshot A snapshot of the bound data.
-   */
-  function _arrayChildRemoved(bindVar, snapshot) {
-    var array = this.data[bindVar];
-
-    // Look up the record's index in the array
-    var index = _indexForKey(array, snapshot.key());
-
-    // Splice out the record from the array
-    array.splice(index, 1);
-
-    // Update state
-    this.setState(this.data);
-  }
-
-  /**
-   * 'child_changed' listener which updates a record's value in the bound array.
-   *
-   * @param {string} bindVar The state variable to which the data is bound.
-   * @param {Firebase.DataSnapshot} snapshot A snapshot of the data to bind.
-   */
-  function _arrayChildChanged(bindVar, snapshot) {
-    var key = snapshot.key();
-    var value = snapshot.val();
-    var array = this.data[bindVar];
-
-    // Look up the record's index in the array
-    var index = _indexForKey(array, key);
-
-    // Update the record's value in the array
-    array[index] = _createRecord(key, value);
-
-    // Update state
-    this.setState(this.data);
-  }
-
-  /**
-   * 'child_moved' listener which updates a record's position in the bound array.
-   *
-   * @param {string} bindVar The state variable to which the data is bound.
-   * @param {Firebase.DataSnapshot} snapshot A snapshot of the bound data.
-   * @param {string|null} previousChildKey The key of the child after which the provided snapshot
-   * is positioned; null if the provided snapshot is in the first position.
-   */
-  function _arrayChildMoved(bindVar, snapshot, previousChildKey) {
-    var key = snapshot.key();
-    var array = this.data[bindVar];
-
-    // Look up the record's index in the array
-    var currentIndex = _indexForKey(array, key);
-
-    // Splice out the record from the array
-    var record = array.splice(currentIndex, 1)[0];
-
-    // Determine where to re-insert the record
-    var insertionIndex;
-    if (previousChildKey === null) {
-      insertionIndex = 0;
-    } else {
-      var previousChildIndex = _indexForKey(array, previousChildKey);
-      insertionIndex = previousChildIndex + 1;
-    }
-
-    // Re-insert the record into the array
-    array.splice(insertionIndex, 0, record);
-
-    // Update state
-    this.setState(this.data);
-  }
-
 
   /*************/
   /*  BINDING  */
@@ -256,20 +152,12 @@
     // Keep track of the Firebase reference we are setting up listeners on
     this.firebaseRefs[bindVar] = firebaseRef.ref();
 
+    // Add listener for 'value' event
     if (bindAsArray) {
-      // Set initial state to an empty array
-      this.data[bindVar] = [];
-      this.setState(this.data);
-
-      // Add listeners for all 'child_*' events
       this.firebaseListeners[bindVar] = {
-        child_added: firebaseRef.on('child_added', _arrayChildAdded.bind(this, bindVar), cancelCallback),
-        child_removed: firebaseRef.on('child_removed', _arrayChildRemoved.bind(this, bindVar), cancelCallback),
-        child_changed: firebaseRef.on('child_changed', _arrayChildChanged.bind(this, bindVar), cancelCallback),
-        child_moved: firebaseRef.on('child_moved', _arrayChildMoved.bind(this, bindVar), cancelCallback)
+        value: firebaseRef.on('value', _arrayValue.bind(this, bindVar), cancelCallback)
       };
     } else {
-      // Add listener for 'value' event
       this.firebaseListeners[bindVar] = {
         value: firebaseRef.on('value', _objectValue.bind(this, bindVar), cancelCallback)
       };
