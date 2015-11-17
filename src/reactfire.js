@@ -137,7 +137,7 @@
   function _arrayChildAdded(bindVar, snapshot, previousChildKey) {
     var key = snapshot.key();
     var value = snapshot.val();
-    var array = this.data[bindVar];
+    var array = this.data[bindVar] || (this.data[bindVar] = []);
 
     // Determine where to insert the new record
     var insertionIndex;
@@ -162,7 +162,7 @@
    * @param {Firebase.DataSnapshot} snapshot A snapshot of the bound data.
    */
   function _arrayChildRemoved(bindVar, snapshot) {
-    var array = this.data[bindVar];
+    var array = this.data[bindVar] || (this.data[bindVar] = []);
 
     // Look up the record's index in the array
     var index = _indexForKey(array, snapshot.key());
@@ -183,7 +183,7 @@
   function _arrayChildChanged(bindVar, snapshot) {
     var key = snapshot.key();
     var value = snapshot.val();
-    var array = this.data[bindVar];
+    var array = this.data[bindVar] || (this.data[bindVar] = []);
 
     // Look up the record's index in the array
     var index = _indexForKey(array, key);
@@ -205,7 +205,7 @@
    */
   function _arrayChildMoved(bindVar, snapshot, previousChildKey) {
     var key = snapshot.key();
-    var array = this.data[bindVar];
+    var array = this.data[bindVar] || (this.data[bindVar] = []);
 
     // Look up the record's index in the array
     var currentIndex = _indexForKey(array, key);
@@ -229,6 +229,17 @@
     this.setState(this.data);
   }
 
+  /**
+   * 'value' listener which ensures empty array if still undefined.
+   *
+   * @param {string} bindVar The state variable to which the data is being bound.
+   */
+  function _arrayValue(bindVar) {
+    if (this.data[bindVar] === undefined) {
+      this.data[bindVar] || (this.data[bindVar] = []);
+      this.setState(this.data);
+    }
+  }
 
   /*************/
   /*  BINDING  */
@@ -257,16 +268,13 @@
     this.firebaseRefs[bindVar] = firebaseRef.ref();
 
     if (bindAsArray) {
-      // Set initial state to an empty array
-      this.data[bindVar] = [];
-      this.setState(this.data);
-
       // Add listeners for all 'child_*' events
       this.firebaseListeners[bindVar] = {
         child_added: firebaseRef.on('child_added', _arrayChildAdded.bind(this, bindVar), cancelCallback),
         child_removed: firebaseRef.on('child_removed', _arrayChildRemoved.bind(this, bindVar), cancelCallback),
         child_changed: firebaseRef.on('child_changed', _arrayChildChanged.bind(this, bindVar), cancelCallback),
-        child_moved: firebaseRef.on('child_moved', _arrayChildMoved.bind(this, bindVar), cancelCallback)
+        child_moved: firebaseRef.on('child_moved', _arrayChildMoved.bind(this, bindVar), cancelCallback),
+        value: firebaseRef.on('value', _arrayValue.bind(this, bindVar), cancelCallback)
       };
     } else {
       // Add listener for 'value' event
