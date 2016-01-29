@@ -28,7 +28,7 @@
   ],
   "dependencies": {
     "firebase": "2.x.x",
-    "react": "0.13.x"
+    "react": "0.14.x"
   },
   "devDependencies": {
     "chai": "^3.0.0",
@@ -41,6 +41,8 @@
     "gulp-mocha": "^2.1.2",
     "gulp-uglify": "^1.2.0",
     "jsdom": "3.x.x",
+    "react-addons-test-utils": "0.14.x",
+    "react-dom": "0.14.x",
     "run-sequence": "^1.1.1",
     "sinon": "^1.15.4",
     "sinon-chai": "^2.8.0"

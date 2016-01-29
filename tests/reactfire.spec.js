@@ -7,8 +7,8 @@ var sinon = require('sinon');
 chai.use(require('sinon-chai'));
 
 // React
-var React = require('react/addons');
-var ReactTestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactTestUtils = require('react-addons-test-utils');
 
 // ReactFire
 var Firebase = require('firebase');
