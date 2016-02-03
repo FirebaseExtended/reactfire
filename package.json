@@ -26,13 +26,15 @@
     "README.md",
     "package.json"
   ],
-  "dependencies": {
-    "firebase": "2.x.x",
-    "react": "0.14.x"
+  "dependencies": {},
+  "peerDependencies": {
+    "react": "0.13.x || 0.14.x",
+    "firebase": "2.x.x"
   },
   "devDependencies": {
     "chai": "^3.0.0",
     "coveralls": "^2.11.2",
+    "firebase": "2.x.x",
     "gulp": "^3.9.0",
     "gulp-eslint": "^0.15.0",
     "gulp-exit": "0.0.2",
@@ -42,6 +44,7 @@
     "gulp-uglify": "^1.2.0",
     "jsdom": "3.x.x",
     "react-addons-test-utils": "0.14.x",
+    "react": "0.14.x",
     "react-dom": "0.14.x",
     "run-sequence": "^1.1.1",
     "sinon": "^1.15.4",
