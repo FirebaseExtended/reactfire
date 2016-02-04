@@ -1,0 +1,2 @@
+feature - Upgraded React dependency to 0.14.x.
+changed - React and Firebase are now specified as `peerDependencies` in the `package.json` instead of regular `dependencies`.
