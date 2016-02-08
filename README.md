@@ -38,12 +38,15 @@ Firebase CDN. You can also download them from the
 [React](http://facebook.github.io/react/downloads.html) can be downloaded directly from their
 respective websites.
 
-You can also install ReactFire via npm or Bower and its dependencies will be downloaded
-automatically:
+You can also install ReactFire via npm or Bower. If downloading via npm, you will have to install
+React and Firebase separately (that is, they are `peerDependencies`):
 
 ```bash
-$ npm install reactfire --save
+$ npm install reactfire react firebase --save
 ```
+
+On Bower, the React and Firebase dependencies will be downloaded automatically:
+
 
 ```bash
 $ bower install reactfire --save
