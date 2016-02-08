@@ -20,12 +20,12 @@ to get started!
 In order to use ReactFire in your project, you need to include the following files in your HTML:
 
 ```html
-<!-- React JS -->
-<script src="https://fb.me/react-0.13.3.min.js"></script>
-<script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
+<!-- React -->
+<script src="https://fb.me/react-0.14.7.min.js"></script>
+<script src="https://fb.me/react-dom-0.14.7.min.js"></script>
 
 <!-- Firebase -->
-<script src="https://cdn.firebase.com/js/client/2.3.0/firebase.js"></script>
+<script src="https://cdn.firebase.com/js/client/2.4.0/firebase.js"></script>
 
 <!-- ReactFire -->
 <script src="https://cdn.firebase.com/libs/reactfire/0.6.0/reactfire.min.js"></script>
