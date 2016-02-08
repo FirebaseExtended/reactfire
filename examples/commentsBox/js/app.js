@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 // IMPORTANT: Replace below with your Firebase app URL
 var firebaseUrl = "https://my-firebase-app.firebaseio.com/";
 

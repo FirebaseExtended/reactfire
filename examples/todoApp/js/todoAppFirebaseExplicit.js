@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var TodoList2 = React.createClass({
   render: function() {
     var _this = this;
@@ -79,4 +78,4 @@ var TodoApp2 = React.createClass({
   }
 });
 
-React.render(<TodoApp2 />, document.getElementById('todoApp2'));
+ReactDOM.render(<TodoApp2 />, document.getElementById('todoApp2'));
