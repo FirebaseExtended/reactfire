@@ -337,6 +337,10 @@
      * @param {function} callback Called when the data is unbound and the state has been updated.
      */
     unbind: function(bindVar, callback) {
+      if (typeof this.firebaseRefs[bindVar] === 'undefined') {
+        return;
+      }
+
       _validateBindVar(bindVar);
 
       if (typeof this.firebaseRefs[bindVar] === 'undefined') {
