@@ -103,7 +103,6 @@
     return record;
   }
 
-
   /******************************/
   /*  BIND AS OBJECT LISTENERS  */
   /******************************/
@@ -118,6 +117,8 @@
     var value = snapshot.val();
 
     this.data[bindVar] = _createRecord(key, value);
+
+    this.firebaseLoaded[bindVar] = true;
 
     this.setState(this.data);
   }
@@ -150,6 +151,8 @@
 
     // Add the new record to the array
     array.splice(insertionIndex, 0, _createRecord(key, value));
+
+    this.firebaseLoaded[bindVar] = true;
 
     // Update state
     this.setState(this.data);
@@ -191,6 +194,8 @@
     // Update the record's value in the array
     array[index] = _createRecord(key, value);
 
+    this.firebaseLoaded[bindVar] = true;
+
     // Update state
     this.setState(this.data);
   }
@@ -224,6 +229,8 @@
 
     // Re-insert the record into the array
     array.splice(insertionIndex, 0, record);
+
+    this.firebaseLoaded[bindVar] = true;
 
     // Update state
     this.setState(this.data);
@@ -288,6 +295,7 @@
       this.data = {};
       this.firebaseRefs = {};
       this.firebaseListeners = {};
+      this.firebaseLoaded = {};
     },
 
     /**
@@ -306,26 +314,58 @@
     /*************/
     /*  BINDING  */
     /*************/
+    isBindingLoaded: function(bindVar) {
+      return !!this.firebaseLoaded[bindVar];
+    },
+
+    areAllBindingsLoaded: function() {
+      for (var bindVar in this.firebaseRefs) {
+        /* istanbul ignore else */
+        if (this.firebaseRefs.hasOwnProperty(bindVar)) {
+          if (!this.isBindingLoaded(bindVar)) {
+            return false;
+          }
+        }
+      }
+      return true;
+    },
+
     /**
      * Creates a binding between Firebase and the inputted bind variable as an array.
+     * Idempotent: Called with the same ref and var will produce no effect, calling with
+     * a different ref will unbind the old binding and bind a new one.
      *
      * @param {Firebase} firebaseRef The Firebase ref whose data to bind.
      * @param {string} bindVar The state variable to which to bind the data.
      * @param {function} cancelCallback The Firebase reference's cancel callback.
      */
     bindAsArray: function(firebaseRef, bindVar, cancelCallback) {
+      if (typeof this.firebaseRefs[bindVar] !== 'undefined') {
+        if (firebaseRef.toString() == this.firebaseRefs[bindVar].toString()) {
+          return;
+        }
+        this.unbind(bindVar);
+      }
       var bindPartial = _bind.bind(this);
       bindPartial(firebaseRef, bindVar, cancelCallback, /* bindAsArray */ true);
     },
 
     /**
      * Creates a binding between Firebase and the inputted bind variable as an object.
+     * Idempotent: Called with the same ref and var will produce no effect, calling with
+     * a different ref will unbind the old binding and bind a new one.
      *
      * @param {Firebase} firebaseRef The Firebase ref whose data to bind.
      * @param {string} bindVar The state variable to which to bind the data.
      * @param {function} cancelCallback The Firebase reference's cancel callback.
      */
     bindAsObject: function(firebaseRef, bindVar, cancelCallback) {
+      if (typeof this.firebaseRefs[bindVar] !== 'undefined') {
+        if (firebaseRef.toString() == this.firebaseRefs[bindVar].toString()) {
+          return;
+        }
+        this.unbind(bindVar);
+      }
       var bindPartial = _bind.bind(this);
       bindPartial(firebaseRef, bindVar, cancelCallback, /* bindAsArray */ false);
     },
@@ -344,10 +384,6 @@
 
       _validateBindVar(bindVar);
 
-      if (typeof this.firebaseRefs[bindVar] === 'undefined') {
-        _throwError('this.state.' + bindVar + ' is not bound to a Firebase reference');
-      }
-
       // Turn off all Firebase listeners
       for (var event in this.firebaseListeners[bindVar]) {
         /* istanbul ignore else */
@@ -358,6 +394,7 @@
       }
       delete this.firebaseRefs[bindVar];
       delete this.firebaseListeners[bindVar];
+      delete this.firebaseLoaded[bindVar];
 
       // Update state
       var newState = {};
