@@ -332,6 +332,7 @@
 
     /**
      * Removes the binding between Firebase and the inputted bind variable.
+     * Idempotent: Calling with an unbound variable will produce no effect.
      *
      * @param {string} bindVar The state variable to which the data is bound.
      * @param {function} callback Called when the data is unbound and the state has been updated.
