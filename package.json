@@ -19,9 +19,9 @@
     "realtime",
     "react-component"
   ],
-  "main": "dist/reactfire.js",
+  "main": "src/reactfire.js",
   "files": [
-    "dist/**",
+    "src/**",
     "LICENSE",
     "README.md",
     "package.json"
