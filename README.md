@@ -1,5 +1,3 @@
-# ReactFire
-
 ## Changes in this fork
 This fork contains some important changes that to be frank you probably need if you want to build serious applications with Firebase and React (which you should by the way, the combination is incredible).
 
@@ -73,6 +71,9 @@ If you have a really large array your render method is going to be called for ea
 
 You don't need to write any code for this to happen, it just works out of the box.
 
+Original documentation follows...
+
+# ReactFire
 
 [![Build Status](https://travis-ci.org/firebase/reactfire.svg?branch=master)](https://travis-ci.org/firebase/reactfire)
 [![Coverage Status](https://coveralls.io/repos/firebase/reactfire/badge.svg?branch=master&service=github)](https://coveralls.io/github/firebase/reactfire?branch=master)
