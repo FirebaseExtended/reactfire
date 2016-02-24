@@ -30,6 +30,54 @@
   /*************/
   /*  HELPERS  */
   /*************/
+
+  var now = Date.now || function () { new Date().getTime() };
+
+  /**
+   * Returns a function, that, as long as it continues to be invoked, will not
+   * be triggered. The function will be called after it stops being called for
+   * N milliseconds. If `immediate` is passed, trigger the function on the
+   * leading edge, instead of the trailing.
+   *
+   * @source underscore.js
+   * @see http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
+   * @param {Function} function to wrap
+   * @param {Number} timeout in ms (`100`)
+   * @param {Boolean} whether to execute at the beginning (`false`)
+   */
+  function debounce(func, wait, immediate) {
+    var timeout, args, context, timestamp, result;
+    if (null == wait) wait = 100;
+
+    function later() {
+      var last = now() - timestamp;
+
+      if (last < wait && last > 0) {
+        timeout = setTimeout(later, wait - last);
+      } else {
+        timeout = null;
+        if (!immediate) {
+          result = func.apply(context, args);
+          if (!timeout) context = args = null;
+        }
+      }
+    };
+
+    return function debounced() {
+      context = this;
+      args = arguments;
+      timestamp = now();
+      var callNow = immediate && !timeout;
+      if (!timeout) timeout = setTimeout(later, wait);
+      if (callNow) {
+        result = func.apply(context, args);
+        context = args = null;
+      }
+
+      return result;
+    };
+  }
+
   /**
    * Returns the index of the key in the list. If an item with the key is not in the list, -1 is
    * returned.
@@ -155,7 +203,8 @@
     this.firebaseLoaded[bindVar] = true;
 
     // Update state
-    this.setState(this.data);
+    // Debounce this so that if we 5000 elements in an array we don't call setState 5000 times.
+    this._debouncedSetState(this.data);
   }
 
   /**
@@ -250,6 +299,13 @@
    * @param {boolean} bindAsArray Whether or not to bind as an array or object.
    */
   function _bind(firebaseRef, bindVar, cancelCallback, bindAsArray) {
+    if (typeof this.firebaseRefs[bindVar] !== 'undefined') {
+      if (firebaseRef.toString() == this.firebaseRefs[bindVar].toString()) {
+        return;
+      }
+      this.unbind(bindVar);
+    }
+
     if (Object.prototype.toString.call(firebaseRef) !== '[object Object]') {
       _throwError('Invalid Firebase reference');
     }
@@ -259,6 +315,15 @@
     if (typeof this.firebaseRefs[bindVar] !== 'undefined') {
       _throwError('this.state.' + bindVar + ' is already bound to a Firebase reference');
     }
+
+    var handleError = function (error) {
+      if (this.firebaseDidCancel) {
+        this.firebaseDidCancel(error);
+      }
+      if (cancelCallback) {
+        cancelCallback(error);
+      }
+    }.bind(this);
 
     // Keep track of the Firebase reference we are setting up listeners on
     this.firebaseRefs[bindVar] = firebaseRef.ref();
@@ -270,15 +335,15 @@
 
       // Add listeners for all 'child_*' events
       this.firebaseListeners[bindVar] = {
-        child_added: firebaseRef.on('child_added', _arrayChildAdded.bind(this, bindVar), cancelCallback),
-        child_removed: firebaseRef.on('child_removed', _arrayChildRemoved.bind(this, bindVar), cancelCallback),
-        child_changed: firebaseRef.on('child_changed', _arrayChildChanged.bind(this, bindVar), cancelCallback),
-        child_moved: firebaseRef.on('child_moved', _arrayChildMoved.bind(this, bindVar), cancelCallback)
+        child_added: firebaseRef.on('child_added', _arrayChildAdded.bind(this, bindVar), handleError),
+        child_removed: firebaseRef.on('child_removed', _arrayChildRemoved.bind(this, bindVar), handleError),
+        child_changed: firebaseRef.on('child_changed', _arrayChildChanged.bind(this, bindVar), handleError),
+        child_moved: firebaseRef.on('child_moved', _arrayChildMoved.bind(this, bindVar), handleError)
       };
     } else {
       // Add listener for 'value' event
       this.firebaseListeners[bindVar] = {
-        value: firebaseRef.on('value', _objectValue.bind(this, bindVar), cancelCallback)
+        value: firebaseRef.on('value', _objectValue.bind(this, bindVar), handleError)
       };
     }
   }
@@ -296,6 +361,7 @@
       this.firebaseRefs = {};
       this.firebaseListeners = {};
       this.firebaseLoaded = {};
+      this._debouncedSetState = debounce(this.setState);
     },
 
     /**
