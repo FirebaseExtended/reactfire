@@ -31,6 +31,10 @@
   /*  HELPERS  */
   /*************/
 
+  var ARRAY_BINDING = 'array';
+  var OBJECT_BINDING = 'object';
+  var SNAPSHOT_BINDING = 'snapshot';
+
   var now = Date.now || function () { new Date().getTime() };
 
   /**
@@ -150,6 +154,24 @@
 
     return record;
   }
+
+  /********************************/
+  /*  BIND AS SNAPSHOT LISTENERS  */
+  /********************************/
+  /**
+   * 'value' listener which updates the value of the bound state variable.
+   *
+   * @param {string} bindVar The state variable to which the data is being bound.
+   * @param {Firebase.DataSnapshot} snapshot A snapshot of the data being bound.
+   */
+  function _snapshotValue(bindVar, snapshot) {
+    this.data[bindVar] = snapshot;
+
+    this.firebaseLoaded[bindVar] = true;
+
+    this.setState(this.data);
+  }
+
 
   /******************************/
   /*  BIND AS OBJECT LISTENERS  */
@@ -298,7 +320,7 @@
    * @param {function} cancelCallback The Firebase reference's cancel callback.
    * @param {boolean} bindAsArray Whether or not to bind as an array or object.
    */
-  function _bind(firebaseRef, bindVar, cancelCallback, bindAsArray) {
+  function _bind(firebaseRef, bindVar, cancelCallback, bindingType) {
     if (typeof this.firebaseRefs[bindVar] !== 'undefined') {
       if (firebaseRef.toString() == this.firebaseRefs[bindVar].toString()) {
         return;
@@ -328,7 +350,7 @@
     // Keep track of the Firebase reference we are setting up listeners on
     this.firebaseRefs[bindVar] = firebaseRef.ref();
 
-    if (bindAsArray) {
+    if (bindingType == ARRAY_BINDING) {
       // Set initial state to an empty array
       this.data[bindVar] = [];
       this.setState(this.data);
@@ -340,11 +362,18 @@
         child_changed: firebaseRef.on('child_changed', _arrayChildChanged.bind(this, bindVar), handleError),
         child_moved: firebaseRef.on('child_moved', _arrayChildMoved.bind(this, bindVar), handleError)
       };
-    } else {
+    } else if (bindingType == OBJECT_BINDING) {
       // Add listener for 'value' event
       this.firebaseListeners[bindVar] = {
         value: firebaseRef.on('value', _objectValue.bind(this, bindVar), handleError)
       };
+    } else if (bindingType == SNAPSHOT_BINDING) {
+      // Add listener for 'value' event
+      this.firebaseListeners[bindVar] = {
+        value: firebaseRef.on('value', _snapshotValue.bind(this, bindVar), handleError)
+      };
+    } else {
+      _throwError("Unknown binding type: " + bindingType);
     }
   }
 
@@ -406,14 +435,8 @@
      * @param {function} cancelCallback The Firebase reference's cancel callback.
      */
     bindAsArray: function(firebaseRef, bindVar, cancelCallback) {
-      if (typeof this.firebaseRefs[bindVar] !== 'undefined') {
-        if (firebaseRef.toString() == this.firebaseRefs[bindVar].toString()) {
-          return;
-        }
-        this.unbind(bindVar);
-      }
       var bindPartial = _bind.bind(this);
-      bindPartial(firebaseRef, bindVar, cancelCallback, /* bindAsArray */ true);
+      bindPartial(firebaseRef, bindVar, cancelCallback, ARRAY_BINDING);
     },
 
     /**
@@ -426,14 +449,22 @@
      * @param {function} cancelCallback The Firebase reference's cancel callback.
      */
     bindAsObject: function(firebaseRef, bindVar, cancelCallback) {
-      if (typeof this.firebaseRefs[bindVar] !== 'undefined') {
-        if (firebaseRef.toString() == this.firebaseRefs[bindVar].toString()) {
-          return;
-        }
-        this.unbind(bindVar);
-      }
       var bindPartial = _bind.bind(this);
-      bindPartial(firebaseRef, bindVar, cancelCallback, /* bindAsArray */ false);
+      bindPartial(firebaseRef, bindVar, cancelCallback, OBJECT_BINDING);
+    },
+
+    /**
+     * Creates a binding between Firebase and the inputted bind variable as a DataSnapshot.
+     * Idempotent: Called with the same ref and var will produce no effect, calling with
+     * a different ref will unbind the old binding and bind a new one.
+     *
+     * @param {Firebase} firebaseRef The Firebase ref whose data to bind.
+     * @param {string} bindVar The state variable to which to bind the data.
+     * @param {function} cancelCallback The Firebase reference's cancel callback.
+     */
+    bindAsDataSnapshot: function(firebaseRef, bindVar, cancelCallback) {
+      var bindPartial = _bind.bind(this);
+      bindPartial(firebaseRef, bindVar, cancelCallback, SNAPSHOT_BINDING);
     },
 
     /**
