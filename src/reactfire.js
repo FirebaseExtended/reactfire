@@ -484,7 +484,7 @@
      * @param {string} bindVar The state variable to which to bind the data.
      * @param {function} cancelCallback The Firebase reference's cancel callback.
      */
-    bindAsTransform: function(firebaseRef, transform, bindVar, cancelCallback) {
+    bindAsTransform: function(firebaseRef, bindVar, transform, cancelCallback) {
       var bindPartial = _bind.bind(this);
       bindPartial(firebaseRef, bindVar, cancelCallback, transform, TRANSFORM_BINDING);
     },
