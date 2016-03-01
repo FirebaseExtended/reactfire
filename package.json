@@ -26,7 +26,9 @@
     "README.md",
     "package.json"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "deep-equal": "^1.0.1"
+  },
   "peerDependencies": {
     "react": "0.13.x || 0.14.x",
     "firebase": "2.x.x"

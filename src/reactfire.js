@@ -38,6 +38,8 @@
 
   var now = Date.now || function () { new Date().getTime() };
 
+  var deepEqual = require('deep-equal');
+
   /**
    * Returns a function, that, as long as it continues to be invoked, will not
    * be triggered. The function will be called after it stops being called for
@@ -325,7 +327,7 @@
    */
   function _bind(firebaseRef, bindVar, cancelCallback, transform, bindingType) {
     if (typeof this.firebaseRefs[bindVar] !== 'undefined') {
-      if (firebaseRef.toString() == this.firebaseRefs[bindVar].toString()) {
+      if (deepEqual(firebaseRef, this.firebaseRefs[bindVar])) {
         return;
       }
       this.unbind(bindVar);
