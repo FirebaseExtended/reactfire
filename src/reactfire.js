@@ -34,6 +34,7 @@
   var ARRAY_BINDING = 'array';
   var OBJECT_BINDING = 'object';
   var SNAPSHOT_BINDING = 'snapshot';
+  var TRANSFORM_BINDING = 'transform';
 
   var now = Date.now || function () { new Date().getTime() };
 
@@ -163,9 +164,10 @@
    *
    * @param {string} bindVar The state variable to which the data is being bound.
    * @param {Firebase.DataSnapshot} snapshot A snapshot of the data being bound.
+   * @param {function} transform Called on each snapshot, the result is used as a value.
    */
-  function _snapshotValue(bindVar, snapshot) {
-    this.data[bindVar] = snapshot;
+  function _snapshotValue(bindVar, transform, snapshot) {
+    this.data[bindVar] = transform(snapshot);
 
     this.firebaseLoaded[bindVar] = true;
 
@@ -317,10 +319,11 @@
    *
    * @param {Firebase} firebaseRef The Firebase ref whose data to bind.
    * @param {string} bindVar The state variable to which to bind the data.
+   * @param {function} transform Transform the binding
    * @param {function} cancelCallback The Firebase reference's cancel callback.
-   * @param {boolean} bindAsArray Whether or not to bind as an array or object.
+   * @param {string} bindingType The type of binding.
    */
-  function _bind(firebaseRef, bindVar, cancelCallback, bindingType) {
+  function _bind(firebaseRef, bindVar, cancelCallback, transform, bindingType) {
     if (typeof this.firebaseRefs[bindVar] !== 'undefined') {
       if (firebaseRef.toString() == this.firebaseRefs[bindVar].toString()) {
         return;
@@ -367,10 +370,13 @@
       this.firebaseListeners[bindVar] = {
         value: firebaseRef.on('value', _objectValue.bind(this, bindVar), handleError)
       };
-    } else if (bindingType == SNAPSHOT_BINDING) {
+    } else if (bindingType == SNAPSHOT_BINDING || bindingType == TRANSFORM_BINDING) {
+      if (!transform) {
+        transform = function(v) { return v; }
+      }
       // Add listener for 'value' event
       this.firebaseListeners[bindVar] = {
-        value: firebaseRef.on('value', _snapshotValue.bind(this, bindVar), handleError)
+        value: firebaseRef.on('value', _snapshotValue.bind(this, bindVar, transform), handleError)
       };
     } else {
       _throwError("Unknown binding type: " + bindingType);
@@ -436,7 +442,7 @@
      */
     bindAsArray: function(firebaseRef, bindVar, cancelCallback) {
       var bindPartial = _bind.bind(this);
-      bindPartial(firebaseRef, bindVar, cancelCallback, ARRAY_BINDING);
+      bindPartial(firebaseRef, bindVar, cancelCallback, null, ARRAY_BINDING);
     },
 
     /**
@@ -450,7 +456,7 @@
      */
     bindAsObject: function(firebaseRef, bindVar, cancelCallback) {
       var bindPartial = _bind.bind(this);
-      bindPartial(firebaseRef, bindVar, cancelCallback, OBJECT_BINDING);
+      bindPartial(firebaseRef, bindVar, cancelCallback, null, OBJECT_BINDING);
     },
 
     /**
@@ -464,7 +470,23 @@
      */
     bindAsDataSnapshot: function(firebaseRef, bindVar, cancelCallback) {
       var bindPartial = _bind.bind(this);
-      bindPartial(firebaseRef, bindVar, cancelCallback, SNAPSHOT_BINDING);
+      bindPartial(firebaseRef, bindVar, cancelCallback, null, SNAPSHOT_BINDING);
+    },
+
+    /**
+     * Creates a binding between Firebase and the inputted bind variable as a DataSnapshot
+     * transformed by a provided function.
+     * Idempotent: Called with the same ref and var will produce no effect, calling with
+     * a different ref will unbind the old binding and bind a new one.
+     *
+     * @param {Firebase} firebaseRef The Firebase ref whose data to bind.
+     * @param {function} transform DataSnapshot is run through this transform before binding, the value being cached.
+     * @param {string} bindVar The state variable to which to bind the data.
+     * @param {function} cancelCallback The Firebase reference's cancel callback.
+     */
+    bindAsTransform: function(firebaseRef, transform, bindVar, cancelCallback) {
+      var bindPartial = _bind.bind(this);
+      bindPartial(firebaseRef, bindVar, cancelCallback, transform, TRANSFORM_BINDING);
     },
 
     /**
