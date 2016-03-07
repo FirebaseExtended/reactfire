@@ -344,6 +344,7 @@
     }
 
     var handleError = function (error) {
+      console.error(error);
       if (this.firebaseDidCancel) {
         this.firebaseDidCancel(error);
       }
