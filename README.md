@@ -1,3 +1,78 @@
+## Changes in this fork
+This fork contains some important changes that to be frank you probably need if you want to build serious applications with Firebase and React (which you should by the way, the combination is incredible).
+
+I have not paid great detail to cleanly designing these APIs yet so don't consider them stable at this point. They are very likely to evolve, sometimes quite drastically.
+
+### Idempotent bindings
+
+Calls to any of the "bind" or "unbind" methods are idempotent. If the binding is the same then nothing will happen, if the binding is different then the old one will be unbound and a new one will be create. Exceptions will not be thrown in these circumstances. Idempotency is an important trait of readable and robust code. In particular this is important if you're going to use react router and have navigation within the same React component, in this case it's likely you would want to change existing bindings.
+
+```javascript
+  rebind() {
+    this.bindAsObject(firebaseRoot.child('foo').child(this.props.params.foo), 'foo');
+  }
+
+  componentWillMount() {
+    this.rebind();
+  }
+
+  componentDidUpdate() {
+    this.rebind();
+  }
+```
+
+In your render method you can check if your bindings have been loaded yet. This is also useful for server side rendering.
+
+```javascript
+render() {
+  // You can check if all the bindings have been loaded.
+  if (!this.areAllBindingsLoaded()) {
+    return <div>Loading...</div>;
+  }
+
+  // ...or you can check if individual bindings are (this is less useful(.
+  if (!this.isBindingLoaded('foo')) {
+    return <div>Loading...</div>;
+  }
+  
+  return <div>{foo.name}</div>
+}
+```
+
+### Check if bindings have been loaded
+
+In your render method you can check if your bindings have been loaded:
+
+```javascript
+render() {
+  if (!this.areAllBindingsLoaded()) {
+    return <div>Loading...</div>;
+  }
+
+  if (!this.isBindingLoaded('foo')) {
+    return <div>Loading...</div>;
+  }
+}
+```
+
+### Component wide "cancel callback" (i.e. error reporting)
+
+You can have a error reporting callback on the entire component by overriding firebaseDidCancel.
+
+```javascript
+  firebaseDidCancel(error) {
+      console.error(error);
+  }
+```
+
+### Debounced "child_added" callback
+
+If you have a really large array your render method is going to be called for each element. Render methods and virtual DOM diffing is fast in React but not this fast.
+
+You don't need to write any code for this to happen, it just works out of the box.
+
+Original documentation follows...
+
 # ReactFire
 
 [![Build Status](https://travis-ci.org/firebase/reactfire.svg?branch=master)](https://travis-ci.org/firebase/reactfire)
@@ -13,7 +88,6 @@ takes a few lines of JavaScript to integrate Firebase data into React apps via t
 [Read through our documentation](https://www.firebase.com/docs/web/libraries/react/?utm_source=reactfire)
 on using Firebase with React and [check out our live Todo app demo](https://reactfiretodoapp.firebaseapp.com/)
 to get started!
-
 
 ## Downloading ReactFire
 
