@@ -29,6 +29,7 @@ var CommentList = React.createClass({
 
 var CommentForm = React.createClass({
   handleSubmit: function() {
+    event.preventDefault();
     var author = this.refs.author.getDOMNode().value.trim();
     var text = this.refs.text.getDOMNode().value.trim();
     this.props.onCommentSubmit({author: author, text: text});
