@@ -30,11 +30,11 @@ var CommentList = React.createClass({
 var CommentForm = React.createClass({
   handleSubmit: function(event) {
     event.preventDefault();
-    var author = this.refs.author.getDOMNode().value.trim();
-    var text = this.refs.text.getDOMNode().value.trim();
+    var author = this.refs.author.value.trim();
+    var text = this.refs.text.value.trim();
     this.props.onCommentSubmit({author: author, text: text});
-    this.refs.author.getDOMNode().value = '';
-    this.refs.text.getDOMNode().value = '';
+    this.refs.author.value = '';
+    this.refs.text.value = '';
   },
 
   render: function() {
@@ -80,7 +80,7 @@ var CommentBox = React.createClass({
   }
 });
 
-React.render(
+ReactDOM.render(
   <CommentBox />,
   document.getElementById('content')
 );
