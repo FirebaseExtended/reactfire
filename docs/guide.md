@@ -20,8 +20,9 @@ Let's look at the Todo app on the [React homepage](http://facebook.github.io/rea
 <!-- React JS -->
 <script src="https://fb.me/react-0.13.3.js"></script>
 <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
+
 <!-- Firebase -->
-<script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.0.0/firebase.js"></script>
 ```
 
 Now that we have included Firebase, we can populate the list of Todo items by reading them from the database. We do this by hooking into the `componentWillMount()` method of the `TodoApp` component which is run once, immediately before the initial rendering of the component:
@@ -75,9 +76,9 @@ To get started with ReactFire, include it in your project by loading the library
 <script src="https://fb.me/react-0.13.3.js"></script>
 <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
 <!-- Firebase -->
-<script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.0.0/firebase.js"></script>
 <!-- ReactFire -->
-<script src="https://cdn.firebase.com/libs/reactfire/0.6.0/reactfire.min.js"></script>
+<script src="https://cdn.firebase.com/libs/reactfire/1.0.0/reactfire.min.js"></script>
 ```
 
 *ReactFire and its dependencies are also available from npm via `npm install reactfire` and Bower via `bower install reactfire`.*
