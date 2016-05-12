@@ -28,7 +28,7 @@ Now that we have included Firebase, we can populate the list of Todo items by re
 
 ```js
 componentWillMount: function() {
-  this.firebaseRef = new Firebase("https://ReactFireTodoApp.firebaseio.com/items");
+  this.firebaseRef = firebase.database.ref().child("items");
   this.firebaseRef.on("child_added", function(dataSnapshot) {
     this.items.push(dataSnapshot.val());
     this.setState({
@@ -52,7 +52,7 @@ handleSubmit: function(e) {
 }
 ```
 
-Within `handleSubmit()` a new item is pushed onto the saved `Firebase` reference which appends it to the end of the `items` node. The call to `setState()` updates `this.state.text` but does not need to update `this.state.items` as it did in the original React code. This is because the `child_added` event handler from `componentWillMount()` will be fired when a new child is pushed onto the `items` node and that code will update `this.state.items`.
+Within `handleSubmit()` a new item is pushed onto the databse reference which appends it to the end of the `items` node. The call to `setState()` updates `this.state.text` but does not need to update `this.state.items` as it did in the original React code. This is because the `child_added` event handler from `componentWillMount()` will be fired when a new child is pushed onto the `items` node and that code will update `this.state.items`.
 
 The last thing that needs to happen is cleaning up the database event handler:
 
@@ -95,12 +95,12 @@ The `ReactFireMixin` extends the functionality of the `TodoApp` component, addin
 
 ```js
 componentWillMount: function() {
-  var ref = new Firebase("https://ReactFireTodoApp.firebaseio.com/items");
+  var ref = firebase.database().ref().child("items");
   this.bindAsArray(ref, "items");
 }
 ```
 
-We simply specify that we want to bind a particular `Firebase` reference to `this.state.items` of the React component. The `ReactFireMixin` allows binding to a node as an array or as a regular JavaScript object. This creates a one-way binding from the `Firebase` reference to `this.state.items`, meaning that if the data in the database changes, so will `this.state.items`. However, if we update `this.state.items`, the database data will not change. Therefore, changes should be made directly to the database and not by calling `setState()`:
+We simply specify that we want to bind a particular Firebase Database reference to `this.state.items` of the React component. The `ReactFireMixin` allows binding to a node as an array or as a regular JavaScript object. This creates a one-way binding from the `Firebase` reference to `this.state.items`, meaning that if the data in the database changes, so will `this.state.items`. However, if we update `this.state.items`, the database data will not change. Therefore, changes should be made directly to the database and not by calling `setState()`:
 
 ```js
 handleSubmit: function(e) {

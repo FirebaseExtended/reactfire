@@ -2,7 +2,7 @@
 
 ## 1. Create an account
 
-The first thing you need to do to get started with Firebase is [sign up for a free account](https://www.firebase.com/login/). A brand new Firebase app will automatically be created for you with its own unique URL ending in `firebaseio.com`. We'll use this URL to authenticate our users and to store and sync data to the app's database.
+The first thing you need to do to get started with Firebase is [sign up for a free account](https://firebase.google.com/). A brand new Firebase app will automatically be created for you with its own unique URL ending in `firebaseio.com`. We'll use this URL to authenticate our users and to store and sync data to the app's database.
 
 
 ## 2. Include Firebase and ReactFire
@@ -14,9 +14,9 @@ To use ReactFire in our website, we need to add it along with all its dependenci
 <script src="https://fb.me/react-0.13.3.js"></script>
 <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
 <!-- Firebase -->
-<script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.0.0/firebase.js"></script>
 <!-- ReactFire -->
-<script src="https://cdn.firebase.com/libs/reactfire/0.6.0/reactfire.min.js"></script>
+<script src="https://cdn.firebase.com/libs/reactfire/1.0.0/reactfire.min.js"></script>
 ```
 
 **ReactFire and its dependencies are also available from npm via `npm install reactfire` and Bower via `bower install reactfire`.**
@@ -42,7 +42,7 @@ Taking `ExampleComponent` above, we can keep `this.state.items` in sync with any
 
 ```js
 componentWillMount: function() {
-  var ref = new Firebase("https://<YOUR-FIREBASE-APP>.firebaseio.com/items");
+  var ref = firebase.database().ref().child("items")
   this.bindAsArray(ref, "items");
 }
 ```

@@ -31,7 +31,7 @@ The following code will make the data stored at /items/ as an array and make it 
 
 ```js
 componentWillMount: function() {
-  var ref = new Firebase("https://<YOUR-FIREBASE-APP>.firebaseio.com/items");
+  var ref = firebase.database().ref().child("items");
   this.bindAsArray(ref, "items");
 }
 ```
@@ -92,7 +92,7 @@ The following code will make the data stored at `/users/fred/` as an object and 
 
 ```js
 componentWillMount: function() {
-  var ref = new Firebase("https://<YOUR-FIREBASE-APP>.firebaseio.com/users/fred");
+  var ref = firebase.database().ref().child("users/fred");
   this.bindAsObject(ref, "user");
 }
 ```
