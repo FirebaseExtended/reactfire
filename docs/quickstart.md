@@ -21,7 +21,22 @@ To use ReactFire in our website, we need to add it along with all its dependenci
 
 **ReactFire and its dependencies are also available from npm via `npm install reactfire` and Bower via `bower install reactfire`.**
 
-## 3. Add the ReactFireMixin
+## 3. Initialize Firebase and add the ReactFireMixin
+
+We'll need to initialize Firebase before we can use it. This can happen outside of React and you can find details on the [Web Setup](https://firebase.google.com/docs/web/setup) page. 
+
+```js
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: '<your-api-key>',
+    authDomain: '<your-auth-domain>',
+    databaseURL: '<your-database-url>',
+    storageBucket: '<your-storage-bucket>'
+  };
+  firebase.initializeApp(config);
+</script>
+```
 
 ReactFire exposes the `ReactFireMixin` which extends the functionality of a React component, adding additional Firebase-specific methods to it. These methods allow us to create a **one-way data binding from our Firebase database to our component's `this.state` variable**. Add the `ReactFireMixin` to our component's `mixins` list:
 
@@ -42,7 +57,7 @@ Taking `ExampleComponent` above, we can keep `this.state.items` in sync with any
 
 ```js
 componentWillMount: function() {
-  var ref = firebase.database().ref().child("items")
+  var ref = firebase.database().ref("items")
   this.bindAsArray(ref, "items");
 }
 ```

@@ -27,7 +27,7 @@ var TodoApp3 = React.createClass({
   },
 
   componentWillMount: function() {
-    var firebaseRef = new Firebase('https://ReactFireTodoApp.firebaseio.com/items/');
+    var firebaseRef = firebase.database().ref("items");;
     this.bindAsArray(firebaseRef.limitToLast(25), 'items');
   },
 
@@ -36,7 +36,7 @@ var TodoApp3 = React.createClass({
   },
 
   removeItem: function(key) {
-    var firebaseRef = new Firebase('https://ReactFireTodoApp.firebaseio.com/items/');
+    var firebaseRef = firebase.database().ref("items");;
     firebaseRef.child(key).remove();
   },
 

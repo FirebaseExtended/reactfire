@@ -53,7 +53,7 @@ handleSubmit: function(e) {
 }
 ```
 
-Within `handleSubmit()` a new item is pushed onto the databse reference which appends it to the end of the `items` node. The call to `setState()` updates `this.state.text` but does not need to update `this.state.items` as it did in the original React code. This is because the `child_added` event handler from `componentWillMount()` will be fired when a new child is pushed onto the `items` node and that code will update `this.state.items`.
+Within `handleSubmit()` a new item is pushed onto the database reference which appends it to the end of the `items` node. The call to `setState()` updates `this.state.text` but does not need to update `this.state.items` as it did in the original React code. This is because the `child_added` event handler from `componentWillMount()` will be fired when a new child is pushed onto the `items` node and that code will update `this.state.items`.
 
 The last thing that needs to happen is cleaning up the database event handler:
 
@@ -83,6 +83,21 @@ To get started with ReactFire, include it in your project by loading the library
 
 *ReactFire and its dependencies are also available from npm via `npm install reactfire` and Bower via `bower install reactfire`.*
 
+We'll need to initialize Firebase before we can use it. This can happen outside of React and you can find details on the [Web Setup](https://firebase.google.com/docs/web/setup) page.
+
+```js
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: '<your-api-key>',
+    authDomain: '<your-auth-domain>',
+    databaseURL: '<your-database-url>',
+    storageBucket: '<your-storage-bucket>'
+  };
+  firebase.initializeApp(config);
+</script>
+```
+
 To then use the `ReactFireMixin` in the `TodoApp` component, add it to the component's `mixins` property:
 
 ```js
@@ -96,7 +111,7 @@ The `ReactFireMixin` extends the functionality of the `TodoApp` component, addin
 
 ```js
 componentWillMount: function() {
-  var ref = firebase.database().ref().child("items");
+  var ref = firebase.database().ref("items");
   this.bindAsArray(ref, "items");
 }
 ```

@@ -31,7 +31,7 @@ The following code will make the data stored at /items/ as an array and make it 
 
 ```js
 componentWillMount: function() {
-  var ref = firebase.database().ref().child("items");
+  var ref = firebase.database().ref("items");
   this.bindAsArray(ref, "items");
 }
 ```

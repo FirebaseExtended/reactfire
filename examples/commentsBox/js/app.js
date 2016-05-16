@@ -1,5 +1,12 @@
-// IMPORTANT: Replace below with your Firebase app URL
-var firebaseUrl = "https://my-firebase-app.firebaseio.com/";
+// IMPORTANT: Replace below with your Firebase config
+
+var config = {
+  apiKey: "AIzaSyD6NMVI9vCk3-VzXY5k_mRLSZS8waWZFjA",
+  authDomain: "reactfire-bbede.firebaseapp.com",
+  databaseURL: "https://reactfire-bbede.firebaseio.com",
+  storageBucket: "reactfire-bbede.appspot.com",
+};
+firebase.initializeApp(config);
 
 var converter = new Showdown.converter();
 
@@ -66,7 +73,7 @@ var CommentBox = React.createClass({
   componentWillMount: function() {
     // Here we bind the component to Firebase and it handles all data updates,
     // no need to poll as in the React example.
-    this.bindAsArray(new Firebase(firebaseUrl + "commentBox"), "data");
+    this.bindAsArray(firebase.database().ref("commentBox"), "data");
   },
 
   render: function() {
