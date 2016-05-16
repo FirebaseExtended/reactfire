@@ -33,6 +33,6 @@
   ],
   "dependencies": {
     "react": "0.13.x || 0.14.x || 15.x.x",
-    "firebase": "3.x.x"
+    "firebase": "2.x.x || 3.x.x"
   }
 }

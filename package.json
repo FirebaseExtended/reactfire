@@ -29,7 +29,7 @@
   "dependencies": {},
   "peerDependencies": {
     "react": "0.13.x || 0.14.x || 15.x.x",
-    "firebase": "2.x.x"
+    "firebase": "2.x.x || 3.x.x"
   },
   "devDependencies": {
     "chai": "^3.0.0",
