@@ -25,6 +25,21 @@ Let's look at the Todo app on the [React homepage](http://facebook.github.io/rea
 <script src="https://www.gstatic.com/firebasejs/3.0.0/firebase.js"></script>
 ```
 
+We'll need to initialize Firebase before we can use it. This can happen outside of React and you can find details on the [Web Setup](https://firebase.google.com/docs/web/setup) page.
+
+```js
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: '<your-api-key>',
+    authDomain: '<your-auth-domain>',
+    databaseURL: '<your-database-url>',
+    storageBucket: '<your-storage-bucket>'
+  };
+  firebase.initializeApp(config);
+</script>
+```
+
 Now that we have included Firebase, we can populate the list of Todo items by reading them from the database. We do this by hooking into the `componentWillMount()` method of the `TodoApp` component which is run once, immediately before the initial rendering of the component:
 
 ```js
