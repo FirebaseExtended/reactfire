@@ -40,7 +40,7 @@
     var key;
     if (typeof snapshot.key === 'function') {
       key = snapshot.key();
-    } else if (typeof snapshot.key === 'string') {
+    } else if (typeof snapshot.key === 'string' || typeof snapshot.key === 'object') {
       key = snapshot.key;
     } else {
       key = snapshot.name();
