@@ -1,4 +1,4 @@
-# API Reference | GeoFire
+# API Reference | ReactFire
 
 
 ## Table of Contents

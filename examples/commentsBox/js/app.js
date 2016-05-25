@@ -1,8 +1,7 @@
 var config = {
-  apiKey: 'AIzaSyD6NMVI9vCk3-VzXY5k_mRLSZS8waWZFjA',
-  authDomain: 'reactfire-bbede.firebaseapp.com',
-  databaseURL: 'https://reactfire-bbede.firebaseio.com',
-  storageBucket: 'reactfire-bbede.appspot.com',
+  apiKey: "AIzaSyCdxGmqWURL8YUfGPK3OVANsyvsE0cHV5s",
+  authDomain: "reactfiretodoapp.firebaseapp.com",
+  databaseURL: "https://reactfiretodoapp.firebaseio.com"
 };
 firebase.initializeApp(config);
 
