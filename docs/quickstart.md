@@ -112,4 +112,4 @@ example, if we no longer want `this.state.items` to be bound to node, we can cal
 
 This was just a quick run through of the basics of ReactFire. For a more in-depth explanation of how
 to use ReactFire, [check out the ReactFire guide](guide.md) or dig right into the
-[ReactFire APIreference](reference.md).
+[ReactFire API reference](reference.md).

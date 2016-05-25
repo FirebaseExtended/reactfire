@@ -1,4 +1,10 @@
 {
-  "firebase": "reactfiretodoapp",
-  "public": "."
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
 }
