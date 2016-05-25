@@ -1,5 +1,7 @@
 'use strict';
 
+var path = require('path');
+
 // Mocha / Chai / Sinon
 var chai = require('chai');
 var expect = chai.expect;
@@ -14,19 +16,20 @@ var ReactTestUtils = require('react-addons-test-utils');
 var firebase = require('firebase');
 var ReactFireMixin = require('../src/reactfire.js');
 
-// Initialize Firebase
-firebase.initializeApp({
-  databaseURL: 'https://reactfire-bbede.firebaseio.com',
-  serviceAccount: 'credentials.json'
-});
-
-
 // JSDom
 var jsdom = require('jsdom');
 global.document = jsdom.jsdom();  // Needed for ReactTestUtils shallow renderer
 
 // Test helpers
 var TH = require('./helpers.js');
+
+
+// Initialize the Firebase SDK
+firebase.initializeApp({
+  databaseURL: process.env.REACTFIRE_TEST_DB_URL,
+  serviceAccount: path.resolve(__dirname, 'key.json')
+});
+
 
 describe('ReactFire', function() {
   var firebaseRef;
@@ -40,7 +43,7 @@ describe('ReactFire', function() {
       if (error) {
         done(error);
       } else {
-        firebaseRef = firebaseRef.child(TH.generateRandomString());
+        firebaseRef = firebaseRef.push();
         done();
       }
     });

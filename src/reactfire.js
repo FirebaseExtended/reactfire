@@ -31,16 +31,16 @@
   /*  HELPERS  */
   /*************/
   /**
-   * Get the key of a Firebase snapshot across SDK versions
+   * Returns the key of a Firebase snapshot across SDK versions.
    *
-   * @param {Object} snapshot A Firebase Snapshot
-   * @return {String} key The Firebase snapshot's key
+   * @param {DataSnapshot} snapshot A Firebase snapshot.
+   * @return {string|null} key The Firebase snapshot's key.
    */
   function _getKey(snapshot) {
     var key;
     if (typeof snapshot.key === 'function') {
       key = snapshot.key();
-    } else if (typeof snapshot.key === 'string' || typeof snapshot.key === 'object') {
+    } else if (typeof snapshot.key === 'string' || snapshot.key === null) {
       key = snapshot.key;
     } else {
       key = snapshot.name();
@@ -49,10 +49,11 @@
   }
 
   /**
-   * Get the ref of a Firebase snapshot or reference across SDK versions
+   * Returns the reference of a Firebase snapshot or reference across SDK versions.
    *
-   * @param {Object} snapshotOrRef A Firebase Snapshot or reference.
-   * @return {Object} ref The object's reference.
+   * @param {DataSnapshot|DatabaseReference} snapshotOrRef A Firebase snapshot or reference.
+   * @return {DatabaseReference} ref The Firebase reference corresponding to the inputted snapshot
+   * or reference.
    */
   function _getRef(snapshotOrRef) {
     var ref;
@@ -262,6 +263,7 @@
     // Update state
     this.setState(this.data);
   }
+
 
   /*************/
   /*  BINDING  */
