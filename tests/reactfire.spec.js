@@ -1,5 +1,7 @@
 'use strict';
 
+var path = require('path');
+
 // Mocha / Chai / Sinon
 var chai = require('chai');
 var expect = chai.expect;
@@ -11,7 +13,7 @@ var React = require('react');
 var ReactTestUtils = require('react-addons-test-utils');
 
 // ReactFire
-var Firebase = require('firebase');
+var firebase = require('firebase');
 var ReactFireMixin = require('../src/reactfire.js');
 
 // JSDom
@@ -21,8 +23,12 @@ global.document = jsdom.jsdom();  // Needed for ReactTestUtils shallow renderer
 // Test helpers
 var TH = require('./helpers.js');
 
-// Get a reference to a random demo Firebase
-var demoFirebaseUrl = 'https://' + TH.generateRandomString() + '.firebaseio-demo.com';
+
+// Initialize the Firebase SDK
+firebase.initializeApp({
+  databaseURL: process.env.REACTFIRE_TEST_DB_URL,
+  serviceAccount: path.resolve(__dirname, 'key.json')
+});
 
 
 describe('ReactFire', function() {
@@ -32,12 +38,12 @@ describe('ReactFire', function() {
   beforeEach(function(done) {
     shallowRenderer = ReactTestUtils.createRenderer();
 
-    firebaseRef = new Firebase(demoFirebaseUrl);
+    firebaseRef = firebase.database().ref().push();
     firebaseRef.remove(function(error) {
       if (error) {
         done(error);
       } else {
-        firebaseRef = firebaseRef.child(TH.generateRandomString());
+        firebaseRef = firebaseRef.push();
         done();
       }
     });
@@ -803,7 +809,7 @@ describe('ReactFire', function() {
         mixins: [ReactFireMixin],
 
         componentWillMount: function() {
-          var rootRef = firebaseRef.root();
+          var rootRef = firebaseRef.root;
 
           this.bindAsObject(rootRef, 'item');
 

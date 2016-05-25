@@ -29,12 +29,12 @@
   "dependencies": {},
   "peerDependencies": {
     "react": "0.13.x || 0.14.x || 15.x.x",
-    "firebase": "2.x.x"
+    "firebase": "2.x.x || 3.x.x"
   },
   "devDependencies": {
     "chai": "^3.0.0",
     "coveralls": "^2.11.2",
-    "firebase": "2.x.x",
+    "firebase": "3.x.x",
     "gulp": "^3.9.0",
     "gulp-eslint": "^0.15.0",
     "gulp-exit": "0.0.2",

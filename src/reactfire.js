@@ -31,6 +31,41 @@
   /*  HELPERS  */
   /*************/
   /**
+   * Returns the key of a Firebase snapshot across SDK versions.
+   *
+   * @param {DataSnapshot} snapshot A Firebase snapshot.
+   * @return {string|null} key The Firebase snapshot's key.
+   */
+  function _getKey(snapshot) {
+    var key;
+    if (typeof snapshot.key === 'function') {
+      key = snapshot.key();
+    } else if (typeof snapshot.key === 'string' || snapshot.key === null) {
+      key = snapshot.key;
+    } else {
+      key = snapshot.name();
+    }
+    return key;
+  }
+
+  /**
+   * Returns the reference of a Firebase snapshot or reference across SDK versions.
+   *
+   * @param {DataSnapshot|DatabaseReference} snapshotOrRef A Firebase snapshot or reference.
+   * @return {DatabaseReference} ref The Firebase reference corresponding to the inputted snapshot
+   * or reference.
+   */
+  function _getRef(snapshotOrRef) {
+    var ref;
+    if (typeof snapshotOrRef.ref === 'function') {
+      ref = snapshotOrRef.ref();
+    } else {
+      ref = snapshotOrRef.ref;
+    }
+    return ref;
+  }
+
+  /**
    * Returns the index of the key in the list. If an item with the key is not in the list, -1 is
    * returned.
    *
@@ -114,7 +149,7 @@
    * @param {Firebase.DataSnapshot} snapshot A snapshot of the data being bound.
    */
   function _objectValue(bindVar, snapshot) {
-    var key = snapshot.key();
+    var key = _getKey(snapshot);
     var value = snapshot.val();
 
     this.data[bindVar] = _createRecord(key, value);
@@ -135,7 +170,7 @@
    * is positioned; null if the provided snapshot is in the first position.
    */
   function _arrayChildAdded(bindVar, snapshot, previousChildKey) {
-    var key = snapshot.key();
+    var key = _getKey(snapshot);
     var value = snapshot.val();
     var array = this.data[bindVar];
 
@@ -165,7 +200,7 @@
     var array = this.data[bindVar];
 
     // Look up the record's index in the array
-    var index = _indexForKey(array, snapshot.key());
+    var index = _indexForKey(array, _getKey(snapshot));
 
     // Splice out the record from the array
     array.splice(index, 1);
@@ -181,7 +216,7 @@
    * @param {Firebase.DataSnapshot} snapshot A snapshot of the data to bind.
    */
   function _arrayChildChanged(bindVar, snapshot) {
-    var key = snapshot.key();
+    var key = _getKey(snapshot);
     var value = snapshot.val();
     var array = this.data[bindVar];
 
@@ -204,7 +239,7 @@
    * is positioned; null if the provided snapshot is in the first position.
    */
   function _arrayChildMoved(bindVar, snapshot, previousChildKey) {
-    var key = snapshot.key();
+    var key = _getKey(snapshot);
     var array = this.data[bindVar];
 
     // Look up the record's index in the array
@@ -254,7 +289,7 @@
     }
 
     // Keep track of the Firebase reference we are setting up listeners on
-    this.firebaseRefs[bindVar] = firebaseRef.ref();
+    this.firebaseRefs[bindVar] = _getRef(firebaseRef);
 
     if (bindAsArray) {
       // Set initial state to an empty array

@@ -1,5 +1,10 @@
-// IMPORTANT: Replace below with your Firebase app URL
-var firebaseUrl = "https://my-firebase-app.firebaseio.com/";
+var config = {
+  apiKey: 'AIzaSyD6NMVI9vCk3-VzXY5k_mRLSZS8waWZFjA',
+  authDomain: 'reactfire-bbede.firebaseapp.com',
+  databaseURL: 'https://reactfire-bbede.firebaseio.com',
+  storageBucket: 'reactfire-bbede.appspot.com',
+};
+firebase.initializeApp(config);
 
 var converter = new Showdown.converter();
 
@@ -8,8 +13,8 @@ var Comment = React.createClass({
   render: function() {
     var rawMarkup = converter.makeHtml(this.props.children.toString());
     return (
-      <div className="comment">
-        <h2 className="commentAuthor">{this.props.author}</h2>
+      <div className='comment'>
+        <h2 className='commentAuthor'>{this.props.author}</h2>
         <span dangerouslySetInnerHTML={{__html: rawMarkup}} />
       </div>
     );
@@ -22,7 +27,7 @@ var CommentList = React.createClass({
     var commentNodes = this.props.data.map(function (comment, index) {
       return <Comment key={index} author={comment.author}>{comment.text}</Comment>;
     });
-    return <div className="commentList">{commentNodes}</div>;
+    return <div className='commentList'>{commentNodes}</div>;
   }
 });
 
@@ -39,10 +44,10 @@ var CommentForm = React.createClass({
 
   render: function() {
     return (
-      <form className="commentForm" onSubmit={this.handleSubmit}>
-        <input type="text" placeholder="Your name" ref="author" />
-        <input type="text" placeholder="Say something..." ref="text" />
-        <input type="submit" value="Post" />
+      <form className='commentForm' onSubmit={this.handleSubmit}>
+        <input type='text' placeholder='Your name' ref='author' />
+        <input type='text' placeholder='Say something...' ref='text' />
+        <input type='submit' value='Post' />
       </form>
     );
   }
@@ -54,7 +59,7 @@ var CommentBox = React.createClass({
 
   handleCommentSubmit: function(comment) {
     // Here we push the update out to Firebase and let ReactFire update this.state.data
-    this.firebaseRefs["data"].push(comment);
+    this.firebaseRefs['data'].push(comment);
   },
 
   getInitialState: function() {
@@ -66,12 +71,12 @@ var CommentBox = React.createClass({
   componentWillMount: function() {
     // Here we bind the component to Firebase and it handles all data updates,
     // no need to poll as in the React example.
-    this.bindAsArray(new Firebase(firebaseUrl + "commentBox"), "data");
+    this.bindAsArray(firebase.database().ref('commentsBox'), 'data');
   },
 
   render: function() {
     return (
-      <div className="commentBox">
+      <div className='commentBox'>
         <h1>Comments</h1>
         <CommentList data={this.state.data} />
         <CommentForm onCommentSubmit={this.handleCommentSubmit} />

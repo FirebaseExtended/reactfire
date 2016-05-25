@@ -9,7 +9,7 @@ var TodoList1 = React.createClass({
 
 var TodoApp1 = React.createClass({
   getInitialState: function() {
-    return {items: [], text: ""};
+    return {items: [], text: ''};
   },
 
   onChange: function(e) {
@@ -24,7 +24,7 @@ var TodoApp1 = React.createClass({
       }]);
       this.setState({
         items: nextItems,
-        text: ""
+        text: ''
       });
     }
   },
@@ -35,11 +35,11 @@ var TodoApp1 = React.createClass({
         <TodoList1 items={ this.state.items } />
         <form onSubmit={ this.handleSubmit }>
           <input onChange={ this.onChange } value={ this.state.text } />
-          <button>{ "Add #" + (this.state.items.length + 1) }</button>
+          <button>{ 'Add #' + (this.state.items.length + 1) }</button>
         </form>
       </div>
     );
   }
 });
 
-ReactDOM.render(<TodoApp1 />, document.getElementById("todoApp1"));
+ReactDOM.render(<TodoApp1 />, document.getElementById('todoApp1'));
