@@ -25,7 +25,7 @@ var TodoApp2 = React.createClass({
   },
 
   componentWillMount: function() {
-    this.firebaseRef = firebase.database().ref("items");
+    this.firebaseRef = firebase.database().ref('todoApp/items');
     this.firebaseRef.limitToLast(25).on('value', function(dataSnapshot) {
       var items = [];
       dataSnapshot.forEach(function(childSnapshot) {
@@ -49,7 +49,7 @@ var TodoApp2 = React.createClass({
   },
 
   removeItem: function(key) {
-    var firebaseRef = firebase.database().ref("items");;
+    var firebaseRef = firebase.database().ref('todoApp/items');;
     firebaseRef.child(key).remove();
   },
 

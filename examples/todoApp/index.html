@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>ReactFire Todo App Demo</title>
+    <title>Todo App | ReactFire Demo</title>
 
     <!-- React -->
     <script src="https://fb.me/react-15.0.1.min.js"></script>
     <script src="https://fb.me/react-dom-15.0.1.min.js"></script>
 
     <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/3.0.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.0.3/firebase.js"></script>
 
     <!-- ReactFire -->
     <script src="https://cdn.firebase.com/libs/reactfire/1.0.0/reactfire.min.js"></script>
@@ -16,8 +16,18 @@
     <!-- throw-in-the-towel -->
     <script src="https://npmcdn.com/throw-in-the-towel@2"></script>
 
+    <!-- Initialize the Firebase SDK -->
+    <script>
+      var config = {
+        apiKey: "AIzaSyD6NMVI9vCk3-VzXY5k_mRLSZS8waWZFjA",
+        authDomain: "reactfire-bbede.firebaseapp.com",
+        databaseURL: "https://reactfire-bbede.firebaseio.com",
+        storageBucket: "reactfire-bbede.appspot.com",
+      };
+      firebase.initializeApp(config);
+    </script>
+
     <!-- Custom JS -->
-    <script type="text/js" src="js/initialize.js"></script>
     <script type="text/babel" src="js/todoAppOriginal.js"></script>
     <script type="text/babel" src="js/todoAppFirebaseExplicit.js"></script>
     <script type="text/babel" src="js/todoAppFirebaseImplicit.js"></script>
@@ -28,31 +38,30 @@
 
   <body>
     <div id="demoContainer">
-    <h1>ReactFire Todo App Demo</h1>
-        <p>
-            <a href="https://github.com/firebase/reactfire">ReactFire</a> is a
-            <a href="http://facebook.github.io/react/">ReactJS</a> mixin which allows for easy
-            integration of <a href="http://www.firebase.com/">Firebase</a> into your React apps.
-            See how this was made by reading the
-            <a href="https://firebase.com/blog/2014-05-01-using-firebase-with-react.html">blog post</a>
-            or checking out the <a href="https://github.com/firebase/reactfire/">source code on GitHub</a>.
-        </p>
+      <h1>Todo App | ReactFire Demo</h1>
+      <p>
+        <a href="https://github.com/firebase/reactfire">ReactFire</a> is a
+        <a href="https://facebook.github.io/react/">ReactJS</a> mixin which allows for easy
+        integration of <a href="https://firebase.google.com/">Firebase</a> into your React apps.
+        See how this was made by reading the
+        <a href="https://github.com/firebase/reactfire/tree/master/docs/guide.md">ReactFire documentation</a>.
+      </p>
 
-        <div class="todoAppContainer">
-            <h2>Plain React</h2>
-            <div id="todoApp1"></div>
-        </div>
+      <div class="todoAppContainer">
+        <h2>Plain React</h2>
+        <div id="todoApp1"></div>
+      </div>
 
-        <div class="todoAppContainer">
-            <h2>React + Plain Firebase</h2>
-            <div id="todoApp2"></div>
-        </div>
+      <div class="todoAppContainer">
+        <h2>React + Plain Firebase</h2>
+        <div id="todoApp2"></div>
+      </div>
 
-        <div class="todoAppContainer">
-            <h2>React + ReactFire</h2>
-            <div id="todoApp3"></div>
-        </div>
-        <div style="clear: both; margin-bottom: 10px;"></div>
+      <div class="todoAppContainer">
+        <h2>React + ReactFire</h2>
+        <div id="todoApp3"></div>
+      </div>
+      <div style="clear: both; margin-bottom: 10px;"></div>
     </div>
   </body>
 </html>

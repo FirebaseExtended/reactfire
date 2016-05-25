@@ -20,9 +20,9 @@ only takes a few lines of JavaScript to integrate Firebase data into React apps 
 
 ## Getting Started With Firebase
 
-ReactFire requires the Firebase Realtime Database in order to sync and store data. Firebase is a
-suite of integrated products designed to help you develop your app, grow your user base, and earn
-money. You can [sign up here for a free account](https://console.firebase.google.com/).
+ReactFire requires [Firebase](https://firebase.google.com/) in order to sync and store data.
+Firebase is a suite of integrated products designed to help you develop your app, grow your user
+base, and earn money. You can [sign up here for a free account](https://console.firebase.google.com/).
 
 
 ## Downloading ReactFire
@@ -59,7 +59,7 @@ $ bower install reactfire --save
 
 * [Quickstart](docs/quickstart.md)
 * [Guide](docs/guide.md)
-* [API reference](docs/reference.md)
+* [API Reference](docs/reference.md)
 
 
 ## Examples
