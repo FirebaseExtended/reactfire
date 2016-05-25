@@ -57,7 +57,6 @@ $ bower install reactfire --save
 
 ## Documentation
 
-* [Overview](docs/README.md)
 * [Quickstart](docs/quickstart.md)
 * [Guide](docs/guide.md)
 * [API reference](docs/reference.md)
@@ -65,8 +64,8 @@ $ bower install reactfire --save
 
 ## Examples
 
-Check out the ReactFire examples [here](examples/README.md) or play with our live
-[Todo app demo](https://reactfiretodoapp.firebaseapp.com/)!
+* [Todo App](examples/todoApp)
+* [Comments Box](examples/commentsBox)
 
 
 ## Migration Guides
