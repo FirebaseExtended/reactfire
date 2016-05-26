@@ -87,18 +87,7 @@ $ bower install         # install local JavaScript dependencies
 ### Create a Firebase Project
 
 1. Create a Firebase project [here](https://console.firebase.google.com).
-2. Set the project's Realtime Database Security Rules to public:
-
-```json
-{
-  "rules": {
-    ".read": true,
-    ".write": true
-  }
-}
-```
-
-3. Set the `REACTFIRE_TEST_DB_URL` environment variable to your project's database URL:
+2. Set the `REACTFIRE_TEST_DB_URL` environment variable to your project's database URL:
 
 ```bash
 $ export REACTFIRE_TEST_DB_URL="https://<YOUR-DATABASE-NAME>.firebaseio.com"
