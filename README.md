@@ -75,22 +75,5 @@ $ bower install reactfire --save
 
 ## Contributing
 
-If you'd like to contribute to ReactFire, you'll need to run the following commands to get your
-environment set up:
-
-```bash
-$ git clone https://github.com/firebase/reactfire.git
-$ cd reactfire          # go to the reactfire directory
-$ npm install -g gulp   # globally install gulp task runner
-$ npm install -g bower  # globally install Bower package manager
-$ npm install           # install local npm build / test dependencies
-$ bower install         # install local JavaScript dependencies
-$ gulp watch            # watch for source file changes
-```
-
-`gulp watch` will watch for changes in the `/src/` directory and lint, concatenate, and minify the
-source files when a change occurs. The output files - `reactfire.js` and `reactfire.min.js` - are
-written to the `/dist/` directory.
-
-You can run the test suite by navigating to `file:///path/to/reactfire/tests/index.html` or via the
-command line using `gulp test`.
+If you'd like to contribute to ReactFire, please first read through our [contribution
+guidelines](.github/CONTRIBUTING.md). Local setup instructions are available [here](.github/CONTRIBUTING.md#local-setup).
