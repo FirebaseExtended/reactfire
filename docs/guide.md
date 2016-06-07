@@ -81,7 +81,7 @@ which is run once, immediately before the initial rendering of the component:
 
 ```js
 componentWillMount: function() {
-  this.firebaseRef = firebase.database.ref("items");
+  this.firebaseRef = firebase.database().ref("items");
   this.firebaseRef.on("child_added", function(dataSnapshot) {
     this.items.push(dataSnapshot.val());
     this.setState({
