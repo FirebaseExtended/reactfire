@@ -409,7 +409,7 @@
     return React.createClass({
       mixins: [ReactFireMixin],
 
-      getInitialState: function () {
+      getInitialState: function() {
         return {};
       },
 
@@ -449,7 +449,6 @@
             } else {
               this.updateBinding(bindVar, oldState.refs[key], result.refs[key]);
             }
-
           }
         }
 

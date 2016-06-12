@@ -1181,12 +1181,12 @@ describe('ReactFire', function() {
     });
 
     it('calls the function passed in as refs, passing in props', function(done) {
-      var refsFunction = sinon.spy(function (props) {
-        return {}
+      var refsFunction = sinon.spy(function() {
+        return {};
       });
 
       var TestComponent = React.createClass({
-        render: function () {
+        render: function() {
           return React.DOM.div({id: this.props.foo});
         }
       });
@@ -1200,9 +1200,9 @@ describe('ReactFire', function() {
       done();
     });
 
-    it('binds to the refs being passed in.', function (done) {
+    it('binds to the refs being passed in.', function(done) {
       var TestComponent = React.createClass({
-        render: function () {
+        render: function() {
           return React.DOM.div({id: this.props.foo});
         }
       });
@@ -1230,9 +1230,9 @@ describe('ReactFire', function() {
       done();
     });
 
-    it('binds to the refs being returned by the function passed in.', function (done) {
+    it('binds to the refs being returned by the function passed in.', function(done) {
       var TestComponent = React.createClass({
-        render: function () {
+        render: function() {
           return React.DOM.div({id: this.props.foo});
         }
       });
@@ -1240,7 +1240,7 @@ describe('ReactFire', function() {
       var ref1 = firebaseRef.push();
       var ref2 = firebaseRef.push();
 
-      var Container = ReactFireMixin.createContainer(TestComponent, function(props) {
+      var Container = ReactFireMixin.createContainer(TestComponent, function() {
         return {
           objectKey: {
             ref: ref1,
@@ -1250,7 +1250,7 @@ describe('ReactFire', function() {
             ref: ref2,
             type: 'array'
           }
-        }
+        };
       });
 
       enzyme.shallow(React.createElement(Container));
@@ -1262,13 +1262,12 @@ describe('ReactFire', function() {
       done();
     });
 
-    it('throws an error when an invalid type is given for a ref..', function (done) {
+    it('throws an error when an invalid type is given for a ref..', function(done) {
       var TestComponent = React.createClass({
-        render: function () {
+        render: function() {
           return React.DOM.div({id: this.props.foo});
         }
       });
-      
       var Container = ReactFireMixin.createContainer(TestComponent, {
         objectKey: {
           ref: firebaseRef,
@@ -1282,11 +1281,10 @@ describe('ReactFire', function() {
       done();
     });
 
-    it('passes the data at its refs as props to its wrapped component.', function (done) {
-
+    it('passes the data at its refs as props to its wrapped component.', function(done) {
+      var Container;
       var TestComponent = React.createClass({
         componentDidMount: function() {
-          console.log('componentWillMount');
           firebaseRef.set({foo: 1, bar: 2}, function() {
             var result = enzyme.shallow(React.createElement(Container));
             expect(result.props().objectKey).to.deep.equal({foo: 1, bar: 2, '.key': firebaseRef.key});
@@ -1299,7 +1297,7 @@ describe('ReactFire', function() {
         displayName: 'TestComponent'
       });
 
-      var Container = ReactFireMixin.createContainer(TestComponent, {
+      Container = ReactFireMixin.createContainer(TestComponent, {
         objectKey: {
           ref: firebaseRef,
           type: 'object'
@@ -1308,16 +1306,16 @@ describe('ReactFire', function() {
       enzyme.mount(React.createElement(Container));
     });
 
-    it('calls the refs function again when its props change.', function (done) {
+    it('calls the refs function again when its props change.', function(done) {
       var TestComponent = React.createClass({
-        render: function () {
+        render: function() {
           return React.DOM.div(this.props, 'foo');
         },
         displayName: 'TestComponent'
       });
 
-      var specsFunction = sinon.spy(function(props) {
-        return {}
+      var specsFunction = sinon.spy(function() {
+        return {};
       });
 
       var Container = ReactFireMixin.createContainer(TestComponent, specsFunction);
@@ -1342,15 +1340,15 @@ describe('ReactFire', function() {
       });
     });
 
-    it('creates a new binding when a new ref is added on props change.', function (done) {
+    it('creates a new binding when a new ref is added on props change.', function(done) {
       var TestComponent = React.createClass({
-        render: function () {
+        render: function() {
           return React.DOM.div(this.props, 'foo');
         },
         displayName: 'TestComponent'
       });
 
-      var specsFunction = sinon.spy(function (props) {
+      var specsFunction = sinon.spy(function(props) {
         return (props.a === 1) ? {} : {
           objectKey: {
             ref: firebaseRef,
@@ -1365,24 +1363,24 @@ describe('ReactFire', function() {
       var props2 = {a: 2};
 
       var ContainerWrapper = React.createClass({
-        getInitialState: function () {
+        getInitialState: function() {
           return {containerProps: props1};
         },
-        render: function () {
+        render: function() {
           return React.createElement(Container, this.state.containerProps);
         }
       });
 
       var wrapper = enzyme.mount(React.createElement(ContainerWrapper));
-      wrapper.instance().setState({containerProps: props2}, function () {
+      wrapper.instance().setState({containerProps: props2}, function() {
         expect(ReactFireMixin.bindAsObject).to.have.been.calledWith(firebaseRef);
         done();
       });
     });
 
-    it('removes the existing binding and creates a new one when the ref changes on props change.', function (done) {
+    it('removes the existing binding and creates a new one when the ref changes on props change.', function(done) {
       var TestComponent = React.createClass({
-        render: function () {
+        render: function() {
           return React.DOM.div(this.props, 'foo');
         },
         displayName: 'TestComponent'
@@ -1391,7 +1389,7 @@ describe('ReactFire', function() {
       var ref1 = firebaseRef.push();
       var ref2 = firebaseRef.push();
 
-      var specsFunction = sinon.spy(function (props) {
+      var specsFunction = sinon.spy(function(props) {
         return (props.a === 1) ? {
           objectKey: {
             ref: ref1,
@@ -1411,16 +1409,16 @@ describe('ReactFire', function() {
       var props2 = {a: 2};
 
       var ContainerWrapper = React.createClass({
-        getInitialState: function () {
+        getInitialState: function() {
           return {containerProps: props1};
         },
-        render: function () {
+        render: function() {
           return React.createElement(Container, this.state.containerProps);
         }
       });
 
       var wrapper = enzyme.mount(React.createElement(ContainerWrapper));
-      wrapper.instance().setState({containerProps: props2}, function () {
+      wrapper.instance().setState({containerProps: props2}, function() {
         expect(ReactFireMixin.bindAsObject).to.have.been.calledWith(ref1);
         // TODO find a way that doesn't use the __bindvar implementation detail
         expect(ReactFireMixin.unbind).to.have.been.calledWith('objectKey__bindvar');
@@ -1429,9 +1427,9 @@ describe('ReactFire', function() {
       });
     });
 
-    it('removes the existing binding and creates a new one when the type changes on props change.', function (done) {
+    it('removes the existing binding and creates a new one when the type changes on props change.', function(done) {
       var TestComponent = React.createClass({
-        render: function () {
+        render: function() {
           return React.DOM.div(this.props, 'foo');
         },
         displayName: 'TestComponent'
@@ -1440,7 +1438,7 @@ describe('ReactFire', function() {
       var ref1 = firebaseRef.push();
       var ref2 = firebaseRef.push();
 
-      var specsFunction = sinon.spy(function (props) {
+      var specsFunction = sinon.spy(function(props) {
         return (props.a === 1) ? {
           objectKey: {
             ref: ref1,
@@ -1460,16 +1458,16 @@ describe('ReactFire', function() {
       var props2 = {a: 2};
 
       var ContainerWrapper = React.createClass({
-        getInitialState: function () {
+        getInitialState: function() {
           return {containerProps: props1};
         },
-        render: function () {
+        render: function() {
           return React.createElement(Container, this.state.containerProps);
         }
       });
 
       var wrapper = enzyme.mount(React.createElement(ContainerWrapper));
-      wrapper.instance().setState({containerProps: props2}, function () {
+      wrapper.instance().setState({containerProps: props2}, function() {
         expect(ReactFireMixin.bindAsObject).to.have.been.calledWith(ref1);
         // TODO find a way that doesn't use the __bindvar implementation detail
         expect(ReactFireMixin.unbind).to.have.been.calledWith('objectKey__bindvar');
@@ -1478,18 +1476,17 @@ describe('ReactFire', function() {
       });
     });
 
-    it('removes the existing binding, when ig is removed on props change.', function (done) {
+    it('removes the existing binding, when ig is removed on props change.', function(done) {
       var TestComponent = React.createClass({
-        render: function () {
+        render: function() {
           return React.DOM.div(this.props, 'foo');
         },
         displayName: 'TestComponent'
       });
 
       var ref1 = firebaseRef.push();
-      var ref2 = firebaseRef.push();
 
-      var specsFunction = sinon.spy(function (props) {
+      var specsFunction = sinon.spy(function(props) {
         return (props.a === 1) ? {
           objectKey: {
             ref: ref1,
@@ -1504,16 +1501,16 @@ describe('ReactFire', function() {
       var props2 = {a: 2};
 
       var ContainerWrapper = React.createClass({
-        getInitialState: function () {
+        getInitialState: function() {
           return {containerProps: props1};
         },
-        render: function () {
+        render: function() {
           return React.createElement(Container, this.state.containerProps);
         }
       });
 
       var wrapper = enzyme.mount(React.createElement(ContainerWrapper));
-      wrapper.instance().setState({containerProps: props2}, function () {
+      wrapper.instance().setState({containerProps: props2}, function() {
         expect(ReactFireMixin.bindAsObject).to.have.been.calledWith(ref1);
         expect(ReactFireMixin.unbind).to.have.been.calledWith('objectKey__bindvar');
         done();
