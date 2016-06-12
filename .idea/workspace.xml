@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="caa05c3a-c5a7-4296-8933-6a73ebaa6f3b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/reactfire.js" afterPath="$PROJECT_DIR$/src/reactfire.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/reactfire.spec.js" afterPath="$PROJECT_DIR$/tests/reactfire.spec.js" />
     </list>
@@ -29,8 +28,8 @@
       <file leaf-file-name="reactfire.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/reactfire.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="833">
-              <caret line="504" column="61" selection-start-line="504" selection-start-column="61" selection-end-line="504" selection-end-column="61" />
+            <state relative-caret-position="383">
+              <caret line="476" column="9" selection-start-line="476" selection-start-column="9" selection-end-line="476" selection-end-column="9" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -68,8 +67,8 @@
       <file leaf-file-name="reactfire.spec.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tests/reactfire.spec.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="473">
-              <caret line="1271" column="99" selection-start-line="1271" selection-start-column="99" selection-end-line="1271" selection-end-column="99" />
+            <state relative-caret-position="480">
+              <caret line="1281" column="13" selection-start-line="1281" selection-start-column="13" selection-end-line="1281" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -507,16 +506,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/reactfire.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="833">
-          <caret line="504" column="61" selection-start-line="504" selection-start-column="61" selection-end-line="504" selection-end-column="61" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -540,10 +529,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/reactfire.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="383">
+          <caret line="476" column="9" selection-start-line="476" selection-start-column="9" selection-end-line="476" selection-end-column="9" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tests/reactfire.spec.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="473">
-          <caret line="1271" column="99" selection-start-line="1271" selection-start-column="99" selection-end-line="1271" selection-end-column="99" />
+        <state relative-caret-position="480">
+          <caret line="1281" column="13" selection-start-line="1281" selection-start-column="13" selection-end-line="1281" selection-end-column="13" />
           <folding />
         </state>
       </provider>

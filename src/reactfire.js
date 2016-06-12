@@ -454,7 +454,7 @@
         }
         for (key in oldState.refs) {
           if (oldState.refs.hasOwnProperty(key) && !result.refs.hasOwnProperty(key)) {
-            this.removeBinding(key + '__bindVar');
+            this.removeBinding(key + '__bindvar');
           }
         }
 
@@ -473,7 +473,7 @@
         } else if (refOptions.type === 'object') {
           this.bindAsObject(refOptions.ref, bindVar);
         }else {
-          _throwError('Unknown type to bind as: ' + refOptions.type);
+          _throwError('Unknown type to bind as: ' + refOptions.type + '.l');
         }
       },
 
