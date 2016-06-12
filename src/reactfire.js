@@ -406,12 +406,17 @@
    * @param {object|function} refs An object specifying the refs to bind to, or a function that returns such an object.
    */
   ReactFireMixin.createContainer = function(component, refs) {
-    var Container = React.createClass({
+    return React.createClass({
       mixins: [ReactFireMixin],
 
       getInitialState: function () {
         return {};
       },
+
+      makeBindVar: function(refKey) {
+        return refKey + '__bindvar';
+      },
+
       /**
        * Gets the (new) state, based on the refs passed to createContainer and props.
        *
@@ -421,8 +426,7 @@
        */
       getStateFromRefs: function(newProps, oldState) {
         var result = {
-          refs: refs,
-          bindVarMappings: []
+          refs: refs
         };
 
         if (typeof refs === 'function') {
@@ -438,23 +442,20 @@
         var bindVar;
         for (key in result.refs) {
           if (result.refs.hasOwnProperty(key)) {
-            // bindVarMappings keep track of all the bindings we have, and map them to properties,
-            // passed to the wrapped component.
-            bindVar = key + '__bindvar';
-            result.bindVarMappings.push({
-              prop: key,
-              bindVar: bindVar
-            });
+            bindVar = this.makeBindVar(key);
+
             if (!oldState.refs.hasOwnProperty(key)) {
               this.addBinding(bindVar, result.refs[key]);
             } else {
               this.updateBinding(bindVar, oldState.refs[key], result.refs[key]);
             }
+
           }
         }
+
         for (key in oldState.refs) {
           if (oldState.refs.hasOwnProperty(key) && !result.refs.hasOwnProperty(key)) {
-            this.removeBinding(key + '__bindvar');
+            this.removeBinding(this.makeBindVar(key));
           }
         }
 
@@ -524,10 +525,10 @@
        */
       getDataProps: function() {
         var props = {};
-        var bindVarMapping;
-        for (var i = 0; i < this.state.bindVarMappings.length; i++) {
-          bindVarMapping = this.state.bindVarMappings[i];
-          props[bindVarMapping.prop] = this.state[bindVarMapping.bindVar];
+        for (var key in this.state.refs) {
+          if (this.state.refs.hasOwnProperty(key)) {
+            props[key] = this.state[this.makeBindVar(key)];
+          }
         }
         return props;
       },
@@ -537,12 +538,11 @@
        */
       render: function() {
         var factory = React.createFactory(component);
+        // TODO: Objet.assign is only supported from IE9. If we need support for 8, we need to change this.
         var props = Object.assign({}, this.props, this.getDataProps());
         return factory(props);
       }
     });
-
-    return Container;
   };
 
   return ReactFireMixin;

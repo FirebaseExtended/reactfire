@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="caa05c3a-c5a7-4296-8933-6a73ebaa6f3b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/reactfire.js" afterPath="$PROJECT_DIR$/src/reactfire.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/reactfire.spec.js" afterPath="$PROJECT_DIR$/tests/reactfire.spec.js" />
     </list>
     <ignored path="reactfire.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -25,11 +24,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="reactfire.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="reactfire.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/reactfire.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="383">
-              <caret line="476" column="9" selection-start-line="476" selection-start-column="9" selection-end-line="476" selection-end-column="9" />
+            <state relative-caret-position="713">
+              <caret line="545" column="2" selection-start-line="545" selection-start-column="2" selection-end-line="545" selection-end-column="2" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -64,7 +63,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="reactfire.spec.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="reactfire.spec.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/reactfire.spec.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="480">
@@ -124,8 +123,8 @@
       <list>
         <option value="$PROJECT_DIR$/node_modules/react/dist/react-with-addons.js" />
         <option value="$PROJECT_DIR$/node_modules/react/lib/ReactElement.js" />
-        <option value="$PROJECT_DIR$/src/reactfire.js" />
         <option value="$PROJECT_DIR$/tests/reactfire.spec.js" />
+        <option value="$PROJECT_DIR$/src/reactfire.js" />
       </list>
     </option>
   </component>
@@ -529,21 +528,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/reactfire.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="383">
-          <caret line="476" column="9" selection-start-line="476" selection-start-column="9" selection-end-line="476" selection-end-column="9" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/reactfire.spec.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="480">
           <caret line="1281" column="13" selection-start-line="1281" selection-start-column="13" selection-end-line="1281" selection-end-column="13" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/reactfire.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="713">
+          <caret line="545" column="2" selection-start-line="545" selection-start-column="2" selection-end-line="545" selection-end-column="2" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
