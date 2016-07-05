@@ -31,8 +31,8 @@ In order to use ReactFire in your project, you need to include the following fil
 
 ```html
 <!-- React -->
-<script src="https://fb.me/react-15.0.1.min.js"></script>
-<script src="https://fb.me/react-dom-15.0.1.min.js"></script>
+<script src="https://fb.me/react-15.1.0.min.js"></script>
+<script src="https://fb.me/react-dom-15.1.0.min.js"></script>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/3.0.3/firebase.js"></script>
