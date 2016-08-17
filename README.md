@@ -31,11 +31,11 @@ In order to use ReactFire in your project, you need to include the following fil
 
 ```html
 <!-- React -->
-<script src="https://fb.me/react-15.1.0.min.js"></script>
-<script src="https://fb.me/react-dom-15.1.0.min.js"></script>
+<script src="https://fb.me/react-15.3.0.min.js"></script>
+<script src="https://fb.me/react-dom-15.3.0.min.js"></script>
 
 <!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
 
 <!-- ReactFire -->
 <script src="https://cdn.firebase.com/libs/reactfire/1.0.0/reactfire.min.js"></script>
