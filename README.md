@@ -14,6 +14,7 @@ only takes a few lines of JavaScript to integrate Firebase data into React apps 
  * [Downloading ReactFire](#downloading-reactfire)
  * [Documentation](#documentation)
  * [Examples](#examples)
+ * [Release Notes](https://github.com/firebase/reactfire/releases)
  * [Migration Guides](#migration-guides)
  * [Contributing](#contributing)
 
