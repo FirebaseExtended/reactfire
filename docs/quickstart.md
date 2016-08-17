@@ -19,11 +19,11 @@ our CDN:
 
 ```js
 <!-- React JS -->
-<script src="https://fb.me/react-15.1.0.js"></script>
-<script src="https://fb.me/react-dom-15.1.0.js"></script>
+<script src="https://fb.me/react-15.3.0.min.js"></script>
+<script src="https://fb.me/react-dom-15.3.0.min.js"></script>
 
 <!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/3.0.3/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
 
 <!-- ReactFire -->
 <script src="https://cdn.firebase.com/libs/reactfire/1.0.0/reactfire.min.js"></script>
