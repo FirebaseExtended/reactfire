@@ -8,10 +8,10 @@ import runSequence from 'run-sequence';
 // File IO
 import exit from 'gulp-exit';
 import babel from 'gulp-babel';
-import babelRegister from 'babel-core/register';
 import eslint from 'gulp-eslint';
 import uglify from 'gulp-uglify';
 import extReplace from 'gulp-ext-replace';
+import babelRegister from 'babel-register';
 
 // Testing
 import mocha from 'gulp-mocha';
