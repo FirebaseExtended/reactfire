@@ -41,7 +41,7 @@ const paths = {
  */
 // Lints the JavaScript files
 gulp.task('lint', () => {
-  // Temporarily skip linting of source and test files on teh ReactFire 2.0 branch
+  // Temporarily skip linting of source and test files on the ReactFire 2.0 branch
   // const filesToLint = paths.srcFiles.concat(paths.testFiles).concat(['gulpfile.js']);
   const filesToLint = ['gulpfile.js'];
   return gulp.src(filesToLint)
@@ -55,9 +55,7 @@ gulp.task('lint', () => {
 gulp.task('build', () => {
   gulp.src(paths.srcFiles)
     // Convert to ES5
-    .pipe(babel({
-      presets: ['react', 'es2015'],
-    }))
+    .pipe(babel())
 
     // Write un-minified version
     .pipe(gulp.dest(paths.destDir))
