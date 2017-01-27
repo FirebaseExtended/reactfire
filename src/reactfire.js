@@ -388,6 +388,7 @@
       }
       delete this.firebaseRefs[bindVar];
       delete this.firebaseListeners[bindVar];
+      delete this.data[bindVar];
 
       // Update state
       var newState = {};
