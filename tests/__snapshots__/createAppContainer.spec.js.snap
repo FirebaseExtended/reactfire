@@ -1,0 +1,7 @@
+exports[`createAppContainer() should throw given an invalid Firebase App as the second argument 1`] = `"Second argument to createAppContainer() must be a Firebase app instance."`;
+
+exports[`createAppContainer() should throw given an invalid React component as the first argument 1`] = `"First argument to createAppContainer() must be a React component."`;
+
+exports[`createAppContainer() should throw given nothing as the first argument 1`] = `"First argument to createAppContainer() must be a React component."`;
+
+exports[`createAppContainer() should throw given nothing as the second argument 1`] = `"Second argument to createAppContainer() must be a Firebase app instance."`;
