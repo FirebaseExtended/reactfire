@@ -122,7 +122,6 @@ describe('createAuthContainer()', () => {
         const userProp = component.toJSON().props.user;
         expect(typeof userProp.uid).toBe('string');
         expect(userProp.isAnonymous).toBe(true);
-        expect(userProp.appName).toBe(nonDefaultApp.name);
       });
   });
 

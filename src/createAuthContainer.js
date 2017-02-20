@@ -24,7 +24,7 @@ const createAuthContainer = (WrappedComponent, userPropName = 'user') => {
     componentDidMount() {
       unsubscribe = firebase.auth(this.props.firebaseApp).onAuthStateChanged((user) => {
         this.setState({
-          [userPropName]: user && user.toJSON(),
+          [userPropName]: user,
         });
       });
     }
