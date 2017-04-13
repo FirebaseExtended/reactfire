@@ -78,22 +78,18 @@ set up.
 ```bash
 $ git clone https://github.com/firebase/reactfire.git
 $ cd reactfire          # go to the reactfire directory
-$ npm install -g gulp   # globally install gulp task runner
-$ npm install -g bower  # globally install Bower package manager
 $ npm install           # install local npm build / test dependencies
-$ bower install         # install local JavaScript dependencies
 ```
 
 ### Lint, Build, and Test
 
 ```bash
-$ gulp           # lint, build, and test
+$ npm test       # lint, build, and test
 
-$ gulp lint      # just lint
-$ gulp build     # just build
-$ gulp test      # just test
+$ npm run lint   # just lint
+$ npm run build  # just build
 
-$ gulp watch     # lint and build whenever source files change
+$ npm run watch  # lint, build, and test whenever source files change
 ```
 
 The output files - `reactfire.js` and `reactfire.min.js` - are written to the `/dist/` directory.

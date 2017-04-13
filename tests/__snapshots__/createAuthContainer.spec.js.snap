@@ -1,0 +1,5 @@
+exports[`createAuthContainer() should throw given a non-string prop name as the second argument 1`] = `"Second argument to createAuthContainer() must be a non-empty string representing a prop name."`;
+
+exports[`createAuthContainer() should throw given an invalid React component as the first argument 1`] = `"First argument to createAuthContainer() must be a React component."`;
+
+exports[`createAuthContainer() should throw given nothing as the first argument 1`] = `"First argument to createAuthContainer() must be a React component."`;
