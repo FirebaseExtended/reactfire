@@ -1,0 +1,21 @@
+exports[`createDatabaseContainer() Input validation should throw given a function which generates an object containing a key whose value is a non-object 1`] = `"Unexpected reference object. Not an object."`;
+
+exports[`createDatabaseContainer() Input validation should throw given a function which generates an object containing a key whose value is an object which is not a Database Reference 1`] = `"Reference must be a Database Reference or Query or an object with a \"ref\" key."`;
+
+exports[`createDatabaseContainer() Input validation should throw given a function which generates an object containing a key whose value is an object whose "ref" key is a non-object 1`] = `"\"ref\" key must be a Database Reference or Query."`;
+
+exports[`createDatabaseContainer() Input validation should throw given a function which generates an object containing a key whose value is an object whose "ref" key is an object which is not a Database Reference 1`] = `"\"ref\" key must be a Database Reference or Query."`;
+
+exports[`createDatabaseContainer() Input validation should throw given a non-function as the second argument 1`] = `"Second argument to createDatabaseContainer() must be a function."`;
+
+exports[`createDatabaseContainer() Input validation should throw given an invalid React component as the first argument 1`] = `"First argument to createDatabaseContainer() must be a React component."`;
+
+exports[`createDatabaseContainer() Input validation should throw given an object which contains a non-boolean "asArray" key 1`] = `"\"asArray\" key must be a boolean."`;
+
+exports[`createDatabaseContainer() Input validation should throw given an object which contains an invalid key 1`] = `"Unexpected key in ref: \"foo\"."`;
+
+exports[`createDatabaseContainer() Input validation should throw given an object which contains no "ref" key 1`] = `"Reference must be a Database Reference or Query or an object with a \"ref\" key."`;
+
+exports[`createDatabaseContainer() Input validation should throw given nothing as the first argument 1`] = `"First argument to createDatabaseContainer() must be a React component."`;
+
+exports[`createDatabaseContainer() Input validation should throw given nothing as the second argument 1`] = `"Second argument to createDatabaseContainer() must be a function."`;

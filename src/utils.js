@@ -89,3 +89,55 @@ export function isFirebaseApp(input) {
 export function isReactComponent(input) {
   return isNonNullObject(input) || isFunction(input);
 }
+
+/**
+ * Returns the display name for the provided component, used by things like React Dev Tools.
+ *
+ * @param {React.Component} Component The component whose display name to return.
+ *
+ * @return {string} The provide component's display name.
+ */
+export function getDisplayName(Component) {
+  return Component.displayName || Component.name || 'Component';
+}
+
+// /**
+//  * Returns the index of the key in the list. If an item with the key is not in the list, -1 is
+//  * returned.
+//  *
+//  * @param {Array<any>} list A list of items.
+//  * @param {string} key The key for which to search.
+//  *
+//  * @return {number} The index of the item which has the provided key or -1 if no items have the
+//  * provided key.
+//  */
+// export function indexForKey(list, key) {
+//   for (let i = 0, length = list.length; i < length; i++) {  // eslint-disable-line no-plusplus
+//     if (list[i]['.key'] === key) {
+//       return i;
+//     }
+//   }
+
+//   /* istanbul ignore next */
+//   return -1;
+// }
+
+// /**
+//  * Creates a new record given a key-value pair.
+//  *
+//  * @param {string} key The new record's key.
+//  * @param {any} value The new record's value.
+//  *
+//  * @return {Object} The new record.
+//  */
+// export function createRecord(key, value) {
+//   let record = {};
+//   if (typeof value === 'object' && value !== null) {
+//     record = value;
+//   } else {
+//     record['.value'] = value;
+//   }
+//   record['.key'] = key;
+
+//   return record;
+// }

@@ -13,6 +13,8 @@ const createAppContainer = (WrappedComponent, firebaseApp) => {
     <WrappedComponent {...props} firebaseApp={firebaseApp} />
   );
 
+  CreateAppContainer.displayName = `CreateAppContainer(${utils.getDisplayName(WrappedComponent)})`;
+
   return CreateAppContainer;
 };
 

@@ -1,0 +1,28 @@
+.new-quote-form {
+  border: solid 1px black;
+  width: 300px;
+  margin: 10px auto 10px auto;
+}
+
+.new-quote-form h4 {
+  margin: 10px;
+}
+
+.new-quote-form-error {
+  font-size: 12px;
+  color: red;
+}
+
+.new-quote-form-author {
+  width: 200px;
+  margin-bottom: 10px;
+}
+
+.new-quote-form-quote {
+  width: 200px;
+  height: 100px;
+}
+
+.new-quote-form-submit-button {
+  margin-bottom: 10px;
+}

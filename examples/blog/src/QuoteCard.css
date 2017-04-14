@@ -1,0 +1,16 @@
+.quote-card {
+  width: 300px;
+  border: solid black 1px;
+  border-radius: 10px;
+  margin: 10px;
+  background-color: #FFCC80;
+}
+
+.quote-card-quote {
+  margin-bottom: 3px;
+}
+
+.quote-card-author {
+  color: #1565C0;
+  margin-top: 0;
+}
