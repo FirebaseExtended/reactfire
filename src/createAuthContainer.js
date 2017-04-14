@@ -34,6 +34,8 @@ const createAuthContainer = (WrappedComponent, userPropName = 'user') => {
     }
 
     render() {
+      // TODO: should we remove this.props.firebaseApp
+      // (since we may have added it and it's not really needed)
       return <WrappedComponent {...this.props} {...this.state} />;
     }
   }
@@ -53,6 +55,8 @@ const createAuthContainer = (WrappedComponent, userPropName = 'user') => {
   CreateAuthContainer.defaultProps = {
     firebaseApp: firebase.app(),
   };
+
+  CreateAuthContainer.displayName = `CreateAuthContainer(${utils.getDisplayName(WrappedComponent)})`;
 
   return CreateAuthContainer;
 };
