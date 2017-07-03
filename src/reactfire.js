@@ -1,4 +1,4 @@
-/*!
+/**
  * ReactFire is an open-source JavaScript library that allows you to add a
  * realtime data source to your React apps by providing an easy way to let
  * Firebase populate the state of React components.
@@ -15,7 +15,8 @@
   if (typeof define === 'function' && define.amd) {
     // AMD
     define([], function() {
-      return (root.ReactFireMixin = factory());
+      root.ReactFireMixin = factory();
+      return root.ReactFireMixin;
     });
   } else if (typeof exports === 'object') {
     // CommonJS
@@ -27,9 +28,9 @@
 }(this, function() {
   'use strict';
 
-  /*************/
-  /*  HELPERS  */
-  /*************/
+  /**
+   * HELPERS
+   */
   /**
    * Returns the key of a Firebase snapshot across SDK versions.
    *
@@ -139,9 +140,9 @@
   }
 
 
-  /******************************/
-  /*  BIND AS OBJECT LISTENERS  */
-  /******************************/
+  /**
+   * BIND AS OBJECT LISTENERS
+   */
   /**
    * 'value' listener which updates the value of the bound state variable.
    *
@@ -158,9 +159,9 @@
   }
 
 
-  /*****************************/
-  /*  BIND AS ARRAY LISTENERS  */
-  /*****************************/
+  /**
+   * BIND AS ARRAY LISTENERS
+   */
   /**
    * 'child_added' listener which adds a new record to the bound array.
    *
@@ -265,9 +266,9 @@
   }
 
 
-  /*************/
-  /*  BINDING  */
-  /*************/
+  /**
+   * BINDING
+   */
   /**
    * Creates a binding between Firebase and the inputted bind variable as either an array or
    * an object.
@@ -313,9 +314,9 @@
 
 
   var ReactFireMixin = {
-    /********************/
-    /*  MIXIN LIFETIME  */
-    /********************/
+    /**
+     * MIXIN LIFETIME
+     */
     /**
      * Initializes the Firebase refs and listeners arrays.
      **/
@@ -338,9 +339,9 @@
     },
 
 
-    /*************/
-    /*  BINDING  */
-    /*************/
+    /**
+     * BINDING
+     */
     /**
      * Creates a binding between Firebase and the inputted bind variable as an array.
      *
