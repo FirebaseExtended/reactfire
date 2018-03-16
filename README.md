@@ -19,7 +19,9 @@ To use the Firebase JS SDK in React, you can follow these guidelines:
  
 ### Initialize Firebase
 
-Initialize Firebase once, for example in a separate module (e.g. `firebase.js`) and export the Firebase app. You can find more details on the [web](https://firebase.google.com/docs/web/setup) setup guides:
+Initialize Firebase once, for example in a separate module (e.g. `firebase.js`) and export the Firebase app. You can find more details on the [web](https://firebase.google.com/docs/web/setup) setup guides and especially where to find your project's configuration.
+
+Here is an example of a `firebase.js` module that initializes Firebase:
 
 **firebase.js**
 ```js
