@@ -1,5 +1,7 @@
 .DS_Store
 npm-debug.log
+# Ignore IntellIJ files
+.idea
 
 dist/
 coverage/

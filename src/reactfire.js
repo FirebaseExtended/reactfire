@@ -14,17 +14,20 @@
   /* istanbul ignore next */
   if (typeof define === 'function' && define.amd) {
     // AMD
-    define([], function() {
-      return (root.ReactFireMixin = factory());
+    define(['/react'], function(React) {
+      // I'm not sure what react's path should be here. Is there a way we can let
+      // users specify it?
+      return (root.ReactFireMixin = factory(React));
     });
   } else if (typeof exports === 'object') {
     // CommonJS
-    module.exports = factory();
+    var React = require('react');
+    module.exports = factory(React);
   } else {
     // Global variables
-    root.ReactFireMixin = factory();
+    root.ReactFireMixin = factory(root.React);
   }
-}(this, function() {
+}(this, function(React) {
   'use strict';
 
   /*************/
@@ -395,6 +398,151 @@
       newState[bindVar] = undefined;
       this.setState(newState, callback);
     }
+  };
+
+  /**
+   * Create a container for rendering components that use Firebase data
+   *
+   * @param {React.Component} component The component to be wrapped
+   * @param {object|function} refs An object specifying the refs to bind to, or a function that returns such an object.
+   */
+  ReactFireMixin.createContainer = function(component, refs) {
+    return React.createClass({
+      mixins: [ReactFireMixin],
+
+      getInitialState: function() {
+        return {};
+      },
+
+      makeBindVar: function(refKey) {
+        return refKey + '__bindvar';
+      },
+
+      /**
+       * Gets the (new) state, based on the refs passed to createContainer and props.
+       *
+       * @param {object} newProps The new property values. this.props still refers to the old prop values.
+       * @param {object} oldState The previous state. We can't use this.state, since this method is used
+       * in getInitialState
+       */
+      getStateFromRefs: function(newProps, oldState) {
+        var result = {
+          refs: refs
+        };
+
+        if (typeof refs === 'function') {
+          result.refs = refs(newProps);
+        }
+
+        if (!oldState.refs) {
+          oldState.refs = {};
+        }
+
+        // Check for difference between the old and new refs.
+        var key;
+        var bindVar;
+        for (key in result.refs) {
+          if (result.refs.hasOwnProperty(key)) {
+            bindVar = this.makeBindVar(key);
+
+            if (!oldState.refs.hasOwnProperty(key)) {
+              this.addBinding(bindVar, result.refs[key]);
+            } else {
+              this.updateBinding(bindVar, oldState.refs[key], result.refs[key]);
+            }
+          }
+        }
+
+        for (key in oldState.refs) {
+          if (oldState.refs.hasOwnProperty(key) && !result.refs.hasOwnProperty(key)) {
+            this.removeBinding(this.makeBindVar(key));
+          }
+        }
+
+        return result;
+      },
+
+      /**
+       * Add a new binding.
+       *
+       * @param {string} bindVar The variable in state to store the ref's value in.
+       * @param {object} refOptions An object that stores the ref to bind to, and options on how to bind.
+       */
+      addBinding: function(bindVar, refOptions) {
+        if (refOptions.type === 'array') {
+          this.bindAsArray(refOptions.ref, bindVar);
+        } else if (refOptions.type === 'object') {
+          this.bindAsObject(refOptions.ref, bindVar);
+        }else {
+          _throwError('Unknown type to bind as: ' + refOptions.type + '.l');
+        }
+      },
+
+      /**
+       * Update an existing binding
+       *
+       * @param {string} bindVar The variable in state to store the ref's value in.
+       * @param {object} prevRefOptions The previous binding options.
+       * @param {object} newRefOptions The new binding options.
+       */
+      updateBinding: function(bindVar, prevRefOptions, newRefOptions) {
+        if (prevRefOptions.ref.toString() !== newRefOptions.ref.toString() || prevRefOptions.type !== newRefOptions.type) {
+          this.removeBinding(bindVar);
+          this.addBinding(bindVar, newRefOptions);
+        }
+      },
+
+      /**
+       * Remove a binding
+       *
+       * @param {string}  bindVar The variable in state to store the ref's value in.
+       */
+      removeBinding: function(bindVar) {
+        this.unbind(bindVar);
+      },
+
+      componentWillMount: function() {
+        this.setState(function(oldState) {
+          return this.getStateFromRefs(this.props, oldState);
+        });
+      },
+
+      /**
+       * Called when the component will receive new props.
+       *
+       * This updates the bindings based on the difference between the old and new props.
+       *
+       * @param {object}  newProps The new property values.
+       */
+      componentWillReceiveProps: function(newProps) {
+        this.setState(function(oldState) {
+          return this.getStateFromRefs(newProps, oldState);
+        });
+      },
+
+      /**
+       * Returns props to pass to the wrapped component, based on the data from bound refs.
+       */
+      getDataProps: function() {
+        var props = {};
+        for (var key in this.state.refs) {
+          if (this.state.refs.hasOwnProperty(key)) {
+            props[key] = this.state[this.makeBindVar(key)];
+          }
+        }
+        return props;
+      },
+
+      /**
+       * Renders the component, passing the data from refs on to the wrapped component.
+       */
+      render: function() {
+        var factory = React.createFactory(component);
+        // TODO: Objet.assign is only supported from IE9. If we need support for 8, we need to change this.
+        var props = Object.assign({}, this.props, this.getDataProps());
+        return factory(props);
+      }
+    });
   };
 
   return ReactFireMixin;
