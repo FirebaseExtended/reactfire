@@ -1,5 +1,7 @@
 # ReactFire is deprecated
 
+![status: inactive](https://img.shields.io/badge/status-inactive-red.svg)
+
 ReactFire is deprecated. To use Firebase on React application you can use either:
  - The [Firebase JS SDK](https://www.npmjs.com/package/firebase) directly. See below for [Firebase + React samples](#using-the-firebase-js-sdk-in-react) and [migration guides](#migrating-from-reactfire).
  - The [Re-base](https://www.npmjs.com/package/re-base) library which is close to reactfire in design.
