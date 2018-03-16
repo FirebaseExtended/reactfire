@@ -58,13 +58,16 @@ class MyComponent extends React.Component {
   };
   
   componentDidMount() {
-    this.deregisterAuthObservable = firebase.auth().onAuthStateChanged((user) => {
+    // Updating the `isSignedIn` and `userProfile` local state attributes when the Firebase Auth
+    // state changes.
+    this.unregisterAuthObserver = firebase.auth().onAuthStateChanged((user) => {
       this.setState({ isSignedIn: !!user, userProfile: user });
     });
   }
   
   componentWillUnmount() {
-    this.deregisterAuthObservable();
+    // Un-registers the auth state observer.
+    this.unregisterAuthObserver();
   }
   
   // ...
@@ -74,7 +77,7 @@ class MyComponent extends React.Component {
 
 ### Firebase Realtime Database
 
-Here is an example of how you can map data from the Realtime Databaseto your React component's local state:
+Here is an example of how you can map data from the Realtime Database to your React component's local state:
 
 ```js
 import firebase from './firebase.js';
@@ -118,7 +121,7 @@ class MyComponent extends React.Component {
   
   componentDidMount() {
     // Updating the `someCollection` local state attribute when the Cloud Firestore 'someCollection' collection changes.
-    this.unsubscribeCollectionObserver = firebase.firestore().collection('someCollection').onSnapshot((snap) => {
+    this.unregisterCollectionObserver = firebase.firestore().collection('someCollection').onSnapshot((snap) => {
       const someCollection = {};
       snap.forEach((docSnapshot) => {
         someCollection[docSnapshot.id] = docSnapshot.data();
@@ -127,15 +130,15 @@ class MyComponent extends React.Component {
     });
     
     // Updating the `someDocument` local state attribute when the Cloud Firestore 'someDocument' document changes.
-    this.unsubscribeDocumentObserver = firebase.firestore().doc('/collection/someDocument').onSnapshot((snap) => {
+    this.unregisterDocumentObserver = firebase.firestore().doc('/collection/someDocument').onSnapshot((snap) => {
       this.setState({ someDocument: snap.data() });
     });
   }
   
   componentWillUnmount() {
     // Un-register the listeners.
-    this.unsubscribeCollectionObserver();
-    this.unsubscribeDocumentObserver();
+    this.unregisterCollectionObserver();
+    this.unregisterDocumentObserver();
   }
   
   // ...
@@ -144,7 +147,7 @@ class MyComponent extends React.Component {
 
 ### Updating data
 
-When updating data, do not set the local state. Setting the local state will not update Firebase. Instead you should update your data on Firebase directly, this will trigger any observers that you have setup locally instantly from cache.
+When updating data, do not modify the local state directly. Modifying the local state will not update the data on Firebase. Instead you should only update your data on Firebase, this will trigger any observers that you have setup locally instantly from cache.
 
 For instance, let's take an app that has a list of todo items stored on Firebase. It also has a text field and a button to add new todos:
 
