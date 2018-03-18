@@ -158,8 +158,8 @@ import firebase from './firebase.js';
 
 class MyComponent extends React.Component {
   state = {
-    todoList: {},
-    newTodoText: ''
+    todoList: {}, // Mirrors the Todo lsit in Firebase.
+    newTodoText: '', // Mirrors the new Todo Text field in the UI.
   };
   
   componentDidMount() {
@@ -176,6 +176,7 @@ class MyComponent extends React.Component {
     this.firebaseRef.off('value', this.firebaseCallback);
   }
   
+  // This is triggered when the "Add New Todo" button is clicked.
   onSubmit(e) {
     e.preventDefault();
     // Add the new todo to Firebase.
@@ -190,7 +191,7 @@ class MyComponent extends React.Component {
 }
 ```
 
-Note how we are not updating the `todoList` in the local state. You only need to update Firebase and the Firebase observer that was set up will take care of propagating the changes and updating the local state.
+Note how we are **not** updating the `todoList` in the local state. You only need to update Firebase and the Firebase observer that was set up will take care of propagating the changes and updating the local state.
 
 
 ## Migrating from ReactFire
