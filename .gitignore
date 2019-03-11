@@ -2,6 +2,5 @@
 npm-debug.log
 
 dist/
-coverage/
 node_modules/
-bower_components/
+
