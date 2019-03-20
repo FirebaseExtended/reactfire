@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import { tester, useUser } from 'reactfire';
+import { useUser } from 'reactfire';
 
 const signIn = () => firebase.auth().signInAnonymously();
 
@@ -12,7 +12,6 @@ const signOut = () =>
     .then(() => console.log('signed out'));
 
 const FirebaseAuthStateButton = props => {
-  console.log(tester());
   const user = useUser(firebase.auth());
   console.log(user);
 

@@ -3,13 +3,14 @@ import { user } from 'rxfire/auth';
 import { auth, User } from 'firebase/app';
 import { collection } from 'rxfire/firestore';
 import { first, map } from 'rxjs/operators';
-
-export function tester(): string {
-  return 'hello world';
-}
+import { Observable } from 'rxjs';
 
 export function useUser(auth: auth.Auth): User {
-  const [currentUser, setUser] = React.useState(null);
+  return useObservable(user(auth));
+}
+
+export function useObservable(observable$: Observable<any>) {
+  const [latestValue, setValue] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const activePromise = React.useRef();
 
@@ -18,16 +19,15 @@ export function useUser(auth: auth.Auth): User {
   }
 
   React.useEffect(() => {
-    const observable = user(auth);
-
-    activePromise.current = observable.pipe(first()).toPromise();
+    activePromise.current = observable$.pipe(first()).toPromise();
     setIsLoading(true);
-    const subscription = observable.subscribe(
+    const subscription = observable$.subscribe(
       u => {
         setIsLoading(false);
-        setUser(u);
+        setValue(u);
       },
       error => {
+        console.warn('There was an error', error);
         throw new Error(JSON.stringify(error));
       }
     );
@@ -35,5 +35,5 @@ export function useUser(auth: auth.Auth): User {
     return subscription.unsubscribe;
   }, []);
 
-  return currentUser;
+  return latestValue;
 }

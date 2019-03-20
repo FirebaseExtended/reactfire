@@ -4,3 +4,6 @@ npm-debug.log
 dist/
 node_modules/
 
+.vscode/*
+reactfire/*.js
+reactfire/*.js.map
