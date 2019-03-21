@@ -15,10 +15,16 @@ const FirebaseAuthStateButton = props => {
   const user = useUser(firebase.auth());
   console.log(user);
 
-  const btnText = user ? 'Signed In' : 'Sign In';
+  const btnText = user ? 'Sign Out' : 'Sign In';
+  const infoText = user ? 'Signed in!' : 'Not signed in';
   const btnAction = user ? signOut : signIn;
 
-  return <button onClick={btnAction}>{btnText}</button>;
+  return (
+    <>
+      <button onClick={btnAction}>{btnText}</button>
+      <span> {infoText}</span>
+    </>
+  );
 };
 
 const AuthButton = props => {
