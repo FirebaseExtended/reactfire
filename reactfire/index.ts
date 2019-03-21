@@ -7,12 +7,16 @@ import { Observable } from 'rxjs';
 
 const ongoingPromises = new Map();
 
-function isPromise(obj: any) {
-  return obj && obj.then;
-}
-
 export function useUser(auth: auth.Auth): User {
   return useObservable(user(auth), 'user');
+}
+
+export function useFirestoreDoc(ref: firestore.DocumentReference) {
+  return useObservable(doc(ref), ref.path);
+}
+
+export function useFirestoreCollection(ref: firestore.CollectionReference) {
+  return useObservable(collection(ref), ref.path);
 }
 
 export function suspendUntilFirst(observable$, observableId) {
@@ -27,17 +31,22 @@ export function suspendUntilFirst(observable$, observableId) {
   }
 
   if (request.isComplete === false) {
-    throw request.promise.then(dataSnapShot => {
-      request.isComplete = true;
-      request.value = dataSnapShot;
-    });
+    throw request.promise
+      .then(dataSnapShot => {
+        request.isComplete = true;
+        request.value = dataSnapShot;
+      })
+      .catch(err => {
+        request.isComplete = true;
+        request.error = err;
+      });
+  }
+
+  if (request.error) {
+    throw request.error;
   }
 
   return request.value;
-}
-
-export function useFirestoreDoc(ref: firestore.DocumentReference) {
-  return useObservable(doc(ref), ref.path);
 }
 
 export function useObservable(
@@ -51,12 +60,6 @@ export function useObservable(
   React.useEffect(() => {
     const subscription = observable$.pipe(startWith(initialValue)).subscribe(
       newVal => {
-        if (newVal === null) {
-          console.log('NULL VALUE RECEIVED');
-        }
-        console.log('NEW VALUE', newVal);
-        console.log('NEW VALUE', newVal.data);
-
         setValue(newVal);
       },
       error => {
@@ -65,7 +68,8 @@ export function useObservable(
       }
     );
 
-    return subscription.unsubscribe;
+    // need to wrap unsubscribe in a function to avoid weird context stuff
+    return () => subscription.unsubscribe();
   }, [observableId]);
 
   return latestValue;
