@@ -13,7 +13,6 @@ const signOut = () =>
 
 const FirebaseAuthStateButton = props => {
   const user = useUser(firebase.auth());
-  console.log(user);
 
   const btnText = user ? 'Sign Out' : 'Sign In';
   const infoText = user ? 'Signed in!' : 'Not signed in';

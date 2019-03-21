@@ -1,14 +1,26 @@
 import React from 'react';
-import AuthButton from './AuthButton';
-import FirestoreCounter from './FirestoreCounter';
+import AuthButton from './Auth';
+import FirestoreCounter from './Firestore';
+
+const Fire = () => (
+  <span role="img" aria-label="Fire">
+    🔥
+  </span>
+);
 
 const App = () => {
   return (
     <>
-      <h1>ReactFire Demo</h1>
-      <h2>Authentication</h2>
+      <h1>
+        <Fire /> ReactFire Demo <Fire />
+      </h1>
+      <h2>
+        <Fire /> Authentication
+      </h2>
       <AuthButton />
-      <h2>Firestore</h2>
+      <h2>
+        <Fire /> Firestore
+      </h2>
       <FirestoreCounter />
     </>
   );
