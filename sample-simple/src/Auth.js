@@ -1,9 +1,13 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { useUser } from 'reactfire';
 
-const signIn = () => firebase.auth().signInAnonymously();
+const signIn = () =>
+  firebase
+    .auth()
+    .signInAnonymously()
+    .then(() => console.log('signed in'));
 
 const signOut = () =>
   firebase
@@ -13,14 +17,30 @@ const signOut = () =>
 
 const FirebaseAuthStateButton = props => {
   const user = useUser(firebase.auth());
+  const [disabled, setDisabled] = useState(false);
 
-  const btnText = user ? 'Sign Out' : 'Sign In';
-  const infoText = user ? 'Signed in!' : 'Not signed in';
-  const btnAction = user ? signOut : signIn;
+  let btnText, infoText, authAction;
+
+  if (user) {
+    btnText = 'Sign Out';
+    infoText = 'Signed in!';
+    authAction = signOut;
+  } else {
+    btnText = 'Sign In';
+    infoText = 'Not signed in';
+    authAction = signIn;
+  }
+
+  const btnAction = () => {
+    setDisabled(true);
+    return authAction().then(() => setDisabled(false));
+  };
 
   return (
     <>
-      <button onClick={btnAction}>{btnText}</button>
+      <button disabled={disabled} onClick={btnAction}>
+        {btnText}
+      </button>
       <span> {infoText}</span>
     </>
   );
