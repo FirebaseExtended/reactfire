@@ -18,11 +18,11 @@
   },
   "homepage": "https://github.com/FirebasePrivate/reactfire#readme",
   "dependencies": {
-    "firebase": "^5.8.6",
-    "rxfire": "^3.3.6",
+    "firebase": "^5.9.1",
+    "rxfire": "^3.3.8",
     "rxjs": "^6.4.0"
   },
   "peerDependencies": {
-    "react": "^16.8.4"
+    "react": "^16.8.5"
   }
 }

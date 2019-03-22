@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "firebase": "^5.8.6",
-    "react": "^16.8.4",
-    "react-dom": "^16.8.4",
+    "firebase": "^5.9.1",
+    "react": "^16.8.5",
+    "react-dom": "^16.8.5",
     "react-scripts": "2.1.8",
     "reactfire": "0.0.1"
   },

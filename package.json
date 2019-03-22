@@ -1,4 +1,7 @@
 {
   "private": true,
-  "workspaces": ["reactfire", "sample-simple"]
+  "workspaces": [
+    "reactfire",
+    "sample-simple"
+  ]
 }
