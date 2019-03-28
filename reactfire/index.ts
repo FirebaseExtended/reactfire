@@ -5,7 +5,47 @@ import { collection, doc } from 'rxfire/firestore';
 import { first, startWith } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-const ongoingPromises = new Map();
+class ActiveRequest {
+  promise: Promise<any>;
+  isComplete: boolean;
+  value: any;
+  error: Error;
+
+  constructor(promise) {
+    this.promise = promise;
+    this.isComplete = false;
+  }
+
+  setValue(value) {
+    this.value = value;
+    this.isComplete = true;
+  }
+}
+
+class ObservablePromiseCache {
+  activeRequests: Map<any, ActiveRequest>;
+
+  constructor() {
+    this.activeRequests = new Map();
+  }
+
+  getRequest(observable$, observableId) {
+    let request = this.activeRequests.get(observableId);
+
+    if (!request) {
+      request = new ActiveRequest(observable$.pipe(first()).toPromise());
+      this.activeRequests.set(observableId, request);
+    }
+
+    return request;
+  }
+
+  removeRequest(observableId) {
+    this.activeRequests.delete(observableId);
+  }
+}
+
+const requestCache = new ObservablePromiseCache();
 
 export function useUser(auth: auth.Auth): User {
   return useObservable(user(auth), 'user');
@@ -20,25 +60,16 @@ export function useFirestoreCollection(ref: firestore.CollectionReference) {
 }
 
 export function suspendUntilFirst(observable$, observableId) {
-  let request = ongoingPromises.get(observableId);
-
-  if (!request) {
-    request = {
-      promise: observable$.pipe(first()).toPromise(),
-      isComplete: false
-    };
-    ongoingPromises.set(observableId, request);
-  }
+  let request = requestCache.getRequest(observable$, observableId);
 
   if (request.isComplete === false) {
     throw request.promise
-      .then(dataSnapShot => {
-        request.isComplete = true;
-        request.value = dataSnapShot;
+      .then(result => {
+        request.setValue(result);
       })
       .catch(err => {
         request.isComplete = true;
-        request.error = err;
+        throw err;
       });
   }
 
@@ -63,13 +94,16 @@ export function useObservable(
         setValue(newVal);
       },
       error => {
-        console.warn('There was an error', error);
-        throw new Error(JSON.stringify(error));
+        console.error('There was an error', error);
+        throw error;
       }
     );
 
     // need to wrap unsubscribe in a function to avoid weird context stuff
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+      requestCache.removeRequest(observableId);
+    };
   }, [observableId]);
 
   return latestValue;
