@@ -1,8 +1,8 @@
-import React, { Suspense, useState } from 'react';
-import { useFirestoreDoc, useUser, useFirestoreCollection } from 'reactfire';
 import firebase from 'firebase/app';
-import 'firebase/firestore';
 import 'firebase/auth';
+import 'firebase/firestore';
+import React, { Suspense, useState } from 'react';
+import { useFirestoreCollection, useFirestoreDoc, useUser } from 'reactfire';
 
 const Counter = props => {
   const ref = firebase.firestore().doc('count/counter');
