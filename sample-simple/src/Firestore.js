@@ -80,6 +80,9 @@ const List = props => {
 
 const AuthCheck = props => {
   const user = useUser(firebase.auth());
+
+  // TODO: check props.requiredClaims
+
   if (!user) {
     return props.fallback;
   } else {
@@ -90,7 +93,7 @@ const AuthCheck = props => {
 const SuspenseWrapper = props => {
   return (
     <Suspense fallback="loading...">
-      <AuthCheck fallback="sign in to use Firestore">
+      <AuthCheck fallback="sign in to use Firestore" requiredClaims={[]}>
         <h3>Sample Doc Listener</h3>
         <Suspense fallback="connecting to Firestore...">
           <Counter />

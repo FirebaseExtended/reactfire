@@ -82,9 +82,11 @@ export function suspendUntilFirst(observable$, observableId) {
 
 export function useObservable(
   observable$: Observable<any>,
-  observableId: string
+  observableId: string,
+  startWithValue?: any
 ) {
-  const initialValue = suspendUntilFirst(observable$, observableId);
+  const initialValue =
+    startWithValue || suspendUntilFirst(observable$, observableId);
 
   const [latestValue, setValue] = React.useState(initialValue);
 
@@ -99,7 +101,6 @@ export function useObservable(
       }
     );
 
-    // need to wrap unsubscribe in a function to avoid weird context stuff
     return () => {
       subscription.unsubscribe();
       requestCache.removeRequest(observableId);
