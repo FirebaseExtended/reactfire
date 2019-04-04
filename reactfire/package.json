@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "tsc index.ts --lib DOM,ES2018 --watch --sourceMap"
+    "watch": "tsc index.ts --lib DOM,ES2018 --watch --sourceMap --declaration"
   },
   "repository": {
     "type": "git",
