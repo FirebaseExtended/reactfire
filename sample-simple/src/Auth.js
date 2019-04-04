@@ -2,12 +2,7 @@ import React, { Suspense, useState } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { useUser } from 'reactfire';
-
-const signIn = () =>
-  firebase
-    .auth()
-    .signInAnonymously()
-    .then(() => console.log('signed in'));
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 const signOut = () =>
   firebase
@@ -15,35 +10,39 @@ const signOut = () =>
     .signOut()
     .then(() => console.log('signed out'));
 
-const FirebaseAuthStateButton = props => {
-  const user = useUser(firebase.auth());
-  const [disabled, setDisabled] = useState(false);
+const UserDetails = ({ user }) => {
+  return (
+    <>
+      <h3>Displayname: {user.displayName}</h3>
+      <h3>Providers:</h3>
+      <ul>
+        {user.providerData.map(profile => (
+          <li key={profile.providerId}>{profile.providerId}</li>
+        ))}
+      </ul>
+      <button onClick={signOut}>Sign Out</button>
+    </>
+  );
+};
 
-  let btnText, infoText, authAction;
-
-  if (user) {
-    btnText = 'Sign Out';
-    infoText = 'Signed in!';
-    authAction = signOut;
-  } else {
-    btnText = 'Sign In';
-    infoText = 'Not signed in';
-    authAction = signIn;
-  }
-
-  const btnAction = () => {
-    setDisabled(true);
-    return authAction().then(() => setDisabled(false));
+const SignInForm = () => {
+  const uiConfig = {
+    signInFlow: 'popup',
+    signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+    callbacks: {
+      // Avoid redirects after sign-in.
+      signInSuccessWithAuthResult: () => false
+    }
   };
 
   return (
-    <>
-      <button disabled={disabled} onClick={btnAction}>
-        {btnText}
-      </button>
-      <span> {infoText}</span>
-    </>
+    <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
   );
+};
+
+const FirebaseAuthStateButton = props => {
+  const user = useUser(firebase.auth());
+  return user ? <UserDetails user={user} /> : <SignInForm />;
 };
 
 const AuthButton = props => {
