@@ -99,11 +99,11 @@ const SuspenseWrapper = props => {
         fallback="sign in to use Realtime Database"
         requiredClaims={[]}
       >
-        <h3>Sample Doc Listener</h3>
+        <h3>Sample Object Listener</h3>
         <Suspense fallback="connecting to Realtime Database...">
           <Counter />
         </Suspense>
-        <h3>Sample Collection Listener</h3>
+        <h3>Sample List Listener</h3>
         <Suspense fallback="connecting to Realtime Database...">
           <List />
         </Suspense>
