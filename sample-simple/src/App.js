@@ -2,6 +2,7 @@ import React from 'react';
 import AuthButton from './Auth';
 import FirestoreCounter from './Firestore';
 import Storage from './Storage';
+import RealtimeDatabase from './RealtimeDatabase';
 
 const Fire = () => (
   <span role="img" aria-label="Fire">
@@ -37,6 +38,10 @@ const App = () => {
 
         <Card title="Storage">
           <Storage />
+        </Card>
+
+        <Card title="Realtime Database">
+          <RealtimeDatabase />
         </Card>
       </div>
     </>
