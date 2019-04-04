@@ -67,7 +67,7 @@ const List = props => {
     <>
       <AnimalEntry saveAnimal={addNewAnimal} />
       <ul>
-        {snapShot.map(snap => (
+        {snapShot.docs.map(snap => (
           <li key={snap.id}>
             {snap.get('commonName')}{' '}
             <button onClick={() => removeAnimal(snap.id)}>X</button>
