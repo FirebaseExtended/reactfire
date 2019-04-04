@@ -1,4 +1,5 @@
-import { first } from 'rxjs/operators';
+import { first, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 class ActiveRequest {
   promise: Promise<any>;
@@ -31,7 +32,7 @@ export class ObservablePromiseCache {
     this.activeRequests = new Map();
   }
 
-  getRequest(observable$, observableId) {
+  getRequest(observable$: Observable<any>, observableId) {
     let request = this.activeRequests.get(observableId);
 
     if (!request) {
