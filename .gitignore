@@ -5,7 +5,6 @@ dist/
 node_modules/
 
 .vscode/*
-reactfire/*.js
-reactfire/*.js.map
-reactfire/*/*.js
-reactfire/*/*.js.map
+reactfire/**/*.js
+reactfire/**/*.js.map
+reactfire/**/*.d.ts
