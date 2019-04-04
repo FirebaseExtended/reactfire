@@ -1,0 +1,15 @@
+.container {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.card {
+  padding: 10px;
+  border: 1px solid black;
+  margin-top: 10px;
+  min-width: 400px;
+}
