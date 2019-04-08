@@ -4,7 +4,7 @@
   "description": "Firebase library for React",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "watch": "tsc index.ts --lib DOM,ES2018 --watch --sourceMap --declaration"
   },
   "repository": {
@@ -18,11 +18,21 @@
   },
   "homepage": "https://github.com/FirebasePrivate/reactfire#readme",
   "dependencies": {
-    "firebase": "^5.9.1",
-    "rxfire": "^3.3.8",
+    "firebase": "^5.9.3",
+    "rxfire": "^3.3.10",
     "rxjs": "^6.4.0"
   },
   "peerDependencies": {
-    "react": "^16.8.5"
+    "react": "^16.8.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/jest": "^24.0.11",
+    "babel-jest": "^24.7.1",
+    "jest": "^24.7.1",
+    "react-hooks-testing-library": "^0.4.0"
   }
 }
