@@ -3,6 +3,7 @@ import { user } from 'rxfire/auth';
 import { fromCollectionRef, doc } from 'rxfire/firestore';
 import { object, list, QueryChange } from 'rxfire/database';
 import { useObservable } from './util/use-observable';
+import { getDownloadURL } from 'rxfire/storage';
 import { Observable, from } from 'rxjs';
 
 export function useUser(auth: auth.Auth): User {
@@ -49,7 +50,11 @@ export function _fromTask(task: storage.UploadTask) {
 
 export function useStorageTask(
   task: storage.UploadTask,
-  ref
+  ref: storage.Reference
 ): storage.UploadTaskSnapshot {
-  return useObservable(_fromTask(task), ref.toString());
+  return useObservable(_fromTask(task), 'upload' + ref.toString());
+}
+
+export function useStorageDownloadURL(ref: storage.Reference): string {
+  return useObservable(getDownloadURL(ref), 'download' + ref.toString());
 }
