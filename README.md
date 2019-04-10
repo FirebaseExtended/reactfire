@@ -6,6 +6,8 @@
 
 ### Authentication
 
+#### `useUser`
+
 ```ts
 useUser(auth: auth.Auth, options?: ReactFireOptions): User
 ```
@@ -14,7 +16,7 @@ useUser(auth: auth.Auth, options?: ReactFireOptions): User
 
 ### Firestore
 
-#### useFirestoreDoc
+#### `useFirestoreDoc`
 
 ```ts
 function useFirestoreDoc(
@@ -25,7 +27,7 @@ function useFirestoreDoc(
 
 [Example use](/master/sample-simple/src/Firestore.js#L16)
 
-#### useFirestoreCollection
+#### `useFirestoreCollection`
 
 ```ts
 function useFirestoreCollection(
@@ -38,7 +40,7 @@ function useFirestoreCollection(
 
 ### Realtime Database
 
-#### useDatabaseObject
+#### `useDatabaseObject`
 
 ```ts
 function useDatabaseObject(
@@ -49,7 +51,7 @@ function useDatabaseObject(
 
 [Example use](/master/sample-simple/src/RealtimeDatabase.js#L16)
 
-#### useDatabaseList
+#### `useDatabaseList`
 
 ```ts
 function useDatabaseList(
@@ -62,7 +64,7 @@ function useDatabaseList(
 
 ### Cloud Storage for Firebase
 
-#### useStorageTask
+#### `useStorageTask`
 
 ```ts
 function useStorageTask(
@@ -74,7 +76,7 @@ function useStorageTask(
 
 [Example use](/master/sample-simple/src/Storage.js#L23)
 
-#### useStorageDownloadURL
+#### `useStorageDownloadURL`
 
 ```ts
 function useStorageDownloadURL(
