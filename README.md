@@ -12,7 +12,7 @@
 useUser(auth: auth.Auth, options?: ReactFireOptions): User
 ```
 
-[Example use](/master/sample-simple/src/Auth.js#L44)
+[Example use](/sample-simple/src/Auth.js#L44)
 
 ### Firestore
 
@@ -25,7 +25,7 @@ function useFirestoreDoc(
 ): firestore.DocumentSnapshot;
 ```
 
-[Example use](/master/sample-simple/src/Firestore.js#L16)
+[Example use](/sample-simple/src/Firestore.js#L16)
 
 #### `useFirestoreCollection`
 
@@ -36,7 +36,7 @@ function useFirestoreCollection(
 ): firestore.QuerySnapshot;
 ```
 
-[Example use](/master/sample-simple/src/Firestore.js#L57)
+[Example use](/sample-simple/src/Firestore.js#L57)
 
 ### Realtime Database
 
@@ -49,7 +49,7 @@ function useDatabaseObject(
 ): QueryChange;
 ```
 
-[Example use](/master/sample-simple/src/RealtimeDatabase.js#L16)
+[Example use](/sample-simple/src/RealtimeDatabase.js#L16)
 
 #### `useDatabaseList`
 
@@ -60,7 +60,7 @@ function useDatabaseList(
 ): QueryChange[];
 ```
 
-[Example use](/master/sample-simple/src/RealtimeDatabase.js#L57)
+[Example use](/sample-simple/src/RealtimeDatabase.js#L57)
 
 ### Cloud Storage for Firebase
 
@@ -74,7 +74,7 @@ function useStorageTask(
 ): storage.UploadTaskSnapshot;
 ```
 
-[Example use](/master/sample-simple/src/Storage.js#L23)
+[Example use](/sample-simple/src/Storage.js#L23)
 
 #### `useStorageDownloadURL`
 
@@ -85,7 +85,7 @@ function useStorageDownloadURL(
 ): string;
 ```
 
-[Example use](/master/sample-simple/src/Storage.js#L11)
+[Example use](/sample-simple/src/Storage.js#L11)
 
 ## For development
 
