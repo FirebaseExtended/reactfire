@@ -10,8 +10,12 @@ export interface ReactFireOptions {
   startWithValue: any;
 }
 
-export function useUser(auth: auth.Auth): User {
-  return useObservable(user(auth), 'user');
+export function useUser(auth: auth.Auth, options?: ReactFireOptions): User {
+  return useObservable(
+    user(auth),
+    'user',
+    options ? options.startWithValue : undefined
+  );
 }
 
 export function useFirestoreDoc(
