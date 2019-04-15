@@ -10,6 +10,12 @@ export interface ReactFireOptions {
   startWithValue: any;
 }
 
+/**
+ * Subscribe to Firebase auth state changes, including token refresh
+ *
+ * @param auth
+ * @param options
+ */
 export function useUser(auth: auth.Auth, options?: ReactFireOptions): User {
   return useObservable(
     user(auth),
@@ -62,7 +68,7 @@ export function useDatabaseList(
   );
 }
 
-export function _fromTask(task: storage.UploadTask) {
+function _fromTask(task: storage.UploadTask) {
   return new Observable<storage.UploadTaskSnapshot>(subscriber => {
     const progress = (snap: storage.UploadTaskSnapshot) => {
       return subscriber.next(snap);

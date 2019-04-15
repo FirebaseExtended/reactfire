@@ -8,3 +8,4 @@ node_modules/
 reactfire/**/*.js
 reactfire/**/*.js.map
 reactfire/**/*.d.ts
+reactfire/docs/reactfire-metadata.json

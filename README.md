@@ -1,91 +1,111 @@
-# ReactFire
+# Reactfire
 
-[Hooks](https://reactjs.org/docs/hooks-intro.html) that make it easy to interact with Firestore, Realtime Database, Authentication, and Storage. Note, every `reactfire` hook _throws a Promise_ until it has connected to Firebase. Wrap your components in React's [Suspense](https://reactjs.org/docs/code-splitting.html#suspense), or, if you don't want to deal with Suspense, pass an [initial value](/reactfire/index.ts#L10) to a `reactfire` hook. [Example](/sample-simple/src/Auth.js#L50).
 
-## Usage
+[Hooks](https://reactjs.org/docs/hooks-intro.html) that make it easy 
+to interact with Firestore, Realtime Database, Authentication, and 
+Storage. Note, every `reactfire` hook _throws a Promise_ until it has 
+connected to Firebase. Wrap your components in React's 
+[Suspense](https://reactjs.org/docs/code-splitting.html#suspense), 
+or, if you don't want to deal with Suspense, pass an 
+[initial value](/reactfire/index.ts#L10) to a `reactfire` hook. 
+[Example](/sample-simple/src/Auth.js#L50).
 
-### Authentication
 
-#### `useUser`
+## Interfaces
 
-```ts
-useUser(auth: auth.Auth, options?: ReactFireOptions): User
-```
+### ReactFireOptions
 
-[Example use](/sample-simple/src/Auth.js#L44)
+|Property|Type|
+|---|---|
+|startWithValue|any|
 
-### Firestore
+## Hooks
 
-#### `useFirestoreDoc`
+### `useDatabaseList`
 
-```ts
-function useFirestoreDoc(
-  ref: firestore.DocumentReference,
-  options?: ReactFireOptions
-): firestore.DocumentSnapshot;
-```
+#### Parameters
+|Parameter|Type|
+|---|---|
+|ref|Reference or Query|
+|options *?*|ReactFireOptions|
 
-[Example use](/sample-simple/src/Firestore.js#L16)
+#### Returns
 
-#### `useFirestoreCollection`
+QueryChange[]
 
-```ts
-function useFirestoreCollection(
-  ref: firestore.CollectionReference,
-  options?: ReactFireOptions
-): firestore.QuerySnapshot;
-```
+### `useDatabaseObject`
 
-[Example use](/sample-simple/src/Firestore.js#L57)
+#### Parameters
+|Parameter|Type|
+|---|---|
+|ref|Reference|
+|options *?*|ReactFireOptions|
 
-### Realtime Database
+#### Returns
 
-#### `useDatabaseObject`
+QueryChange
 
-```ts
-function useDatabaseObject(
-  ref: database.Reference,
-  options?: ReactFireOptions
-): QueryChange;
-```
+### `useFirestoreCollection`
 
-[Example use](/sample-simple/src/RealtimeDatabase.js#L16)
+#### Parameters
+|Parameter|Type|
+|---|---|
+|ref|CollectionReference|
+|options *?*|ReactFireOptions|
 
-#### `useDatabaseList`
+#### Returns
 
-```ts
-function useDatabaseList(
-  ref: database.Reference | database.Query,
-  options?: ReactFireOptions
-): QueryChange[];
-```
+QuerySnapshot
 
-[Example use](/sample-simple/src/RealtimeDatabase.js#L57)
+### `useFirestoreDoc`
 
-### Cloud Storage for Firebase
+#### Parameters
+|Parameter|Type|
+|---|---|
+|ref|DocumentReference|
+|options *?*|ReactFireOptions|
 
-#### `useStorageTask`
+#### Returns
 
-```ts
-function useStorageTask(
-  task: storage.UploadTask,
-  ref: storage.Reference,
-  options?: ReactFireOptions
-): storage.UploadTaskSnapshot;
-```
+DocumentSnapshot
 
-[Example use](/sample-simple/src/Storage.js#L23)
+### `useStorageDownloadURL`
 
-#### `useStorageDownloadURL`
+#### Parameters
+|Parameter|Type|
+|---|---|
+|ref|Reference|
+|options *?*|ReactFireOptions|
 
-```ts
-function useStorageDownloadURL(
-  ref: storage.Reference,
-  options?: ReactFireOptions
-): string;
-```
+#### Returns
 
-[Example use](/sample-simple/src/Storage.js#L11)
+string
+
+### `useStorageTask`
+
+#### Parameters
+|Parameter|Type|
+|---|---|
+|task|UploadTask|
+|ref|Reference|
+|options *?*|ReactFireOptions|
+
+#### Returns
+
+UploadTaskSnapshot
+
+### `useUser`
+
+#### Parameters
+|Parameter|Type|
+|---|---|
+|auth|Auth|
+|options *?*|ReactFireOptions|
+
+#### Returns
+
+User
+
 
 ## For development
 

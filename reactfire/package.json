@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "watch": "tsc index.ts --lib DOM,ES2018 --watch --sourceMap --declaration"
+    "watch": "tsc index.ts --lib DOM,ES2018 --watch --sourceMap --declaration",
+    "docs": "./node_modules/.bin/typedoc --mode modules --json docs/reactfire-metadata.json index.ts && node ./docs/generate-readme.js"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
     "@types/jest": "^24.0.11",
     "babel-jest": "^24.7.1",
     "jest": "^24.7.1",
-    "react-hooks-testing-library": "^0.4.0"
+    "react-hooks-testing-library": "^0.4.0",
+    "typedoc": "^0.14.2"
   }
 }
