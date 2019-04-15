@@ -23,7 +23,10 @@ or, if you don't want to deal with Suspense, pass an
 
 ### `useDatabaseList`
 
+Subscribe to a Realtime Database list
+
 #### Parameters
+
 |Parameter|Type|
 |---|---|
 |ref|Reference or Query|
@@ -35,7 +38,10 @@ QueryChange[]
 
 ### `useDatabaseObject`
 
+Subscribe to a Realtime Database object
+
 #### Parameters
+
 |Parameter|Type|
 |---|---|
 |ref|Reference|
@@ -47,7 +53,10 @@ QueryChange
 
 ### `useFirestoreCollection`
 
+Subscribe to a Firestore collection
+
 #### Parameters
+
 |Parameter|Type|
 |---|---|
 |ref|CollectionReference|
@@ -59,7 +68,10 @@ QuerySnapshot
 
 ### `useFirestoreDoc`
 
+Suscribe to Firestore Document changes
+
 #### Parameters
+
 |Parameter|Type|
 |---|---|
 |ref|DocumentReference|
@@ -71,7 +83,10 @@ DocumentSnapshot
 
 ### `useStorageDownloadURL`
 
+Subscribe to a storage ref's download URL
+
 #### Parameters
+
 |Parameter|Type|
 |---|---|
 |ref|Reference|
@@ -83,7 +98,10 @@ string
 
 ### `useStorageTask`
 
+Subscribe to the progress of a storage task
+
 #### Parameters
+
 |Parameter|Type|
 |---|---|
 |task|UploadTask|
@@ -96,7 +114,10 @@ UploadTaskSnapshot
 
 ### `useUser`
 
+Subscribe to Firebase auth state changes, including token refresh
+
 #### Parameters
+
 |Parameter|Type|
 |---|---|
 |auth|Auth|

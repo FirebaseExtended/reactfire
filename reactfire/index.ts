@@ -24,6 +24,12 @@ export function useUser(auth: auth.Auth, options?: ReactFireOptions): User {
   );
 }
 
+/**
+ * Suscribe to Firestore Document changes
+ *
+ * @param ref
+ * @param options
+ */
 export function useFirestoreDoc(
   ref: firestore.DocumentReference,
   options?: ReactFireOptions
@@ -35,6 +41,12 @@ export function useFirestoreDoc(
   );
 }
 
+/**
+ * Subscribe to a Firestore collection
+ *
+ * @param ref
+ * @param options
+ */
 export function useFirestoreCollection(
   ref: firestore.CollectionReference,
   options?: ReactFireOptions
@@ -46,6 +58,12 @@ export function useFirestoreCollection(
   );
 }
 
+/**
+ * Subscribe to a Realtime Database object
+ *
+ * @param ref
+ * @param options
+ */
 export function useDatabaseObject(
   ref: database.Reference,
   options?: ReactFireOptions
@@ -57,6 +75,12 @@ export function useDatabaseObject(
   );
 }
 
+/**
+ * Subscribe to a Realtime Database list
+ *
+ * @param ref
+ * @param options
+ */
 export function useDatabaseList(
   ref: database.Reference | database.Query,
   options?: ReactFireOptions
@@ -68,6 +92,11 @@ export function useDatabaseList(
   );
 }
 
+/**
+ * modified version of rxFire's _fromTask
+ *
+ * @param task
+ */
 function _fromTask(task: storage.UploadTask) {
   return new Observable<storage.UploadTaskSnapshot>(subscriber => {
     const progress = (snap: storage.UploadTaskSnapshot) => {
@@ -84,6 +113,13 @@ function _fromTask(task: storage.UploadTask) {
   });
 }
 
+/**
+ * Subscribe to the progress of a storage task
+ *
+ * @param task
+ * @param ref
+ * @param options
+ */
 export function useStorageTask(
   task: storage.UploadTask,
   ref: storage.Reference,
@@ -96,6 +132,12 @@ export function useStorageTask(
   );
 }
 
+/**
+ * Subscribe to a storage ref's download URL
+ *
+ * @param ref
+ * @param options
+ */
 export function useStorageDownloadURL(
   ref: storage.Reference,
   options?: ReactFireOptions
