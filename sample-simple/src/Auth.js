@@ -1,7 +1,7 @@
 import React, { Suspense, useState } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import { useUser } from 'reactfire';
+import { useUser, SuspenseWithPerf } from 'reactfire';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 const signOut = () =>
@@ -47,9 +47,13 @@ const FirebaseAuthStateButton = props => {
 
 const AuthButton = props => {
   return (
-    <Suspense fallback={<p>loading...</p>}>
+    <SuspenseWithPerf
+      traceId={'firebase-user-wait'}
+      fallback={<p>loading...</p>}
+      firePerf={firebase.performance()}
+    >
       <FirebaseAuthStateButton />
-    </Suspense>
+    </SuspenseWithPerf>
   );
 };
 

@@ -6,6 +6,8 @@ import { useObservable } from './util/use-observable';
 import { getDownloadURL } from 'rxfire/storage';
 import { Observable, from } from 'rxjs';
 
+export { SuspenseWithPerf } from './components';
+
 export interface ReactFireOptions {
   startWithValue: any;
 }

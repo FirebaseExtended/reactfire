@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "watch": "tsc index.ts --lib DOM,ES2018 --watch --sourceMap --declaration",
+    "watch": "tsc index.ts --lib DOM,ES2018 --watch --sourceMap --declaration --jsx react",
     "docs": "./node_modules/.bin/typedoc --mode modules --json docs/reactfire-metadata.json index.ts && node ./docs/generate-readme.js"
   },
   "repository": {
