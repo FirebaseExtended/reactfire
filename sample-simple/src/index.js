@@ -2,17 +2,23 @@ import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import firebase from 'firebase/app';
 import './app.css';
 
-firebase.initializeApp({
+import firebase from 'firebase/app';
+import '@firebase/performance';
+
+const app = firebase.initializeApp({
   apiKey: 'AIzaSyBg3u1sJlyJwQCE95oSDH_mtLABS-is8ZM',
   authDomain: 'rxfire-525a3.firebaseapp.com',
   databaseURL: 'https://rxfire-525a3.firebaseio.com',
   projectId: 'rxfire-525a3',
   storageBucket: 'rxfire-525a3.appspot.com',
-  messagingSenderId: '844180061847'
+  messagingSenderId: '844180061847',
+  appId: '1:844180061847:web:400f7142e2d1aaeb'
 });
+
+// Initialize performance monitoring
+app.performance();
 
 ReactDOM.render(
   <StrictMode>

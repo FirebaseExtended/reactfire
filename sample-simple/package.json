@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "firebase": "^5.9.3",
+    "@firebase/performance": "https://fireperffw.firebaseapp.com/v002/firebase-performance-0.0.2.tgz",
+    "firebase": "^5.9.4",
+    "jest": "23.6.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-firebaseui": "^3.1.2",
     "react-scripts": "2.1.8",
-    "reactfire": "0.0.1",
-    "jest": "23.6.0"
+    "reactfire": "0.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
