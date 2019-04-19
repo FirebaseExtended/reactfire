@@ -1,6 +1,6 @@
 import * as React from 'react';
 import '@firebase/performance';
-
+import { useUser } from './index';
 const { Suspense, useState, useLayoutEffect } = React;
 
 export function SuspenseWithPerf({
@@ -39,4 +39,37 @@ export function SuspenseWithPerf({
     return <>{children}</>;
   };
   return <Suspense fallback={<Fallback />}>{<Children />}</Suspense>;
+}
+
+export function AuthCheck({ auth, fallback, children, requiredClaims }) {
+  const user = useUser(auth);
+
+  useLayoutEffect(() => {
+    if (requiredClaims) {
+      throw user.getIdTokenResult().then(idTokenResult => {
+        const { claims } = idTokenResult;
+        const missingClaims = {};
+        Object.keys(requiredClaims).forEach(claim => {
+          if (requiredClaims[claim] !== claims[claim]) {
+            missingClaims[claim] = {
+              expected: requiredClaims[claim],
+              actual: claims[claim]
+            };
+          }
+        });
+
+        if (Object.keys(missingClaims).length > 0) {
+          throw new Error(
+            `Mismatched Claims: ${JSON.stringify(missingClaims)}`
+          );
+        }
+      });
+    }
+  });
+
+  if (!user) {
+    return fallback;
+  } else {
+    return children;
+  }
 }
