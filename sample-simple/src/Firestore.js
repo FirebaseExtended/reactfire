@@ -2,7 +2,13 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import React, { Suspense, useState } from 'react';
-import { useFirestoreCollection, useFirestoreDoc, useUser } from 'reactfire';
+import {
+  useFirestoreCollection,
+  useFirestoreDoc,
+  useUser,
+  AuthCheck,
+  SuspenseWithPerf
+} from 'reactfire';
 
 const Counter = props => {
   const ref = firebase.firestore().doc('count/counter');
@@ -78,32 +84,32 @@ const List = props => {
   );
 };
 
-const AuthCheck = props => {
-  const user = useUser(firebase.auth());
-
-  // TODO: check props.requiredClaims
-
-  if (!user) {
-    return props.fallback;
-  } else {
-    return props.children;
-  }
-};
-
 const SuspenseWrapper = props => {
   return (
-    <Suspense fallback="loading...">
-      <AuthCheck fallback="sign in to use Firestore" requiredClaims={[]}>
+    <SuspenseWithPerf
+      fallback="loading..."
+      traceId="firestore-demo-root"
+      firePerf={firebase.performance()}
+    >
+      <AuthCheck fallback="sign in to use Firestore" auth={firebase.auth()}>
         <h3>Sample Doc Listener</h3>
-        <Suspense fallback="connecting to Firestore...">
+        <SuspenseWithPerf
+          fallback="connecting to Firestore..."
+          traceId="firestore-demo-doc"
+          firePerf={firebase.performance()}
+        >
           <Counter />
-        </Suspense>
+        </SuspenseWithPerf>
         <h3>Sample Collection Listener</h3>
-        <Suspense fallback="connecting to Firestore...">
+        <SuspenseWithPerf
+          fallback="connecting to Firestore..."
+          traceId="firestore-demo-collection"
+          firePerf={firebase.performance()}
+        >
           <List />
-        </Suspense>
+        </SuspenseWithPerf>
       </AuthCheck>
-    </Suspense>
+    </SuspenseWithPerf>
   );
 };
 
