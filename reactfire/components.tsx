@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { auth } from 'firebase/app';
-import { useUser, ReactFireOptions } from './index';
+import { useUser } from './index';
 const { Suspense, useState, useLayoutEffect } = React;
 
 export interface SuspensePerfProps {
