@@ -64,6 +64,7 @@ export function AuthCheck({
   const user = useUser(auth);
 
   useLayoutEffect(() => {
+    // TODO(jeff) see if this actually works
     if (requiredClaims) {
       throw user.getIdTokenResult().then(idTokenResult => {
         const { claims } = idTokenResult;
