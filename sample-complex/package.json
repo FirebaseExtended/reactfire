@@ -1,26 +1,28 @@
 {
   "name": "sample-complex",
   "version": "1.0.0",
-  "description": "reactfire sample with SSR",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build-server": "webpack --config ./webpack.server.config.js",
-    "build-client": "webpack --config ./webpack.client.config.js",
-    "start": "node server.js"
+    "build": "rimraf dist && npm run build-client && npm run build-server",
+    "build-client": "parcel build src/client.tsx -d dist/client --no-minify",
+    "build-server": "parcel build src/server.tsx -d dist/server --target=node10 --no-minify",
+    "start": "node dist/server/server.js"
   },
-  "dependencies": {
+  "devDependencies": {
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-react": "^7.0.0",
-    "babel-loader": "^8.0.5",
+    "parcel-bundler": "^1.12.3",
+    "rimraf": "^2.6.3"
+  },
+  "dependencies": {
+    "@types/express": "^4.16.1",
+    "@types/react": "^16.8.14",
+    "@types/react-dom": "^16.8.4",
     "express": "^4.16.4",
+    "firebase": "^5.10.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
-  },
-  "devDependencies": {
-    "prettier": "^1.17.0",
-    "webpack": "^4.30.0",
-    "webpack-cli": "^3.3.0"
   }
 }

@@ -11,3 +11,4 @@ reactfire/**/*.js.map
 reactfire/**/*.jsx.map
 reactfire/**/*.d.ts
 reactfire/docs/reactfire-metadata.json
+sample-complex/.cache/**

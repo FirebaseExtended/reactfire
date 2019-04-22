@@ -2,6 +2,7 @@
   "private": true,
   "workspaces": [
     "reactfire",
-    "sample-simple"
+    "sample-simple",
+    "sample-complex"
   ]
 }
