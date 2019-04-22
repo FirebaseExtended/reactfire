@@ -13,11 +13,55 @@ or, if you don't want to deal with Suspense, pass an
 
 ## Interfaces
 
+### AuthCheckProps
+
+|Property|Type|
+|---|---|
+|auth|Auth|
+|children|React.Component|
+|fallback|React.Component|
+|requiredClaims|Object|
+
+### SuspensePerfProps
+
+|Property|Type|
+|---|---|
+|children|React.Component|
+|fallback|React.Component|
+|firePerf|any|
+|traceId|string|
+
 ### ReactFireOptions
 
 |Property|Type|
 |---|---|
 |startWithValue|any|
+
+## Components
+
+### `AuthCheck`
+
+
+
+#### Props
+
+interface `AuthCheckProps`
+
+#### Returns
+
+React.FunctionComponent
+
+### `SuspenseWithPerf`
+
+
+
+#### Props
+
+interface `SuspensePerfProps`
+
+#### Returns
+
+React.FunctionComponent
 
 ## Hooks
 
@@ -126,6 +170,22 @@ Subscribe to Firebase auth state changes, including token refresh
 #### Returns
 
 User
+
+### `useObservable`
+
+
+
+#### Parameters
+
+|Parameter|Type|
+|---|---|
+|observable$|Observable|
+|observableId|string|
+|startWithValue *?*|any|
+
+#### Returns
+
+any
 
 
 ## For development

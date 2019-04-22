@@ -6,8 +6,6 @@ import { useObservable } from './util/use-observable';
 import { getDownloadURL } from 'rxfire/storage';
 import { Observable, from } from 'rxjs';
 
-export { SuspenseWithPerf, AuthCheck } from './components';
-
 export interface ReactFireOptions {
   startWithValue: any;
 }
@@ -150,3 +148,5 @@ export function useStorageDownloadURL(
     options ? options.startWithValue : undefined
   );
 }
+
+export { SuspenseWithPerf, AuthCheck } from './components';
