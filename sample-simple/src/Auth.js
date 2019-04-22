@@ -1,8 +1,8 @@
-import React, { Suspense, useState } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import { useUser, SuspenseWithPerf } from 'reactfire';
+import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import { SuspenseWithPerf, useUser } from 'reactfire';
 
 const signOut = () =>
   firebase

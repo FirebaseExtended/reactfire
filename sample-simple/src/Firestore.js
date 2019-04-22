@@ -1,13 +1,12 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import React, { Suspense, useState } from 'react';
+import React, { useState } from 'react';
 import {
-  useFirestoreCollection,
-  useFirestoreDoc,
-  useUser,
   AuthCheck,
-  SuspenseWithPerf
+  SuspenseWithPerf,
+  useFirestoreCollection,
+  useFirestoreDoc
 } from 'reactfire';
 
 const Counter = props => {
