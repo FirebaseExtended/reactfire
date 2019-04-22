@@ -1,8 +1,14 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/storage';
-import React, { Suspense, useState } from 'react';
-import { useStorageTask, useUser, useStorageDownloadURL } from 'reactfire';
+import '@firebase/performance';
+import React, { useState } from 'react';
+import {
+  SuspenseWithPerf,
+  useStorageDownloadURL,
+  useStorageTask,
+  useUser
+} from 'reactfire';
 
 const DownloadImage = () => {
   const demoImagePath = 'Cloud Storage for Firebase (Independent Icon).png';
@@ -58,9 +64,13 @@ const ImageUploadButton = props => {
     <>
       <input type="file" accept="image/png, image/jpeg" onChange={onChange} />
       {uploadTask ? (
-        <Suspense fallback="waiting for progress...">
+        <SuspenseWithPerf
+          fallback="waiting for progress..."
+          traceId="storage-upload"
+          firePerf={firebase.performance()}
+        >
           <UploadProgress uploadTask={uploadTask} storageRef={ref} />
-        </Suspense>
+        </SuspenseWithPerf>
       ) : (
         ''
       )}
@@ -82,13 +92,17 @@ const AuthCheck = props => {
 
 const SuspenseWrapper = props => {
   return (
-    <Suspense fallback="loading...">
+    <SuspenseWithPerf
+      fallback="loading..."
+      traceId="storage-root"
+      firePerf={firebase.performance()}
+    >
       <AuthCheck fallback="sign in to use Storage">
         <DownloadImage />
         <br />
         <ImageUploadButton />
       </AuthCheck>
-    </Suspense>
+    </SuspenseWithPerf>
   );
 };
 

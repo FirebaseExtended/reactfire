@@ -1,8 +1,14 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-import React, { Suspense, useState } from 'react';
-import { useDatabaseList, useDatabaseObject, useUser } from 'reactfire';
+import '@firebase/performance';
+import React, { useState } from 'react';
+import {
+  AuthCheck,
+  SuspenseWithPerf,
+  useDatabaseList,
+  useDatabaseObject
+} from 'reactfire';
 
 const Counter = props => {
   const ref = firebase.database().ref('counter');
@@ -80,35 +86,23 @@ const List = props => {
   );
 };
 
-const AuthCheck = props => {
-  const user = useUser(firebase.auth());
-
-  // TODO: check props.requiredClaims
-
-  if (!user) {
-    return props.fallback;
-  } else {
-    return props.children;
-  }
-};
-
 const SuspenseWrapper = props => {
   return (
-    <Suspense fallback="loading...">
+    <SuspenseWithPerf
+      fallback="loading..."
+      traceId="RTDB-root"
+      firePerf={firebase.performance()}
+    >
       <AuthCheck
         fallback="sign in to use Realtime Database"
-        requiredClaims={[]}
+        auth={firebase.auth()}
       >
         <h3>Sample Object Listener</h3>
-        <Suspense fallback="connecting to Realtime Database...">
-          <Counter />
-        </Suspense>
+        <Counter />
         <h3>Sample List Listener</h3>
-        <Suspense fallback="connecting to Realtime Database...">
-          <List />
-        </Suspense>
+        <List />
       </AuthCheck>
-    </Suspense>
+    </SuspenseWithPerf>
   );
 };
 

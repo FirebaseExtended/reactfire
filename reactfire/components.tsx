@@ -28,6 +28,7 @@ export function SuspenseWithPerf({
 
       if (trace && !traceStarted) {
         trace.start();
+        console.log(`started trace ${traceId}`);
         setTraceStarted(true);
       }
     });
@@ -39,6 +40,7 @@ export function SuspenseWithPerf({
     useLayoutEffect(() => {
       if (trace && traceStarted && !traceCompleted) {
         trace.stop();
+        console.log(`stopped trace ${traceId}`);
         setTraceCompleted(true);
       }
     });
