@@ -1,14 +1,21 @@
 import * as React from 'react';
-import '@firebase/performance';
-import { useUser } from './index';
+import { auth } from 'firebase/app';
+import { useUser, ReactFireOptions } from './index';
 const { Suspense, useState, useLayoutEffect } = React;
+
+export interface SuspensePerfProps {
+  children: React.Component;
+  traceId: string;
+  fallback: React.Component;
+  firePerf: any; // TODO(jeff): Add firePerf here when it's available
+}
 
 export function SuspenseWithPerf({
   children,
   traceId,
   fallback,
   firePerf
-}): React.Component {
+}: SuspensePerfProps): React.FunctionComponent<SuspensePerfProps> {
   const [trace, setTrace] = useState(null);
   const [traceStarted, setTraceStarted] = useState(false);
   const [traceCompleted, setTraceCompleted] = useState(false);
@@ -41,7 +48,19 @@ export function SuspenseWithPerf({
   return <Suspense fallback={<Fallback />}>{<Children />}</Suspense>;
 }
 
-export function AuthCheck({ auth, fallback, children, requiredClaims }) {
+export interface AuthCheckProps {
+  auth: auth.Auth;
+  fallback: React.Component;
+  children: React.Component;
+  requiredClaims?: Object;
+}
+
+export function AuthCheck({
+  auth,
+  fallback,
+  children,
+  requiredClaims
+}: AuthCheckProps): React.FunctionComponent<AuthCheckProps> {
   const user = useUser(auth);
 
   useLayoutEffect(() => {
