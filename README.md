@@ -45,7 +45,7 @@ or, if you don't want to deal with Suspense, pass an
 
 #### Props
 
-interface `AuthCheckProps`
+interface [`AuthCheckProps`](#authcheckprops)
 
 #### Returns
 
@@ -57,7 +57,7 @@ React.FunctionComponent
 
 #### Props
 
-interface `SuspensePerfProps`
+interface [`SuspensePerfProps`](#suspenseperfprops)
 
 #### Returns
 
