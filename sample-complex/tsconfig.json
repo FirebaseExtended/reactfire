@@ -5,11 +5,12 @@
     "strict": true,
     "noImplicitReturns": true,
     "noImplicitAny": true,
-    "module": "es6",
+    "module": "esNext",
     "moduleResolution": "node",
     "target": "es5",
     "allowJs": true,
-    "jsx": "react"
+    "jsx": "react",
+    "resolveJsonModule": true
   },
   "include": ["./src/**/*"]
 }

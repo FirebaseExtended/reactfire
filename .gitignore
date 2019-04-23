@@ -12,3 +12,4 @@ reactfire/**/*.jsx.map
 reactfire/**/*.d.ts
 reactfire/docs/reactfire-metadata.json
 sample-complex/.cache/**
+sample-complex/src/firebase-key.json

@@ -5,6 +5,6 @@ import App from './App';
 const serverState = window.__initialState;
 
 ReactDOM.hydrate(
-  <App initialCount={serverState.initialCount} />,
+  <App isBrowser={true} animals={serverState.animals} />,
   document.getElementById('app')
 );

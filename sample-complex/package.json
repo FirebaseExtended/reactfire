@@ -5,9 +5,9 @@
   "license": "MIT",
   "scripts": {
     "build": "rimraf dist && npm run build-client && npm run build-server",
-    "build-client": "parcel build src/client.tsx -d dist/client --no-minify",
-    "build-server": "parcel build src/server.tsx -d dist/server --target=node10 --no-minify",
-    "start": "node dist/server/server.js"
+    "build-client": "NODE_ENV=development parcel build src/client.tsx -d dist/client --no-minify --public-url .",
+    "build-server": "NODE_ENV=development parcel build src/server.tsx -d dist/server --target=node10 --no-minify",
+    "start": "yarn run build && node dist/server/server.js"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
@@ -22,7 +22,9 @@
     "@types/react-dom": "^16.8.4",
     "express": "^4.16.4",
     "firebase": "^5.10.0",
+    "firebase-admin": "^7.3.0",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "reactfire": "0.0.1"
   }
 }
