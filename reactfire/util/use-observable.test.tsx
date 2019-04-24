@@ -9,7 +9,7 @@ import {
   queryByTestId
 } from 'react-testing-library';
 import { ReactFireOptions } from '..';
-import React from 'react';
+import * as React from 'react';
 import 'jest-dom/extend-expect';
 
 afterEach(cleanup);
