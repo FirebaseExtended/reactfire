@@ -4,6 +4,7 @@
   "description": "Firebase library for React",
   "main": "index.js",
   "scripts": {
+    "clean": "find ./ -name '**.js' -delete && find ./ -name '**.jsx' -delete && find ./ -name '**.map' -delete",
     "build": "tsc index.ts --lib DOM,ES2018 --sourceMap --declaration --jsx react",
     "test": "jest",
     "watch": "tsc index.ts --lib DOM,ES2018 --watch --sourceMap --declaration --jsx react",
