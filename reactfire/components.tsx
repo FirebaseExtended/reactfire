@@ -15,7 +15,7 @@ export function SuspenseWithPerf({
   traceId,
   fallback,
   firePerf
-}: SuspensePerfProps): React.FunctionComponent<SuspensePerfProps> {
+}: SuspensePerfProps) {
   const [trace, setTrace] = useState(null);
   const [traceStarted, setTraceStarted] = useState(false);
   const [traceCompleted, setTraceCompleted] = useState(false);
@@ -62,7 +62,7 @@ export function AuthCheck({
   fallback,
   children,
   requiredClaims
-}: AuthCheckProps): React.FunctionComponent<AuthCheckProps> {
+}: AuthCheckProps): React.Component {
   const user = useUser(auth);
 
   useLayoutEffect(() => {
