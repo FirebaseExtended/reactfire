@@ -1,6 +1,6 @@
 {
-  "name": "reactfire",
-  "version": "0.0.1",
+  "name": "reactfire-exp",
+  "version": "2.0.0-exp.1",
   "description": "Firebase library for React",
   "main": "index.js",
   "scripts": {
@@ -11,20 +11,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FirebasePrivate/reactfire.git"
+    "url": "git+https://github.com/Firebase/reactfire.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/FirebasePrivate/reactfire/issues"
+    "url": "https://github.com/Firebase/reactfire/issues"
   },
-  "homepage": "https://github.com/FirebasePrivate/reactfire#readme",
+  "homepage": "https://firebaseopensource.com/projects/firebase/reactfire/",
   "dependencies": {
-    "firebase": "^5.9.4",
     "rxfire": "^3.3.11",
     "rxjs": "^6.4.0"
   },
   "peerDependencies": {
+    "firebase": "^5.9.4",
     "react": "^16.8.6"
   },
   "devDependencies": {
