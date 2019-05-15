@@ -10,7 +10,7 @@
     "react-dom": "^16.8.6",
     "react-firebaseui": "^3.1.2",
     "react-scripts": "3.0.0",
-    "reactfire": "0.0.1"
+    "reactfire-exp": ">= 2.0.0-exp.1"
   },
   "scripts": {
     "start": "react-scripts start",

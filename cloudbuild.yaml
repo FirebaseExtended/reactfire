@@ -1,0 +1,25 @@
+steps:
+- name: 'gcr.io/cloud-builders/yarn'
+  dir: 'reactfire'
+- name: 'gcr.io/cloud-builders/yarn'
+  dir: 'reactfire'
+  args: ['build']
+- name: 'gcr.io/cloud-builders/yarn'
+  dir: 'reactfire'
+  args: ['test']
+- name: 'gcr.io/cloud-builders/npm'
+  dir: 'reactfire'
+  args: ['publish']
+  entrypoint: 'sh'
+  args:
+  - -c
+  - |
+    echo "//registry.npmjs.org/:_authToken=$$NPM_TOKEN" > .npmrc
+    npm publish . --tag exp
+    rm -f .npmrc
+  secretEnv: ['NPM_TOKEN']
+
+secrets:
+- kmsKeyName: projects/reactfire/locations/global/keyRings/cloud-build/cryptoKeys/cloud-build
+  secretEnv:
+    NPM_TOKEN: CiQADamFn5XzbeNQgzTGST9r3Tp5skWlDbBiWaZljffgEm0yIxYSTQC1QbtmDtScXx1BPE+d3CP9rXvOY+n5J0XRuLTTqN7RaqyipCEqTi7+z1kI6mKyBo2ilsMtOtngNzbOZ8kZeUDA80ISLWrNs0hF8k78
