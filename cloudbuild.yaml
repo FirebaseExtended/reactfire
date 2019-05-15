@@ -1,0 +1,38 @@
+steps:
+- name: 'gcr.io/cloud-builders/yarn'
+  dir: 'reactfire'
+- name: 'gcr.io/cloud-builders/yarn'
+  dir: 'reactfire'
+  args: ['build']
+- name: 'gcr.io/cloud-builders/yarn'
+  dir: 'reactfire'
+  args: ['test']
+# Manually push builds to NPM:
+#   @canary `gcloud builds submit --substitutions=SHORT_SHA="9b0a0b0"`
+#   @next   `gcloud builds submit --substitutions=TAG_NAME="v1.2.3-rc.1"`
+- name: 'gcr.io/cloud-builders/npm'
+  dir: 'reactfire'
+  entrypoint: 'sh'
+  env:
+  - 'SHORT_SHA=$SHORT_SHA'
+  - 'TAG_NAME=$TAG_NAME'
+  args:
+  - -c
+  - |
+    echo "//registry.npmjs.org/:_authToken=$$NPM_TOKEN" > .npmrc
+    cp ../README.md .
+    cp ../LICENSE .
+    if test $TAG_NAME; then
+      npm version $(echo $TAG_NAME | sed 's/^v\(.*\)$/\1/')
+      npm publish . --tag next
+    else
+      npm version $(npm view reactfire version)-canary.$SHORT_SHA
+      npm publish . --tag canary
+    fi
+    rm -f .npmrc
+  secretEnv: ['NPM_TOKEN']
+
+secrets:
+- kmsKeyName: projects/reactfire/locations/global/keyRings/cloud-build/cryptoKeys/cloud-build
+  secretEnv:
+    NPM_TOKEN: CiQADamFn5XzbeNQgzTGST9r3Tp5skWlDbBiWaZljffgEm0yIxYSTQC1QbtmDtScXx1BPE+d3CP9rXvOY+n5J0XRuLTTqN7RaqyipCEqTi7+z1kI6mKyBo2ilsMtOtngNzbOZ8kZeUDA80ISLWrNs0hF8k78
