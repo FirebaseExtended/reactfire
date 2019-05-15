@@ -8,8 +8,8 @@ steps:
   dir: 'reactfire'
   args: ['test']
 # Manually push builds to NPM:
-#   @canary `gcloud builds submit --substitutions=SHORT_SHA="SOMETHING"`
-#   @next   `gcloud builds submit --substitutions=TAG_NAME="SOME_VERSION"`
+#   @canary `gcloud builds submit --substitutions=SHORT_SHA="9b0a0b0"`
+#   @next   `gcloud builds submit --substitutions=TAG_NAME="v1.2.3-rc.1"`
 - name: 'gcr.io/cloud-builders/npm'
   dir: 'reactfire'
   entrypoint: 'sh'
@@ -23,10 +23,10 @@ steps:
     cp ../README.md .
     cp ../LICENSE .
     if test $TAG_NAME; then
-      npm version $TAG_NAME
+      npm version $(echo $TAG_NAME | sed 's/^v\(.*\)$/\1/')
       npm publish . --tag next
     else
-      npm version $(npm view reactfire-exp version)-canary.$SHORT_SHA
+      npm version $(npm view reactfire version)-canary.$SHORT_SHA
       npm publish . --tag canary
     fi
     rm -f .npmrc

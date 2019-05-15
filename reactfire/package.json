@@ -1,5 +1,5 @@
 {
-  "name": "reactfire-exp",
+  "name": "reactfire",
   "version": "0.0.0",
   "description": "Firebase library for React",
   "main": "index.js",
