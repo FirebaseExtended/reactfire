@@ -9,13 +9,21 @@ steps:
   args: ['test']
 - name: 'gcr.io/cloud-builders/npm'
   dir: 'reactfire'
-  args: ['publish']
   entrypoint: 'sh'
+  env:
+  - 'SHORT_SHA=$SHORT_SHA'
+  - 'TAG_NAME=$TAG_NAME'
   args:
   - -c
   - |
     echo "//registry.npmjs.org/:_authToken=$$NPM_TOKEN" > .npmrc
-    npm publish . --tag exp
+    if test $TAG_NAME; then
+      npm version $TAG_NAME
+      npm publish . --tag next
+    else
+      npm version $(npm view reactfire-exp version)-canary.$SHORT_SHA
+      npm publish . --tag canary
+    fi
     rm -f .npmrc
   secretEnv: ['NPM_TOKEN']
 

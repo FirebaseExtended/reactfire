@@ -25,6 +25,6 @@
     "firebase-admin": "^7.3.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "reactfire-exp": ">= 2.0.0-exp.1"
+    "reactfire-exp": "0.0.0"
   }
 }
