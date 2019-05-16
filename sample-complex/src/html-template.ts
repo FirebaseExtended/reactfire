@@ -4,6 +4,8 @@ const x = (appMarkup: string, initialState: string) => {
   <head>
     <title>Empty project</title>
     <meta charset="utf-8" />
+    <link href="https://unpkg.com/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+
   </head>
   <body>
     <script>

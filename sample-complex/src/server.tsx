@@ -30,15 +30,15 @@ app.get('/*', async (req, res) => {
   console.log('got a request');
 
   const animalsSnapShot = await db.collection('animals').get();
-
   const serializedAnimalSnapshot = serializeQuerySnapshot(animalsSnapShot);
-  console.log(serializedAnimalSnapshot);
+
   const markup = ReactDOM.renderToString(
     <App isBrowser={false} animals={serializedAnimalSnapshot} />
   );
+
   const html = htmlTemplate(
     markup,
-    JSON.stringify({ initialCount: 7, animals: serializedAnimalSnapshot })
+    JSON.stringify({ animals: serializedAnimalSnapshot })
   );
 
   res.send(html);
