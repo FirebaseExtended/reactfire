@@ -1,3 +1,8 @@
+# See go/reactfire-releasing for details on the ReactFire release process.
+# If you need to trigger a release manually, be sure to use substitutions like so:
+#   @canary `gcloud builds submit --substitutions=SHORT_SHA="9b0a0b0"`
+#   @next   `gcloud builds submit --substitutions=TAG_NAME="v1.2.3-rc.1"`
+#   @latest `gcloud builds submit --substitutions=TAG_NAME="v1.2.3"`
 steps:
 - name: 'gcr.io/cloud-builders/yarn'
   dir: 'reactfire'
@@ -7,9 +12,6 @@ steps:
 - name: 'gcr.io/cloud-builders/yarn'
   dir: 'reactfire'
   args: ['test']
-# Manually push builds to NPM:
-#   @canary `gcloud builds submit --substitutions=SHORT_SHA="9b0a0b0"`
-#   @next   `gcloud builds submit --substitutions=TAG_NAME="v1.2.3-rc.1"`
 - name: 'gcr.io/cloud-builders/npm'
   dir: 'reactfire'
   entrypoint: 'sh'
