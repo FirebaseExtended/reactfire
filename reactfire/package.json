@@ -1,6 +1,6 @@
 {
   "name": "reactfire",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "description": "Firebase library for React",
   "main": "index.js",
   "types": "index.d.ts",
