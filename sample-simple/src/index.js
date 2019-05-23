@@ -3,11 +3,10 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import './app.css';
-
-import firebase from 'firebase/app';
+import { FirebaseAppProvider } from 'reactfire';
 import '@firebase/performance';
 
-const app = firebase.initializeApp({
+const config = {
   apiKey: 'AIzaSyBg3u1sJlyJwQCE95oSDH_mtLABS-is8ZM',
   authDomain: 'rxfire-525a3.firebaseapp.com',
   databaseURL: 'https://rxfire-525a3.firebaseio.com',
@@ -15,14 +14,13 @@ const app = firebase.initializeApp({
   storageBucket: 'rxfire-525a3.appspot.com',
   messagingSenderId: '844180061847',
   appId: '1:844180061847:web:400f7142e2d1aaeb'
-});
-
-// Initialize performance monitoring
-app.performance();
+};
 
 ReactDOM.render(
   <StrictMode>
-    <App />
+    <FirebaseAppProvider firebaseConfig={config} initPerformance>
+      <App />
+    </FirebaseAppProvider>
   </StrictMode>,
   document.getElementById('root')
 ); // https://reactjs.org/docs/strict-mode.html

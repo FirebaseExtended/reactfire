@@ -1,13 +1,33 @@
 import * as React from 'react';
-import { auth } from 'firebase/app';
-import { useUser } from './index';
+import { auth, performance } from 'firebase/app';
+import { useUser, useFirebaseApp } from './index';
 const { Suspense, useState, useLayoutEffect } = React;
 
 export interface SuspensePerfProps {
   children: React.Component;
   traceId: string;
   fallback: React.Component;
-  firePerf: any; // TODO(jeff): Add firePerf here when it's available
+  firePerf?: any; // TODO(jeff): Add firePerf here when it's available
+}
+
+function getPerfFromContext(): performance.Performance {
+  const firebaseApp = useFirebaseApp();
+
+  if (!firebaseApp) {
+    throw new Error(
+      'Firebase not found in context. Either pass it directly to a reactfire hook, or wrap your component in a FirebaseAppProvider'
+    );
+  }
+
+  const perfFunc = firebaseApp.performance;
+
+  if (!perfFunc || !perfFunc()) {
+    throw new Error(
+      "No auth object off of Firebase. Did you forget to import 'firebase/auth' in a component?"
+    );
+  }
+
+  return perfFunc();
 }
 
 export function SuspenseWithPerf({
@@ -16,6 +36,7 @@ export function SuspenseWithPerf({
   fallback,
   firePerf
 }: SuspensePerfProps) {
+  firePerf = firePerf || getPerfFromContext();
   const [trace, setTrace] = useState(null);
   const [traceStarted, setTraceStarted] = useState(false);
   const [traceCompleted, setTraceCompleted] = useState(false);
@@ -51,7 +72,7 @@ export function SuspenseWithPerf({
 }
 
 export interface AuthCheckProps {
-  auth: auth.Auth;
+  auth?: auth.Auth;
   fallback: React.Component;
   children: React.Component;
   requiredClaims?: Object;

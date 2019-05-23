@@ -1,4 +1,3 @@
-import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import '@firebase/performance';
@@ -7,11 +6,13 @@ import {
   AuthCheck,
   SuspenseWithPerf,
   useDatabaseList,
-  useDatabaseObject
+  useDatabaseObject,
+  useFirebaseApp
 } from 'reactfire';
 
 const Counter = props => {
-  const ref = firebase.database().ref('counter');
+  const firebaseApp = useFirebaseApp();
+  const ref = firebaseApp.database().ref('counter');
 
   const increment = amountToIncrement => {
     ref.transaction(counterVal => {
@@ -59,7 +60,8 @@ const AnimalEntry = ({ saveAnimal }) => {
 };
 
 const List = props => {
-  const ref = firebase.database().ref('animals');
+  const firebaseApp = useFirebaseApp();
+  const ref = firebaseApp.database().ref('animals');
   const changes = useDatabaseList(ref);
 
   const addNewAnimal = commonName => {
@@ -88,15 +90,8 @@ const List = props => {
 
 const SuspenseWrapper = props => {
   return (
-    <SuspenseWithPerf
-      fallback="loading..."
-      traceId="RTDB-root"
-      firePerf={firebase.performance()}
-    >
-      <AuthCheck
-        fallback="sign in to use Realtime Database"
-        auth={firebase.auth()}
-      >
+    <SuspenseWithPerf fallback="loading..." traceId="RTDB-root">
+      <AuthCheck fallback="sign in to use Realtime Database">
         <h3>Sample Object Listener</h3>
         <Counter />
         <h3>Sample List Listener</h3>

@@ -5,9 +5,30 @@ import { object, list, QueryChange } from 'rxfire/database';
 import { useObservable } from './util/use-observable';
 import { getDownloadURL } from 'rxfire/storage';
 import { Observable, from } from 'rxjs';
+import { useFirebaseApp } from './firebaseContext';
 
 export interface ReactFireOptions {
   startWithValue: any;
+}
+
+function getAuthFromContext(): auth.Auth {
+  const firebaseApp = useFirebaseApp();
+
+  if (!firebaseApp) {
+    throw new Error(
+      'Firebase not found in context. Either pass it directly to a reactfire hook, or wrap your component in a FirebaseAppProvider'
+    );
+  }
+
+  const authFunc = firebaseApp.auth;
+
+  if (!authFunc || !authFunc()) {
+    throw new Error(
+      "No auth object off of Firebase. Did you forget to import 'firebase/auth' in a component?"
+    );
+  }
+
+  return authFunc();
 }
 
 /**
@@ -16,7 +37,9 @@ export interface ReactFireOptions {
  * @param auth - the [firebase.auth](https://firebase.google.com/docs/reference/js/firebase.auth) object
  * @param options
  */
-export function useUser(auth: auth.Auth, options?: ReactFireOptions): User {
+export function useUser(auth?: auth.Auth, options?: ReactFireOptions): User {
+  auth = auth || getAuthFromContext();
+
   return useObservable(
     user(auth),
     'user',
@@ -150,3 +173,4 @@ export function useStorageDownloadURL(
 }
 
 export { SuspenseWithPerf, AuthCheck } from './components';
+export { FirebaseAppProvider, useFirebaseApp } from './firebaseContext';

@@ -1,17 +1,18 @@
-import firebase from 'firebase/app';
 import 'firebase/auth';
 import '@firebase/performance';
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import { SuspenseWithPerf, useUser } from 'reactfire';
+import { SuspenseWithPerf, useUser, useFirebaseApp } from 'reactfire';
 
-const signOut = () =>
-  firebase
+const signOut = firebaseApp =>
+  firebaseApp
     .auth()
     .signOut()
     .then(() => console.log('signed out'));
 
 const UserDetails = ({ user }) => {
+  const firebaseApp = useFirebaseApp();
+
   return (
     <>
       <h3>Displayname: {user.displayName}</h3>
@@ -21,15 +22,17 @@ const UserDetails = ({ user }) => {
           <li key={profile.providerId}>{profile.providerId}</li>
         ))}
       </ul>
-      <button onClick={signOut}>Sign Out</button>
+      <button onClick={() => signOut(firebaseApp)}>Sign Out</button>
     </>
   );
 };
 
 const SignInForm = () => {
+  const firebaseApp = useFirebaseApp();
+
   const uiConfig = {
     signInFlow: 'popup',
-    signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+    signInOptions: [firebaseApp.auth.GoogleAuthProvider.PROVIDER_ID],
     callbacks: {
       // Avoid redirects after sign-in.
       signInSuccessWithAuthResult: () => false
@@ -37,12 +40,12 @@ const SignInForm = () => {
   };
 
   return (
-    <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+    <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebaseApp.auth()} />
   );
 };
 
-const FirebaseAuthStateButton = props => {
-  const user = useUser(firebase.auth());
+const FirebaseAuthStateButton = () => {
+  const user = useUser();
   return user ? <UserDetails user={user} /> : <SignInForm />;
 };
 
@@ -51,7 +54,6 @@ const AuthButton = props => {
     <SuspenseWithPerf
       traceId={'firebase-user-wait'}
       fallback={<p>loading...</p>}
-      firePerf={firebase.performance()}
     >
       <FirebaseAuthStateButton />
     </SuspenseWithPerf>
