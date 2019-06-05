@@ -9,22 +9,24 @@ const FirebaseAppContext = React.createContext<
 
 export function FirebaseAppProvider(props) {
   const { firebaseConfig, initPerformance } = props;
-  // const [firebaseApp, setFirebaseApp] = React.useState(null);
+  let { firebaseApp } = props;
 
-  const value = React.useMemo(() => {
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
+  firebaseApp =
+    firebaseApp ||
+    React.useMemo(() => {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
 
-      if (initPerformance === true) {
-        // initialize Performance Monitoring
-        firebase.performance();
+        if (initPerformance === true) {
+          // initialize Performance Monitoring
+          firebase.performance();
+        }
       }
-    }
 
-    return firebase;
-  }, [firebaseConfig]);
+      return firebase;
+    }, [firebaseConfig]);
 
-  return <FirebaseAppContext.Provider value={value} {...props} />;
+  return <FirebaseAppContext.Provider value={firebaseApp} {...props} />;
 }
 
 export function useFirebaseApp() {
