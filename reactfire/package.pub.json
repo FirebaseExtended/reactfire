@@ -5,11 +5,10 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "build-dev": "tsc",
+    "build": "tsc",
     "test": "jest",
     "watch": "tsc index.ts --lib DOM,ES2018 --watch --sourceMap --declaration --jsx react",
-    "docs": "./node_modules/.bin/typedoc --mode modules --json docs/reactfire-metadata.json index.ts && node ./docs/generate-readme.js",
-    "build": "rm -rf pub && tsc && cp package.pub.json pub/reactfire/package.json"
+    "docs": "./node_modules/.bin/typedoc --mode modules --json docs/reactfire-metadata.json index.ts && node ./docs/generate-readme.js"
   },
   "repository": {
     "type": "git",
@@ -28,19 +27,5 @@
   "peerDependencies": {
     "firebase": "^6.0.0",
     "react": "^16.8.6"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.4.3",
-    "@babel/preset-env": "^7.4.3",
-    "@babel/preset-react": "^7.0.0",
-    "@babel/preset-typescript": "^7.3.3",
-    "@firebase/app": "^0.4.8",
-    "@firebase/app-types": "^0.4.0",
-    "@types/jest": "^24.0.11",
-    "babel-jest": "^24.7.1",
-    "jest": "~24.7.1",
-    "jest-dom": "^3.1.3",
-    "react-hooks-testing-library": "^0.4.0",
-    "typescript": "^3.4.5"
   }
 }
