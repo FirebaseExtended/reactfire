@@ -1,15 +1,62 @@
-# Reactfire [![Build Status](https://travis-ci.com/FirebasePrivate/reactfire.svg?token=QezymPzqp8xf4BvzSukf&branch=master)](https://travis-ci.com/FirebasePrivate/reactfire)
+# Reactfire
 
-[Hooks](https://reactjs.org/docs/hooks-intro.html) that make it easy
-to interact with Firestore, Realtime Database, Authentication, and
-Storage. Note, every `reactfire` hook _throws a Promise_ until it has
-connected to Firebase. Wrap your components in React's
-[Suspense](https://reactjs.org/docs/code-splitting.html#suspense),
-or, if you don't want to deal with Suspense, pass an
-[initial value](/reactfire/index.ts#L10) to a `reactfire` hook.
-[Example](/sample-simple/src/Auth.js#L50).
+[Hooks](https://reactjs.org/docs/hooks-intro.html), Context Providers, and Components that make it easy
+to interact with Firebase.
 
-## Interfaces
+By default, every `reactfire` hook _throws a Promise_ until it has
+connected to Firebase, allowing you to use [Suspense](https://reactjs.org/docs/code-splitting.html#suspense) to render a fallback component. If you don't want `reactfire` to throw a promise, pass an initial value to a `reactfire` hook. It will emit the initial value right away instead of throwing a promise.
+
+## ToC
+
+- Providers
+  - [`FirebaseAppProvider`](#FirebaseAppProvider)
+- Hooks
+  - [`useFirebaseApp`](#useFirebaseApp)
+  - Authentication
+    - [`useUser`](#useUser)
+  - Database
+    - Cloud Firestore
+      - [`useFirestoreDoc`](#useFirestoreDoc)
+      - [`useFirestoreCollection`](#useFirestoreCollection)
+    - Realtime Database
+      - [`useDatabaseObject`](#useDatabaseObject)
+      - [`useDatabaseList`](#useDatabaseList)
+  - Cloud Storage
+    - [`useStorageTask`](#useStorageTask)
+    - [`useStorageDownloadURL`](#useStorageDownloadURL)
+- Components
+  - [Performance Monitoring](#perf-components)
+    - [`SuspenseWithPerf`](#SuspenseWithPerf)
+  - [Authentication](#Authentication-components)
+    - [`AuthCheck`](#AuthCheck)
+
+## Providers
+
+### `FirebaseAppProvider`
+
+## Hooks
+
+### `useFirebaseApp`
+
+### `useUser`
+
+### `useFirestoreDoc`
+
+### `useFirestoreCollection`
+
+### `useDatabaseObject`
+
+### `useDatabaseList`
+
+### `useStorageTask`
+
+### `useStorageDownloadURL`
+
+## Components
+
+### `SuspenseWithPerf`
+
+### `AuthCheck`
 
 ### AuthCheckProps
 
