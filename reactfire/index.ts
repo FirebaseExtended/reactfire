@@ -7,8 +7,8 @@ import { getDownloadURL } from 'rxfire/storage';
 import { Observable, from } from 'rxjs';
 import { useFirebaseApp } from './firebaseContext';
 
-export interface ReactFireOptions {
-  startWithValue: any;
+export interface ReactFireOptions<T = unknown> {
+  startWithValue: T;
 }
 
 function getAuthFromContext(): auth.Auth {
@@ -37,7 +37,10 @@ function getAuthFromContext(): auth.Auth {
  * @param auth - the [firebase.auth](https://firebase.google.com/docs/reference/js/firebase.auth) object
  * @param options
  */
-export function useUser(auth?: auth.Auth, options?: ReactFireOptions): User {
+export function useUser<T = unknown>(
+  auth?: auth.Auth,
+  options?: ReactFireOptions<T>
+): User | T {
   auth = auth || getAuthFromContext();
 
   return useObservable(
@@ -53,10 +56,10 @@ export function useUser(auth?: auth.Auth, options?: ReactFireOptions): User {
  * @param ref - Reference to the document you want to listen to
  * @param options
  */
-export function useFirestoreDoc(
+export function useFirestoreDoc<T = unknown>(
   ref: firestore.DocumentReference,
-  options?: ReactFireOptions
-): firestore.DocumentSnapshot {
+  options?: ReactFireOptions<T>
+): firestore.DocumentSnapshot | T {
   return useObservable(
     doc(ref),
     ref.path,
@@ -70,10 +73,10 @@ export function useFirestoreDoc(
  * @param ref - Reference to the collection you want to listen to
  * @param options
  */
-export function useFirestoreCollection(
+export function useFirestoreCollection<T = { [key: string]: unknown }>(
   ref: firestore.CollectionReference,
-  options?: ReactFireOptions
-): firestore.QuerySnapshot {
+  options?: ReactFireOptions<T[]>
+): firestore.QuerySnapshot | T[] {
   return useObservable(
     fromCollectionRef(ref),
     ref.path,
@@ -87,10 +90,10 @@ export function useFirestoreCollection(
  * @param ref - Reference to the DB object you want to listen to
  * @param options
  */
-export function useDatabaseObject(
+export function useDatabaseObject<T = unknown>(
   ref: database.Reference,
-  options?: ReactFireOptions
-): QueryChange {
+  options?: ReactFireOptions<T>
+): QueryChange | T {
   return useObservable(
     object(ref),
     ref.toString(),
@@ -104,10 +107,10 @@ export function useDatabaseObject(
  * @param ref - Reference to the DB List you want to listen to
  * @param options
  */
-export function useDatabaseList(
+export function useDatabaseList<T = { [key: string]: unknown }>(
   ref: database.Reference | database.Query,
-  options?: ReactFireOptions
-): QueryChange[] {
+  options?: ReactFireOptions<T[]>
+): QueryChange[] | T[] {
   return useObservable(
     list(ref),
     ref.toString(),
@@ -143,11 +146,11 @@ function _fromTask(task: storage.UploadTask) {
  * @param ref - reference to the blob the task is acting on
  * @param options
  */
-export function useStorageTask(
+export function useStorageTask<T = unknown>(
   task: storage.UploadTask,
   ref: storage.Reference,
-  options?: ReactFireOptions
-): storage.UploadTaskSnapshot {
+  options?: ReactFireOptions<T>
+): storage.UploadTaskSnapshot | T {
   return useObservable(
     _fromTask(task),
     'upload' + ref.toString(),
@@ -161,10 +164,10 @@ export function useStorageTask(
  * @param ref - reference to the blob you want to download
  * @param options
  */
-export function useStorageDownloadURL(
+export function useStorageDownloadURL<T = string>(
   ref: storage.Reference,
-  options?: ReactFireOptions
-): string {
+  options?: ReactFireOptions<T>
+): string | T {
   return useObservable(
     getDownloadURL(ref),
     'download' + ref.toString(),

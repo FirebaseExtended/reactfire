@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { auth, performance } from 'firebase/app';
+import { auth, performance, User } from 'firebase/app';
 import { useUser, useFirebaseApp } from './index';
 const { Suspense, useState, useLayoutEffect } = React;
 
@@ -84,7 +84,7 @@ export function AuthCheck({
   children,
   requiredClaims
 }: AuthCheckProps): React.ReactNode {
-  const user = useUser(auth);
+  const user = useUser<User>(auth);
 
   useLayoutEffect(() => {
     // TODO(jeff) see if this actually works
