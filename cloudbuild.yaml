@@ -13,7 +13,7 @@ steps:
   dir: 'reactfire'
   args: ['test']
 - name: 'gcr.io/cloud-builders/npm'
-  dir: 'reactfire'
+  dir: 'reactfire/pub/reactfire'
   entrypoint: 'bash'
   env:
   - 'SHORT_SHA=$SHORT_SHA'
