@@ -18,7 +18,7 @@ steps:
   env:
   - 'SHORT_SHA=$SHORT_SHA'
   - 'TAG_NAME=$TAG_NAME'
-  args: ["../publish.sh"]
+  args: ["../../../publish.sh"]
   secretEnv: ['NPM_TOKEN']
 
 secrets:
