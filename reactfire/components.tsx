@@ -4,9 +4,9 @@ import { useUser, useFirebaseApp } from './index';
 const { Suspense, useState, useLayoutEffect } = React;
 
 export interface SuspensePerfProps {
-  children: React.Component;
+  children: React.ReactNode;
   traceId: string;
-  fallback: React.Component;
+  fallback: React.ReactNode;
   firePerf?: any; // TODO(jeff): Add firePerf here when it's available
 }
 
@@ -73,8 +73,8 @@ export function SuspenseWithPerf({
 
 export interface AuthCheckProps {
   auth?: auth.Auth;
-  fallback: React.Component;
-  children: React.Component;
+  fallback: React.ReactNode;
+  children: React.ReactNode;
   requiredClaims?: Object;
 }
 
@@ -83,7 +83,7 @@ export function AuthCheck({
   fallback,
   children,
   requiredClaims
-}: AuthCheckProps): React.Component {
+}: AuthCheckProps): React.ReactNode {
   const user = useUser(auth);
 
   useLayoutEffect(() => {
