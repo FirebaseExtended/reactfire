@@ -146,9 +146,9 @@ Listen for realtime changes in a Firestore document with Reactfire. We'll use [`
     - [`useStorageTask`](#useStorageTask)
     - [`useStorageDownloadURL`](#useStorageDownloadURL)
 - Components
-  - [Performance Monitoring](#perf-components)
+  - Performance Monitoring
     - [`SuspenseWithPerf`](#SuspenseWithPerf)
-  - [Authentication](#Authentication-components)
+  - Authentication
     - [`AuthCheck`](#AuthCheck)
 
 ### Providers
