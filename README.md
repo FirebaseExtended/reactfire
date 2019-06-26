@@ -10,9 +10,9 @@ to interact with Firebase.
 By default, every `reactfire` hook _throws a Promise_ until it has
 connected to Firebase, allowing you to use [Suspense](https://reactjs.org/docs/code-splitting.html#suspense) to render a fallback component. If you don't want `reactfire` to throw a promise, pass an initial value to a `reactfire` hook. It will emit the initial value right away instead of throwing a promise.
 
-- [Quickstart](#Quickstart)
-- [Docs](#Docs)
-- [Contributing](#Contributing)
+- [**Quickstart**](#Quickstart)
+- [**Docs**](#Docs)
+- [**Contributing**](#Contributing)
 
 ## Quickstart
 
