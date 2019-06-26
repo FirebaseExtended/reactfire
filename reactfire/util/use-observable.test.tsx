@@ -1,13 +1,8 @@
 import { useObservable } from './use-observable';
-import { renderHook, cleanup, act } from 'react-hooks-testing-library';
+import { renderHook, act } from '@testing-library/react-hooks';
 import { of, Subject, Observable, observable } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import {
-  render,
-  waitForElement,
-  getByTestId,
-  queryByTestId
-} from 'react-testing-library';
+import { render, waitForElement, cleanup } from '@testing-library/react';
 import { ReactFireOptions } from '..';
 import * as React from 'react';
 import 'jest-dom/extend-expect';
@@ -86,40 +81,20 @@ it('works with Suspense', async () => {
   expect(queryByTestId(fallbackComponentId)).toBeNull();
 });
 
-it('updates the component as the observable emits new values', async () => {
-  const observableFirstValue = 'a';
+it('emits new values as the observable changes', async () => {
+  const startVal = 'start';
+  const values = ['a', 'b', 'c'];
   const observableSecondValue = 'b';
   const observable$ = new Subject();
-  const actualComponentId = 'actual-component';
-  const fallbackComponentId = 'fallback-component';
 
-  const FallbackComponent = () => (
-    <h1 data-testid={fallbackComponentId}>Fallback</h1>
+  const { result } = renderHook(() =>
+    useObservable(observable$, 'test', startVal)
   );
 
-  const Component = () => {
-    const val = useObservable(observable$, 'test-suspense');
-    return <h1 data-testid={actualComponentId}>{val}}</h1>;
-  };
+  expect(result.current).toEqual(startVal);
 
-  const { queryByTestId, getByTestId } = render(
-    <React.Suspense fallback={<FallbackComponent />}>
-      <Component />
-    </React.Suspense>
-  );
-
-  act(() => observable$.next(observableFirstValue));
-  await waitForElement(() => getByTestId(actualComponentId));
-
-  // check that the value matches
-  expect(getByTestId(actualComponentId)).toHaveTextContent(
-    observableFirstValue
-  );
-
-  act(() => observable$.next(observableSecondValue));
-
-  // check that the component was updated with the new value
-  expect(getByTestId(actualComponentId)).toHaveTextContent(
-    observableSecondValue
-  );
+  values.forEach(value => {
+    act(() => observable$.next(value));
+    expect(result.current).toEqual(value);
+  });
 });
