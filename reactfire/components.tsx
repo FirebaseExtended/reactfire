@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { auth, performance, User } from 'firebase/app';
+import { firebase, auth, performance, User } from 'firebase/app';
 import { useUser, useFirebaseApp } from './index';
 const { Suspense, useState, useLayoutEffect } = React;
 
@@ -7,7 +7,7 @@ export interface SuspensePerfProps {
   children: React.ReactNode;
   traceId: string;
   fallback: React.ReactNode;
-  firePerf?: any; // TODO(jeff): Add firePerf here when it's available
+  firePerf?: firebase.performance.Performance; // TODO(jeff): Add firePerf here when it's available
 }
 
 function getPerfFromContext(): performance.Performance {
@@ -23,7 +23,7 @@ function getPerfFromContext(): performance.Performance {
 
   if (!perfFunc || !perfFunc()) {
     throw new Error(
-      "No auth object off of Firebase. Did you forget to import 'firebase/auth' in a component?"
+      "No auth object off of Firebase. Did you forget to import 'firebase/performance' in a component?"
     );
   }
 
@@ -37,38 +37,21 @@ export function SuspenseWithPerf({
   firePerf
 }: SuspensePerfProps) {
   firePerf = firePerf || getPerfFromContext();
-  const [trace, setTrace] = useState(null);
-  const [traceStarted, setTraceStarted] = useState(false);
-  const [traceCompleted, setTraceCompleted] = useState(false);
+  const trace = React.useMemo(() => firePerf.trace(traceId), [traceId]);
 
   const Fallback = () => {
     useLayoutEffect(() => {
-      if (!trace) {
-        setTrace(firePerf.trace(traceId));
-      }
+      trace.start();
 
-      if (trace && !traceStarted) {
-        trace.start();
-        console.log(`started trace ${traceId}`);
-        setTraceStarted(true);
-      }
-    });
+      return () => {
+        trace.stop();
+      };
+    }, []);
 
     return <>{fallback}</>;
   };
 
-  const Children = () => {
-    useLayoutEffect(() => {
-      if (trace && traceStarted && !traceCompleted) {
-        trace.stop();
-        console.log(`stopped trace ${traceId}`);
-        setTraceCompleted(true);
-      }
-    });
-
-    return <>{children}</>;
-  };
-  return <Suspense fallback={<Fallback />}>{<Children />}</Suspense>;
+  return <Suspense fallback={<Fallback />}>{children}</Suspense>;
 }
 
 export interface AuthCheckProps {

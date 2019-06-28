@@ -7,7 +7,7 @@
   "scripts": {
     "build-dev": "tsc",
     "test-dev": "jest --verbose --watch",
-    "test": "jest",
+    "test": "jest --no-cache",
     "watch": "tsc index.ts --lib DOM,ES2018 --watch --sourceMap --declaration --jsx react",
     "docs": "./node_modules/.bin/typedoc --mode modules --json docs/reactfire-metadata.json index.ts && node ./docs/generate-readme.js",
     "build": "rm -rf pub && tsc && cp package.pub.json pub/reactfire/package.json"
