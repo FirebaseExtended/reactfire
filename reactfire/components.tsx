@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { firebase, auth, performance, User } from 'firebase/app';
+import { auth, performance, User } from 'firebase/app';
 import { useUser, useFirebaseApp } from './index';
 const { Suspense, useState, useLayoutEffect } = React;
 
@@ -7,7 +7,7 @@ export interface SuspensePerfProps {
   children: React.ReactNode;
   traceId: string;
   fallback: React.ReactNode;
-  firePerf?: firebase.performance.Performance; // TODO(jeff): Add firePerf here when it's available
+  firePerf?: performance.Performance; // TODO(jeff): Add firePerf here when it's available
 }
 
 function getPerfFromContext(): performance.Performance {
@@ -23,7 +23,7 @@ function getPerfFromContext(): performance.Performance {
 
   if (!perfFunc || !perfFunc()) {
     throw new Error(
-      "No auth object off of Firebase. Did you forget to import 'firebase/performance' in a component?"
+      "No perf object off of Firebase. Did you forget to import 'firebase/performance' in a component?"
     );
   }
 

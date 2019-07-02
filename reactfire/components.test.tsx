@@ -171,7 +171,7 @@ describe('SuspenseWithPerf', () => {
       <SuspenseWithPerf
         traceId={'hello'}
         fallback={'loading'}
-        firePerf={mockPerf()}
+        firePerf={(mockPerf() as unknown) as performance.Performance}
       >
         {'children'}
       </SuspenseWithPerf>
@@ -204,7 +204,7 @@ describe('AuthCheck', () => {
       render(
         <React.Suspense fallback={'loading'}>
           <AuthCheck
-            fallback={'not signed in'}
+            fallback={<h1>not signed in</h1>}
             auth={(mockFirebase.auth() as unknown) as auth.Auth}
           >
             {'signed in'}
@@ -212,8 +212,6 @@ describe('AuthCheck', () => {
         </React.Suspense>
       )
     ).not.toThrow();
-
-    // if this doesn't throw, it's good
   });
 
   test.todo('renders the fallback if a user is not signed in');
