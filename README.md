@@ -27,7 +27,7 @@ Listen for realtime changes in a Firestore document with Reactfire. We'll use [`
 1. Install reactfire and the Firebase SDK
 
    ```shell
-   npm i firebase reactfire
+   npm i firebase reactfire@canary
    ```
 
 1. Create a world-readable document in Firestore.
@@ -43,7 +43,6 @@ Listen for realtime changes in a Firestore document with Reactfire. We'll use [`
       ```js
       //...
       import { FirebaseAppProvider } from 'reactfire';
-      import * as firebase from 'firebase/app';
       import 'firebase/performance';
       //...
       ```
@@ -71,7 +70,7 @@ Listen for realtime changes in a Firestore document with Reactfire. We'll use [`
       ```js
       //...
       import 'firebase/firestore';
-      import { UseFirestoreDoc } from 'reactfire';
+      import { useFirestoreDoc, useFirebaseApp } from 'reactfire';
       //...
       ```
 
@@ -100,17 +99,18 @@ Listen for realtime changes in a Firestore document with Reactfire. We'll use [`
 
    1. Render your component inside of a `Suspense` tag
 
-   We need to do this because `useFirestoreDoc` throws a Promise while it is waiting for a response from Firestore. Suspense will catch the Promise and render `fallback` until the Promise is resolved.
+   > We need to do this because `useFirestoreDoc` throws a Promise while it is waiting for a response from Firestore. Suspense will catch the Promise and render `fallback` until the Promise is resolved.
+
+   Replace the `App` function with the following:
 
    ```jsx
    //...
    function App() {
      return (
        <div className="App">
-         <header className="App-header">{/* ... */}</header>
-         <Suspense fallback={'loading burrito status...'}>
+         <React.Suspense fallback={'loading burrito status...'}>
            <Burrito />
-         </Suspense>
+         </React.Suspense>
        </div>
      );
    }
