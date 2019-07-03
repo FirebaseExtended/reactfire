@@ -16,25 +16,45 @@ connected to Firebase, allowing you to use [Suspense](https://reactjs.org/docs/c
 
 ## Quickstart
 
-Listen for realtime changes in a Firestore document with Reactfire. We'll use [`create-react-app`](https://facebook.github.io/create-react-app/docs/getting-started) to quickly get a Reactfire demo up and running.
+⚛ + 🔥 = 🌯
 
-1. Create a fresh React app.
+We'll build a web app that displays, in _real time_, the tastiness of a burrito. It will listen to **Cloud Firestore** for its data, and we'll configure **Firebase Performance Monitoring** so we can get some perf stats.
+
+> Prerequisite: make sure you have [Node.js](https://nodejs.org/en/) installed.
+
+1. In a terminal, create a fresh React app and `cd` into its directory.
 
    ```shell
-   create-react-app myapp
+   npx create-react-app myapp
+   cd myapp
    ```
 
 1. Install reactfire and the Firebase SDK
 
    ```shell
-   npm i firebase reactfire@canary
+   yarn add firebase reactfire@canary
    ```
 
-1. Create a world-readable document in Firestore.
+1. Create a document in Cloud Firestore.
 
-   For example, a collection called **_tryreactfire_** with document **_burrito_** with field `yummy: true`.
+   1. Go to the _Database_ tab in the Firebase console. If your project doesn't have a Cloud Firestore instance yet, initialize it in locked mode
+   1. Add a document
 
-   To keep this as simple as possible, modify your security rules to make that document world-readable.
+      1. In the _Data_ tab of the console, click _Add Collection_
+
+      1. Name the collection **_tryreactfire_**
+      1. Add a document with ID **_burrito_** and boolean field `yummy: true`
+
+      ![new document screenshot](https://firebasestorage.googleapis.com/v0/b/rxfire-525a3.appspot.com/o/docs%2FScreen%20Shot%202019-07-03%20at%202.19.11%20PM.png?alt=media&token=052d27ea-5db1-4a02-aad0-a3f017c1a975)
+
+   1. Add the following to your security rules and click _Publish_
+
+      ```text
+      match /tryreactfire/burrito {
+        allow read: if true;
+        allow write: if request.auth.uid != null;
+      }
+      ```
 
 1. Modify `src/index.js`
 
@@ -70,7 +90,11 @@ Listen for realtime changes in a Firestore document with Reactfire. We'll use [`
       ```js
       //...
       import 'firebase/firestore';
-      import { useFirestoreDoc, useFirebaseApp } from 'reactfire';
+      import {
+        useFirestoreDoc,
+        useFirebaseApp,
+        SuspenseWithPerf
+      } from 'reactfire';
       //...
       ```
 
@@ -108,9 +132,12 @@ Listen for realtime changes in a Firestore document with Reactfire. We'll use [`
    function App() {
      return (
        <div className="App">
-         <React.Suspense fallback={'loading burrito status...'}>
+         <SuspenseWithPerf
+           fallback={'loading burrito status...'}
+           traceId={'load-burrito-status'}
+         >
            <Burrito />
-         </React.Suspense>
+         </SuspenseWithPerf>
        </div>
      );
    }
@@ -124,6 +151,16 @@ Listen for realtime changes in a Firestore document with Reactfire. We'll use [`
    ```
 
 1. Edit the value of `yummy` in the Firebase console, and watch it update in real time in your app! 🔥🔥🔥
+
+1. _"But what about Firebase Performance Monitoring?"_
+
+   By passing the `initPerformance` prop to `FirebaseAppProvider`, our app will automatically measure [common performance stats](https://firebase.google.com/docs/perf-mon/automatic-web), as well as report on our custom trace, `load-burrito-status`, that we set in the `traceId` prop of `SuspenseWithPerf`.
+
+   However, Firebase Performance Monitoring can take about 12 hours to crunch your data and show it in the _Performance_ tab of the Firebase console.
+
+   This is an example of some of the stats in the Firebase Performance Monitoring console after 12 hours:
+
+   ![Performance screenshot](https://firebasestorage.googleapis.com/v0/b/rxfire-525a3.appspot.com/o/docs%2FScreen%20Shot%202019-07-03%20at%202.43.29%20PM.png?alt=media&token=079547b5-ba5d-46bc-acfa-d9dedc184dc5)
 
 ## Docs
 
