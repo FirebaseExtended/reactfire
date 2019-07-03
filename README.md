@@ -1,7 +1,9 @@
 # Reactfire
 
-```shell
+```bash
 npm install reactfire
+# or
+yarn add reactfire
 ```
 
 [Hooks](https://reactjs.org/docs/hooks-intro.html), Context Providers, and Components that make it easy
@@ -31,8 +33,10 @@ We'll build a web app that displays, in _real time_, the tastiness of a burrito.
 
 1. Install reactfire and the Firebase SDK
 
-   ```shell
+   ```bash
    yarn add firebase reactfire@canary
+   # or
+   npm install firebase reactfire@canary
    ```
 
 1. Create a document in Cloud Firestore.
@@ -146,13 +150,15 @@ We'll build a web app that displays, in _real time_, the tastiness of a burrito.
 
 1. Run your app!
 
-   ```shell
+   ```bash
+   yarn start
+   # or
    npm run start
    ```
 
 1. Edit the value of `yummy` in the Firebase console, and watch it update in real time in your app! 🔥🔥🔥
 
-1. _"But what about Firebase Performance Monitoring?"_
+1. _But what about Firebase Performance Monitoring?_
 
    By passing the `initPerformance` prop to `FirebaseAppProvider`, our app will automatically measure [common performance stats](https://firebase.google.com/docs/perf-mon/automatic-web), as well as report on our custom trace, `load-burrito-status`, that we set in the `traceId` prop of `SuspenseWithPerf`.
 
