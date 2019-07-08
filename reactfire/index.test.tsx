@@ -6,8 +6,6 @@ import * as firebase from '@firebase/testing';
 import { useFirestoreDoc, useFirestoreCollection } from '.';
 import { FirebaseAppProvider } from './firebaseContext';
 import { firestore } from 'firebase/app';
-import { FirestoreEmulator } from 'firebase-tools/lib/emulator/firestoreEmulator';
-import { EmulatorServer } from 'firebase-tools/lib/emulator/emulatorServer';
 
 describe('useUser', () => {
   test.todo('can find firebase.auth() from Context');
@@ -19,15 +17,8 @@ describe('useUser', () => {
 
 describe('Database', () => {
   let app;
-  let emulator;
 
   beforeAll(async () => {
-    emulator = new EmulatorServer(new FirestoreEmulator({}));
-
-    console.log(emulator.instance.getInfo());
-
-    await emulator.start();
-
     app = firebase.initializeTestApp({
       projectId: '12345',
       databaseName: 'my-database',
@@ -40,113 +31,102 @@ describe('Database', () => {
     await firebase.clearFirestoreData({ projectId: '12345' });
   });
 
-  afterAll(() => {
-    return emulator.stop();
-  });
-
   test('sanity check - emulators are running', () => {
-    // IF THIS TEST FAILS, START THE EMULATOR BEFORE RERUNNING
-    // https://firebase.google.com/docs/rules/emulator-setup
+    // IF THIS TEST FAILS, MAKE SURE YOU'RE RUNNING THESE TESTS BY DOING:
+    //
 
-    const firestoreWrite = app
+    return app
       .firestore()
       .collection('test')
       .add({ a: 'hello' });
-
-    const rtdbWrite = app
-      .database()
-      .ref('test')
-      .push({ a: 1 });
-
-    return Promise.all([firestoreWrite, rtdbWrite]);
   });
 
-  // describe('Firestore', () => {
-  //   describe('useFirestoreDoc', () => {
-  //     it('can get a Firestore document [TEST REQUIRES EMULATOR]', async () => {
-  //       const mockData = { a: 'hello' };
+  describe('Firestore', () => {
+    describe('useFirestoreDoc', () => {
+      it('can get a Firestore document [TEST REQUIRES EMULATOR]', async () => {
+        const mockData = { a: 'hello' };
 
-  //       const ref = app
-  //         .firestore()
-  //         .collection('testDoc')
-  //         .doc('test1');
+        const ref = app
+          .firestore()
+          .collection('testDoc')
+          .doc('test1');
 
-  //       await ref.set(mockData);
+        await ref.set(mockData);
 
-  //       const ReadFirestoreDoc = () => {
-  //         const doc = useFirestoreDoc(
-  //           (ref as unknown) as firestore.DocumentReference
-  //         );
+        const ReadFirestoreDoc = () => {
+          const doc = useFirestoreDoc(
+            (ref as unknown) as firestore.DocumentReference
+          );
 
-  //         return (
-  //           <h1 data-testid="readSuccess">
-  //             {(doc as firestore.DocumentSnapshot).data().a}
-  //           </h1>
-  //         );
-  //       };
-  //       const { getByTestId } = render(
-  //         <FirebaseAppProvider firebase={app}>
-  //           <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
-  //             <ReadFirestoreDoc />
-  //           </React.Suspense>
-  //         </FirebaseAppProvider>
-  //       );
+          return (
+            <h1 data-testid="readSuccess">
+              {(doc as firestore.DocumentSnapshot).data().a}
+            </h1>
+          );
+        };
+        const { getByTestId } = render(
+          <FirebaseAppProvider firebase={app}>
+            <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
+              <ReadFirestoreDoc />
+            </React.Suspense>
+          </FirebaseAppProvider>
+        );
 
-  //       await waitForElement(() => getByTestId('readSuccess'));
+        await waitForElement(() => getByTestId('readSuccess'));
 
-  //       expect(getByTestId('readSuccess')).toContainHTML(mockData.a);
-  //     });
-  //   });
+        expect(getByTestId('readSuccess')).toContainHTML(mockData.a);
+      });
+    });
 
-  //   describe('useFirestoreCollection', () => {
-  //     it('can get a Firestore collection [TEST REQUIRES EMULATOR]', async () => {
-  //       const mockData1 = { a: 'hello' };
-  //       const mockData2 = { a: 'goodbye' };
+    describe('useFirestoreCollection', () => {
+      it('can get a Firestore collection [TEST REQUIRES EMULATOR]', async () => {
+        const mockData1 = { a: 'hello' };
+        const mockData2 = { a: 'goodbye' };
 
-  //       const ref = app.firestore().collection('testCollection');
+        const ref = app.firestore().collection('testCollection');
 
-  //       await ref.add(mockData1);
-  //       await ref.add(mockData2);
+        await ref.add(mockData1);
+        await ref.add(mockData2);
 
-  //       const ReadFirestoreCollection = () => {
-  //         const collection = useFirestoreCollection(
-  //           (ref as unknown) as firestore.CollectionReference
-  //         );
+        const ReadFirestoreCollection = () => {
+          const collection = useFirestoreCollection(
+            (ref as unknown) as firestore.CollectionReference
+          );
 
-  //         return (
-  //           <ul data-testid="readSuccess">
-  //             {(collection as firestore.QuerySnapshot).docs.map(doc => (
-  //               <li key={doc.id} data-testid="listItem">
-  //                 doc.data().a
-  //               </li>
-  //             ))}
-  //           </ul>
-  //         );
-  //       };
-  //       const { getAllByTestId } = render(
-  //         <FirebaseAppProvider firebase={app}>
-  //           <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
-  //             <ReadFirestoreCollection />
-  //           </React.Suspense>
-  //         </FirebaseAppProvider>
-  //       );
+          return (
+            <ul data-testid="readSuccess">
+              {(collection as firestore.QuerySnapshot).docs.map(doc => (
+                <li key={doc.id} data-testid="listItem">
+                  doc.data().a
+                </li>
+              ))}
+            </ul>
+          );
+        };
+        const { getAllByTestId } = render(
+          <FirebaseAppProvider firebase={app}>
+            <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
+              <ReadFirestoreCollection />
+            </React.Suspense>
+          </FirebaseAppProvider>
+        );
 
-  //       await waitForElement(() => getAllByTestId('listItem'));
+        await waitForElement(() => getAllByTestId('listItem'));
 
-  //       expect(getAllByTestId('listItem').length).toEqual(2);
-  //     });
-  //   });
-  // });
+        expect(getAllByTestId('listItem').length).toEqual(2);
+      });
+    });
+  });
 
-  // describe('Realtime Database (RTDB)', () => {
-  //   describe('useDatabaseObject', () => {
-  //     test.todo("returns the same value as ref.on('value')");
-  //   });
+  describe('Realtime Database (RTDB)', () => {
+    describe('useDatabaseObject', () => {
+      test.todo("returns the same value as ref.on('value')");
+    });
 
-  //   describe('useDatabaseList', () => {
-  //     test.todo("returns the same value as ref.on('value')");
-  //   });
-  // });
+    describe('useDatabaseList', () => {
+      test.todo("returns the same value as ref.on('value')");
+    });
+  });
 });
 
 describe('Storage', () => {
