@@ -1,9 +1,9 @@
 # Reactfire
 
-[Hooks](https://reactjs.org/docs/hooks-intro.html), Context Providers, and Components that make it easy
+Hooks, Context Providers, and Components that make it easy
 to interact with Firebase.
 
-> _!!!_ If you're looking for docs for the deprecated ReactFire v1 (the one that uses mixins), click [here](https://github.com/FirebaseExtended/reactfire/tree/v1.0.0)
+> If you're looking for docs for the _deprecated_ ReactFire v1 (the one that uses mixins), click [here](https://github.com/FirebaseExtended/reactfire/tree/v1.0.0)
 
 ## What is ReactFire?
 
