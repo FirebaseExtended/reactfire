@@ -1,10 +1,10 @@
-import { of, Subject, Observable, observable } from 'rxjs';
-import { render, waitForElement, cleanup, act } from '@testing-library/react';
-import * as React from 'react';
+import { act, cleanup, render, waitForElement } from '@testing-library/react';
+import { performance } from 'firebase/app';
 import 'jest-dom/extend-expect';
-import { SuspenseWithPerf, AuthCheck } from './components';
-import { FirebaseAppProvider } from './firebaseContext';
-import { auth, performance, User } from 'firebase/app';
+import * as React from 'react';
+import { Subject } from 'rxjs';
+import { SuspenseWithPerf } from '.';
+import { FirebaseAppProvider } from '../firebaseApp';
 
 const traceStart = jest.fn();
 const traceEnd = jest.fn();
@@ -18,15 +18,8 @@ const mockPerf = jest.fn(() => {
   return { trace: createTrace };
 });
 
-const mockAuth = jest.fn(() => {
-  return {
-    onIdTokenChanged: jest.fn()
-  };
-});
-
 const mockFirebase = {
-  performance: mockPerf,
-  auth: mockAuth
+  performance: mockPerf
 };
 
 const Provider = ({ children }) => (
@@ -179,44 +172,4 @@ describe('SuspenseWithPerf', () => {
 
     expect(createTrace).toHaveBeenCalled();
   });
-});
-
-describe('AuthCheck', () => {
-  afterEach(() => {
-    cleanup();
-    jest.clearAllMocks();
-  });
-
-  it('can find firebase Auth from Context', () => {
-    expect(() =>
-      render(
-        <Provider>
-          <React.Suspense fallback={'loading'}>
-            <AuthCheck fallback={'loading'}>{'children'}</AuthCheck>
-          </React.Suspense>
-        </Provider>
-      )
-    ).not.toThrow();
-  });
-
-  it('can use firebase Auth from props', () => {
-    expect(() =>
-      render(
-        <React.Suspense fallback={'loading'}>
-          <AuthCheck
-            fallback={<h1>not signed in</h1>}
-            auth={(mockFirebase.auth() as unknown) as auth.Auth}
-          >
-            {'signed in'}
-          </AuthCheck>
-        </React.Suspense>
-      )
-    ).not.toThrow();
-  });
-
-  test.todo('renders the fallback if a user is not signed in');
-
-  test.todo('renders children if a user is logged in');
-
-  test.todo('checks requiredClaims');
 });

@@ -8,7 +8,7 @@
     "build-dev": "tsc",
     "test-dev": "jest --verbose --watch",
     "test": "jest --no-cache",
-    "watch": "tsc index.ts --lib DOM,ES2018 --watch --sourceMap --declaration --jsx react",
+    "watch": "tsc --watch",
     "build": "rm -rf pub && tsc && cp package.pub.json pub/reactfire/package.json && cp ../README.md pub/reactfire/README.md"
   },
   "repository": {
