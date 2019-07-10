@@ -83,7 +83,7 @@ render(<App />, document.getElementById('root'));
 ## Learn More
 
 - [**Quickstart**](./docs/quickstart.md)
-- [**Docs**](./docs/reference.md)
+- [**API Reference**](./docs/reference.md)
 
 ## Contributing
 
