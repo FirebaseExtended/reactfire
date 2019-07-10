@@ -1,262 +1,400 @@
-# ReactFire is deprecated
+# Reactfire
 
-![status: inactive](https://img.shields.io/badge/status-inactive-red.svg)
+```bash
+npm install reactfire
+# or
+yarn add reactfire
+```
 
-ReactFire is deprecated. To use Firebase on React application you can use either:
- - The [Firebase JS SDK](https://www.npmjs.com/package/firebase) directly. See below for [Firebase + React samples](#using-the-firebase-js-sdk-in-react) and [migration guides](#migrating-from-reactfire).
- - The [Re-base](https://www.npmjs.com/package/re-base) library which is close to reactfire in design.
- - The [react-redux-firebase](https://www.npmjs.com/package/react-redux-firebase) library if you are using Redux in your React app.
- 
-> To access the former README you can check out the [v1.0.0 tag](https://github.com/firebase/reactfire/tree/v1.0.0)
+[Hooks](https://reactjs.org/docs/hooks-intro.html), Context Providers, and Components that make it easy
+to interact with Firebase.
 
-## Using the Firebase JS SDK in React
+By default, every `reactfire` hook _throws a Promise_ until it has
+connected to Firebase, allowing you to use [Suspense](https://reactjs.org/docs/code-splitting.html#suspense) to render a fallback component. If you don't want `reactfire` to throw a promise, pass an initial value to a `reactfire` hook. It will emit the initial value right away instead of throwing a promise.
 
-To use the Firebase JS SDK in React, you can follow these guidelines:
- - Initialize Firebase in your app once, for instance outside the React components or in a separate module and export the firebase App.
- - Create your Firebase data observers in `componentDidMount` lifecycle methods.
- - Map your Firebase data to the local state in the data observers.
- - Un-subscribe your Firebase data observers in `componentWillUnmount` lifecycle methods to avoid memory leaks and unintended behaviors.
- - When updating data: update the data on Firebase directly. Do not update the local state because it won't update  the data on Firebase but updating Firebase will trigger your local observers instantly.
- 
- 
-### Initialize Firebase
+- [**Quickstart**](#Quickstart)
+- [**Docs**](#Docs)
+- [**Contributing**](#Contributing)
 
-Initialize Firebase once, for example in a separate module (e.g. `firebase.js`) and export the Firebase app. You can find more details on the [web](https://firebase.google.com/docs/web/setup) setup guides and especially where to find your project's configuration.
+## Quickstart
 
-Here is an example of a `firebase.js` module that initializes Firebase:
+⚛ + 🔥 = 🌯
 
-**firebase.js**
-```js
-// Import the Firebase modules that you need in your app.
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/database';
-import 'firebase/datastore';
+We'll build a web app that displays, in _real time_, the tastiness of a burrito. It will listen to **Cloud Firestore** for its data, and we'll configure **Firebase Performance Monitoring** so we can get some perf stats.
 
-// Initalize and export Firebase.
-const config = {
-  apiKey: '<YOUR-API-KEY>',
-  authDomain: '<YOUR-AUTH-DOMAIN>',
-  databaseURL: 'https://<YOUR-DATABASE-NAME>.firebaseio.com',
-  projectId: '<YOUR-PROJECT-ID>',
-  storageBucket: '<YOUR-STORAGE-BUCKET>.appspot.com',
-  messagingSenderId: '<YOUR-MESSAGING-SENDER-ID>'
+> Prerequisite: make sure you have [Node.js](https://nodejs.org/en/) installed.
+
+1. In a terminal, create a fresh React app and `cd` into its directory.
+
+   ```shell
+   npx create-react-app myapp
+   cd myapp
+   ```
+
+1. Install reactfire and the Firebase SDK
+
+   ```bash
+   yarn add firebase reactfire@canary
+   # or
+   npm install firebase reactfire@canary
+   ```
+
+1. Create a document in Cloud Firestore.
+
+   1. Go to the _Database_ tab in the Firebase console. If your project doesn't have a Cloud Firestore instance yet, initialize it in locked mode
+   1. Add a document
+
+      1. In the _Data_ tab of the console, click _Add Collection_
+
+      1. Name the collection **_tryreactfire_**
+      1. Add a document with ID **_burrito_** and boolean field `yummy: true`
+
+      ![new document screenshot](https://firebasestorage.googleapis.com/v0/b/rxfire-525a3.appspot.com/o/docs%2FScreen%20Shot%202019-07-03%20at%202.19.11%20PM.png?alt=media&token=052d27ea-5db1-4a02-aad0-a3f017c1a975)
+
+   1. Add the following to your security rules and click _Publish_
+
+      ```text
+      match /tryreactfire/burrito {
+        allow read: if true;
+        allow write: if request.auth.uid != null;
+      }
+      ```
+
+1. Modify `src/index.js`
+
+   1. Import firebase and reactfire
+
+      ```js
+      //...
+      import { FirebaseAppProvider } from 'reactfire';
+      import 'firebase/performance';
+      //...
+      ```
+
+   1. Wrap your app in a `FirebaseAppProvider` and provide the config object from the Firebase console
+
+      ```jsx
+      //...
+      const firebaseConfig = {
+        /* add your config object from Firebase console */
+      };
+      ReactDOM.render(
+        <FirebaseAppProvider firebaseConfig={firebaseConfig} initPerformance>
+          <App />
+        </FirebaseAppProvider>,
+        document.getElementById('root')
+      );
+      //...
+      ```
+
+1. Modify `src/App.js`
+
+   1. Import `firebase/firestore` as well as the `useFirestoreDoc` and `useFirebaseApp` hooks
+
+      ```js
+      //...
+      import 'firebase/firestore';
+      import {
+        useFirestoreDoc,
+        useFirebaseApp,
+        SuspenseWithPerf
+      } from 'reactfire';
+      //...
+      ```
+
+   1. Add a function component
+
+      ```jsx
+      //...
+      function Burrito() {
+        // create a ref
+        const firebaseApp = useFirebaseApp();
+        const burritoRef = firebaseApp
+          .firestore()
+          .collection('tryreactfire')
+          .doc('burrito');
+
+        // get the doc. just one line!
+        const burritoDoc = useFirestoreDoc(burritoRef);
+
+        // get the value from the doc
+        const isYummy = burritoDoc.data().yummy;
+
+        return <p>The burrito is {isYummy ? 'good' : 'bad'}</p>;
+      }
+      //...
+      ```
+
+   1. Render your component inside of a `Suspense` tag
+
+   > We need to do this because `useFirestoreDoc` throws a Promise while it is waiting for a response from Firestore. Suspense will catch the Promise and render `fallback` until the Promise is resolved.
+
+   Replace the `App` function with the following:
+
+   ```jsx
+   //...
+   function App() {
+     return (
+       <div className="App">
+         <SuspenseWithPerf
+           fallback={'loading burrito status...'}
+           traceId={'load-burrito-status'}
+         >
+           <Burrito />
+         </SuspenseWithPerf>
+       </div>
+     );
+   }
+   //...
+   ```
+
+1. Run your app!
+
+   ```bash
+   yarn start
+   # or
+   npm run start
+   ```
+
+1. Edit the value of `yummy` in the Firebase console, and watch it update in real time in your app! 🔥🔥🔥
+
+1. _But what about Firebase Performance Monitoring?_
+
+   By passing the `initPerformance` prop to `FirebaseAppProvider`, our app will automatically measure [common performance stats](https://firebase.google.com/docs/perf-mon/automatic-web), as well as report on our custom trace, `load-burrito-status`, that we set in the `traceId` prop of `SuspenseWithPerf`.
+
+   However, Firebase Performance Monitoring can take about 12 hours to crunch your data and show it in the _Performance_ tab of the Firebase console.
+
+   This is an example of some of the stats in the Firebase Performance Monitoring console after 12 hours:
+
+   ![Performance screenshot](https://firebasestorage.googleapis.com/v0/b/rxfire-525a3.appspot.com/o/docs%2FScreen%20Shot%202019-07-03%20at%202.43.29%20PM.png?alt=media&token=079547b5-ba5d-46bc-acfa-d9dedc184dc5)
+
+## Docs
+
+### ToC
+
+- Providers
+  - [`FirebaseAppProvider`](#FirebaseAppProvider)
+- Hooks
+  - [`useFirebaseApp`](#useFirebaseApp)
+  - Authentication
+    - [`useUser`](#useUser)
+  - Database
+    - Cloud Firestore
+      - [`useFirestoreDoc`](#useFirestoreDoc)
+      - [`useFirestoreCollection`](#useFirestoreCollection)
+    - Realtime Database
+      - [`useDatabaseObject`](#useDatabaseObject)
+      - [`useDatabaseList`](#useDatabaseList)
+  - Cloud Storage
+    - [`useStorageTask`](#useStorageTask)
+    - [`useStorageDownloadURL`](#useStorageDownloadURL)
+- Components
+  - Performance Monitoring
+    - [`SuspenseWithPerf`](#SuspenseWithPerf)
+  - Authentication
+    - [`AuthCheck`](#AuthCheck)
+
+### Providers
+
+#### `FirebaseAppProvider`
+
+A React [Context Provider](https://reactjs.org/docs/context.html#contextprovider) that allows the `useFirebaseApp` hook to pick up the `firebase` object.
+
+##### Sample usage
+
+```jsx
+const firebaseConfig = {
+  /* web app config from Firebase console */
 };
-export default firebase.initializeApp(config);
+
+<FirebaseAppProvider firebaseConfig={firebaseConfig} initPerformance>
+  <App />
+</FirebaseAppProvider>;
 ```
 
+##### Props
 
-### Firebase Auth
+| Prop            | Type   | Description                                                                                                                              |
+| --------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| config          | Object | the web app config object usually passed to [`initializeApp`](https://firebase.google.com/docs/reference/js/firebase.html#initializeapp) |
+| initPerformance | bool   | Whether or not to initialize Firebase Performance Monitoring                                                                             |
 
-Here is an example of how you can map the Firebase authentication state to your React component's local state:
+### Hooks
 
-```js
-import firebase from './firebase.js';
+#### `useFirebaseApp`
 
-class MyComponent extends React.Component {
-  state = {
-    isSignedIn: false,
-    userProfile: null
-  };
-  
-  componentDidMount() {
-    // Updating the `isSignedIn` and `userProfile` local state attributes when the Firebase Auth
-    // state changes.
-    this.unregisterAuthObserver = firebase.auth().onAuthStateChanged((user) => {
-      this.setState({ isSignedIn: !!user, userProfile: user });
-    });
-  }
-  
-  componentWillUnmount() {
-    // Un-registers the auth state observer.
-    this.unregisterAuthObserver();
-  }
-  
-  // ...
-}
-```
+When called from a component nested inside a `FirebaseAppProvider`, `useFirebaseApp` returns the root Firebase object.
 
+> IMPORTANT: By default, `useFirebaseApp` returns a firebase object without any products attached to it (e.g. you can't call `firebase.firestore()`. To do that, you need to `import 'firebase/firestore'` or any other Firebase feature as needed)
 
-### Firebase Realtime Database
+##### Returns
 
-Here is an example of how you can map data from the Realtime Database to your React component's local state:
+[`firebase`](https://firebase.google.com/docs/reference/js/firebase)
 
-```js
-import firebase from './firebase.js';
+#### `useUser`
 
-class MyComponent extends React.Component {
-  state = {
-    someData: {}
-  };
-  
-  componentDidMount() {
-    // Updating the `someData` local state attribute when the Firebase Realtime Database data
-    // under the '/someData' path changes.
-    this.firebaseRef = firebase.database().ref('/someData');
-    this.firebaseCallback = this.firebaseRef.on('value', (snap) => {      
-      this.setState({ someData: snap.val() });
-    });
-  }
-  
-  componentWillUnmount() {
-    // Un-register the listener on '/someData'.
-    this.firebaseRef.off('value', this.firebaseCallback);
-  }
-  
-  // ...
-}
-```
+Get the user that is currently signed in.
 
+_Throws a Promise by default_
 
-### Firebase Cloud Datastore
+##### Parameters
 
-Here is an example of how you can map data from the Cloud Datastore in a React component:
+| Parameter   | Type                                                                            | Description                                                                                         |
+| ----------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| auth _?_    | [`Auth`](https://firebase.google.com/docs/reference/js/firebase.auth.Auth.html) | [optional] auth object. If not provided, useUser will use `useFirebaseApp` to find the Auth object. |
+| options _?_ | ReactFireOptions                                                                | Options. This hook will not throw a Promise if you provide `startWithValue`.                        |
 
-```js
-import firebase from './firebase.js';
+##### Returns
 
-class MyComponent extends React.Component {
-  state = {
-    someCollection: {},
-    someDocument: null
-  };
-  
-  componentDidMount() {
-    // Updating the `someCollection` local state attribute when the Cloud Firestore 'someCollection' collection changes.
-    this.unregisterCollectionObserver = firebase.firestore().collection('someCollection').onSnapshot((snap) => {
-      const someCollection = {};
-      snap.forEach((docSnapshot) => {
-        someCollection[docSnapshot.id] = docSnapshot.data();
-      });
-      this.setState({ someCollection: someCollection });
-    });
-    
-    // Updating the `someDocument` local state attribute when the Cloud Firestore 'someDocument' document changes.
-    this.unregisterDocumentObserver = firebase.firestore().doc('/collection/someDocument').onSnapshot((snap) => {
-      this.setState({ someDocument: snap.data() });
-    });
-  }
-  
-  componentWillUnmount() {
-    // Un-register the listeners.
-    this.unregisterCollectionObserver();
-    this.unregisterDocumentObserver();
-  }
-  
-  // ...
-}
-```
+[`User`](https://firebase.google.com/docs/reference/js/firebase.User)
 
-### Updating data
+#### `useFirestoreDoc`
 
-When updating data, do not modify the local state directly. Modifying the local state will not update the data on Firebase. Instead you should only update your data on Firebase, this will trigger any observers that you have setup locally instantly from cache.
+Listen to a Firestore Document.
 
-For instance, let's take an app that has a list of todo items stored on Firebase. It also has a text field and a button to add new todos:
+_Throws a Promise by default_
 
-```js
-import firebase from './firebase.js';
+##### Parameters
 
-class MyComponent extends React.Component {
-  state = {
-    todoList: {}, // Mirrors the Todo lsit in Firebase.
-    newTodoText: '', // Mirrors the new Todo Text field in the UI.
-  };
-  
-  componentDidMount() {
-    // Updating the `todoList` local state attribute when the Firebase Realtime Database data
-    // under the '/todoList' path changes.
-    this.firebaseRef = firebase.database().ref('/todoList');
-    this.firebaseCallback = this.firebaseRef.on('value', (snap) => {      
-      this.setState({ todoList: snap.val() });
-    });
-  }
-  
-  componentWillUnmount() {
-    // Un-register the listener on '/todoList'.
-    this.firebaseRef.off('value', this.firebaseCallback);
-  }
-  
-  // This is triggered when the "Add New Todo" button is clicked.
-  onSubmit(e) {
-    e.preventDefault();
-    // Add the new todo to Firebase.
-    this.firebaseRef.push({
-      text: this.state.newTodoText
-    });
-    // Clearing the text field.
-    this.setState({text: ''});
-  }
-  
-  // ...
-}
-```
+| Parameter   | Type                                                                                                      | Description                                                                  |
+| ----------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| ref         | [`DocumentReference`](https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference) | A reference to the document you want to listen to                            |
+| options _?_ | ReactFireOptions                                                                                          | Options. This hook will not throw a Promise if you provide `startWithValue`. |
 
-Note how we are **not** updating the `todoList` in the local state. You only need to update Firebase and the Firebase observer that was set up will take care of propagating the changes and updating the local state.
+##### Returns
 
+[`DocumentSnapshot`](https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentSnapshot)
 
-## Migrating from ReactFire
+#### `useFirestoreCollection`
 
-To migrate from ReactFire to using the Firebase JS SDK first remove the `ReactFireMixin` that was applied to any of your React components.
+Listen to a Firestore Collection.
 
-### Migrate `bindAsObject` calls
+_Throws a Promise by default_
 
-In all component that are using [bindAsObject(firebaseRef, bindVar, cancelCallback)](https://github.com/firebase/reactfire/blob/master/docs/reference.md#bindasobjectfirebaseref-bindvar-cancelcallback) change from:
+##### Parameters
 
-```js
-componentWillMount: function() {
-  var ref = firebase.database().ref().child("users/fred");
-  this.bindAsObject(ref, "user");
-}
+| Parameter   | Type                                                                                                          | Description                                                                  |
+| ----------- | ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| ref         | [`CollectionReference`](https://firebase.google.com/docs/reference/js/firebase.firestore.CollectionReference) | A reference to the collection you want to listen to                          |
+| options _?_ | ReactFireOptions                                                                                              | Options. This hook will not throw a Promise if you provide `startWithValue`. |
 
-componentWillUnmount: function() {
-  this.unbind("user");
-}
-```
+##### Returns
 
-to:
+[`QuerySnapshot`](https://firebase.google.com/docs/reference/js/firebase.firestore.QuerySnapshot)
 
-```js
-componentDidMount: function() {
-  this.firebaseCallback = firebase.database().ref('/users/fred').on('value', function(snap) {      
-    this.setState({ user: snap.val() });
-  });
-}
-  
-componentWillUnmount: function() {
-  firebase.database().ref('/users/fred').off('value', this.firebaseCallback);
-}
-```
+#### `useDatabaseObject`
 
+Listen to a Realtime Database Object.
 
-### Migrate `bindAsObject` calls
+_Throws a Promise by default_
 
-In all component that are using [bindAsArray(firebaseRef, bindVar, cancelCallback)](https://github.com/firebase/reactfire/blob/master/docs/reference.md#bindasarrayfirebaseref-bindvar-cancelcallback) change from:
+##### Parameters
 
-```js
-componentWillMount: function() {
-  var ref = firebase.database().ref("items");
-  this.bindAsArray(ref, "items");
-}
+| Parameter   | Type                                                                                     | Description                                                                  |
+| ----------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| ref         | [`Reference`](https://firebase.google.com/docs/reference/js/firebase.database.Reference) | A reference to the object you want to listen to                              |
+| options _?_ | ReactFireOptions                                                                         | Options. This hook will not throw a Promise if you provide `startWithValue`. |
 
-componentWillUnmount: function() {
-  this.unbind("items");
-}
-```
+##### Returns
 
-to:
+[`QueryChange`](https://github.com/firebase/firebase-js-sdk/blob/6b53e0058483c9002d2fe56119f86fc9fb96b56c/packages/rxfire/database/interfaces.ts#L28)
 
-```js
-componentDidMount: function() {
-  this.firebaseCallback = firebase.database().ref('/items').on('value', function(snap) {    
-    var items = [];
-    snap.forEach(function(itemSnap) {
-      items.push(itemSnap.val());
-    });
-    this.setState({ items: items });
-  });
-}
-  
-componentWillUnmount: function() {
-  firebase.database().ref('/items').off('value', this.firebaseCallback);
-}
-```
+#### `useDatabaseList`
+
+Listen to a Realtime Database list.
+
+_Throws a Promise by default_
+
+##### Parameters
+
+| Parameter   | Type                                                                                     | Description                                                                  |
+| ----------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| ref         | [`Reference`](https://firebase.google.com/docs/reference/js/firebase.database.Reference) | A reference to the list you want to listen to                                |
+| options _?_ | ReactFireOptions                                                                         | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+
+##### Returns
+
+[`QueryChange[]`](https://github.com/firebase/firebase-js-sdk/blob/6b53e0058483c9002d2fe56119f86fc9fb96b56c/packages/rxfire/database/interfaces.ts#L28)
+
+#### `useStorageTask`
+
+Listen to a Storage UploadTask
+
+_Throws a Promise by default_
+
+##### Parameters
+
+| Parameter   | Type                                                                                      | Description |
+| ----------- | ----------------------------------------------------------------------------------------- | ----------- |
+| task        | [`UploadTask`](https://firebase.google.com/docs/reference/js/firebase.storage.UploadTask) |             |
+| ref         | [`Reference`](https://firebase.google.com/docs/reference/js/firebase.storage.Reference)   |             |
+| options _?_ | ReactFireOptions                                                                          |             |
+
+##### Returns
+
+[`UploadTaskSnapshot`](https://firebase.google.com/docs/reference/js/firebase.storage.UploadTaskSnapshot)
+
+#### `useStorageDownloadURL`
+
+Subscribe to a storage blob's download URL
+
+_Throws a Promise by default_
+
+#### Parameters
+
+| Parameter   | Type                                                                                    | Description |
+| ----------- | --------------------------------------------------------------------------------------- | ----------- |
+| ref         | [`Reference`](https://firebase.google.com/docs/reference/js/firebase.storage.Reference) |             |
+| options _?_ | ReactFireOptions                                                                        |             |
+
+##### Returns
+
+`string`
+
+### Components
+
+#### `AuthCheck`
+
+Renders `children` if a user is signed in and meets the required claims. Renders `fallback` otherwise.
+
+##### Props
+
+| Property       | Type            |
+| -------------- | --------------- |
+| auth           | Auth            |
+| children       | React.Component |
+| fallback       | React.Component |
+| requiredClaims | Object          |
+
+#### `SuspenseWithPerf`
+
+Starts a Firebase Performance Monitoring [trace](https://firebase.google.com/docs/reference/js/firebase.performance.Trace) and ends it when suspense stops suspending.
+
+##### Props
+
+| Property     | Type            |
+| ------------ | --------------- |
+| children     | React.Component |
+| fallback     | React.Component |
+| firePerf _?_ | any             |
+| traceId      | string          |
+
+### ReactFireOptions
+
+| Property       | Type |
+| -------------- | ---- |
+| startWithValue | any  |
+
+## Contributing
+
+### For development
+
+1. `yarn install`
+1. `cd` into the _reactfire/reactfire_ directory. run `yarn run watch`.
+1. In a new terminal, `cd` into the _reactfire/sample-simple_ directory. run `yarn start`.
+1. Head over to https://localhost:3000 to see the running sample
+
+### Testing
+
+1. `cd` into the _reactfire/reactfire_ directory
+1. run `yarn test`

@@ -1,0 +1,29 @@
+{
+  "name": "reactfire",
+  "version": "2.0.0",
+  "description": "Firebase library for React",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Firebase/reactfire.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Firebase/reactfire/issues"
+  },
+  "homepage": "https://firebaseopensource.com/projects/firebase/reactfire/",
+  "dependencies": {
+    "rxfire": "^3.6.3",
+    "rxjs": "^6.4.0"
+  },
+  "peerDependencies": {
+    "firebase": "^6.0.0",
+    "react": "^16.8.6"
+  }
+}

@@ -1,57 +1,8 @@
 {
-  "name": "reactfire",
-  "description": "Firebase mixin for ReactJS",
-  "version": "1.0.1",
-  "author": "Firebase (https://firebase.google.com/)",
-  "homepage": "https://github.com/firebase/reactfire/",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/firebase/reactfire.git"
-  },
-  "bugs": {
-    "url": "https://github.com/firebase/reactfire/issues"
-  },
-  "license": "MIT",
-  "keywords": [
-    "react",
-    "mixin",
-    "firebase",
-    "realtime",
-    "react-component"
-  ],
-  "main": "dist/reactfire.js",
-  "files": [
-    "dist/**",
-    "LICENSE",
-    "README.md",
-    "package.json"
-  ],
-  "dependencies": {},
-  "peerDependencies": {
-    "react": "0.13.x || 0.14.x || 15.x.x",
-    "firebase": "2.x.x || 3.x.x"
-  },
-  "devDependencies": {
-    "chai": "^3.0.0",
-    "coveralls": "^2.11.2",
-    "firebase": "3.x.x",
-    "gulp": "^3.9.0",
-    "gulp-eslint": "^0.15.0",
-    "gulp-exit": "0.0.2",
-    "gulp-ext-replace": "^0.2.0",
-    "gulp-istanbul": "^0.10.0",
-    "gulp-mocha": "^2.1.2",
-    "gulp-uglify": "^1.2.0",
-    "jsdom": "3.x.x",
-    "react-addons-test-utils": "15.x.x",
-    "react": "15.x.x",
-    "react-dom": "15.x.x",
-    "run-sequence": "^1.1.1",
-    "sinon": "^1.15.4",
-    "sinon-chai": "^2.8.0"
-  },
-  "scripts": {
-    "test": "gulp test",
-    "travis": "gulp"
-  }
+  "private": true,
+  "workspaces": [
+    "reactfire",
+    "sample-simple",
+    "sample-complex"
+  ]
 }
