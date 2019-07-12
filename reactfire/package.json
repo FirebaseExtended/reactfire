@@ -7,8 +7,9 @@
   "scripts": {
     "build-dev": "tsc",
     "test-dev": "jest --verbose --watch",
-    "test": "firebase emulators:exec --only firestore --project=rxfire-525a3 \"jest --no-cache\"",
-    "watch": "tsc index.ts --lib DOM,ES2018 --watch --sourceMap --declaration --jsx react",
+    "emulator": "firebase emulators:exec --only firestore",
+    "test": "firebase emulators:exec --only firestore \"jest --no-cache --verbose\"",
+    "watch": "tsc --watch",
     "build": "rm -rf pub && tsc && cp package.pub.json pub/reactfire/package.json && cp ../README.md pub/reactfire/README.md"
   },
   "repository": {
@@ -22,7 +23,6 @@
   },
   "homepage": "https://firebaseopensource.com/projects/firebase/reactfire/",
   "dependencies": {
-    "@firebase/testing": "^0.11.4",
     "@testing-library/react": "^8.0.4",
     "@testing-library/react-hooks": "^1.0.4",
     "firebase-functions-test": "^0.1.6",
@@ -40,9 +40,10 @@
     "@babel/preset-typescript": "^7.3.3",
     "@firebase/app": "^0.4.8",
     "@firebase/app-types": "^0.4.0",
+    "@firebase/testing": "^0.11.4",
     "@types/jest": "^24.0.11",
     "babel-jest": "^24.7.1",
-    "firebase-tools": "^7.0.2",
+    "firebase-tools": "^7.1.0",
     "jest": "~24.7.1",
     "jest-dom": "^3.1.3",
     "react-test-renderer": "^16.8.6",

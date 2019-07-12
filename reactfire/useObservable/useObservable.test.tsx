@@ -1,4 +1,4 @@
-import { useObservable } from './use-observable';
+import { useObservable } from '.';
 import { renderHook, act } from '@testing-library/react-hooks';
 import { of, Subject, Observable, observable } from 'rxjs';
 import { delay } from 'rxjs/operators';

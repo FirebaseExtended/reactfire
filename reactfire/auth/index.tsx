@@ -1,16 +1,9 @@
+import { auth, User } from 'firebase/app';
 import * as React from 'react';
-import { auth, performance, User } from 'firebase/app';
-import { useUser, useFirebaseApp } from './index';
-const { Suspense, useState, useLayoutEffect } = React;
+import { user } from 'rxfire/auth';
+import { useObservable, useFirebaseApp, ReactFireOptions } from '..';
 
-export interface SuspensePerfProps {
-  children: React.ReactNode;
-  traceId: string;
-  fallback: React.ReactNode;
-  firePerf?: performance.Performance; // TODO(jeff): Add firePerf here when it's available
-}
-
-function getPerfFromContext(): performance.Performance {
+function getAuthFromContext(): auth.Auth {
   const firebaseApp = useFirebaseApp();
 
   if (!firebaseApp) {
@@ -19,39 +12,34 @@ function getPerfFromContext(): performance.Performance {
     );
   }
 
-  const perfFunc = firebaseApp.performance;
+  const authFunc = firebaseApp.auth;
 
-  if (!perfFunc || !perfFunc()) {
+  if (!authFunc || !authFunc()) {
     throw new Error(
-      "No perf object off of Firebase. Did you forget to import 'firebase/performance' in a component?"
+      "No auth object off of Firebase. Did you forget to import 'firebase/auth' in a component?"
     );
   }
 
-  return perfFunc();
+  return authFunc();
 }
 
-export function SuspenseWithPerf({
-  children,
-  traceId,
-  fallback,
-  firePerf
-}: SuspensePerfProps) {
-  firePerf = firePerf || getPerfFromContext();
-  const trace = React.useMemo(() => firePerf.trace(traceId), [traceId]);
+/**
+ * Subscribe to Firebase auth state changes, including token refresh
+ *
+ * @param auth - the [firebase.auth](https://firebase.google.com/docs/reference/js/firebase.auth) object
+ * @param options
+ */
+export function useUser<T = unknown>(
+  auth?: auth.Auth,
+  options?: ReactFireOptions<T>
+): User | T {
+  auth = auth || getAuthFromContext();
 
-  const Fallback = () => {
-    useLayoutEffect(() => {
-      trace.start();
-
-      return () => {
-        trace.stop();
-      };
-    }, []);
-
-    return <>{fallback}</>;
-  };
-
-  return <Suspense fallback={<Fallback />}>{children}</Suspense>;
+  return useObservable(
+    user(auth),
+    'user',
+    options ? options.startWithValue : undefined
+  );
 }
 
 export interface AuthCheckProps {
@@ -69,7 +57,7 @@ export function AuthCheck({
 }: AuthCheckProps): React.ReactNode {
   const user = useUser<User>(auth);
 
-  useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     // TODO(jeff) see if this actually works
     if (requiredClaims) {
       throw user.getIdTokenResult().then(idTokenResult => {

@@ -1,10 +1,10 @@
-import { renderHook, act } from '@testing-library/react-hooks';
-import { render, cleanup } from '@testing-library/react';
-import * as React from 'react';
-import 'jest-dom/extend-expect';
-import { FirebaseAppProvider } from './index';
+import { cleanup, render } from '@testing-library/react';
+import { renderHook } from '@testing-library/react-hooks';
 import * as firebase from 'firebase/app';
-import { useFirebaseApp } from './firebaseContext';
+import 'jest-dom/extend-expect';
+import * as React from 'react';
+import { useFirebaseApp } from '.';
+import { FirebaseAppProvider } from './index';
 
 afterEach(cleanup);
 
