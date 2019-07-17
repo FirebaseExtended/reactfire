@@ -5,9 +5,9 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "build-dev": "tsc",
+    "build-dev": "tsc --watch",
     "test-dev": "jest --verbose --watch",
-    "emulator": "firebase emulators:exec --only firestore",
+    "emulator": "firebase emulators:start --only firestore",
     "test": "firebase emulators:exec --only firestore \"jest --no-cache --verbose\"",
     "watch": "tsc --watch",
     "build": "rm -rf pub && tsc && cp package.pub.json pub/reactfire/package.json && cp ../README.md pub/reactfire/README.md"
