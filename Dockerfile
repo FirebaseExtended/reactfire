@@ -17,4 +17,6 @@ RUN npm install -g yarn firebase-tools
 
 RUN firebase setup:emulators:firestore
 
-COPY reactfire/ /
+COPY . /
+
+CMD ./test.sh
