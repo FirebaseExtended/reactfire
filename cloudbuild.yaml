@@ -8,6 +8,9 @@ steps:
   args: ['build', '-t', 'reactfire/test', '.']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['run', '-t', 'reactfire/test']
+- name: 'gcr.io/cloud-builders/yarn'
+  dir: 'reactfire'
+  args: ['build']
 - name: 'gcr.io/cloud-builders/npm'
   dir: 'reactfire/pub/reactfire'
   entrypoint: 'bash'
