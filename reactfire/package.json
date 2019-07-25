@@ -8,7 +8,7 @@
     "build-dev": "tsc --watch",
     "test-dev": "jest --verbose --watch",
     "emulator": "firebase emulators:start --only firestore",
-    "test": "firebase emulators:exec --only firestore \"jest --no-cache --verbose\"",
+    "test": "firebase emulators:exec --only firestore \"jest --no-cache --verbose --detectOpenHandles --forceExit\"",
     "watch": "tsc --watch",
     "build": "rm -rf pub && tsc && cp package.pub.json pub/reactfire/package.json && cp ../README.md pub/reactfire/README.md"
   },
@@ -23,7 +23,7 @@
   },
   "homepage": "https://firebaseopensource.com/projects/firebase/reactfire/",
   "dependencies": {
-    "rxfire": "^3.6.3",
+    "rxfire": "^3.6.6",
     "rxjs": "^6.4.0"
   },
   "peerDependencies": {

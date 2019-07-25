@@ -11499,10 +11499,10 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   dependencies:
     aproba "^1.1.1"
 
-rxfire@^3.6.3:
-  version "3.6.4"
-  resolved "https://registry.yarnpkg.com/rxfire/-/rxfire-3.6.4.tgz#09052e4785e949384da608929eed8590d732cc46"
-  integrity sha512-k3s7EVLR15AMUm2Q9eX/fviRuMSXYNriWKZrj13kVQjJafVVLcydS47o3B8kpm7U4yb/0BCrZIJ0tr6mLsBwVQ==
+rxfire@^3.6.6:
+  version "3.6.6"
+  resolved "https://registry.yarnpkg.com/rxfire/-/rxfire-3.6.6.tgz#6913fa7c1f5a9796a3ec47df7c3701e1932080ba"
+  integrity sha512-Ed1uZHQhLdRvYTJ27Hy5KCMs114kBjPC8uh/Zpfsjt4bzJZWddtuYmau6Ey0NK04qShdP8vYMgB02CSiY1FCFQ==
 
 rxjs@^6.4.0:
   version "6.5.2"
