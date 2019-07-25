@@ -10,7 +10,7 @@
     "emulator": "firebase emulators:start --only firestore",
     "test": "firebase emulators:exec --only firestore \"jest --no-cache --verbose --detectOpenHandles --forceExit\"",
     "watch": "tsc --watch",
-    "build": "rm -rf pub && tsc && cp package.pub.json pub/reactfire/package.json && cp ../README.md pub/reactfire/README.md"
+    "build": "rm -rf pub && tsc && cp package.pub.json pub/reactfire/package.json && cp ../README.md pub/reactfire/README.md && cp ../LICENSE pub/reactfire/LICENSE"
   },
   "repository": {
     "type": "git",
