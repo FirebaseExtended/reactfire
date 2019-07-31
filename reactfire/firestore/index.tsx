@@ -11,7 +11,7 @@ import { ReactFireOptions, useObservable } from '..';
 export function useFirestoreDoc<T = unknown>(
   ref: firestore.DocumentReference,
   options?: ReactFireOptions<T>
-): firestore.DocumentSnapshot | T {
+): T extends {} ? T : firestore.DocumentSnapshot {
   return useObservable(
     doc(ref),
     ref.path,
@@ -28,7 +28,7 @@ export function useFirestoreDoc<T = unknown>(
 export function useFirestoreCollection<T = { [key: string]: unknown }>(
   ref: firestore.CollectionReference,
   options?: ReactFireOptions<T[]>
-): firestore.QuerySnapshot | T[] {
+): T extends {} ? T[] : firestore.QuerySnapshot {
   return useObservable(
     fromCollectionRef(ref),
     ref.path,
