@@ -11,7 +11,7 @@ to interact with Firebase.
 - **Loading states handled by `<Suspense>`** - Reactfire's hooks throw promises that Suspense can catch. No more `isLoaded ?...` - let React [handle it for you](https://reactjs.org/blog/2018/11/27/react-16-roadmap.html#react-166-shipped-the-one-with-suspense-for-code-splitting).
 - **Dead-simple Real User Monitoring (RUM)** - Easily enable Firebase Performance Monitoring's [automatic traces](https://firebase.google.com/docs/perf-mon/automatic-web), and instrument your Suspenseful loads with Reactfire's `<SuspenseWithPerf>` component
 
-Status: Beta
+Status: Alpha
 
 ## Install
 
