@@ -4,14 +4,13 @@
 #   @next   `gcloud builds submit --substitutions=TAG_NAME="v1.2.3-rc.1"`
 #   @latest `gcloud builds submit --substitutions=TAG_NAME="v1.2.3"`
 steps:
-- name: 'gcr.io/cloud-builders/yarn'
-  dir: 'reactfire'
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'reactfire/test', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['run', '-t', 'reactfire/test']
 - name: 'gcr.io/cloud-builders/yarn'
   dir: 'reactfire'
   args: ['build']
-- name: 'gcr.io/cloud-builders/yarn'
-  dir: 'reactfire'
-  args: ['test']
 - name: 'gcr.io/cloud-builders/npm'
   dir: 'reactfire/pub/reactfire'
   entrypoint: 'bash'

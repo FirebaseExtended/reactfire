@@ -5,14 +5,11 @@ dist/
 node_modules/
 
 .vscode/*
-reactfire/**/*.js
-!reactfire/babel.config.js
 
-reactfire/**/*.jsx
-reactfire/**/*.js.map
-reactfire/**/*.jsx.map
-reactfire/**/*.d.ts
-reactfire/pub/reactfire/package.json
+
+
 reactfire/docs/reactfire-metadata.json
 sample-complex/.cache/**
 sample-complex/src/firebase-key.json
+reactfire/firestore-debug.log
+reactfire/pub/**
