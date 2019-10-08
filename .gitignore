@@ -16,3 +16,5 @@ reactfire/pub/reactfire/package.json
 reactfire/docs/reactfire-metadata.json
 sample-complex/.cache/**
 sample-complex/src/firebase-key.json
+
+pub

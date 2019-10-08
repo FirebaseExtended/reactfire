@@ -1,7 +1,7 @@
 {
   "private": true,
   "workspaces": [
-    "reactfire",
+    "reactfire/pub/reactfire",
     "sample-simple",
     "sample-complex"
   ]
