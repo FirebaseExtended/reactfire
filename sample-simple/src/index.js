@@ -4,7 +4,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import './app.css';
 import { FirebaseAppProvider } from 'reactfire';
-import '@firebase/performance';
+import 'firebase/performance';
 
 const config = {
   apiKey: 'AIzaSyBg3u1sJlyJwQCE95oSDH_mtLABS-is8ZM',
