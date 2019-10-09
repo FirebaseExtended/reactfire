@@ -4,15 +4,21 @@
 #   @next   `gcloud builds submit --substitutions=TAG_NAME="v1.2.3-rc.1"`
 #   @latest `gcloud builds submit --substitutions=TAG_NAME="v1.2.3"`
 steps:
-- name: 'gcr.io/cloud-builders/yarn'
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['pull', 'gcr.io/reactfire/docker']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/reactfire/docker', '--cache-from', 'gcr.io/reactfire/docker']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/reactfire/firebase']
+- name: 'gcr.io/reactfire/docker'
   args: ['install', '--frozen-lockfile']
-- name: 'gcr.io/cloud-builders/yarn'
+- name: 'gcr.io/reactfire/docker'
   dir: 'reactfire'
   args: ['build']
-- name: 'gcr.io/cloud-builders/yarn'
+- name: 'gcr.io/reactfire/docker'
   dir: 'reactfire'
   args: ['test']
-- name: 'gcr.io/cloud-builders/npm'
+- name: 'gcr.io/reactfire/docker'
   dir: 'reactfire/pub/reactfire'
   entrypoint: 'bash'
   env:
@@ -25,3 +31,6 @@ secrets:
 - kmsKeyName: projects/reactfire/locations/global/keyRings/cloud-build/cryptoKeys/cloud-build
   secretEnv:
     NPM_TOKEN: CiQADamFn5XzbeNQgzTGST9r3Tp5skWlDbBiWaZljffgEm0yIxYSTQC1QbtmDtScXx1BPE+d3CP9rXvOY+n5J0XRuLTTqN7RaqyipCEqTi7+z1kI6mKyBo2ilsMtOtngNzbOZ8kZeUDA80ISLWrNs0hF8k78
+
+images:
+- gcr.io/reactfire/docker
