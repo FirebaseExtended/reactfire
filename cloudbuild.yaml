@@ -5,6 +5,7 @@
 #   @latest `gcloud builds submit --substitutions=TAG_NAME="v1.2.3"`
 steps:
 - name: 'gcr.io/cloud-builders/yarn'
+  args: ['install', '--frozen-lockfile']
 - name: 'gcr.io/cloud-builders/yarn'
   dir: 'reactfire'
   args: ['build']
