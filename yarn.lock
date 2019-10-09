@@ -9908,6 +9908,14 @@ react@^16.8.6:
     prop-types "^15.6.2"
     scheduler "^0.13.6"
 
+reactfire@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/reactfire/-/reactfire-2.0.0.tgz#492730ce51ee4c1b2fd5310960261090a294d4b8"
+  integrity sha512-e0IInm/0DlQDCxiIrim6Ox3x+YrPEwXBWXDzSz2WUDUz+EYOTfOSr8WpP4PKcYjLzUJBtSDHXoCqJ2boWRiMow==
+  dependencies:
+    rxfire "^3.6.3"
+    rxjs "^6.4.0"
+
 read-pkg-up@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/read-pkg-up/-/read-pkg-up-2.0.0.tgz#6b72a8048984e0c41e79510fd5e9fa99b3b549be"
