@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "build": "rimraf dist && npm run build-client && npm run build-server",
     "build-client": "NODE_ENV=development parcel build src/client.tsx -d dist/client --no-minify --public-url .",

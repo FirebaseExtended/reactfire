@@ -4,6 +4,7 @@
   "description": "Firebase library for React",
   "main": "index.js",
   "types": "index.d.ts",
+  "private": true,
   "scripts": {
     "build-dev": "tsc",
     "test-dev": "jest --verbose --watch",
