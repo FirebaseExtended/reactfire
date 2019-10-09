@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react-hooks';
 import * as React from 'react';
-import 'jest-dom/extend-expect';
+import '@testing-library/jest-dom/extend-expect';
 
 describe('Firestore', () => {
   describe('useFirestoreDoc', () => {

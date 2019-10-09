@@ -1,6 +1,6 @@
 import { act, cleanup, render, waitForElement } from '@testing-library/react';
 import { performance } from 'firebase/app';
-import 'jest-dom/extend-expect';
+import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
 import { Subject } from 'rxjs';
 import { SuspenseWithPerf } from '.';

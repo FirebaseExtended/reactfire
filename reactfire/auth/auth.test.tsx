@@ -1,6 +1,6 @@
 import { cleanup, render } from '@testing-library/react';
 import { auth } from 'firebase/app';
-import 'jest-dom/extend-expect';
+import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
 import { AuthCheck } from '.';
 import { FirebaseAppProvider } from '..';

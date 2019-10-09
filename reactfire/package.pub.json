@@ -24,6 +24,6 @@
   },
   "peerDependencies": {
     "firebase": "^6.0.0",
-    "react": "^16.8.6"
+    "react": "^16.9.0"
   }
 }
