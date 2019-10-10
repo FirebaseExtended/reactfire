@@ -1,10 +1,15 @@
 language: node_js
 sudo: false
-node_js:
-- 'lts/*'
 
 addons:
   chrome: stable
+  apt:
+    update: true
+    packages:
+    - default-jre
+    - default-jdk
+    - build-essential
+    - python2.7
 
 cache:
   yarn: true
@@ -37,6 +42,8 @@ install:
         yarn install --frozen-lockfile
       fi
     fi
+  - yarn global add firebase-tools
+  - firebase setup:emulators:firestore
 
 script:
   - cd reactfire

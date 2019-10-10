@@ -3,34 +3,17 @@
 #   @canary `gcloud builds submit --substitutions=SHORT_SHA="9b0a0b0"`
 #   @next   `gcloud builds submit --substitutions=TAG_NAME="v1.2.3-rc.1"`
 #   @latest `gcloud builds submit --substitutions=TAG_NAME="v1.2.3"`
+
+# Not caching with kaniko due to https://github.com/GoogleContainerTools/kaniko/issues/713
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['pull', 'gcr.io/reactfire/docker']
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/reactfire/docker', '--cache-from', 'gcr.io/reactfire/docker']
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/reactfire/firebase']
-- name: 'gcr.io/reactfire/docker'
-  args: ['install', '--frozen-lockfile']
-- name: 'gcr.io/reactfire/docker'
-  dir: 'reactfire'
-  args: ['build']
-- name: 'gcr.io/reactfire/docker'
-  dir: 'reactfire'
-  args: ['test']
-- name: 'gcr.io/reactfire/docker'
-  dir: 'reactfire/pub/reactfire'
+- name: gcr.io/cloud-builders/docker
   entrypoint: 'bash'
-  env:
-  - 'SHORT_SHA=$SHORT_SHA'
-  - 'TAG_NAME=$TAG_NAME'
-  args: ["../../../publish.sh"]
+  args:
+  - -c
+  - 'docker pull gcr.io/$PROJECT_ID/publish:latest; docker build -t gcr.io/$PROJECT_ID/publish:latest --cache-from gcr.io/$PROJECT_ID/publish:latest --build-arg SHORT_SHA=$SHORT_SHA --build-arg TAG_NAME=$TAG_NAME --build-arg NPM_TOKEN=$(echo $$NPM_TOKEN) . && docker push gcr.io/$PROJECT_ID/publish:latest'
   secretEnv: ['NPM_TOKEN']
 
 secrets:
 - kmsKeyName: projects/reactfire/locations/global/keyRings/cloud-build/cryptoKeys/cloud-build
   secretEnv:
     NPM_TOKEN: CiQADamFn5XzbeNQgzTGST9r3Tp5skWlDbBiWaZljffgEm0yIxYSTQC1QbtmDtScXx1BPE+d3CP9rXvOY+n5J0XRuLTTqN7RaqyipCEqTi7+z1kI6mKyBo2ilsMtOtngNzbOZ8kZeUDA80ISLWrNs0hF8k78
-
-images:
-- gcr.io/reactfire/docker

@@ -26,17 +26,13 @@
     "rxfire": "^3.6.3",
     "rxjs": "^6.4.0"
   },
-  "peerDependencies": {
-    "firebase": "^6.0.0",
-    "react": "^16.9.0"
-  },
   "devDependencies": {
+    "firebase": "^7.0.0",
+    "react": "^16.9.0",
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
-    "@firebase/app": "^0.4.8",
-    "@firebase/app-types": "^0.4.0",
     "@testing-library/jest-dom": "^4.1.1",
     "@testing-library/react": "^9.3.0",
     "@testing-library/react-hooks": "^2.0.3",
