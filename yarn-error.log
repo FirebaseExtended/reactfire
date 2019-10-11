@@ -1,0 +1,40 @@
+Arguments: 
+  /Users/deast/.nvm/versions/node/v8.16.2/bin/node /Users/deast/.nvm/versions/node/v8.16.2/bin/yarn
+
+PATH: 
+  /Users/deast/.nvm/versions/node/v8.16.2/bin:/Library/Frameworks/Python.framework/Versions/3.7/bin:/usr/local/git/current/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/X11/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/deast/Downloads/google-cloud-sdk/bin:/Library/Frameworks/Python.framework/Versions/3.7/bin:/Users/deast/.rvm/bin:[PATH_TO_FLUTTER_GIT_DIRECTORY]/flutter/bin:/Users/deast/.rvm/bin:[PATH_TO_FLUTTER_GIT_DIRECTORY]/flutter/bin
+
+Yarn version: 
+  1.19.1
+
+Node version: 
+  8.16.2
+
+Platform: 
+  darwin x64
+
+Trace: 
+  SyntaxError: /Users/deast/Documents/firebase/reactfire/reactfire/package.json: Unexpected string in JSON at position 1651
+      at JSON.parse (<anonymous>)
+      at /Users/deast/.nvm/versions/node/v8.16.2/lib/node_modules/yarn/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/Users/deast/.nvm/versions/node/v8.16.2/lib/node_modules/yarn/lib/cli.js:304:30)
+      at /Users/deast/.nvm/versions/node/v8.16.2/lib/node_modules/yarn/lib/cli.js:315:13
+      at <anonymous>
+
+npm manifest: 
+  {
+    "private": true,
+    "workspaces": [
+      "reactfire",
+      "reactfire/pub/reactfire",
+      "sample-simple",
+      "sample-complex"
+    ]
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
