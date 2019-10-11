@@ -1,7 +1,7 @@
 import { cleanup, render } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import * as firebase from 'firebase/app';
-import 'jest-dom/extend-expect';
+import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
 import { useFirebaseApp } from '.';
 import { FirebaseAppProvider } from './index';

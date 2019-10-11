@@ -3,22 +3,14 @@
 #   @canary `gcloud builds submit --substitutions=SHORT_SHA="9b0a0b0"`
 #   @next   `gcloud builds submit --substitutions=TAG_NAME="v1.2.3-rc.1"`
 #   @latest `gcloud builds submit --substitutions=TAG_NAME="v1.2.3"`
+
+# Not caching with kaniko due to https://github.com/GoogleContainerTools/kaniko/issues/713
 steps:
-- name: 'gcr.io/cloud-builders/yarn'
-  dir: 'reactfire'
-- name: 'gcr.io/cloud-builders/yarn'
-  dir: 'reactfire'
-  args: ['build']
-- name: 'gcr.io/cloud-builders/yarn'
-  dir: 'reactfire'
-  args: ['test']
-- name: 'gcr.io/cloud-builders/npm'
-  dir: 'reactfire/pub/reactfire'
+- name: gcr.io/cloud-builders/docker
   entrypoint: 'bash'
-  env:
-  - 'SHORT_SHA=$SHORT_SHA'
-  - 'TAG_NAME=$TAG_NAME'
-  args: ["../../../publish.sh"]
+  args:
+  - -c
+  - 'docker pull gcr.io/$PROJECT_ID/publish:latest; docker build -t gcr.io/$PROJECT_ID/publish:latest --cache-from gcr.io/$PROJECT_ID/publish:latest --build-arg SHORT_SHA=$SHORT_SHA --build-arg TAG_NAME=$TAG_NAME --build-arg NPM_TOKEN=$(echo $$NPM_TOKEN) . && docker push gcr.io/$PROJECT_ID/publish:latest'
   secretEnv: ['NPM_TOKEN']
 
 secrets:

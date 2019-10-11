@@ -11,7 +11,6 @@ export interface SuspensePerfProps {
 
 function getPerfFromContext(): performance.Performance {
   const firebaseApp = useFirebaseApp();
-  console.log('looooool');
   if (!firebaseApp) {
     throw new Error(
       'Firebase not found in context. Either pass it directly to a reactfire hook, or wrap your component in a FirebaseAppProvider'

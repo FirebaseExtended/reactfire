@@ -23,7 +23,7 @@
     "rxjs": "^6.4.0"
   },
   "peerDependencies": {
-    "firebase": "^6.0.0",
-    "react": "^16.8.6"
+    "firebase": "^7.0.0",
+    "react": "^16.9.0"
   }
 }
