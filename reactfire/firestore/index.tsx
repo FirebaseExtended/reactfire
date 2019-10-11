@@ -28,7 +28,7 @@ export function useFirestoreDoc<T = unknown>(
 export function useFirestoreDocData<T = unknown>(
   ref: firestore.DocumentReference,
   options?: ReactFireOptions<T>
-): firestore.DocumentSnapshot | T {
+): T {
   return useObservable(
     docData(ref, checkIdField(options)),
     ref.path,
@@ -62,7 +62,7 @@ export function useFirestoreCollection<T = { [key: string]: unknown }>(
 export function useFirestoreCollectionData<T = { [key: string]: unknown }>(
   ref: firestore.CollectionReference,
   options?: ReactFireOptions<T[]>
-): firestore.QuerySnapshot | T[] {
+): T[] {
   return useObservable(
     collectionData(ref, checkIdField(options)),
     ref.path,
