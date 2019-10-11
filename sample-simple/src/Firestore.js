@@ -1,12 +1,12 @@
 import 'firebase/auth';
 import 'firebase/firestore';
-import '@firebase/performance';
+import 'firebase/performance';
 import React, { useState } from 'react';
 import {
   AuthCheck,
   SuspenseWithPerf,
-  useFirestoreCollection,
-  useFirestoreDoc,
+  useFirestoreCollectionData,
+  useFirestoreDocData,
   useFirebaseApp
 } from 'reactfire';
 
@@ -20,13 +20,12 @@ const Counter = props => {
     });
   };
 
-  const snapshot = useFirestoreDoc(ref);
-  const counterValue = snapshot.data().value;
+  const { value } = useFirestoreDocData(ref);
 
   return (
     <>
       <button onClick={() => increment(-1)}>-</button>
-      <span> {counterValue} </span>
+      <span> {value} </span>
       <button onClick={() => increment(1)}>+</button>
     </>
   );
@@ -62,7 +61,7 @@ const AnimalEntry = ({ saveAnimal }) => {
 const List = props => {
   const firebaseApp = useFirebaseApp();
   const ref = firebaseApp.firestore().collection('animals');
-  const snapShot = useFirestoreCollection(ref);
+  const animals = useFirestoreCollectionData(ref, { idField: 'id' });
 
   const addNewAnimal = commonName =>
     ref.add({
@@ -75,11 +74,11 @@ const List = props => {
     <>
       <AnimalEntry saveAnimal={addNewAnimal} />
       <ul>
-        {snapShot.docs.map(snap => (
-          <li key={snap.id}>
-            {snap.get('commonName')}{' '}
-            <button onClick={() => removeAnimal(snap.id)}>X</button>
-          </li>
+        {animals.map(animal => (
+          <li key={animal.id}>
+            {animal.commonName}{' '}
+            <button onClick={() => removeAnimal(animal.id)}>X</button>
+        </li>
         ))}
       </ul>
     </>

@@ -7,19 +7,22 @@ import * as firebase from '@firebase/testing';
 import {
   useFirestoreDoc,
   useFirestoreCollection,
-  FirebaseAppProvider
+  FirebaseAppProvider,
+  useFirestoreCollectionData,
+  useFirestoreDocData,
 } from '..';
 import { firestore } from 'firebase/app';
 
 describe('Firestore', () => {
-  let app;
+  let app: import('firebase').app.App;
 
   beforeAll(async () => {
     app = firebase.initializeTestApp({
       projectId: '12345',
       databaseName: 'my-database',
       auth: { uid: 'alice' }
-    });
+    }) as import('firebase').app.App; 
+    // TODO(davideast): Wait for rc and analytics to get included in test app
   });
 
   afterEach(async () => {
@@ -49,13 +52,46 @@ describe('Firestore', () => {
       await ref.set(mockData);
 
       const ReadFirestoreDoc = () => {
-        const doc = useFirestoreDoc(
-          (ref as unknown) as firestore.DocumentReference
-        );
+        const doc = useFirestoreDoc(ref);
 
         return (
           <h1 data-testid="readSuccess">
             {(doc as firestore.DocumentSnapshot).data().a}
+          </h1>
+        );
+      };
+      const { getByTestId } = render(
+        <FirebaseAppProvider firebase={app}>
+          <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
+            <ReadFirestoreDoc />
+          </React.Suspense>
+        </FirebaseAppProvider>
+      );
+
+      await waitForElement(() => getByTestId('readSuccess'));
+
+      expect(getByTestId('readSuccess')).toContainHTML(mockData.a);
+    });
+  });
+  
+  describe('useFirestoreDocData', () => {
+    it('can get a Firestore document [TEST REQUIRES EMULATOR]', async () => {
+      const mockData = { a: 'hello' };
+
+      const ref = app
+        .firestore()
+        .collection('testDoc')
+        // 'readSuccess' is set to the data-testid={data.id} attribute
+        .doc('readSuccess');
+
+      await ref.set(mockData);
+
+      const ReadFirestoreDoc = () => {
+        const data = useFirestoreDocData<any>(ref, { idField: 'id' });
+
+        return (
+          <h1 data-testid={data.id}>
+            {data.a}
           </h1>
         );
       };
@@ -87,9 +123,7 @@ describe('Firestore', () => {
       await ref.add(mockData2);
 
       const ReadFirestoreCollection = () => {
-        const collection = useFirestoreCollection(
-          (ref as unknown) as firestore.CollectionReference
-        );
+        const collection = useFirestoreCollection(ref);
 
         return (
           <ul data-testid="readSuccess">
@@ -114,4 +148,45 @@ describe('Firestore', () => {
       expect(getAllByTestId('listItem').length).toEqual(2);
     });
   });
+  
+  // THIS TEST CAUSES A REACT `act` WARNING
+  // IT WILL BE FIXED IN REACT 16.9
+  // More info here: https://github.com/testing-library/react-testing-library/issues/281
+  describe('useFirestoreCollectionData', () => {
+    it('can get a Firestore collection [TEST REQUIRES EMULATOR]', async () => {
+      const mockData1 = { a: 'hello' };
+      const mockData2 = { a: 'goodbye' };
+
+      const ref = app.firestore().collection('testCollection');
+
+      await ref.add(mockData1);
+      await ref.add(mockData2);
+
+      const ReadFirestoreCollection = () => {
+        const list = useFirestoreCollectionData<any>(ref, { idField: 'id' });
+
+        return (
+          <ul data-testid="readSuccess">
+            {list.map(item => (
+              <li key={item.id} data-testid="listItem">
+                {item.a}
+              </li>
+            ))}
+          </ul>
+        );
+      };
+      const { getAllByTestId } = render(
+        <FirebaseAppProvider firebase={app}>
+          <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
+            <ReadFirestoreCollection />
+          </React.Suspense>
+        </FirebaseAppProvider>
+      );
+
+      await waitForElement(() => getAllByTestId('listItem'));
+
+      expect(getAllByTestId('listItem').length).toEqual(2);
+    });
+  });
+
 });
