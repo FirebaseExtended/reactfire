@@ -8,7 +8,8 @@
     "baseUrl": "./src",
     "lib": ["es5", "es6", "dom"],
     "outDir": "pub/reactfire",
-    "declaration": true
+    "declaration": true,
+    "skipLibCheck": true
   },
   "files": ["index.ts"]
 }

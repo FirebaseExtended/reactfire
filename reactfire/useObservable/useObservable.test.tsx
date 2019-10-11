@@ -5,7 +5,7 @@ import { delay } from 'rxjs/operators';
 import { render, waitForElement, cleanup } from '@testing-library/react';
 import { ReactFireOptions } from '..';
 import * as React from 'react';
-import 'jest-dom/extend-expect';
+import '@testing-library/jest-dom/extend-expect';
 
 describe('useObservable', () => {
   afterEach(cleanup);

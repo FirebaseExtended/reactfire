@@ -1,9 +1,10 @@
 {
-  "name": "reactfire",
+  "name": "reactfire-dev",
   "version": "2.0.0",
   "description": "Firebase library for React",
   "main": "index.js",
   "types": "index.d.ts",
+  "private": true,
   "scripts": {
     "build-dev": "tsc --watch",
     "test-dev": "jest --verbose --watch",
@@ -26,11 +27,9 @@
     "rxfire": "^3.6.6",
     "rxjs": "^6.4.0"
   },
-  "peerDependencies": {
-    "firebase": "^6.0.0",
-    "react": "^16.8.6"
-  },
   "devDependencies": {
+    "firebase": "^7.0.0",
+    "react": "^16.9.0",
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-react": "^7.0.0",
@@ -38,15 +37,16 @@
     "@firebase/app": "^0.4.8",
     "@firebase/app-types": "^0.4.0",
     "@firebase/testing": "^0.11.4",
+    "@testing-library/jest-dom": "^4.1.1",
+    "@testing-library/react": "^9.3.0",
+    "@testing-library/react-hooks": "^2.0.3",
     "@types/jest": "^24.0.11",
     "babel-jest": "^24.7.1",
     "firebase-tools": "^7.1.0",
     "jest": "~24.7.1",
     "jest-dom": "^3.1.3",
-    "react-test-renderer": "^16.8.6",
     "typescript": "^3.4.5",
-    "@testing-library/react": "^8.0.4",
-    "@testing-library/react-hooks": "^1.0.4",
     "firebase-functions-test": "^0.1.6"
+    "react-test-renderer": "^16.9.0",
   }
 }

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "build": "rimraf dist && npm run build-client && npm run build-server",
     "build-client": "NODE_ENV=development parcel build src/client.tsx -d dist/client --no-minify --public-url .",
@@ -21,7 +22,7 @@
     "@types/react": "^16.8.14",
     "@types/react-dom": "^16.8.4",
     "express": "^4.16.4",
-    "firebase": "^5.10.0",
+    "firebase": "^7.0.0",
     "firebase-admin": "^7.3.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
