@@ -9,7 +9,7 @@ import {
   useFirestoreCollection,
   FirebaseAppProvider,
   useFirestoreCollectionData,
-  useFirestoreDocData,
+  useFirestoreDocData
 } from '..';
 import { firestore } from 'firebase/app';
 
@@ -21,7 +21,7 @@ describe('Firestore', () => {
       projectId: '12345',
       databaseName: 'my-database',
       auth: { uid: 'alice' }
-    }) as import('firebase').app.App; 
+    }) as import('firebase').app.App;
     // TODO(davideast): Wait for rc and analytics to get included in test app
   });
 
@@ -73,7 +73,7 @@ describe('Firestore', () => {
       expect(getByTestId('readSuccess')).toContainHTML(mockData.a);
     });
   });
-  
+
   describe('useFirestoreDocData', () => {
     it('can get a Firestore document [TEST REQUIRES EMULATOR]', async () => {
       const mockData = { a: 'hello' };
@@ -89,11 +89,7 @@ describe('Firestore', () => {
       const ReadFirestoreDoc = () => {
         const data = useFirestoreDocData<any>(ref, { idField: 'id' });
 
-        return (
-          <h1 data-testid={data.id}>
-            {data.a}
-          </h1>
-        );
+        return <h1 data-testid={data.id}>{data.a}</h1>;
       };
       const { getByTestId } = render(
         <FirebaseAppProvider firebase={app}>
@@ -148,7 +144,7 @@ describe('Firestore', () => {
       expect(getAllByTestId('listItem').length).toEqual(2);
     });
   });
-  
+
   // THIS TEST CAUSES A REACT `act` WARNING
   // IT WILL BE FIXED IN REACT 16.9
   // More info here: https://github.com/testing-library/react-testing-library/issues/281
@@ -188,5 +184,4 @@ describe('Firestore', () => {
       expect(getAllByTestId('listItem').length).toEqual(2);
     });
   });
-
 });
