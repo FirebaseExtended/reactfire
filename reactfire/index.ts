@@ -1,5 +1,6 @@
 export interface ReactFireOptions<T = unknown> {
   startWithValue: T;
+  idField: string;
 }
 
 export * from './auth';

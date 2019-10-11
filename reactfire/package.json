@@ -27,8 +27,6 @@
     "rxjs": "^6.4.0"
   },
   "devDependencies": {
-    "firebase": "^7.0.0",
-    "react": "^16.9.0",
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-react": "^7.0.0",
@@ -38,7 +36,9 @@
     "@testing-library/react-hooks": "^2.0.3",
     "@types/jest": "^24.0.11",
     "babel-jest": "^24.7.1",
+    "firebase": "^7.0.0",
     "jest": "~24.7.1",
+    "react": "^16.9.0",
     "react-test-renderer": "^16.9.0",
     "typescript": "^3.4.5"
   }
