@@ -1,5 +1,10 @@
 import { firestore } from 'firebase/app';
-import { doc, collectionData, fromCollectionRef, docData } from 'rxfire/firestore';
+import {
+  doc,
+  collectionData,
+  fromCollectionRef,
+  docData
+} from 'rxfire/firestore';
 import { ReactFireOptions, useObservable } from '..';
 
 /**

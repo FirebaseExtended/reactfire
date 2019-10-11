@@ -78,7 +78,7 @@ const List = props => {
           <li key={animal.id}>
             {animal.commonName}{' '}
             <button onClick={() => removeAnimal(animal.id)}>X</button>
-        </li>
+          </li>
         ))}
       </ul>
     </>
