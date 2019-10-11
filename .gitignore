@@ -14,4 +14,4 @@ sample-complex/src/firebase-key.json
 reactfire/firestore-debug.log
 reactfire/pub/**
 pub
-reactfire/firestore-debug.log
+yarn-error.log
