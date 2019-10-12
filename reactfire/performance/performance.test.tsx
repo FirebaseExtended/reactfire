@@ -174,7 +174,7 @@ describe('SuspenseWithPerf', () => {
     expect(createTrace).not.toHaveBeenCalled();
   });
 
-  it.only('Does not reuse a trace object', async () => {
+  it('Does not reuse a trace object', async () => {
     // traces throw if you call start() twice,
     // even if you've called stop() in between:
     // https://github.com/firebase/firebase-js-sdk/blob/dd098c6a87f23ddf54a7f9b21b87f7bb3fd56bdd/packages/performance/src/resources/trace.test.ts#L52
