@@ -22,6 +22,11 @@ const mockFirebase = {
   performance: mockPerf
 };
 
+const PromiseThrower = () => {
+  throw new Promise((resolve, reject) => {});
+  return <h1>Hello world</h1>;
+};
+
 const Provider = ({ children }) => (
   <FirebaseAppProvider firebaseApp={mockFirebase}>
     {children}
@@ -82,10 +87,11 @@ describe('SuspenseWithPerf', () => {
 
   it('creates a trace with the correct name', () => {
     const traceName = 'trace';
+
     render(
       <Provider>
         <SuspenseWithPerf traceId={traceName} fallback={'loading'}>
-          children
+          <PromiseThrower />
         </SuspenseWithPerf>
       </Provider>
     );
@@ -139,7 +145,7 @@ describe('SuspenseWithPerf', () => {
     render(
       <Provider>
         <SuspenseWithPerf traceId={'hello'} fallback={'loading'}>
-          {'children'}
+          <PromiseThrower />
         </SuspenseWithPerf>
       </Provider>
     );
@@ -148,17 +154,24 @@ describe('SuspenseWithPerf', () => {
   });
 
   it('can use firePerf from props', () => {
+    const propPerf = mockPerf();
+    propPerf.trace = jest.fn(() => ({
+      start: traceStart,
+      stop: traceEnd
+    }));
     render(
       <SuspenseWithPerf
         traceId={'hello'}
         fallback={'loading'}
-        firePerf={(mockPerf() as unknown) as performance.Performance}
+        firePerf={(propPerf as unknown) as performance.Performance}
       >
-        {'children'}
+        <PromiseThrower />
       </SuspenseWithPerf>
     );
 
-    expect(createTrace).toHaveBeenCalled();
+    // call the createTrace provided, not the one in context
+    expect(propPerf.trace).toHaveBeenCalled();
+    expect(createTrace).not.toHaveBeenCalled();
   });
 
   it('Does not reuse a trace object', async () => {
@@ -180,39 +193,35 @@ describe('SuspenseWithPerf', () => {
     const o$ = new Subject();
 
     const Comp = () => {
-      useObservable(o$, 'test');
+      const val = useObservable(o$, 'test');
+
+      if (val === 'throw') {
+        throw new Promise(() => {});
+      }
 
       return <h1 data-testid="child">Actual</h1>;
     };
 
-    const Component = ({ renderPerf }) => {
-      if (renderPerf) {
-        return (
-          <SuspenseWithPerf
-            traceId={'hello'}
-            fallback={'loading'}
-            firePerf={(mockPerf() as unknown) as performance.Performance}
-          >
-            <Comp />
-          </SuspenseWithPerf>
-        );
-      } else {
-        return <div data-testid="other-element">no perf</div>;
-      }
+    const Component = () => {
+      return (
+        <SuspenseWithPerf
+          traceId={'hello'}
+          fallback={'loading'}
+          firePerf={(mockPerf() as unknown) as performance.Performance}
+        >
+          <Comp />
+        </SuspenseWithPerf>
+      );
     };
 
     // render SuspenseWithPerf and go through normal trace start -> trace stop
-    const { getByTestId, rerender } = render(<Component renderPerf />);
+    const { getByTestId, rerender } = render(<Component />);
     expect(createTrace).toHaveBeenCalledTimes(1);
     act(() => o$.next('some value'));
     await waitForElement(() => getByTestId('child'));
 
-    // re-render with changed props. now we're not rendering SuspenseWithPerf any more
-    rerender(<Component renderPerf={false} />);
-    await waitForElement(() => getByTestId('other-element'));
-
-    // re-render with changed props to render SuspenseWithPerf again
-    rerender(<Component renderPerf />);
+    // this is a magic value that will cause the child to throw a Promise again
+    act(() => o$.next('throw'));
 
     // if createTrace is only called once, the firebase SDK will throw
     expect(createTrace).toHaveBeenCalledTimes(2);

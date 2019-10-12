@@ -36,16 +36,15 @@ export function SuspenseWithPerf({
 }: SuspensePerfProps) {
   firePerf = firePerf || getPerfFromContext();
 
-  const trace = React.useRef(firePerf.trace(traceId));
-
   const Fallback = () => {
     React.useLayoutEffect(() => {
-      trace.current.start();
+      const trace = firePerf.trace(traceId);
+      trace.start();
 
       return () => {
-        trace.current.stop();
+        trace.stop();
       };
-    }, []);
+    }, [traceId]);
 
     return <>{fallback}</>;
   };
