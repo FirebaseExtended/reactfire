@@ -39,6 +39,11 @@ export function useObservable(
   React.useEffect(() => {
     const subscription = observable$.pipe(startWith(initialValue)).subscribe(
       newVal => {
+        // update the value in requestCache
+        const request = requestCache.getRequest(observable$, observableId);
+        request.setValue(newVal);
+
+        // update state
         setValue(newVal);
       },
       error => {
