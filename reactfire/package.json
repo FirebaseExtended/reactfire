@@ -38,7 +38,7 @@
     "@firebase/testing": "^0.11.4",
     "@testing-library/jest-dom": "^4.1.1",
     "@testing-library/react": "^9.3.0",
-    "@testing-library/react-hooks": "^2.0.3",
+    "@testing-library/react-hooks": "^3.1.0",
     "@types/jest": "^24.0.11",
     "babel-jest": "^24.7.1",
     "firebase-tools": "^7.1.0",
