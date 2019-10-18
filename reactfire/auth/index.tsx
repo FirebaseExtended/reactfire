@@ -54,7 +54,7 @@ export function AuthCheck({
   fallback,
   children,
   requiredClaims
-}: AuthCheckProps): React.ReactNode {
+}: AuthCheckProps): JSX.Element {
   const user = useUser<User>(auth);
 
   React.useLayoutEffect(() => {
