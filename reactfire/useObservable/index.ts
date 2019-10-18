@@ -31,14 +31,22 @@ export function useObservable(
   observableId: string,
   startWithValue?: any
 ) {
+  const request = requestCache.getRequest(observable$, observableId);
+
   const initialValue =
-    startWithValue || suspendUntilFirst(observable$, observableId);
+    request.value ||
+    startWithValue ||
+    suspendUntilFirst(observable$, observableId);
 
   const [latestValue, setValue] = React.useState(initialValue);
 
   React.useEffect(() => {
     const subscription = observable$.pipe(startWith(initialValue)).subscribe(
       newVal => {
+        // update the value in requestCache
+        request.setValue(newVal);
+
+        // update state
         setValue(newVal);
       },
       error => {

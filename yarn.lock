@@ -1885,10 +1885,10 @@
     pretty-format "^24.0.0"
     redent "^3.0.0"
 
-"@testing-library/react-hooks@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@testing-library/react-hooks/-/react-hooks-2.0.3.tgz#305a6c76facb5fa1d185792b9eb11b1ca1b63fb7"
-  integrity sha512-adm+7b1gcysGka8VuYq/ObBrIBJTT9QmCEIqPpuxozWFfVDgxSbzBGc44ia/WYLGVt2dqFIOc6/DmAmu/pa0gQ==
+"@testing-library/react-hooks@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@testing-library/react-hooks/-/react-hooks-3.1.0.tgz#f186c4f3b32db153d30d646faacb043ef4089807"
+  integrity sha512-mwFDHXCQiyr0tQkYU4VkcwlCzR5YQ5k1/TCrL3hPslCM5MvS6pBhbl2z4UnCMV4DOyiUUXIvoMAf5kHT/hibTg==
   dependencies:
     "@babel/runtime" "^7.5.4"
     "@types/testing-library__react-hooks" "^2.0.0"

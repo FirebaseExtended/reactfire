@@ -1,11 +1,9 @@
-import { useObservable } from '.';
-import { renderHook, act } from '@testing-library/react-hooks';
-import { of, Subject, Observable, observable } from 'rxjs';
-import { delay } from 'rxjs/operators';
-import { render, waitForElement, cleanup } from '@testing-library/react';
-import { ReactFireOptions } from '..';
-import * as React from 'react';
 import '@testing-library/jest-dom/extend-expect';
+import { act, cleanup, render, waitForElement } from '@testing-library/react';
+import { act as actOnHook, renderHook } from '@testing-library/react-hooks';
+import * as React from 'react';
+import { of, Subject } from 'rxjs';
+import { useObservable } from '.';
 
 describe('useObservable', () => {
   afterEach(cleanup);
@@ -32,20 +30,33 @@ describe('useObservable', () => {
     expect(result.current).toEqual(startVal);
 
     // prove that it actually does emit the value from the observable too
-    act(() => observable$.next(observableVal));
+    actOnHook(() => observable$.next(observableVal));
     expect(result.current).toEqual(observableVal);
   });
 
-  it('ignores provided initial value if the observable is ready right away', () => {
+  it('returns the provided startWithValue first even if the observable is ready right away', () => {
+    // This behavior is a consequense of how observables work. There is
+    // not a synchronous way to ask an observable if it has a value to emit.
+
     const startVal = 'howdy';
     const observableVal = "y'all";
     const observable$ = of(observableVal);
+    let hasReturnedStartWithValue = false;
 
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useObservable(observable$, 'test', startVal)
-    );
+    const Component = () => {
+      const val = useObservable(observable$, 'test', startVal);
 
-    expect(result.current).toEqual(observableVal);
+      if (hasReturnedStartWithValue) {
+        expect(val).toEqual(observableVal);
+      } else {
+        expect(val).toEqual(startVal);
+        hasReturnedStartWithValue = true;
+      }
+
+      return <h1>Hello</h1>;
+    };
+
+    render(<Component />);
   });
 
   it('works with Suspense', async () => {
@@ -73,7 +84,7 @@ describe('useObservable', () => {
     expect(getByTestId(fallbackComponentId)).toBeInTheDocument();
     expect(queryByTestId(actualComponentId)).toBeNull();
 
-    act(() => observable$.next(observableFinalVal));
+    actOnHook(() => observable$.next(observableFinalVal));
     await waitForElement(() => getByTestId(actualComponentId));
 
     // make sure Suspense correctly renders its child after the observable emits a value
@@ -87,7 +98,6 @@ describe('useObservable', () => {
   it('emits new values as the observable changes', async () => {
     const startVal = 'start';
     const values = ['a', 'b', 'c'];
-    const observableSecondValue = 'b';
     const observable$ = new Subject();
 
     const { result } = renderHook(() =>
@@ -97,8 +107,55 @@ describe('useObservable', () => {
     expect(result.current).toEqual(startVal);
 
     values.forEach(value => {
-      act(() => observable$.next(value));
+      actOnHook(() => observable$.next(value));
       expect(result.current).toEqual(value);
     });
+  });
+
+  it('returns the most recent value of an observable to all subscribers of an observableId', async () => {
+    const values = ['a', 'b', 'c'];
+    const observable$ = new Subject();
+    const observableId = 'my-observable-id';
+    const firstComponentId = 'first';
+    const secondComponentId = 'second';
+
+    const ObservableConsumer = props => {
+      const val = useObservable(observable$, observableId);
+
+      return <h1 {...props}>{val}</h1>;
+    };
+
+    const Component = ({ renderSecondComponent }) => {
+      return (
+        <React.Suspense fallback="loading">
+          <ObservableConsumer data-testid={firstComponentId} />
+          {renderSecondComponent ? (
+            <ObservableConsumer data-testid={secondComponentId} />
+          ) : null}
+        </React.Suspense>
+      );
+    };
+
+    const { getByTestId, rerender } = render(
+      <Component renderSecondComponent={false} />
+    );
+
+    // emit one value to the first component (second one isn't rendered yet)
+    act(() => observable$.next(values[0]));
+    const comp = await waitForElement(() => getByTestId(firstComponentId));
+    expect(comp).toHaveTextContent(values[0]);
+
+    // emit a second value to the first component (second one still isn't rendered)
+    act(() => observable$.next(values[1]));
+    expect(comp).toHaveTextContent(values[1]);
+
+    // keep the original component around, but now render the second one.
+    // they both use the same observableId
+    rerender(<Component renderSecondComponent={true} />);
+
+    // the second component should start by receiving the latest value
+    // since the first component has already been subscribed
+    const comp2 = await waitForElement(() => getByTestId(secondComponentId));
+    expect(comp2).toHaveTextContent(values[1]);
   });
 });
