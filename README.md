@@ -17,10 +17,12 @@ Status: Alpha
 
 ```bash
 # npm
-npm install reactfire
+npm install reactfire@next
 # yarn
-yarn add reactfire
+yarn add reactfire@next
 ```
+
+If you like living life on the edge, use `reactfire@canary`.
 
 ## Example use
 
