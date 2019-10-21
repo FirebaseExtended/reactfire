@@ -82,8 +82,8 @@ export function AuthCheck({
   });
 
   if (!user) {
-    return <>fallback</>;
+    return <>{fallback}</>;
   } else {
-    return <>children</>;
+    return <>{children}</>;
   }
 }
