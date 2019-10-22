@@ -104,10 +104,10 @@ _Throws a Promise by default_
 
 #### Parameters
 
-| Parameter   | Type                                                                                                          | Description                                                                  |
-| ----------- | ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| ref         | [`CollectionReference`](https://firebase.google.com/docs/reference/js/firebase.firestore.CollectionReference) | A reference to the collection you want to listen to                          |
-| options _?_ | ReactFireOptions                                                                                              | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+| Parameter   | Type                                                                              | Description                                                                  |
+| ----------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| ref         | [`Query`](https://firebase.google.com/docs/reference/js/firebase.firestore.Query) | A query for the collection you want to listen to                             |
+| options _?_ | ReactFireOptions                                                                  | Options. This hook will not throw a Promise if you provide `startWithValue`. |
 
 #### Returns
 
