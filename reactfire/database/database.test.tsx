@@ -30,7 +30,7 @@ describe('Realtime Database (RTDB)', () => {
 
   test('sanity check - emulator is running', () => {
     // IF THIS TEST FAILS, MAKE SURE YOU'RE RUNNING THESE TESTS BY DOING:
-    //
+    // yarn test
 
     return app
       .database()
