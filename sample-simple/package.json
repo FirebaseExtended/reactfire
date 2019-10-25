@@ -5,8 +5,8 @@
   "dependencies": {
     "@types/jest": "^24.0.18",
     "firebase": "^7.0.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "react": "0.0.0-experimental-f6b8d31a7",
+    "react-dom": "0.0.0-experimental-f6b8d31a7",
     "react-firebaseui": "^3.1.2",
     "react-scripts": "3.0.1",
     "reactfire": "2.0.0"
