@@ -38,7 +38,7 @@ export function useUser<T = unknown>(
   return useObservable(
     user(auth),
     'user',
-    options ? options.startWithValue : undefined
+    options ? options.startWithValue : auth.currentUser
   );
 }
 
