@@ -31,6 +31,10 @@ export function useObservable(
   observableId: string,
   startWithValue?: any
 ) {
+  if (!observableId) {
+    throw new Error('cannot call useObservable without an observableId');
+  }
+
   const request = requestCache.getRequest(observable$, observableId);
 
   const initialValue =

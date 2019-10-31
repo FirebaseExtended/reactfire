@@ -1,9 +1,9 @@
 import { firestore } from 'firebase/app';
 import {
-  doc,
   collectionData,
-  fromCollectionRef,
-  docData
+  doc,
+  docData,
+  fromCollectionRef
 } from 'rxfire/firestore';
 import { ReactFireOptions, useObservable } from '..';
 
@@ -19,7 +19,7 @@ export function useFirestoreDoc<T = unknown>(
 ): firestore.DocumentSnapshot | T {
   return useObservable(
     doc(ref),
-    ref.path,
+    `firestore: ${ref.path}`,
     options ? options.startWithValue : undefined
   );
 }
@@ -36,7 +36,7 @@ export function useFirestoreDocData<T = unknown>(
 ): T {
   return useObservable(
     docData(ref, checkIdField(options)),
-    ref.path,
+    `firestore: ${ref.path}`,
     checkStartWithValue(options)
   );
 }
@@ -48,14 +48,31 @@ export function useFirestoreDocData<T = unknown>(
  * @param options
  */
 export function useFirestoreCollection<T = { [key: string]: unknown }>(
-  ref: firestore.CollectionReference,
+  query: firestore.Query,
   options?: ReactFireOptions<T[]>
 ): firestore.QuerySnapshot | T[] {
+  const queryId = getHashFromFirestoreQuery(query);
+
   return useObservable(
-    fromCollectionRef(ref),
-    ref.path,
+    fromCollectionRef(query, checkIdField(options)),
+    queryId,
     options ? options.startWithValue : undefined
   );
+}
+
+// The Firestore SDK has an undocumented _query
+// object that has a method to generate a hash for a query,
+// which we need for useObservable
+// https://github.com/firebase/firebase-js-sdk/blob/5beb23cd47312ffc415d3ce2ae309cc3a3fde39f/packages/firestore/src/core/query.ts#L221
+interface _QueryWithId extends firestore.Query {
+  _query: {
+    canonicalId(): string;
+  };
+}
+
+function getHashFromFirestoreQuery(query: firestore.Query) {
+  const hash = (query as _QueryWithId)._query.canonicalId();
+  return `firestore: ${hash}`;
 }
 
 /**
@@ -65,12 +82,14 @@ export function useFirestoreCollection<T = { [key: string]: unknown }>(
  * @param options
  */
 export function useFirestoreCollectionData<T = { [key: string]: unknown }>(
-  ref: firestore.CollectionReference,
+  query: firestore.Query,
   options?: ReactFireOptions<T[]>
 ): T[] {
+  const queryId = getHashFromFirestoreQuery(query);
+
   return useObservable(
-    collectionData(ref, checkIdField(options)),
-    ref.path,
+    collectionData(query, checkIdField(options)),
+    queryId,
     checkStartWithValue(options)
   );
 }

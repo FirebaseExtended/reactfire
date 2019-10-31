@@ -18,6 +18,16 @@ describe('useObservable', () => {
     }
   });
 
+  it('throws an error if no observableId is provided', () => {
+    const observable$: Subject<any> = new Subject();
+
+    try {
+      useObservable(observable$, undefined);
+    } catch (thingThatWasThrown) {
+      expect(thingThatWasThrown).toBeInstanceOf(Error);
+    }
+  });
+
   it('can return a startval and then the observable once it is ready', () => {
     const startVal = 'howdy';
     const observableVal = "y'all";
