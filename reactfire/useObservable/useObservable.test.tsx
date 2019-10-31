@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { act, cleanup, render, waitForElement } from '@testing-library/react';
 import { act as actOnHook, renderHook } from '@testing-library/react-hooks';
 import * as React from 'react';
-import { of, Subject } from 'rxjs';
+import { of, Subject, throwError } from 'rxjs';
 import { useObservable } from '.';
 
 describe('useObservable', () => {
@@ -42,6 +42,58 @@ describe('useObservable', () => {
     // prove that it actually does emit the value from the observable too
     actOnHook(() => observable$.next(observableVal));
     expect(result.current).toEqual(observableVal);
+  });
+
+  it('throws an error if there is an error on initial fetch', async () => {
+    const error = new Error('I am an error');
+    const observable$ = throwError(error);
+
+    // stop a nasty-looking console error
+    // https://github.com/facebook/react/issues/11098#issuecomment-523977830
+    const spy = jest.spyOn(console, 'error');
+    spy.mockImplementation(() => {});
+
+    class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {
+      constructor(props) {
+        super(props);
+        this.state = { hasError: false };
+      }
+
+      static getDerivedStateFromError(error) {
+        // Update state so the next render will show the fallback UI.
+        return { hasError: true };
+      }
+
+      componentDidCatch(newError, errorInfo) {
+        expect(newError).toEqual(error);
+      }
+
+      render() {
+        if (this.state.hasError) {
+          return <h1 data-testid="error-component">Error</h1>;
+        } else {
+          return this.props.children;
+        }
+      }
+    }
+
+    const Component = () => {
+      const val = useObservable(observable$, 'test-error');
+      return <h1 data-testid="thing">{val}</h1>;
+    };
+
+    const { queryByTestId, getByTestId } = render(
+      <ErrorBoundary>
+        <React.Suspense fallback={null}>
+          <Component />
+        </React.Suspense>
+      </ErrorBoundary>
+    );
+
+    await waitForElement(() => getByTestId('error-component'));
+    expect(queryByTestId('error-component')).toBeInTheDocument();
+
+    spy.mockRestore();
   });
 
   it('returns the provided startWithValue first even if the observable is ready right away', () => {

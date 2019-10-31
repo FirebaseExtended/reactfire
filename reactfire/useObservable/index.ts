@@ -15,7 +15,7 @@ function suspendUntilFirst(observable$, observableId) {
       })
       .catch(err => {
         request.isComplete = true;
-        throw err;
+        request.setError(err);
       });
   }
 
