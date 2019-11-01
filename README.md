@@ -92,7 +92,8 @@ render(<App />, document.getElementById('root'));
 
 ### For development
 
-1. At the project root, run `yarn install`
+1. [Clone](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) this repository (or a [fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo#propose-changes-to-someone-elses-project))
+1. At the project root, install all modules by running `yarn install`.
 1. `cd` into the _reactfire_ directory. Run `yarn` and `yarn watch`.
 1. In a new terminal, `cd` into the _reactfire/sample-simple_ directory. run `yarn` and `yarn start`.
 1. Head over to https://localhost:3000 to see the running sample! If you edit the reactfire source, the sample will reload.
