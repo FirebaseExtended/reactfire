@@ -5,7 +5,41 @@ import {
   docData,
   fromCollectionRef
 } from 'rxfire/firestore';
-import { ReactFireOptions, useObservable } from '..';
+import {
+  ReactFireOptions,
+  useObservable,
+  useFirebaseApp,
+  useSDK,
+  fetchSDK,
+  SDK
+} from '..';
+import { preloadObservable, usePreloadedRequest } from '../useObservable';
+import { concat, from } from 'rxjs';
+
+// starts a request for a firestore doc.
+// imports the firestore SDK automatically
+// if it hasn't been imported yet.
+//
+// there's a decent chance this gets called before the Firestore SDK
+// has been imported, so it takes a refProvider instead of a ref
+export function preloadFirestoreDoc(
+  refProvider: (
+    firestore: firebase.firestore.Firestore
+  ) => firestore.DocumentReference,
+  firebaseApp: firebase.app.App
+) {
+  return fetchSDK(SDK.FIRESTORE, firebaseApp).then(firestore => {
+    if (!firestore) {
+      throw new Error('Something went wrong with the firestore dynamic import');
+    }
+    const ref = refProvider(firestore() as firebase.firestore.Firestore);
+    return preloadObservable(doc(ref), ref.path);
+  });
+}
+
+export function useFirestore(firebaseApp?: firebase.app.App) {
+  return useSDK(SDK.FIRESTORE, firebaseApp);
+}
 
 /**
  * Suscribe to Firestore Document changes
@@ -17,9 +51,11 @@ export function useFirestoreDoc<T = unknown>(
   ref: firestore.DocumentReference,
   options?: ReactFireOptions<T>
 ): firestore.DocumentSnapshot | T {
+  const firestore = useFirestore();
+
   return useObservable(
     doc(ref),
-    `firestore: ${ref.path}`,
+    'firestore doc: ' + ref.path,
     options ? options.startWithValue : undefined
   );
 }
@@ -36,7 +72,7 @@ export function useFirestoreDocData<T = unknown>(
 ): T {
   return useObservable(
     docData(ref, checkIdField(options)),
-    `firestore: ${ref.path}`,
+    'firestore docdata: ' + ref.path,
     checkStartWithValue(options)
   );
 }

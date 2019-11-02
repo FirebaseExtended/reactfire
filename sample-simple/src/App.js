@@ -3,6 +3,7 @@ import AuthButton from './Auth';
 import FirestoreCounter from './Firestore';
 import Storage from './Storage';
 import RealtimeDatabase from './RealtimeDatabase';
+import { preloadFirestoreDoc, useFirebaseApp } from 'reactfire';
 
 const Fire = () => (
   <span role="img" aria-label="Fire">
@@ -22,6 +23,11 @@ const Card = ({ title, children }) => {
 };
 
 const App = () => {
+  preloadFirestoreDoc(
+    firestore => firestore.doc('count/counter'),
+    useFirebaseApp()
+  );
+
   return (
     <>
       <h1>

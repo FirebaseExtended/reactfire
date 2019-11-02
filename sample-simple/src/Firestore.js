@@ -1,5 +1,4 @@
 import 'firebase/auth';
-import 'firebase/firestore';
 import 'firebase/performance';
 import React, { useState } from 'react';
 import {
@@ -7,16 +6,19 @@ import {
   SuspenseWithPerf,
   useFirestoreCollectionData,
   useFirestoreDocData,
-  useFirebaseApp
+  useFirestore
 } from 'reactfire';
 
 const Counter = props => {
-  const firebaseApp = useFirebaseApp();
-  const ref = firebaseApp.firestore().doc('count/counter');
+  const firestore = useFirestore();
+
+  const serverIncrement = firestore.FieldValue.increment;
+
+  const ref = firestore().doc('count/counter');
 
   const increment = amountToIncrement => {
     ref.update({
-      value: firebaseApp.firestore.FieldValue.increment(amountToIncrement)
+      value: serverIncrement(amountToIncrement)
     });
   };
 
@@ -59,8 +61,8 @@ const AnimalEntry = ({ saveAnimal }) => {
 };
 
 const List = props => {
-  const firebaseApp = useFirebaseApp();
-  const ref = firebaseApp.firestore().collection('animals');
+  const firestore = useFirestore();
+  const ref = firestore().collection('animals');
   const animals = useFirestoreCollectionData(ref, { idField: 'id' });
 
   const addNewAnimal = commonName =>

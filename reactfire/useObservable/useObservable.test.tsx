@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { act, cleanup, render, waitForElement } from '@testing-library/react';
 import { act as actOnHook, renderHook } from '@testing-library/react-hooks';
 import * as React from 'react';
-import { of, Subject, throwError } from 'rxjs';
+import { of, Subject, BehaviorSubject, throwError } from 'rxjs';
 import { useObservable } from '.';
 
 describe('useObservable', () => {
@@ -123,7 +123,7 @@ describe('useObservable', () => {
 
   it('works with Suspense', async () => {
     const observableFinalVal = "y'all";
-    const observable$ = new Subject();
+    const observable$ = new BehaviorSubject(undefined);
     const actualComponentId = 'actual-component';
     const fallbackComponentId = 'fallback-component';
 
@@ -146,7 +146,7 @@ describe('useObservable', () => {
     expect(getByTestId(fallbackComponentId)).toBeInTheDocument();
     expect(queryByTestId(actualComponentId)).toBeNull();
 
-    actOnHook(() => observable$.next(observableFinalVal));
+    act(() => observable$.next(observableFinalVal));
     await waitForElement(() => getByTestId(actualComponentId));
 
     // make sure Suspense correctly renders its child after the observable emits a value
