@@ -1,6 +1,5 @@
-import 'firebase/auth';
 import 'firebase/performance';
-import React, { useState } from 'react';
+import React, { useState, SuspenseList, useTransition } from 'react';
 import {
   AuthCheck,
   SuspenseWithPerf,
@@ -60,29 +59,52 @@ const AnimalEntry = ({ saveAnimal }) => {
   );
 };
 
-const List = props => {
+const List = ({ query, removeAnimal }) => {
+  const animals = useFirestoreCollectionData(query, { idField: 'id' });
+  return (
+    <ul>
+      {animals.map(animal => (
+        <li key={animal.id}>
+          {animal.commonName}{' '}
+          <button onClick={() => removeAnimal(animal.id)}>X</button>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+const FavoriteAnimals = props => {
   const firestore = useFirestore();
-  const ref = firestore().collection('animals');
-  const animals = useFirestoreCollectionData(ref, { idField: 'id' });
+  const baseRef = firestore().collection('animals');
+  const [isAscending, setIsAscending] = useState(true);
+  const query = baseRef.orderBy('commonName', isAscending ? 'asc' : 'desc');
+  const [startTransition, isPending] = useTransition({
+    timeoutMs: 1000
+  });
+
+  const toggleSort = () => {
+    startTransition(() => {
+      setIsAscending(!isAscending);
+    });
+  };
 
   const addNewAnimal = commonName =>
-    ref.add({
+    baseRef.add({
       commonName
     });
 
-  const removeAnimal = id => ref.doc(id).delete();
+  const removeAnimal = id => baseRef.doc(id).delete();
 
   return (
     <>
       <AnimalEntry saveAnimal={addNewAnimal} />
-      <ul>
-        {animals.map(animal => (
-          <li key={animal.id}>
-            {animal.commonName}{' '}
-            <button onClick={() => removeAnimal(animal.id)}>X</button>
-          </li>
-        ))}
-      </ul>
+      <br />
+      <button onClick={toggleSort} disabled={isPending}>
+        Sort {isAscending ? '^' : 'v'}
+      </button>
+      <React.Suspense fallback="loading...">
+        <List query={query} removeAnimal={removeAnimal} />
+      </React.Suspense>
     </>
   );
 };
@@ -91,20 +113,22 @@ const SuspenseWrapper = props => {
   return (
     <SuspenseWithPerf fallback="loading..." traceId="firestore-demo-root">
       <AuthCheck fallback="sign in to use Firestore">
-        <h3>Sample Doc Listener</h3>
-        <SuspenseWithPerf
-          fallback="connecting to Firestore..."
-          traceId="firestore-demo-doc"
-        >
-          <Counter />
-        </SuspenseWithPerf>
-        <h3>Sample Collection Listener</h3>
-        <SuspenseWithPerf
-          fallback="connecting to Firestore..."
-          traceId="firestore-demo-collection"
-        >
-          <List />
-        </SuspenseWithPerf>
+        <SuspenseList revealOrder="together">
+          <h3>Sample Doc Listener</h3>
+          <SuspenseWithPerf
+            fallback="connecting to Firestore..."
+            traceId="firestore-demo-doc"
+          >
+            <Counter />
+          </SuspenseWithPerf>
+          <h3>Sample Collection Listener</h3>
+          <SuspenseWithPerf
+            fallback="connecting to Firestore..."
+            traceId="firestore-demo-collection"
+          >
+            <FavoriteAnimals />
+          </SuspenseWithPerf>
+        </SuspenseList>
       </AuthCheck>
     </SuspenseWithPerf>
   );
