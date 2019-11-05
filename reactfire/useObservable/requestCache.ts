@@ -12,6 +12,7 @@ export class ActiveRequest {
     this.promise = promise
       .then(result => {
         this.setValue(result);
+        return result;
       })
       .catch(err => {
         this.isComplete = true;

@@ -5,16 +5,8 @@ import {
   docData,
   fromCollectionRef
 } from 'rxfire/firestore';
-import {
-  ReactFireOptions,
-  useObservable,
-  useFirebaseApp,
-  useSDK,
-  fetchSDK,
-  SDK
-} from '..';
-import { preloadObservable, usePreloadedRequest } from '../useObservable';
-import { concat, from } from 'rxjs';
+import { preloadFirestore, ReactFireOptions, useObservable } from '..';
+import { preloadObservable } from '../useObservable';
 
 // starts a request for a firestore doc.
 // imports the firestore SDK automatically
@@ -28,17 +20,10 @@ export function preloadFirestoreDoc(
   ) => firestore.DocumentReference,
   firebaseApp: firebase.app.App
 ) {
-  return fetchSDK(SDK.FIRESTORE, firebaseApp).then(firestore => {
-    if (!firestore) {
-      throw new Error('Something went wrong with the firestore dynamic import');
-    }
+  return preloadFirestore(firebaseApp).then(firestore => {
     const ref = refProvider(firestore() as firebase.firestore.Firestore);
     return preloadObservable(doc(ref), ref.path);
   });
-}
-
-export function useFirestore(firebaseApp?: firebase.app.App) {
-  return useSDK(SDK.FIRESTORE, firebaseApp);
 }
 
 /**
@@ -51,8 +36,6 @@ export function useFirestoreDoc<T = unknown>(
   ref: firestore.DocumentReference,
   options?: ReactFireOptions<T>
 ): firestore.DocumentSnapshot | T {
-  const firestore = useFirestore();
-
   return useObservable(
     doc(ref),
     'firestore doc: ' + ref.path,

@@ -3,7 +3,15 @@ import AuthButton from './Auth';
 import FirestoreCounter from './Firestore';
 import Storage from './Storage';
 import RealtimeDatabase from './RealtimeDatabase';
-import { preloadFirestoreDoc, useFirebaseApp } from 'reactfire';
+import {
+  preloadFirestoreDoc,
+  useFirebaseApp,
+  preloadUser,
+  preloadAuth,
+  preloadFirestore,
+  preloadDatabase,
+  preloadStorage
+} from 'reactfire';
 
 const Fire = () => (
   <span role="img" aria-label="Fire">
@@ -22,11 +30,31 @@ const Card = ({ title, children }) => {
   );
 };
 
+const preloadSDKs = firebaseApp => {
+  return Promise.all([
+    preloadFirestore(firebaseApp),
+    preloadDatabase(firebaseApp),
+    preloadStorage(firebaseApp),
+    preloadAuth(firebaseApp)
+  ]);
+};
+
+const preloadData = async firebaseApp => {
+  const user = await preloadUser(firebaseApp);
+
+  if (user) {
+    preloadFirestoreDoc(
+      firestore => firestore.doc('count/counter'),
+      firebaseApp
+    );
+  }
+};
+
 const App = () => {
-  preloadFirestoreDoc(
-    firestore => firestore.doc('count/counter'),
-    useFirebaseApp()
-  );
+  const firebaseApp = useFirebaseApp();
+
+  // kick off stuff we know our components will eventually need
+  preloadSDKs(firebaseApp).then(preloadData(firebaseApp));
 
   return (
     <>

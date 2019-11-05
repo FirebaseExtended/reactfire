@@ -1,5 +1,3 @@
-import 'firebase/auth';
-import 'firebase/database';
 import '@firebase/performance';
 import React, { useState } from 'react';
 import {
@@ -7,13 +5,12 @@ import {
   SuspenseWithPerf,
   useDatabaseList,
   useDatabaseObject,
-  useFirebaseApp
+  useDatabase
 } from 'reactfire';
 
 const Counter = props => {
-  const firebaseApp = useFirebaseApp();
-  const ref = firebaseApp.database().ref('counter');
-
+  const database = useDatabase();
+  const ref = database().ref('counter');
   const increment = amountToIncrement => {
     ref.transaction(counterVal => {
       return counterVal + amountToIncrement;
@@ -60,10 +57,9 @@ const AnimalEntry = ({ saveAnimal }) => {
 };
 
 const List = props => {
-  const firebaseApp = useFirebaseApp();
-  const ref = firebaseApp.database().ref('animals');
+  const database = useDatabase();
+  const ref = database().ref('animals');
   const changes = useDatabaseList(ref);
-
   const addNewAnimal = commonName => {
     const newAnimalRef = ref.push();
     return newAnimalRef.set({
