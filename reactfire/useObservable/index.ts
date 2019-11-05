@@ -37,10 +37,15 @@ export function useObservable(
 
   const request = requestCache.getRequest(observable$, observableId);
 
-  const initialValue =
-    request.value ||
-    startWithValue ||
-    suspendUntilFirst(observable$, observableId);
+  let initialValue;
+
+  if (request.value !== undefined) {
+    initialValue = request.value;
+  } else if (startWithValue !== undefined) {
+    initialValue = startWithValue;
+  } else {
+    initialValue = suspendUntilFirst(observable$, observableId);
+  }
 
   const [latestValue, setValue] = React.useState(initialValue);
 
