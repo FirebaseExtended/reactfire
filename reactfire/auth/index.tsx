@@ -92,7 +92,7 @@ export function AuthCheck({
   fallback,
   children,
   requiredClaims
-}: AuthCheckProps): React.ReactNode {
+}: AuthCheckProps): JSX.Element {
   const user = useUser<User>(auth);
 
   if (user) {
@@ -105,9 +105,9 @@ export function AuthCheck({
         {children}
       </ClaimsCheck>
     ) : (
-      children
+      <>{children}</>
     );
   } else {
-    return fallback;
+    return <>{fallback}</>;
   }
 }
