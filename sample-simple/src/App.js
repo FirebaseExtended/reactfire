@@ -30,6 +30,10 @@ const Card = ({ title, children }) => {
   );
 };
 
+// Our components will lazy load the
+// SDKs to decrease their bundle size.
+// Since we know that, we can start
+// fetching them now
 const preloadSDKs = firebaseApp => {
   return Promise.all([
     preloadFirestore(firebaseApp),
@@ -53,7 +57,11 @@ const preloadData = async firebaseApp => {
 const App = () => {
   const firebaseApp = useFirebaseApp();
 
-  // kick off stuff we know our components will eventually need
+  // Kick off fetches for SDKs and data that
+  // we know our components will eventually need.
+  //
+  // This is OPTIONAL but encouraged as part of the render-as-you-fetch pattern
+  // https://reactjs.org/docs/concurrent-mode-suspense.html#approach-3-render-as-you-fetch-using-suspense
   preloadSDKs(firebaseApp).then(preloadData(firebaseApp));
 
   return (

@@ -2,10 +2,13 @@
 
 ## Table of Contents
 
-- [Providers](#Providers)
-  - [`FirebaseAppProvider`](#FirebaseAppProvider)
 - [Hooks](#Hooks)
-  - [`useFirebaseApp`](#useFirebaseApp)
+  - SDK
+    - [`useFirebaseApp`](#useFirebaseApp)
+    - [`useFirestore`](#useFirestore)
+    - [`useDatabase`](#useDatabase)
+    - [`useAuth`](#useAuth)
+    - [`useStorage`](#useStorage)
   - Authentication
     - [`useUser`](#useUser)
   - Database
@@ -18,37 +21,19 @@
   - Cloud Storage
     - [`useStorageTask`](#useStorageTask)
     - [`useStorageDownloadURL`](#useStorageDownloadURL)
+  - [ReactFireOptions](#ReactFireOptions)
 - [Components](#Components)
+  - [`FirebaseAppProvider`](#FirebaseAppProvider)
   - Performance Monitoring
     - [`SuspenseWithPerf`](#SuspenseWithPerf)
   - Authentication
     - [`AuthCheck`](#AuthCheck)
-- [ReactFireOptions](#ReactFireOptions)
-
-## Providers
-
-### `FirebaseAppProvider`
-
-A React [Context Provider](https://reactjs.org/docs/context.html#contextprovider) that allows the `useFirebaseApp` hook to pick up the `firebase` object.
-
-#### Sample usage
-
-```jsx
-const firebaseConfig = {
-  /* web app config from Firebase console */
-};
-
-<FirebaseAppProvider firebaseConfig={firebaseConfig} initPerformance>
-  <App />
-</FirebaseAppProvider>;
-```
-
-#### Props
-
-| Prop            | Type   | Description                                                                                                                              |
-| --------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| config          | Object | the web app config object usually passed to [`initializeApp`](https://firebase.google.com/docs/reference/js/firebase.html#initializeapp) |
-| initPerformance | bool   | Whether or not to initialize Firebase Performance Monitoring                                                                             |
+- [Preloading](#Preloading)
+  - SDK
+    - [`preloadAuth`](#preloadAuth)
+    - [`preloadDatabase`](#preloadDatabase)
+    - [`preloadFirestore`](#preloadFirestore)
+    - [`preloadStorage`](#preloadStorage)
 
 ## Hooks
 
@@ -56,15 +41,55 @@ const firebaseConfig = {
 
 When called from a component nested inside a `FirebaseAppProvider`, `useFirebaseApp` returns the root Firebase object.
 
-> IMPORTANT: By default, `useFirebaseApp` returns a firebase object without any products attached to it (e.g. you can't call `firebase.firestore()`. To do that, you need to `import 'firebase/firestore'` or any other Firebase feature as needed)
+> IMPORTANT: By default, `useFirebaseApp` returns a firebase object without any products attached to it (e.g. you can't call `firebase.firestore()`. To do that, you need to import a Firebase feature (`import 'firebase/firestore'`) or lazy load a feature with one of the Hooks below)
 
 #### Returns
 
 [`firebase`](https://firebase.google.com/docs/reference/js/firebase)
 
+### `useFirestore`
+
+_Throws a Promise by default_
+
+Returns `firebase.firestore` When called from a component nested inside a `FirebaseAppProvider`. If `firebase.firestore` doesn't exist, it lazy loads the Cloud Firestore SDK.
+
+#### Returns
+
+`([`firebase.firestore`](https://firebase.google.com/docs/reference/js/firebase.firestore.html))`
+
+### `useDatabase`
+
+_Throws a Promise by default_
+
+Returns `firebase.database` When called from a component nested inside a `FirebaseAppProvider`. If `firebase.database` doesn't exist, it lazy loads the Realtime Database SDK.
+
+#### Returns
+
+`([`firebase.database`](https://firebase.google.com/docs/reference/js/firebase.database.html))`
+
+### `useAuth`
+
+_Throws a Promise by default_
+
+Returns `firebase.auth` When called from a component nested inside a `FirebaseAppProvider`. If `firebase.auth` doesn't exist, it lazy loads the Auth SDK.
+
+#### Returns
+
+`([`firebase.auth`](https://firebase.google.com/docs/reference/js/firebase.auth.html))`
+
+### `useStorage`
+
+_Throws a Promise by default_
+
+Returns `firebase.storage` When called from a component nested inside a `FirebaseAppProvider`. If `firebase.storage` doesn't exist, it lazy loads the Storage SDK.
+
+#### Returns
+
+`([`firebase.storage`](https://firebase.google.com/docs/reference/js/firebase.storage.html))`
+
 ### `useUser`
 
-Get the user that is currently signed in.
+Get the user that is currently signed in. Lazy loads the `firebase/auth` SDK if it is not already loaded.
 
 _Throws a Promise by default_
 
@@ -182,7 +207,36 @@ _Throws a Promise by default_
 
 `string`
 
+## ReactFireOptions
+
+| Property       | Type |
+| -------------- | ---- |
+| startWithValue | any  |
+
 ## Components
+
+### `FirebaseAppProvider`
+
+A React [Context Provider](https://reactjs.org/docs/context.html#contextprovider) that allows the `useFirebaseApp` hook to pick up the `firebase` object.
+
+#### Sample usage
+
+```jsx
+const firebaseConfig = {
+  /* web app config from Firebase console */
+};
+
+<FirebaseAppProvider firebaseConfig={firebaseConfig} initPerformance>
+  <App />
+</FirebaseAppProvider>;
+```
+
+#### Props
+
+| Prop            | Type   | Description                                                                                                                              |
+| --------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| config          | Object | the web app config object usually passed to [`initializeApp`](https://firebase.google.com/docs/reference/js/firebase.html#initializeapp) |
+| initPerformance | bool   | Whether or not to initialize Firebase Performance Monitoring                                                                             |
 
 ### `AuthCheck`
 
@@ -210,8 +264,60 @@ Starts a Firebase Performance Monitoring [trace](https://firebase.google.com/doc
 | firePerf _?_ | any             |
 | traceId      | string          |
 
-## ReactFireOptions
+## Preloading
 
-| Property       | Type |
-| -------------- | ---- |
-| startWithValue | any  |
+### preloadAuth
+
+Start importing the `firebase/auth` package.
+
+#### Parameters
+
+| Parameter   | Type                                                                                 | Description         |
+| ----------- | ------------------------------------------------------------------------------------ | ------------------- |
+| firebaseApp | [`firebase.app.App`](https://firebase.google.com/docs/reference/js/firebase.app.App) | The Firebase object |
+
+#### Returns
+
+`Promise<`[`firebase.auth`](https://firebase.google.com/docs/reference/js/firebase.auth)`>`
+
+### preloadDatabase
+
+Start importing the `firebase/database` package.
+
+#### Parameters
+
+| Parameter   | Type                                                                                 | Description         |
+| ----------- | ------------------------------------------------------------------------------------ | ------------------- |
+| firebaseApp | [`firebase.app.App`](https://firebase.google.com/docs/reference/js/firebase.app.App) | The Firebase object |
+
+#### Returns
+
+`Promise<`[`firebase.database`](https://firebase.google.com/docs/reference/js/firebase.database)`>`
+
+### `preloadFirestore`
+
+Start importing the `firebase/firestore` package.
+
+#### Parameters
+
+| Parameter   | Type                                                                                 | Description         |
+| ----------- | ------------------------------------------------------------------------------------ | ------------------- |
+| firebaseApp | [`firebase.app.App`](https://firebase.google.com/docs/reference/js/firebase.app.App) | The Firebase object |
+
+#### Returns
+
+`Promise<`[`firebase.firestore`](https://firebase.google.com/docs/reference/js/firebase.firestore)`>`
+
+### preloadStorage
+
+Start importing the `firebase/storage` package.
+
+#### Parameters
+
+| Parameter   | Type                                                                                 | Description         |
+| ----------- | ------------------------------------------------------------------------------------ | ------------------- |
+| firebaseApp | [`firebase.app.App`](https://firebase.google.com/docs/reference/js/firebase.app.App) | The Firebase object |
+
+#### Returns
+
+`Promise<`[`firebase.storage`](https://firebase.google.com/docs/reference/js/firebase.storage)`>`
