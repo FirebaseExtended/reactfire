@@ -36,11 +36,17 @@ export function useUser<T = unknown>(
 ): User | T {
   auth = auth || getAuthFromContext();
 
-  return useObservable(
-    user(auth),
-    'auth: user',
-    options ? options.startWithValue : undefined
-  );
+  let currentUser = undefined;
+
+  if (options && options.startWithValue !== undefined) {
+    currentUser = options.startWithValue;
+  } else if (auth.currentUser) {
+    // if auth.currentUser is undefined or null, we won't use it
+    // because null can mean "not signed in" OR "still loading"
+    currentUser = auth.currentUser;
+  }
+
+  return useObservable(user(auth), 'auth: user', currentUser);
 }
 
 export function useIdTokenResult(user: User, forceRefresh: boolean = false) {
