@@ -33,7 +33,7 @@ export function SuspenseWithPerf({
   traceId,
   fallback,
   firePerf
-}: SuspensePerfProps) {
+}: SuspensePerfProps): JSX.Element {
   firePerf = firePerf || getPerfFromContext();
 
   const Fallback = () => {
