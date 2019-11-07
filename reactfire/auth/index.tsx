@@ -87,9 +87,9 @@ export function ClaimsCheck({ user, fallback, children, requiredClaims }) {
   });
 
   if (Object.keys(missingClaims).length === 0) {
-    return children;
+    return <>{children}</>;
   } else {
-    return fallback;
+    return <>{fallback}</>;
   }
 }
 
