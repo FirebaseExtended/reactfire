@@ -18,8 +18,6 @@ export default {
       'rxjs/operators',
     ],
     plugins: [
-      resolve({
-        browser: true
-      })
+      resolve()
     ]
 };
