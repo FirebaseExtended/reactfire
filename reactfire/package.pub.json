@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "Firebase library for React",
   "module": "index.js",
-  "main": "bundle.js",
+  "main": "cjs/index.js",
   "types": "index.d.ts",
   "scripts": {
     "build": "tsc",
