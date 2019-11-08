@@ -5,13 +5,13 @@ to interact with Firebase.
 
 > If you're looking for docs for the _deprecated_ ReactFire v1 (the one that uses mixins), click [here](https://github.com/FirebaseExtended/reactfire/tree/v1.0.0)
 
+**Status: Alpha**. ReactFire is meant for React Concurrent Mode, which is only available in [experimental React builds](https://reactjs.org/docs/concurrent-mode-adoption.html#installation).
+
 ## What is ReactFire?
 
 - **Easy realtime updates for your function components** - Reactfire's hooks, like `useFirestoreCollection` and `useUser`, let you easily subscribe to events, and automatically unsubscribe when your component unmounts.
 - **Loading states handled by `<Suspense>`** - Reactfire's hooks throw promises that Suspense can catch. No more `isLoaded ?...` - let React [handle it for you](https://reactjs.org/blog/2018/11/27/react-16-roadmap.html#react-166-shipped-the-one-with-suspense-for-code-splitting).
 - **Dead-simple Real User Monitoring (RUM)** - Easily enable Firebase Performance Monitoring's [automatic traces](https://firebase.google.com/docs/perf-mon/automatic-web), and instrument your Suspenseful loads with Reactfire's `<SuspenseWithPerf>` component
-
-Status: Alpha
 
 ## Install
 
