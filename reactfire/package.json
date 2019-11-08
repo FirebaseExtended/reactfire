@@ -12,7 +12,7 @@
     "test": "firebase emulators:exec --only firestore,database \"jest --no-cache --verbose --detectOpenHandles --forceExit\"",
     "copy-package-json": "cp package.pub.json pub/reactfire/package.json",
     "watch": "yarn build && tsc --watch",
-    "build": "rm -rf pub && tsc && yarn copy-package-json && cp ../README.md pub/reactfire/README.md && cp ../LICENSE pub/reactfire/LICENSE"
+    "build": "rm -rf pub && tsc && yarn copy-package-json && cp ../README.md pub/reactfire/README.md && cp ../LICENSE pub/reactfire/LICENSE && rollup -c"
   },
   "repository": {
     "type": "git",
@@ -41,11 +41,13 @@
     "@testing-library/react-hooks": "^3.1.0",
     "@types/jest": "^24.0.11",
     "babel-jest": "^24.7.1",
+    "firebase-functions-test": "^0.1.6",
     "firebase-tools": "^7.1.0",
     "jest": "~24.7.1",
     "jest-dom": "^3.1.3",
-    "typescript": "^3.4.5",
-    "firebase-functions-test": "^0.1.6",
-    "react-test-renderer": "^16.9.0"
+    "react-test-renderer": "^16.9.0",
+    "rollup": "^1.26.3",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "typescript": "^3.4.5"
   }
 }
