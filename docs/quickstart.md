@@ -99,7 +99,7 @@ npm install firebase reactfire@canary
        .doc('burrito');
 
      // subscribe to the doc. just one line!
-     const burrito = useFirestoreDoc(burritoRef);
+     const burrito = useFirestoreDocData(burritoRef);
 
      // get the value from the doc
      const isYummy = burrito.yummy;
@@ -111,7 +111,7 @@ npm install firebase reactfire@canary
 
 1. Render your component inside of a `Suspense` tag
 
-> We need to do this because `useFirestoreDoc` throws a Promise while it is waiting for a response from Firestore. Suspense will catch the Promise and render `fallback` until the Promise is resolved.
+> We need to do this because `useFirestoreDocData` throws a Promise while it is waiting for a response from Firestore. Suspense will catch the Promise and render `fallback` until the Promise is resolved.
 
 Replace the `App` function with the following:
 

@@ -34,33 +34,29 @@ import { render } from 'react-dom';
 import './style.css';
 import {
   FirebaseAppProvider,
-  useFirestoreDoc,
-  useFirebaseApp,
+  useFirestoreDocData,
   SuspenseWithPerf
 } from 'reactfire';
 
 import 'firebase/performance';
-import 'firebase/firestore';
 
 const firebaseConfig = {
   /* add your config object from the Firebase console */
 };
 
 function Burrito() {
-  // create a ref
-  const firebaseApp = useFirebaseApp();
-  const burritoRef = firebaseApp
-    .firestore()
+  // lazy load the Firestore SDK and create a ref
+  const burritoRef = useFirestore()
     .collection('tryreactfire')
     .doc('burrito');
 
   // subscribe to the doc. just one line!
   // throws a Promise for Suspense to catch,
   // and then streams live updates
-  const burritoDoc = useFirestoreDoc(burritoRef);
+  const burrito = useFirestoreDocData(burritoRef);
 
   // get the value from the doc
-  const isYummy = burritoDoc.data().yummy;
+  const isYummy = burrito.yummy;
 
   return <p>The burrito is {isYummy ? 'good' : 'bad'}!</p>;
 }
