@@ -4,27 +4,11 @@ import '@firebase/performance';
 import React, { useState } from 'react';
 import {
   SuspenseWithPerf,
-  useStorageDownloadURL,
   useStorageTask,
   useFirebaseApp,
-  AuthCheck
+  AuthCheck,
+  StorageImage
 } from 'reactfire';
-
-const DownloadImage = () => {
-  const demoImagePath = 'Cloud Storage for Firebase (Independent Icon).png';
-  const firebaseApp = useFirebaseApp();
-  const ref = firebaseApp.storage().ref(demoImagePath);
-
-  const downloadURL = useStorageDownloadURL(ref);
-
-  return (
-    <img
-      src={downloadURL}
-      alt="demo download"
-      style={{ width: '200px', height: '200px' }}
-    />
-  );
-};
 
 const UploadProgress = ({ uploadTask, storageRef }) => {
   const { bytesTransferred, totalBytes } = useStorageTask(
@@ -82,7 +66,11 @@ const SuspenseWrapper = props => {
   return (
     <SuspenseWithPerf fallback="loading..." traceId="storage-root">
       <AuthCheck fallback="sign in to use Storage">
-        <DownloadImage />
+        <StorageImage
+          storagePath="Cloud Storage for Firebase (Independent Icon).png"
+          alt="demo download"
+          style={{ width: '200px', height: '200px' }}
+        />
         <br />
         <ImageUploadButton />
       </AuthCheck>

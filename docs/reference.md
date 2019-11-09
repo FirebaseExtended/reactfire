@@ -23,6 +23,8 @@
     - [`SuspenseWithPerf`](#SuspenseWithPerf)
   - Authentication
     - [`AuthCheck`](#AuthCheck)
+  - Cloud Storage
+    - [`StorageImage`](#StorageImage)
 - [ReactFireOptions](#ReactFireOptions)
 
 ## Providers
@@ -196,6 +198,19 @@ Renders `children` if a user is signed in and meets the required claims. Renders
 | children       | React.Component |
 | fallback       | React.Component |
 | requiredClaims | Object          |
+
+### `StorageImage`
+
+Renders an image based on a Cloud Storage path.
+
+#### Props
+
+| Property    | Type                     |
+| ----------- | ------------------------ |
+| storagePath | string                   |
+| storage?    | firebase.storage.Storage |
+
+...and any other props a normal React `<img>` element can take.
 
 ### `SuspenseWithPerf`
 
