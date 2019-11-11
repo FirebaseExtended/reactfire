@@ -37,11 +37,18 @@
     - [`SuspenseWithPerf`](#SuspenseWithPerf)
   - Authentication
     - [`AuthCheck`](#AuthCheck)
+  - Cloud Storage
+    - [`StorageImage`](#StorageImage)
 - [Preloading](#Preloading)
   - SDK
+    - [`preloadAnalytics`](#preloadAnalytics)
     - [`preloadAuth`](#preloadAuth)
     - [`preloadDatabase`](#preloadDatabase)
     - [`preloadFirestore`](#preloadFirestore)
+    - [`preloadFunctions`](#preloadFunctions)
+    - [`preloadMessaging`](#preloadMessaging)
+    - [`preloadPerformance`](#preloadPerformance)
+    - [`preloadRemoteConfig`](#preloadRemoteConfig)
     - [`preloadStorage`](#preloadStorage)
 
 ## Hooks
@@ -310,6 +317,19 @@ Renders `children` if a user is signed in and meets the required claims. Renders
 | fallback       | React.Component |
 | requiredClaims | Object          |
 
+### `StorageImage`
+
+Renders an image based on a Cloud Storage path.
+
+#### Props
+
+| Property    | Type                     |
+| ----------- | ------------------------ |
+| storagePath | string                   |
+| storage?    | firebase.storage.Storage |
+
+...and any other props a normal React `<img>` element can take.
+
 ### `SuspenseWithPerf`
 
 Starts a Firebase Performance Monitoring [trace](https://firebase.google.com/docs/reference/js/firebase.performance.Trace) and ends it when suspense stops suspending.
@@ -325,7 +345,21 @@ Starts a Firebase Performance Monitoring [trace](https://firebase.google.com/doc
 
 ## Preloading
 
-### preloadAuth
+### `preloadAnalytics`
+
+Start importing the `firebase/analytics` package.
+
+#### Parameters
+
+| Parameter   | Type                                                                                 | Description         |
+| ----------- | ------------------------------------------------------------------------------------ | ------------------- |
+| firebaseApp | [`firebase.app.App`](https://firebase.google.com/docs/reference/js/firebase.app.App) | The Firebase object |
+
+#### Returns
+
+`Promise<`[`firebase.analytics`](https://firebase.google.com/docs/reference/js/firebase.analytics)`>`
+
+### `preloadAuth`
 
 Start importing the `firebase/auth` package.
 
@@ -339,7 +373,7 @@ Start importing the `firebase/auth` package.
 
 `Promise<`[`firebase.auth`](https://firebase.google.com/docs/reference/js/firebase.auth)`>`
 
-### preloadDatabase
+### `preloadDatabase`
 
 Start importing the `firebase/database` package.
 
@@ -367,7 +401,63 @@ Start importing the `firebase/firestore` package.
 
 `Promise<`[`firebase.firestore`](https://firebase.google.com/docs/reference/js/firebase.firestore)`>`
 
-### preloadStorage
+### `preloadFunctions`
+
+Start importing the `firebase/functions` package.
+
+#### Parameters
+
+| Parameter   | Type                                                                                 | Description         |
+| ----------- | ------------------------------------------------------------------------------------ | ------------------- |
+| firebaseApp | [`firebase.app.App`](https://firebase.google.com/docs/reference/js/firebase.app.App) | The Firebase object |
+
+#### Returns
+
+`Promise<`[`firebase.functions`](https://firebase.google.com/docs/reference/js/firebase.functions)`>`
+
+### `preloadMessaging`
+
+Start importing the `firebase/messaging` package.
+
+#### Parameters
+
+| Parameter   | Type                                                                                 | Description         |
+| ----------- | ------------------------------------------------------------------------------------ | ------------------- |
+| firebaseApp | [`firebase.app.App`](https://firebase.google.com/docs/reference/js/firebase.app.App) | The Firebase object |
+
+#### Returns
+
+`Promise<`[`firebase.messaging`](https://firebase.google.com/docs/reference/js/firebase.messaging)`>`
+
+### `preloadPerformance`
+
+Start importing the `firebase/performance` package.
+
+#### Parameters
+
+| Parameter   | Type                                                                                 | Description         |
+| ----------- | ------------------------------------------------------------------------------------ | ------------------- |
+| firebaseApp | [`firebase.app.App`](https://firebase.google.com/docs/reference/js/firebase.app.App) | The Firebase object |
+
+#### Returns
+
+`Promise<`[`firebase.performance`](https://firebase.google.com/docs/reference/js/firebase.performance)`>`
+
+### `preloadRemoteConfig`
+
+Start importing the `firebase/remoteConfig` package.
+
+#### Parameters
+
+| Parameter   | Type                                                                                 | Description         |
+| ----------- | ------------------------------------------------------------------------------------ | ------------------- |
+| firebaseApp | [`firebase.app.App`](https://firebase.google.com/docs/reference/js/firebase.app.App) | The Firebase object |
+
+#### Returns
+
+`Promise<`[`firebase.remoteConfig`](https://firebase.google.com/docs/reference/js/firebase.remoteConfig)`>`
+
+### `preloadStorage`
 
 Start importing the `firebase/storage` package.
 

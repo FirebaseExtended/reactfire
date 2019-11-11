@@ -35,7 +35,7 @@ export function preloadFirestoreDoc(
 export function useFirestoreDoc<T = unknown>(
   ref: firestore.DocumentReference,
   options?: ReactFireOptions<T>
-): firestore.DocumentSnapshot | T {
+): T extends {} ? T : firestore.DocumentSnapshot {
   return useObservable(
     doc(ref),
     'firestore doc: ' + ref.path,
@@ -69,7 +69,7 @@ export function useFirestoreDocData<T = unknown>(
 export function useFirestoreCollection<T = { [key: string]: unknown }>(
   query: firestore.Query,
   options?: ReactFireOptions<T[]>
-): firestore.QuerySnapshot | T[] {
+): T extends {} ? T[] : firestore.QuerySnapshot {
   const queryId = getHashFromFirestoreQuery(query);
 
   return useObservable(
