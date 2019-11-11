@@ -2,6 +2,7 @@ import { auth, User } from 'firebase/app';
 import * as React from 'react';
 import { user } from 'rxfire/auth';
 import { useObservable, useFirebaseApp, ReactFireOptions } from '..';
+import { from } from 'rxjs';
 
 function getAuthFromContext(): auth.Auth {
   const firebaseApp = useFirebaseApp();
@@ -35,11 +36,27 @@ export function useUser<T = unknown>(
 ): User | T {
   auth = auth || getAuthFromContext();
 
-  return useObservable(
-    user(auth),
-    'user',
-    options ? options.startWithValue : undefined
-  );
+  let currentUser = undefined;
+
+  if (options && options.startWithValue !== undefined) {
+    currentUser = options.startWithValue;
+  } else if (auth.currentUser) {
+    // if auth.currentUser is undefined or null, we won't use it
+    // because null can mean "not signed in" OR "still loading"
+    currentUser = auth.currentUser;
+  }
+
+  return useObservable(user(auth), 'auth: user', currentUser);
+}
+
+export function useIdTokenResult(user: User, forceRefresh: boolean = false) {
+  if (!user) {
+    throw new Error('you must provide a user');
+  }
+
+  const idToken$ = from(user.getIdTokenResult(forceRefresh));
+
+  return useObservable(idToken$, `${user.uid}-claims`);
 }
 
 export interface AuthCheckProps {
@@ -49,41 +66,54 @@ export interface AuthCheckProps {
   requiredClaims?: Object;
 }
 
+export interface ClaimsCheckProps {
+  user: User;
+  fallback: React.ReactNode;
+  children: React.ReactNode;
+  requiredClaims?: Object;
+}
+
+export function ClaimsCheck({ user, fallback, children, requiredClaims }) {
+  const { claims } = useIdTokenResult(user, false);
+  const missingClaims = {};
+
+  Object.keys(requiredClaims).forEach(claim => {
+    if (requiredClaims[claim] !== claims[claim]) {
+      missingClaims[claim] = {
+        expected: requiredClaims[claim],
+        actual: claims[claim]
+      };
+    }
+  });
+
+  if (Object.keys(missingClaims).length === 0) {
+    return <>{children}</>;
+  } else {
+    return <>{fallback}</>;
+  }
+}
+
 export function AuthCheck({
   auth,
   fallback,
   children,
   requiredClaims
-}: AuthCheckProps): React.ReactNode {
+}: AuthCheckProps): JSX.Element {
   const user = useUser<User>(auth);
 
-  React.useLayoutEffect(() => {
-    // TODO(jeff) see if this actually works
-    if (requiredClaims) {
-      throw user.getIdTokenResult().then(idTokenResult => {
-        const { claims } = idTokenResult;
-        const missingClaims = {};
-        Object.keys(requiredClaims).forEach(claim => {
-          if (requiredClaims[claim] !== claims[claim]) {
-            missingClaims[claim] = {
-              expected: requiredClaims[claim],
-              actual: claims[claim]
-            };
-          }
-        });
-
-        if (Object.keys(missingClaims).length > 0) {
-          throw new Error(
-            `Mismatched Claims: ${JSON.stringify(missingClaims)}`
-          );
-        }
-      });
-    }
-  });
-
-  if (!user) {
-    return fallback;
+  if (user) {
+    return requiredClaims ? (
+      <ClaimsCheck
+        user={user}
+        fallback={fallback}
+        requiredClaims={requiredClaims}
+      >
+        {children}
+      </ClaimsCheck>
+    ) : (
+      <>{children}</>
+    );
   } else {
-    return children;
+    return <>{fallback}</>;
   }
 }

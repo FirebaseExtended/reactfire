@@ -11,7 +11,6 @@ export interface SuspensePerfProps {
 
 function getPerfFromContext(): performance.Performance {
   const firebaseApp = useFirebaseApp();
-
   if (!firebaseApp) {
     throw new Error(
       'Firebase not found in context. Either pass it directly to a reactfire hook, or wrap your component in a FirebaseAppProvider'
@@ -34,18 +33,18 @@ export function SuspenseWithPerf({
   traceId,
   fallback,
   firePerf
-}: SuspensePerfProps) {
+}: SuspensePerfProps): JSX.Element {
   firePerf = firePerf || getPerfFromContext();
-  const trace = React.useMemo(() => firePerf.trace(traceId), [traceId]);
 
   const Fallback = () => {
     React.useLayoutEffect(() => {
+      const trace = firePerf.trace(traceId);
       trace.start();
 
       return () => {
         trace.stop();
       };
-    }, []);
+    }, [traceId]);
 
     return <>{fallback}</>;
   };

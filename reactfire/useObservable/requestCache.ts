@@ -16,6 +16,11 @@ class ActiveRequest {
     this.value = value;
     this.isComplete = true;
   }
+
+  setError(err) {
+    this.error = err;
+    this.isComplete = true;
+  }
 }
 
 /*

@@ -15,7 +15,7 @@ function suspendUntilFirst(observable$, observableId) {
       })
       .catch(err => {
         request.isComplete = true;
-        throw err;
+        request.setError(err);
       });
   }
 
@@ -31,14 +31,31 @@ export function useObservable(
   observableId: string,
   startWithValue?: any
 ) {
-  const initialValue =
-    startWithValue || suspendUntilFirst(observable$, observableId);
+  if (!observableId) {
+    throw new Error('cannot call useObservable without an observableId');
+  }
+
+  const request = requestCache.getRequest(observable$, observableId);
+
+  let initialValue;
+
+  if (request.value !== undefined) {
+    initialValue = request.value;
+  } else if (startWithValue !== undefined) {
+    initialValue = startWithValue;
+  } else {
+    initialValue = suspendUntilFirst(observable$, observableId);
+  }
 
   const [latestValue, setValue] = React.useState(initialValue);
 
   React.useEffect(() => {
     const subscription = observable$.pipe(startWith(initialValue)).subscribe(
       newVal => {
+        // update the value in requestCache
+        request.setValue(newVal);
+
+        // update state
         setValue(newVal);
       },
       error => {

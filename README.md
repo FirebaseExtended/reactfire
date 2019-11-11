@@ -11,16 +11,18 @@ to interact with Firebase.
 - **Loading states handled by `<Suspense>`** - Reactfire's hooks throw promises that Suspense can catch. No more `isLoaded ?...` - let React [handle it for you](https://reactjs.org/blog/2018/11/27/react-16-roadmap.html#react-166-shipped-the-one-with-suspense-for-code-splitting).
 - **Dead-simple Real User Monitoring (RUM)** - Easily enable Firebase Performance Monitoring's [automatic traces](https://firebase.google.com/docs/perf-mon/automatic-web), and instrument your Suspenseful loads with Reactfire's `<SuspenseWithPerf>` component
 
-Status: Beta
+Status: Alpha
 
 ## Install
 
 ```bash
 # npm
-npm install reactfire
+npm install reactfire@next
 # yarn
-yarn add reactfire
+yarn add reactfire@next
 ```
+
+If you like living life on the edge, use `reactfire@canary`.
 
 ## Example use
 
@@ -83,16 +85,18 @@ render(<App />, document.getElementById('root'));
 ## Learn More
 
 - [**Quickstart**](./docs/quickstart.md)
+- [**Common Use Cases**](./docs/use.md)
 - [**API Reference**](./docs/reference.md)
 
 ## Contributing
 
 ### For development
 
-1. `yarn install`
-1. `cd` into the _reactfire/reactfire_ directory. run `yarn run watch`.
-1. In a new terminal, `cd` into the _reactfire/sample-simple_ directory. run `yarn start`.
-1. Head over to https://localhost:3000 to see the running sample
+1. [Clone](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) this repository (or a [fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo#propose-changes-to-someone-elses-project))
+1. At the project root, install all modules by running `yarn install`.
+1. `cd` into the _reactfire_ directory. Run `yarn` and `yarn watch`.
+1. In a new terminal, `cd` into the _reactfire/sample-simple_ directory. run `yarn` and `yarn start`.
+1. Head over to https://localhost:3000 to see the running sample! If you edit the reactfire source, the sample will reload.
 
 ### Testing
 
