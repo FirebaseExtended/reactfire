@@ -1,6 +1,5 @@
 import * as firebase from 'firebase/app';
 import * as React from 'react';
-import { preloadRequest, usePreloadedRequest } from '../useObservable';
 
 export * from './sdk';
 
@@ -13,6 +12,7 @@ const FirebaseAppContext = React.createContext<
 export function FirebaseAppProvider(props) {
   const { firebaseConfig, initPerformance } = props;
   let { firebaseApp } = props;
+
   firebaseApp =
     firebaseApp ||
     React.useMemo(() => {
@@ -25,6 +25,12 @@ export function FirebaseAppProvider(props) {
 
   React.useMemo(() => {
     if (initPerformance === true && !!firebase.apps.length) {
+      if (!firebase.performance) {
+        throw new Error(
+          'firebase.performance not found. Did you forget to import it?'
+        );
+      }
+
       // initialize Performance Monitoring
       firebase.performance();
     }

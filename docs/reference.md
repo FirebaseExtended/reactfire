@@ -3,12 +3,20 @@
 ## Table of Contents
 
 - [Hooks](#Hooks)
+
   - SDK
+
     - [`useFirebaseApp`](#useFirebaseApp)
-    - [`useFirestore`](#useFirestore)
-    - [`useDatabase`](#useDatabase)
+    - [`useAnalytics`](#useAnalytics)
     - [`useAuth`](#useAuth)
+    - [`useDatabase`](#useDatabase)
+    - [`useFirestore`](#useFirestore)
+    - [`useFunctions`](#useFunctions)
+    - [`useMessaging`](#useMessaging)
+    - [`usePerformance`](#usePerformance)
+    - [`useRemoteConfig`](#useRemoteConfig)
     - [`useStorage`](#useStorage)
+
   - Authentication
     - [`useUser`](#useUser)
   - Database
@@ -22,6 +30,7 @@
     - [`useStorageTask`](#useStorageTask)
     - [`useStorageDownloadURL`](#useStorageDownloadURL)
   - [ReactFireOptions](#ReactFireOptions)
+
 - [Components](#Components)
   - [`FirebaseAppProvider`](#FirebaseAppProvider)
   - Performance Monitoring
@@ -47,25 +56,15 @@ When called from a component nested inside a `FirebaseAppProvider`, `useFirebase
 
 [`firebase`](https://firebase.google.com/docs/reference/js/firebase)
 
-### `useFirestore`
+### `useAnalytics`
 
 _Throws a Promise by default_
 
-Returns `firebase.firestore` When called from a component nested inside a `FirebaseAppProvider`. If `firebase.firestore` doesn't exist, it lazy loads the Cloud Firestore SDK.
+Returns `firebase.analytics` When called from a component nested inside a `FirebaseAppProvider`. If `firebase.analytics` doesn't exist, it lazy loads the Analytics SDK.
 
 #### Returns
 
-`([`firebase.firestore`](https://firebase.google.com/docs/reference/js/firebase.firestore.html))`
-
-### `useDatabase`
-
-_Throws a Promise by default_
-
-Returns `firebase.database` When called from a component nested inside a `FirebaseAppProvider`. If `firebase.database` doesn't exist, it lazy loads the Realtime Database SDK.
-
-#### Returns
-
-`([`firebase.database`](https://firebase.google.com/docs/reference/js/firebase.database.html))`
+[`firebase.analytics`](https://firebase.google.com/docs/reference/js/firebase.analytics.html)
 
 ### `useAuth`
 
@@ -75,7 +74,67 @@ Returns `firebase.auth` When called from a component nested inside a `FirebaseAp
 
 #### Returns
 
-`([`firebase.auth`](https://firebase.google.com/docs/reference/js/firebase.auth.html))`
+[`firebase.auth`](https://firebase.google.com/docs/reference/js/firebase.auth.html)
+
+### `useDatabase`
+
+_Throws a Promise by default_
+
+Returns `firebase.database` When called from a component nested inside a `FirebaseAppProvider`. If `firebase.database` doesn't exist, it lazy loads the Realtime Database SDK.
+
+#### Returns
+
+[`firebase.database`](https://firebase.google.com/docs/reference/js/firebase.database.html)
+
+### `useFirestore`
+
+_Throws a Promise by default_
+
+Returns `firebase.firestore` When called from a component nested inside a `FirebaseAppProvider`. If `firebase.firestore` doesn't exist, it lazy loads the Cloud Firestore SDK.
+
+#### Returns
+
+[`firebase.firestore`](https://firebase.google.com/docs/reference/js/firebase.firestore.html)
+
+### `useFunctions`
+
+_Throws a Promise by default_
+
+Returns `firebase.functions` When called from a component nested inside a `FirebaseAppProvider`. If `firebase.functions` doesn't exist, it lazy loads the Cloud Functions for Firebase SDK.
+
+#### Returns
+
+[`firebase.functions`](https://firebase.google.com/docs/reference/js/firebase.functions.html)
+
+### `useMessaging`
+
+_Throws a Promise by default_
+
+Returns `firebase.messaging` When called from a component nested inside a `FirebaseAppProvider`. If `firebase.messaging` doesn't exist, it lazy loads the Firebase Cloud Messaging SDK.
+
+#### Returns
+
+[`firebase.messaging`](https://firebase.google.com/docs/reference/js/firebase.messaging.html)
+
+### `usePerformance`
+
+_Throws a Promise by default_
+
+Returns `firebase.performance` When called from a component nested inside a `FirebaseAppProvider`. If `firebase.performance` doesn't exist, it lazy loads the Performance Monitoring SDK.
+
+#### Returns
+
+[`firebase.performance`](https://firebase.google.com/docs/reference/js/firebase.performance.html)
+
+### `useRemoteConfig`
+
+_Throws a Promise by default_
+
+Returns `firebase.remoteConfig` When called from a component nested inside a `FirebaseAppProvider`. If `firebase.remoteConfig` doesn't exist, it lazy loads the Remote Config SDK.
+
+#### Returns
+
+[`firebase.remoteConfig`](https://firebase.google.com/docs/reference/js/firebase.remoteConfig.html)
 
 ### `useStorage`
 
@@ -85,7 +144,7 @@ Returns `firebase.storage` When called from a component nested inside a `Firebas
 
 #### Returns
 
-`([`firebase.storage`](https://firebase.google.com/docs/reference/js/firebase.storage.html))`
+[`firebase.storage`](https://firebase.google.com/docs/reference/js/firebase.storage.html)
 
 ### `useUser`
 
