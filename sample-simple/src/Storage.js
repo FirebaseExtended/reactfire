@@ -1,4 +1,3 @@
-import '@firebase/performance';
 import React, { useState } from 'react';
 import {
   SuspenseWithPerf,

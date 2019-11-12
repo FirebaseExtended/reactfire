@@ -1,4 +1,3 @@
-import '@firebase/performance';
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { SuspenseWithPerf, useUser, useAuth } from 'reactfire';
