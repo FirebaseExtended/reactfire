@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Observable, of, from } from 'rxjs';
-import { startWith, first, mergeMap } from 'rxjs/operators';
-import { ObservablePromiseCache, ActiveRequest } from './requestCache';
+import { Observable } from 'rxjs';
+import { first, startWith } from 'rxjs/operators';
+import { ActiveRequest, ObservablePromiseCache } from './requestCache';
 
 const requestCache = new ObservablePromiseCache();
 
