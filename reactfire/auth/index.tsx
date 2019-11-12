@@ -1,27 +1,23 @@
 import { auth, User } from 'firebase/app';
 import * as React from 'react';
 import { user } from 'rxfire/auth';
-import { useObservable, useFirebaseApp, ReactFireOptions } from '..';
+import {
+  preloadAuth,
+  preloadObservable,
+  ReactFireOptions,
+  useAuth,
+  useObservable
+} from '..';
 import { from } from 'rxjs';
 
-function getAuthFromContext(): auth.Auth {
-  const firebaseApp = useFirebaseApp();
-
-  if (!firebaseApp) {
-    throw new Error(
-      'Firebase not found in context. Either pass it directly to a reactfire hook, or wrap your component in a FirebaseAppProvider'
+export function preloadUser(firebaseApp: firebase.app.App) {
+  return preloadAuth(firebaseApp).then(auth => {
+    const result = preloadObservable(
+      user(auth() as firebase.auth.Auth),
+      'auth: user'
     );
-  }
-
-  const authFunc = firebaseApp.auth;
-
-  if (!authFunc || !authFunc()) {
-    throw new Error(
-      "No auth object off of Firebase. Did you forget to import 'firebase/auth' in a component?"
-    );
-  }
-
-  return authFunc();
+    return result.request.promise;
+  });
 }
 
 /**
@@ -34,7 +30,7 @@ export function useUser<T = unknown>(
   auth?: auth.Auth,
   options?: ReactFireOptions<T>
 ): User | T {
-  auth = auth || getAuthFromContext();
+  auth = auth || useAuth()();
 
   let currentUser = undefined;
 

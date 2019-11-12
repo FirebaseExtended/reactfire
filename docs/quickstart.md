@@ -77,16 +77,11 @@ npm install firebase reactfire@canary
 
 ## 5. Modify `src/App.js`
 
-1. Import `firebase/firestore` as well as the `useFirestoreDoc` and `useFirebaseApp` hooks
+1. Import the `useFirestoreDocData` and `useFirestore` hooks
 
    ```js
    //...
-   import 'firebase/firestore';
-   import {
-     useFirestoreDoc,
-     useFirebaseApp,
-     SuspenseWithPerf
-   } from 'reactfire';
+   import { useFirestoreDocData, useFirestore } from 'reactfire';
    //...
    ```
 
@@ -95,18 +90,19 @@ npm install firebase reactfire@canary
    ```jsx
    //...
    function Burrito() {
-     // create a ref
-     const firebaseApp = useFirebaseApp();
-     const burritoRef = firebaseApp
-       .firestore()
+     // lazy load the Firestore SDK
+     const firestore = useFirestore();
+
+     // create a document reference
+     const burritoRef = firestore()
        .collection('tryreactfire')
        .doc('burrito');
 
      // subscribe to the doc. just one line!
-     const burritoDoc = useFirestoreDoc(burritoRef);
+     const burrito = useFirestoreDocData(burritoRef);
 
      // get the value from the doc
-     const isYummy = burritoDoc.data().yummy;
+     const isYummy = burrito.yummy;
 
      return <p>The burrito is {isYummy ? 'good' : 'bad'}</p>;
    }
@@ -115,7 +111,7 @@ npm install firebase reactfire@canary
 
 1. Render your component inside of a `Suspense` tag
 
-> We need to do this because `useFirestoreDoc` throws a Promise while it is waiting for a response from Firestore. Suspense will catch the Promise and render `fallback` until the Promise is resolved.
+> We need to do this because `useFirestoreDocData` throws a Promise while it is waiting for a response from Firestore. Suspense will catch the Promise and render `fallback` until the Promise is resolved.
 
 Replace the `App` function with the following:
 

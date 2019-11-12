@@ -7,6 +7,10 @@
   - [Provide an initial value](#provide-an-initial-value)
 - [Access the current user](#access-the-current-user)
   - [Decide what to render based on a user's auth state](#decide-what-to-render-based-on-a-users-auth-state)
+- [Lazy Load the Firebase SDKs](#lazy-load-the-Firebase-SDKs)
+- [Preloading](#preloading)
+  - [Preload an SDK](#preload-an-sdk)
+  - [Preload Data](#preload-data)
 
 ## Access your `firebase` object from any component
 
@@ -27,9 +31,8 @@ render(
 // ** MYCOMPONENT.JS **
 
 function MyComponent(props) {
-  const firebaseApp = useFirebaseApp();
-  const documentReference = firebaseApp
-    .firestore()
+  const firestore = useFirestore();
+  const documentReference = firestore()
     .collection('burritos')
     .doc('vegetarian');
 
@@ -47,9 +50,8 @@ Say we have a component called `Burrito` that uses `useFirestoreDoc`:
 
 ```jsx
 function Burrito() {
-  const firebaseApp = useFirebaseApp();
-  const burritoRef = firebaseApp
-    .firestore()
+  const firebaseApp = useFirestore();
+  const burritoRef = firestore()
     .collection('tryreactfire')
     .doc('burrito');
 
@@ -108,11 +110,9 @@ function Burrito() {
   // subscribe to the doc. just one line!
   // returns the `startWithValue`,
   // and then streams live updates
-  const burritoDoc = useFirestoreDoc(burritoRef, {
+  const burritoDoc = useFirestoreDocData(burritoRef, {
     startWithValue: {
-      data: () => {
-        yummy: true;
-      }
+      yummy: true
     }
   });
 
@@ -143,6 +143,8 @@ function HomePage(props) {
 }
 ```
 
+Note: `useUser` will also automatically lazily import the `firebase/auth` SDK if it has not been imported already.
+
 ### Decide what to render based on a user's auth state
 
 The `AuthCheck` component makes it easy to hide/show UI elements based on a user's auth state. It will render its children if a user is signed in, but if they are not signed in, it renders its `fallback` prop:
@@ -154,3 +156,37 @@ render(
   </AuthCheck>
 );
 ```
+
+## Lazy Load the Firebase SDKs
+
+Including the Firebase SDKs in your main JS bundle (by using `import 'firebase/firestore'`, for example) will increase your bundle size. To get around this, you can lazy load the Firebase SDK with ReactFire. As long as a component has a parent that is a `FirebaseAppProvider`, you can use an SDK hook (`useFirestore`, `useDatabase`, `useAuth`, `useStorage`) like so:
+
+`MyComponent.jsx`
+
+```jsx
+import React from 'react';
+// WE ARE NOT IMPORTING THE FIRESTORE SDK UP HERE
+import { useFirestoreDocData, useFirestore } from 'reactfire';
+
+export function MyComponent(props) {
+  // automatically lazy loads the Cloud Firestore SDK
+  const firestore = useFirestore();
+
+  const ref = firestore().doc('count/counter');
+  const data = useFirestoreDocData(ref);
+
+  return <h1>{data.value}</h1>;
+}
+```
+
+## Preloading
+
+The [render-as-you-fetch pattern](https://reactjs.org/docs/concurrent-mode-suspense.html#approach-3-render-as-you-fetch-using-suspense) encourages kicking off requests as early as possible instead of waiting until a component renders. ReactFire supports this behavior
+
+### Preload an SDK
+
+Just as the SDK hooks like `useFirestore` can automatically fetch an SDK, you can call `preloadFirestore` (or `preloadAuth`, etc) to start loading an SDK without suspending.
+
+### Preload Data
+
+Many ReactFire hooks have corresponding preload functions. For example, you can call `preloadFirestoreDocData` to preload data if a component later calls `useFirestoreDocData`.

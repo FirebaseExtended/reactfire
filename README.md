@@ -5,13 +5,13 @@ to interact with Firebase.
 
 > If you're looking for docs for the _deprecated_ ReactFire v1 (the one that uses mixins), click [here](https://github.com/FirebaseExtended/reactfire/tree/v1.0.0)
 
+**Status: Alpha**. ReactFire is meant for React Concurrent Mode, which is only available in [experimental React builds](https://reactjs.org/docs/concurrent-mode-adoption.html#installation).
+
 ## What is ReactFire?
 
 - **Easy realtime updates for your function components** - Reactfire's hooks, like `useFirestoreCollection` and `useUser`, let you easily subscribe to events, and automatically unsubscribe when your component unmounts.
 - **Loading states handled by `<Suspense>`** - Reactfire's hooks throw promises that Suspense can catch. No more `isLoaded ?...` - let React [handle it for you](https://reactjs.org/blog/2018/11/27/react-16-roadmap.html#react-166-shipped-the-one-with-suspense-for-code-splitting).
 - **Dead-simple Real User Monitoring (RUM)** - Easily enable Firebase Performance Monitoring's [automatic traces](https://firebase.google.com/docs/perf-mon/automatic-web), and instrument your Suspenseful loads with Reactfire's `<SuspenseWithPerf>` component
-
-Status: Alpha
 
 ## Install
 
@@ -34,33 +34,29 @@ import { render } from 'react-dom';
 import './style.css';
 import {
   FirebaseAppProvider,
-  useFirestoreDoc,
-  useFirebaseApp,
+  useFirestoreDocData,
   SuspenseWithPerf
 } from 'reactfire';
 
 import 'firebase/performance';
-import 'firebase/firestore';
 
 const firebaseConfig = {
   /* add your config object from the Firebase console */
 };
 
 function Burrito() {
-  // create a ref
-  const firebaseApp = useFirebaseApp();
-  const burritoRef = firebaseApp
-    .firestore()
+  // lazy load the Firestore SDK and create a ref
+  const burritoRef = useFirestore()
     .collection('tryreactfire')
     .doc('burrito');
 
   // subscribe to the doc. just one line!
   // throws a Promise for Suspense to catch,
   // and then streams live updates
-  const burritoDoc = useFirestoreDoc(burritoRef);
+  const burrito = useFirestoreDocData(burritoRef);
 
   // get the value from the doc
-  const isYummy = burritoDoc.data().yummy;
+  const isYummy = burrito.yummy;
 
   return <p>The burrito is {isYummy ? 'good' : 'bad'}!</p>;
 }

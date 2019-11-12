@@ -1,22 +1,41 @@
 import * as React from 'react';
 import { Observable } from 'rxjs';
-import { startWith } from 'rxjs/operators';
-import { ObservablePromiseCache } from './requestCache';
+import { first, startWith } from 'rxjs/operators';
+import { ActiveRequest, ObservablePromiseCache } from './requestCache';
 
 const requestCache = new ObservablePromiseCache();
 
-function suspendUntilFirst(observable$, observableId) {
-  let request = requestCache.getRequest(observable$, observableId);
+export function preloadRequest(
+  getPromise,
+  requestId: string
+): { requestId: string; request: ActiveRequest } {
+  const request = requestCache.createDedupedRequest(getPromise, requestId);
 
-  if (request.isComplete === false) {
-    throw request.promise
-      .then(result => {
-        request.setValue(result);
-      })
-      .catch(err => {
-        request.isComplete = true;
-        request.setError(err);
-      });
+  return {
+    requestId: requestId,
+    request
+  };
+}
+
+// Starts listening to an Observable.
+// Call this once you know you're going to render a
+// child that will consume the observable
+export function preloadObservable(
+  observable$: Observable<any>,
+  observableId: string
+): { requestId: string; request: ActiveRequest } {
+  return preloadRequest(
+    () => observable$.pipe(first()).toPromise(),
+    observableId
+  );
+}
+
+export function usePreloadedRequest(preloadResult: { requestId: string }) {
+  const request = requestCache.getRequest(preloadResult.requestId);
+
+  // Suspend if we're not ready yet
+  if (!request.isComplete) {
+    throw request.promise;
   }
 
   if (request.error) {
@@ -35,16 +54,12 @@ export function useObservable(
     throw new Error('cannot call useObservable without an observableId');
   }
 
-  const request = requestCache.getRequest(observable$, observableId);
+  const result = preloadObservable(observable$, observableId);
 
-  let initialValue;
-
-  if (request.value !== undefined) {
-    initialValue = request.value;
-  } else if (startWithValue !== undefined) {
-    initialValue = startWithValue;
-  } else {
-    initialValue = suspendUntilFirst(observable$, observableId);
+  let initialValue = startWithValue;
+  if (initialValue === undefined) {
+    // this will Suspend until the Promise resolves
+    initialValue = usePreloadedRequest(result);
   }
 
   const [latestValue, setValue] = React.useState(initialValue);
@@ -53,7 +68,7 @@ export function useObservable(
     const subscription = observable$.pipe(startWith(initialValue)).subscribe(
       newVal => {
         // update the value in requestCache
-        request.setValue(newVal);
+        result.request.setValue(newVal);
 
         // update state
         setValue(newVal);

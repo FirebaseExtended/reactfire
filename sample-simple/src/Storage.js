@@ -1,13 +1,10 @@
-import 'firebase/auth';
-import 'firebase/storage';
-import '@firebase/performance';
 import React, { useState } from 'react';
 import {
   SuspenseWithPerf,
   useStorageTask,
-  useFirebaseApp,
   AuthCheck,
-  StorageImage
+  StorageImage,
+  useStorage
 } from 'reactfire';
 
 const UploadProgress = ({ uploadTask, storageRef }) => {
@@ -25,13 +22,12 @@ const UploadProgress = ({ uploadTask, storageRef }) => {
 const ImageUploadButton = props => {
   const [uploadTask, setUploadTask] = useState(null);
   const [ref, setRef] = useState(null);
-  const firebaseApp = useFirebaseApp();
+  const storage = useStorage();
   const onChange = event => {
     const fileList = event.target.files;
     const fileToUpload = fileList[0];
     const fileName = fileToUpload.name;
-    const newRef = firebaseApp
-      .storage()
+    const newRef = storage()
       .ref('images')
       .child(fileName);
     setRef(newRef);

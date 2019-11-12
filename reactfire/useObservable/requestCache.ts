@@ -1,26 +1,34 @@
 import { first, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-class ActiveRequest {
+export class ActiveRequest {
   promise: Promise<any>;
   isComplete: boolean;
   value: any;
   error: Error;
 
   constructor(promise) {
-    this.promise = promise;
     this.isComplete = false;
+    this.promise = promise
+      .then(result => {
+        this.setValue(result);
+        return result;
+      })
+      .catch(err => {
+        this.isComplete = true;
+        this.setError(err);
+      });
   }
 
-  setValue(value) {
+  setValue = value => {
     this.value = value;
     this.isComplete = true;
-  }
+  };
 
-  setError(err) {
+  setError = err => {
     this.error = err;
     this.isComplete = true;
-  }
+  };
 }
 
 /*
@@ -37,18 +45,36 @@ export class ObservablePromiseCache {
     this.activeRequests = new Map();
   }
 
-  getRequest(observable$: Observable<any>, observableId) {
-    let request = this.activeRequests.get(observableId);
+  getRequest(requestId) {
+    const request = this.activeRequests.get(requestId);
+    if (request === undefined) {
+      throw new Error(`No request with ID "${requestId}" exists`);
+    }
+    return request;
+  }
 
-    if (!request) {
-      request = new ActiveRequest(observable$.pipe(first()).toPromise());
-      this.activeRequests.set(observableId, request);
+  createRequest(promise: Promise<any>, requestId): ActiveRequest {
+    if (this.activeRequests.get(requestId) !== undefined) {
+      throw new Error(`request "${requestId}" is already in use.`);
+    }
+
+    const request = new ActiveRequest(promise);
+    this.activeRequests.set(requestId, request);
+
+    return request;
+  }
+
+  createDedupedRequest(getPromise: () => Promise<any>, requestId) {
+    let request = this.activeRequests.get(requestId);
+
+    if (request === undefined) {
+      request = this.createRequest(getPromise(), requestId);
     }
 
     return request;
   }
 
-  removeRequest(observableId) {
-    this.activeRequests.delete(observableId);
+  removeRequest(requestId: string) {
+    this.activeRequests.delete(requestId);
   }
 }
