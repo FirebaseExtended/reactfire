@@ -3,8 +3,7 @@
   "workspaces": [
     "reactfire",
     "reactfire/pub/reactfire",
-    "sample-simple",
-    "sample-complex"
+    "sample"
   ],
   "devDependencies": {
     "husky": "^3.0.8",
