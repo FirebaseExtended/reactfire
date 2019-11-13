@@ -87,10 +87,10 @@ export function useDatabaseList<T = { [key: string]: unknown }>(
   );
 }
 
-export function useDatabaseListData<T>(
+export function useDatabaseListData<T = { [key: string]: unknown }>(
   ref: database.Reference | database.Query,
-  options?: ReactFireOptions<T>
-): T {
+  options?: ReactFireOptions<T[]>
+): T[] {
   return useObservable(
     listVal(ref, checkIdField(options)),
     `RTDB ListData: ${ref.toString()}`,
