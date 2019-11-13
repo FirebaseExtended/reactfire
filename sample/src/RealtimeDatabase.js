@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import {
   AuthCheck,
   SuspenseWithPerf,
-  useDatabaseList,
-  useDatabaseObject,
-  useDatabase
+  useDatabaseObjectData,
+  useDatabase,
+  useDatabaseListData
 } from 'reactfire';
 
 const Counter = props => {
@@ -16,13 +16,12 @@ const Counter = props => {
     });
   };
 
-  const { snapshot } = useDatabaseObject(ref);
-  const counterValue = snapshot.val();
+  const count = useDatabaseObjectData(ref);
 
   return (
     <>
       <button onClick={() => increment(-1)}>-</button>
-      <span> {counterValue} </span>
+      <span> {count} </span>
       <button onClick={() => increment(1)}>+</button>
     </>
   );
@@ -58,7 +57,8 @@ const AnimalEntry = ({ saveAnimal }) => {
 const List = props => {
   const database = useDatabase();
   const ref = database().ref('animals');
-  const changes = useDatabaseList(ref);
+  const animals = useDatabaseListData(ref, { idField: 'id' });
+
   const addNewAnimal = commonName => {
     const newAnimalRef = ref.push();
     return newAnimalRef.set({
@@ -72,10 +72,9 @@ const List = props => {
     <>
       <AnimalEntry saveAnimal={addNewAnimal} />
       <ul>
-        {changes.map(({ snapshot }) => (
-          <li key={snapshot.key}>
-            {snapshot.val().commonName}{' '}
-            <button onClick={() => removeAnimal(snapshot.key)}>X</button>
+        {animals.map(({ commonName, id }) => (
+          <li key={id}>
+            {commonName} <button onClick={() => removeAnimal(id)}>X</button>
           </li>
         ))}
       </ul>
