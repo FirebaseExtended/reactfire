@@ -5,7 +5,13 @@ import {
   docData,
   fromCollectionRef
 } from 'rxfire/firestore';
-import { preloadFirestore, ReactFireOptions, useObservable } from '..';
+import {
+  preloadFirestore,
+  ReactFireOptions,
+  useObservable,
+  checkIdField,
+  checkStartWithValue
+} from '..';
 import { preloadObservable } from '../useObservable';
 
 // starts a request for a firestore doc.
@@ -111,16 +117,4 @@ export function useFirestoreCollectionData<T = { [key: string]: unknown }>(
     queryId,
     checkStartWithValue(options)
   );
-}
-
-function checkOptions(options: ReactFireOptions, field: string) {
-  return options ? options[field] : undefined;
-}
-
-function checkStartWithValue(options: ReactFireOptions) {
-  return checkOptions(options, 'startWithValue');
-}
-
-function checkIdField(options: ReactFireOptions) {
-  return checkOptions(options, 'idField');
 }
