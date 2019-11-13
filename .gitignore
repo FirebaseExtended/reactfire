@@ -9,8 +9,6 @@ node_modules/
 
 
 reactfire/docs/reactfire-metadata.json
-sample-complex/.cache/**
-sample-complex/src/firebase-key.json
 reactfire/firestore-debug.log
 reactfire/pub/**
 pub

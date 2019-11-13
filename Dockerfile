@@ -19,8 +19,7 @@ ENV PYTHON /usr/bin/python2.7
 COPY package.json /
 COPY yarn.lock /
 COPY reactfire/package.json reactfire/
-COPY sample-complex/package.json sample-complex/
-COPY sample-simple/package.json sample-simple/
+COPY sample/package.json sample/
 RUN yarn install --frozen-lockfile
 
 COPY . /
