@@ -1,6 +1,14 @@
 import { database } from 'firebase/app';
-import { list, object, QueryChange } from 'rxfire/database';
-import { ReactFireOptions, useObservable } from '..';
+import { list, object, QueryChange, listVal } from 'rxfire/database';
+import {
+  ReactFireOptions,
+  useObservable,
+  checkIdField,
+  checkStartWithValue
+} from '..';
+
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 /**
  * Subscribe to a Realtime Database object
@@ -14,8 +22,42 @@ export function useDatabaseObject<T = unknown>(
 ): QueryChange | T {
   return useObservable(
     object(ref),
-    `RTDB: ${ref.toString()}`,
+    `RTDB Doc: ${ref.toString()}`,
     options ? options.startWithValue : undefined
+  );
+}
+
+// ============================================================================
+// TODO: switch to rxfire's objectVal once this PR is merged:
+// https://github.com/firebase/firebase-js-sdk/pull/2352
+
+function objectVal<T>(query: database.Query, keyField?: string): Observable<T> {
+  return object(query).pipe(map(change => changeToData(change, keyField) as T));
+}
+
+function changeToData(change: QueryChange, keyField?: string): {} {
+  const val = change.snapshot.val();
+
+  // don't worry about setting IDs if the value is a primitive type
+  if (typeof val !== 'object') {
+    return val;
+  }
+
+  return {
+    ...change.snapshot.val(),
+    ...(keyField ? { [keyField]: change.snapshot.key } : null)
+  };
+}
+// ============================================================================
+
+export function useDatabaseObjectData<T>(
+  ref: database.Reference,
+  options?: ReactFireOptions<T>
+): T {
+  return useObservable(
+    objectVal(ref, checkIdField(options)),
+    `RTDB DocData: ${ref.toString()}`,
+    checkStartWithValue(options)
   );
 }
 
@@ -36,11 +78,22 @@ export function useDatabaseList<T = { [key: string]: unknown }>(
   ref: database.Reference | database.Query,
   options?: ReactFireOptions<T[]>
 ): QueryChange[] | T[] {
-  const hash = `RTDB: ${ref.toString()}|${(ref as _QueryWithId).queryIdentifier()}`;
+  const hash = `RTDB List: ${ref.toString()}|${(ref as _QueryWithId).queryIdentifier()}`;
 
   return useObservable(
     list(ref),
     hash,
     options ? options.startWithValue : undefined
+  );
+}
+
+export function useDatabaseListData<T>(
+  ref: database.Reference | database.Query,
+  options?: ReactFireOptions<T>
+): T {
+  return useObservable(
+    listVal(ref, checkIdField(options)),
+    `RTDB ListData: ${ref.toString()}`,
+    checkStartWithValue(options)
   );
 }
