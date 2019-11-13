@@ -20,4 +20,3 @@ reactfire/**/*.d.ts
 reactfire/pub/*
 reactfire/docs/reactfire-metadata.json
 .cache
-sample-complex/src/firebase-key.json
