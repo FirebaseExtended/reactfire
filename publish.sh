@@ -17,7 +17,7 @@ if test $NPM_TOKEN; then
     if test $TAG_NAME; then
         npm version $(echo $TAG_NAME | sed 's/^v\(.*\)$/\1/')
 
-        if [[ $TAG_NAME =~ $LATEST_TEST]]; then
+        if [[ $TAG_NAME =~ $LATEST_TEST ]]; then
             NPM_TAG=latest
         else
             NPM_TAG=next
@@ -26,7 +26,7 @@ if test $NPM_TOKEN; then
         npm publish . --tag $NPM_TAG
         ret=$?
     else
-        npm version $(npm version | sed -n "s/^  reactfire: '\(.*\)',/\1/p")-canary.$SHORT_SHA
+        npm version $(npm version | sed -n "s/. reactfire: '\(.*\)',/\1/p")-canary.$SHORT_SHA
         npm publish . --tag canary
         ret=$?
     fi
