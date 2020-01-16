@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/jest": "^24.0.18",
+    "@types/jest": "^24.9.0",
     "firebase": "^7.0.0",
-    "react": "0.0.0-experimental-f6b8d31a7",
-    "react-dom": "0.0.0-experimental-f6b8d31a7",
-    "react-firebaseui": "^3.1.2",
-    "react-scripts": "3.0.1",
+    "react": "0.0.0-experimental-f42431abe",
+    "react-dom": "0.0.0-experimental-f42431abe",
+    "react-firebaseui": "^4.0.0",
+    "react-scripts": "3.3.0",
     "reactfire": "2.0.0"
   },
   "scripts": {
