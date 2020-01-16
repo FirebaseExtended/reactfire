@@ -3,6 +3,18 @@ export interface ReactFireOptions<T = unknown> {
   idField?: string;
 }
 
+export function checkOptions(options: ReactFireOptions, field: string) {
+  return options ? options[field] : undefined;
+}
+
+export function checkStartWithValue(options: ReactFireOptions) {
+  return checkOptions(options, 'startWithValue');
+}
+
+export function checkIdField(options: ReactFireOptions) {
+  return checkOptions(options, 'idField');
+}
+
 export * from './auth';
 export * from './database';
 export * from './firebaseApp';

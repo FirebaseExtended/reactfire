@@ -22,10 +22,14 @@
   - Database
     - Cloud Firestore
       - [`useFirestoreDoc`](#useFirestoreDoc)
+      - [`useFirestoreDocData`](#useFirestoreDocData)
       - [`useFirestoreCollection`](#useFirestoreCollection)
+      - [`useFirestoreCollectionData`](#useFirestoreCollectionData)
     - Realtime Database
       - [`useDatabaseObject`](#useDatabaseObject)
+      - [`useDatabaseObjectData`](#useDatabaseObjectData)
       - [`useDatabaseList`](#useDatabaseList)
+      - [`useDatabaseListData`](#useDatabaseListData)
   - Cloud Storage
     - [`useStorageTask`](#useStorageTask)
     - [`useStorageDownloadURL`](#useStorageDownloadURL)
@@ -187,6 +191,23 @@ _Throws a Promise by default_
 
 [`DocumentSnapshot`](https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentSnapshot)
 
+### `useFirestoreDocData`
+
+Listen to a Firestore Document.
+
+_Throws a Promise by default_
+
+#### Parameters
+
+| Parameter   | Type                                                                                                      | Description                                                                  |
+| ----------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| ref         | [`DocumentReference`](https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference) | A reference to the document you want to listen to                            |
+| options _?_ | ReactFireOptions                                                                                          | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+
+#### Returns
+
+`T`
+
 ### `useFirestoreCollection`
 
 Listen to a Firestore Collection.
@@ -203,6 +224,23 @@ _Throws a Promise by default_
 #### Returns
 
 [`QuerySnapshot`](https://firebase.google.com/docs/reference/js/firebase.firestore.QuerySnapshot)
+
+### `useFirestoreCollectionData`
+
+Listen to a Firestore Collection.
+
+_Throws a Promise by default_
+
+#### Parameters
+
+| Parameter   | Type                                                                              | Description                                                                  |
+| ----------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| ref         | [`Query`](https://firebase.google.com/docs/reference/js/firebase.firestore.Query) | A query for the collection you want to listen to                             |
+| options _?_ | ReactFireOptions                                                                  | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+
+#### Returns
+
+`T[]`
 
 ### `useDatabaseObject`
 
@@ -221,6 +259,23 @@ _Throws a Promise by default_
 
 [`QueryChange`](https://github.com/firebase/firebase-js-sdk/blob/6b53e0058483c9002d2fe56119f86fc9fb96b56c/packages/rxfire/database/interfaces.ts#L28)
 
+### `useDatabaseObjectData`
+
+Listen to a Realtime Database Object.
+
+_Throws a Promise by default_
+
+#### Parameters
+
+| Parameter   | Type                                                                                     | Description                                                                  |
+| ----------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| ref         | [`Reference`](https://firebase.google.com/docs/reference/js/firebase.database.Reference) | A reference to the object you want to listen to                              |
+| options _?_ | ReactFireOptions                                                                         | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+
+#### Returns
+
+`T`
+
 ### `useDatabaseList`
 
 Listen to a Realtime Database list.
@@ -237,6 +292,23 @@ _Throws a Promise by default_
 #### Returns
 
 [`QueryChange[]`](https://github.com/firebase/firebase-js-sdk/blob/6b53e0058483c9002d2fe56119f86fc9fb96b56c/packages/rxfire/database/interfaces.ts#L28)
+
+### `useDatabaseListData`
+
+Listen to a Realtime Database list.
+
+_Throws a Promise by default_
+
+#### Parameters
+
+| Parameter   | Type                                                                                     | Description                                                                  |
+| ----------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| ref         | [`Reference`](https://firebase.google.com/docs/reference/js/firebase.database.Reference) | A reference to the list you want to listen to                                |
+| options _?_ | ReactFireOptions                                                                         | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+
+#### Returns
+
+`T[]`
 
 ### `useStorageTask`
 
