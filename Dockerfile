@@ -10,7 +10,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -qq curl default-jre < /dev/n
 
 RUN curl --silent -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash
 COPY .nvmrc /
-RUN nvm install .
+RUN nvm install
 RUN npm install --unsafe-perm -g yarn firebase-tools
 RUN firebase setup:emulators:firestore
 
