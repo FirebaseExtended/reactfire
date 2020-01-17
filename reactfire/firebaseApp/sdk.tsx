@@ -23,22 +23,32 @@ function fetchSDK(sdk: SDK, firebaseApp: firebase.app.App) {
     sdkPromise = Promise.resolve(firebaseApp[sdk]);
   } else {
     switch (sdk) {
-      case SDK.FIRESTORE:
+      case SDK.ANALYTICS:
         sdkPromise = import(
-          /* webpackChunkName: "firestore" */ 'firebase/firestore'
+          /* webpackChunkName: "analytics" */ 'firebase/analytics'
         );
+        break;
+      case SDK.AUTH:
+        sdkPromise = import(/* webpackChunkName: "auth" */ 'firebase/auth');
         break;
       case SDK.DATABASE:
         sdkPromise = import(
           /* webpackChunkName: "database" */ 'firebase/database'
         );
         break;
-      case SDK.AUTH:
-        sdkPromise = import(/* webpackChunkName: "auth" */ 'firebase/auth');
-        break;
-      case SDK.STORAGE:
+      case SDK.FIRESTORE:
         sdkPromise = import(
-          /* webpackChunkName: "storage" */ 'firebase/storage'
+          /* webpackChunkName: "firestore" */ 'firebase/firestore'
+        );
+        break;
+      case SDK.FUNCTIONS:
+        sdkPromise = import(
+          /* webpackChunkName: "functions" */ 'firebase/functions'
+        );
+        break;
+      case SDK.MESSAGING:
+        sdkPromise = import(
+          /* webpackChunkName: "messaging" */ 'firebase/messaging'
         );
         break;
       case SDK.PERFORMANCE:
@@ -48,7 +58,12 @@ function fetchSDK(sdk: SDK, firebaseApp: firebase.app.App) {
         break;
       case SDK.REMOTE_CONFIG:
         sdkPromise = import(
-          /* webpackChunkName: "config" */ 'firebase/remote-config'
+          /* webpackChunkName: "remoteConfig" */ 'firebase/remote-config'
+        );
+        break;
+      case SDK.STORAGE:
+        sdkPromise = import(
+          /* webpackChunkName: "storage" */ 'firebase/storage'
         );
         break;
     }

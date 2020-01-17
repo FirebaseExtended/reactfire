@@ -1,0 +1,1 @@
+import { useRemoteConfigValue } from 'reactfire';
