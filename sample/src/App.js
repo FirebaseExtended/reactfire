@@ -10,7 +10,8 @@ import {
   preloadAuth,
   preloadFirestore,
   preloadDatabase,
-  preloadStorage
+  preloadStorage,
+  preloadRemoteConfig
 } from 'reactfire';
 
 const Fire = () => (
@@ -39,7 +40,8 @@ const preloadSDKs = firebaseApp => {
     preloadFirestore(firebaseApp),
     preloadDatabase(firebaseApp),
     preloadStorage(firebaseApp),
-    preloadAuth(firebaseApp)
+    preloadAuth(firebaseApp),
+    preloadRemoteConfig(firebaseApp)
   ]);
 };
 

@@ -1,6 +1,6 @@
 import { useFirebaseApp, preloadRequest, usePreloadedRequest } from '..';
-import { firestore } from 'firebase/app';
-enum SDK {
+
+const enum SDK {
   ANALYTICS = 'analytics',
   AUTH = 'auth',
   DATABASE = 'database',
@@ -44,6 +44,11 @@ function fetchSDK(sdk: SDK, firebaseApp: firebase.app.App) {
       case SDK.PERFORMANCE:
         sdkPromise = import(
           /* webpackChunkName: "performance" */ 'firebase/performance'
+        );
+        break;
+      case SDK.REMOTE_CONFIG:
+        sdkPromise = import(
+          /* webpackChunkName: "config" */ 'firebase/remote-config'
         );
         break;
     }
