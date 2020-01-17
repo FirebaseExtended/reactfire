@@ -3,6 +3,7 @@ import AuthButton from './Auth';
 import FirestoreCounter from './Firestore';
 import Storage from './Storage';
 import RealtimeDatabase from './RealtimeDatabase';
+import RemoteConfig from './RemoteConfig';
 import {
   preloadFirestoreDoc,
   useFirebaseApp,
@@ -86,6 +87,10 @@ const App = () => {
 
         <Card title="Realtime Database">
           <RealtimeDatabase />
+        </Card>
+
+        <Card title="Remote Config">
+          <RemoteConfig />
         </Card>
       </div>
     </>
