@@ -45,11 +45,11 @@ export function usePreloadedRequest(preloadResult: { requestId: string }) {
   return request.value;
 }
 
-export function useObservable(
-  observable$: Observable<any>,
+export function useObservable<T>(
+  observable$: Observable<T | any>,
   observableId: string,
-  startWithValue?: any
-) {
+  startWithValue?: T | any
+): T {
   if (!observableId) {
     throw new Error('cannot call useObservable without an observableId');
   }
