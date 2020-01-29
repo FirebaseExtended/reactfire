@@ -17,9 +17,7 @@ const SuspenseWrapper = props => {
       traceId={'remote-config-message'}
       fallback={<p>loading remote config</p>}
     >
-      <RemoteConfigProvider fetchInterval={10000} activate={true}>
-        <RemoteConfig rcKey="message" />
-      </RemoteConfigProvider>
+      <RemoteConfig rcKey="message" />
     </SuspenseWithPerf>
   );
 };

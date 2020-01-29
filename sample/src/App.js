@@ -38,11 +38,19 @@ const Card = ({ title, children }) => {
 // fetching them now
 const preloadSDKs = firebaseApp => {
   return Promise.all([
-    preloadFirestore(firebaseApp),
+    preloadFirestore(firebaseApp, firestore => {
+      return firestore().enablePersistence();
+    }),
     preloadDatabase(firebaseApp),
     preloadStorage(firebaseApp),
     preloadAuth(firebaseApp),
-    preloadRemoteConfig(firebaseApp)
+    preloadRemoteConfig(firebaseApp, remoteConfig => {
+      remoteConfig().settings = {
+        minimumFetchIntervalMillis: 10000,
+        fetchTimeoutMillis: 10000
+      };
+      return remoteConfig().fetchAndActivate();
+    })
   ]);
 };
 
