@@ -46,7 +46,8 @@ export function getBoolean(remoteConfig: RemoteConfig, key: string) {
   return parameter$<boolean>({ remoteConfig, key, getter });
 }
 
-export function getAll(remoteConfig: RemoteConfig, key: string) {
+export function getAll(remoteConfig: RemoteConfig) {
   const getter = remoteConfig.getAll;
-  return parameter$<AllParameters>({ remoteConfig, key, getter });
+  // No key is needed for getAll()
+  return parameter$<AllParameters>({ remoteConfig, key: null, getter });
 }
