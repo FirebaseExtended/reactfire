@@ -1,6 +1,6 @@
 import { useFirebaseApp, preloadRequest, usePreloadedRequest } from '..';
 
-const enum SDK {
+enum SDK {
   ANALYTICS = 'analytics',
   AUTH = 'auth',
   DATABASE = 'database',

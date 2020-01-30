@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  useRemoteConfigValue,
-  SuspenseWithPerf,
-  RemoteConfigProvider
-} from 'reactfire';
+import { useRemoteConfigValue, SuspenseWithPerf } from 'reactfire';
 
 const RemoteConfig = props => {
   const parameter = useRemoteConfigValue(props.rcKey);
@@ -17,9 +13,7 @@ const SuspenseWrapper = props => {
       traceId={'remote-config-message'}
       fallback={<p>loading remote config</p>}
     >
-      <RemoteConfigProvider fetchInterval={10000} activate={true}>
-        <RemoteConfig rcKey="message" />
-      </RemoteConfigProvider>
+      <RemoteConfig rcKey="message" />
     </SuspenseWithPerf>
   );
 };
