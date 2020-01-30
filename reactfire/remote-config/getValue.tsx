@@ -21,7 +21,7 @@ function parameter$<T>({
 }: ParameterSettings<T>): Observable<T> {
   return new Observable(subscriber => {
     remoteConfig.ensureInitialized().then(() => {
-      subscriber.next(getter(key));
+      subscriber.next(getter.bind(remoteConfig)(key));
     });
   });
 }

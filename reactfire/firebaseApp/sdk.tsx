@@ -1,6 +1,21 @@
 import { useFirebaseApp, preloadRequest, usePreloadedRequest } from '..';
 
-const enum SDK {
+type RemoteConfig = import('firebase/app').remoteConfig.RemoteConfig;
+type Storage = import('firebase/app').storage.Storage;
+type Firestore = import('firebase/app').firestore.Firestore;
+
+type FirebaseSDK =
+  | (() => firebase.analytics.Analytics)
+  | (() => firebase.auth.Auth)
+  | ((url?: string) => firebase.database.Database)
+  | (() => firebase.firestore.Firestore)
+  | ((region?: string) => firebase.functions.Functions)
+  | (() => firebase.messaging.Messaging)
+  | (() => firebase.performance.Performance)
+  | (() => firebase.remoteConfig.RemoteConfig)
+  | ((url?: string) => firebase.storage.Storage);
+
+enum SDK {
   ANALYTICS = 'analytics',
   AUTH = 'auth',
   DATABASE = 'database',
@@ -12,14 +27,20 @@ const enum SDK {
   STORAGE = 'storage'
 }
 
-function fetchSDK(sdk: SDK, firebaseApp: firebase.app.App) {
+function fetchSDK(
+  sdk: SDK,
+  firebaseApp: firebase.app.App,
+  settingsCallback: (sdk: FirebaseSDK) => Promise<any> = () => Promise.resolve()
+) {
   if (!firebaseApp) {
     throw new Error('Firebase app was not provided');
   }
 
-  let sdkPromise;
+  let sdkPromise: Promise<FirebaseSDK>;
 
   if (firebaseApp[sdk]) {
+    // Don't apply settings here. Only needed for lazy loaded SDKs.
+    // If not lazy loaded, user can provide settings as normal
     sdkPromise = Promise.resolve(firebaseApp[sdk]);
   } else {
     switch (sdk) {
@@ -67,8 +88,12 @@ function fetchSDK(sdk: SDK, firebaseApp: firebase.app.App) {
         );
         break;
     }
-    sdkPromise = sdkPromise.then(() => firebaseApp[sdk]);
+    sdkPromise = sdkPromise
+      .then(() => settingsCallback(firebaseApp[sdk]))
+      .then(() => firebaseApp[sdk]);
   }
+  preloadRequest(() => sdkPromise, `firebase-sdk-${sdk}`);
+
   return sdkPromise;
 }
 
@@ -108,8 +133,11 @@ export function useDatabase(firebaseApp?: firebase.app.App) {
   return useSDK(SDK.DATABASE, firebaseApp);
 }
 
-export function preloadFirestore(firebaseApp: firebase.app.App) {
-  return fetchSDK(SDK.FIRESTORE, firebaseApp);
+export function preloadFirestore(
+  firebaseApp: firebase.app.App,
+  settingsCallback?: (firestore: () => Firestore) => Promise<void>
+) {
+  return fetchSDK(SDK.FIRESTORE, firebaseApp, settingsCallback);
 }
 
 export function useFirestore(firebaseApp?: firebase.app.App) {
@@ -140,16 +168,22 @@ export function usePerformance(firebaseApp?: firebase.app.App) {
   return useSDK(SDK.PERFORMANCE, firebaseApp);
 }
 
-export function preloadRemoteConfig(firebaseApp: firebase.app.App) {
-  return fetchSDK(SDK.REMOTE_CONFIG, firebaseApp);
+export function preloadRemoteConfig(
+  firebaseApp: firebase.app.App,
+  settingsCallback?: (remoteConfig: () => RemoteConfig) => Promise<any>
+) {
+  return fetchSDK(SDK.REMOTE_CONFIG, firebaseApp, settingsCallback);
 }
 
 export function useRemoteConfig(firebaseApp?: firebase.app.App) {
   return useSDK(SDK.REMOTE_CONFIG, firebaseApp);
 }
 
-export function preloadStorage(firebaseApp: firebase.app.App) {
-  return fetchSDK(SDK.STORAGE, firebaseApp);
+export function preloadStorage(
+  firebaseApp: firebase.app.App,
+  settingsCallback: (storage: () => Storage) => Promise<void>
+) {
+  return fetchSDK(SDK.STORAGE, firebaseApp, settingsCallback);
 }
 
 export function useStorage(firebaseApp?: firebase.app.App) {
