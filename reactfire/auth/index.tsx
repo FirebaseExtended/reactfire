@@ -52,7 +52,7 @@ export function useIdTokenResult(user: User, forceRefresh: boolean = false) {
 
   const idToken$ = from(user.getIdTokenResult(forceRefresh));
 
-  return useObservable(idToken$, `${user.uid}-claims`);
+  return useObservable<any>(idToken$, `${user.uid}-claims`);
 }
 
 export interface AuthCheckProps {

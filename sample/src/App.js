@@ -3,6 +3,7 @@ import AuthButton from './Auth';
 import FirestoreCounter from './Firestore';
 import Storage from './Storage';
 import RealtimeDatabase from './RealtimeDatabase';
+import RemoteConfig from './RemoteConfig';
 import {
   preloadFirestoreDoc,
   useFirebaseApp,
@@ -10,7 +11,8 @@ import {
   preloadAuth,
   preloadFirestore,
   preloadDatabase,
-  preloadStorage
+  preloadStorage,
+  preloadRemoteConfig
 } from 'reactfire';
 
 const Fire = () => (
@@ -39,7 +41,8 @@ const preloadSDKs = firebaseApp => {
     preloadFirestore(firebaseApp),
     preloadDatabase(firebaseApp),
     preloadStorage(firebaseApp),
-    preloadAuth(firebaseApp)
+    preloadAuth(firebaseApp),
+    preloadRemoteConfig(firebaseApp)
   ]);
 };
 
@@ -84,6 +87,10 @@ const App = () => {
 
         <Card title="Realtime Database">
           <RealtimeDatabase />
+        </Card>
+
+        <Card title="Remote Config">
+          <RemoteConfig />
         </Card>
       </div>
     </>

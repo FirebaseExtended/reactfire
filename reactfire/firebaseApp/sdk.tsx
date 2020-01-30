@@ -1,4 +1,5 @@
 import { useFirebaseApp, preloadRequest, usePreloadedRequest } from '..';
+
 enum SDK {
   ANALYTICS = 'analytics',
   AUTH = 'auth',

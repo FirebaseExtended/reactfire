@@ -36,6 +36,7 @@
     "@firebase/app": "^0.4.8",
     "@firebase/app-types": "^0.4.0",
     "@firebase/testing": "^0.11.4",
+    "@rollup/plugin-node-resolve": "^7.0.0",
     "@testing-library/jest-dom": "^4.1.1",
     "@testing-library/react": "^9.3.0",
     "@testing-library/react-hooks": "^3.1.0",
@@ -46,7 +47,6 @@
     "jest": "~24.9.0",
     "react-test-renderer": "^16.9.0",
     "rollup": "^1.26.3",
-    "@rollup/plugin-node-resolve": "^7.0.0",
     "typescript": "^3.4.5"
   }
 }
