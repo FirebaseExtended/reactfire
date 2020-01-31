@@ -2,7 +2,8 @@ import React from 'react';
 import {
   useRemoteConfigValue,
   SuspenseWithPerf,
-  RemoteConfigProvider
+  useRemoteConfigValue,
+  SuspenseWithPerf
 } from 'reactfire';
 
 const RemoteConfig = props => {

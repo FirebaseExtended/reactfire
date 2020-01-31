@@ -93,5 +93,3 @@ export function useRemoteConfigAll(
 ): AllParameters {
   return typeSafeUse<AllParameters>(key, getAll, remoteConfig);
 }
-
-export * from './provider';
