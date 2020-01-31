@@ -4,7 +4,7 @@ import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
 import { Subject } from 'rxjs';
 import { SuspenseWithPerf } from '.';
-import { FirebaseAppProvider, useObservable } from '..';
+import { FirebaseAppProvider, useObservable, clearCache } from '..';
 
 const traceStart = jest.fn();
 const traceEnd = jest.fn();
@@ -36,6 +36,7 @@ const Provider = ({ children }) => (
 describe('SuspenseWithPerf', () => {
   afterEach(() => {
     cleanup();
+    clearCache();
     jest.clearAllMocks();
   });
 
@@ -206,7 +207,7 @@ describe('SuspenseWithPerf', () => {
       return (
         <SuspenseWithPerf
           traceId={'hello'}
-          fallback={'loading'}
+          fallback={<h1 data-testid="fallback">Actual</h1>}
           firePerf={(mockPerf() as unknown) as performance.Performance}
         >
           <Comp />
@@ -215,7 +216,8 @@ describe('SuspenseWithPerf', () => {
     };
 
     // render SuspenseWithPerf and go through normal trace start -> trace stop
-    const { getByTestId, rerender } = render(<Component />);
+    const { getByTestId } = render(<Component />);
+    await waitForElement(() => getByTestId('fallback'));
     expect(createTrace).toHaveBeenCalledTimes(1);
     act(() => o$.next('some value'));
     await waitForElement(() => getByTestId('child'));

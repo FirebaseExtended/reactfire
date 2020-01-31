@@ -1,18 +1,26 @@
 import '@testing-library/jest-dom/extend-expect';
 import { act, cleanup, render, waitForElement } from '@testing-library/react';
-import { act as actOnHook, renderHook } from '@testing-library/react-hooks';
+import {
+  act as actOnHook,
+  renderHook,
+  cleanup as cleanupHooks
+} from '@testing-library/react-hooks';
 import * as React from 'react';
-import { of, Subject, BehaviorSubject, throwError } from 'rxjs';
-import { useObservable } from '.';
+import { of, Subject, BehaviorSubject, throwError, Observable } from 'rxjs';
+import { useObservable, clearCache } from '.';
 
 describe('useObservable', () => {
-  afterEach(cleanup);
+  afterEach(() => {
+    cleanupHooks();
+    cleanup();
+    clearCache();
+  });
 
   it('throws a promise if the observable has no initial value', () => {
     const observable$: Subject<any> = new Subject();
 
     try {
-      useObservable(observable$, 'test');
+      renderHook(() => useObservable(observable$, 'test'));
     } catch (thingThatWasThrown) {
       expect(thingThatWasThrown).toBeInstanceOf(Promise);
     }
@@ -22,7 +30,7 @@ describe('useObservable', () => {
     const observable$: Subject<any> = new Subject();
 
     try {
-      useObservable(observable$, undefined);
+      renderHook(() => useObservable(observable$, undefined));
     } catch (thingThatWasThrown) {
       expect(thingThatWasThrown).toBeInstanceOf(Error);
     }
@@ -46,12 +54,23 @@ describe('useObservable', () => {
 
   it('throws an error if there is an error on initial fetch', async () => {
     const error = new Error('I am an error');
-    const observable$ = throwError(error);
+    let observable$ = throwError(error);
 
-    // stop a nasty-looking console error
+    // stop a nasty-looking console log of the error we're trying to throw
     // https://github.com/facebook/react/issues/11098#issuecomment-523977830
     const spy = jest.spyOn(console, 'error');
-    spy.mockImplementation(() => {});
+    spy.mockImplementation(e => {
+      if (
+        typeof e === 'string' &&
+        (e.includes('I am an error') ||
+          e.includes('React will try to recreate'))
+      ) {
+        return;
+      }
+
+      // log any error that isn't one we expect
+      console.log(e);
+    });
 
     class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {
       constructor(props) {
@@ -79,6 +98,7 @@ describe('useObservable', () => {
 
     const Component = () => {
       const val = useObservable(observable$, 'test-error');
+      console.log('I SHOULD NEVER GET HERE', val);
       return <h1 data-testid="thing">{val}</h1>;
     };
 

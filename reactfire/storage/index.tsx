@@ -3,6 +3,7 @@ import { storage } from 'firebase/app';
 import { getDownloadURL } from 'rxfire/storage';
 import { Observable } from 'rxjs';
 import { ReactFireOptions, useObservable, useFirebaseApp } from '..';
+import { useStorage } from '../firebaseApp';
 
 /**
  * modified version of rxFire's _fromTask
@@ -75,7 +76,7 @@ export function StorageImage(
 ) {
   let { storage, storagePath, ...imgProps } = props;
 
-  storage = storage || useFirebaseApp().storage();
+  storage = storage || useStorage()();
 
   const imgSrc = useStorageDownloadURL(storage.ref(storagePath));
   return <img src={imgSrc} {...imgProps} />;

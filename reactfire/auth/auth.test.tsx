@@ -3,7 +3,7 @@ import { auth, User } from 'firebase/app';
 import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
 import { AuthCheck, useUser } from '.';
-import { FirebaseAppProvider } from '..';
+import { FirebaseAppProvider, clearCache } from '..';
 import { Observable, Observer } from 'rxjs';
 import { act } from 'react-dom/test-utils';
 
@@ -62,6 +62,7 @@ describe('AuthCheck', () => {
 
   afterEach(() => {
     cleanup();
+    clearCache();
     jest.clearAllMocks();
   });
 
@@ -115,6 +116,7 @@ describe('AuthCheck', () => {
     await wait(() => expect(getByTestId('signed-out')).toBeInTheDocument());
   });
 
+  // implement this once we have an auth emulator
   test.todo('checks requiredClaims');
 });
 

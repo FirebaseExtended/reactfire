@@ -12,11 +12,10 @@ import { from } from 'rxjs';
 
 export function preloadUser(firebaseApp: firebase.app.App) {
   return preloadAuth(firebaseApp).then(auth => {
-    const result = preloadObservable(
+    return preloadObservable(
       user(auth() as firebase.auth.Auth),
       'auth: user'
-    );
-    return result.request.promise;
+    ).getPromise();
   });
 }
 

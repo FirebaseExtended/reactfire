@@ -28,7 +28,7 @@ export function preloadFirestoreDoc(
 ) {
   return preloadFirestore(firebaseApp).then(firestore => {
     const ref = refProvider(firestore() as firebase.firestore.Firestore);
-    return preloadObservable(doc(ref), ref.path);
+    return preloadObservable(doc(ref), 'firestore doc: ' + ref.path);
   });
 }
 
@@ -110,7 +110,7 @@ export function useFirestoreCollectionData<T = { [key: string]: unknown }>(
   query: firestore.Query,
   options?: ReactFireOptions<T[]>
 ): T[] {
-  const queryId = getHashFromFirestoreQuery(query);
+  const queryId = getHashFromFirestoreQuery(query) + ' data only';
 
   return useObservable(
     collectionData(query, checkIdField(options)),

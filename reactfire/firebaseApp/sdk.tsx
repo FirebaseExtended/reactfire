@@ -1,4 +1,4 @@
-import { useFirebaseApp, preloadRequest, usePreloadedRequest } from '..';
+import { useFirebaseApp, preloadPromise, usePreloadedObservable } from '..';
 enum SDK {
   ANALYTICS = 'analytics',
   AUTH = 'auth',
@@ -74,13 +74,17 @@ function fetchSDK(sdk: SDK, firebaseApp: firebase.app.App) {
 function useSDK(sdk: SDK, firebaseApp?: firebase.app.App) {
   firebaseApp = firebaseApp || useFirebaseApp();
 
-  // use the request cache so we don't issue multiple fetches for the sdk
-  const result = preloadRequest(
-    () => fetchSDK(sdk, firebaseApp),
-    `firebase-sdk-${sdk}`
-  );
+  // before we worry about fetching, check to see if the SDK is already loaded
+  if (firebaseApp[sdk]) {
+    return firebaseApp[sdk];
+  }
 
-  return usePreloadedRequest(result);
+  const requestId = `firebase-sdk-${sdk}`;
+
+  // use the request cache so we don't issue multiple fetches for the sdk
+  preloadPromise(() => fetchSDK(sdk, firebaseApp), requestId);
+
+  return usePreloadedObservable(requestId);
 }
 
 export function preloadAuth(firebaseApp: firebase.app.App) {
