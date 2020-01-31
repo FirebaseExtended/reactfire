@@ -42,7 +42,9 @@ const preloadSDKs = firebaseApp => {
       return firestore().enablePersistence();
     }),
     preloadDatabase(firebaseApp),
-    preloadStorage(firebaseApp),
+    preloadStorage(firebaseApp, storage => {
+      storage().setMaxUploadRetryTime(10000);
+    }),
     preloadAuth(firebaseApp),
     preloadRemoteConfig(firebaseApp, remoteConfig => {
       remoteConfig().settings = {

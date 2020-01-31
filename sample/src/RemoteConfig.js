@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  useRemoteConfigValue,
-  SuspenseWithPerf,
-  useRemoteConfigValue,
-  SuspenseWithPerf
-} from 'reactfire';
+import { useRemoteConfigValue, SuspenseWithPerf } from 'reactfire';
 
 const RemoteConfig = props => {
   const parameter = useRemoteConfigValue(props.rcKey);
