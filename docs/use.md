@@ -187,6 +187,16 @@ The [render-as-you-fetch pattern](https://reactjs.org/docs/concurrent-mode-suspe
 
 Just as the SDK hooks like `useFirestore` can automatically fetch an SDK, you can call `preloadFirestore` (or `preloadAuth`, etc) to start loading an SDK without suspending.
 
+### Initialize an SDK
+
+A few Firestore SDKs need to be initialized (`firebase().performance().initialize()`, `firebase.remoteConfig().fetchAndActivate()`), or need to have settings set before any other calls are made (`firebase.firestore().enablePersistence()`). This can be done by using an extra argument in the preload method:
+
+```jsx
+preloadFirestore(firestore => {
+  return firestore().enablePersistence();
+});
+```
+
 ### Preload Data
 
 Many ReactFire hooks have corresponding preload functions. For example, you can call `preloadFirestoreDocData` to preload data if a component later calls `useFirestoreDocData`.
