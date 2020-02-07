@@ -1,15 +1,16 @@
 import { Observable, Subject, Subscription, Subscriber } from 'rxjs';
-import { tap, share, first } from 'rxjs/operators';
+import { tap, share } from 'rxjs/operators';
 
 export class BehaviorReplaySubject<T> extends Subject<T> {
   private _value: T | undefined;
   private _hasValue = false;
-  private _timeoutHandler: NodeJS.Timeout | undefined;
-  private _innerSubscriber: any;
+  private _timeoutHandler: NodeJS.Timeout;
+  private _innerSubscriber: Subscription;
   private _firstEmission: Promise<void>;
   private _resolveFirstEmission: () => void;
   private _error: any = undefined;
   private _innerObservable: Observable<T>;
+  private _warmupSubscription: Subscription;
 
   constructor(innerObservable: Observable<T>, private _timeoutWindow: number) {
     super();
@@ -31,7 +32,8 @@ export class BehaviorReplaySubject<T> extends Subject<T> {
       share()
     );
     // warm up the observable
-    this._innerObservable.pipe(first()).subscribe();
+    this._warmupSubscription = this._innerObservable.subscribe();
+    this._reset();
   }
 
   get hasValue(): boolean {
@@ -72,6 +74,10 @@ export class BehaviorReplaySubject<T> extends Subject<T> {
     // set a timeout for reseting the cache, subscriptions will cancel the timeout
     // and reschedule again on unsubscribe
     this._timeoutHandler = setTimeout(() => {
+      // seems to be undefined in tests?
+      if (this._warmupSubscription) {
+        this._warmupSubscription.unsubscribe();
+      }
       this._hasValue = false;
       this._value = undefined;
       this._error = undefined;

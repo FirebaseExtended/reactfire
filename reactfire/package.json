@@ -9,7 +9,7 @@
     "build-dev": "tsc --watch",
     "test-dev": "jest --verbose --watch",
     "emulators": "firebase emulators:start --only firestore,database",
-    "test": "firebase emulators:exec --only firestore,database \"jest --no-cache --verbose --detectOpenHandles --forceExit\"",
+    "test": "yarn build && firebase emulators:exec --only firestore,database \"jest --rootDir pub --no-cache --verbose --detectOpenHandles --forceExit\"",
     "copy-package-json": "cp package.pub.json pub/reactfire/package.json",
     "watch": "yarn build && tsc --watch",
     "build": "rm -rf pub && tsc && yarn copy-package-json && cp ../README.md pub/reactfire/README.md && cp ../LICENSE pub/reactfire/LICENSE && rollup -c"

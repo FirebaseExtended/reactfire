@@ -78,7 +78,6 @@ describe('useObservable', () => {
       }
     }
     /*
-
     INVESTIGATE not sure what's up with the error component
 
     const Component = () => {
