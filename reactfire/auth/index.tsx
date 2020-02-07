@@ -16,7 +16,7 @@ export function preloadUser(firebaseApp: firebase.app.App) {
       user(auth() as firebase.auth.Auth),
       'auth: user'
     );
-    return result.request.promise;
+    return result.toPromise();
   });
 }
 

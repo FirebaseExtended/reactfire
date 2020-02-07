@@ -66,7 +66,7 @@ describe('AuthCheck', () => {
   });
 
   it('can find firebase Auth from Context', () => {
-    expect(() => render(<Component />)).not.toThrow();
+    expect(() => render(<Component> </Component>)).not.toThrow();
   });
 
   it('can use firebase Auth from props', () => {
@@ -85,7 +85,7 @@ describe('AuthCheck', () => {
   });
 
   it('renders the fallback if a user is not signed in', async () => {
-    const { getByTestId } = render(<Component />);
+    const { getByTestId } = render(<Component> </Component>);
 
     await wait(() => expect(getByTestId('signed-out')).toBeInTheDocument());
 
@@ -96,13 +96,13 @@ describe('AuthCheck', () => {
 
   it('renders children if a user is logged in', async () => {
     mockFirebase.auth().updateUser({ uid: 'testuser' });
-    const { getByTestId } = render(<Component />);
+    const { getByTestId } = render(<Component> </Component>);
 
     await wait(() => expect(getByTestId('signed-in')).toBeInTheDocument());
   });
 
   it('can switch between logged in and logged out', async () => {
-    const { getByTestId } = render(<Component />);
+    const { getByTestId } = render(<Component> </Component>);
 
     await wait(() => expect(getByTestId('signed-out')).toBeInTheDocument());
 

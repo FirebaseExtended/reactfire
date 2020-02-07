@@ -1,89 +1,58 @@
 import * as React from 'react';
 import { Observable } from 'rxjs';
-import { first, startWith } from 'rxjs/operators';
-import { ActiveRequest, ObservablePromiseCache } from './requestCache';
+import { first, tap, startWith } from 'rxjs/operators';
+import { BehaviorReplaySubject } from './behaviorReplaySubject';
 
-const requestCache = new ObservablePromiseCache();
-
-export function preloadRequest(
-  getPromise,
-  requestId: string
-): { requestId: string; request: ActiveRequest } {
-  const request = requestCache.createDedupedRequest(getPromise, requestId);
-
-  return {
-    requestId: requestId,
-    request
-  };
-}
+// TODO why can't I use underscore? 30_000
+const DEFAULT_TIMEOUT = 30000;
+const preloadedObservables = new Map<string, BehaviorReplaySubject<unknown>>();
 
 // Starts listening to an Observable.
 // Call this once you know you're going to render a
 // child that will consume the observable
-export function preloadObservable(
-  observable$: Observable<any>,
-  observableId: string
-): { requestId: string; request: ActiveRequest } {
-  return preloadRequest(
-    () => observable$.pipe(first()).toPromise(),
-    observableId
-  );
-}
-
-export function usePreloadedRequest(preloadResult: { requestId: string }) {
-  const request = requestCache.getRequest(preloadResult.requestId);
-
-  // Suspend if we're not ready yet
-  if (!request.isComplete) {
-    throw request.promise;
+export function preloadObservable<T>(
+  source: Observable<T>,
+  id: string,
+  defaultValue?: T
+) {
+  // TODO wrap in our own Subject implementation
+  if (preloadedObservables.has(id)) {
+    return preloadedObservables.get(id) as BehaviorReplaySubject<T>;
+  } else {
+    const observable = new BehaviorReplaySubject(
+      source,
+      DEFAULT_TIMEOUT,
+      id,
+      defaultValue
+    );
+    preloadedObservables.set(id, observable);
+    return observable;
   }
-
-  if (request.error) {
-    throw request.error;
-  }
-
-  return request.value;
 }
 
 export function useObservable<T>(
-  observable$: Observable<T | any>,
+  source: Observable<T | any>,
   observableId: string,
   startWithValue?: T | any
 ): T {
   if (!observableId) {
     throw new Error('cannot call useObservable without an observableId');
   }
-
-  const result = preloadObservable(observable$, observableId);
-
-  let initialValue = startWithValue;
-  if (initialValue === undefined) {
-    // this will Suspend until the Promise resolves
-    initialValue = usePreloadedRequest(result);
+  const observable = preloadObservable(source, observableId, startWithValue);
+  if (!observable.hasValue && !startWithValue) {
+    throw observable.firstEmission;
   }
-
-  const [latestValue, setValue] = React.useState(initialValue);
-
+  const [latest, setValue] = React.useState(
+    observable.hasValue ? observable.value : startWithValue
+  );
   React.useEffect(() => {
-    const subscription = observable$.pipe(startWith(initialValue)).subscribe(
-      newVal => {
-        // update the value in requestCache
-        result.request.setValue(newVal);
-
-        // update state
-        setValue(newVal);
-      },
-      error => {
-        console.error('There was an error', error);
-        throw error;
+    const subscription = observable.subscribe(
+      v => setValue(v),
+      e => {
+        throw e;
       }
     );
-
-    return () => {
-      subscription.unsubscribe();
-      requestCache.removeRequest(observableId);
-    };
+    return () => subscription.unsubscribe();
   }, [observableId]);
-
-  return latestValue;
+  return latest;
 }

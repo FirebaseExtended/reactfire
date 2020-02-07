@@ -10,6 +10,6 @@
     "outDir": "pub/reactfire",
     "declaration": true,
     "skipLibCheck": true
-  },
-  "files": ["index.ts"]
+  }
+  //"files": ["index.ts"]
 }

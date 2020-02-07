@@ -1,4 +1,6 @@
-import { useFirebaseApp, preloadRequest, usePreloadedRequest } from '..';
+import { useFirebaseApp } from '..';
+import { preloadObservable, useObservable } from '../useObservable';
+import { from } from 'rxjs';
 
 type RemoteConfig = import('firebase/app').remoteConfig.RemoteConfig;
 type Storage = import('firebase/app').storage.Storage;
@@ -98,7 +100,7 @@ function fetchSDK(
       .then(() => settingsCallback(firebaseApp[sdk]))
       .then(() => firebaseApp[sdk]);
   }
-  preloadRequest(() => sdkPromise, `firebase-sdk-${sdk}`);
+  preloadObservable(from(sdkPromise), `firebase-sdk-${sdk}`);
 
   return sdkPromise;
 }
@@ -107,12 +109,7 @@ function useSDK(sdk: SDK, firebaseApp?: firebase.app.App) {
   firebaseApp = firebaseApp || useFirebaseApp();
 
   // use the request cache so we don't issue multiple fetches for the sdk
-  const result = preloadRequest(
-    () => fetchSDK(sdk, firebaseApp),
-    `firebase-sdk-${sdk}`
-  );
-
-  return usePreloadedRequest(result);
+  return useObservable(from(fetchSDK(sdk, firebaseApp)), `firebase-sdk-${sdk}`);
 }
 
 export function preloadAuth(
@@ -123,7 +120,7 @@ export function preloadAuth(
 }
 
 export function useAuth(firebaseApp?: firebase.app.App) {
-  return useSDK(SDK.AUTH, firebaseApp);
+  return useSDK(SDK.AUTH, firebaseApp) as () => firebase.auth.Auth;
 }
 
 export function preloadAnalytics(firebaseApp: firebase.app.App) {
@@ -197,7 +194,10 @@ export function preloadRemoteConfig(
 }
 
 export function useRemoteConfig(firebaseApp?: firebase.app.App) {
-  return useSDK(SDK.REMOTE_CONFIG, firebaseApp);
+  return useSDK(
+    SDK.REMOTE_CONFIG,
+    firebaseApp
+  ) as () => firebase.remoteConfig.RemoteConfig;
 }
 
 export function preloadStorage(
