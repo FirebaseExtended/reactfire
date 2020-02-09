@@ -8,7 +8,8 @@ import {
   useFirestoreCollection,
   FirebaseAppProvider,
   useFirestoreCollectionData,
-  useFirestoreDocData
+  useFirestoreDocData,
+  useFirestoreDocDataOnce
 } from '..';
 import { firestore } from 'firebase/app';
 
@@ -101,6 +102,51 @@ describe('Firestore', () => {
       await waitForElement(() => getByTestId('readSuccess'));
 
       expect(getByTestId('readSuccess')).toContainHTML(mockData.a);
+    });
+  });
+
+  describe('useFirestoreDocDataOnce', () => {
+    it('does not update on database changes [TEST REQUIRES EMULATOR]', async () => {
+      const mockData1 = { a: 'hello' };
+      const mockData2 = { a: 'goodbye' };
+
+      const ref = app
+        .firestore()
+        .collection('testDoc')
+        // 'readSuccess' is set to the data-testid={data.id} attribute
+        .doc('readSuccess');
+
+      await ref.set(mockData1);
+
+      const ReadFirestoreDoc = () => {
+        const dataOnce = useFirestoreDocDataOnce<any>(ref, { idField: 'id' });
+        const data = useFirestoreDocData<any>(ref, { idField: 'id' });
+
+        return (
+          <>
+            <h1 data-testid="once">{dataOnce.a}</h1>{' '}
+            <h1 data-testid="subscribe">{data.a}</h1>
+          </>
+        );
+      };
+      const { getByTestId } = render(
+        <FirebaseAppProvider firebase={app}>
+          <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
+            <ReadFirestoreDoc />
+          </React.Suspense>
+        </FirebaseAppProvider>
+      );
+
+      await waitForElement(() => getByTestId('once'));
+      await waitForElement(() => getByTestId('subscribe'));
+
+      expect(getByTestId('once')).toContainHTML(mockData1.a);
+      expect(getByTestId('subscribe')).toContainHTML(mockData1.a);
+
+      await act(() => ref.set(mockData2));
+
+      expect(getByTestId('once')).toContainHTML(mockData1.a);
+      expect(getByTestId('subscribe')).toContainHTML(mockData2.a);
     });
   });
 

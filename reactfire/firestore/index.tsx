@@ -13,6 +13,7 @@ import {
   checkStartWithValue
 } from '..';
 import { preloadObservable } from '../useObservable';
+import { first } from 'rxjs/operators';
 
 // starts a request for a firestore doc.
 // imports the firestore SDK automatically
@@ -55,6 +56,23 @@ export function useFirestoreDoc<T = unknown>(
  * @param ref - Reference to the document you want to listen to
  * @param options
  */
+export function useFirestoreDocOnce<T = unknown>(
+  ref: firestore.DocumentReference,
+  options?: ReactFireOptions<T>
+): T extends {} ? T : firestore.DocumentSnapshot {
+  return useObservable(
+    doc(ref).pipe(first()),
+    'firestore doconce: ' + ref.path,
+    options ? options.startWithValue : undefined
+  );
+}
+
+/**
+ * Suscribe to Firestore Document changes
+ *
+ * @param ref - Reference to the document you want to listen to
+ * @param options
+ */
 export function useFirestoreDocData<T = unknown>(
   ref: firestore.DocumentReference,
   options?: ReactFireOptions<T>
@@ -62,6 +80,23 @@ export function useFirestoreDocData<T = unknown>(
   return useObservable(
     docData(ref, checkIdField(options)),
     'firestore docdata: ' + ref.path,
+    checkStartWithValue(options)
+  );
+}
+
+/**
+ * Suscribe to Firestore Document changes
+ *
+ * @param ref - Reference to the document you want to listen to
+ * @param options
+ */
+export function useFirestoreDocDataOnce<T = unknown>(
+  ref: firestore.DocumentReference,
+  options?: ReactFireOptions<T>
+): T {
+  return useObservable(
+    docData(ref, checkIdField(options)).pipe(first()),
+    'firestore docdataonce: ' + ref.path,
     checkStartWithValue(options)
   );
 }
