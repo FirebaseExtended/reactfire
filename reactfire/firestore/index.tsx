@@ -51,9 +51,9 @@ export function useFirestoreDoc<T = unknown>(
 }
 
 /**
- * Suscribe to Firestore Document changes
+ * Get a firestore document and don't subscribe to changes
  *
- * @param ref - Reference to the document you want to listen to
+ * @param ref - Reference to the document you want to get
  * @param options
  */
 export function useFirestoreDocOnce<T = unknown>(
@@ -85,9 +85,9 @@ export function useFirestoreDocData<T = unknown>(
 }
 
 /**
- * Suscribe to Firestore Document changes
+ * Get a firestore document and don't subscribe to changes
  *
- * @param ref - Reference to the document you want to listen to
+ * @param ref - Reference to the document you want to get
  * @param options
  */
 export function useFirestoreDocDataOnce<T = unknown>(
