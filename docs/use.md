@@ -11,6 +11,8 @@
 - [Preloading](#preloading)
   - [Preload an SDK](#preload-an-sdk)
   - [Preload Data](#preload-data)
+- [Combining ReactFire Hooks](#combining-reactfire-hooks)
+  - [Combine Auth, Firestore, and Cloud Storage to Show a User Profile Card](#todo)
 
 ## Access your `firebase` object from any component
 
@@ -200,3 +202,73 @@ preloadFirestore(firestore => {
 ### Preload Data
 
 Many ReactFire hooks have corresponding preload functions. For example, you can call `preloadFirestoreDocData` to preload data if a component later calls `useFirestoreDocData`.
+
+### Combining ReactFire Hooks
+
+#### Combine Auth, Firestore, and Cloud Storage to Show a User Profile Card
+
+```jsx
+import {
+  AuthCheck,
+  StorageImage,
+  useFirestoreDocData,
+  useUser,
+  useAuth,
+  useFirestore
+} from 'reactfire';
+
+const DEFAULT_IMAGE_PATH = 'userPhotos/default.jpg';
+
+function ProfileCard() {
+  // get the current user.
+  // this is safe because we've wrapped this component in an `AuthCheck` component.
+  const user = useUser();
+
+  // read the user details from Firestore based on the current user's ID
+  const userDetailsRef = useFirestore()
+    .collection('users')
+    .doc(user.uid);
+  let { commonName, favoriteAnimal, profileImagePath } = useFirestoreDocData(
+    userDetailsRef
+  );
+
+  // defend against null field(s)
+  profileImagePath = profileImagePath || DEFAULT_IMAGE_PATH;
+
+  return (
+    <div>
+      <h1>{commonName}</h1>
+      {/*
+        `StorageImage` converts a Cloud Storage path into a download URL and then renders an image
+       */}
+      <StorageImage style={{ width: '100%' }} storagePath={profileImagePath} />
+      <span>Your favorite animal is the {favoriteAnimal}</span>
+    </div>
+  );
+}
+
+function LogInForm() {
+  const auth = useAuth();
+
+  const signIn = () => {
+    auth().signInWithEmailAndPassword(email, password);
+  };
+
+  return <MySignInForm onSubmit={signIn} />;
+}
+
+function ProfilePage() {
+  return (
+    {/*
+      Render a spinner until components are ready
+    */}
+    <Suspense fallback={<MyLoadingSpinner />}>
+      {/*
+        Render `ProfileCard` only if a user is signed in.
+        Otherwise, render `LoginForm`
+       */}
+      <AuthCheck fallback={<LogInForm />}>{ProfileCard}</AuthCheck>
+    </Suspense>
+  );
+}
+```
