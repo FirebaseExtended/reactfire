@@ -15,6 +15,10 @@ class MockAuth {
     this.subscriber = null;
   }
 
+  app = {
+    name: '[DEFAULT]'
+  };
+
   notifySubscriber() {
     if (this.subscriber) {
       this.subscriber.next(this.user);
@@ -44,11 +48,11 @@ const Provider = ({ children }) => (
   </FirebaseAppProvider>
 );
 
-const Component = ({ children }) => (
+const Component = (props?: { children?: any }) => (
   <Provider>
     <React.Suspense fallback={'loading'}>
       <AuthCheck fallback={<h1 data-testid="signed-out">not signed in</h1>}>
-        {children || <h1 data-testid="signed-in">signed in</h1>}
+        {props?.children || <h1 data-testid="signed-in">signed in</h1>}
       </AuthCheck>
     </React.Suspense>
   </Provider>
@@ -57,16 +61,18 @@ const Component = ({ children }) => (
 describe('AuthCheck', () => {
   beforeEach(() => {
     // clear the signed in user
-    mockFirebase.auth().updateUser(null);
+    act(() => mockFirebase.auth().updateUser(null));
   });
 
   afterEach(() => {
-    cleanup();
-    jest.clearAllMocks();
+    act(() => {
+      cleanup();
+      jest.clearAllMocks();
+    });
   });
 
   it('can find firebase Auth from Context', () => {
-    expect(() => render(<Component> </Component>)).not.toThrow();
+    expect(() => render(<Component></Component>)).not.toThrow();
   });
 
   it('can use firebase Auth from props', () => {
@@ -85,7 +91,7 @@ describe('AuthCheck', () => {
   });
 
   it('renders the fallback if a user is not signed in', async () => {
-    const { getByTestId } = render(<Component> </Component>);
+    const { getByTestId } = render(<Component></Component>);
 
     await wait(() => expect(getByTestId('signed-out')).toBeInTheDocument());
 
@@ -95,14 +101,14 @@ describe('AuthCheck', () => {
   });
 
   it('renders children if a user is logged in', async () => {
-    mockFirebase.auth().updateUser({ uid: 'testuser' });
-    const { getByTestId } = render(<Component> </Component>);
+    act(() => mockFirebase.auth().updateUser({ uid: 'testuser' }));
+    const { getByTestId } = render(<Component></Component>);
 
     await wait(() => expect(getByTestId('signed-in')).toBeInTheDocument());
   });
 
   it('can switch between logged in and logged out', async () => {
-    const { getByTestId } = render(<Component> </Component>);
+    const { getByTestId } = render(<Component></Component>);
 
     await wait(() => expect(getByTestId('signed-out')).toBeInTheDocument());
 

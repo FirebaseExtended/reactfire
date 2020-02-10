@@ -44,7 +44,7 @@ export function useFirestoreDoc<T = unknown>(
 ): T extends {} ? T : firestore.DocumentSnapshot {
   return useObservable(
     doc(ref),
-    `useFirestoreDoc:${ref.path}`,
+    `useFirestoreDoc:${ref.path}:${JSON.stringify(options)}`,
     options ? options.startWithValue : undefined
   );
 }
@@ -61,7 +61,7 @@ export function useFirestoreDocData<T = unknown>(
 ): T {
   return useObservable(
     docData(ref, checkIdField(options)),
-    `useFirestoreDocData:${ref.path}`,
+    `useFirestoreDocData:${ref.path}:${JSON.stringify(options)}`,
     checkStartWithValue(options)
   );
 }
@@ -76,7 +76,9 @@ export function useFirestoreCollection<T = { [key: string]: unknown }>(
   query: firestore.Query,
   options?: ReactFireOptions<T[]>
 ): T extends {} ? T[] : firestore.QuerySnapshot {
-  const queryId = `useFirestoreCollection:${getHashFromFirestoreQuery(query)}`;
+  const queryId = `useFirestoreCollection:${getHashFromFirestoreQuery(
+    query
+  )}:${JSON.stringify(options)}`;
 
   return useObservable(
     fromCollectionRef(query, checkIdField(options)),
@@ -111,7 +113,7 @@ export function useFirestoreCollectionData<T = { [key: string]: unknown }>(
 ): T[] {
   const queryId = `useFirestoreCollectionData:${getHashFromFirestoreQuery(
     query
-  )}`;
+  )}:${JSON.stringify(options)}`;
 
   return useObservable(
     collectionData(query, checkIdField(options)),

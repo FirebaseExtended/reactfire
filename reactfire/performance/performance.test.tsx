@@ -45,7 +45,7 @@ describe('SuspenseWithPerf', () => {
     const Fallback = () => <h1 data-testid="fallback">Fallback</h1>;
 
     const Comp = () => {
-      useObservable(o$, 'test');
+      useObservable(o$, 'perf-test-1');
 
       return <h1 data-testid="child">Actual</h1>;
     };
@@ -193,7 +193,7 @@ describe('SuspenseWithPerf', () => {
     const o$ = new Subject();
 
     const Comp = () => {
-      const val = useObservable(o$, 'test');
+      const val = useObservable(o$, 'perf-test-2');
 
       if (val === 'throw') {
         throw new Promise(() => {});
