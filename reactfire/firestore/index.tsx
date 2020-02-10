@@ -44,7 +44,7 @@ export function useFirestoreDoc<T = unknown>(
 ): T extends {} ? T : firestore.DocumentSnapshot {
   return useObservable(
     doc(ref),
-    'firestore doc: ' + ref.path,
+    `useFirestoreDoc:${ref.path}`,
     options ? options.startWithValue : undefined
   );
 }
@@ -61,7 +61,7 @@ export function useFirestoreDocData<T = unknown>(
 ): T {
   return useObservable(
     docData(ref, checkIdField(options)),
-    'firestore docdata: ' + ref.path,
+    `useFirestoreDocData:${ref.path}`,
     checkStartWithValue(options)
   );
 }
@@ -76,7 +76,7 @@ export function useFirestoreCollection<T = { [key: string]: unknown }>(
   query: firestore.Query,
   options?: ReactFireOptions<T[]>
 ): T extends {} ? T[] : firestore.QuerySnapshot {
-  const queryId = getHashFromFirestoreQuery(query);
+  const queryId = `useFirestoreCollection:${getHashFromFirestoreQuery(query)}`;
 
   return useObservable(
     fromCollectionRef(query, checkIdField(options)),
@@ -96,8 +96,7 @@ interface _QueryWithId extends firestore.Query {
 }
 
 function getHashFromFirestoreQuery(query: firestore.Query) {
-  const hash = (query as _QueryWithId)._query.canonicalId();
-  return `firestore: ${hash}`;
+  return (query as _QueryWithId)._query.canonicalId();
 }
 
 /**
@@ -110,7 +109,9 @@ export function useFirestoreCollectionData<T = { [key: string]: unknown }>(
   query: firestore.Query,
   options?: ReactFireOptions<T[]>
 ): T[] {
-  const queryId = getHashFromFirestoreQuery(query);
+  const queryId = `useFirestoreCollectionData:${getHashFromFirestoreQuery(
+    query
+  )}`;
 
   return useObservable(
     collectionData(query, checkIdField(options)),
