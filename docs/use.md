@@ -11,6 +11,7 @@
 - [Preloading](#preloading)
   - [Preload an SDK](#preload-an-sdk)
   - [Preload Data](#preload-data)
+- [Log Page Views with React Router](#todo)
 - [Combining ReactFire Hooks](#combining-reactfire-hooks)
   - [Combine Auth, Firestore, and Cloud Storage to Show a User Profile Card](#todo)
 
@@ -269,6 +270,39 @@ function ProfilePage() {
        */}
       <AuthCheck fallback={<LogInForm />}>{ProfileCard}</AuthCheck>
     </Suspense>
+  );
+}
+```
+
+### Log Page Views to Google Analytics for Firebase with React Router
+
+```jsx
+import { useAnalytics } from 'reactfire';
+import { Router, Route, Switch } from 'react-router';
+
+function MyPageViewLogger({ location }) {
+  const analytics = useAnalytics();
+
+  // By passing `location.pathname` to the second argument of `useEffect`,
+  // we only log on first render and when the `pathname` changes
+  useEffect(() => {
+    analytics.logEvent('page-view', location.pathname);
+  }, [location.pathname]);
+
+  return null;
+}
+
+function App() {
+  const analytics = useAnalytics();
+
+  return (
+    <Router>
+      <Switch>
+        <Route exact path="/about" component={<AboutPage />} />
+        <Route component={<NotFoundPage />} />
+      </Switch>
+      <MyPageViewLogger />
+    </Router>
   );
 }
 ```
