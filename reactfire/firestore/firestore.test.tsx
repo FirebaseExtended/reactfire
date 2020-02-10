@@ -9,7 +9,8 @@ import {
   FirebaseAppProvider,
   useFirestoreCollectionData,
   useFirestoreDocData,
-  useFirestoreDocDataOnce
+  useFirestoreDocDataOnce,
+  useFirestoreDocOnce
 } from '..';
 import { firestore } from 'firebase/app';
 
@@ -105,6 +106,42 @@ describe('Firestore', () => {
     });
   });
 
+  describe('useFirestoreDocOnce', () => {
+    it('works when the document does not exist, and does not update when it is created', async () => {
+      const ref = app
+        .firestore()
+        .collection('testDoc')
+        .doc('emptydoc');
+
+      const ReadFirestoreDoc = () => {
+        const dataOnce = useFirestoreDocOnce<any>(ref);
+        const data = useFirestoreDoc<any>(ref);
+
+        return (
+          <>
+            <h1 data-testid="once">{dataOnce.exists.toString()}</h1>
+            <h1 data-testid="subscribe">{data.exists.toString()}</h1>
+          </>
+        );
+      };
+      const { getByTestId } = render(
+        <FirebaseAppProvider firebase={app}>
+          <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
+            <ReadFirestoreDoc />
+          </React.Suspense>
+        </FirebaseAppProvider>
+      );
+
+      await waitForElement(() => getByTestId('once'));
+      expect(getByTestId('once')).toContainHTML('false');
+      expect(getByTestId('subscribe')).toContainHTML('false');
+
+      await act(() => ref.set({ a: 'test' }));
+      expect(getByTestId('once')).toContainHTML('false');
+      expect(getByTestId('subscribe')).toContainHTML('true');
+    });
+  });
+
   describe('useFirestoreDocDataOnce', () => {
     it('does not update on database changes [TEST REQUIRES EMULATOR]', async () => {
       const mockData1 = { a: 'hello' };
@@ -113,7 +150,6 @@ describe('Firestore', () => {
       const ref = app
         .firestore()
         .collection('testDoc')
-        // 'readSuccess' is set to the data-testid={data.id} attribute
         .doc('readSuccess');
 
       await ref.set(mockData1);
