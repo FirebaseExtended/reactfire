@@ -115,12 +115,10 @@ describe('Firestore', () => {
 
       const ReadFirestoreDoc = () => {
         const dataOnce = useFirestoreDocOnce<any>(ref);
-        const data = useFirestoreDoc<any>(ref);
 
         return (
           <>
             <h1 data-testid="once">{dataOnce.exists.toString()}</h1>
-            <h1 data-testid="subscribe">{data.exists.toString()}</h1>
           </>
         );
       };
@@ -134,11 +132,9 @@ describe('Firestore', () => {
 
       await waitForElement(() => getByTestId('once'));
       expect(getByTestId('once')).toContainHTML('false');
-      expect(getByTestId('subscribe')).toContainHTML('false');
 
       await act(() => ref.set({ a: 'test' }));
       expect(getByTestId('once')).toContainHTML('false');
-      expect(getByTestId('subscribe')).toContainHTML('true');
     });
   });
 
@@ -156,12 +152,10 @@ describe('Firestore', () => {
 
       const ReadFirestoreDoc = () => {
         const dataOnce = useFirestoreDocDataOnce<any>(ref, { idField: 'id' });
-        const data = useFirestoreDocData<any>(ref, { idField: 'id' });
 
         return (
           <>
             <h1 data-testid="once">{dataOnce.a}</h1>{' '}
-            <h1 data-testid="subscribe">{data.a}</h1>
           </>
         );
       };
@@ -177,12 +171,9 @@ describe('Firestore', () => {
       await waitForElement(() => getByTestId('subscribe'));
 
       expect(getByTestId('once')).toContainHTML(mockData1.a);
-      expect(getByTestId('subscribe')).toContainHTML(mockData1.a);
 
       await act(() => ref.set(mockData2));
-
       expect(getByTestId('once')).toContainHTML(mockData1.a);
-      expect(getByTestId('subscribe')).toContainHTML(mockData2.a);
     });
   });
 
