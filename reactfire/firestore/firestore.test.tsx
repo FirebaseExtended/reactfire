@@ -168,8 +168,6 @@ describe('Firestore', () => {
       );
 
       await waitForElement(() => getByTestId('once'));
-      await waitForElement(() => getByTestId('subscribe'));
-
       expect(getByTestId('once')).toContainHTML(mockData1.a);
 
       await act(() => ref.set(mockData2));
