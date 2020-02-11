@@ -79,7 +79,7 @@ export function useFirestoreDocData<T = unknown>(
 ): T {
   return useObservable(
     docData(ref, checkIdField(options)),
-    `useFirestoreDocDataOnce:${ref.path}:${JSON.stringify(options)}`,
+    'firestore docdata: ' + ref.path,
     checkStartWithValue(options)
   );
 }
@@ -96,7 +96,7 @@ export function useFirestoreDocDataOnce<T = unknown>(
 ): T {
   return useObservable(
     docData(ref, checkIdField(options)).pipe(first()),
-    'firestore docdataonce: ' + ref.path,
+    `useFirestoreDocDataOnce:${ref.path}:${JSON.stringify(options)}`,
     checkStartWithValue(options)
   );
 }
