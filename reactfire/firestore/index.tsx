@@ -62,7 +62,7 @@ export function useFirestoreDocOnce<T = unknown>(
 ): T extends {} ? T : firestore.DocumentSnapshot {
   return useObservable(
     doc(ref).pipe(first()),
-    'firestore doconce: ' + ref.path,
+    `useFirestoreDocOnce:${ref.path}:${JSON.stringify(options)}`,
     options ? options.startWithValue : undefined
   );
 }
@@ -79,7 +79,7 @@ export function useFirestoreDocData<T = unknown>(
 ): T {
   return useObservable(
     docData(ref, checkIdField(options)),
-    'firestore docdata: ' + ref.path,
+    `useFirestoreDocDataOnce:${ref.path}:${JSON.stringify(options)}`,
     checkStartWithValue(options)
   );
 }
