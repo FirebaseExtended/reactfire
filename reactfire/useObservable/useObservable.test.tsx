@@ -2,9 +2,8 @@ import '@testing-library/jest-dom/extend-expect';
 import { act, cleanup, render, waitForElement } from '@testing-library/react';
 import { act as actOnHook, renderHook } from '@testing-library/react-hooks';
 import * as React from 'react';
-import { of, Subject, BehaviorSubject, throwError } from 'rxjs';
+import { of, Subject, throwError } from 'rxjs';
 import { useObservable } from '.';
-import { share } from 'rxjs/operators';
 
 describe('useObservable', () => {
   afterEach(cleanup);
@@ -77,8 +76,6 @@ describe('useObservable', () => {
         }
       }
     }
-    /*
-    INVESTIGATE not sure what's up with the error component
 
     const Component = () => {
       const val = useObservable(observable$, 'test-error');
@@ -95,7 +92,7 @@ describe('useObservable', () => {
 
     await waitForElement(() => getByTestId('error-component'));
     expect(queryByTestId('error-component')).toBeInTheDocument();
-*/
+
     spy.mockRestore();
   });
 

@@ -1,5 +1,5 @@
-import { Observable, Subject, Subscription, Subscriber } from 'rxjs';
-import { tap, share } from 'rxjs/operators';
+import { Observable, Subject, Subscription, Subscriber, empty } from 'rxjs';
+import { tap, share, catchError } from 'rxjs/operators';
 
 export class BehaviorReplaySubject<T> extends Subject<T> {
   private _value: T | undefined;
@@ -29,11 +29,15 @@ export class BehaviorReplaySubject<T> extends Subject<T> {
           this._resolveFirstEmission();
         }
       ),
+      catchError(() => empty()),
       share()
     );
     // warm up the observable
     this._warmupSubscription = this._innerObservable.subscribe();
-    this._reset();
+
+    // set a timeout for reseting the cache, subscriptions will cancel the timeout
+    // and reschedule again on unsubscribe
+    this._timeoutHandler = setTimeout(this._reset, this._timeoutWindow);
   }
 
   get hasValue(): boolean {
@@ -44,18 +48,11 @@ export class BehaviorReplaySubject<T> extends Subject<T> {
   }
 
   get value(): T {
-    // throw on .value since the first().subscribe would otherwise
-    // absorb it, clear the error for retry
+    // TODO figure out how to reset the cache here, if I _reset() here before throwing
+    // it doesn't seem to work.
+    // As it is now, this will burn the cache entry until the timeout fires.
     if (this._error) {
-      const error = this._error;
-      this._error = undefined;
-      if (!this._hasValue) {
-        // if we cheated around hasValue let's reset the suspense promise too
-        this._firstEmission = new Promise<void>(
-          resolve => (this._resolveFirstEmission = resolve)
-        );
-      }
-      throw error;
+      throw this._error;
     }
     return this._value;
   }
@@ -71,30 +68,19 @@ export class BehaviorReplaySubject<T> extends Subject<T> {
   }
 
   private _reset() {
-    // set a timeout for reseting the cache, subscriptions will cancel the timeout
-    // and reschedule again on unsubscribe
-    this._timeoutHandler = setTimeout(() => {
-      // seems to be undefined in tests?
-      if (this._warmupSubscription) {
-        this._warmupSubscription.unsubscribe();
-      }
-      this._hasValue = false;
-      this._value = undefined;
-      this._error = undefined;
-      this._firstEmission = new Promise<void>(
-        resolve => (this._resolveFirstEmission = resolve)
-      );
-    }, this._timeoutWindow);
+    // seems to be undefined in tests?
+    if (this._warmupSubscription) {
+      this._warmupSubscription.unsubscribe();
+    }
+    this._hasValue = false;
+    this._value = undefined;
+    this._error = undefined;
+    this._firstEmission = new Promise<void>(
+      resolve => (this._resolveFirstEmission = resolve)
+    );
   }
 
   _subscribe(subscriber: Subscriber<T>): Subscription {
-    // throw the error if there is one
-    if (this._error) {
-      // reset, so they can retry
-      const error = this._error;
-      this._error = undefined;
-      throw error;
-    }
     if (this._timeoutHandler) {
       clearTimeout(this._timeoutHandler);
     }
