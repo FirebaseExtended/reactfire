@@ -62,7 +62,7 @@ export function useFirestoreDocOnce<T = unknown>(
 ): T extends {} ? T : firestore.DocumentSnapshot {
   return useObservable(
     doc(ref).pipe(first()),
-    `useFirestoreDocOnce:${ref.path}:${JSON.stringify(options)}`,
+    `firestore:docOnce:${ref.firestore.app.name}:${ref.path}`,
     checkStartWithValue(options)
   );
 }
@@ -94,9 +94,10 @@ export function useFirestoreDocDataOnce<T = unknown>(
   ref: firestore.DocumentReference,
   options?: ReactFireOptions<T>
 ): T {
+  const idField = checkIdField(options);
   return useObservable(
-    docData(ref, checkIdField(options)).pipe(first()),
-    `useFirestoreDocDataOnce:${ref.path}:${JSON.stringify(options)}`,
+    docData(ref, idField).pipe(first()),
+    `firestore:docDataOnce:${ref.firestore.app.name}:${ref.path}:idField=${idField}`,
     checkStartWithValue(options)
   );
 }
