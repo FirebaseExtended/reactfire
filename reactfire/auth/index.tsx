@@ -14,7 +14,7 @@ export function preloadUser(firebaseApp: firebase.app.App) {
   return preloadAuth(firebaseApp).then(auth => {
     const result = preloadObservable(
       user(auth() as firebase.auth.Auth),
-      `auth:preloadUser:${firebaseApp.name}`
+      `auth:user:${firebaseApp.name}`
     );
     return result.toPromise();
   });
@@ -32,11 +32,7 @@ export function useUser<T = unknown>(
 ): User | T {
   auth = auth || useAuth()();
   const currentUser = auth.currentUser || options?.startWithValue;
-  return useObservable(
-    user(auth),
-    `auth:${auth.app.name}:useUser:${JSON.stringify(options)}`,
-    currentUser
-  );
+  return useObservable(user(auth), `auth:user:${auth.app.name}`, currentUser);
 }
 
 export function useIdTokenResult(user: User, forceRefresh: boolean = false) {
@@ -48,7 +44,7 @@ export function useIdTokenResult(user: User, forceRefresh: boolean = false) {
 
   return useObservable<any>(
     idToken$,
-    `auth:getIdTokenResult:${user.uid}:forceRefresh=${forceRefresh}`
+    `auth:idTokenResult:${user.uid}:forceRefresh=${forceRefresh}`
   );
 }
 

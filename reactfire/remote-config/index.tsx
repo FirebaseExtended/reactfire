@@ -29,7 +29,7 @@ function typeSafeUse<T>(
 ): T {
   remoteConfig = remoteConfig || useRemoteConfig()();
   const $value = getter(remoteConfig, key);
-  return useObservable<T>($value, `remoteconfig:${key}`);
+  return useObservable<T>($value, `remoteConfig:${key}`);
 }
 
 /**

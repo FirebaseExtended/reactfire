@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Observable } from 'rxjs';
-import { SuspenseSubject } from './SuspenseSubject';
+import { SuspenseSubject } from './suspenseSubject';
 
 const DEFAULT_TIMEOUT = 30_000;
 const preloadedObservables = new Map<string, SuspenseSubject<unknown>>();
@@ -12,6 +12,7 @@ export function preloadObservable<T>(source: Observable<T>, id: string) {
   if (preloadedObservables.has(id)) {
     return preloadedObservables.get(id) as SuspenseSubject<T>;
   } else {
+    console.log(id);
     const observable = new SuspenseSubject(source, DEFAULT_TIMEOUT);
     preloadedObservables.set(id, observable);
     return observable;
@@ -21,7 +22,8 @@ export function preloadObservable<T>(source: Observable<T>, id: string) {
 export function useObservable<T>(
   source: Observable<T | any>,
   observableId: string,
-  startWithValue?: T | any
+  startWithValue?: T | any,
+  deps: React.DependencyList = [observableId]
 ): T {
   if (!observableId) {
     throw new Error('cannot call useObservable without an observableId');
@@ -41,6 +43,6 @@ export function useObservable<T>(
       }
     );
     return () => subscription.unsubscribe();
-  }, [observableId]);
+  }, deps);
   return latest;
 }

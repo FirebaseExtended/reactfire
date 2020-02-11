@@ -28,7 +28,10 @@ export function preloadFirestoreDoc(
 ) {
   return preloadFirestore(firebaseApp).then(firestore => {
     const ref = refProvider(firestore() as firebase.firestore.Firestore);
-    return preloadObservable(doc(ref), ref.path);
+    return preloadObservable(
+      doc(ref),
+      `firestore:doc:${ref.firestore.app.name}:${ref.path}`
+    );
   });
 }
 
@@ -44,7 +47,7 @@ export function useFirestoreDoc<T = unknown>(
 ): T extends {} ? T : firestore.DocumentSnapshot {
   return useObservable(
     doc(ref),
-    `useFirestoreDoc:${ref.path}:${JSON.stringify(options)}`,
+    `firestore:doc:${ref.firestore.app.name}:${ref.path}`,
     options ? options.startWithValue : undefined
   );
 }
@@ -59,9 +62,10 @@ export function useFirestoreDocData<T = unknown>(
   ref: firestore.DocumentReference,
   options?: ReactFireOptions<T>
 ): T {
+  const idField = checkIdField(options);
   return useObservable(
-    docData(ref, checkIdField(options)),
-    `useFirestoreDocData:${ref.path}:${JSON.stringify(options)}`,
+    docData(ref, idField),
+    `firestore:docData:${ref.firestore.app.name}:${ref.path}:idField=${idField}`,
     checkStartWithValue(options)
   );
 }
@@ -76,12 +80,12 @@ export function useFirestoreCollection<T = { [key: string]: unknown }>(
   query: firestore.Query,
   options?: ReactFireOptions<T[]>
 ): T extends {} ? T[] : firestore.QuerySnapshot {
-  const queryId = `useFirestoreCollection:${getHashFromFirestoreQuery(
-    query
-  )}:${JSON.stringify(options)}`;
+  const queryId = `firestore:collection:${
+    query.firestore.app.name
+  }:${getHashFromFirestoreQuery(query)}`;
 
   return useObservable(
-    fromCollectionRef(query, checkIdField(options)),
+    fromCollectionRef(query),
     queryId,
     options ? options.startWithValue : undefined
   );
@@ -111,12 +115,13 @@ export function useFirestoreCollectionData<T = { [key: string]: unknown }>(
   query: firestore.Query,
   options?: ReactFireOptions<T[]>
 ): T[] {
-  const queryId = `useFirestoreCollectionData:${getHashFromFirestoreQuery(
-    query
-  )}:${JSON.stringify(options)}`;
+  const idField = checkIdField(options);
+  const queryId = `firestore:collectionData:${
+    query.firestore.app.name
+  }:${getHashFromFirestoreQuery(query)}:idField=${idField}`;
 
   return useObservable(
-    collectionData(query, checkIdField(options)),
+    collectionData(query, idField),
     queryId,
     checkStartWithValue(options)
   );

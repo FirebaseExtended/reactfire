@@ -39,7 +39,7 @@ export function useStorageTask<T = unknown>(
 ): storage.UploadTaskSnapshot | T {
   return useObservable(
     _fromTask(task),
-    'storage upload: ' + ref.toString(),
+    `storage:task:${ref.toString()}`,
     options ? options.startWithValue : undefined
   );
 }
@@ -56,7 +56,7 @@ export function useStorageDownloadURL<T = string>(
 ): string | T {
   return useObservable(
     getDownloadURL(ref),
-    'storage download:' + ref.toString(),
+    `storage:downloadUrl:${ref.toString()}`,
     options ? options.startWithValue : undefined
   );
 }
