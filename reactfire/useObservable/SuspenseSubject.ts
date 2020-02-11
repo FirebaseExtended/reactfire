@@ -1,7 +1,7 @@
 import { Observable, Subject, Subscription, Subscriber, empty } from 'rxjs';
 import { tap, share, catchError } from 'rxjs/operators';
 
-export class BehaviorReplaySubject<T> extends Subject<T> {
+export class SuspenseSubject<T> extends Subject<T> {
   private _value: T | undefined;
   private _hasValue = false;
   private _timeoutHandler: NodeJS.Timeout;

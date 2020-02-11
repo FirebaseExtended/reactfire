@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { Observable } from 'rxjs';
-import { BehaviorReplaySubject } from './behaviorReplaySubject';
+import { SuspenseSubject } from './SuspenseSubject';
 
 const DEFAULT_TIMEOUT = 30_000;
-const preloadedObservables = new Map<string, BehaviorReplaySubject<unknown>>();
+const preloadedObservables = new Map<string, SuspenseSubject<unknown>>();
 
 // Starts listening to an Observable.
 // Call this once you know you're going to render a
 // child that will consume the observable
 export function preloadObservable<T>(source: Observable<T>, id: string) {
   if (preloadedObservables.has(id)) {
-    return preloadedObservables.get(id) as BehaviorReplaySubject<T>;
+    return preloadedObservables.get(id) as SuspenseSubject<T>;
   } else {
-    const observable = new BehaviorReplaySubject(source, DEFAULT_TIMEOUT);
+    const observable = new SuspenseSubject(source, DEFAULT_TIMEOUT);
     preloadedObservables.set(id, observable);
     return observable;
   }
