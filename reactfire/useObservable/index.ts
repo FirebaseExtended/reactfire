@@ -12,7 +12,6 @@ export function preloadObservable<T>(source: Observable<T>, id: string) {
   if (preloadedObservables.has(id)) {
     return preloadedObservables.get(id) as SuspenseSubject<T>;
   } else {
-    console.log(id);
     const observable = new SuspenseSubject(source, DEFAULT_TIMEOUT);
     preloadedObservables.set(id, observable);
     return observable;
