@@ -46,7 +46,7 @@ export function useFirestoreDoc<T = unknown>(
   return useObservable(
     doc(ref),
     'firestore doc: ' + ref.path,
-    options ? options.startWithValue : undefined
+    checkStartWithValue(options)
   );
 }
 
@@ -63,7 +63,7 @@ export function useFirestoreDocOnce<T = unknown>(
   return useObservable(
     doc(ref).pipe(first()),
     `useFirestoreDocOnce:${ref.path}:${JSON.stringify(options)}`,
-    options ? options.startWithValue : undefined
+    checkStartWithValue(options)
   );
 }
 
@@ -116,7 +116,7 @@ export function useFirestoreCollection<T = { [key: string]: unknown }>(
   return useObservable(
     fromCollectionRef(query, checkIdField(options)),
     queryId,
-    options ? options.startWithValue : undefined
+    checkStartWithValue(options)
   );
 }
 
