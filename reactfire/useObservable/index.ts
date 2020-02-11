@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Observable } from 'rxjs';
-import { SuspenseSubject } from './suspenseSubject';
+import { SuspenseSubject } from './SuspenseSubject';
 
 const DEFAULT_TIMEOUT = 30_000;
 const preloadedObservables = new Map<string, SuspenseSubject<unknown>>();
