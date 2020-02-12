@@ -5,6 +5,7 @@ import {
   SuspenseWithPerf,
   useFirestoreCollectionData,
   useFirestoreDocData,
+  useFirestoreDocDataOnce,
   useFirestore
 } from 'reactfire';
 
@@ -30,6 +31,16 @@ const Counter = props => {
       <button onClick={() => increment(1)}>+</button>
     </>
   );
+};
+
+const StaticValue = props => {
+  const firestore = useFirestore();
+
+  const ref = firestore().doc('count/counter');
+
+  const { value } = useFirestoreDocDataOnce(ref);
+
+  return <span>{value}</span>;
 };
 
 const AnimalEntry = ({ saveAnimal }) => {
@@ -121,6 +132,14 @@ const SuspenseWrapper = props => {
           >
             <Counter />
           </SuspenseWithPerf>
+          <h3>Sample One-time Get</h3>
+          <SuspenseWithPerf
+            fallback="connecting to Firestore..."
+            traceId="firestore-demo-doc"
+          >
+            <StaticValue />
+          </SuspenseWithPerf>
+
           <h3>Sample Collection Listener</h3>
           <SuspenseWithPerf
             fallback="connecting to Firestore..."
