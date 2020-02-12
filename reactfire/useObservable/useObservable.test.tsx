@@ -13,6 +13,7 @@ describe('useObservable', () => {
 
     try {
       useObservable(observable$, 'test');
+      fail('expected a throw');
     } catch (thingThatWasThrown) {
       expect(thingThatWasThrown).toBeInstanceOf(Promise);
     }
@@ -23,6 +24,7 @@ describe('useObservable', () => {
 
     try {
       useObservable(observable$, undefined);
+      fail('expected a throw');
     } catch (thingThatWasThrown) {
       expect(thingThatWasThrown).toBeInstanceOf(Error);
     }
