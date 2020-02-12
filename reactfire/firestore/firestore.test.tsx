@@ -115,7 +115,7 @@ describe('Firestore', () => {
       await act(() => ref.add(mockData2));
 
       const ReadFirestoreCollection = () => {
-        const collection = useFirestoreCollection(ref);
+        const collection = useFirestoreCollection(ref) as any;
 
         return (
           <ul data-testid="readSuccess">
@@ -151,11 +151,12 @@ describe('Firestore', () => {
       await act(() => ref.add(mockData2));
 
       const ReadFirestoreCollection = () => {
-        const list = (useFirestoreCollection(ref) as firestore.QuerySnapshot)
-          .docs;
-        const filteredList = (useFirestoreCollection(
+        const list = ((useFirestoreCollection(
+          ref
+        ) as any) as firestore.QuerySnapshot).docs;
+        const filteredList = ((useFirestoreCollection(
           filteredRef
-        ) as firestore.QuerySnapshot).docs;
+        ) as any) as firestore.QuerySnapshot).docs;
 
         // filteredList's length should be 1 since we only added one value that matches its query
         expect(filteredList.length).toEqual(1);

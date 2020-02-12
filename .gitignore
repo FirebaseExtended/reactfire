@@ -10,7 +10,9 @@ node_modules/
 
 reactfire/docs/reactfire-metadata.json
 reactfire/firestore-debug.log
+reactfire/firebase-debug.log
 reactfire/pub/**
 pub
 yarn-error.log
 reactfire/database-debug.log
+reactfire/reactfire-*.tgz

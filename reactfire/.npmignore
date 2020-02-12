@@ -1,0 +1,3 @@
+cjs/index.esm-*
+**/*.test.d.ts
+**/*.test.js
