@@ -19,6 +19,10 @@ type Props = {
   appName?: string;
 };
 
+const shallowEq = (a: Object, b: Object) =>
+  a == b ||
+  [...Object.keys(a), ...Object.keys(b)].every(key => a[key] == b[key]);
+
 export function FirebaseAppProvider(props: Props & { [key: string]: unknown }) {
   const { firebaseConfig, appName, initPerformance = false } = props;
   const firebaseApp: firebase.app.App =
@@ -28,14 +32,12 @@ export function FirebaseAppProvider(props: Props & { [key: string]: unknown }) {
         app => app.name == (appName || DEFAULT_APP_NAME)
       );
       if (existingApp) {
-        // INVESTIGATE can we do a shallow eq check rather than JSON eq?
-        if (
-          JSON.stringify(existingApp.options) != JSON.stringify(firebaseConfig)
-        ) {
+        if (shallowEq(existingApp.options, firebaseConfig)) {
+          return existingApp;
+        } else {
           throw `Does not match the options already provided to the ${appName ||
             'default'} firebase app instance, give this new instance a different appName.`;
         }
-        return existingApp;
       } else {
         return firebase.initializeApp(firebaseConfig, appName);
       }
@@ -52,7 +54,7 @@ export function FirebaseAppProvider(props: Props & { [key: string]: unknown }) {
         );
       }
     }
-  }, [initPerformance, appName]);
+  }, [initPerformance, firebaseApp]);
 
   return <FirebaseAppContext.Provider value={firebaseApp} {...props} />;
 }
