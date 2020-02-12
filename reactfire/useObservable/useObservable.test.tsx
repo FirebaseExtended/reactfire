@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { act, cleanup, render, waitForElement } from '@testing-library/react';
 import { act as actOnHook, renderHook } from '@testing-library/react-hooks';
 import * as React from 'react';
-import { of, Subject, BehaviorSubject, throwError } from 'rxjs';
+import { of, Subject, throwError } from 'rxjs';
 import { useObservable } from '.';
 
 describe('useObservable', () => {
@@ -13,6 +13,7 @@ describe('useObservable', () => {
 
     try {
       useObservable(observable$, 'test');
+      fail('expected a throw');
     } catch (thingThatWasThrown) {
       expect(thingThatWasThrown).toBeInstanceOf(Promise);
     }
@@ -23,6 +24,7 @@ describe('useObservable', () => {
 
     try {
       useObservable(observable$, undefined);
+      fail('expected a throw');
     } catch (thingThatWasThrown) {
       expect(thingThatWasThrown).toBeInstanceOf(Error);
     }
@@ -31,10 +33,10 @@ describe('useObservable', () => {
   it('can return a startval and then the observable once it is ready', () => {
     const startVal = 'howdy';
     const observableVal = "y'all";
-    const observable$: Subject<any> = new Subject();
+    const observable$ = new Subject<any>();
 
     const { result, waitForNextUpdate } = renderHook(() =>
-      useObservable(observable$, 'test', startVal)
+      useObservable(observable$, 'test-2', startVal)
     );
 
     expect(result.current).toEqual(startVal);
@@ -96,25 +98,14 @@ describe('useObservable', () => {
     spy.mockRestore();
   });
 
-  it('returns the provided startWithValue first even if the observable is ready right away', () => {
-    // This behavior is a consequense of how observables work. There is
-    // not a synchronous way to ask an observable if it has a value to emit.
-
+  it('provides the value, rather than startWithValue, when the observable is ready right away', () => {
     const startVal = 'howdy';
     const observableVal = "y'all";
     const observable$ = of(observableVal);
-    let hasReturnedStartWithValue = false;
 
     const Component = () => {
-      const val = useObservable(observable$, 'test', startVal);
-
-      if (hasReturnedStartWithValue) {
-        expect(val).toEqual(observableVal);
-      } else {
-        expect(val).toEqual(startVal);
-        hasReturnedStartWithValue = true;
-      }
-
+      const val = useObservable(observable$, 'test-3', startVal);
+      expect(val).toEqual(observableVal);
       return <h1>Hello</h1>;
     };
 
@@ -123,7 +114,7 @@ describe('useObservable', () => {
 
   it('works with Suspense', async () => {
     const observableFinalVal = "y'all";
-    const observable$ = new BehaviorSubject(undefined);
+    const observable$ = new Subject();
     const actualComponentId = 'actual-component';
     const fallbackComponentId = 'fallback-component';
 
@@ -163,7 +154,7 @@ describe('useObservable', () => {
     const observable$ = new Subject();
 
     const { result } = renderHook(() =>
-      useObservable(observable$, 'test', startVal)
+      useObservable(observable$, 'test-changes', startVal)
     );
 
     expect(result.current).toEqual(startVal);

@@ -15,7 +15,8 @@ export default {
     'rxfire/firestore',
     'rxfire/storage',
     'rxjs',
-    'rxjs/operators'
+    'rxjs/operators',
+    'tslib'
   ],
   plugins: [resolve()]
 };
