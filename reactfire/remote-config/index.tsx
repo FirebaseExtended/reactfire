@@ -14,6 +14,11 @@ type RemoteConfig = import('firebase/app').remoteConfig.RemoteConfig;
 type RemoteConfigValue = import('firebase/app').remoteConfig.Value;
 type Getter$<T> = (remoteConfig: RemoteConfig, key: string) => Observable<T>;
 
+interface RemoteConfigWithPrivate extends firebase.remoteConfig.RemoteConfig {
+  // This is a private API, assume optional
+  _storage?: { appName: string };
+}
+
 /**
  * Helper function to construct type safe functions. Since Remote Config has
  * methods that return different types for values, we need to be extra safe
@@ -28,8 +33,14 @@ function typeSafeUse<T>(
   remoteConfig?: RemoteConfig
 ): T {
   remoteConfig = remoteConfig || useRemoteConfig()();
+  // INVESTIGATE need to use a public API to get at the app name, one doesn't appear to exist...
+  // we might need to iterate over the Firebase apps and check for remoteConfig equality? this works for now
+  const appName = (remoteConfig as RemoteConfigWithPrivate)._storage?.appName;
   const $value = getter(remoteConfig, key);
-  return useObservable<T>($value, `remoteConfig:${key}`);
+  return useObservable<T>(
+    $value,
+    `remoteConfig:${key}:${getter.name}:${appName}`
+  );
 }
 
 /**
