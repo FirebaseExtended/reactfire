@@ -18,9 +18,9 @@ const mockPerf = jest.fn(() => {
   return { trace: createTrace };
 });
 
-const mockFirebase = {
+const mockFirebase: firebase.app.App = {
   performance: mockPerf
-};
+} as any;
 
 const PromiseThrower = () => {
   throw new Promise((resolve, reject) => {});

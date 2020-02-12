@@ -43,7 +43,7 @@ const mockFirebase = {
 };
 
 const Provider = ({ children }) => (
-  <FirebaseAppProvider firebaseApp={mockFirebase}>
+  <FirebaseAppProvider firebaseApp={(mockFirebase as any) as firebase.app.App}>
     {children}
   </FirebaseAppProvider>
 );

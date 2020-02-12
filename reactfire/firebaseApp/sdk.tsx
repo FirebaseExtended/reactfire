@@ -100,7 +100,10 @@ function fetchSDK(
       .then(() => settingsCallback(firebaseApp[sdk]))
       .then(() => firebaseApp[sdk]);
   }
-  preloadObservable(from(sdkPromise), `firebase-sdk-${sdk}`);
+  preloadObservable(
+    from(sdkPromise),
+    `firebase:sdk-${sdk}:${firebaseApp.name}`
+  );
 
   return sdkPromise;
 }
@@ -109,7 +112,10 @@ function useSDK(sdk: SDK, firebaseApp?: firebase.app.App) {
   firebaseApp = firebaseApp || useFirebaseApp();
 
   // use the request cache so we don't issue multiple fetches for the sdk
-  return useObservable(from(fetchSDK(sdk, firebaseApp)), `firebase-sdk-${sdk}`);
+  return useObservable(
+    from(fetchSDK(sdk, firebaseApp)),
+    `firebase:sdk-${sdk}:${firebaseApp.name}`
+  );
 }
 
 export function preloadAuth(
