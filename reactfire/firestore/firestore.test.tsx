@@ -113,7 +113,14 @@ describe('Firestore', () => {
         .collection('testDoc')
         .doc('emptydoc');
 
+      let deleted = false;
+      const deletePromise = ref.delete().then(() => (deleted = true));
+
       const ReadFirestoreDoc = () => {
+        if (!deleted) {
+          throw deletePromise;
+        }
+
         const dataOnce = useFirestoreDocOnce<any>(ref);
 
         return (
