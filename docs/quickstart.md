@@ -19,12 +19,10 @@ cd myapp
 
 ```bash
 # yarn
-yarn add firebase reactfire@canary
-
-# or
+yarn add firebase reactfire
 
 # npm
-npm install firebase reactfire@canary
+npm install --save firebase reactfire
 ```
 
 ## 3. Create a document in Cloud Firestore

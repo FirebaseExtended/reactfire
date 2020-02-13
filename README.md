@@ -29,12 +29,11 @@ available in
 
 ```bash
 # npm
-npm install reactfire@next
-# yarn
-yarn add reactfire@next
-```
+npm install --save reactfire
 
-If you like living life on the edge, use `reactfire@canary`.
+# yarn
+yarn add reactfire
+```
 
 ## Example use
 
