@@ -11,10 +11,10 @@ import {
 
 const Counter = props => {
   const firestore = useFirestore();
-
+  
   const serverIncrement = firestore.FieldValue.increment;
 
-  const ref = firestore().doc('count/counter');
+  const ref = firestore.doc('count/counter');
 
   const increment = amountToIncrement => {
     ref.update({
@@ -36,7 +36,7 @@ const Counter = props => {
 const StaticValue = props => {
   const firestore = useFirestore();
 
-  const ref = firestore().doc('count/counter');
+  const ref = firestore.doc('count/counter');
 
   const { value } = useFirestoreDocDataOnce(ref);
 
@@ -86,7 +86,7 @@ const List = ({ query, removeAnimal }) => {
 
 const FavoriteAnimals = props => {
   const firestore = useFirestore();
-  const baseRef = firestore().collection('animals');
+  const baseRef = firestore.collection('animals');
   const [isAscending, setIsAscending] = useState(true);
   const query = baseRef.orderBy('commonName', isAscending ? 'asc' : 'desc');
   const [startTransition, isPending] = useTransition({

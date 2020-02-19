@@ -27,7 +27,7 @@ const ImageUploadButton = props => {
     const fileList = event.target.files;
     const fileToUpload = fileList[0];
     const fileName = fileToUpload.name;
-    const newRef = storage()
+    const newRef = storage
       .ref('images')
       .child(fileName);
     setRef(newRef);

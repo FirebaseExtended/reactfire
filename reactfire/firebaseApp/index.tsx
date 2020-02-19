@@ -6,14 +6,13 @@ export * from './sdk';
 type FirebaseAppContextValue = firebase.app.App;
 
 // INVESTIGATE I don't like magic strings, can we have export this in js-sdk?
-const DEFAULT_APP_NAME = '[DEFAULT]';
+export const DEFAULT_APP_NAME = '[DEFAULT]';
 
 const FirebaseAppContext = React.createContext<
   FirebaseAppContextValue | undefined
 >(undefined);
 
 type Props = {
-  initPerformance?: boolean;
   firebaseApp?: firebase.app.App;
   firebaseConfig?: Object;
   appName?: string;
@@ -24,7 +23,7 @@ const shallowEq = (a: Object, b: Object) =>
   [...Object.keys(a), ...Object.keys(b)].every(key => a[key] == b[key]);
 
 export function FirebaseAppProvider(props: Props & { [key: string]: unknown }) {
-  const { firebaseConfig, appName, initPerformance = false } = props;
+  const { firebaseConfig, appName } = props;
   const firebaseApp: firebase.app.App =
     props.firebaseApp ||
     React.useMemo(() => {
@@ -42,19 +41,6 @@ export function FirebaseAppProvider(props: Props & { [key: string]: unknown }) {
         return firebase.initializeApp(firebaseConfig, appName);
       }
     }, [firebaseConfig, appName]);
-
-  React.useMemo(() => {
-    if (initPerformance === true) {
-      if (firebaseApp.performance) {
-        // initialize Performance Monitoring
-        firebaseApp.performance();
-      } else {
-        throw new Error(
-          'firebase.performance not found. Did you forget to import it?'
-        );
-      }
-    }
-  }, [initPerformance, firebaseApp]);
 
   return <FirebaseAppContext.Provider value={firebaseApp} {...props} />;
 }
