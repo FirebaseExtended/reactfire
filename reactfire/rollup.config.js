@@ -18,5 +18,6 @@ export default {
     'rxjs/operators',
     'tslib'
   ],
-  plugins: [resolve()]
+  plugins: [resolve()],
+  inlineDynamicImports: true
 };
