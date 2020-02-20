@@ -7,17 +7,7 @@ export default {
     format: 'cjs',
     name: 'reactfire'
   },
-  external: [
-    'react',
-    'firebase/app',
-    'rxfire/auth',
-    'rxfire/database',
-    'rxfire/firestore',
-    'rxfire/storage',
-    'rxjs',
-    'rxjs/operators',
-    'tslib'
-  ],
+  external: id => !id.startsWith('.'),
   plugins: [resolve()],
   inlineDynamicImports: true
 };
