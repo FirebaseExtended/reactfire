@@ -15,19 +15,24 @@ export function SuspenseWithPerf({
   firePerf
 }: SuspensePerfProps): JSX.Element {
   if (!firePerf) {
-    preloadPerformance();
+    preloadPerformance().then(perf => perf());
   }
 
-  const startMarkName = `${traceId}[${Math.random().toString(36)}]`;
-  const endMarkName = `${traceId}[${Math.random().toString(36)}]`;
+  const mark = performance?.mark || (() => {});
+  const measure = performance?.measure || (() => {});
+  const getEntriesByName = performance?.getEntriesByName || (() => []);
+
+  const entries = getEntriesByName(traceId, 'measure');
+  const startMarkName = `_${traceId}Start[${entries.length}]`;
+  const endMarkName = `_${traceId}End[${entries.length}]`;
 
   const Fallback = () => {
     React.useLayoutEffect(() => {
-      performance?.mark(startMarkName);
+      mark(startMarkName);
 
       return () => {
-        performance?.mark(endMarkName);
-        performance?.measure(traceId, startMarkName, endMarkName);
+        mark(endMarkName);
+        measure(traceId, startMarkName, endMarkName);
       };
     }, [traceId]);
 

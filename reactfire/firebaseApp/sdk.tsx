@@ -168,7 +168,6 @@ function preload(componentName: ComponentName) {
     } else if (settingsCallback) {
       await Promise.resolve(settingsCallback(instanceFactory));
     }
-    instanceFactory(); // make preload eager by calling the factory
     return instanceFactory;
   };
 }

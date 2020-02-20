@@ -1,5 +1,4 @@
 import { act, cleanup, render, waitForElement } from '@testing-library/react';
-import { performance } from 'firebase/app';
 import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
 import { Subject } from 'rxjs';
@@ -14,13 +13,19 @@ const createTrace = jest.fn(() => ({
   stop: traceEnd
 }));
 
-const mockPerf = jest.fn(() => {
+const mockPerf = (jest.fn(() => {
   return { trace: createTrace };
-});
+}) as any) as () => firebase.performance.Performance;
 
 const mockFirebase: firebase.app.App = {
   performance: mockPerf
 } as any;
+
+const mark = jest.fn();
+const measure = jest.fn();
+
+window.performance.mark = mark;
+window.performance.measure = measure;
 
 const PromiseThrower = () => {
   throw new Promise((resolve, reject) => {});
@@ -61,7 +66,11 @@ describe('SuspenseWithPerf', () => {
     const SuspenseWithPerfComp = () => {
       return (
         <Provider>
-          <SuspenseWithPerf fallback={<Fallback />} traceId="test">
+          <SuspenseWithPerf
+            fallback={<Fallback />}
+            traceId="test"
+            firePerf={mockPerf()}
+          >
             <Comp />
           </SuspenseWithPerf>
         </Provider>
@@ -90,13 +99,18 @@ describe('SuspenseWithPerf', () => {
 
     render(
       <Provider>
-        <SuspenseWithPerf traceId={traceName} fallback={'loading'}>
+        <SuspenseWithPerf
+          traceId={traceName}
+          fallback={'loading'}
+          firePerf={mockPerf()}
+        >
           <PromiseThrower />
         </SuspenseWithPerf>
       </Provider>
     );
 
-    expect(createTrace).toHaveBeenCalledWith(traceName);
+    expect(mark).toBeCalledWith('_traceStart[0]');
+    expect(mark).toHaveBeenCalledTimes(1);
   });
 
   it('starts a trace when a promise is thrown and stops when it resolves', async () => {
@@ -122,7 +136,11 @@ describe('SuspenseWithPerf', () => {
 
     const { getByTestId } = render(
       <Provider>
-        <SuspenseWithPerf fallback={<Fallback />} traceId="test lifecycle">
+        <SuspenseWithPerf
+          fallback={<Fallback />}
+          traceId="test lifecycle"
+          firePerf={mockPerf()}
+        >
           <Comp />
         </SuspenseWithPerf>
       </Provider>
@@ -130,17 +148,26 @@ describe('SuspenseWithPerf', () => {
 
     expect(getByTestId('fallback')).toBeInTheDocument();
 
-    expect(traceStart).toHaveBeenCalledTimes(1);
-    expect(traceEnd).toHaveBeenCalledTimes(0);
+    expect(mark).toBeCalledWith('_test lifecycleStart[0]');
+    expect(mark).toHaveBeenCalledTimes(1);
+    expect(measure).toHaveBeenCalledTimes(0);
 
     act(() => o$.next('a'));
     await waitForElement(() => getByTestId('child'));
     expect(getByTestId('child')).toBeInTheDocument();
 
-    expect(traceStart).toHaveBeenCalledTimes(1);
-    expect(traceEnd).toHaveBeenCalledTimes(1);
+    expect(mark).toBeCalledWith('_test lifecycleEnd[0]');
+    expect(mark).toHaveBeenCalledTimes(2);
+    expect(measure).toHaveBeenCalledTimes(1);
+    expect(measure).toHaveBeenCalledWith(
+      'test lifecycle',
+      '_test lifecycleStart[0]',
+      '_test lifecycleEnd[0]'
+    );
   });
 
+  it.todo('can find fireperf from Context');
+  /*
   it('can find fireperf from Context', () => {
     render(
       <Provider>
@@ -152,78 +179,5 @@ describe('SuspenseWithPerf', () => {
 
     expect(mockPerf).toHaveBeenCalled();
   });
-
-  it('can use firePerf from props', () => {
-    const propPerf = mockPerf();
-    propPerf.trace = jest.fn(() => ({
-      start: traceStart,
-      stop: traceEnd
-    }));
-    render(
-      <SuspenseWithPerf
-        traceId={'hello'}
-        fallback={'loading'}
-        firePerf={(propPerf as unknown) as performance.Performance}
-      >
-        <PromiseThrower />
-      </SuspenseWithPerf>
-    );
-
-    // call the createTrace provided, not the one in context
-    expect(propPerf.trace).toHaveBeenCalled();
-    expect(createTrace).not.toHaveBeenCalled();
-  });
-
-  it('Does not reuse a trace object', async () => {
-    // traces throw if you call start() twice,
-    // even if you've called stop() in between:
-    // https://github.com/firebase/firebase-js-sdk/blob/dd098c6a87f23ddf54a7f9b21b87f7bb3fd56bdd/packages/performance/src/resources/trace.test.ts#L52
-    //
-    // this test covers the scenario where a component
-    // is rendered, and uses suspenseWithPerf, is then
-    // hidden, and then re-rendered, triggering another
-    // suspenseWithPerf
-    //
-    // I ran into this when I loaded a site while logged
-    // in, rendering a component that used a reactfire hook,
-    // then logged out, hiding that component. When I logged
-    // back in without reloading the page, perfmon threw an error
-    // because SuspenseWithPerf tried to reuse a trace.
-
-    const o$ = new Subject();
-
-    const Comp = () => {
-      const val = useObservable(o$, 'perf-test-2');
-
-      if (val === 'throw') {
-        throw new Promise(() => {});
-      }
-
-      return <h1 data-testid="child">Actual</h1>;
-    };
-
-    const Component = () => {
-      return (
-        <SuspenseWithPerf
-          traceId={'hello'}
-          fallback={'loading'}
-          firePerf={(mockPerf() as unknown) as performance.Performance}
-        >
-          <Comp />
-        </SuspenseWithPerf>
-      );
-    };
-
-    // render SuspenseWithPerf and go through normal trace start -> trace stop
-    const { getByTestId, rerender } = render(<Component />);
-    expect(createTrace).toHaveBeenCalledTimes(1);
-    act(() => o$.next('some value'));
-    await waitForElement(() => getByTestId('child'));
-
-    // this is a magic value that will cause the child to throw a Promise again
-    act(() => o$.next('throw'));
-
-    // if createTrace is only called once, the firebase SDK will throw
-    expect(createTrace).toHaveBeenCalledTimes(2);
-  });
+*/
 });
