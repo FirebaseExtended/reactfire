@@ -8,6 +8,5 @@ export default {
     name: 'reactfire'
   },
   external: id => !id.startsWith('.'),
-  plugins: [resolve()],
-  inlineDynamicImports: true
+  plugins: [resolve()]
 };
