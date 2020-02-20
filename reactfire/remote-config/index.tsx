@@ -32,7 +32,7 @@ function typeSafeUse<T>(
   getter: Getter$<T>,
   remoteConfig?: RemoteConfig
 ): T {
-  remoteConfig = remoteConfig || useRemoteConfig()();
+  remoteConfig = remoteConfig || useRemoteConfig();
   // INVESTIGATE need to use a public API to get at the app name, one doesn't appear to exist...
   // we might need to iterate over the Firebase apps and check for remoteConfig equality? this works for now
   const appName = (remoteConfig as RemoteConfigWithPrivate)._storage?.appName;

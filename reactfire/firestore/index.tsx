@@ -28,7 +28,7 @@ export function preloadFirestoreDoc(
   firebaseApp: firebase.app.App
 ) {
   return preloadFirestore(firebaseApp).then(firestore => {
-    const ref = refProvider(firestore() as firebase.firestore.Firestore);
+    const ref = refProvider(firestore());
     return preloadObservable(
       doc(ref),
       `firestore:doc:${ref.firestore.app.name}:${ref.path}`

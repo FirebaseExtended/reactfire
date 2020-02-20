@@ -29,25 +29,6 @@ describe('FirebaseAppProvider', () => {
     spy.mockRestore();
   });
 
-  it('initializes fireperf if specified', async () => {
-    const mockPerf = jest.fn();
-    firebase['performance' as any] = mockPerf;
-    const app: firebase.app.App = { performance: mockPerf } as any;
-
-    render(<FirebaseAppProvider firebaseApp={app} initPerformance />);
-
-    expect(mockPerf).toBeCalled();
-  });
-
-  it('does not initialize fireperf if not specified', async () => {
-    const mockPerf = jest.fn();
-    firebase['performance' as any] = mockPerf;
-    const app: firebase.app.App = { performance: mockPerf } as any;
-
-    render(<FirebaseAppProvider firebaseApp={app} />);
-
-    expect(mockPerf).not.toBeCalled();
-  });
 });
 
 describe('useFirebaseApp', () => {
