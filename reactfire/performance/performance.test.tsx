@@ -23,9 +23,11 @@ const mockFirebase: firebase.app.App = {
 
 const mark = jest.fn();
 const measure = jest.fn();
+const getEntriesByName = jest.fn(() => []);
 
 window.performance.mark = mark;
 window.performance.measure = measure;
+window.performance.getEntriesByName = getEntriesByName;
 
 const PromiseThrower = () => {
   throw new Promise((resolve, reject) => {});

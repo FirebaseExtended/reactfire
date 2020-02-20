@@ -18,21 +18,17 @@ export function SuspenseWithPerf({
     preloadPerformance().then(perf => perf());
   }
 
-  const mark = performance?.mark || (() => {});
-  const measure = performance?.measure || (() => {});
-  const getEntriesByName = performance?.getEntriesByName || (() => []);
-
-  const entries = getEntriesByName(traceId, 'measure');
+  const entries = performance?.getEntriesByName(traceId, 'measure') || [];
   const startMarkName = `_${traceId}Start[${entries.length}]`;
   const endMarkName = `_${traceId}End[${entries.length}]`;
 
   const Fallback = () => {
     React.useLayoutEffect(() => {
-      mark(startMarkName);
+      performance?.mark(startMarkName);
 
       return () => {
-        mark(endMarkName);
-        measure(traceId, startMarkName, endMarkName);
+        performance?.mark(endMarkName);
+        performance?.measure(traceId, startMarkName, endMarkName);
       };
     }, [traceId]);
 
