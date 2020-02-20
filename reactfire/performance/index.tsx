@@ -1,12 +1,11 @@
-import { performance } from 'firebase/app';
 import * as React from 'react';
-import { usePerformance } from '../firebaseApp';
+import { preloadPerformance } from '../firebaseApp';
 
 export interface SuspensePerfProps {
   children: React.ReactNode;
   traceId: string;
   fallback: React.ReactNode;
-  firePerf?: performance.Performance;
+  firePerf?: import('firebase/app').performance.Performance;
 }
 
 export function SuspenseWithPerf({
@@ -15,15 +14,20 @@ export function SuspenseWithPerf({
   fallback,
   firePerf
 }: SuspensePerfProps): JSX.Element {
-  firePerf = firePerf || usePerformance();
+  if (!firePerf) {
+    preloadPerformance();
+  }
+
+  const startMarkName = `${traceId}[${Math.random().toString(36)}]`;
+  const endMarkName = `${traceId}[${Math.random().toString(36)}]`;
 
   const Fallback = () => {
     React.useLayoutEffect(() => {
-      const trace = firePerf.trace(traceId);
-      trace.start();
+      performance?.mark(startMarkName);
 
       return () => {
-        trace.stop();
+        performance?.mark(endMarkName);
+        performance?.measure(traceId, startMarkName, endMarkName);
       };
     }, [traceId]);
 
