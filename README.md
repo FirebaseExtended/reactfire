@@ -50,8 +50,6 @@ import {
   SuspenseWithPerf
 } from 'reactfire';
 
-import 'firebase/performance';
-
 const firebaseConfig = {
   /* add your config object from the Firebase console */
 };
