@@ -13,7 +13,7 @@ import { from } from 'rxjs';
 export function preloadUser(firebaseApp: firebase.app.App) {
   return preloadAuth(firebaseApp).then(auth => {
     const result = preloadObservable(
-      user(auth),
+      user(auth()),
       `auth:user:${firebaseApp.name}`
     );
     return result.toPromise();

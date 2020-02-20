@@ -25,7 +25,7 @@ const UserDetails = ({ user }) => {
 };
 
 const SignInForm = () => {
-  const auth = useAuth();
+  const auth = useAuth;
 
   const uiConfig = {
     signInFlow: 'popup',
@@ -36,7 +36,7 @@ const SignInForm = () => {
     }
   };
 
-  return <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />;
+  return <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth()} />;
 };
 
 const FirebaseAuthStateButton = () => {

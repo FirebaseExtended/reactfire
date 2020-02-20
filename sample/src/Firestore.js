@@ -10,11 +10,11 @@ import {
 } from 'reactfire';
 
 const Counter = props => {
-  const firestore = useFirestore();
+  const firestore = useFirestore;
   
   const serverIncrement = firestore.FieldValue.increment;
 
-  const ref = firestore.doc('count/counter');
+  const ref = firestore().doc('count/counter');
 
   const increment = amountToIncrement => {
     ref.update({
