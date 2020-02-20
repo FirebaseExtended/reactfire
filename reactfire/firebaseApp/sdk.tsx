@@ -71,11 +71,12 @@ function proxyComponent(
   return new Proxy(componentFn, {
     get: (target, p) => target()[p],
     apply: (target, _this, args) => {
+      const component = target().bind(_this);
       // If they don't pass an app, assume the app in context rather than [DEFAULT]
       if (!args[0]) {
         args[0] = contextualApp;
       }
-      return target().bind(_this)(...args);
+      return component(...args);
     }
   }) as any;
 }
