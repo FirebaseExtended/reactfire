@@ -12,6 +12,7 @@ type ComponentName =
   | 'performance'
   | 'remoteConfig'
   | 'storage';
+
 type ValueOf<T> = T[keyof T];
 type App = firebase.app.App;
 type FirebaseInstanceFactory = ValueOf<Pick<App, ComponentName>>;
@@ -61,14 +62,14 @@ function proxyComponent(
   componentName: ComponentName
 ): FirebaseNamespaceComponent {
   let contextualApp: App | undefined;
-  const componentFn = () => {
+  const useComponent = () => {
     contextualApp = useFirebaseApp();
     if (!firebase[componentName]) {
       throw importSDK(componentName);
     }
     return firebase[componentName];
   };
-  return new Proxy(componentFn, {
+  return new Proxy(useComponent, {
     get: (target, p) => target()[p],
     apply: (target, _this, args) => {
       const component = target().bind(_this);
@@ -90,6 +91,16 @@ export const useMessaging = proxyComponent('messaging');
 export const usePerformance = proxyComponent('performance');
 export const useRemoteConfig = proxyComponent('remoteConfig');
 export const useStorage = proxyComponent('storage');
+
+export const auth = useAuth;
+export const analytics = useAnalytics;
+export const database = useDatabase;
+export const firestore = useFirestore;
+export const functions = useFunctions;
+export const messaging = useMessaging;
+export const performance = usePerformance;
+export const remoteConfig = useRemoteConfig;
+export const storage = useStorage;
 
 function preload(
   componentName: 'auth'
