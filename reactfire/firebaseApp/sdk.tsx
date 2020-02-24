@@ -63,9 +63,9 @@ function proxyComponent(
   componentName: ComponentName
 ): FirebaseNamespaceComponent {
   let contextualApp: App | undefined;
-  const useComponent = () => {
+  const useComponent = (app?: App) => {
     contextualApp = useFirebaseApp();
-    const sdkSubject = preload(componentName, contextualApp);
+    const sdkSubject = preload(componentName, app || contextualApp);
     if (!sdkSubject.hasValue) {
       throw sdkSubject.firstEmission;
     }
@@ -75,7 +75,7 @@ function proxyComponent(
   return new Proxy(useComponent, {
     get: (target, p) => target()[p],
     apply: (target, _this, args) => {
-      const component = target().bind(_this);
+      const component = target(args[0]).bind(_this);
       // If they don't pass an app, assume the app in context rather than [DEFAULT]
       if (!args[0]) {
         args[0] = contextualApp;
