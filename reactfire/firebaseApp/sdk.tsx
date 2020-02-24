@@ -1,212 +1,195 @@
-import { useFirebaseApp, preloadRequest, usePreloadedRequest } from '..';
+import { DEFAULT_APP_NAME } from '../index';
+import { useFirebaseApp } from '.';
+import * as firebase from 'firebase/app';
 
-type RemoteConfig = import('firebase/app').remoteConfig.RemoteConfig;
-type Storage = import('firebase/app').storage.Storage;
-type Firestore = import('firebase/app').firestore.Firestore;
-type Performance = import('firebase/app').performance.Performance;
-type Messaging = import('firebase/app').messaging.Messaging;
-type Functions = import('firebase/app').functions.Functions;
-type Database = import('firebase/app').database.Database;
-type Auth = import('firebase/app').auth.Auth;
+type ComponentName =
+  | 'analytics'
+  | 'auth'
+  | 'database'
+  | 'firestore'
+  | 'functions'
+  | 'messaging'
+  | 'performance'
+  | 'remoteConfig'
+  | 'storage';
 
-type FirebaseSDK =
-  | (() => firebase.analytics.Analytics)
-  | (() => firebase.auth.Auth)
-  | ((url?: string) => firebase.database.Database)
-  | (() => firebase.firestore.Firestore)
-  | ((region?: string) => firebase.functions.Functions)
-  | (() => firebase.messaging.Messaging)
-  | (() => firebase.performance.Performance)
-  | (() => firebase.remoteConfig.RemoteConfig)
-  | ((url?: string) => firebase.storage.Storage);
+type ValueOf<T> = T[keyof T];
+type App = firebase.app.App;
+type FirebaseInstanceFactory = ValueOf<Pick<App, ComponentName>>;
+type FirebaseNamespaceComponent = ValueOf<Pick<typeof firebase, ComponentName>>;
 
-enum SDK {
-  ANALYTICS = 'analytics',
-  AUTH = 'auth',
-  DATABASE = 'database',
-  FIRESTORE = 'firestore',
-  FUNCTIONS = 'functions',
-  MESSAGING = 'messaging',
-  PERFORMANCE = 'performance',
-  REMOTE_CONFIG = 'remoteConfig',
-  STORAGE = 'storage'
+function importSDK(sdk: ComponentName) {
+  switch (sdk) {
+    case 'analytics':
+      return import(/* webpackChunkName: "analytics" */ 'firebase/analytics');
+    case 'auth':
+      return import(/* webpackChunkName: "auth" */ 'firebase/auth');
+    case 'database':
+      return import(/* webpackChunkName: "database" */ 'firebase/database');
+    case 'firestore':
+      return import(/* webpackChunkName: "firestore" */ 'firebase/firestore');
+    case 'functions':
+      return import(/* webpackChunkName: "functions" */ 'firebase/functions');
+    case 'messaging':
+      return import(/* webpackChunkName: "messaging" */ 'firebase/messaging');
+    case 'performance':
+      return import(
+        /* webpackChunkName: "performance" */ 'firebase/performance'
+      );
+    case 'remoteConfig':
+      return import(
+        /* webpackChunkName: "remoteConfig" */ 'firebase/remote-config'
+      );
+    case 'storage':
+      return import(/* webpackChunkName: "storage" */ 'firebase/storage');
+  }
 }
 
-function fetchSDK(
-  sdk: SDK,
-  firebaseApp: firebase.app.App,
-  settingsCallback: (sdk: FirebaseSDK) => Promise<any> | void = () =>
-    Promise.resolve()
-) {
-  if (!firebaseApp) {
-    throw new Error('Firebase app was not provided');
-  }
-
-  let sdkPromise: Promise<FirebaseSDK>;
-
-  if (firebaseApp[sdk]) {
-    // Don't apply settings here. Only needed for lazy loaded SDKs.
-    // If not lazy loaded, user can provide settings as normal
-    sdkPromise = Promise.resolve(firebaseApp[sdk]);
-  } else {
-    switch (sdk) {
-      case SDK.ANALYTICS:
-        sdkPromise = import(
-          /* webpackChunkName: "analytics" */ 'firebase/analytics'
-        );
-        break;
-      case SDK.AUTH:
-        sdkPromise = import(/* webpackChunkName: "auth" */ 'firebase/auth');
-        break;
-      case SDK.DATABASE:
-        sdkPromise = import(
-          /* webpackChunkName: "database" */ 'firebase/database'
-        );
-        break;
-      case SDK.FIRESTORE:
-        sdkPromise = import(
-          /* webpackChunkName: "firestore" */ 'firebase/firestore'
-        );
-        break;
-      case SDK.FUNCTIONS:
-        sdkPromise = import(
-          /* webpackChunkName: "functions" */ 'firebase/functions'
-        );
-        break;
-      case SDK.MESSAGING:
-        sdkPromise = import(
-          /* webpackChunkName: "messaging" */ 'firebase/messaging'
-        );
-        break;
-      case SDK.PERFORMANCE:
-        sdkPromise = import(
-          /* webpackChunkName: "performance" */ 'firebase/performance'
-        );
-        break;
-      case SDK.REMOTE_CONFIG:
-        sdkPromise = import(
-          /* webpackChunkName: "remoteConfig" */ 'firebase/remote-config'
-        );
-        break;
-      case SDK.STORAGE:
-        sdkPromise = import(
-          /* webpackChunkName: "storage" */ 'firebase/storage'
-        );
-        break;
+function proxyComponent(componentName: 'auth'): typeof firebase.auth;
+function proxyComponent(componentName: 'analytics'): typeof firebase.analytics;
+function proxyComponent(componentName: 'database'): typeof firebase.database;
+function proxyComponent(componentName: 'firestore'): typeof firebase.firestore;
+function proxyComponent(componentName: 'functions'): typeof firebase.functions;
+function proxyComponent(componentName: 'messaging'): typeof firebase.messaging;
+function proxyComponent(
+  componentName: 'performance'
+): typeof firebase.performance;
+function proxyComponent(
+  componentName: 'remoteConfig'
+): typeof firebase.remoteConfig;
+function proxyComponent(componentName: 'storage'): typeof firebase.storage;
+function proxyComponent(
+  componentName: ComponentName
+): FirebaseNamespaceComponent {
+  let contextualApp: App | undefined;
+  const useComponent = () => {
+    contextualApp = useFirebaseApp();
+    if (!firebase[componentName]) {
+      throw importSDK(componentName);
     }
-    sdkPromise = sdkPromise
-      .then(() => settingsCallback(firebaseApp[sdk]))
-      .then(() => firebaseApp[sdk]);
-  }
-  preloadRequest(() => sdkPromise, `firebase-sdk-${sdk}`);
-
-  return sdkPromise;
+    return firebase[componentName];
+  };
+  return new Proxy(useComponent, {
+    get: (target, p) => target()[p],
+    apply: (target, _this, args) => {
+      const component = target().bind(_this);
+      // If they don't pass an app, assume the app in context rather than [DEFAULT]
+      if (!args[0]) {
+        args[0] = contextualApp;
+      }
+      return component(...args);
+    }
+  }) as any;
 }
 
-function useSDK(sdk: SDK, firebaseApp?: firebase.app.App) {
-  firebaseApp = firebaseApp || useFirebaseApp();
+export const useAuth = proxyComponent('auth');
+export const useAnalytics = proxyComponent('analytics');
+export const useDatabase = proxyComponent('database');
+export const useFirestore = proxyComponent('firestore');
+export const useFunctions = proxyComponent('functions');
+export const useMessaging = proxyComponent('messaging');
+export const usePerformance = proxyComponent('performance');
+export const useRemoteConfig = proxyComponent('remoteConfig');
+export const useStorage = proxyComponent('storage');
 
-  // use the request cache so we don't issue multiple fetches for the sdk
-  const result = preloadRequest(
-    () => fetchSDK(sdk, firebaseApp),
-    `firebase-sdk-${sdk}`
-  );
+export const auth = useAuth;
+export const analytics = useAnalytics;
+export const database = useDatabase;
+export const firestore = useFirestore;
+export const functions = useFunctions;
+export const messaging = useMessaging;
+export const performance = usePerformance;
+export const remoteConfig = useRemoteConfig;
+export const storage = useStorage;
 
-  return usePreloadedRequest(result);
+function preload(
+  componentName: 'auth'
+): (
+  firebaseApp?: App,
+  settingsCallback?: (instanceFactory: App['auth']) => any
+) => Promise<App['auth']>;
+function preload(
+  componentName: 'analytics'
+): (
+  firebaseApp?: App,
+  settingsCallback?: (instanceFactory: App['analytics']) => any
+) => Promise<App['analytics']>;
+function preload(
+  componentName: 'database'
+): (
+  firebaseApp?: App,
+  settingsCallback?: (instanceFactory: App['database']) => any
+) => Promise<App['database']>;
+function preload(
+  componentName: 'firestore'
+): (
+  firebaseApp?: App,
+  settingsCallback?: (instanceFactory: App['firestore']) => any
+) => Promise<App['firestore']>;
+function preload(
+  componentName: 'functions'
+): (
+  firebaseApp?: App,
+  settingsCallback?: (instanceFactory: App['functions']) => any
+) => Promise<App['functions']>;
+function preload(
+  componentName: 'messaging'
+): (
+  firebaseApp?: App,
+  settingsCallback?: (instanceFactory: App['messaging']) => any
+) => Promise<App['messaging']>;
+function preload(
+  componentName: 'performance'
+): (
+  firebaseApp?: App,
+  settingsCallback?: (instanceFactory: App['performance']) => any
+) => Promise<App['performance']>;
+function preload(
+  componentName: 'remoteConfig'
+): (
+  firebaseApp?: App,
+  settingsCallback?: (instanceFactory: App['remoteConfig']) => any
+) => Promise<App['remoteConfig']>;
+function preload(
+  componentName: 'storage'
+): (
+  firebaseApp?: App,
+  settingsCallback?: (instanceFactory: App['storage']) => any
+) => Promise<App['storage']>;
+function preload(componentName: ComponentName) {
+  return async (
+    firebaseApp?: App,
+    settingsCallback?: (instanceFactory: FirebaseInstanceFactory) => any
+  ) => {
+    const app = firebaseApp || useFirebaseApp();
+    const initialized = !!app[componentName];
+    if (!initialized) {
+      await importSDK(componentName);
+    }
+    const instanceFactory = app[componentName].bind(
+      app
+    ) as FirebaseInstanceFactory;
+    if (initialized) {
+      if (settingsCallback) {
+        console.warn(
+          `${componentName} was already initialized on ${
+            app.name == DEFAULT_APP_NAME ? 'the default app' : app.name
+          }, ignoring settingsCallback`
+        );
+      }
+    } else if (settingsCallback) {
+      await Promise.resolve(settingsCallback(instanceFactory));
+    }
+    return instanceFactory;
+  };
 }
 
-export function preloadAuth(
-  firebaseApp: firebase.app.App,
-  settingsCallback?: (auth: () => Auth) => void
-) {
-  return fetchSDK(SDK.AUTH, firebaseApp, settingsCallback);
-}
-
-export function useAuth(firebaseApp?: firebase.app.App) {
-  return useSDK(SDK.AUTH, firebaseApp);
-}
-
-export function preloadAnalytics(firebaseApp: firebase.app.App) {
-  return fetchSDK(SDK.ANALYTICS, firebaseApp);
-}
-
-export function useAnalytics(firebaseApp?: firebase.app.App) {
-  return useSDK(SDK.ANALYTICS, firebaseApp);
-}
-
-export function preloadDatabase(
-  firebaseApp: firebase.app.App,
-  settingsCallback?: (database: () => Database) => void
-) {
-  return fetchSDK(SDK.DATABASE, firebaseApp, settingsCallback);
-}
-
-export function useDatabase(firebaseApp?: firebase.app.App) {
-  return useSDK(SDK.DATABASE, firebaseApp);
-}
-
-export function preloadFirestore(
-  firebaseApp: firebase.app.App,
-  settingsCallback?: (firestore: () => Firestore) => Promise<void>
-) {
-  return fetchSDK(SDK.FIRESTORE, firebaseApp, settingsCallback);
-}
-
-export function useFirestore(firebaseApp?: firebase.app.App) {
-  return useSDK(SDK.FIRESTORE, firebaseApp);
-}
-
-export function preloadFunctions(
-  firebaseApp?: firebase.app.App,
-  settingsCallback?: (functions: () => Functions) => void
-) {
-  return fetchSDK(SDK.FUNCTIONS, firebaseApp, settingsCallback);
-}
-
-export function useFunctions(firebaseApp?: firebase.app.App) {
-  return useSDK(SDK.FUNCTIONS, firebaseApp);
-}
-
-export function preloadMessaging(
-  firebaseApp: firebase.app.App,
-  settingsCallback?: (messaging: () => Messaging) => void
-) {
-  return fetchSDK(SDK.MESSAGING, firebaseApp, settingsCallback);
-}
-
-export function useMessaging(firebaseApp?: firebase.app.App) {
-  return useSDK(SDK.MESSAGING, firebaseApp);
-}
-
-export function preloadPerformance(
-  firebaseApp: firebase.app.App,
-  settingsCallback?: (performance: () => Performance) => void
-) {
-  return fetchSDK(SDK.PERFORMANCE, firebaseApp, settingsCallback);
-}
-
-export function usePerformance(firebaseApp?: firebase.app.App) {
-  return useSDK(SDK.PERFORMANCE, firebaseApp);
-}
-
-export function preloadRemoteConfig(
-  firebaseApp: firebase.app.App,
-  settingsCallback?: (remoteConfig: () => RemoteConfig) => Promise<any>
-) {
-  return fetchSDK(SDK.REMOTE_CONFIG, firebaseApp, settingsCallback);
-}
-
-export function useRemoteConfig(firebaseApp?: firebase.app.App) {
-  return useSDK(SDK.REMOTE_CONFIG, firebaseApp);
-}
-
-export function preloadStorage(
-  firebaseApp: firebase.app.App,
-  settingsCallback: (storage: () => Storage) => Promise<void>
-) {
-  return fetchSDK(SDK.STORAGE, firebaseApp, settingsCallback);
-}
-
-export function useStorage(firebaseApp?: firebase.app.App) {
-  return useSDK(SDK.STORAGE, firebaseApp);
-}
+export const preloadAuth = preload('auth');
+export const preloadAnalytics = preload('analytics');
+export const preloadDatabase = preload('database');
+export const preloadFirestore = preload('firestore');
+export const preloadFunctions = preload('functions');
+export const preloadMessaging = preload('messaging');
+export const preloadPerformance = preload('performance');
+export const preloadRemoteConfig = preload('remoteConfig');
+export const preloadStorage = preload('storage');

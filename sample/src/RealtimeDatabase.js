@@ -9,7 +9,7 @@ import {
 
 const Counter = props => {
   const database = useDatabase();
-  const ref = database().ref('counter');
+  const ref = database.ref('counter');
   const increment = amountToIncrement => {
     ref.transaction(counterVal => {
       return counterVal + amountToIncrement;
@@ -56,7 +56,7 @@ const AnimalEntry = ({ saveAnimal }) => {
 
 const List = props => {
   const database = useDatabase();
-  const ref = database().ref('animals');
+  const ref = database.ref('animals');
   const animals = useDatabaseListData(ref, { idField: 'id' });
 
   const addNewAnimal = commonName => {

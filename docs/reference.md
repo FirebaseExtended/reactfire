@@ -22,7 +22,9 @@
   - Database
     - Cloud Firestore
       - [`useFirestoreDoc`](#useFirestoreDoc)
+      - [`useFirestoreDocOnce`](#useFirestoreDocOnce)
       - [`useFirestoreDocData`](#useFirestoreDocData)
+      - [`useFirestoreDocDataOnce`](#useFirestoreDocDataOnce)
       - [`useFirestoreCollection`](#useFirestoreCollection)
       - [`useFirestoreCollectionData`](#useFirestoreCollectionData)
     - Realtime Database
@@ -191,9 +193,43 @@ _Throws a Promise by default_
 
 [`DocumentSnapshot`](https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentSnapshot)
 
+### `useFirestoreDocOnce`
+
+Get a firestore document, but don't listen for updates.
+
+_Throws a Promise by default_
+
+#### Parameters
+
+| Parameter   | Type                                                                                                      | Description                                                                  |
+| ----------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| ref         | [`DocumentReference`](https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference) | A reference to the document you want to listen to                            |
+| options _?_ | ReactFireOptions                                                                                          | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+
+#### Returns
+
+[`DocumentSnapshot`](https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentSnapshot)
+
 ### `useFirestoreDocData`
 
 Listen to a Firestore Document.
+
+_Throws a Promise by default_
+
+#### Parameters
+
+| Parameter   | Type                                                                                                      | Description                                                                  |
+| ----------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| ref         | [`DocumentReference`](https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference) | A reference to the document you want to listen to                            |
+| options _?_ | ReactFireOptions                                                                                          | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+
+#### Returns
+
+`T`
+
+### `useFirestoreDocDataOnce`
+
+Get a firestore document, but don't listen for updates.
 
 _Throws a Promise by default_
 

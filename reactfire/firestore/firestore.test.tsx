@@ -8,7 +8,9 @@ import {
   useFirestoreCollection,
   FirebaseAppProvider,
   useFirestoreCollectionData,
-  useFirestoreDocData
+  useFirestoreDocData,
+  useFirestoreDocDataOnce,
+  useFirestoreDocOnce
 } from '..';
 import { firestore } from 'firebase/app';
 
@@ -104,6 +106,91 @@ describe('Firestore', () => {
     });
   });
 
+  describe('useFirestoreDocOnce', () => {
+    it.todo(
+      'works when the document does not exist, and does not update when it is created'
+    );
+    /*
+
+    INVESTIGATE this test is flaky
+
+    it('works when the document does not exist, and does not update when it is created', async () => {
+      const ref = app
+        .firestore()
+        .collection('testDoc')
+        .doc('emptydoc');
+
+      let deleted = false;
+      const deletePromise = ref.delete().then(() => (deleted = true));
+
+      const ReadFirestoreDoc = () => {
+        if (!deleted) {
+          throw deletePromise;
+        }
+
+        const dataOnce = useFirestoreDocOnce<any>(ref);
+
+        return (
+          <>
+            <h1 data-testid="once">{dataOnce.exists.toString()}</h1>
+          </>
+        );
+      };
+      const { getByTestId } = render(
+        <FirebaseAppProvider firebase={app}>
+          <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
+            <ReadFirestoreDoc />
+          </React.Suspense>
+        </FirebaseAppProvider>
+      );
+
+      await waitForElement(() => getByTestId('once'));
+      expect(getByTestId('once')).toContainHTML('false');
+
+      await act(() => ref.set({ a: 'test' }));
+      expect(getByTestId('once')).toContainHTML('false');
+    });
+    
+    */
+  });
+
+  describe('useFirestoreDocDataOnce', () => {
+    it('does not update on database changes [TEST REQUIRES EMULATOR]', async () => {
+      const mockData1 = { a: 'hello' };
+      const mockData2 = { a: 'goodbye' };
+
+      const ref = app
+        .firestore()
+        .collection('testDoc')
+        .doc('readSuccess');
+
+      await ref.set(mockData1);
+
+      const ReadFirestoreDoc = () => {
+        const dataOnce = useFirestoreDocDataOnce<any>(ref, { idField: 'id' });
+
+        return (
+          <>
+            <h1 data-testid="once">{dataOnce.a}</h1>{' '}
+          </>
+        );
+      };
+      const { getByTestId } = render(
+        <FirebaseAppProvider firebase={app}>
+          <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
+            <ReadFirestoreDoc />
+          </React.Suspense>
+        </FirebaseAppProvider>
+      );
+
+      await waitForElement(() => getByTestId('once'));
+      expect(getByTestId('once')).toContainHTML(mockData1.a);
+
+      await act(() => ref.set(mockData2));
+      expect(getByTestId('once')).toContainHTML(mockData1.a);
+    });
+  });
+
   describe('useFirestoreCollection', () => {
     it('can get a Firestore collection [TEST REQUIRES EMULATOR]', async () => {
       const mockData1 = { a: 'hello' };
@@ -115,7 +202,7 @@ describe('Firestore', () => {
       await act(() => ref.add(mockData2));
 
       const ReadFirestoreCollection = () => {
-        const collection = useFirestoreCollection(ref);
+        const collection = useFirestoreCollection(ref) as any;
 
         return (
           <ul data-testid="readSuccess">
@@ -151,11 +238,12 @@ describe('Firestore', () => {
       await act(() => ref.add(mockData2));
 
       const ReadFirestoreCollection = () => {
-        const list = (useFirestoreCollection(ref) as firestore.QuerySnapshot)
-          .docs;
-        const filteredList = (useFirestoreCollection(
+        const list = ((useFirestoreCollection(
+          ref
+        ) as any) as firestore.QuerySnapshot).docs;
+        const filteredList = ((useFirestoreCollection(
           filteredRef
-        ) as firestore.QuerySnapshot).docs;
+        ) as any) as firestore.QuerySnapshot).docs;
 
         // filteredList's length should be 1 since we only added one value that matches its query
         expect(filteredList.length).toEqual(1);

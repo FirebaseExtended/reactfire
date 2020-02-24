@@ -13,6 +13,7 @@ import {
   checkStartWithValue
 } from '..';
 import { preloadObservable } from '../useObservable';
+import { first } from 'rxjs/operators';
 
 // starts a request for a firestore doc.
 // imports the firestore SDK automatically
@@ -27,8 +28,11 @@ export function preloadFirestoreDoc(
   firebaseApp: firebase.app.App
 ) {
   return preloadFirestore(firebaseApp).then(firestore => {
-    const ref = refProvider(firestore() as firebase.firestore.Firestore);
-    return preloadObservable(doc(ref), ref.path);
+    const ref = refProvider(firestore());
+    return preloadObservable(
+      doc(ref),
+      `firestore:doc:${ref.firestore.app.name}:${ref.path}`
+    );
   });
 }
 
@@ -44,8 +48,25 @@ export function useFirestoreDoc<T = unknown>(
 ): T extends {} ? T : firestore.DocumentSnapshot {
   return useObservable(
     doc(ref),
-    'firestore doc: ' + ref.path,
+    `firestore:doc:${ref.firestore.app.name}:${ref.path}`,
     options ? options.startWithValue : undefined
+  );
+}
+
+/**
+ * Get a firestore document and don't subscribe to changes
+ *
+ * @param ref - Reference to the document you want to get
+ * @param options
+ */
+export function useFirestoreDocOnce<T = unknown>(
+  ref: firestore.DocumentReference,
+  options?: ReactFireOptions<T>
+): T extends {} ? T : firestore.DocumentSnapshot {
+  return useObservable(
+    doc(ref).pipe(first()),
+    `firestore:docOnce:${ref.firestore.app.name}:${ref.path}`,
+    checkStartWithValue(options)
   );
 }
 
@@ -59,9 +80,28 @@ export function useFirestoreDocData<T = unknown>(
   ref: firestore.DocumentReference,
   options?: ReactFireOptions<T>
 ): T {
+  const idField = checkIdField(options);
   return useObservable(
-    docData(ref, checkIdField(options)),
-    'firestore docdata: ' + ref.path,
+    docData(ref, idField),
+    `firestore:docData:${ref.firestore.app.name}:${ref.path}:idField=${idField}`,
+    checkStartWithValue(options)
+  );
+}
+
+/**
+ * Get a firestore document and don't subscribe to changes
+ *
+ * @param ref - Reference to the document you want to get
+ * @param options
+ */
+export function useFirestoreDocDataOnce<T = unknown>(
+  ref: firestore.DocumentReference,
+  options?: ReactFireOptions<T>
+): T {
+  const idField = checkIdField(options);
+  return useObservable(
+    docData(ref, idField).pipe(first()),
+    `firestore:docDataOnce:${ref.firestore.app.name}:${ref.path}:idField=${idField}`,
     checkStartWithValue(options)
   );
 }
@@ -76,12 +116,14 @@ export function useFirestoreCollection<T = { [key: string]: unknown }>(
   query: firestore.Query,
   options?: ReactFireOptions<T[]>
 ): T extends {} ? T[] : firestore.QuerySnapshot {
-  const queryId = getHashFromFirestoreQuery(query);
+  const queryId = `firestore:collection:${
+    query.firestore.app.name
+  }:${getHashFromFirestoreQuery(query)}`;
 
   return useObservable(
-    fromCollectionRef(query, checkIdField(options)),
+    fromCollectionRef(query),
     queryId,
-    options ? options.startWithValue : undefined
+    checkStartWithValue(options)
   );
 }
 
@@ -96,8 +138,7 @@ interface _QueryWithId extends firestore.Query {
 }
 
 function getHashFromFirestoreQuery(query: firestore.Query) {
-  const hash = (query as _QueryWithId)._query.canonicalId();
-  return `firestore: ${hash}`;
+  return (query as _QueryWithId)._query.canonicalId();
 }
 
 /**
@@ -110,10 +151,13 @@ export function useFirestoreCollectionData<T = { [key: string]: unknown }>(
   query: firestore.Query,
   options?: ReactFireOptions<T[]>
 ): T[] {
-  const queryId = getHashFromFirestoreQuery(query);
+  const idField = checkIdField(options);
+  const queryId = `firestore:collectionData:${
+    query.firestore.app.name
+  }:${getHashFromFirestoreQuery(query)}:idField=${idField}`;
 
   return useObservable(
-    collectionData(query, checkIdField(options)),
+    collectionData(query, idField),
     queryId,
     checkStartWithValue(options)
   );

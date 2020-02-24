@@ -22,7 +22,7 @@ export function useDatabaseObject<T = unknown>(
 ): QueryChange | T {
   return useObservable(
     object(ref),
-    `RTDB Doc: ${ref.toString()}`,
+    `database:object:${ref.toString()}`,
     options ? options.startWithValue : undefined
   );
 }
@@ -54,9 +54,10 @@ export function useDatabaseObjectData<T>(
   ref: database.Reference,
   options?: ReactFireOptions<T>
 ): T {
+  const idField = checkIdField(options);
   return useObservable(
-    objectVal(ref, checkIdField(options)),
-    `RTDB DocData: ${ref.toString()}`,
+    objectVal(ref, idField),
+    `database:objectVal:${ref.toString()}:idField=${idField}`,
     checkStartWithValue(options)
   );
 }
@@ -78,7 +79,7 @@ export function useDatabaseList<T = { [key: string]: unknown }>(
   ref: database.Reference | database.Query,
   options?: ReactFireOptions<T[]>
 ): QueryChange[] | T[] {
-  const hash = `RTDB List: ${ref.toString()}|${(ref as _QueryWithId).queryIdentifier()}`;
+  const hash = `database:list:${ref.toString()}|${(ref as _QueryWithId).queryIdentifier()}`;
 
   return useObservable(
     list(ref),
@@ -91,9 +92,10 @@ export function useDatabaseListData<T = { [key: string]: unknown }>(
   ref: database.Reference | database.Query,
   options?: ReactFireOptions<T[]>
 ): T[] {
+  const idField = checkIdField(options);
   return useObservable(
-    listVal(ref, checkIdField(options)),
-    `RTDB ListData: ${ref.toString()}`,
+    listVal(ref, idField),
+    `database:listVal:${ref.toString()}|${(ref as _QueryWithId).queryIdentifier()}:idField=${idField}`,
     checkStartWithValue(options)
   );
 }

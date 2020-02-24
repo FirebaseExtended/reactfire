@@ -5,12 +5,13 @@ import {
   SuspenseWithPerf,
   useFirestoreCollectionData,
   useFirestoreDocData,
+  useFirestoreDocDataOnce,
   useFirestore
 } from 'reactfire';
 
 const Counter = props => {
-  const firestore = useFirestore();
-
+  const firestore = useFirestore;
+  
   const serverIncrement = firestore.FieldValue.increment;
 
   const ref = firestore().doc('count/counter');
@@ -30,6 +31,16 @@ const Counter = props => {
       <button onClick={() => increment(1)}>+</button>
     </>
   );
+};
+
+const StaticValue = props => {
+  const firestore = useFirestore();
+
+  const ref = firestore.doc('count/counter');
+
+  const { value } = useFirestoreDocDataOnce(ref);
+
+  return <span>{value}</span>;
 };
 
 const AnimalEntry = ({ saveAnimal }) => {
@@ -75,7 +86,7 @@ const List = ({ query, removeAnimal }) => {
 
 const FavoriteAnimals = props => {
   const firestore = useFirestore();
-  const baseRef = firestore().collection('animals');
+  const baseRef = firestore.collection('animals');
   const [isAscending, setIsAscending] = useState(true);
   const query = baseRef.orderBy('commonName', isAscending ? 'asc' : 'desc');
   const [startTransition, isPending] = useTransition({
@@ -121,6 +132,14 @@ const SuspenseWrapper = props => {
           >
             <Counter />
           </SuspenseWithPerf>
+          <h3>Sample One-time Get</h3>
+          <SuspenseWithPerf
+            fallback="connecting to Firestore..."
+            traceId="firestore-demo-doc"
+          >
+            <StaticValue />
+          </SuspenseWithPerf>
+
           <h3>Sample Collection Listener</h3>
           <SuspenseWithPerf
             fallback="connecting to Firestore..."

@@ -3,7 +3,7 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { SuspenseWithPerf, useUser, useAuth } from 'reactfire';
 
 const signOut = auth =>
-  auth()
+  auth
     .signOut()
     .then(() => console.log('signed out'));
 
@@ -25,7 +25,7 @@ const UserDetails = ({ user }) => {
 };
 
 const SignInForm = () => {
-  const auth = useAuth();
+  const auth = useAuth;
 
   const uiConfig = {
     signInFlow: 'popup',
