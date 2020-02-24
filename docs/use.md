@@ -192,10 +192,10 @@ Just as the SDK hooks like `useFirestore` can automatically fetch an SDK, you ca
 
 ### Initialize an SDK
 
-A few Firestore SDKs need to be initialized (`firebase().performance().initialize()`, `firebase.remoteConfig().fetchAndActivate()`), or need to have settings set before any other calls are made (`firebase.firestore().enablePersistence()`). This can be done by using an extra argument in the preload method:
+Some Firestore SDKs need to be initialized (`firebase.remoteConfig().fetchAndActivate()`), or need to have settings set before any other calls are made (`firebase.firestore().enablePersistence()`). This can be done by using an extra argument in the preload method:
 
 ```jsx
-preloadFirestore(firestore => {
+preloadFirestore(firebaseApp, firestore => {
   return firestore().enablePersistence();
 });
 ```
@@ -252,7 +252,7 @@ function LogInForm() {
   const auth = useAuth();
 
   const signIn = () => {
-    auth().signInWithEmailAndPassword(email, password);
+    auth.signInWithEmailAndPassword(email, password);
   };
 
   return <MySignInForm onSubmit={signIn} />;
@@ -286,7 +286,7 @@ function MyPageViewLogger({ location }) {
   // By passing `location.pathname` to the second argument of `useEffect`,
   // we only log on first render and when the `pathname` changes
   useEffect(() => {
-    analytics.logEvent('page-view', location.pathname);
+    analytics.logEvent('page-view', { path_name: location.pathname });
   }, [location.pathname]);
 
   return null;
