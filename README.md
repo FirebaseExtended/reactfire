@@ -31,7 +31,7 @@ yarn add reactfire
 ## Example use
 
 Check out the
-[live version on StackBlitz](https://stackblitz.com/edit/reactfire-sample)!
+[live version on StackBlitz](https://stackblitz.com/fork/reactfire-sample)!
 
 ```jsx
 import React, { Component } from 'react';

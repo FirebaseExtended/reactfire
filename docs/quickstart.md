@@ -4,7 +4,7 @@
 
 We'll build a web app that displays, in _real time_, the tastiness of a burrito. It will listen to **Cloud Firestore** for its data, and we'll configure **Firebase Performance Monitoring** so we can get some perf stats.
 
-To see the completed app, check out [this StackBlitz workspace](https://stackblitz.com/edit/reactfire-sample).
+To see the completed app, check out [this StackBlitz workspace](https://stackblitz.com/fork/reactfire-sample).
 
 ## 1. In a terminal, create a fresh React app and `cd` into its directory
 
