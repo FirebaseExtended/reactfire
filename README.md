@@ -28,6 +28,10 @@ npm install --save reactfire
 yarn add reactfire
 ```
 
+- [**Quickstart**](./docs/quickstart.md)
+- [**Common Use Cases**](./docs/use.md)
+- [**API Reference**](./docs/reference.md)
+
 ## Example use
 
 Check out the
@@ -80,12 +84,6 @@ function App() {
 // https://reactjs.org/docs/concurrent-mode-adoption.html#enabling-concurrent-mode
 createRoot(document.getElementById('root')).render(<App />);
 ```
-
-## Learn More
-
-- [**Quickstart**](./docs/quickstart.md)
-- [**Common Use Cases**](./docs/use.md)
-- [**API Reference**](./docs/reference.md)
 
 ---
 
