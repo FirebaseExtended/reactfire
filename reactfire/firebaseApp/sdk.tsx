@@ -65,7 +65,7 @@ function proxyComponent(
   let contextualApp: App | undefined;
   const useComponent = () => {
     contextualApp = useFirebaseApp();
-    const sdkSubject = loadSDK(componentName, contextualApp);
+    const sdkSubject = preload(componentName, contextualApp);
     if (!sdkSubject.hasValue) {
       throw sdkSubject.firstEmission;
     }
@@ -105,68 +105,68 @@ export const performance = usePerformance;
 export const remoteConfig = useRemoteConfig;
 export const storage = useStorage;
 
-function preload(
+function preloadFactory(
   componentName: 'auth'
 ): (
   firebaseApp?: App,
   settingsCallback?: (instanceFactory: App['auth']) => any
 ) => Promise<App['auth']>;
-function preload(
+function preloadFactory(
   componentName: 'analytics'
 ): (
   firebaseApp?: App,
   settingsCallback?: (instanceFactory: App['analytics']) => any
 ) => Promise<App['analytics']>;
-function preload(
+function preloadFactory(
   componentName: 'database'
 ): (
   firebaseApp?: App,
   settingsCallback?: (instanceFactory: App['database']) => any
 ) => Promise<App['database']>;
-function preload(
+function preloadFactory(
   componentName: 'firestore'
 ): (
   firebaseApp?: App,
   settingsCallback?: (instanceFactory: App['firestore']) => any
 ) => Promise<App['firestore']>;
-function preload(
+function preloadFactory(
   componentName: 'functions'
 ): (
   firebaseApp?: App,
   settingsCallback?: (instanceFactory: App['functions']) => any
 ) => Promise<App['functions']>;
-function preload(
+function preloadFactory(
   componentName: 'messaging'
 ): (
   firebaseApp?: App,
   settingsCallback?: (instanceFactory: App['messaging']) => any
 ) => Promise<App['messaging']>;
-function preload(
+function preloadFactory(
   componentName: 'performance'
 ): (
   firebaseApp?: App,
   settingsCallback?: (instanceFactory: App['performance']) => any
 ) => Promise<App['performance']>;
-function preload(
+function preloadFactory(
   componentName: 'remoteConfig'
 ): (
   firebaseApp?: App,
   settingsCallback?: (instanceFactory: App['remoteConfig']) => any
 ) => Promise<App['remoteConfig']>;
-function preload(
+function preloadFactory(
   componentName: 'storage'
 ): (
   firebaseApp?: App,
   settingsCallback?: (instanceFactory: App['storage']) => any
 ) => Promise<App['storage']>;
-function preload(componentName: ComponentName) {
+function preloadFactory(componentName: ComponentName) {
   return (
     firebaseApp?: App,
     settingsCallback?: (instanceFactory: FirebaseInstanceFactory) => any
-  ) => loadSDK(componentName, firebaseApp, settingsCallback).toPromise();
+  ) => preload(componentName, firebaseApp, settingsCallback).toPromise();
 }
 
-function loadSDK(
+function preload(
   componentName: ComponentName,
   firebaseApp?: App,
   settingsCallback: (instanceFactory: FirebaseInstanceFactory) => any = () => {}
@@ -193,12 +193,12 @@ function loadSDK(
   );
 }
 
-export const preloadAuth = preload('auth');
-export const preloadAnalytics = preload('analytics');
-export const preloadDatabase = preload('database');
-export const preloadFirestore = preload('firestore');
-export const preloadFunctions = preload('functions');
-export const preloadMessaging = preload('messaging');
-export const preloadPerformance = preload('performance');
-export const preloadRemoteConfig = preload('remoteConfig');
-export const preloadStorage = preload('storage');
+export const preloadAuth = preloadFactory('auth');
+export const preloadAnalytics = preloadFactory('analytics');
+export const preloadDatabase = preloadFactory('database');
+export const preloadFirestore = preloadFactory('firestore');
+export const preloadFunctions = preloadFactory('functions');
+export const preloadMessaging = preloadFactory('messaging');
+export const preloadPerformance = preloadFactory('performance');
+export const preloadRemoteConfig = preloadFactory('remoteConfig');
+export const preloadStorage = preloadFactory('storage');
