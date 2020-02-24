@@ -35,7 +35,7 @@
     "@babel/preset-typescript": "^7.3.3",
     "@firebase/app": "^0.4.8",
     "@firebase/app-types": "^0.4.0",
-    "@firebase/testing": "^0.11.4",
+    "@firebase/testing": "^0.16.10",
     "@rollup/plugin-node-resolve": "^7.0.0",
     "@testing-library/jest-dom": "^4.1.1",
     "@testing-library/react": "^9.3.0",

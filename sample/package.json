@@ -4,11 +4,11 @@
   "private": true,
   "dependencies": {
     "@types/jest": "^24.9.0",
-    "firebase": "^7.0.0",
-    "react": "0.0.0-experimental-f42431abe",
-    "react-dom": "0.0.0-experimental-f42431abe",
+    "firebase": "^7.9.1",
+    "react": "0.0.0-experimental-5de5b6150",
+    "react-dom": "0.0.0-experimental-5de5b6150",
     "react-firebaseui": "^4.0.0",
-    "react-scripts": "3.3.0"
+    "react-scripts": "3.4.0"
   },
   "scripts": {
     "start": "react-scripts start",

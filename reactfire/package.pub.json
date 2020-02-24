@@ -25,6 +25,6 @@
   },
   "peerDependencies": {
     "firebase": "^7.0.0",
-    "react": "0.0.0-experimental-f6b8d31a7"
+    "react": "0.0.0-experimental-5de5b6150"
   }
 }
