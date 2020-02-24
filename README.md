@@ -39,15 +39,17 @@ import { createRoot } from 'react-dom';
 import {
   FirebaseAppProvider,
   useFirestoreDocData,
+  useFirestore,
   SuspenseWithPerf
 } from 'reactfire';
 
 const firebaseConfig = {
-  /* add your config object from the Firebase console */
+  /* Add your config from the Firebase Console */
 };
 
 function Burrito() {
-  // lazy load the Firestore SDK and create a ref
+  // lazy load the Firestore SDK
+  // and create a ref
   const burritoRef = useFirestore()
     .collection('tryreactfire')
     .doc('burrito');
@@ -57,18 +59,15 @@ function Burrito() {
   // and then streams live updates
   const burrito = useFirestoreDocData(burritoRef);
 
-  // get the value from the doc
-  const isYummy = burrito.yummy;
-
-  return <p>The burrito is {isYummy ? 'good' : 'bad'}!</p>;
+  return <p>The burrito is {burrito.yummy ? 'good' : 'bad'}!</p>;
 }
 
 function App() {
   return (
-    <FirebaseAppProvider firebaseConfig={firebaseConfig} initPerformance>
+    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
       <h1>🌯</h1>
       <SuspenseWithPerf
-        fallback={'loading burrito status...'}
+        fallback={<p>loading burrito status...</p>}
         traceId={'load-burrito-status'}
       >
         <Burrito />
