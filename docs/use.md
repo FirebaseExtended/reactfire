@@ -1,23 +1,23 @@
-# Common Patterns
+# Using ReactFire
 
-- [Access your `firebase` object from any component](#access-your-firebase-object-from-any-component)
+- [Access your `firebase` app from any component](#access-your-firebase-object-from-any-component)
+- [Access the current user](#access-the-current-user)
+  - [Decide what to render based on a user's auth state](#decide-what-to-render-based-on-a-users-auth-state)
+- [Log Page Views with React Router](#todo)
+- [Combine Auth, Firestore, and Cloud Storage to Show a User Profile Card](#todo)
 - [Manage Loading States](#manage-loading-states)
   - [Default: `Suspense`](#default-suspense)
     - [Bonus: `SuspenseWithPerf`](#bonus-suspensewithperf)
   - [Provide an initial value](#provide-an-initial-value)
-- [Access the current user](#access-the-current-user)
-  - [Decide what to render based on a user's auth state](#decide-what-to-render-based-on-a-users-auth-state)
 - [Lazy Load the Firebase SDKs](#lazy-load-the-Firebase-SDKs)
 - [Preloading](#preloading)
   - [Preload an SDK](#preload-an-sdk)
   - [Preload Data](#preload-data)
-- [Log Page Views with React Router](#todo)
-- [Combining ReactFire Hooks](#combining-reactfire-hooks)
-  - [Combine Auth, Firestore, and Cloud Storage to Show a User Profile Card](#todo)
+- [Advanced: Using RxJS observables to combine multiple data sources](#todo)
 
 ## Access your `firebase` object from any component
 
-Since reactfire uses React's Context API, any component under a `FirebaseAppProvider` can use `useFirebaseApp()` to get your initialized app.
+Since reactfire uses React's Context API, any component under a `FirebaseAppProvider` can use `useFirebaseApp()` to get your initialized app. Plus, all ReactFire hooks will automatically check context to see if a firebase app is available.
 
 ```jsx
 // ** INDEX.JS **
@@ -34,8 +34,8 @@ render(
 // ** MYCOMPONENT.JS **
 
 function MyComponent(props) {
-  const firestore = useFirestore();
-  const documentReference = firestore()
+  // useFirestore will get the firebase app from Context!
+  const documentReference = useFirestore()
     .collection('burritos')
     .doc('vegetarian');
 
@@ -98,7 +98,7 @@ function FoodRatings() {
 }
 ```
 
-### Provide an initial value
+### Don't want Suspense? Provide an initial value
 
 What if we don't want to use Suspense, or we're server rendering and we know what the initial value should be? In that case we can provide an initial value to any Reactfire hook:
 
@@ -182,13 +182,13 @@ export function MyComponent(props) {
 }
 ```
 
-## Preloading
+## The _render-as-you-fetch_ pattern
 
-The [render-as-you-fetch pattern](https://reactjs.org/docs/concurrent-mode-suspense.html#approach-3-render-as-you-fetch-using-suspense) encourages kicking off requests as early as possible instead of waiting until a component renders. ReactFire supports this behavior
+The [React docs](https://reactjs.org/docs/concurrent-mode-suspense.html#approach-3-render-as-you-fetch-using-suspense) recommend kicking off reads as early as possible in order to reduce perceived load times. ReactFire offers a number of `preload` methods to help you do this.
 
 ### Preload an SDK
 
-Just as the SDK hooks like `useFirestore` can automatically fetch an SDK, you can call `preloadFirestore` (or `preloadAuth`, etc) to start loading an SDK without suspending.
+Call `preloadFirestore` (or `preloadAuth`, `preloadRemoteConfig`, etc) to start fetching a Firebase library in the background. Later, when you call `useFirestore` in a component, the `useFirestore` hook may not need to suspend if the preload has already completed.
 
 ### Initialize an SDK
 
@@ -202,11 +202,9 @@ preloadFirestore(firebaseApp, firestore => {
 
 ### Preload Data
 
-Many ReactFire hooks have corresponding preload functions. For example, you can call `preloadFirestoreDocData` to preload data if a component later calls `useFirestoreDocData`.
+ReactFire's data fetching hooks don't fully support preloading yet. The experimental `preloadFirestoreDoc` function allows you to subscribe to a Firestore document if you know you call `useFirestoreDoc` somewhere farther down the component tree.
 
-### Combining ReactFire Hooks
-
-#### Combine Auth, Firestore, and Cloud Storage to Show a User Profile Card
+## Combine Auth, Firestore, and Cloud Storage to Show a User Profile Card
 
 ```jsx
 import {
@@ -274,7 +272,7 @@ function ProfilePage() {
 }
 ```
 
-### Log Page Views to Google Analytics for Firebase with React Router
+## Log Page Views to Google Analytics for Firebase with React Router
 
 ```jsx
 import { useAnalytics } from 'reactfire';
@@ -306,3 +304,7 @@ function App() {
   );
 }
 ```
+
+## Advanced: Using RxJS observables to combine multiple data sources
+
+All ReactFire hooks are powered by [`useObservable`](./reference.md#useObservable). By calling `useObservable` directly, you can subscribe to any observable in the same manner as the built-in ReactFire hooks. If you use [RxFire](https://github.com/firebase/firebase-js-sdk/tree/master/packages/rxfire#rxfire) and `useObservable` together, you can accomplish more advanced read patterns (like [OR queries in Firestore](https://stackoverflow.com/a/53497072/4816918)!).
