@@ -133,6 +133,12 @@ function FoodRatings() {
 }
 ```
 
+### Solve `Warning: App triggered a user-blocking update that suspended. with useTransition`
+
+This warning can be solved with React's `useTransition` hook. Check out the sample code's Firestore example to see how to use this with ReactFire:
+
+https://github.com/FirebaseExtended/reactfire/blob/c67dfa755431c15034f0c713b9df3864fb762c06/sample/src/Firestore.js#L87-L121
+
 ## Access the current user
 
 The `useUser()` hook returns the currently signed-in [user](https://firebase.google.com/docs/reference/js/firebase.User). Like the other Reactfire Hooks, you need to wrap it in `Suspense` or provide a `startWithValue`.
