@@ -87,25 +87,6 @@ createRoot(document.getElementById('root')).render(<App />);
 - [**Common Use Cases**](./docs/use.md)
 - [**API Reference**](./docs/reference.md)
 
-## Contributing
-
-### For development
-
-1. [Clone](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository)
-   this repository (or a
-   [fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo#propose-changes-to-someone-elses-project))
-1. At the project root, install all modules by running `yarn install`.
-1. `cd` into the _reactfire_ directory. Run `yarn` and `yarn watch`.
-1. In a new terminal, `cd` into the _reactfire/sample_ directory. run `yarn` and
-   `yarn start`.
-1. Head over to https://localhost:3000 to see the running sample! If you edit
-   the reactfire source, the sample will reload.
-
-### Testing
-
-1. `cd` into the _reactfire/reactfire_ directory
-1. run `yarn test`
-
 ---
 
 > If you're looking for docs for the _deprecated_ ReactFire v1 (the one that
