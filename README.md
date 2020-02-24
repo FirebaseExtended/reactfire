@@ -35,8 +35,7 @@ Check out the
 
 ```jsx
 import React, { Component } from 'react';
-import { render } from 'react-dom';
-import './style.css';
+import { createRoot } from 'react-dom';
 import {
   FirebaseAppProvider,
   useFirestoreDocData,
@@ -78,7 +77,9 @@ function App() {
   );
 }
 
-render(<App />, document.getElementById('root'));
+// Enable Concurrent Mode
+// https://reactjs.org/docs/concurrent-mode-adoption.html#enabling-concurrent-mode
+createRoot(document.getElementById('root')).render(<App />);
 ```
 
 ## Learn More
