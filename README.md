@@ -3,27 +3,20 @@
 Hooks, Context Providers, and Components that make it easy to interact with
 Firebase.
 
-> If you're looking for docs for the _deprecated_ ReactFire v1 (the one that
-> uses mixins), click
-> [here](https://github.com/FirebaseExtended/reactfire/tree/v1.0.0)
-
-**Status: Alpha**. ReactFire is meant for React Concurrent Mode, which is only
+⚠️ **Status: Alpha**. ReactFire is meant for React Concurrent Mode, which is only
 available in
 [experimental React builds](https://reactjs.org/docs/concurrent-mode-adoption.html#installation).
 
 ## What is ReactFire?
 
-- **Easy realtime updates for your function components** - Reactfire's hooks,
-  like `useFirestoreCollection` and `useUser`, let you easily subscribe to
-  events, and automatically unsubscribe when your component unmounts.
+- **Easy realtime updates for your function components** - Hooks
+  like `useUser`and `useFirestoreCollection` let you easily subscribe to
+  auth state, realtime data, and all other Firebase SDK events. Plus, they automatically unsubscribe when your component unmounts.
 - **Loading states handled by `<Suspense>`** - Reactfire's hooks throw promises
   that Suspense can catch. No more `isLoaded ?...` - let React
-  [handle it for you](https://reactjs.org/blog/2018/11/27/react-16-roadmap.html#react-166-shipped-the-one-with-suspense-for-code-splitting).
-- **Dead-simple Real User Monitoring (RUM)** - Easily enable Firebase
-  Performance Monitoring's
-  [automatic traces](https://firebase.google.com/docs/perf-mon/automatic-web),
-  and instrument your Suspenseful loads with Reactfire's `<SuspenseWithPerf>`
-  component
+  [handle it for you](https://reactjs.org/docs/concurrent-mode-suspense.html).
+- **Faster initial page load times** - Load only the code you need, when you need it, with `useFirestore`, `useAuth`, `useRemoteConfig`, and more.
+- **Convenient components for common use cases** - Only want to render a component if a user is signed in? Wrap it in `<AuthCheck />`. Need to automatically instrument your `Suspense` load times with [RUM](https://firebase.google.com/docs/perf-mon)? Use `<SuspenseWithPef />`.
 
 ## Install
 
@@ -115,3 +108,9 @@ render(<App />, document.getElementById('root'));
 
 1. `cd` into the _reactfire/reactfire_ directory
 1. run `yarn test`
+
+---
+
+> If you're looking for docs for the _deprecated_ ReactFire v1 (the one that
+> uses mixins), click
+> [here](https://github.com/FirebaseExtended/reactfire/tree/v1.0.0)
