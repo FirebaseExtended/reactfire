@@ -1,21 +1,21 @@
 # Using ReactFire
 
-- [Access your `firebase` app from any component](#access-your-firebase-object-from-any-component)
+- [Access your `firebase` app from any component](#access-your-firebase-app-from-any-component)
 - [Access the current user](#access-the-current-user)
   - [Decide what to render based on a user's auth state](#decide-what-to-render-based-on-a-users-auth-state)
-- [Log Page Views with React Router](#todo)
-- [Combine Auth, Firestore, and Cloud Storage to Show a User Profile Card](#todo)
+- [Log Page Views with React Router](#log-page-views-to-google-analytics-for-firebase-with-react-router)
+- [Combine Auth, Firestore, and Cloud Storage to Show a User Profile Card](#combine-auth-firestore-and-cloud-storage-to-show-a-user-profile-card)
 - [Manage Loading States](#manage-loading-states)
   - [Default: `Suspense`](#default-suspense)
     - [Bonus: `SuspenseWithPerf`](#bonus-suspensewithperf)
-  - [Provide an initial value](#provide-an-initial-value)
+  - [Provide an initial value](#dont-want-suspense-provide-an-initial-value)
 - [Lazy Load the Firebase SDKs](#lazy-load-the-Firebase-SDKs)
-- [Preloading](#preloading)
+- [The _render-as-you-fetch_ pattern](#the-render-as-you-fetch-pattern)
   - [Preload an SDK](#preload-an-sdk)
   - [Preload Data](#preload-data)
-- [Advanced: Using RxJS observables to combine multiple data sources](#todo)
+- [Advanced: Using RxJS observables to combine multiple data sources](#advanced-using-rxjs-observables-to-combine-multiple-data-sources)
 
-## Access your `firebase` object from any component
+## Access your `firebase` app from any component
 
 Since reactfire uses React's Context API, any component under a `FirebaseAppProvider` can use `useFirebaseApp()` to get your initialized app. Plus, all ReactFire hooks will automatically check context to see if a firebase app is available.
 
@@ -40,6 +40,134 @@ function MyComponent(props) {
     .doc('vegetarian');
 
   // ...
+}
+```
+
+## Access the current user
+
+The `useUser()` hook returns the currently signed-in [user](https://firebase.google.com/docs/reference/js/firebase.User). Like the other Reactfire Hooks, you need to wrap it in `Suspense` or provide a `startWithValue`.
+
+```jsx
+function HomePage(props) {
+  // no need to use useFirebaseApp - useUser calls it under the hood
+  const user = useUser();
+
+  return <h1>Welcome Back {user.displayName}!</h1>;
+}
+```
+
+Note: `useUser` will also automatically lazily import the `firebase/auth` SDK if it has not been imported already.
+
+### Decide what to render based on a user's auth state
+
+The `AuthCheck` component makes it easy to hide/show UI elements based on a user's auth state. It will render its children if a user is signed in, but if they are not signed in, it renders its `fallback` prop:
+
+```jsx
+render(
+  <AuthCheck fallback={<LoginPage />}>
+    <HomePage />
+  </AuthCheck>
+);
+```
+
+## Log Page Views to Google Analytics for Firebase with React Router
+
+```jsx
+import { useAnalytics } from 'reactfire';
+import { Router, Route, Switch } from 'react-router';
+
+function MyPageViewLogger({ location }) {
+  const analytics = useAnalytics();
+
+  // By passing `location.pathname` to the second argument of `useEffect`,
+  // we only log on first render and when the `pathname` changes
+  useEffect(() => {
+    analytics.logEvent('page-view', { path_name: location.pathname });
+  }, [location.pathname]);
+
+  return null;
+}
+
+function App() {
+  const analytics = useAnalytics();
+
+  return (
+    <Router>
+      <Switch>
+        <Route exact path="/about" component={<AboutPage />} />
+        <Route component={<NotFoundPage />} />
+      </Switch>
+      <MyPageViewLogger />
+    </Router>
+  );
+}
+```
+
+## Combine Auth, Firestore, and Cloud Storage to Show a User Profile Card
+
+```jsx
+import {
+  AuthCheck,
+  StorageImage,
+  useFirestoreDocData,
+  useUser,
+  useAuth,
+  useFirestore
+} from 'reactfire';
+
+const DEFAULT_IMAGE_PATH = 'userPhotos/default.jpg';
+
+function ProfileCard() {
+  // get the current user.
+  // this is safe because we've wrapped this component in an `AuthCheck` component.
+  const user = useUser();
+
+  // read the user details from Firestore based on the current user's ID
+  const userDetailsRef = useFirestore()
+    .collection('users')
+    .doc(user.uid);
+  let { commonName, favoriteAnimal, profileImagePath } = useFirestoreDocData(
+    userDetailsRef
+  );
+
+  // defend against null field(s)
+  profileImagePath = profileImagePath || DEFAULT_IMAGE_PATH;
+
+  return (
+    <div>
+      <h1>{commonName}</h1>
+      {/*
+        `StorageImage` converts a Cloud Storage path into a download URL and then renders an image
+       */}
+      <StorageImage style={{ width: '100%' }} storagePath={profileImagePath} />
+      <span>Your favorite animal is the {favoriteAnimal}</span>
+    </div>
+  );
+}
+
+function LogInForm() {
+  const auth = useAuth();
+
+  const signIn = () => {
+    auth.signInWithEmailAndPassword(email, password);
+  };
+
+  return <MySignInForm onSubmit={signIn} />;
+}
+
+function ProfilePage() {
+  return (
+    {/*
+      Render a spinner until components are ready
+    */}
+    <Suspense fallback={<MyLoadingSpinner />}>
+      {/*
+        Render `ProfileCard` only if a user is signed in.
+        Otherwise, render `LoginForm`
+       */}
+      <AuthCheck fallback={<LogInForm />}>{ProfileCard}</AuthCheck>
+    </Suspense>
+  );
 }
 ```
 
@@ -139,33 +267,6 @@ This warning can be solved with React's `useTransition` hook. Check out the samp
 
 https://github.com/FirebaseExtended/reactfire/blob/c67dfa755431c15034f0c713b9df3864fb762c06/sample/src/Firestore.js#L87-L121
 
-## Access the current user
-
-The `useUser()` hook returns the currently signed-in [user](https://firebase.google.com/docs/reference/js/firebase.User). Like the other Reactfire Hooks, you need to wrap it in `Suspense` or provide a `startWithValue`.
-
-```jsx
-function HomePage(props) {
-  // no need to use useFirebaseApp - useUser calls it under the hood
-  const user = useUser();
-
-  return <h1>Welcome Back {user.displayName}!</h1>;
-}
-```
-
-Note: `useUser` will also automatically lazily import the `firebase/auth` SDK if it has not been imported already.
-
-### Decide what to render based on a user's auth state
-
-The `AuthCheck` component makes it easy to hide/show UI elements based on a user's auth state. It will render its children if a user is signed in, but if they are not signed in, it renders its `fallback` prop:
-
-```jsx
-render(
-  <AuthCheck fallback={<LoginPage />}>
-    <HomePage />
-  </AuthCheck>
-);
-```
-
 ## Lazy Load the Firebase SDKs
 
 Including the Firebase SDKs in your main JS bundle (by using `import 'firebase/firestore'`, for example) will increase your bundle size. To get around this, you can lazy load the Firebase SDK with ReactFire. As long as a component has a parent that is a `FirebaseAppProvider`, you can use an SDK hook (`useFirestore`, `useDatabase`, `useAuth`, `useStorage`) like so:
@@ -209,107 +310,6 @@ preloadFirestore(firebaseApp, firestore => {
 ### Preload Data
 
 ReactFire's data fetching hooks don't fully support preloading yet. The experimental `preloadFirestoreDoc` function allows you to subscribe to a Firestore document if you know you call `useFirestoreDoc` somewhere farther down the component tree.
-
-## Combine Auth, Firestore, and Cloud Storage to Show a User Profile Card
-
-```jsx
-import {
-  AuthCheck,
-  StorageImage,
-  useFirestoreDocData,
-  useUser,
-  useAuth,
-  useFirestore
-} from 'reactfire';
-
-const DEFAULT_IMAGE_PATH = 'userPhotos/default.jpg';
-
-function ProfileCard() {
-  // get the current user.
-  // this is safe because we've wrapped this component in an `AuthCheck` component.
-  const user = useUser();
-
-  // read the user details from Firestore based on the current user's ID
-  const userDetailsRef = useFirestore()
-    .collection('users')
-    .doc(user.uid);
-  let { commonName, favoriteAnimal, profileImagePath } = useFirestoreDocData(
-    userDetailsRef
-  );
-
-  // defend against null field(s)
-  profileImagePath = profileImagePath || DEFAULT_IMAGE_PATH;
-
-  return (
-    <div>
-      <h1>{commonName}</h1>
-      {/*
-        `StorageImage` converts a Cloud Storage path into a download URL and then renders an image
-       */}
-      <StorageImage style={{ width: '100%' }} storagePath={profileImagePath} />
-      <span>Your favorite animal is the {favoriteAnimal}</span>
-    </div>
-  );
-}
-
-function LogInForm() {
-  const auth = useAuth();
-
-  const signIn = () => {
-    auth.signInWithEmailAndPassword(email, password);
-  };
-
-  return <MySignInForm onSubmit={signIn} />;
-}
-
-function ProfilePage() {
-  return (
-    {/*
-      Render a spinner until components are ready
-    */}
-    <Suspense fallback={<MyLoadingSpinner />}>
-      {/*
-        Render `ProfileCard` only if a user is signed in.
-        Otherwise, render `LoginForm`
-       */}
-      <AuthCheck fallback={<LogInForm />}>{ProfileCard}</AuthCheck>
-    </Suspense>
-  );
-}
-```
-
-## Log Page Views to Google Analytics for Firebase with React Router
-
-```jsx
-import { useAnalytics } from 'reactfire';
-import { Router, Route, Switch } from 'react-router';
-
-function MyPageViewLogger({ location }) {
-  const analytics = useAnalytics();
-
-  // By passing `location.pathname` to the second argument of `useEffect`,
-  // we only log on first render and when the `pathname` changes
-  useEffect(() => {
-    analytics.logEvent('page-view', { path_name: location.pathname });
-  }, [location.pathname]);
-
-  return null;
-}
-
-function App() {
-  const analytics = useAnalytics();
-
-  return (
-    <Router>
-      <Switch>
-        <Route exact path="/about" component={<AboutPage />} />
-        <Route component={<NotFoundPage />} />
-      </Switch>
-      <MyPageViewLogger />
-    </Router>
-  );
-}
-```
 
 ## Advanced: Using RxJS observables to combine multiple data sources
 
