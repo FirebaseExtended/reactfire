@@ -6,7 +6,7 @@ export * from './sdk';
 type FirebaseAppContextValue = firebase.app.App;
 
 // INVESTIGATE I don't like magic strings, can we have export this in js-sdk?
-export const DEFAULT_APP_NAME = '[DEFAULT]';
+const DEFAULT_APP_NAME = '[DEFAULT]';
 
 const FirebaseAppContext = React.createContext<
   FirebaseAppContextValue | undefined

@@ -1,6 +1,7 @@
-import { DEFAULT_APP_NAME } from '../index';
 import { useFirebaseApp } from '.';
 import * as firebase from 'firebase/app';
+import { Observable } from 'rxjs';
+import { preloadObservable } from '../useObservable';
 
 type ComponentName =
   | 'analytics'
@@ -64,9 +65,11 @@ function proxyComponent(
   let contextualApp: App | undefined;
   const useComponent = () => {
     contextualApp = useFirebaseApp();
-    if (!firebase[componentName]) {
-      throw importSDK(componentName);
+    const sdkSubject = loadSDK(componentName, contextualApp);
+    if (!sdkSubject.hasValue) {
+      throw sdkSubject.firstEmission;
     }
+    sdkSubject.value; // get value to throw if there's an error
     return firebase[componentName];
   };
   return new Proxy(useComponent, {
@@ -157,31 +160,37 @@ function preload(
   settingsCallback?: (instanceFactory: App['storage']) => any
 ) => Promise<App['storage']>;
 function preload(componentName: ComponentName) {
-  return async (
+  return (
     firebaseApp?: App,
     settingsCallback?: (instanceFactory: FirebaseInstanceFactory) => any
-  ) => {
-    const app = firebaseApp || useFirebaseApp();
-    const initialized = !!app[componentName];
-    if (!initialized) {
-      await importSDK(componentName);
-    }
-    const instanceFactory = app[componentName].bind(
-      app
-    ) as FirebaseInstanceFactory;
-    if (initialized) {
-      if (settingsCallback) {
-        console.warn(
-          `${componentName} was already initialized on ${
-            app.name == DEFAULT_APP_NAME ? 'the default app' : app.name
-          }, ignoring settingsCallback`
-        );
-      }
-    } else if (settingsCallback) {
-      await Promise.resolve(settingsCallback(instanceFactory));
-    }
-    return instanceFactory;
-  };
+  ) => loadSDK(componentName, firebaseApp, settingsCallback).toPromise();
+}
+
+function loadSDK(
+  componentName: ComponentName,
+  firebaseApp?: App,
+  settingsCallback: (instanceFactory: FirebaseInstanceFactory) => any = () => {}
+) {
+  const app = firebaseApp || useFirebaseApp();
+  return preloadObservable(
+    new Observable(emitter => {
+      importSDK(componentName)
+        .then(() => {
+          const instanceFactory = app[componentName].bind(
+            app
+          ) as FirebaseInstanceFactory;
+          Promise.resolve(settingsCallback(instanceFactory)).then(() => {
+            emitter.next(instanceFactory);
+            emitter.complete();
+          });
+        })
+        .catch(e => {
+          emitter.error(e);
+          emitter.complete();
+        });
+    }),
+    `firebase-sdk:${componentName}:${app.name}`
+  );
 }
 
 export const preloadAuth = preload('auth');
