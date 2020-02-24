@@ -126,12 +126,17 @@ function ProfileCard() {
   const userDetailsRef = useFirestore()
     .collection('users')
     .doc(user.uid);
+
   let { commonName, favoriteAnimal, profileImagePath } = useFirestoreDocData(
     userDetailsRef
   );
 
   // defend against null field(s)
   profileImagePath = profileImagePath || DEFAULT_IMAGE_PATH;
+
+  if (!commonName || !favoriteAnimal) {
+    throw new Error(MissingProfileInfoError);
+  }
 
   return (
     <div>
@@ -261,7 +266,7 @@ function FoodRatings() {
 }
 ```
 
-### Solve `Warning: App triggered a user-blocking update that suspended. with useTransition`
+### Solve `Warning: App triggered a user-blocking update that suspended.` with useTransition
 
 This warning can be solved with React's `useTransition` hook. Check out the sample code's Firestore example to see how to use this with ReactFire:
 
