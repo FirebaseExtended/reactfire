@@ -17,7 +17,7 @@
 
 ## Access your `firebase` app from any component
 
-Since reactfire uses React's Context API, any component under a `FirebaseAppProvider` can use `useFirebaseApp()` to get your initialized app. Plus, all ReactFire hooks will automatically check context to see if a firebase app is available.
+Since ReactFire uses React's Context API, any component under a `FirebaseAppProvider` can use `useFirebaseApp()` to get your initialized app. Plus, all ReactFire hooks will automatically check context to see if a firebase app is available.
 
 ```jsx
 // ** INDEX.JS **
@@ -45,7 +45,7 @@ function MyComponent(props) {
 
 ## Access the current user
 
-The `useUser()` hook returns the currently signed-in [user](https://firebase.google.com/docs/reference/js/firebase.User). Like the other Reactfire Hooks, you need to wrap it in `Suspense` or provide a `startWithValue`.
+The `useUser()` hook returns the currently signed-in [user](https://firebase.google.com/docs/reference/js/firebase.User). Like the other ReactFire Hooks, you need to wrap it in `Suspense` or provide a `startWithValue`.
 
 ```jsx
 function HomePage(props) {
@@ -178,7 +178,7 @@ function ProfilePage() {
 
 ## Manage Loading States
 
-Reactfire is designed to integrate with React's Suspense API, but also supports use cases where Suspense isn't needed or wanted.
+ReactFire is designed to integrate with React's Suspense API, but also supports use cases where Suspense isn't needed or wanted.
 
 ### Default: `Suspense`
 
@@ -216,7 +216,7 @@ function FoodRatings() {
 
 #### Bonus: `SuspenseWithPerf`
 
-Reactfire provides an a wrapper around `Suspense` called `SuspenseWithPerf` that instruments your `Suspense` loads with a Firebase Performance Monitoring custom trace. It looks like this:
+ReactFire provides an a wrapper around `Suspense` called `SuspenseWithPerf` that instruments your `Suspense` loads with a Firebase Performance Monitoring custom trace. It looks like this:
 
 ```jsx
 function FoodRatings() {
@@ -233,7 +233,7 @@ function FoodRatings() {
 
 ### Don't want Suspense? Provide an initial value
 
-What if we don't want to use Suspense, or we're server rendering and we know what the initial value should be? In that case we can provide an initial value to any Reactfire hook:
+What if we don't want to use Suspense, or we're server rendering and we know what the initial value should be? In that case we can provide an initial value to any ReactFire hook:
 
 ```jsx
 function Burrito() {

@@ -1,9 +1,9 @@
-# Reactfire
+# ReactFire
 
 Hooks, Context Providers, and Components that make it easy to interact with
 Firebase.
 
-⚠️ **Status: Alpha**. ReactFire is meant for React Concurrent Mode, which is only
+⚠️ **Status: Experimental**. The API is intended to be stable, but ReactFire is meant for React Concurrent Mode, which is only
 available in
 [experimental React builds](https://reactjs.org/docs/concurrent-mode-adoption.html#installation).
 
@@ -12,7 +12,7 @@ available in
 - **Easy realtime updates for your function components** - Hooks
   like `useUser`and `useFirestoreCollection` let you easily subscribe to
   auth state, realtime data, and all other Firebase SDK events. Plus, they automatically unsubscribe when your component unmounts.
-- **Loading states handled by `<Suspense>`** - Reactfire's hooks throw promises
+- **Loading states handled by `<Suspense>`** - ReactFire's hooks throw promises
   that Suspense can catch. No more `isLoaded ?...` - let React
   [handle it for you](https://reactjs.org/docs/concurrent-mode-suspense.html).
 - **Faster initial page load times** - Load only the code you need, when you need it, with `useFirestore`, `useAuth`, `useRemoteConfig`, and more.
@@ -22,10 +22,10 @@ available in
 
 ```bash
 # npm
-npm install --save reactfire
+npm install --save reactfire firebase
 
 # yarn
-yarn add reactfire
+yarn add reactfire firebase
 ```
 
 - [**Quickstart**](./docs/quickstart.md)

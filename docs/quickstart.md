@@ -1,4 +1,4 @@
-# Reactfire Quickstart
+# ReactFire Quickstart
 
 ⚛ + 🔥 = 🌯
 
@@ -15,7 +15,7 @@ npx create-react-app myapp
 cd myapp
 ```
 
-## 2. Install reactfire and the Firebase SDK
+## 2. Install ReactFire and the Firebase SDK
 
 ```bash
 # yarn
@@ -48,7 +48,7 @@ npm install --save firebase reactfire
 
 ## 4. Modify `src/index.js`
 
-1. Import firebase and reactfire
+1. Import Firebase and ReactFire
 
    ```js
    //...
