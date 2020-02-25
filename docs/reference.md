@@ -35,6 +35,7 @@
   - Cloud Storage
     - [`useStorageTask`](#useStorageTask)
     - [`useStorageDownloadURL`](#useStorageDownloadURL)
+  - [`useObservable`](#useobservablet)
   - [ReactFireOptions](#ReactFireOptions)
 
 - [Components](#Components)
@@ -56,6 +57,8 @@
     - [`preloadPerformance`](#preloadPerformance)
     - [`preloadRemoteConfig`](#preloadRemoteConfig)
     - [`preloadStorage`](#preloadStorage)
+  - Data
+    - [`preloadFirestoreDoc`](#preloadFirestoreDoc)
 
 ## Hooks
 
@@ -368,6 +371,8 @@ _Throws a Promise by default_
 
 Subscribe to a storage blob's download URL
 
+useobservable link
+
 _Throws a Promise by default_
 
 ### Parameters
@@ -380,6 +385,21 @@ _Throws a Promise by default_
 #### Returns
 
 `string`
+
+### `useObservable<T>`
+
+_Throws a Promise by default_
+
+| Parameter          | Type                 | Description                                                                                                                                  |
+| ------------------ | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| source             | `Observable`         | The observable whose values you want to subscribe to                                                                                         |
+| observableId       | `string`             | A unique id. If this id matches an observable already in the cache, `useObservable` will reuse that observable instead of the one passed in. |
+| startWithValue _?_ | `T`                  | A value to emit first (if you don't want `useObservable` to throw a Promise)                                                                 |
+| deps               | React.DependencyList | A list of values that, when changed, should cause `useObservable` to re-subscribe to its observable                                          |
+
+##### Returns
+
+`T`
 
 ## ReactFireOptions
 
@@ -578,3 +598,20 @@ Start importing the `firebase/storage` package.
 #### Returns
 
 `Promise<`[`firebase.storage`](https://firebase.google.com/docs/reference/js/firebase.storage)`>`
+
+### `preloadFirestoreDoc`
+
+⚠️ experimental
+
+Starts subscribing to a Firestore document in the background. Cleans itself up after 30 seconds if `useFirestoreDoc` calls are made.
+
+#### Parameters
+
+| Parameter   | Type                                                                       | Description                                                                                         |
+| ----------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| refProvider | `(firestore: firebase.firestore.Firestore) => firestore.DocumentReference` | A function that is called when the firestore SDK is ready and generates a DocumentReference to read |
+| firebaseApp | `firebase.app.App`                                                         | The firebase app                                                                                    |
+
+#### Returns
+
+`Promise<Obsevable<any>>`

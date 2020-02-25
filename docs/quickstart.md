@@ -1,12 +1,12 @@
-# Reactfire Quickstart
+# ReactFire Quickstart
 
 ⚛ + 🔥 = 🌯
 
 We'll build a web app that displays, in _real time_, the tastiness of a burrito. It will listen to **Cloud Firestore** for its data, and we'll configure **Firebase Performance Monitoring** so we can get some perf stats.
 
-To see the completed app, check out [this StackBlitz workspace](https://stackblitz.com/edit/reactfire-sample).
+To see the completed app, check out [this StackBlitz workspace](https://stackblitz.com/fork/reactfire-sample).
 
-## 1. In a terminal, create a fresh React app and `cd` into its directory.
+## 1. In a terminal, create a fresh React app and `cd` into its directory
 
 > Prerequisite: make sure you have [Node.js](https://nodejs.org/en/) installed.
 
@@ -15,7 +15,7 @@ npx create-react-app myapp
 cd myapp
 ```
 
-## 2. Install reactfire and the Firebase SDK
+## 2. Install ReactFire and the Firebase SDK
 
 ```bash
 # yarn
@@ -48,12 +48,11 @@ npm install --save firebase reactfire
 
 ## 4. Modify `src/index.js`
 
-1. Import firebase and reactfire
+1. Import Firebase and ReactFire
 
    ```js
    //...
    import { FirebaseAppProvider } from 'reactfire';
-   import 'firebase/performance';
    //...
    ```
 
@@ -64,11 +63,10 @@ npm install --save firebase reactfire
    const firebaseConfig = {
      /* add your config object from Firebase console */
    };
-   ReactDOM.render(
-     <FirebaseAppProvider firebaseConfig={firebaseConfig} initPerformance>
+   ReactDOM.createRoot(document.getElementById('root')).render(
+     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
        <App />
-     </FirebaseAppProvider>,
-     document.getElementById('root')
+     </FirebaseAppProvider>
    );
    //...
    ```
@@ -88,11 +86,8 @@ npm install --save firebase reactfire
    ```jsx
    //...
    function Burrito() {
-     // lazy load the Firestore SDK
-     const firestore = useFirestore();
-
-     // create a document reference
-     const burritoRef = firestore()
+     // lazy load the Firestore SDK and create a document reference
+     const burritoRef = useFirestore()
        .collection('tryreactfire')
        .doc('burrito');
 
@@ -118,6 +113,11 @@ Replace the `App` function with the following:
 function App() {
   return (
     <div className="App">
+      {/*
+        SuspenseWithPerf behaves the same as Suspense,
+        but also automatically measures load times with the User Timing API
+        and reports it to Firebase Performance Monitoring
+      */}
       <SuspenseWithPerf
         fallback={'loading burrito status...'}
         traceId={'load-burrito-status'}
@@ -140,11 +140,11 @@ npm run start
 
 1. Edit the value of `yummy` in the Firebase console, and watch it update in real time in your app! 🔥🔥🔥
 
-## _But what about Firebase Performance Monitoring?_
+## _About Firebase Performance Monitoring_
 
-By passing the `initPerformance` prop to `FirebaseAppProvider`, our app will automatically measure [common performance stats](https://firebase.google.com/docs/perf-mon/automatic-web), as well as report on our custom trace, `load-burrito-status`, that we set in the `traceId` prop of `SuspenseWithPerf`.
+`SuspenseWithPerf` will lazy load the Firebase Performance Monitoring library and report on on our custom trace, `load-burrito-status`, that we set in the `traceId` prop of `SuspenseWithPerf`. In addition, it will automatically measure [common performance stats](https://firebase.google.com/docs/perf-mon/automatic-web)!
 
-However, Firebase Performance Monitoring can take about 12 hours to crunch your data and show it in the _Performance_ tab of the Firebase console.
+Note that Firebase Performance Monitoring can take about 12 hours to crunch your data and show it in the _Performance_ tab of the Firebase console.
 
 This is an example of some of the stats in the Firebase Performance Monitoring console after 12 hours:
 
