@@ -35,7 +35,7 @@
   - Cloud Storage
     - [`useStorageTask`](#useStorageTask)
     - [`useStorageDownloadURL`](#useStorageDownloadURL)
-  - [`useObservable`](#useObservable)
+  - [`useObservable`](#useobservablet)
   - [ReactFireOptions](#ReactFireOptions)
 
 - [Components](#Components)
@@ -370,6 +370,8 @@ _Throws a Promise by default_
 ### `useStorageDownloadURL`
 
 Subscribe to a storage blob's download URL
+
+useobservable link
 
 _Throws a Promise by default_
 
