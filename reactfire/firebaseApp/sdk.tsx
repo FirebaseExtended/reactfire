@@ -109,55 +109,55 @@ function preloadFactory(
   componentName: 'auth'
 ): (
   firebaseApp?: App,
-  settingsCallback?: (instanceFactory: App['auth']) => any
+  settingsCallback?: (instanceFactory: App['auth']) => void | Promise<any>
 ) => Promise<App['auth']>;
 function preloadFactory(
   componentName: 'analytics'
 ): (
   firebaseApp?: App,
-  settingsCallback?: (instanceFactory: App['analytics']) => any
+  settingsCallback?: (instanceFactory: App['analytics']) => void | Promise<any>
 ) => Promise<App['analytics']>;
 function preloadFactory(
   componentName: 'database'
 ): (
   firebaseApp?: App,
-  settingsCallback?: (instanceFactory: App['database']) => any
+  settingsCallback?: (instanceFactory: App['database']) => void | Promise<any>
 ) => Promise<App['database']>;
 function preloadFactory(
   componentName: 'firestore'
 ): (
   firebaseApp?: App,
-  settingsCallback?: (instanceFactory: App['firestore']) => any
+  settingsCallback?: (instanceFactory: App['firestore']) => void | Promise<any>
 ) => Promise<App['firestore']>;
 function preloadFactory(
   componentName: 'functions'
 ): (
   firebaseApp?: App,
-  settingsCallback?: (instanceFactory: App['functions']) => any
+  settingsCallback?: (instanceFactory: App['functions']) => void | Promise<any>
 ) => Promise<App['functions']>;
 function preloadFactory(
   componentName: 'messaging'
 ): (
   firebaseApp?: App,
-  settingsCallback?: (instanceFactory: App['messaging']) => any
+  settingsCallback?: (instanceFactory: App['messaging']) => void | Promise<any>
 ) => Promise<App['messaging']>;
 function preloadFactory(
   componentName: 'performance'
 ): (
   firebaseApp?: App,
-  settingsCallback?: (instanceFactory: App['performance']) => any
+  settingsCallback?: (instanceFactory: App['performance']) => void | Promise<any>
 ) => Promise<App['performance']>;
 function preloadFactory(
   componentName: 'remoteConfig'
 ): (
   firebaseApp?: App,
-  settingsCallback?: (instanceFactory: App['remoteConfig']) => any
+  settingsCallback?: (instanceFactory: App['remoteConfig']) => void | Promise<any>
 ) => Promise<App['remoteConfig']>;
 function preloadFactory(
   componentName: 'storage'
 ): (
   firebaseApp?: App,
-  settingsCallback?: (instanceFactory: App['storage']) => any
+  settingsCallback?: (instanceFactory: App['storage']) => void | Promise<any>
 ) => Promise<App['storage']>;
 function preloadFactory(componentName: ComponentName) {
   return (
