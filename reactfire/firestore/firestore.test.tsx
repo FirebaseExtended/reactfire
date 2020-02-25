@@ -10,9 +10,11 @@ import {
   useFirestoreCollectionData,
   useFirestoreDocData,
   useFirestoreDocDataOnce,
-  useFirestoreDocOnce
+  useFirestoreDocOnce,
+  useFirestore
 } from '..';
 import { firestore } from 'firebase/app';
+import { preloadFirestore } from '../firebaseApp';
 
 describe('Firestore', () => {
   let app: import('firebase').app.App;
@@ -39,6 +41,48 @@ describe('Firestore', () => {
       .firestore()
       .collection('test')
       .add({ a: 'hello' });
+  });
+
+  describe('useFirestore', () => {
+
+    it('awaits the preloadFirestore setup', async () => {
+      const app2 = firebase.initializeTestApp({
+        projectId: '123456',
+        databaseName: 'my-database',
+        auth: { uid: 'alice' }
+      });
+
+      let firestore: firebase.firestore.Firestore;
+      let preloadResolved = false;
+      let preloadResolve: (v?: unknown) => void;
+      preloadFirestore(app2, () => new Promise(resolve => preloadResolve = resolve)).then(() => preloadResolved = true);
+
+      const Firestore = () => {
+        const firestore = useFirestore(app2);
+        return (
+          <div data-testid="success"></div>
+        );
+      };
+      const { getByTestId } = render(
+        <FirebaseAppProvider firebase={app2}>
+          <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
+            <Firestore />
+          </React.Suspense>
+        </FirebaseAppProvider>
+      );
+
+      await waitForElement(() => getByTestId('fallback'));
+      expect(preloadResolved).toEqual(false);
+
+      await waitForElement(() => getByTestId('success')).then(() => fail('expected throw')).catch(() => {});
+      expect(preloadResolved).toEqual(false);
+
+      preloadResolve();
+
+      await waitForElement(() => getByTestId('success'));
+      expect(preloadResolved).toEqual(true);
+
+    });
   });
 
   describe('useFirestoreDoc', () => {

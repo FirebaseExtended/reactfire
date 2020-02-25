@@ -5,6 +5,7 @@
   "dependencies": {
     "@types/jest": "^24.9.0",
     "firebase": "^7.9.1",
+    "js-levenshtein": "^1.1.6",
     "react": "0.0.0-experimental-5de5b6150",
     "react-dom": "0.0.0-experimental-5de5b6150",
     "react-firebaseui": "^4.0.0",

@@ -2,8 +2,22 @@ import * as React from 'react';
 import { Observable } from 'rxjs';
 import { SuspenseSubject } from './SuspenseSubject';
 
+const globalThis = function() {
+  if (typeof self !== 'undefined') { return self; }
+  if (typeof window !== 'undefined') { return window; }
+  if (typeof global !== 'undefined') { return global; }
+  throw new Error('unable to locate global object');
+}();
+
+const PRELOADED_OBSERVABLES = '_reactFirePreloadedObservables';
 const DEFAULT_TIMEOUT = 30_000;
-const preloadedObservables = new Map<string, SuspenseSubject<unknown>>();
+
+// Since we're side-effect free, we need to ensure our observable cache is global
+const preloadedObservables = globalThis[PRELOADED_OBSERVABLES] || new Map<string, SuspenseSubject<unknown>>();
+
+if (!globalThis[PRELOADED_OBSERVABLES]) {
+  globalThis[PRELOADED_OBSERVABLES] = preloadedObservables;
+}
 
 // Starts listening to an Observable.
 // Call this once you know you're going to render a
