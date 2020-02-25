@@ -46,7 +46,7 @@ describe('Firestore', () => {
   describe('useFirestore', () => {
 
     it('awaits the preloadFirestore setup', async () => {
-      const app2 = firebase.initializeTestApp({
+      const firebaseApp = firebase.initializeTestApp({
         projectId: '123456',
         databaseName: 'my-database',
         auth: { uid: 'alice' }
@@ -55,16 +55,21 @@ describe('Firestore', () => {
       let firestore: firebase.firestore.Firestore;
       let preloadResolved = false;
       let preloadResolve: (v?: unknown) => void;
-      preloadFirestore(app2, () => new Promise(resolve => preloadResolve = resolve)).then(() => preloadResolved = true);
+
+      preloadFirestore({
+        firebaseApp,
+        setup: () => new Promise(resolve => preloadResolve = resolve)
+      }).then(() => preloadResolved = true);
 
       const Firestore = () => {
-        const firestore = useFirestore(app2);
+        const firestore = useFirestore(firebaseApp);
         return (
           <div data-testid="success"></div>
         );
       };
+
       const { getByTestId } = render(
-        <FirebaseAppProvider firebase={app2}>
+        <FirebaseAppProvider firebase={firebaseApp}>
           <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
             <Firestore />
           </React.Suspense>

@@ -14,6 +14,7 @@ import {
 } from '..';
 import { preloadObservable } from '../useObservable';
 import { first } from 'rxjs/operators';
+import { useFirebaseApp } from '../firebaseApp';
 
 // starts a request for a firestore doc.
 // imports the firestore SDK automatically
@@ -25,13 +26,14 @@ export function preloadFirestoreDoc(
   refProvider: (
     firestore: firebase.firestore.Firestore
   ) => firestore.DocumentReference,
-  firebaseApp: firebase.app.App
+  options?: { firebaseApp?: firebase.app.App }
 ) {
-  return preloadFirestore(firebaseApp).then(firestore => {
+  const firebaseApp = options?.firebaseApp || useFirebaseApp();
+  return preloadFirestore({firebaseApp}).then(firestore => {
     const ref = refProvider(firestore());
     return preloadObservable(
       doc(ref),
-      `firestore:doc:${ref.firestore.app.name}:${ref.path}`
+      `firestore:doc:${firebaseApp.name}:${ref.path}`
     );
   });
 }

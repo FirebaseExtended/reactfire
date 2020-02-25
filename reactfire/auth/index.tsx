@@ -9,9 +9,11 @@ import {
   useObservable
 } from '..';
 import { from } from 'rxjs';
+import { useFirebaseApp } from '../firebaseApp';
 
-export function preloadUser(firebaseApp: firebase.app.App) {
-  return preloadAuth(firebaseApp).then(auth => {
+export function preloadUser(options?: {firebaseApp?: firebase.app.App}) {
+  const firebaseApp = options?.firebaseApp || useFirebaseApp();
+  return preloadAuth({firebaseApp}).then(auth => {
     const result = preloadObservable(
       user(auth()),
       `auth:user:${firebaseApp.name}`
