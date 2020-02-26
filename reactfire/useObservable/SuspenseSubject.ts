@@ -1,5 +1,5 @@
-import { Observable, Subject, Subscription, Subscriber, empty } from 'rxjs';
-import { tap, share, catchError } from 'rxjs/operators';
+import { empty, Observable, Subject, Subscriber, Subscription } from 'rxjs';
+import { catchError, shareReplay, tap } from 'rxjs/operators';
 
 export class SuspenseSubject<T> extends Subject<T> {
   private _value: T | undefined;
@@ -14,9 +14,7 @@ export class SuspenseSubject<T> extends Subject<T> {
 
   constructor(innerObservable: Observable<T>, private _timeoutWindow: number) {
     super();
-    this._firstEmission = new Promise<void>(
-      resolve => (this._resolveFirstEmission = resolve)
-    );
+    this._firstEmission = new Promise<void>(resolve => (this._resolveFirstEmission = resolve));
     this._innerObservable = innerObservable.pipe(
       tap(
         v => {
@@ -30,7 +28,7 @@ export class SuspenseSubject<T> extends Subject<T> {
         }
       ),
       catchError(() => empty()),
-      share()
+      shareReplay(1)
     );
     // warm up the observable
     this._warmupSubscription = this._innerObservable.subscribe();
@@ -75,9 +73,7 @@ export class SuspenseSubject<T> extends Subject<T> {
     this._hasValue = false;
     this._value = undefined;
     this._error = undefined;
-    this._firstEmission = new Promise<void>(
-      resolve => (this._resolveFirstEmission = resolve)
-    );
+    this._firstEmission = new Promise<void>(resolve => (this._resolveFirstEmission = resolve));
   }
 
   _subscribe(subscriber: Subscriber<T>): Subscription {
