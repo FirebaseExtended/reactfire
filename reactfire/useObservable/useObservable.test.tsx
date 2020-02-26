@@ -35,9 +35,7 @@ describe('useObservable', () => {
     const observableVal = "y'all";
     const observable$ = new Subject<any>();
 
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useObservable(observable$, 'test-2', startVal)
-    );
+    const { result, waitForNextUpdate } = renderHook(() => useObservable(observable$, 'test-2', startVal));
 
     expect(result.current).toEqual(startVal);
 
@@ -118,9 +116,7 @@ describe('useObservable', () => {
     const actualComponentId = 'actual-component';
     const fallbackComponentId = 'fallback-component';
 
-    const FallbackComponent = () => (
-      <h1 data-testid={fallbackComponentId}>Fallback</h1>
-    );
+    const FallbackComponent = () => <h1 data-testid={fallbackComponentId}>Fallback</h1>;
 
     const Component = () => {
       const val = useObservable(observable$, 'test-suspense');
@@ -142,9 +138,7 @@ describe('useObservable', () => {
 
     // make sure Suspense correctly renders its child after the observable emits a value
     expect(getByTestId(actualComponentId)).toBeInTheDocument();
-    expect(getByTestId(actualComponentId)).toHaveTextContent(
-      observableFinalVal
-    );
+    expect(getByTestId(actualComponentId)).toHaveTextContent(observableFinalVal);
     expect(queryByTestId(fallbackComponentId)).toBeNull();
   });
 
@@ -153,9 +147,7 @@ describe('useObservable', () => {
     const values = ['a', 'b', 'c'];
     const observable$ = new Subject();
 
-    const { result } = renderHook(() =>
-      useObservable(observable$, 'test-changes', startVal)
-    );
+    const { result } = renderHook(() => useObservable(observable$, 'test-changes', startVal));
 
     expect(result.current).toEqual(startVal);
 
@@ -182,16 +174,12 @@ describe('useObservable', () => {
       return (
         <React.Suspense fallback="loading">
           <ObservableConsumer data-testid={firstComponentId} />
-          {renderSecondComponent ? (
-            <ObservableConsumer data-testid={secondComponentId} />
-          ) : null}
+          {renderSecondComponent ? <ObservableConsumer data-testid={secondComponentId} /> : null}
         </React.Suspense>
       );
     };
 
-    const { getByTestId, rerender } = render(
-      <Component renderSecondComponent={false} />
-    );
+    const { getByTestId, rerender } = render(<Component renderSecondComponent={false} />);
 
     // emit one value to the first component (second one isn't rendered yet)
     act(() => observable$.next(values[0]));
