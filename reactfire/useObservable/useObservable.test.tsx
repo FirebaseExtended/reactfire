@@ -199,4 +199,45 @@ describe('useObservable', () => {
     const comp2 = await waitForElement(() => getByTestId(secondComponentId));
     expect(comp2).toHaveTextContent(values[1]);
   });
+
+  it(`emits the new observable's value if the observable is swapped out`, async () => {
+    const obs1$ = new Subject();
+    const obs2$ = new Subject();
+
+    let currentObs$ = obs1$;
+    let currentObsId = 'observable-1';
+
+    const ObservableConsumer = props => {
+      const val = useObservable(currentObs$, currentObsId);
+
+      return <h1 {...props}>{val}</h1>;
+    };
+
+    const Component = () => {
+      return (
+        <React.Suspense fallback={<span data-testid="fallback">Loading...</span>}>
+          <ObservableConsumer data-testid={'consumer'} />
+        </React.Suspense>
+      );
+    };
+
+    const { getByTestId, rerender } = render(<Component />);
+
+    act(() => obs1$.next('Jeff'));
+    const comp = await waitForElement(() => getByTestId('consumer'));
+    expect(comp).toBeInTheDocument();
+
+    currentObs$ = obs2$;
+    currentObsId = 'observable-2';
+
+    rerender(<Component />);
+    expect(getByTestId('fallback')).toBeInTheDocument();
+
+    act(() => obs2$.next('James'));
+    const refreshedComp = await waitForElement(() => getByTestId('consumer'));
+    expect(refreshedComp).toBeInTheDocument();
+
+    // if useObservable doesn't re-emit, the value here will still be "Jeff"
+    expect(refreshedComp).toHaveTextContent('James');
+  });
 });
