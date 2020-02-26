@@ -304,11 +304,11 @@ Call `preloadFirestore` (or `preloadAuth`, `preloadRemoteConfig`, etc) to start 
 
 ### Initialize an SDK
 
-Some Firestore SDKs need to be initialized (`firebase.remoteConfig().fetchAndActivate()`), or need to have settings set before any other calls are made (`firebase.firestore().enablePersistence()`). This can be done by using an extra argument in the preload method:
+Some Firestore SDKs need to be initialized (`firebase.remoteConfig().fetchAndActivate()`), or need to have settings set before any other calls are made (`firebase.firestore().enablePersistence()`). This can be done by passing a function returning a promise to the `setup` option.
 
 ```jsx
-preloadFirestore(firebaseApp, firestore => {
-  return firestore().enablePersistence();
+preloadFirestore({
+  setup: firestore => firestore().enablePersistence()
 });
 ```
 
