@@ -1,10 +1,6 @@
 cd reactfire/pub/reactfire
 
-# TODO once we go 2.0.0 stable, uncomment
-# LATEST_TEST="^[^-]*$"
-
-# Publish -rc tags on @latest for now
-LATEST_TEST="^[^-]*-rc"
+LATEST_TEST="^[^-]*$"
 
 if test $NPM_TOKEN; then
 
