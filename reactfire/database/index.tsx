@@ -5,29 +5,21 @@ import { ReactFireOptions, useObservable, checkIdField, checkStartWithValue } fr
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-const QUERY_UNIQUE_IDS = '_reactFireDatabaseQueryUniqueIds';
+const CACHED_QUERIES = '_reactFireDatabaseCachedQueries';
 
 // Since we're side-effect free, we need to ensure our observableId cache is global
-const cachedUniqueIds: Map<string, database.Query> = globalThis[QUERY_UNIQUE_IDS] || new Map();
+const cachedQueries: Array<database.Query> = globalThis[CACHED_QUERIES] || [];
 
-if (!globalThis[QUERY_UNIQUE_IDS]) {
-  globalThis[QUERY_UNIQUE_IDS] = cachedUniqueIds;
+if (!globalThis[CACHED_QUERIES]) {
+  globalThis[CACHED_QUERIES] = cachedQueries;
 }
 
 function getUnqiueIdForDatabaseQuery(query: database.Query) {
-  for (const [cachedUniqueId, cachedQuery] of cachedUniqueIds.entries()) {
-    if (cachedQuery.isEqual(query)) {
-      return cachedUniqueId;
-    }
+  const index = cachedQueries.findIndex(cachedQuery => cachedQuery.isEqual(query));
+  if (index > -1) {
+    return index;
   }
-  let uniqueId: string;
-  do {
-    uniqueId = Math.random()
-      .toString(36)
-      .split('.')[1];
-  } while (cachedUniqueIds.has(uniqueId));
-  cachedUniqueIds.set(uniqueId, query);
-  return uniqueId;
+  return cachedQueries.push(query) - 1;
 }
 
 /**

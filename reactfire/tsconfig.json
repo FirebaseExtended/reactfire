@@ -9,7 +9,6 @@
     "lib": ["es5", "es6", "dom"],
     "outDir": "pub/reactfire",
     "declaration": true,
-    "skipLibCheck": true,
-    "downlevelIteration": true
+    "skipLibCheck": true
   }
 }
