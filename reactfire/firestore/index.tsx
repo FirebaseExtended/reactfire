@@ -8,22 +8,25 @@ import { useFirebaseApp } from '../firebaseApp';
 const QUERY_UNIQUE_IDS = '_reactFireFirestoreQueryUniqueIds';
 
 // Since we're side-effect free, we need to ensure our observableId cache is global
-const cachedUniqueIds: Map<firestore.Query, string> = globalThis[QUERY_UNIQUE_IDS] || new Map();
+const cachedUniqueIds: Map<string, firestore.Query> = globalThis[QUERY_UNIQUE_IDS] || new Map();
 
 if (!globalThis[QUERY_UNIQUE_IDS]) {
   globalThis[QUERY_UNIQUE_IDS] = cachedUniqueIds;
 }
 
 function getUnqiueIdForFirestoreQuery(query: firestore.Query) {
-  for (const [cachedQuery, cachedUniqueId] of cachedUniqueIds.entries()) {
-    if (cachedQuery.isEqual(query as any)) {
+  for (const [cachedUniqueId, cachedQuery] of cachedUniqueIds.entries()) {
+    if (cachedQuery.isEqual(query)) {
       return cachedUniqueId;
     }
   }
-  const uniqueId = Math.random()
-    .toString(36)
-    .split('.')[1];
-  cachedUniqueIds.set(query, uniqueId);
+  let uniqueId: string;
+  do {
+    uniqueId = Math.random()
+      .toString(36)
+      .split('.')[1];
+  } while (cachedUniqueIds.has(uniqueId));
+  cachedUniqueIds.set(uniqueId, query);
   return uniqueId;
 }
 

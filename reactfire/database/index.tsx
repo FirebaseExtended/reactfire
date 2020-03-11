@@ -8,22 +8,25 @@ import { map } from 'rxjs/operators';
 const QUERY_UNIQUE_IDS = '_reactFireDatabaseQueryUniqueIds';
 
 // Since we're side-effect free, we need to ensure our observableId cache is global
-const cachedUniqueIds: Map<database.Query, string> = globalThis[QUERY_UNIQUE_IDS] || new Map();
+const cachedUniqueIds: Map<string, database.Query> = globalThis[QUERY_UNIQUE_IDS] || new Map();
 
 if (!globalThis[QUERY_UNIQUE_IDS]) {
   globalThis[QUERY_UNIQUE_IDS] = cachedUniqueIds;
 }
 
 function getUnqiueIdForDatabaseQuery(query: database.Query) {
-  for (const [cachedQuery, cachedUniqueId] of cachedUniqueIds.entries()) {
+  for (const [cachedUniqueId, cachedQuery] of cachedUniqueIds.entries()) {
     if (cachedQuery.isEqual(query)) {
       return cachedUniqueId;
     }
   }
-  const uniqueId = Math.random()
-    .toString(36)
-    .split('.')[1];
-  cachedUniqueIds.set(query, uniqueId);
+  let uniqueId: string;
+  do {
+    uniqueId = Math.random()
+      .toString(36)
+      .split('.')[1];
+  } while (cachedUniqueIds.has(uniqueId));
+  cachedUniqueIds.set(uniqueId, query);
   return uniqueId;
 }
 
