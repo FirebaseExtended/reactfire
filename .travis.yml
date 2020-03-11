@@ -47,5 +47,4 @@ install:
 
 script:
   - cd reactfire
-  - yarn build
   - yarn test

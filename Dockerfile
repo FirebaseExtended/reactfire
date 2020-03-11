@@ -24,7 +24,6 @@ RUN yarn install --frozen-lockfile
 
 COPY . /
 
-RUN cd reactfire && yarn build
 RUN cd reactfire && yarn test
 
 ARG SHORT_SHA=""
