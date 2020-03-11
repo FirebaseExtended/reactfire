@@ -14,7 +14,7 @@ if (!globalThis[CACHED_QUERIES]) {
   globalThis[CACHED_QUERIES] = cachedQueries;
 }
 
-function getUnqiueIdForDatabaseQuery(query: database.Query) {
+function getUniqueIdForDatabaseQuery(query: database.Query) {
   const index = cachedQueries.findIndex(cachedQuery => cachedQuery.isEqual(query));
   if (index > -1) {
     return index;
@@ -70,12 +70,12 @@ export function useDatabaseList<T = { [key: string]: unknown }>(
   ref: database.Reference | database.Query,
   options?: ReactFireOptions<T[]>
 ): QueryChange[] | T[] {
-  const hash = `database:list:${getUnqiueIdForDatabaseQuery(ref)}`;
+  const hash = `database:list:${getUniqueIdForDatabaseQuery(ref)}`;
 
   return useObservable(list(ref), hash, options ? options.startWithValue : undefined);
 }
 
 export function useDatabaseListData<T = { [key: string]: unknown }>(ref: database.Reference | database.Query, options?: ReactFireOptions<T[]>): T[] {
   const idField = checkIdField(options);
-  return useObservable(listVal(ref, idField), `database:listVal:${getUnqiueIdForDatabaseQuery(ref)}:idField=${idField}`, checkStartWithValue(options));
+  return useObservable(listVal(ref, idField), `database:listVal:${getUniqueIdForDatabaseQuery(ref)}:idField=${idField}`, checkStartWithValue(options));
 }

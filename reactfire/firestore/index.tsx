@@ -14,7 +14,7 @@ if (!globalThis[CACHED_QUERIES]) {
   globalThis[CACHED_QUERIES] = cachedQueries;
 }
 
-function getUnqiueIdForFirestoreQuery(query: firestore.Query) {
+function getUniqueIdForFirestoreQuery(query: firestore.Query) {
   const index = cachedQueries.findIndex(cachedQuery => cachedQuery.isEqual(query));
   if (index > -1) {
     return index;
@@ -98,7 +98,7 @@ export function useFirestoreCollection<T = { [key: string]: unknown }>(
   query: firestore.Query,
   options?: ReactFireOptions<T[]>
 ): T extends {} ? T[] : firestore.QuerySnapshot {
-  const queryId = `firestore:collection:${getUnqiueIdForFirestoreQuery(query)}`;
+  const queryId = `firestore:collection:${getUniqueIdForFirestoreQuery(query)}`;
   return useObservable(fromCollectionRef(query), queryId, checkStartWithValue(options));
 }
 
@@ -110,7 +110,7 @@ export function useFirestoreCollection<T = { [key: string]: unknown }>(
  */
 export function useFirestoreCollectionData<T = { [key: string]: unknown }>(query: firestore.Query, options?: ReactFireOptions<T[]>): T[] {
   const idField = checkIdField(options);
-  const queryId = `firestore:collectionData:${getUnqiueIdForFirestoreQuery(query)}:idField=${idField}`;
+  const queryId = `firestore:collectionData:${getUniqueIdForFirestoreQuery(query)}:idField=${idField}`;
 
   return useObservable(collectionData(query, idField), queryId, checkStartWithValue(options));
 }
