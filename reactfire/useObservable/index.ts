@@ -2,18 +2,11 @@ import * as React from 'react';
 import { Observable } from 'rxjs';
 import { SuspenseSubject } from './SuspenseSubject';
 
-const globalThis = function() {
-  if (typeof self !== 'undefined') { return self; }
-  if (typeof window !== 'undefined') { return window; }
-  if (typeof global !== 'undefined') { return global; }
-  throw new Error('unable to locate global object');
-}();
-
 const PRELOADED_OBSERVABLES = '_reactFirePreloadedObservables';
 const DEFAULT_TIMEOUT = 30_000;
 
 // Since we're side-effect free, we need to ensure our observable cache is global
-const preloadedObservables = globalThis[PRELOADED_OBSERVABLES] || new Map<string, SuspenseSubject<unknown>>();
+const preloadedObservables: Map<string, SuspenseSubject<unknown>> = globalThis[PRELOADED_OBSERVABLES] || new Map();
 
 if (!globalThis[PRELOADED_OBSERVABLES]) {
   globalThis[PRELOADED_OBSERVABLES] = preloadedObservables;
@@ -32,12 +25,7 @@ export function preloadObservable<T>(source: Observable<T>, id: string) {
   }
 }
 
-export function useObservable<T>(
-  source: Observable<T | any>,
-  observableId: string,
-  startWithValue?: T | any,
-  deps: React.DependencyList = [observableId]
-): T {
+export function useObservable<T>(source: Observable<T | any>, observableId: string, startWithValue?: T | any, deps: React.DependencyList = [observableId]): T {
   if (!observableId) {
     throw new Error('cannot call useObservable without an observableId');
   }
@@ -45,9 +33,7 @@ export function useObservable<T>(
   if (!observable.hasValue && !startWithValue) {
     throw observable.firstEmission;
   }
-  const [latest, setValue] = React.useState(() =>
-    observable.hasValue ? observable.value : startWithValue
-  );
+  const [latest, setValue] = React.useState(() => (observable.hasValue ? observable.value : startWithValue));
   React.useEffect(() => {
     const subscription = observable.subscribe(
       v => setValue(() => v),

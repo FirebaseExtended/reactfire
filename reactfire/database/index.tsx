@@ -1,14 +1,26 @@
 import { database } from 'firebase/app';
 import { list, object, QueryChange, listVal } from 'rxfire/database';
-import {
-  ReactFireOptions,
-  useObservable,
-  checkIdField,
-  checkStartWithValue
-} from '..';
+import { ReactFireOptions, useObservable, checkIdField, checkStartWithValue } from '..';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+const CACHED_QUERIES = '_reactFireDatabaseCachedQueries';
+
+// Since we're side-effect free, we need to ensure our observableId cache is global
+const cachedQueries: Array<database.Query> = globalThis[CACHED_QUERIES] || [];
+
+if (!globalThis[CACHED_QUERIES]) {
+  globalThis[CACHED_QUERIES] = cachedQueries;
+}
+
+function getUniqueIdForDatabaseQuery(query: database.Query) {
+  const index = cachedQueries.findIndex(cachedQuery => cachedQuery.isEqual(query));
+  if (index > -1) {
+    return index;
+  }
+  return cachedQueries.push(query) - 1;
+}
 
 /**
  * Subscribe to a Realtime Database object
@@ -16,15 +28,8 @@ import { map } from 'rxjs/operators';
  * @param ref - Reference to the DB object you want to listen to
  * @param options
  */
-export function useDatabaseObject<T = unknown>(
-  ref: database.Reference,
-  options?: ReactFireOptions<T>
-): QueryChange | T {
-  return useObservable(
-    object(ref),
-    `database:object:${ref.toString()}`,
-    options ? options.startWithValue : undefined
-  );
+export function useDatabaseObject<T = unknown>(ref: database.Reference, options?: ReactFireOptions<T>): QueryChange | T {
+  return useObservable(object(ref), `database:object:${ref.toString()}`, options ? options.startWithValue : undefined);
 }
 
 // ============================================================================
@@ -50,23 +55,9 @@ function changeToData(change: QueryChange, keyField?: string): {} {
 }
 // ============================================================================
 
-export function useDatabaseObjectData<T>(
-  ref: database.Reference,
-  options?: ReactFireOptions<T>
-): T {
+export function useDatabaseObjectData<T>(ref: database.Reference, options?: ReactFireOptions<T>): T {
   const idField = checkIdField(options);
-  return useObservable(
-    objectVal(ref, idField),
-    `database:objectVal:${ref.toString()}:idField=${idField}`,
-    checkStartWithValue(options)
-  );
-}
-
-// Realtime Database has an undocumented method
-// that helps us build a unique ID for the query
-// https://github.com/firebase/firebase-js-sdk/blob/aca99669dd8ed096f189578c47a56a8644ac62e6/packages/database/src/api/Query.ts#L601
-interface _QueryWithId extends database.Query {
-  queryIdentifier(): string;
+  return useObservable(objectVal(ref, idField), `database:objectVal:${ref.toString()}:idField=${idField}`, checkStartWithValue(options));
 }
 
 /**
@@ -79,23 +70,12 @@ export function useDatabaseList<T = { [key: string]: unknown }>(
   ref: database.Reference | database.Query,
   options?: ReactFireOptions<T[]>
 ): QueryChange[] | T[] {
-  const hash = `database:list:${ref.toString()}|${(ref as _QueryWithId).queryIdentifier()}`;
+  const hash = `database:list:${getUniqueIdForDatabaseQuery(ref)}`;
 
-  return useObservable(
-    list(ref),
-    hash,
-    options ? options.startWithValue : undefined
-  );
+  return useObservable(list(ref), hash, options ? options.startWithValue : undefined);
 }
 
-export function useDatabaseListData<T = { [key: string]: unknown }>(
-  ref: database.Reference | database.Query,
-  options?: ReactFireOptions<T[]>
-): T[] {
+export function useDatabaseListData<T = { [key: string]: unknown }>(ref: database.Reference | database.Query, options?: ReactFireOptions<T[]>): T[] {
   const idField = checkIdField(options);
-  return useObservable(
-    listVal(ref, idField),
-    `database:listVal:${ref.toString()}|${(ref as _QueryWithId).queryIdentifier()}:idField=${idField}`,
-    checkStartWithValue(options)
-  );
+  return useObservable(listVal(ref, idField), `database:listVal:${getUniqueIdForDatabaseQuery(ref)}:idField=${idField}`, checkStartWithValue(options));
 }

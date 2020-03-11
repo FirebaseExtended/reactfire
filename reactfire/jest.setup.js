@@ -1,0 +1,1 @@
+global.globalThis = require('globalthis')();

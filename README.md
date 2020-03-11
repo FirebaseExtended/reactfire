@@ -28,6 +28,8 @@ npm install --save reactfire firebase
 yarn add reactfire firebase
 ```
 
+Depending on your targeted platforms you may need to install polyfills. The most commonly needed will be [globalThis](https://caniuse.com/#search=globalThis) and [Proxy](https://caniuse.com/#search=Proxy).
+
 - [**Quickstart**](./docs/quickstart.md)
 - [**Common Use Cases**](./docs/use.md)
 - [**API Reference**](./docs/reference.md)
@@ -40,12 +42,7 @@ Check out the
 ```jsx
 import React, { Component } from 'react';
 import { createRoot } from 'react-dom';
-import {
-  FirebaseAppProvider,
-  useFirestoreDocData,
-  useFirestore,
-  SuspenseWithPerf
-} from 'reactfire';
+import { FirebaseAppProvider, useFirestoreDocData, useFirestore, SuspenseWithPerf } from 'reactfire';
 
 const firebaseConfig = {
   /* Add your config from the Firebase Console */
@@ -70,10 +67,7 @@ function App() {
   return (
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
       <h1>🌯</h1>
-      <SuspenseWithPerf
-        fallback={<p>loading burrito status...</p>}
-        traceId={'load-burrito-status'}
-      >
+      <SuspenseWithPerf fallback={<p>loading burrito status...</p>} traceId={'load-burrito-status'}>
         <Burrito />
       </SuspenseWithPerf>
     </FirebaseAppProvider>
