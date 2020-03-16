@@ -97,7 +97,7 @@ export function useFirestoreDocDataOnce<T = unknown>(ref: firestore.DocumentRefe
 export function useFirestoreCollection<T = { [key: string]: unknown }>(
   query: firestore.Query,
   options?: ReactFireOptions<T[]>
-): T extends {} ? T[] : firestore.QuerySnapshot {
+): firestore.QuerySnapshot<T> {
   const queryId = `firestore:collection:${getUniqueIdForFirestoreQuery(query)}`;
   return useObservable(fromCollectionRef(query), queryId, checkStartWithValue(options));
 }
