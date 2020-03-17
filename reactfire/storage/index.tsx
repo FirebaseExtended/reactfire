@@ -1,8 +1,9 @@
-import * as React from 'react';
 import { storage } from 'firebase/app';
+import * as React from 'react';
 import { getDownloadURL } from 'rxfire/storage';
 import { Observable } from 'rxjs';
-import { ReactFireOptions, useObservable, useFirebaseApp } from '..';
+import { ReactFireOptions, useObservable } from '..';
+import { useStorage } from '../firebaseApp';
 
 /**
  * modified version of rxFire's _fromTask
@@ -32,16 +33,8 @@ function _fromTask(task: storage.UploadTask) {
  * @param ref - reference to the blob the task is acting on
  * @param options
  */
-export function useStorageTask<T = unknown>(
-  task: storage.UploadTask,
-  ref: storage.Reference,
-  options?: ReactFireOptions<T>
-): storage.UploadTaskSnapshot | T {
-  return useObservable(
-    _fromTask(task),
-    `storage:task:${ref.toString()}`,
-    options ? options.startWithValue : undefined
-  );
+export function useStorageTask<T = unknown>(task: storage.UploadTask, ref: storage.Reference, options?: ReactFireOptions<T>): storage.UploadTaskSnapshot | T {
+  return useObservable(_fromTask(task), `storage:task:${ref.toString()}`, options ? options.startWithValue : undefined);
 }
 
 /**
@@ -50,15 +43,8 @@ export function useStorageTask<T = unknown>(
  * @param ref - reference to the blob you want to download
  * @param options
  */
-export function useStorageDownloadURL<T = string>(
-  ref: storage.Reference,
-  options?: ReactFireOptions<T>
-): string | T {
-  return useObservable(
-    getDownloadURL(ref),
-    `storage:downloadUrl:${ref.toString()}`,
-    options ? options.startWithValue : undefined
-  );
+export function useStorageDownloadURL<T = string>(ref: storage.Reference, options?: ReactFireOptions<T>): string | T {
+  return useObservable(getDownloadURL(ref), `storage:downloadUrl:${ref.toString()}`, options ? options.startWithValue : undefined);
 }
 
 type StorageImageProps = {
@@ -66,16 +52,10 @@ type StorageImageProps = {
   storage?: firebase.storage.Storage;
 };
 
-export function StorageImage(
-  props: StorageImageProps &
-    React.DetailedHTMLProps<
-      React.ImgHTMLAttributes<HTMLImageElement>,
-      HTMLImageElement
-    >
-) {
+export function StorageImage(props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>) {
   let { storage, storagePath, ...imgProps } = props;
 
-  storage = storage || useFirebaseApp().storage();
+  storage = storage || useStorage();
 
   const imgSrc = useStorageDownloadURL(storage.ref(storagePath));
   return <img src={imgSrc} {...imgProps} />;
