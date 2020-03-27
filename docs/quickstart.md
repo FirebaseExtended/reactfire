@@ -6,7 +6,34 @@ We'll build a web app that displays, in _real time_, the tastiness of a burrito.
 
 To see the completed app, check out [this StackBlitz workspace](https://stackblitz.com/fork/reactfire-sample).
 
-## 1. In a terminal, create a fresh React app and `cd` into its directory
+## 1. Create a document in Cloud Firestore
+> If your project doesn't have a Cloud Firestore database instance yet, check out [these instructions](https://firebase.google.com/docs/firestore/quickstart#create) to create a new instance and initialize it in _locked mode_.
+
+1. Go to the _Database_ tab in the [Firebase console](https://console.firebase.google.com).
+ 
+1. Add a document.
+
+   1. In the _Data_ tab of the console, click _Add Collection_
+
+   1. Name the collection **_tryreactfire_**
+   1. Add a document with ID **_burrito_** and boolean field `yummy: true`
+
+   ![new document screenshot](https://firebasestorage.googleapis.com/v0/b/rxfire-525a3.appspot.com/o/docs%2FScreen%20Shot%202019-07-03%20at%202.19.11%20PM.png?alt=media&token=052d27ea-5db1-4a02-aad0-a3f017c1a975)
+
+1. Add security rules to your document.
+
+    1. In the _Rules_ tab of the console, add the following security rules:
+   
+   ```text
+   match /tryreactfire/burrito {
+     allow read: if true;
+     allow write: if request.auth.uid != null;
+   }
+   ```
+    2. Click _Publish_
+
+
+## 2. In a terminal, create a fresh React app and `cd` into its directory
 
 > Prerequisite: make sure you have [Node.js](https://nodejs.org/en/) installed.
 
@@ -15,7 +42,7 @@ npx create-react-app myapp
 cd myapp
 ```
 
-## 2. Install ReactFire and the Firebase SDK
+## 3. Install ReactFire and the Firebase SDK
 
 ```bash
 yarn add firebase reactfire
@@ -25,26 +52,7 @@ yarn add firebase reactfire
 npm install --save firebase reactfire
 ```
 
-## 3. Create a document in Cloud Firestore
 
-1. Go to the _Database_ tab in the Firebase console. If your project doesn't have a Cloud Firestore instance yet, initialize it in locked mode
-1. Add a document
-
-   1. In the _Data_ tab of the console, click _Add Collection_
-
-   1. Name the collection **_tryreactfire_**
-   1. Add a document with ID **_burrito_** and boolean field `yummy: true`
-
-   ![new document screenshot](https://firebasestorage.googleapis.com/v0/b/rxfire-525a3.appspot.com/o/docs%2FScreen%20Shot%202019-07-03%20at%202.19.11%20PM.png?alt=media&token=052d27ea-5db1-4a02-aad0-a3f017c1a975)
-
-1. Add the following to your security rules and click _Publish_
-
-   ```text
-   match /tryreactfire/burrito {
-     allow read: if true;
-     allow write: if request.auth.uid != null;
-   }
-   ```
 
 ## 4. Modify `src/index.js`
 
