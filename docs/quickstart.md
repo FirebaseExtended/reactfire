@@ -18,10 +18,10 @@ cd myapp
 ## 2. Install ReactFire and the Firebase SDK
 
 ```bash
-# yarn
 yarn add firebase reactfire
 
-# npm
+# or
+
 npm install --save firebase reactfire
 ```
 
@@ -134,7 +134,9 @@ function App() {
 
 ```bash
 yarn start
+
 # or
+
 npm run start
 ```
 
