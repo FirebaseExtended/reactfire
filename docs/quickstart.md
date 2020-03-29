@@ -1,13 +1,15 @@
-# ReactFire Quickstart
+# Getting Started with ReactFire
 
 ⚛ + 🔥 = 🌯
 
-We'll build a web app that displays, in _real time_, the tastiness of a burrito. It will listen to **Cloud Firestore** for its data, and we'll configure **Firebase Performance Monitoring** so we can get some perf stats.
+This quickstart shows you how to connect your React web app to **Cloud Firestore**, listen for its data, and display the data in _real time_. We'll also configure **Firebase Performance Monitoring** so you can get some performance stats.
+
+Let's build a web app that displays, in _real time_, the tastiness of a burrito. Yum!
 
 To see the completed app, check out [this StackBlitz workspace](https://stackblitz.com/fork/reactfire-sample).
 
 ## 1. Create a document in Cloud Firestore
-> If your project doesn't have a Cloud Firestore database instance yet, check out [these instructions](https://firebase.google.com/docs/firestore/quickstart#create) to create a new instance and initialize it in _locked mode_.
+> If your project doesn't have a Cloud Firestore database instance yet, check out [these instructions](https://firebase.google.com/docs/firestore/quickstart#create) to create a new instance.  Please initialize it in _locked mode_.
 
 1. Go to the _Database_ tab in the [Firebase console](https://console.firebase.google.com).
  
@@ -30,7 +32,7 @@ To see the completed app, check out [this StackBlitz workspace](https://stackbli
      allow write: if request.auth.uid != null;
    }
    ```
-    2. Click _Publish_
+    2. _Publish_ the rules.
 
 
 ## 2. In a terminal, create a fresh React app and `cd` into its directory
