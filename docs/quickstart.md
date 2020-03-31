@@ -27,10 +27,14 @@ To see the completed app, check out [this StackBlitz workspace](https://stackbli
     1. In the _Rules_ tab of the console, add the following security rules:
    
    ```text
-   match /tryreactfire/burrito {
-     allow read: if true;
-     allow write: if request.auth.uid != null;
-   }
+   rules_version = '2';
+   service cloud.firestore {
+      match /databases/{database}/documents {
+        match /tryreactfire/burrito {
+          allow read, write: if true;
+        }
+      }
+    } 
    ```
     2. _Publish_ the rules.
 
