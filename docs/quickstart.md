@@ -169,15 +169,16 @@ function App() {
 
 ## 7. Run your app!
 
-```bash
-yarn start
+1. Run your app.
+   ```bash
+   yarn start
 
-# or
+   # or
 
-npm run start
-```
+    npm run start
+   ```
 
-1. Edit the value of `yummy` in the Firebase console, and watch it update in real time in your app! 🔥🔥🔥
+1. Edit the value of `yummy` in the _Database_ tab in the [Firebase console](https://console.firebase.google.com) and watch it update in real time in your app! 🔥🔥🔥
 
 ## _About Firebase Performance Monitoring_
 
@@ -188,3 +189,7 @@ Note that Firebase Performance Monitoring can take about 12 hours to crunch your
 This is an example of some of the stats in the Firebase Performance Monitoring console after 12 hours:
 
 ![Performance screenshot](https://firebasestorage.googleapis.com/v0/b/rxfire-525a3.appspot.com/o/docs%2FScreen%20Shot%202019-07-03%20at%202.43.29%20PM.png?alt=media&token=079547b5-ba5d-46bc-acfa-d9dedc184dc5)
+
+## _Next Steps_
+
+To explore information on using ReactFire, check out  [Common Use Cases](https://github.com/FirebaseExtended/reactfire/blob/master/docs/use.md).
