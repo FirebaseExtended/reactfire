@@ -38,10 +38,11 @@ To see the completed app, check out [this StackBlitz workspace](https://stackbli
    ```
     2. _Publish_ the rules.
 
-
-## 2. In a terminal, create a fresh React app and `cd` into its directory
+## 2. Create a React App
 
 > Prerequisite: make sure you have [Node.js](https://nodejs.org/en/) installed.
+
+In a terminal, create a fresh React app in a directory of your choice.
 
 ```shell
 npx create-react-app myapp
@@ -50,6 +51,8 @@ cd myapp
 
 ## 3. Install ReactFire and the Firebase SDK
 
+> Ignore yarn/npm warnings.
+
 ```bash
 yarn add firebase reactfire
 
@@ -57,10 +60,21 @@ yarn add firebase reactfire
 
 npm install --save firebase reactfire
 ```
+## 4. Register your app with Firebase
 
+1. In the center of the Firebase console's project overview page, click the Web icon to launch the setup workflow.
+    > If you've already added an app to your Firebase project, click _Add app_ to display the platform options.
 
+1. Enter your app's nickname.
+    > Note: Firebase Hosting is not required for you to use Firebase products with your web app.
 
-## 4. Modify `src/index.js`
+1. _Register_ the app.
+
+1. Copy the Firebase configuration.  This will be used in Step 4.
+
+1. _Continue to Console_
+
+## 5. Add Firebase to `src/index.js` 
 
 1. Import Firebase and ReactFire
 
@@ -70,13 +84,22 @@ npm install --save firebase reactfire
    //...
    ```
 
-1. Wrap your app in a `FirebaseAppProvider` and provide the config object from the Firebase console
-
-   ```jsx
+1. Add the Firebase configuration
+    > Add the firebaseConfig constant and paste the configuration from Step 3.
+  
+    ```jsx
    //...
    const firebaseConfig = {
-     /* add your config object from Firebase console */
+     /* Paste your config object from Firebase console here */
    };
+   //...
+    ```
+
+1. Wrap your app in a `FirebaseAppProvider` 
+    > Replace the default render function.
+
+    ```jsx
+   //...
    ReactDOM.createRoot(document.getElementById('root')).render(
      <FirebaseAppProvider firebaseConfig={firebaseConfig}>
        <App />
@@ -85,7 +108,7 @@ npm install --save firebase reactfire
    //...
    ```
 
-## 5. Modify `src/App.js`
+## 6. Modify `src/App.js`
 
 1. Import the `useFirestoreDocData` and `useFirestore` hooks
 
@@ -144,7 +167,7 @@ function App() {
 //...
 ```
 
-## 6. Run your app!
+## 7. Run your app!
 
 ```bash
 yarn start
