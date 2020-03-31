@@ -9,6 +9,17 @@
   "imageSize": 100,
   "commit": true,
   "commitConvention": "none",
-  "contributors": [],
-  "contributorsPerLine": 7
+  "contributors": [
+    {
+      "login": "jhuleatt",
+      "name": "Jeff",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3759507?v=4",
+      "profile": "http://git.io/jhuleatt",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true
 }
