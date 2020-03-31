@@ -30,11 +30,15 @@ available in
 # npm
 npm install --save reactfire firebase
 
+# or
+
 # yarn
 yarn add reactfire firebase
 ```
 
 Depending on your targeted platforms you may need to install polyfills. The most commonly needed will be [globalThis](https://caniuse.com/#search=globalThis) and [Proxy](https://caniuse.com/#search=Proxy).
+
+## Docs
 
 - [**Quickstart**](./docs/quickstart.md)
 - [**Common Use Cases**](./docs/use.md)

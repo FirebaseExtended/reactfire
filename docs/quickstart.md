@@ -1,34 +1,19 @@
-# ReactFire Quickstart
+# Getting Started with ReactFire
 
 ⚛ + 🔥 = 🌯
 
-We'll build a web app that displays, in _real time_, the tastiness of a burrito. It will listen to **Cloud Firestore** for its data, and we'll configure **Firebase Performance Monitoring** so we can get some perf stats.
+This quickstart shows you how to connect your React web app to **Cloud Firestore**, listen for its data, and display the data in _real time_. We'll also configure **Firebase Performance Monitoring** so you can get some performance stats.
+
+Let's build a web app that displays, in _real time_, the tastiness of a burrito. Yum!
 
 To see the completed app, check out [this StackBlitz workspace](https://stackblitz.com/fork/reactfire-sample).
 
-## 1. In a terminal, create a fresh React app and `cd` into its directory
+## 1. Create a document in Cloud Firestore
+> If your project doesn't have a Cloud Firestore database instance yet, check out [these instructions](https://firebase.google.com/docs/firestore/quickstart#create) to create a new instance.  Please initialize it in _locked mode_.
 
-> Prerequisite: make sure you have [Node.js](https://nodejs.org/en/) installed.
-
-```shell
-npx create-react-app myapp
-cd myapp
-```
-
-## 2. Install ReactFire and the Firebase SDK
-
-```bash
-# yarn
-yarn add firebase reactfire
-
-# npm
-npm install --save firebase reactfire
-```
-
-## 3. Create a document in Cloud Firestore
-
-1. Go to the _Database_ tab in the Firebase console. If your project doesn't have a Cloud Firestore instance yet, initialize it in locked mode
-1. Add a document
+1. Go to the _Database_ tab in the [Firebase console](https://console.firebase.google.com).
+ 
+1. Add a document.
 
    1. In the _Data_ tab of the console, click _Add Collection_
 
@@ -37,16 +22,59 @@ npm install --save firebase reactfire
 
    ![new document screenshot](https://firebasestorage.googleapis.com/v0/b/rxfire-525a3.appspot.com/o/docs%2FScreen%20Shot%202019-07-03%20at%202.19.11%20PM.png?alt=media&token=052d27ea-5db1-4a02-aad0-a3f017c1a975)
 
-1. Add the following to your security rules and click _Publish_
+1. Add security rules to your document.
 
+    1. In the _Rules_ tab of the console, add the following security rules:
+   
    ```text
-   match /tryreactfire/burrito {
-     allow read: if true;
-     allow write: if request.auth.uid != null;
-   }
+   rules_version = '2';
+   service cloud.firestore {
+      match /databases/{database}/documents {
+        match /tryreactfire/burrito {
+          allow read, write: if true;
+        }
+      }
+    } 
    ```
+    2. _Publish_ the rules.
 
-## 4. Modify `src/index.js`
+## 2. Create a React App
+
+> Prerequisite: make sure you have [Node.js](https://nodejs.org/en/) installed.
+
+In a terminal, create a fresh React app in a directory of your choice.
+
+```shell
+npx create-react-app myapp
+cd myapp
+```
+
+## 3. Install ReactFire and the Firebase SDK
+
+> Ignore yarn/npm warnings.
+
+```bash
+yarn add firebase reactfire
+
+# or
+
+npm install --save firebase reactfire
+```
+## 4. Register your app with Firebase
+
+1. In the center of the Firebase console's project overview page, click the Web icon to launch the setup workflow.
+    > If you've already added an app to your Firebase project, click _Add app_ to display the platform options.
+
+1. Enter your app's nickname.
+    > Note: Firebase Hosting is not required for you to use Firebase products with your web app.
+
+1. _Register_ the app.
+
+1. Copy the Firebase configuration.  This will be used in Step 4.
+
+1. _Continue to Console_
+
+## 5. Add Firebase to `src/index.js` 
 
 1. Import Firebase and ReactFire
 
@@ -56,13 +84,22 @@ npm install --save firebase reactfire
    //...
    ```
 
-1. Wrap your app in a `FirebaseAppProvider` and provide the config object from the Firebase console
-
-   ```jsx
+1. Add the Firebase configuration
+    > Add the firebaseConfig constant and paste the configuration from Step 3.
+  
+    ```jsx
    //...
    const firebaseConfig = {
-     /* add your config object from Firebase console */
+     /* Paste your config object from Firebase console here */
    };
+   //...
+    ```
+
+1. Wrap your app in a `FirebaseAppProvider` 
+    > Replace the default render function.
+
+    ```jsx
+   //...
    ReactDOM.createRoot(document.getElementById('root')).render(
      <FirebaseAppProvider firebaseConfig={firebaseConfig}>
        <App />
@@ -71,7 +108,7 @@ npm install --save firebase reactfire
    //...
    ```
 
-## 5. Modify `src/App.js`
+## 6. Modify `src/App.js`
 
 1. Import the `useFirestoreDocData` and `useFirestore` hooks
 
@@ -130,15 +167,18 @@ function App() {
 //...
 ```
 
-## 6. Run your app!
+## 7. Run your app!
 
-```bash
-yarn start
-# or
-npm run start
-```
+1. Run your app.
+   ```bash
+   yarn start
 
-1. Edit the value of `yummy` in the Firebase console, and watch it update in real time in your app! 🔥🔥🔥
+   # or
+
+    npm run start
+   ```
+
+1. Edit the value of `yummy` in the _Database_ tab in the [Firebase console](https://console.firebase.google.com) and watch it update in real time in your app! 🔥🔥🔥
 
 ## _About Firebase Performance Monitoring_
 
@@ -149,3 +189,7 @@ Note that Firebase Performance Monitoring can take about 12 hours to crunch your
 This is an example of some of the stats in the Firebase Performance Monitoring console after 12 hours:
 
 ![Performance screenshot](https://firebasestorage.googleapis.com/v0/b/rxfire-525a3.appspot.com/o/docs%2FScreen%20Shot%202019-07-03%20at%202.43.29%20PM.png?alt=media&token=079547b5-ba5d-46bc-acfa-d9dedc184dc5)
+
+## _Next Steps_
+
+To explore information on using ReactFire, check out  [Common Use Cases](https://github.com/FirebaseExtended/reactfire/blob/master/docs/use.md).
