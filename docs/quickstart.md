@@ -74,9 +74,10 @@ npm install --save firebase reactfire
 
 1. _Continue to Console_
 
-## 5. Add Firebase to `src/index.js` 
+## 5. Add Firebase to `index.js` 
+> Open the src directory and add code to index.js as described below.
 
-1. Import Firebase and ReactFire
+1. Import from ReactFire
 
    ```js
    //...
@@ -108,13 +109,14 @@ npm install --save firebase reactfire
    //...
    ```
 
-## 6. Modify `src/App.js`
+## 6. Add the Burrito() function component to `App.js`
+> Open the src directory and add code to App.js as described below.
 
-1. Import the `useFirestoreDocData` and `useFirestore` hooks
+1. Import from ReactFire
 
    ```js
    //...
-   import { useFirestoreDocData, useFirestore } from 'reactfire';
+   import { useFirestoreDocData, useFirestore, SuspenseWithPerf} from 'reactfire';
    //...
    ```
 
