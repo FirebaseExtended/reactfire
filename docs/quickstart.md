@@ -77,7 +77,7 @@ npm install --save firebase reactfire
 ## 5. Add Firebase to `index.js` 
 > Open the src directory and add code to index.js as described below.
 
-1. Import Firebase and ReactFire
+1. Import from ReactFire
 
    ```js
    //...
@@ -112,7 +112,7 @@ npm install --save firebase reactfire
 ## 6. Add the Burrito() function component to `App.js`
 > Open the src directory and add code to App.js as described below.
 
-1. Import the required ReactFire hooks
+1. Import from ReactFire
 
    ```js
    //...
