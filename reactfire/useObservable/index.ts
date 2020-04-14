@@ -33,15 +33,15 @@ export function useObservable<T>(source: Observable<T | any>, observableId: stri
   if (!observable.hasValue && !startWithValue) {
     throw observable.firstEmission;
   }
-  const [latest, setValue] = React.useState(() => (observable.hasValue ? observable.value : startWithValue));
+  const [, update] = React.useState(() => (observable.hasValue ? observable.value : startWithValue));
   React.useEffect(() => {
     const subscription = observable.subscribe(
-      v => setValue(() => v),
+      v => update(() => v),
       e => {
         throw e;
       }
     );
     return () => subscription.unsubscribe();
   }, deps);
-  return latest;
+  return observable.value;
 }
