@@ -11,6 +11,15 @@
   "commitConvention": "none",
   "contributors": [
     {
+      "login": "prescottprue",
+      "name": "Scott Prue",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/2992224?v=4",
+      "profile": "http://prue.io",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
       "login": "w3bdesign",
       "name": "w3bdesign",
       "avatar_url": "https://avatars1.githubusercontent.com/u/45217974?v=4",

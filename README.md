@@ -103,6 +103,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="http://www.dfweb.no"><img src="https://avatars1.githubusercontent.com/u/45217974?v=4" width="100px;" alt=""/><br /><sub><b>w3bdesign</b></sub></a><br /><a href="https://github.com/FirebaseExtended/reactfire/commits?author=w3bdesign" title="Code">💻</a></td>
+    <td align="center"><a href="http://prue.io"><img src="https://avatars0.githubusercontent.com/u/2992224?v=4" width="100px;" alt=""/><br /><sub><b>Scott Prue</b></sub></a><br /><a href="https://github.com/FirebaseExtended/reactfire/commits?author=prescottprue" title="Code">💻</a></td>
   </tr>
 </table>
 
