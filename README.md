@@ -28,11 +28,15 @@ available in
 # npm
 npm install --save reactfire firebase
 
+# or
+
 # yarn
 yarn add reactfire firebase
 ```
 
 Depending on your targeted platforms you may need to install polyfills. The most commonly needed will be [globalThis](https://caniuse.com/#search=globalThis) and [Proxy](https://caniuse.com/#search=Proxy).
+
+## Docs
 
 - [**Quickstart**](./docs/quickstart.md)
 - [**Common Use Cases**](./docs/use.md)
@@ -98,6 +102,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
+    <td align="center"><a href="http://www.dfweb.no"><img src="https://avatars1.githubusercontent.com/u/45217974?v=4" width="100px;" alt=""/><br /><sub><b>w3bdesign</b></sub></a><br /><a href="https://github.com/FirebaseExtended/reactfire/commits?author=w3bdesign" title="Code">💻</a></td>
+    <td align="center"><a href="http://prue.io"><img src="https://avatars0.githubusercontent.com/u/2992224?v=4" width="100px;" alt=""/><br /><sub><b>Scott Prue</b></sub></a><br /><a href="https://github.com/FirebaseExtended/reactfire/commits?author=prescottprue" title="Code">💻</a></td>
     <td align="center"><a href="http://git.io/jhuleatt"><img src="https://avatars0.githubusercontent.com/u/3759507?v=4" width="100px;" alt=""/><br /><sub><b>Jeff</b></sub></a><br /><a href="https://github.com/FirebaseExtended/reactfire/commits?author=jhuleatt" title="Code">💻</a></td>
   </tr>
 </table>
