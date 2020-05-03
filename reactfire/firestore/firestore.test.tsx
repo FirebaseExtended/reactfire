@@ -8,6 +8,7 @@ import {
   useFirestoreCollection,
   FirebaseAppProvider,
   useFirestoreCollectionData,
+  useFirestoreCollectionDataOnce,
   useFirestoreDocData,
   useFirestoreDocDataOnce,
   useFirestoreDocOnce,
@@ -385,6 +386,77 @@ describe('Firestore', () => {
       );
 
       await waitForElement(() => getByTestId('rendered'));
+    });
+  });
+
+  describe('useFirestoreCollectionDataOnce', () => {
+    it('works when the collection does not exist, and does not update when it is created', async () => {
+      const ref = app.firestore().collection('testDoc');
+
+      const ReadFirestoreCollection = () => {
+        const list = useFirestoreCollectionDataOnce<any>(ref, { idField: 'id' });
+
+        return (
+          <ul data-testid="readSuccess">
+            {list.map(item => (
+              <li key={item.id} data-testid="listItem">
+                {item.a}
+              </li>
+            ))}
+          </ul>
+        );
+      };
+      const { queryAllByTestId, getByTestId } = render(
+        <FirebaseAppProvider firebase={app}>
+          <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
+            <ReadFirestoreCollection />
+          </React.Suspense>
+        </FirebaseAppProvider>
+      );
+
+      await waitForElement(() => getByTestId('readSuccess'));
+      expect(queryAllByTestId('listItem').length).toEqual(0);
+
+      await act(async () => await ref.add({ a: 'test' }));
+      expect(queryAllByTestId('listItem').length).toEqual(0);
+    });
+
+    it('can get a Firestore collection and does not update on database changes[TEST REQUIRES EMULATOR]', async () => {
+      const mockData1 = { a: 'hello' };
+      const mockData2 = { a: 'goodbye' };
+      const mockData3 = { a: 'hi' };
+
+      const ref = app.firestore().collection('testCollection');
+
+      await act(async () => await ref.add(mockData1));
+      await act(async () => await ref.add(mockData2));
+
+      const ReadFirestoreCollection = () => {
+        const list = useFirestoreCollectionDataOnce<any>(ref, { idField: 'id' });
+
+        return (
+          <ul data-testid="readSuccess">
+            {list.map(item => (
+              <li key={item.id} data-testid="listItem">
+                {item.a}
+              </li>
+            ))}
+          </ul>
+        );
+      };
+      const { getAllByTestId } = render(
+        <FirebaseAppProvider firebase={app}>
+          <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
+            <ReadFirestoreCollection />
+          </React.Suspense>
+        </FirebaseAppProvider>
+      );
+
+      await waitForElement(() => getAllByTestId('listItem'));
+      expect(getAllByTestId('listItem').length).toEqual(2);
+
+      await act(async () => await ref.add(mockData3));
+      expect(getAllByTestId('listItem').length).toEqual(2);
     });
   });
 });

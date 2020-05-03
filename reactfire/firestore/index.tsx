@@ -114,3 +114,16 @@ export function useFirestoreCollectionData<T = { [key: string]: unknown }>(query
 
   return useObservable(collectionData(query, idField), queryId, checkStartWithValue(options));
 }
+
+/**
+ * Get a firestore collection and don't subscribe to changes
+ *
+ * @param ref - Reference to the collection you want to get
+ * @param options
+ */
+export function useFirestoreCollectionDataOnce<T = { [key: string]: unknown }>(query: firestore.Query, options?: ReactFireOptions<T[]>): T[] {
+  const idField = checkIdField(options);
+  const queryId = `firestore:collectionDataOnce:${getUniqueIdForFirestoreQuery(query)}:idField=${idField}`;
+
+  return useObservable(collectionData(query, idField).pipe(first()), queryId, checkStartWithValue(options));
+}
