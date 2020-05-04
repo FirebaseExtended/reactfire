@@ -38,20 +38,29 @@ const Card = ({ title, children }) => {
 // fetching them now
 const preloadSDKs = firebaseApp => {
   return Promise.all([
-    preloadFirestore(firebaseApp, firestore => {
-      return firestore().enablePersistence();
+    preloadFirestore({
+      firebaseApp,
+      setup(firestore) {
+        return firestore().enablePersistence();
+      }
     }),
-    preloadDatabase(firebaseApp),
-    preloadStorage(firebaseApp, storage => {
-      storage().setMaxUploadRetryTime(10000);
+    preloadDatabase({ firebaseApp }),
+    preloadStorage({
+      firebaseApp,
+      setup(storage) {
+        return storage().setMaxUploadRetryTime(10000);
+      }
     }),
-    preloadAuth(firebaseApp),
-    preloadRemoteConfig(firebaseApp, remoteConfig => {
-      remoteConfig().settings = {
-        minimumFetchIntervalMillis: 10000,
-        fetchTimeoutMillis: 10000
-      };
-      return remoteConfig().fetchAndActivate();
+    preloadAuth({ firebaseApp }),
+    preloadRemoteConfig({
+      firebaseApp,
+      setup(remoteConfig) {
+        remoteConfig().settings = {
+          minimumFetchIntervalMillis: 10000,
+          fetchTimeoutMillis: 10000
+        };
+        return remoteConfig().fetchAndActivate();
+      }
     })
   ]);
 };
@@ -60,10 +69,7 @@ const preloadData = async firebaseApp => {
   const user = await preloadUser(firebaseApp);
 
   if (user) {
-    preloadFirestoreDoc(
-      firestore => firestore.doc('count/counter'),
-      firebaseApp
-    );
+    preloadFirestoreDoc(firestore => firestore.doc('count/counter'), firebaseApp);
   }
 };
 
