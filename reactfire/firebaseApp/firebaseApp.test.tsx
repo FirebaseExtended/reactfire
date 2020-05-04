@@ -3,8 +3,9 @@ import { renderHook } from '@testing-library/react-hooks';
 import * as firebase from 'firebase/app';
 import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
-import { useFirebaseApp } from '.';
+import { useFirebaseApp, version } from '.';
 import { FirebaseAppProvider } from './index';
+const pkg = require('../package.json');
 
 afterEach(cleanup);
 
@@ -103,3 +104,11 @@ describe('useFirebaseApp', () => {
     expect(result.error).toBeDefined();
   });
 });
+
+describe('reactfire version', () => {
+
+  it(`should match ${pkg.version}`, () => {
+    expect(pkg.version).toEqual(version);
+  });
+
+})
