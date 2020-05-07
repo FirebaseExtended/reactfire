@@ -25,23 +25,63 @@ export function preloadObservable<T>(source: Observable<T>, id: string) {
   }
 }
 
-export function useObservable<T>(source: Observable<T | any>, observableId: string, startWithValue?: T | any, deps: React.DependencyList = [observableId]): T {
+interface ObservableStatus<T> {
+  status: 'loading' | 'error' | 'success';
+  hasEmitted: boolean;
+  isComplete: boolean;
+  data: T;
+  error: Error | undefined;
+  firstValuePromise: Promise<void>;
+}
+
+export function useObservable<T>(
+  observableId: string,
+  source: Observable<T | any>,
+  config: { initialData?: T | any; suspense?: boolean } = {}
+): ObservableStatus<T> {
   if (!observableId) {
     throw new Error('cannot call useObservable without an observableId');
   }
   const observable = preloadObservable(source, observableId);
-  if (!observable.hasValue && !startWithValue) {
-    throw observable.firstEmission;
+
+  const hasInitialData = Object.keys(config).includes('initialData');
+  const suspenseEnabled = !!config.suspense;
+
+  if (!observable.hasValue && !config?.initialData) {
+    if (suspenseEnabled === true) {
+      throw observable.firstEmission;
+    }
   }
-  const [latest, setValue] = React.useState(() => (observable.hasValue ? observable.value : startWithValue));
+
+  const [latest, setValue] = React.useState(() => (observable.hasValue ? observable.value : config.initialData));
   React.useEffect(() => {
     const subscription = observable.subscribe(
-      v => setValue(() => v),
+      v => {
+        setValue(() => v);
+      },
       e => {
         throw e;
       }
     );
     return () => subscription.unsubscribe();
-  }, deps);
-  return latest;
+  }, [observableId]);
+
+  let status;
+
+  if (observable.hasError) {
+    status = 'error';
+  } else if (observable.hasValue || hasInitialData) {
+    status = 'success';
+  } else {
+    status = 'loading';
+  }
+
+  return {
+    status,
+    hasEmitted: observable.hasValue,
+    isComplete: observable.isStopped,
+    data: latest,
+    error: observable.ourError,
+    firstValuePromise: observable.firstEmission
+  };
 }

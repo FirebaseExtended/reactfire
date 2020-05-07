@@ -83,4 +83,8 @@ export class SuspenseSubject<T> extends Subject<T> {
     this._innerSubscriber = this._innerObservable.subscribe(subscriber);
     return this._innerSubscriber.add(this._reset);
   }
+
+  get ourError() {
+    return this._error;
+  }
 }
