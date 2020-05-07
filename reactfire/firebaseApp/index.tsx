@@ -16,6 +16,8 @@ type Props = {
   appName?: string;
 };
 
+// The version number is substituted in as part of the build process
+// See after.build.js for the substitution script
 const version = '::__reactfireversion__::';
 
 const shallowEq = (a: Object, b: Object) =>
