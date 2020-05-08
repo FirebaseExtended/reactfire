@@ -1,6 +1,7 @@
 export interface ReactFireOptions<T = unknown> {
-  startWithValue?: T;
   idField?: string;
+  initialData?: T | any;
+  suspense?: boolean;
 }
 
 export function checkOptions(options: ReactFireOptions, field: string) {

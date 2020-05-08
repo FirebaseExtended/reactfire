@@ -1,17 +1,10 @@
 import 'firebase/performance';
 import React, { useState, SuspenseList, useTransition } from 'react';
-import {
-  AuthCheck,
-  SuspenseWithPerf,
-  useFirestoreCollectionData,
-  useFirestoreDocData,
-  useFirestoreDocDataOnce,
-  useFirestore
-} from 'reactfire';
+import { AuthCheck, SuspenseWithPerf, useFirestoreCollectionData, useFirestoreDocData, useFirestoreDocDataOnce, useFirestore } from 'reactfire';
 
 const Counter = props => {
   const firestore = useFirestore;
-  
+
   const serverIncrement = firestore.FieldValue.increment;
 
   const ref = firestore().doc('count/counter');
@@ -23,6 +16,8 @@ const Counter = props => {
   };
 
   const { value } = useFirestoreDocData(ref);
+
+  // const {status, data, error, isFetching} = useFirestoreDocData(ref)
 
   return (
     <>
@@ -57,12 +52,7 @@ const AnimalEntry = ({ saveAnimal }) => {
 
   return (
     <>
-      <input
-        value={text}
-        disabled={disabled}
-        placeholder="Iguana"
-        onChange={({ target }) => setText(target.value)}
-      />
+      <input value={text} disabled={disabled} placeholder="Iguana" onChange={({ target }) => setText(target.value)} />
       <button onClick={onSave} disabled={disabled || text.length < 3}>
         Add new animal
       </button>
@@ -76,8 +66,7 @@ const List = ({ query, removeAnimal }) => {
     <ul>
       {animals.map(animal => (
         <li key={animal.id}>
-          {animal.commonName}{' '}
-          <button onClick={() => removeAnimal(animal.id)}>X</button>
+          {animal.commonName} <button onClick={() => removeAnimal(animal.id)}>X</button>
         </li>
       ))}
     </ul>
@@ -126,25 +115,16 @@ const SuspenseWrapper = props => {
       <AuthCheck fallback="sign in to use Firestore">
         <SuspenseList revealOrder="together">
           <h3>Sample Doc Listener</h3>
-          <SuspenseWithPerf
-            fallback="connecting to Firestore..."
-            traceId="firestore-demo-doc"
-          >
+          <SuspenseWithPerf fallback="connecting to Firestore..." traceId="firestore-demo-doc">
             <Counter />
           </SuspenseWithPerf>
           <h3>Sample One-time Get</h3>
-          <SuspenseWithPerf
-            fallback="connecting to Firestore..."
-            traceId="firestore-demo-doc"
-          >
+          <SuspenseWithPerf fallback="connecting to Firestore..." traceId="firestore-demo-doc">
             <StaticValue />
           </SuspenseWithPerf>
 
           <h3>Sample Collection Listener</h3>
-          <SuspenseWithPerf
-            fallback="connecting to Firestore..."
-            traceId="firestore-demo-collection"
-          >
+          <SuspenseWithPerf fallback="connecting to Firestore..." traceId="firestore-demo-collection">
             <FavoriteAnimals />
           </SuspenseWithPerf>
         </SuspenseList>

@@ -1,7 +1,7 @@
 import { firestore } from 'firebase/app';
 import { collectionData, doc, docData, fromCollectionRef } from 'rxfire/firestore';
 import { preloadFirestore, ReactFireOptions, useObservable, checkIdField, checkStartWithValue } from '..';
-import { preloadObservable } from '../useObservable';
+import { preloadObservable, ObservableStatus } from '../useObservable';
 import { first } from 'rxjs/operators';
 import { useFirebaseApp } from '../firebaseApp';
 
@@ -68,9 +68,12 @@ export function useFirestoreDocOnce<T = unknown>(
  * @param ref - Reference to the document you want to listen to
  * @param options
  */
-export function useFirestoreDocData<T = unknown>(ref: firestore.DocumentReference, options?: ReactFireOptions<T>): T {
+export function useFirestoreDocData<T>(ref: firestore.DocumentReference, options?: ReactFireOptions<T>): ObservableStatus<T> {
   const idField = checkIdField(options);
-  return useObservable(docData(ref, idField), `firestore:docData:${ref.firestore.app.name}:${ref.path}:idField=${idField}`, checkStartWithValue(options));
+
+  const observableId = `firestore:docData:${ref.firestore.app.name}:${ref.path}:idField=${idField}`;
+  const observable = docData(ref, idField);
+  return useObservable(observableId, observable, checkStartWithValue(options));
 }
 
 /**
