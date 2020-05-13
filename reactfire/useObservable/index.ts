@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Observable } from 'rxjs';
 import { SuspenseSubject } from './SuspenseSubject';
-import { useIsSuspenseEnabled } from '../firebaseApp';
+import { useSuspenseEnabledFromConfigAndContext } from '../firebaseApp';
 
 const PRELOADED_OBSERVABLES = '_reactFirePreloadedObservables';
 const DEFAULT_TIMEOUT = 30_000;
@@ -36,17 +36,6 @@ export interface ObservableStatus<T> {
   data: T; // latest data from observable
   error: Error | undefined;
   firstValuePromise: Promise<void>; // promise that resolves after first emit from observable
-}
-
-function useSuspenseEnabledFromConfigAndContext(suspenseFromConfig): boolean {
-  let suspenseFromContext = useIsSuspenseEnabled();
-
-  // prioritize config over context
-  if (suspenseFromConfig !== undefined) {
-    return suspenseFromConfig;
-  }
-
-  return suspenseFromContext;
 }
 
 export function useObservable<T>(

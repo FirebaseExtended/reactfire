@@ -56,6 +56,17 @@ export function useIsSuspenseEnabled(): boolean {
   return suspense;
 }
 
+export function useSuspenseEnabledFromConfigAndContext(suspenseFromConfig): boolean {
+  let suspenseFromContext = useIsSuspenseEnabled();
+
+  // prioritize config over context
+  if (suspenseFromConfig !== undefined) {
+    return suspenseFromConfig;
+  }
+
+  return suspenseFromContext;
+}
+
 export function useFirebaseApp() {
   const firebaseApp = React.useContext(FirebaseAppContext);
   if (!firebaseApp) {
