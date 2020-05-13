@@ -45,8 +45,11 @@ export function preloadFirestoreDoc(
  * @param ref - Reference to the document you want to listen to
  * @param options
  */
-export function useFirestoreDoc<T = unknown>(ref: firestore.DocumentReference, options?: ReactFireOptions<T>): T extends {} ? T : firestore.DocumentSnapshot {
-  return useObservable(doc(ref), `firestore:doc:${ref.firestore.app.name}:${ref.path}`, options ? options.initialData : undefined);
+export function useFirestoreDoc<T = unknown>(
+  ref: firestore.DocumentReference,
+  options?: ReactFireOptions<T>
+): ObservableStatus<T extends {} ? T : firestore.DocumentSnapshot> {
+  return useObservable(`firestore:doc:${ref.firestore.app.name}:${ref.path}`, doc(ref), options);
 }
 
 /**
@@ -58,8 +61,8 @@ export function useFirestoreDoc<T = unknown>(ref: firestore.DocumentReference, o
 export function useFirestoreDocOnce<T = unknown>(
   ref: firestore.DocumentReference,
   options?: ReactFireOptions<T>
-): T extends {} ? T : firestore.DocumentSnapshot {
-  return useObservable(doc(ref).pipe(first()), `firestore:docOnce:${ref.firestore.app.name}:${ref.path}`, checkinitialData(options));
+): ObservableStatus<T extends {} ? T : firestore.DocumentSnapshot> {
+  return useObservable(`firestore:docOnce:${ref.firestore.app.name}:${ref.path}`, doc(ref).pipe(first()), options);
 }
 
 /**
@@ -73,7 +76,7 @@ export function useFirestoreDocData<T>(ref: firestore.DocumentReference, options
 
   const observableId = `firestore:docData:${ref.firestore.app.name}:${ref.path}:idField=${idField}`;
   const observable = docData(ref, idField);
-  return useObservable(observableId, observable, checkinitialData(options));
+  return useObservable(observableId, observable, options);
 }
 
 /**
@@ -82,13 +85,9 @@ export function useFirestoreDocData<T>(ref: firestore.DocumentReference, options
  * @param ref - Reference to the document you want to get
  * @param options
  */
-export function useFirestoreDocDataOnce<T = unknown>(ref: firestore.DocumentReference, options?: ReactFireOptions<T>): T {
+export function useFirestoreDocDataOnce<T = unknown>(ref: firestore.DocumentReference, options?: ReactFireOptions<T>): ObservableStatus<T> {
   const idField = checkIdField(options);
-  return useObservable(
-    docData(ref, idField).pipe(first()),
-    `firestore:docDataOnce:${ref.firestore.app.name}:${ref.path}:idField=${idField}`,
-    checkinitialData(options)
-  );
+  return useObservable(`firestore:docDataOnce:${ref.firestore.app.name}:${ref.path}:idField=${idField}`, docData(ref, idField).pipe(first()), options);
 }
 
 /**
@@ -100,9 +99,9 @@ export function useFirestoreDocDataOnce<T = unknown>(ref: firestore.DocumentRefe
 export function useFirestoreCollection<T = { [key: string]: unknown }>(
   query: firestore.Query,
   options?: ReactFireOptions<T[]>
-): T extends {} ? T[] : firestore.QuerySnapshot {
+): ObservableStatus<T extends {} ? T[] : firestore.QuerySnapshot> {
   const queryId = `firestore:collection:${getUniqueIdForFirestoreQuery(query)}`;
-  return useObservable(fromCollectionRef(query), queryId, checkinitialData(options));
+  return useObservable(queryId, fromCollectionRef(query), options);
 }
 
 /**
@@ -111,9 +110,9 @@ export function useFirestoreCollection<T = { [key: string]: unknown }>(
  * @param ref - Reference to the collection you want to listen to
  * @param options
  */
-export function useFirestoreCollectionData<T = { [key: string]: unknown }>(query: firestore.Query, options?: ReactFireOptions<T[]>): T[] {
+export function useFirestoreCollectionData<T = { [key: string]: unknown }>(query: firestore.Query, options?: ReactFireOptions<T[]>): ObservableStatus<T[]> {
   const idField = checkIdField(options);
   const queryId = `firestore:collectionData:${getUniqueIdForFirestoreQuery(query)}:idField=${idField}`;
 
-  return useObservable(collectionData(query, idField), queryId, checkinitialData(options));
+  return useObservable(queryId, collectionData(query, idField), options);
 }

@@ -1,7 +1,7 @@
 import { auth, User } from 'firebase/app';
 import * as React from 'react';
 import { user } from 'rxfire/auth';
-import { preloadAuth, preloadObservable, ReactFireOptions, useAuth, useObservable } from '..';
+import { preloadAuth, preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus } from '..';
 import { from } from 'rxjs';
 import { useFirebaseApp } from '../firebaseApp';
 
@@ -19,20 +19,26 @@ export function preloadUser(options?: { firebaseApp?: firebase.app.App }) {
  * @param auth - the [firebase.auth](https://firebase.google.com/docs/reference/js/firebase.auth) object
  * @param options
  */
-export function useUser<T = unknown>(auth?: auth.Auth, options?: ReactFireOptions<T>): User | T {
+export function useUser<T = unknown>(auth?: auth.Auth, options?: ReactFireOptions<T>): ObservableStatus<User> {
   auth = auth || useAuth();
+
+  // Skip initialData if currentUser is available
   const currentUser = auth.currentUser || options?.initialData;
-  return useObservable(user(auth), `auth:user:${auth.app.name}`, currentUser);
+  return useObservable(`auth:user:${auth.app.name}`, user(auth), { ...options, initialData: currentUser });
 }
 
-export function useIdTokenResult(user: User, forceRefresh: boolean = false) {
+export function useIdTokenResult(
+  user: User,
+  forceRefresh: boolean = false,
+  options?: ReactFireOptions<auth.IdTokenResult>
+): ObservableStatus<auth.IdTokenResult> {
   if (!user) {
     throw new Error('you must provide a user');
   }
 
   const idToken$ = from(user.getIdTokenResult(forceRefresh));
 
-  return useObservable<any>(idToken$, `auth:idTokenResult:${user.uid}:forceRefresh=${forceRefresh}`);
+  return useObservable(`auth:idTokenResult:${user.uid}:forceRefresh=${forceRefresh}`, idToken$, options);
 }
 
 export interface AuthCheckProps {
