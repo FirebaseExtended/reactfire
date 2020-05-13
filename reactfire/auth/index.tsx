@@ -1,23 +1,14 @@
 import { auth, User } from 'firebase/app';
 import * as React from 'react';
 import { user } from 'rxfire/auth';
-import {
-  preloadAuth,
-  preloadObservable,
-  ReactFireOptions,
-  useAuth,
-  useObservable
-} from '..';
+import { preloadAuth, preloadObservable, ReactFireOptions, useAuth, useObservable } from '..';
 import { from } from 'rxjs';
 import { useFirebaseApp } from '../firebaseApp';
 
-export function preloadUser(options?: {firebaseApp?: firebase.app.App}) {
+export function preloadUser(options?: { firebaseApp?: firebase.app.App }) {
   const firebaseApp = options?.firebaseApp || useFirebaseApp();
-  return preloadAuth({firebaseApp}).then(auth => {
-    const result = preloadObservable(
-      user(auth()),
-      `auth:user:${firebaseApp.name}`
-    );
+  return preloadAuth({ firebaseApp }).then(auth => {
+    const result = preloadObservable(user(auth()), `auth:user:${firebaseApp.name}`);
     return result.toPromise();
   });
 }
@@ -28,12 +19,9 @@ export function preloadUser(options?: {firebaseApp?: firebase.app.App}) {
  * @param auth - the [firebase.auth](https://firebase.google.com/docs/reference/js/firebase.auth) object
  * @param options
  */
-export function useUser<T = unknown>(
-  auth?: auth.Auth,
-  options?: ReactFireOptions<T>
-): User | T {
+export function useUser<T = unknown>(auth?: auth.Auth, options?: ReactFireOptions<T>): User | T {
   auth = auth || useAuth();
-  const currentUser = auth.currentUser || options?.startWithValue;
+  const currentUser = auth.currentUser || options?.initialData;
   return useObservable(user(auth), `auth:user:${auth.app.name}`, currentUser);
 }
 
@@ -44,10 +32,7 @@ export function useIdTokenResult(user: User, forceRefresh: boolean = false) {
 
   const idToken$ = from(user.getIdTokenResult(forceRefresh));
 
-  return useObservable<any>(
-    idToken$,
-    `auth:idTokenResult:${user.uid}:forceRefresh=${forceRefresh}`
-  );
+  return useObservable<any>(idToken$, `auth:idTokenResult:${user.uid}:forceRefresh=${forceRefresh}`);
 }
 
 export interface AuthCheckProps {
@@ -84,21 +69,12 @@ export function ClaimsCheck({ user, fallback, children, requiredClaims }) {
   }
 }
 
-export function AuthCheck({
-  auth,
-  fallback,
-  children,
-  requiredClaims
-}: AuthCheckProps): JSX.Element {
+export function AuthCheck({ auth, fallback, children, requiredClaims }: AuthCheckProps): JSX.Element {
   const user = useUser<User>(auth);
 
   if (user) {
     return requiredClaims ? (
-      <ClaimsCheck
-        user={user}
-        fallback={fallback}
-        requiredClaims={requiredClaims}
-      >
+      <ClaimsCheck user={user} fallback={fallback} requiredClaims={requiredClaims}>
         {children}
       </ClaimsCheck>
     ) : (

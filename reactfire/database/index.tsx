@@ -1,6 +1,6 @@
 import { database } from 'firebase/app';
 import { list, object, QueryChange, listVal } from 'rxfire/database';
-import { ReactFireOptions, useObservable, checkIdField, checkStartWithValue } from '..';
+import { ReactFireOptions, useObservable, checkIdField, checkinitialData } from '..';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -29,7 +29,7 @@ function getUniqueIdForDatabaseQuery(query: database.Query) {
  * @param options
  */
 export function useDatabaseObject<T = unknown>(ref: database.Reference, options?: ReactFireOptions<T>): QueryChange | T {
-  return useObservable(object(ref), `database:object:${ref.toString()}`, options ? options.startWithValue : undefined);
+  return useObservable(object(ref), `database:object:${ref.toString()}`, options ? options.initialData : undefined);
 }
 
 // ============================================================================
@@ -57,7 +57,7 @@ function changeToData(change: QueryChange, keyField?: string): {} {
 
 export function useDatabaseObjectData<T>(ref: database.Reference, options?: ReactFireOptions<T>): T {
   const idField = checkIdField(options);
-  return useObservable(objectVal(ref, idField), `database:objectVal:${ref.toString()}:idField=${idField}`, checkStartWithValue(options));
+  return useObservable(objectVal(ref, idField), `database:objectVal:${ref.toString()}:idField=${idField}`, checkinitialData(options));
 }
 
 /**
@@ -72,10 +72,10 @@ export function useDatabaseList<T = { [key: string]: unknown }>(
 ): QueryChange[] | T[] {
   const hash = `database:list:${getUniqueIdForDatabaseQuery(ref)}`;
 
-  return useObservable(list(ref), hash, options ? options.startWithValue : undefined);
+  return useObservable(list(ref), hash, options ? options.initialData : undefined);
 }
 
 export function useDatabaseListData<T = { [key: string]: unknown }>(ref: database.Reference | database.Query, options?: ReactFireOptions<T[]>): T[] {
   const idField = checkIdField(options);
-  return useObservable(listVal(ref, idField), `database:listVal:${getUniqueIdForDatabaseQuery(ref)}:idField=${idField}`, checkStartWithValue(options));
+  return useObservable(listVal(ref, idField), `database:listVal:${getUniqueIdForDatabaseQuery(ref)}:idField=${idField}`, checkinitialData(options));
 }

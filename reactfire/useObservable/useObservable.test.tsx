@@ -96,7 +96,7 @@ describe('useObservable', () => {
     spy.mockRestore();
   });
 
-  it('provides the value, rather than startWithValue, when the observable is ready right away', () => {
+  it('provides the value, rather than initialData, when the observable is ready right away', () => {
     const startVal = 'howdy';
     const observableVal = "y'all";
     const observable$ = of(observableVal);

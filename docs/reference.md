@@ -173,7 +173,7 @@ _Throws a Promise by default_
 | Parameter   | Type                                                                            | Description                                                                                         |
 | ----------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
 | auth _?_    | [`Auth`](https://firebase.google.com/docs/reference/js/firebase.auth.Auth.html) | [optional] auth object. If not provided, useUser will use `useFirebaseApp` to find the Auth object. |
-| options _?_ | ReactFireOptions                                                                | Options. This hook will not throw a Promise if you provide `startWithValue`.                        |
+| options _?_ | ReactFireOptions                                                                | Options. This hook will not throw a Promise if you provide `initialData`.                           |
 
 #### Returns
 
@@ -187,10 +187,10 @@ _Throws a Promise by default_
 
 #### Parameters
 
-| Parameter   | Type                                                                                                      | Description                                                                  |
-| ----------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| ref         | [`DocumentReference`](https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference) | A reference to the document you want to listen to                            |
-| options _?_ | ReactFireOptions                                                                                          | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+| Parameter   | Type                                                                                                      | Description                                                               |
+| ----------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| ref         | [`DocumentReference`](https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference) | A reference to the document you want to listen to                         |
+| options _?_ | ReactFireOptions                                                                                          | Options. This hook will not throw a Promise if you provide `initialData`. |
 
 #### Returns
 
@@ -204,10 +204,10 @@ _Throws a Promise by default_
 
 #### Parameters
 
-| Parameter   | Type                                                                                                      | Description                                                                  |
-| ----------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| ref         | [`DocumentReference`](https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference) | A reference to the document you want to listen to                            |
-| options _?_ | ReactFireOptions                                                                                          | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+| Parameter   | Type                                                                                                      | Description                                                               |
+| ----------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| ref         | [`DocumentReference`](https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference) | A reference to the document you want to listen to                         |
+| options _?_ | ReactFireOptions                                                                                          | Options. This hook will not throw a Promise if you provide `initialData`. |
 
 #### Returns
 
@@ -221,10 +221,10 @@ _Throws a Promise by default_
 
 #### Parameters
 
-| Parameter   | Type                                                                                                      | Description                                                                  |
-| ----------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| ref         | [`DocumentReference`](https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference) | A reference to the document you want to listen to                            |
-| options _?_ | ReactFireOptions                                                                                          | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+| Parameter   | Type                                                                                                      | Description                                                               |
+| ----------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| ref         | [`DocumentReference`](https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference) | A reference to the document you want to listen to                         |
+| options _?_ | ReactFireOptions                                                                                          | Options. This hook will not throw a Promise if you provide `initialData`. |
 
 #### Returns
 
@@ -238,10 +238,10 @@ _Throws a Promise by default_
 
 #### Parameters
 
-| Parameter   | Type                                                                                                      | Description                                                                  |
-| ----------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| ref         | [`DocumentReference`](https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference) | A reference to the document you want to listen to                            |
-| options _?_ | ReactFireOptions                                                                                          | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+| Parameter   | Type                                                                                                      | Description                                                               |
+| ----------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| ref         | [`DocumentReference`](https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference) | A reference to the document you want to listen to                         |
+| options _?_ | ReactFireOptions                                                                                          | Options. This hook will not throw a Promise if you provide `initialData`. |
 
 #### Returns
 
@@ -255,10 +255,10 @@ _Throws a Promise by default_
 
 #### Parameters
 
-| Parameter   | Type                                                                              | Description                                                                  |
-| ----------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| ref         | [`Query`](https://firebase.google.com/docs/reference/js/firebase.firestore.Query) | A query for the collection you want to listen to                             |
-| options _?_ | ReactFireOptions                                                                  | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+| Parameter   | Type                                                                              | Description                                                               |
+| ----------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| ref         | [`Query`](https://firebase.google.com/docs/reference/js/firebase.firestore.Query) | A query for the collection you want to listen to                          |
+| options _?_ | ReactFireOptions                                                                  | Options. This hook will not throw a Promise if you provide `initialData`. |
 
 #### Returns
 
@@ -272,10 +272,10 @@ _Throws a Promise by default_
 
 #### Parameters
 
-| Parameter   | Type                                                                              | Description                                                                  |
-| ----------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| ref         | [`Query`](https://firebase.google.com/docs/reference/js/firebase.firestore.Query) | A query for the collection you want to listen to                             |
-| options _?_ | ReactFireOptions                                                                  | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+| Parameter   | Type                                                                              | Description                                                               |
+| ----------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| ref         | [`Query`](https://firebase.google.com/docs/reference/js/firebase.firestore.Query) | A query for the collection you want to listen to                          |
+| options _?_ | ReactFireOptions                                                                  | Options. This hook will not throw a Promise if you provide `initialData`. |
 
 #### Returns
 
@@ -289,10 +289,10 @@ _Throws a Promise by default_
 
 #### Parameters
 
-| Parameter   | Type                                                                                     | Description                                                                  |
-| ----------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| ref         | [`Reference`](https://firebase.google.com/docs/reference/js/firebase.database.Reference) | A reference to the object you want to listen to                              |
-| options _?_ | ReactFireOptions                                                                         | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+| Parameter   | Type                                                                                     | Description                                                               |
+| ----------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| ref         | [`Reference`](https://firebase.google.com/docs/reference/js/firebase.database.Reference) | A reference to the object you want to listen to                           |
+| options _?_ | ReactFireOptions                                                                         | Options. This hook will not throw a Promise if you provide `initialData`. |
 
 #### Returns
 
@@ -306,10 +306,10 @@ _Throws a Promise by default_
 
 #### Parameters
 
-| Parameter   | Type                                                                                     | Description                                                                  |
-| ----------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| ref         | [`Reference`](https://firebase.google.com/docs/reference/js/firebase.database.Reference) | A reference to the object you want to listen to                              |
-| options _?_ | ReactFireOptions                                                                         | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+| Parameter   | Type                                                                                     | Description                                                               |
+| ----------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| ref         | [`Reference`](https://firebase.google.com/docs/reference/js/firebase.database.Reference) | A reference to the object you want to listen to                           |
+| options _?_ | ReactFireOptions                                                                         | Options. This hook will not throw a Promise if you provide `initialData`. |
 
 #### Returns
 
@@ -323,10 +323,10 @@ _Throws a Promise by default_
 
 #### Parameters
 
-| Parameter   | Type                                                                                     | Description                                                                  |
-| ----------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| ref         | [`Reference`](https://firebase.google.com/docs/reference/js/firebase.database.Reference) | A reference to the list you want to listen to                                |
-| options _?_ | ReactFireOptions                                                                         | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+| Parameter   | Type                                                                                     | Description                                                               |
+| ----------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| ref         | [`Reference`](https://firebase.google.com/docs/reference/js/firebase.database.Reference) | A reference to the list you want to listen to                             |
+| options _?_ | ReactFireOptions                                                                         | Options. This hook will not throw a Promise if you provide `initialData`. |
 
 #### Returns
 
@@ -340,10 +340,10 @@ _Throws a Promise by default_
 
 #### Parameters
 
-| Parameter   | Type                                                                                     | Description                                                                  |
-| ----------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| ref         | [`Reference`](https://firebase.google.com/docs/reference/js/firebase.database.Reference) | A reference to the list you want to listen to                                |
-| options _?_ | ReactFireOptions                                                                         | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+| Parameter   | Type                                                                                     | Description                                                               |
+| ----------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| ref         | [`Reference`](https://firebase.google.com/docs/reference/js/firebase.database.Reference) | A reference to the list you want to listen to                             |
+| options _?_ | ReactFireOptions                                                                         | Options. This hook will not throw a Promise if you provide `initialData`. |
 
 #### Returns
 
@@ -390,12 +390,12 @@ _Throws a Promise by default_
 
 _Throws a Promise by default_
 
-| Parameter          | Type                 | Description                                                                                                                                  |
-| ------------------ | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| source             | `Observable`         | The observable whose values you want to subscribe to                                                                                         |
-| observableId       | `string`             | A unique id. If this id matches an observable already in the cache, `useObservable` will reuse that observable instead of the one passed in. |
-| startWithValue _?_ | `T`                  | A value to emit first (if you don't want `useObservable` to throw a Promise)                                                                 |
-| deps               | React.DependencyList | A list of values that, when changed, should cause `useObservable` to re-subscribe to its observable                                          |
+| Parameter       | Type                 | Description                                                                                                                                  |
+| --------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| source          | `Observable`         | The observable whose values you want to subscribe to                                                                                         |
+| observableId    | `string`             | A unique id. If this id matches an observable already in the cache, `useObservable` will reuse that observable instead of the one passed in. |
+| initialData _?_ | `T`                  | A value to emit first (if you don't want `useObservable` to throw a Promise)                                                                 |
+| deps            | React.DependencyList | A list of values that, when changed, should cause `useObservable` to re-subscribe to its observable                                          |
 
 ##### Returns
 
@@ -403,9 +403,9 @@ _Throws a Promise by default_
 
 ## ReactFireOptions
 
-| Property       | Type |
-| -------------- | ---- |
-| startWithValue | any  |
+| Property    | Type |
+| ----------- | ---- |
+| initialData | any  |
 
 ## Components
 

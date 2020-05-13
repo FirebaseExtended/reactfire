@@ -45,7 +45,7 @@ function MyComponent(props) {
 
 ## Access the current user
 
-The `useUser()` hook returns the currently signed-in [user](https://firebase.google.com/docs/reference/js/firebase.User). Like the other ReactFire Hooks, you need to wrap it in `Suspense` or provide a `startWithValue`.
+The `useUser()` hook returns the currently signed-in [user](https://firebase.google.com/docs/reference/js/firebase.User). Like the other ReactFire Hooks, you need to wrap it in `Suspense` or provide a `initialData`.
 
 ```jsx
 function HomePage(props) {
@@ -221,10 +221,7 @@ ReactFire provides an a wrapper around `Suspense` called `SuspenseWithPerf` that
 ```jsx
 function FoodRatings() {
   return (
-    <SuspenseWithPerf
-      fallback={'loading burrito status...'}
-      traceId={'load-burrito-status'}
-    >
+    <SuspenseWithPerf fallback={'loading burrito status...'} traceId={'load-burrito-status'}>
       <Burrito />
     </SuspenseWithPerf>
   );
@@ -244,10 +241,10 @@ function Burrito() {
     .doc('burrito');
 
   // subscribe to the doc. just one line!
-  // returns the `startWithValue`,
+  // returns the `initialData`,
   // and then streams live updates
   const burritoDoc = useFirestoreDocData(burritoRef, {
-    startWithValue: {
+    initialData: {
       yummy: true
     }
   });

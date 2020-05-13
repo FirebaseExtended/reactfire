@@ -16,7 +16,7 @@ type Props = {
   firebaseApp?: firebase.app.App;
   firebaseConfig?: Object;
   appName?: string;
-  suspense: boolean;
+  suspense?: boolean;
 };
 
 const shallowEq = (a: Object, b: Object) => a == b || [...Object.keys(a), ...Object.keys(b)].every(key => a[key] == b[key]);

@@ -8,8 +8,8 @@ export function checkOptions(options: ReactFireOptions, field: string) {
   return options ? options[field] : undefined;
 }
 
-export function checkStartWithValue(options: ReactFireOptions) {
-  return checkOptions(options, 'startWithValue');
+export function checkinitialData(options: ReactFireOptions) {
+  return checkOptions(options, 'initialData');
 }
 
 export function checkIdField(options: ReactFireOptions) {

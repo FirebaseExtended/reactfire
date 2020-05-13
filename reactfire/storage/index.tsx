@@ -34,7 +34,7 @@ function _fromTask(task: storage.UploadTask) {
  * @param options
  */
 export function useStorageTask<T = unknown>(task: storage.UploadTask, ref: storage.Reference, options?: ReactFireOptions<T>): storage.UploadTaskSnapshot | T {
-  return useObservable(_fromTask(task), `storage:task:${ref.toString()}`, options ? options.startWithValue : undefined);
+  return useObservable(_fromTask(task), `storage:task:${ref.toString()}`, options ? options.initialData : undefined);
 }
 
 /**
@@ -44,7 +44,7 @@ export function useStorageTask<T = unknown>(task: storage.UploadTask, ref: stora
  * @param options
  */
 export function useStorageDownloadURL<T = string>(ref: storage.Reference, options?: ReactFireOptions<T>): string | T {
-  return useObservable(getDownloadURL(ref), `storage:downloadUrl:${ref.toString()}`, options ? options.startWithValue : undefined);
+  return useObservable(getDownloadURL(ref), `storage:downloadUrl:${ref.toString()}`, options ? options.initialData : undefined);
 }
 
 type StorageImageProps = {

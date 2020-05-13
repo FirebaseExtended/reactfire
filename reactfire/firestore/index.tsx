@@ -1,6 +1,6 @@
 import { firestore } from 'firebase/app';
 import { collectionData, doc, docData, fromCollectionRef } from 'rxfire/firestore';
-import { preloadFirestore, ReactFireOptions, useObservable, checkIdField, checkStartWithValue } from '..';
+import { preloadFirestore, ReactFireOptions, useObservable, checkIdField, checkinitialData } from '..';
 import { preloadObservable, ObservableStatus } from '../useObservable';
 import { first } from 'rxjs/operators';
 import { useFirebaseApp } from '../firebaseApp';
@@ -46,7 +46,7 @@ export function preloadFirestoreDoc(
  * @param options
  */
 export function useFirestoreDoc<T = unknown>(ref: firestore.DocumentReference, options?: ReactFireOptions<T>): T extends {} ? T : firestore.DocumentSnapshot {
-  return useObservable(doc(ref), `firestore:doc:${ref.firestore.app.name}:${ref.path}`, options ? options.startWithValue : undefined);
+  return useObservable(doc(ref), `firestore:doc:${ref.firestore.app.name}:${ref.path}`, options ? options.initialData : undefined);
 }
 
 /**
@@ -59,7 +59,7 @@ export function useFirestoreDocOnce<T = unknown>(
   ref: firestore.DocumentReference,
   options?: ReactFireOptions<T>
 ): T extends {} ? T : firestore.DocumentSnapshot {
-  return useObservable(doc(ref).pipe(first()), `firestore:docOnce:${ref.firestore.app.name}:${ref.path}`, checkStartWithValue(options));
+  return useObservable(doc(ref).pipe(first()), `firestore:docOnce:${ref.firestore.app.name}:${ref.path}`, checkinitialData(options));
 }
 
 /**
@@ -73,7 +73,7 @@ export function useFirestoreDocData<T>(ref: firestore.DocumentReference, options
 
   const observableId = `firestore:docData:${ref.firestore.app.name}:${ref.path}:idField=${idField}`;
   const observable = docData(ref, idField);
-  return useObservable(observableId, observable, checkStartWithValue(options));
+  return useObservable(observableId, observable, checkinitialData(options));
 }
 
 /**
@@ -87,7 +87,7 @@ export function useFirestoreDocDataOnce<T = unknown>(ref: firestore.DocumentRefe
   return useObservable(
     docData(ref, idField).pipe(first()),
     `firestore:docDataOnce:${ref.firestore.app.name}:${ref.path}:idField=${idField}`,
-    checkStartWithValue(options)
+    checkinitialData(options)
   );
 }
 
@@ -102,7 +102,7 @@ export function useFirestoreCollection<T = { [key: string]: unknown }>(
   options?: ReactFireOptions<T[]>
 ): T extends {} ? T[] : firestore.QuerySnapshot {
   const queryId = `firestore:collection:${getUniqueIdForFirestoreQuery(query)}`;
-  return useObservable(fromCollectionRef(query), queryId, checkStartWithValue(options));
+  return useObservable(fromCollectionRef(query), queryId, checkinitialData(options));
 }
 
 /**
@@ -115,5 +115,5 @@ export function useFirestoreCollectionData<T = { [key: string]: unknown }>(query
   const idField = checkIdField(options);
   const queryId = `firestore:collectionData:${getUniqueIdForFirestoreQuery(query)}:idField=${idField}`;
 
-  return useObservable(collectionData(query, idField), queryId, checkStartWithValue(options));
+  return useObservable(collectionData(query, idField), queryId, checkinitialData(options));
 }
