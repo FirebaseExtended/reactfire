@@ -18,7 +18,7 @@ const config = {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <FirebaseAppProvider firebaseConfig={config}>
+    <FirebaseAppProvider firebaseConfig={config} suspense={true}>
       <App />
     </FirebaseAppProvider>
   </StrictMode>
