@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Observable } from 'rxjs';
 import { SuspenseSubject } from './SuspenseSubject';
 import { useSuspenseEnabledFromConfigAndContext } from '../firebaseApp';
+import { ReactFireOptions } from '..';
 
 const PRELOADED_OBSERVABLES = '_reactFirePreloadedObservables';
 const DEFAULT_TIMEOUT = 30_000;
@@ -38,11 +39,7 @@ export interface ObservableStatus<T> {
   firstValuePromise: Promise<void>; // promise that resolves after first emit from observable
 }
 
-export function useObservable<T>(
-  observableId: string,
-  source: Observable<T | any>,
-  config: { initialData?: T | any; suspense?: boolean } = {}
-): ObservableStatus<T> {
+export function useObservable<T>(observableId: string, source: Observable<T | any>, config: ReactFireOptions = {}): ObservableStatus<T> {
   if (!observableId) {
     throw new Error('cannot call useObservable without an observableId');
   }
