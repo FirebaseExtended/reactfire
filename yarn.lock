@@ -11992,7 +11992,7 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   dependencies:
     aproba "^1.1.1"
 
-rxfire@^3.6.3, rxfire@^3.6.6:
+rxfire@^3.6.6:
   version "3.12.4"
   resolved "https://registry.yarnpkg.com/rxfire/-/rxfire-3.12.4.tgz#a06d5a239659571c350747917a6fe76ad3bf5d8a"
   integrity sha512-JxXWobZuLafJFQffFIhUymtGVye823QZ2T4MOIzBhNfScZ86MK6Qym+J61fJO/tkRqlNRHWErXcIM6+I9Y4IMw==
