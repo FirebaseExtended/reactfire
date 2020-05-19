@@ -96,7 +96,7 @@ const App = () => {
         <Card title="Firestore">
           <FirestoreCounter />
         </Card>
-
+        {/* 
         <Card title="Storage">
           <Storage />
         </Card>
@@ -107,7 +107,7 @@ const App = () => {
 
         <Card title="Remote Config">
           <RemoteConfig />
-        </Card>
+        </Card> */}
       </div>
     </>
   );
