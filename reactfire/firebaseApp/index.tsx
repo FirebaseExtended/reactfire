@@ -1,8 +1,6 @@
 import * as firebase from 'firebase/app';
 import * as React from 'react';
 
-export * from './sdk';
-
 type FirebaseAppContextValue = firebase.app.App;
 
 // INVESTIGATE I don't like magic strings, can we have export this in js-sdk?
@@ -18,11 +16,15 @@ type Props = {
   appName?: string;
 };
 
+// The version number is substituted in as part of the build process
+// See after.build.js for the substitution script
+const version = '::__reactfireversion__::';
+
 const shallowEq = (a: Object, b: Object) =>
   a == b ||
   [...Object.keys(a), ...Object.keys(b)].every(key => a[key] == b[key]);
 
-export function FirebaseAppProvider(props: Props & { [key: string]: unknown }) {
+function FirebaseAppProvider(props: Props & { [key: string]: unknown }) {
   const { firebaseConfig, appName } = props;
   const firebaseApp: firebase.app.App =
     props.firebaseApp ||
@@ -38,6 +40,9 @@ export function FirebaseAppProvider(props: Props & { [key: string]: unknown }) {
             'default'} firebase app instance, give this new instance a different appName.`;
         }
       } else {
+        const reactVersion = React.version || 'unknown';
+        firebase.registerVersion('react', reactVersion);
+        firebase.registerVersion('reactfire', version);
         return firebase.initializeApp(firebaseConfig, appName);
       }
     }, [firebaseConfig, appName]);
@@ -45,7 +50,7 @@ export function FirebaseAppProvider(props: Props & { [key: string]: unknown }) {
   return <FirebaseAppContext.Provider value={firebaseApp} {...props} />;
 }
 
-export function useFirebaseApp() {
+function useFirebaseApp() {
   const firebaseApp = React.useContext(FirebaseAppContext);
   if (!firebaseApp) {
     throw new Error(
@@ -55,3 +60,11 @@ export function useFirebaseApp() {
 
   return firebaseApp;
 }
+
+
+export * from './sdk';
+export { 
+  FirebaseAppProvider,
+  useFirebaseApp,
+  version,
+};
