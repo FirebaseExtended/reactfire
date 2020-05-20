@@ -14,7 +14,7 @@ const files = [{
 }];
 
 const fileContents = files.map(file => {
-  const fullPath = path.join(ABSOULTE_PATH, file.name);
+  const fullPath = path.join(ABSOLUTE_PATH, file.name);
   const content = fs.readFileSync(fullPath, 'utf8');
   return { 
     fullPath,
