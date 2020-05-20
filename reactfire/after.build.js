@@ -5,7 +5,7 @@ const { version } = require('./package.json');
 // This script should only ever be ran after
 // a successful rollup build.
 
-const ABSOULTE_PATH = path.join(process.cwd(), `/pub/reactfire`);
+const ABSOLUTE_PATH = path.join(process.cwd(), `/pub/reactfire`);
 
 const files = [{
   name: 'firebaseApp/index.js',
