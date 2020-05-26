@@ -29,9 +29,9 @@ export function preloadObservable<T>(source: Observable<T>, id: string) {
 
 export interface ObservableStatus<T> {
   status:
-    | 'loading' // waiting for first value from observable
-    | 'error'
-    | 'success'; // has received at least one value
+  | 'loading' // waiting for first value from observable
+  | 'error'
+  | 'success'; // has received at least one value
   hasEmitted: boolean; // has received at least one value
   isComplete: boolean; // observable has triggered onComplete event
   data: T; // latest data from observable

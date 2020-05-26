@@ -8,10 +8,12 @@ import {
 } from 'reactfire';
 
 const UploadProgress = ({ uploadTask, storageRef }) => {
-  const { bytesTransferred, totalBytes } = useStorageTask(
+  const { data: uploadStatus } = useStorageTask(
     uploadTask,
     storageRef
   );
+
+  const { bytesTransferred, totalBytes } = uploadStatus;
 
   const percentComplete =
     Math.round(100 * (bytesTransferred / totalBytes)) + '%';
@@ -52,8 +54,8 @@ const ImageUploadButton = props => {
           <UploadProgress uploadTask={uploadTask} storageRef={ref} />
         </SuspenseWithPerf>
       ) : (
-        ''
-      )}
+          ''
+        )}
     </>
   );
 };

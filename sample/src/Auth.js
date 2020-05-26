@@ -8,7 +8,7 @@ const signOut = auth =>
     .then(() => console.log('signed out'));
 
 const UserDetails = ({ user }) => {
-  const auth = useAuth();
+  const { data: auth } = useAuth();
 
   return (
     <>
@@ -40,7 +40,7 @@ const SignInForm = () => {
 };
 
 const FirebaseAuthStateButton = () => {
-  const user = useUser();
+  const { data: user } = useUser();
   return user ? <UserDetails user={user} /> : <SignInForm />;
 };
 

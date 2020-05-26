@@ -16,7 +16,7 @@ const Counter = props => {
     });
   };
 
-  const count = useDatabaseObjectData(ref);
+  const { data: count } = useDatabaseObjectData(ref);
 
   return (
     <>
@@ -57,7 +57,7 @@ const AnimalEntry = ({ saveAnimal }) => {
 const List = props => {
   const database = useDatabase();
   const ref = database.ref('animals');
-  const animals = useDatabaseListData(ref, { idField: 'id' });
+  const { data: animals } = useDatabaseListData(ref, { idField: 'id' });
 
   const addNewAnimal = commonName => {
     const newAnimalRef = ref.push();

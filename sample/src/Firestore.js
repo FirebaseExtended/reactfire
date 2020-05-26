@@ -15,14 +15,12 @@ const Counter = props => {
     });
   };
 
-  const { value } = useFirestoreDocData(ref);
-
-  // const {status, data, error, isFetching} = useFirestoreDocData(ref)
+  const { data: doc } = useFirestoreDocData(ref);
 
   return (
     <>
       <button onClick={() => increment(-1)}>-</button>
-      <span> {value} </span>
+      <span> {doc.value} </span>
       <button onClick={() => increment(1)}>+</button>
     </>
   );
@@ -61,7 +59,7 @@ const AnimalEntry = ({ saveAnimal }) => {
 };
 
 const List = ({ query, removeAnimal }) => {
-  const animals = useFirestoreCollectionData(query, { idField: 'id' });
+  const { data: animals } = useFirestoreCollectionData(query, { idField: 'id' });
   return (
     <ul>
       {animals.map(animal => (
