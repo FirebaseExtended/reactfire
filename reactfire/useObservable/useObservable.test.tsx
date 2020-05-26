@@ -12,7 +12,7 @@ describe('useObservable', () => {
     const observable$: Subject<any> = new Subject();
 
     try {
-      useObservable(observable$, 'test');
+      useObservable('test', observable$, { suspense: true });
       fail('expected a throw');
     } catch (thingThatWasThrown) {
       expect(thingThatWasThrown).toBeInstanceOf(Promise);
@@ -23,7 +23,7 @@ describe('useObservable', () => {
     const observable$: Subject<any> = new Subject();
 
     try {
-      useObservable(observable$, undefined);
+      useObservable(undefined, observable$, { suspense: true });
       fail('expected a throw');
     } catch (thingThatWasThrown) {
       expect(thingThatWasThrown).toBeInstanceOf(Error);
@@ -35,7 +35,7 @@ describe('useObservable', () => {
     const observableVal = "y'all";
     const observable$ = new Subject<any>();
 
-    const { result, waitForNextUpdate } = renderHook(() => useObservable(observable$, 'test-2', startVal));
+    const { result, waitForNextUpdate } = renderHook(() => useObservable('test-2', observable$, { initialData: startVal, suspense: true }));
 
     expect(result.current).toEqual(startVal);
 
@@ -51,7 +51,7 @@ describe('useObservable', () => {
     // stop a nasty-looking console error
     // https://github.com/facebook/react/issues/11098#issuecomment-523977830
     const spy = jest.spyOn(console, 'error');
-    spy.mockImplementation(() => {});
+    spy.mockImplementation(() => { });
 
     class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {
       constructor(props) {
@@ -78,7 +78,7 @@ describe('useObservable', () => {
     }
 
     const Component = () => {
-      const val = useObservable(observable$, 'test-error');
+      const val = useObservable('test-error', observable$, { suspense: true });
       return <h1 data-testid="thing">{val}</h1>;
     };
 
@@ -102,7 +102,7 @@ describe('useObservable', () => {
     const observable$ = of(observableVal);
 
     const Component = () => {
-      const val = useObservable(observable$, 'test-3', startVal);
+      const val = useObservable('test-3', observable$, { initialData: startVal, suspense: true });
       expect(val).toEqual(observableVal);
       return <h1>Hello</h1>;
     };
@@ -119,7 +119,7 @@ describe('useObservable', () => {
     const FallbackComponent = () => <h1 data-testid={fallbackComponentId}>Fallback</h1>;
 
     const Component = () => {
-      const val = useObservable(observable$, 'test-suspense');
+      const val = useObservable('test-suspense', observable$, { suspense: true });
       return <h1 data-testid={actualComponentId}>{val}}</h1>;
     };
 
@@ -147,7 +147,7 @@ describe('useObservable', () => {
     const values = ['a', 'b', 'c'];
     const observable$ = new Subject();
 
-    const { result } = renderHook(() => useObservable(observable$, 'test-changes', startVal));
+    const { result } = renderHook(() => useObservable('test-changes', observable$, { initialData: startVal, suspense: true }));
 
     expect(result.current).toEqual(startVal);
 
@@ -165,7 +165,7 @@ describe('useObservable', () => {
     const secondComponentId = 'second';
 
     const ObservableConsumer = props => {
-      const val = useObservable(observable$, observableId);
+      const { data: val } = useObservable(observableId, observable$, { suspense: true });
 
       return <h1 {...props}>{val}</h1>;
     };
@@ -208,7 +208,7 @@ describe('useObservable', () => {
     let currentObsId = 'observable-1';
 
     const ObservableConsumer = props => {
-      const val = useObservable(currentObs$, currentObsId);
+      const val = useObservable(currentObsId, currentObs$, { suspense: true });
 
       return <h1 {...props}>{val}</h1>;
     };

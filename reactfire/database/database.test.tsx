@@ -6,6 +6,7 @@ import * as firebase from '@firebase/testing';
 import { useDatabaseObject, useDatabaseList, FirebaseAppProvider } from '..';
 import { database } from 'firebase/app';
 import { QueryChange } from 'rxfire/database/dist/database';
+import { ObservableStatus } from '../useObservable';
 
 describe('Realtime Database (RTDB)', () => {
   let app: import('firebase').app.App;
@@ -47,7 +48,8 @@ describe('Realtime Database (RTDB)', () => {
       await ref.set(mockData);
 
       const ReadObject = () => {
-        const { snapshot } = useDatabaseObject(ref);
+        const { data } = useDatabaseObject(ref);
+        const { snapshot } = data as QueryChange;
 
         return <h1 data-testid="readSuccess">{snapshot.val().a}</h1>;
       };
@@ -77,7 +79,7 @@ describe('Realtime Database (RTDB)', () => {
       await act(() => ref.push(mockData2));
 
       const ReadList = () => {
-        const changes = useDatabaseList(ref) as QueryChange[];
+        const { data: changes } = useDatabaseList(ref) as ObservableStatus<QueryChange[]>;
 
         return (
           <ul data-testid="readSuccess">
@@ -114,8 +116,8 @@ describe('Realtime Database (RTDB)', () => {
       await act(() => ref.push(mockData2));
 
       const ReadFirestoreCollection = () => {
-        const list = useDatabaseList(ref) as QueryChange[];
-        const filteredList = useDatabaseList(filteredRef) as QueryChange[];
+        const { data: list } = useDatabaseList(ref) as ObservableStatus<QueryChange[]>;
+        const { data: filteredList } = useDatabaseList(filteredRef) as ObservableStatus<QueryChange[]>;
 
         // filteredList's length should be 1 since we only added one value that matches its query
         expect(filteredList.length).toEqual(1);

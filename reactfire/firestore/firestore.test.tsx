@@ -79,7 +79,7 @@ describe('Firestore', () => {
       await waitForElement(() => getByTestId('fallback'));
       expect(preloadResolved).toEqual(false);
 
-      await waitForElement(() => getByTestId('success')).then(() => fail('expected throw')).catch(() => {});
+      await waitForElement(() => getByTestId('success')).then(() => fail('expected throw')).catch(() => { });
       expect(preloadResolved).toEqual(false);
 
       preloadResolve();
@@ -102,7 +102,7 @@ describe('Firestore', () => {
       await ref.set(mockData);
 
       const ReadFirestoreDoc = () => {
-        const doc = useFirestoreDoc(ref);
+        const { data: doc } = useFirestoreDoc(ref);
 
         return (
           <h1 data-testid="readSuccess">
@@ -137,7 +137,7 @@ describe('Firestore', () => {
       await ref.set(mockData);
 
       const ReadFirestoreDoc = () => {
-        const data = useFirestoreDocData<any>(ref, { idField: 'id' });
+        const { data } = useFirestoreDocData<any>(ref, { idField: 'id' });
 
         return <h1 data-testid={data.id}>{data.a}</h1>;
       };
@@ -216,7 +216,7 @@ describe('Firestore', () => {
       await ref.set(mockData1);
 
       const ReadFirestoreDoc = () => {
-        const dataOnce = useFirestoreDocDataOnce<any>(ref, { idField: 'id' });
+        const { data: dataOnce } = useFirestoreDocDataOnce<any>(ref, { idField: 'id' });
 
         return (
           <>
@@ -326,7 +326,7 @@ describe('Firestore', () => {
       await act(() => ref.add(mockData2));
 
       const ReadFirestoreCollection = () => {
-        const list = useFirestoreCollectionData<any>(ref, { idField: 'id' });
+        const { data: list } = useFirestoreCollectionData<any>(ref, { idField: 'id' });
 
         return (
           <ul data-testid="readSuccess">
@@ -362,8 +362,8 @@ describe('Firestore', () => {
       await act(() => ref.add(mockData2));
 
       const ReadFirestoreCollection = () => {
-        const list = useFirestoreCollectionData<any>(ref, { idField: 'id' });
-        const filteredList = useFirestoreCollectionData<any>(filteredRef, {
+        const { data: list } = useFirestoreCollectionData<any>(ref, { idField: 'id' });
+        const { data: filteredList } = useFirestoreCollectionData<any>(filteredRef, {
           idField: 'id'
         });
 

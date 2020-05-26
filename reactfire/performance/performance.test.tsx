@@ -30,7 +30,7 @@ window.performance.measure = measure;
 window.performance.getEntriesByName = getEntriesByName;
 
 const PromiseThrower = () => {
-  throw new Promise((resolve, reject) => {});
+  throw new Promise((resolve, reject) => { });
   return <h1>Hello world</h1>;
 };
 
@@ -52,7 +52,7 @@ describe('SuspenseWithPerf', () => {
     const Fallback = () => <h1 data-testid="fallback">Fallback</h1>;
 
     const Comp = () => {
-      useObservable(o$, 'perf-test-1');
+      useObservable('perf-test-1', o$, { suspense: true });
 
       return <h1 data-testid="child">Actual</h1>;
     };

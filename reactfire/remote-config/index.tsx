@@ -38,7 +38,7 @@ function typeSafeUse<T>(key: string, getter: Getter$<T>, remoteConfig?: RemoteCo
  * @param key The parameter key in Remote Config
  * @param remoteConfig Optional instance. If not provided ReactFire will either grab the default instance or lazy load.
  */
-export function useRemoteConfigValue(key: string, remoteConfig?: RemoteConfig): RemoteConfigValue {
+export function useRemoteConfigValue(key: string, remoteConfig?: RemoteConfig): ObservableStatus<RemoteConfigValue> {
   return typeSafeUse<RemoteConfigValue>(key, getValue, remoteConfig);
 }
 
@@ -47,7 +47,7 @@ export function useRemoteConfigValue(key: string, remoteConfig?: RemoteConfig): 
  * @param key The parameter key in Remote Config
  * @param remoteConfig Optional instance. If not provided ReactFire will either grab the default instance or lazy load.
  */
-export function useRemoteConfigString(key: string, remoteConfig?: RemoteConfig): string {
+export function useRemoteConfigString(key: string, remoteConfig?: RemoteConfig): ObservableStatus<string> {
   return typeSafeUse<string>(key, getString, remoteConfig);
 }
 
@@ -56,7 +56,7 @@ export function useRemoteConfigString(key: string, remoteConfig?: RemoteConfig):
  * @param key The parameter key in Remote Config
  * @param remoteConfig Optional instance. If not provided ReactFire will either grab the default instance or lazy load.
  */
-export function useRemoteConfigNumber(key: string, remoteConfig?: RemoteConfig): number {
+export function useRemoteConfigNumber(key: string, remoteConfig?: RemoteConfig): ObservableStatus<number> {
   return typeSafeUse<number>(key, getNumber, remoteConfig);
 }
 
@@ -65,7 +65,7 @@ export function useRemoteConfigNumber(key: string, remoteConfig?: RemoteConfig):
  * @param key The parameter key in Remote Config
  * @param remoteConfig Optional instance. If not provided ReactFire will either grab the default instance or lazy load.
  */
-export function useRemoteConfigBoolean(key: string, remoteConfig?: RemoteConfig) {
+export function useRemoteConfigBoolean(key: string, remoteConfig?: RemoteConfig): ObservableStatus<boolean> {
   return typeSafeUse<boolean>(key, getBoolean, remoteConfig);
 }
 
@@ -74,6 +74,6 @@ export function useRemoteConfigBoolean(key: string, remoteConfig?: RemoteConfig)
  * @param key The parameter key in Remote Config
  * @param remoteConfig Optional instance. If not provided ReactFire will either grab the default instance or lazy load.
  */
-export function useRemoteConfigAll(key: string, remoteConfig?: RemoteConfig): AllParameters {
+export function useRemoteConfigAll(key: string, remoteConfig?: RemoteConfig): ObservableStatus<AllParameters> {
   return typeSafeUse<AllParameters>(key, getAll, remoteConfig);
 }
