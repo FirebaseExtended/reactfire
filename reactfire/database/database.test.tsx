@@ -55,7 +55,7 @@ describe('Realtime Database (RTDB)', () => {
       };
 
       const { getByTestId } = render(
-        <FirebaseAppProvider firebase={app}>
+        <FirebaseAppProvider firebase={app} suspense={true}>
           <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
             <ReadObject />
           </React.Suspense>
@@ -93,7 +93,7 @@ describe('Realtime Database (RTDB)', () => {
       };
 
       const { getAllByTestId } = render(
-        <FirebaseAppProvider firebase={app}>
+        <FirebaseAppProvider firebase={app} suspense={true}>
           <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
             <ReadList />
           </React.Suspense>
@@ -116,8 +116,8 @@ describe('Realtime Database (RTDB)', () => {
       await act(() => ref.push(mockData2));
 
       const ReadFirestoreCollection = () => {
-        const { data: list } = useDatabaseList(ref) as ObservableStatus<QueryChange[]>;
-        const { data: filteredList } = useDatabaseList(filteredRef) as ObservableStatus<QueryChange[]>;
+        const { data: list } = useDatabaseList(ref, { suspense: true }) as ObservableStatus<QueryChange[]>;
+        const { data: filteredList } = useDatabaseList(filteredRef, { suspense: true }) as ObservableStatus<QueryChange[]>;
 
         // filteredList's length should be 1 since we only added one value that matches its query
         expect(filteredList.length).toEqual(1);
@@ -129,7 +129,7 @@ describe('Realtime Database (RTDB)', () => {
       };
 
       const { getByTestId } = render(
-        <FirebaseAppProvider firebase={app}>
+        <FirebaseAppProvider firebase={app} suspense={true}>
           <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
             <ReadFirestoreCollection />
           </React.Suspense>

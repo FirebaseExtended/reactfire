@@ -79,7 +79,7 @@ export function useDatabaseList<T = { [key: string]: unknown }>(
   const hash = `database:list:${getUniqueIdForDatabaseQuery(ref)}`;
   const observable$ = list(ref);
 
-  return useObservable(hash, observable$, options ? options.initialData : undefined);
+  return useObservable(hash, observable$, options);
 }
 
 export function useDatabaseListData<T = { [key: string]: unknown }>(ref: database.Reference | database.Query, options?: ReactFireOptions<T[]>): ObservableStatus<T[]> {

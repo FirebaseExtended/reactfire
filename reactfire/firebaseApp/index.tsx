@@ -49,15 +49,12 @@ export function FirebaseAppProvider(props: Props & { [key: string]: unknown }) {
 export function useIsSuspenseEnabled(): boolean {
   const suspense = React.useContext(SuspenseEnabledContext);
 
-  if (suspense === undefined) {
-    throw new Error('Cannot call useIsSuspenseEnabled unless your component is within a FirebaseAppProvider');
-  }
-
-  return suspense;
+  // default to false if not available in context
+  return suspense ?? false;
 }
 
 export function useSuspenseEnabledFromConfigAndContext(suspenseFromConfig): boolean {
-  let suspenseFromContext = useIsSuspenseEnabled();
+  let suspenseFromContext = React.useContext(SuspenseEnabledContext);
 
   // prioritize config over context
   if (suspenseFromConfig !== undefined) {

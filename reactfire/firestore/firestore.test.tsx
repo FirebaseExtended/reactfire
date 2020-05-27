@@ -69,7 +69,7 @@ describe('Firestore', () => {
       };
 
       const { getByTestId } = render(
-        <FirebaseAppProvider firebase={firebaseApp}>
+        <FirebaseAppProvider firebase={firebaseApp} suspense={true}>
           <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
             <Firestore />
           </React.Suspense>
@@ -111,7 +111,7 @@ describe('Firestore', () => {
         );
       };
       const { getByTestId } = render(
-        <FirebaseAppProvider firebase={app}>
+        <FirebaseAppProvider firebase={app} suspense={true}>
           <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
             <ReadFirestoreDoc />
           </React.Suspense>
@@ -142,7 +142,7 @@ describe('Firestore', () => {
         return <h1 data-testid={data.id}>{data.a}</h1>;
       };
       const { getByTestId } = render(
-        <FirebaseAppProvider firebase={app}>
+        <FirebaseAppProvider firebase={app} suspense={true}>
           <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
             <ReadFirestoreDoc />
           </React.Suspense>
@@ -225,7 +225,7 @@ describe('Firestore', () => {
         );
       };
       const { getByTestId } = render(
-        <FirebaseAppProvider firebase={app}>
+        <FirebaseAppProvider firebase={app} suspense={true}>
           <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
             <ReadFirestoreDoc />
           </React.Suspense>
@@ -264,7 +264,7 @@ describe('Firestore', () => {
         );
       };
       const { getAllByTestId } = render(
-        <FirebaseAppProvider firebase={app}>
+        <FirebaseAppProvider firebase={app} suspense={true}>
           <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
             <ReadFirestoreCollection />
           </React.Suspense>
@@ -287,12 +287,15 @@ describe('Firestore', () => {
       await act(() => ref.add(mockData2));
 
       const ReadFirestoreCollection = () => {
-        const list = ((useFirestoreCollection(
+        const { data: querySnap } = useFirestoreCollection(
           ref
-        ) as any) as firestore.QuerySnapshot).docs;
-        const filteredList = ((useFirestoreCollection(
+        );
+        const { data: filteredQuerySnap } = useFirestoreCollection(
           filteredRef
-        ) as any) as firestore.QuerySnapshot).docs;
+        );
+
+        const filteredList = (filteredQuerySnap as unknown as firestore.QuerySnapshot).docs;
+        const list = (querySnap as unknown as firestore.QuerySnapshot).docs;
 
         // filteredList's length should be 1 since we only added one value that matches its query
         expect(filteredList.length).toEqual(1);
@@ -304,7 +307,7 @@ describe('Firestore', () => {
       };
 
       const { getByTestId } = render(
-        <FirebaseAppProvider firebase={app}>
+        <FirebaseAppProvider firebase={app} suspense={true}>
           <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
             <ReadFirestoreCollection />
           </React.Suspense>
@@ -326,8 +329,9 @@ describe('Firestore', () => {
       await act(() => ref.add(mockData2));
 
       const ReadFirestoreCollection = () => {
-        const { data: list } = useFirestoreCollectionData<any>(ref, { idField: 'id' });
+        const status = useFirestoreCollectionData<any>(ref, { idField: 'id' });
 
+        const list = status.data;
         return (
           <ul data-testid="readSuccess">
             {list.map(item => (
@@ -339,7 +343,7 @@ describe('Firestore', () => {
         );
       };
       const { getAllByTestId } = render(
-        <FirebaseAppProvider firebase={app}>
+        <FirebaseAppProvider firebase={app} suspense={true}>
           <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
             <ReadFirestoreCollection />
           </React.Suspense>
@@ -377,7 +381,7 @@ describe('Firestore', () => {
       };
 
       const { getByTestId } = render(
-        <FirebaseAppProvider firebase={app}>
+        <FirebaseAppProvider firebase={app} suspense={true}>
           <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
             <ReadFirestoreCollection />
           </React.Suspense>

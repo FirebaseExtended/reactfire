@@ -8,26 +8,11 @@ import { useObservable } from '.';
 describe('useObservable', () => {
   afterEach(cleanup);
 
-  it('throws a promise if the observable has no initial value', () => {
-    const observable$: Subject<any> = new Subject();
-
-    try {
-      useObservable('test', observable$, { suspense: true });
-      fail('expected a throw');
-    } catch (thingThatWasThrown) {
-      expect(thingThatWasThrown).toBeInstanceOf(Promise);
-    }
-  });
-
   it('throws an error if no observableId is provided', () => {
     const observable$: Subject<any> = new Subject();
 
-    try {
-      useObservable(undefined, observable$, { suspense: true });
-      fail('expected a throw');
-    } catch (thingThatWasThrown) {
-      expect(thingThatWasThrown).toBeInstanceOf(Error);
-    }
+    const { result } = renderHook(() => useObservable(undefined, observable$, { suspense: true }));
+    expect(result.error).toBeInstanceOf(Error);
   });
 
   it('can return a startval and then the observable once it is ready', () => {
@@ -35,13 +20,13 @@ describe('useObservable', () => {
     const observableVal = "y'all";
     const observable$ = new Subject<any>();
 
-    const { result, waitForNextUpdate } = renderHook(() => useObservable('test-2', observable$, { initialData: startVal, suspense: true }));
+    const { result } = renderHook(() => useObservable('test-2', observable$, { initialData: startVal, suspense: true }));
 
-    expect(result.current).toEqual(startVal);
+    expect(result.current.data).toEqual(startVal);
 
     // prove that it actually does emit the value from the observable too
     actOnHook(() => observable$.next(observableVal));
-    expect(result.current).toEqual(observableVal);
+    expect(result.current.data).toEqual(observableVal);
   });
 
   it('throws an error if there is an error on initial fetch', async () => {
@@ -78,7 +63,7 @@ describe('useObservable', () => {
     }
 
     const Component = () => {
-      const val = useObservable('test-error', observable$, { suspense: true });
+      const { data: val } = useObservable('test-error', observable$, { suspense: true });
       return <h1 data-testid="thing">{val}</h1>;
     };
 
@@ -102,7 +87,7 @@ describe('useObservable', () => {
     const observable$ = of(observableVal);
 
     const Component = () => {
-      const val = useObservable('test-3', observable$, { initialData: startVal, suspense: true });
+      const { data: val } = useObservable('test-3', observable$, { initialData: startVal, suspense: true });
       expect(val).toEqual(observableVal);
       return <h1>Hello</h1>;
     };
@@ -119,7 +104,7 @@ describe('useObservable', () => {
     const FallbackComponent = () => <h1 data-testid={fallbackComponentId}>Fallback</h1>;
 
     const Component = () => {
-      const val = useObservable('test-suspense', observable$, { suspense: true });
+      const { data: val } = useObservable('test-suspense', observable$, { suspense: true });
       return <h1 data-testid={actualComponentId}>{val}}</h1>;
     };
 
@@ -149,11 +134,11 @@ describe('useObservable', () => {
 
     const { result } = renderHook(() => useObservable('test-changes', observable$, { initialData: startVal, suspense: true }));
 
-    expect(result.current).toEqual(startVal);
+    expect(result.current.data).toEqual(startVal);
 
     values.forEach(value => {
       actOnHook(() => observable$.next(value));
-      expect(result.current).toEqual(value);
+      expect(result.current.data).toEqual(value);
     });
   });
 
@@ -208,7 +193,7 @@ describe('useObservable', () => {
     let currentObsId = 'observable-1';
 
     const ObservableConsumer = props => {
-      const val = useObservable(currentObsId, currentObs$, { suspense: true });
+      const { data: val } = useObservable(currentObsId, currentObs$, { suspense: true });
 
       return <h1 {...props}>{val}</h1>;
     };
