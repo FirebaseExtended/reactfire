@@ -251,11 +251,11 @@ describe('Firestore', () => {
       await act(() => ref.add(mockData2));
 
       const ReadFirestoreCollection = () => {
-        const collection = useFirestoreCollection(ref) as any;
+        const { data: collection } = useFirestoreCollection(ref);
 
         return (
           <ul data-testid="readSuccess">
-            {(collection as firestore.QuerySnapshot).docs.map(doc => (
+            {(collection as unknown as firestore.QuerySnapshot).docs.map(doc => (
               <li key={doc.id} data-testid="listItem">
                 doc.data().a
               </li>
