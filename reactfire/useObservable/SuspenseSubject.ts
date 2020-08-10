@@ -35,7 +35,7 @@ export class SuspenseSubject<T> extends Subject<T> {
 
     // set a timeout for reseting the cache, subscriptions will cancel the timeout
     // and reschedule again on unsubscribe
-    this._timeoutHandler = setTimeout(this._reset, this._timeoutWindow);
+    this._timeoutHandler = setTimeout(this._reset.bind(this), this._timeoutWindow);
   }
 
   get hasValue(): boolean {
@@ -66,10 +66,7 @@ export class SuspenseSubject<T> extends Subject<T> {
   }
 
   private _reset() {
-    // seems to be undefined in tests?
-    if (this._warmupSubscription) {
-      this._warmupSubscription.unsubscribe();
-    }
+    this._warmupSubscription.unsubscribe();
     this._hasValue = false;
     this._value = undefined;
     this._error = undefined;
@@ -81,6 +78,6 @@ export class SuspenseSubject<T> extends Subject<T> {
       clearTimeout(this._timeoutHandler);
     }
     this._innerSubscriber = this._innerObservable.subscribe(subscriber);
-    return this._innerSubscriber.add(this._reset);
+    return this._innerSubscriber.add(this._reset.bind(this));
   }
 }
