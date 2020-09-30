@@ -27,6 +27,7 @@
       - [`useFirestoreDocDataOnce`](#useFirestoreDocDataOnce)
       - [`useFirestoreCollection`](#useFirestoreCollection)
       - [`useFirestoreCollectionData`](#useFirestoreCollectionData)
+      - [`useFirestoreCollectionDataOnce`](#useFirestoreCollectionDataOnce)
     - Realtime Database
       - [`useDatabaseObject`](#useDatabaseObject)
       - [`useDatabaseObjectData`](#useDatabaseObjectData)
@@ -267,6 +268,23 @@ _Throws a Promise by default_
 ### `useFirestoreCollectionData`
 
 Listen to a Firestore Collection.
+
+_Throws a Promise by default_
+
+#### Parameters
+
+| Parameter   | Type                                                                              | Description                                                                  |
+| ----------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| ref         | [`Query`](https://firebase.google.com/docs/reference/js/firebase.firestore.Query) | A query for the collection you want to listen to                             |
+| options _?_ | ReactFireOptions                                                                  | Options. This hook will not throw a Promise if you provide `startWithValue`. |
+
+#### Returns
+
+`T[]`
+
+### `useFirestoreCollectionDataOnce`
+
+Get a firestore collection, but don't listen for updates.
 
 _Throws a Promise by default_
 

@@ -4,6 +4,7 @@ import {
   AuthCheck,
   SuspenseWithPerf,
   useFirestoreCollectionData,
+  useFirestoreCollectionDataOnce,
   useFirestoreDocData,
   useFirestoreDocDataOnce,
   useFirestore
@@ -84,6 +85,21 @@ const List = ({ query, removeAnimal }) => {
   );
 };
 
+const StaticList = () => {
+  const ref = useFirestore()
+    .collection('animals')
+    .orderBy('commonName', 'asc');
+  const animals = useFirestoreCollectionDataOnce(ref, { idField: 'id' });
+
+  return (
+    <ul>
+      {animals.map(animal => (
+        <li key={animal.id}>{animal.commonName}</li>
+      ))}
+    </ul>
+  );
+};
+
 const FavoriteAnimals = props => {
   const firestore = useFirestore();
   const baseRef = firestore.collection('animals');
@@ -146,6 +162,14 @@ const SuspenseWrapper = props => {
             traceId="firestore-demo-collection"
           >
             <FavoriteAnimals />
+          </SuspenseWithPerf>
+
+          <h3>Sample One-time Get Collection</h3>
+          <SuspenseWithPerf
+            fallback="connecting to Firestore..."
+            traceId="firestore-demo-collection"
+          >
+            <StaticList />
           </SuspenseWithPerf>
         </SuspenseList>
       </AuthCheck>
