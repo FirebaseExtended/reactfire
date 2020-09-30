@@ -20,7 +20,7 @@ available in
   that Suspense can catch. No more `isLoaded ?...` - let React
   [handle it for you](https://reactjs.org/docs/concurrent-mode-suspense.html).
 - **Faster initial page load times** - Load only the code you need, when you need it, with `useFirestore`, `useAuth`, `useRemoteConfig`, and more.
-- **Convenient components for common use cases** - Only want to render a component if a user is signed in? Wrap it in `<AuthCheck />`. Need to automatically instrument your `Suspense` load times with [RUM](https://firebase.google.com/docs/perf-mon)? Use `<SuspenseWithPef />`.
+- **Convenient components for common use cases** - Only want to render a component if a user is signed in? Wrap it in `<AuthCheck />`. Need to automatically instrument your `Suspense` load times with [RUM](https://firebase.google.com/docs/perf-mon)? Use `<SuspenseWithPerf />`.
 
 ## Install
 
