@@ -1,8 +1,6 @@
 import * as firebase from 'firebase/app';
 import * as React from 'react';
 
-export * from './sdk';
-
 type FirebaseAppContextValue = firebase.app.App;
 
 // INVESTIGATE I don't like magic strings, can we have export this in js-sdk?
@@ -19,15 +17,18 @@ type Props = {
   suspense?: boolean;
 };
 
-const shallowEq = (a: Object, b: Object) => a == b || [...Object.keys(a), ...Object.keys(b)].every(key => a[key] == b[key]);
+// The version number is substituted in as part of the build process
+// See after.build.js for the substitution script
+const version = '::__reactfireversion__::';
 
-export function FirebaseAppProvider(props: Props & { [key: string]: unknown }) {
+const shallowEq = (a: Object, b: Object) => a == b || [...Object.keys(a), ...Object.keys(b)].every((key) => a[key] == b[key]);
+
+function FirebaseAppProvider(props: Props & { [key: string]: unknown }) {
   const { firebaseConfig, appName, suspense } = props;
-
   const firebaseApp: firebase.app.App =
     props.firebaseApp ||
     React.useMemo(() => {
-      const existingApp = firebase.apps.find(app => app.name == (appName || DEFAULT_APP_NAME));
+      const existingApp = firebase.apps.find((app) => app.name == (appName || DEFAULT_APP_NAME));
       if (existingApp) {
         if (shallowEq(existingApp.options, firebaseConfig)) {
           return existingApp;
@@ -35,6 +36,9 @@ export function FirebaseAppProvider(props: Props & { [key: string]: unknown }) {
           throw `Does not match the options already provided to the ${appName || 'default'} firebase app instance, give this new instance a different appName.`;
         }
       } else {
+        const reactVersion = React.version || 'unknown';
+        firebase.registerVersion('react', reactVersion);
+        firebase.registerVersion('reactfire', version);
         return firebase.initializeApp(firebaseConfig, appName);
       }
     }, [firebaseConfig, appName]);
@@ -64,7 +68,7 @@ export function useSuspenseEnabledFromConfigAndContext(suspenseFromConfig): bool
   return suspenseFromContext;
 }
 
-export function useFirebaseApp() {
+function useFirebaseApp() {
   const firebaseApp = React.useContext(FirebaseAppContext);
   if (!firebaseApp) {
     throw new Error('Cannot call useFirebaseApp unless your component is within a FirebaseAppProvider');
@@ -72,3 +76,6 @@ export function useFirebaseApp() {
 
   return firebaseApp;
 }
+
+export * from './sdk';
+export { FirebaseAppProvider, useFirebaseApp, version };

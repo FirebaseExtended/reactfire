@@ -57,11 +57,13 @@ describe('Firestore', () => {
       let preloadResolve: (v?: unknown) => void;
 
       preloadFirestore({
+        // @ts-ignore: TODO: use the regular JS SDK instead of @firebase/testing
         firebaseApp,
         setup: () => new Promise(resolve => preloadResolve = resolve)
       }).then(() => preloadResolved = true);
 
       const Firestore = () => {
+        // @ts-ignore: TODO: use the regular JS SDK instead of @firebase/testing
         const firestore = useFirestore(firebaseApp);
         return (
           <div data-testid="success"></div>

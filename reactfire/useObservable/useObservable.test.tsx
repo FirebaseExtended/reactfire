@@ -30,6 +30,56 @@ describe('useObservable', () => {
       expect(result.current.status).toEqual('success');
     });
   })
+  it('throws a promise if the observable has no initial value', () => {
+    const observable$: Subject<any> = new Subject();
+
+    try {
+      useObservable('test', observable$);
+      fail('expected a throw');
+    } catch (thingThatWasThrown) {
+      expect(thingThatWasThrown).toBeInstanceOf(Promise);
+    }
+  });
+
+  it('throws an error if no observableId is provided', () => {
+    const observable$: Subject<any> = new Subject();
+
+    try {
+      useObservable(undefined, observable$);
+      fail('expected a throw');
+    } catch (thingThatWasThrown) {
+      expect(thingThatWasThrown).toBeInstanceOf(Error);
+    }
+  });
+
+  it('can return a startval and then the observable once it is ready', () => {
+    const startVal = 'howdy';
+    const observableVal = "y'all";
+    const observable$ = new Subject<any>();
+
+    const { result, waitForNextUpdate } = renderHook(() => useObservable(observable$, 'test-2', startVal));
+
+    expect(result.current).toEqual(startVal);
+
+    // prove that it actually does emit the value from the observable too
+    actOnHook(() => observable$.next(observableVal));
+    expect(result.current).toEqual(observableVal);
+  });
+
+  it('throws an error if there is an error on initial fetch', async () => {
+    const error = new Error('I am an error');
+    const observable$ = throwError(error);
+
+    // stop a nasty-looking console error
+    // https://github.com/facebook/react/issues/11098#issuecomment-523977830
+    const spy = jest.spyOn(console, 'error');
+    spy.mockImplementation(() => { });
+
+    class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {
+      constructor(props) {
+        super(props);
+        this.state = { hasError: false };
+      }
 
   describe('Suspense Mode', () => {
     it('throws an error if no observableId is provided', () => {
