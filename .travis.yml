@@ -46,5 +46,5 @@ install:
   - firebase setup:emulators:firestore
 
 script:
-  - cd reactfire
+  - yarn build
   - yarn test
