@@ -1,14 +1,8 @@
-cd reactfire/pub/reactfire
-
 LATEST_TEST="^[^-]*$"
 
 if test $NPM_TOKEN; then
 
     echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
-
-    cp ../../../README.md .
-    cp -r ../../../docs .
-    cp ../../../LICENSE .
 
     if test $TAG_NAME; then
         npm version $(echo $TAG_NAME | sed 's/^v\(.*\)$/\1/')
