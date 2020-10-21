@@ -7,7 +7,12 @@ import { App as ConcurrentModeApp } from './withSuspense/App';
 import { App as NonConcurrentModeApp } from './withoutSuspense/App';
 import './styles.pcss';
 
-// Set this to `true` to see a ReactFire demo with Suspense/Concurrent mode enabled
+/**
+ * Set this to `true` to see a ReactFire demo with Suspense/Concurrent mode enabled
+ *
+ * You'll need to use an experimental build of React to use Concurrent mode
+ * https://reactjs.org/docs/concurrent-mode-adoption.html#installation
+ */
 const SUSPENSE_MODE_ENABLED = false;
 
 const firebaseConfig = {
@@ -28,5 +33,6 @@ if (!rootElement) {
 if (SUSPENSE_MODE_ENABLED === false) {
   ReactDOM.render(<NonConcurrentModeApp firebaseConfig={firebaseConfig} />, rootElement);
 } else {
+  // https://reactjs.org/docs/concurrent-mode-adoption.html#enabling-concurrent-mode
   ReactDOM.unstable_createRoot(rootElement).render(<ConcurrentModeApp firebaseConfig={firebaseConfig} />);
 }
