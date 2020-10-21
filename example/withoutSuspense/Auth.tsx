@@ -7,6 +7,21 @@ import { LoadingSpinner } from '../display/LoadingSpinner';
 
 const signOut = auth => auth.signOut().then(() => console.log('signed out'));
 
+export const AuthWrapper = ({ children, fallback }: React.PropsWithChildren<{ fallback: JSX.Element }>): JSX.Element => {
+  const { status, data: user, hasEmitted } = useUser();
+
+  if (!children) {
+    throw new Error('Children must be provided');
+  }
+  if (status === 'loading' || hasEmitted === false) {
+    return <LoadingSpinner />;
+  } else if (user) {
+    return children as JSX.Element;
+  }
+
+  return fallback;
+};
+
 const UserDetails = ({ user }) => {
   const auth = useAuth();
 

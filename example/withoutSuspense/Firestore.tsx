@@ -4,6 +4,7 @@ import { preloadFirestore, useFirebaseApp, useFirestore, useFirestoreCollectionD
 import { WideButton } from '../display/Button';
 import { CardSection } from '../display/Card';
 import { LoadingSpinner } from '../display/LoadingSpinner';
+import { AuthWrapper } from './Auth';
 
 const Counter = () => {
   const firestore = useFirestore;
@@ -87,21 +88,6 @@ const StaticValue = props => {
     return <LoadingSpinner />;
   }
   return <span>{(data as any).value}</span>;
-};
-
-const AuthWrapper = ({ children, fallback }: React.PropsWithChildren<{ fallback: JSX.Element }>): JSX.Element => {
-  const { status, data: user, hasEmitted } = useUser();
-
-  if (!children) {
-    throw new Error('Children must be provided');
-  }
-  if (status === 'loading' || hasEmitted === false) {
-    return <LoadingSpinner />;
-  } else if (user) {
-    return children as JSX.Element;
-  }
-
-  return fallback;
 };
 
 export const Firestore = () => {

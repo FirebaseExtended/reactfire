@@ -11,5 +11,10 @@ dist
 yarn-error.log
 
 example/.cache
+
+# firebase emulator logs
 database-debug.log
 firestore-debug.log
+
+# npm pack artifacts
+reactfire-*.tgz

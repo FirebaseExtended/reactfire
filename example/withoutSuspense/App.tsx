@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { FirebaseAppProvider } from 'reactfire';
-import { Firestore } from './Firestore';
-import { Auth } from './Auth';
-
 import { Card } from '../display/Card';
+import { Auth } from './Auth';
+import { Firestore } from './Firestore';
+import { RealtimeDatabase } from './RealtimeDatabase';
+import { RemoteConfig } from './RemoteConfig';
 
 // Import auth directly because most components need it
 // Other Firebase libraries can be lazy-loaded as-needed
 import 'firebase/auth';
-import { RealtimeDatabase } from './RealtimeDatabase';
+import { Storage } from './Storage';
 
 export const App = ({ firebaseConfig }: { firebaseConfig: { [key: string]: unknown } }) => {
   return (
@@ -22,6 +23,12 @@ export const App = ({ firebaseConfig }: { firebaseConfig: { [key: string]: unkno
         </Card>
         <Card title="Realtime Database">
           <RealtimeDatabase />
+        </Card>
+        <Card title="Remote Config">
+          <RemoteConfig />
+        </Card>
+        <Card title="Storage">
+          <Storage />
         </Card>
       </FirebaseAppProvider>
     </div>
