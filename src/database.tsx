@@ -1,20 +1,15 @@
 import { database } from 'firebase/app';
 import { list, object, QueryChange, listVal } from 'rxfire/database';
-import { ReactFireOptions, useObservable, checkIdField, ObservableStatus } from './';
+import { ReactFireOptions, useObservable, checkIdField, ObservableStatus, ReactFireGlobals } from './';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-const CACHED_QUERIES = '_reactFireDatabaseCachedQueries';
-
 // Since we're side-effect free, we need to ensure our observableId cache is global
-// @ts-ignore: TS doesn't like globalThis
-const cachedQueries: Array<database.Query> = globalThis[CACHED_QUERIES] || [];
+const cachedQueries: Array<database.Query> = ((globalThis as any) as ReactFireGlobals)._reactFireDatabaseCachedQueries || [];
 
-// @ts-ignore: TS doesn't like globalThis
-if (!globalThis[CACHED_QUERIES]) {
-  // @ts-ignore: TS doesn't like globalThis
-  globalThis[CACHED_QUERIES] = cachedQueries;
+if (!((globalThis as any) as ReactFireGlobals)._reactFireDatabaseCachedQueries) {
+  ((globalThis as any) as ReactFireGlobals)._reactFireDatabaseCachedQueries = cachedQueries;
 }
 
 function getUniqueIdForDatabaseQuery(query: database.Query) {

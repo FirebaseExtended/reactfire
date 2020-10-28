@@ -1,20 +1,15 @@
 import { firestore } from 'firebase/app';
 import { collectionData, doc, docData, fromCollectionRef } from 'rxfire/firestore';
-import { preloadFirestore, ReactFireOptions, useObservable, checkIdField } from './';
+import { preloadFirestore, ReactFireOptions, useObservable, checkIdField, ReactFireGlobals } from './';
 import { preloadObservable, ObservableStatus } from './useObservable';
 import { first } from 'rxjs/operators';
 import { useFirebaseApp } from './firebaseApp';
 
-const CACHED_QUERIES = '_reactFireFirestoreQueryCache';
-
 // Since we're side-effect free, we need to ensure our observableId cache is global
-// @ts-ignore: TS doesn't like globalThis
-const cachedQueries: Array<firestore.Query> = globalThis[CACHED_QUERIES] || [];
+const cachedQueries: Array<firestore.Query> = ((globalThis as any) as ReactFireGlobals)._reactFireFirestoreQueryCache || [];
 
-// @ts-ignore: TS doesn't like globalThis
-if (!globalThis[CACHED_QUERIES]) {
-  // @ts-ignore: TS doesn't like globalThis
-  globalThis[CACHED_QUERIES] = cachedQueries;
+if (!((globalThis as any) as ReactFireGlobals)._reactFireFirestoreQueryCache) {
+  ((globalThis as any) as ReactFireGlobals)._reactFireFirestoreQueryCache = cachedQueries;
 }
 
 function getUniqueIdForFirestoreQuery(query: firestore.Query) {

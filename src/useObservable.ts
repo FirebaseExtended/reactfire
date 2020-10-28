@@ -2,19 +2,15 @@ import * as React from 'react';
 import { Observable } from 'rxjs';
 import { SuspenseSubject } from './SuspenseSubject';
 import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp';
-import { ReactFireOptions } from './';
+import { ReactFireGlobals, ReactFireOptions } from './';
 
-const PRELOADED_OBSERVABLES = '_reactFirePreloadedObservables';
 const DEFAULT_TIMEOUT = 30_000;
 
 // Since we're side-effect free, we need to ensure our observable cache is global
-// @ts-ignore: TS doesn't like globalThis
-const preloadedObservables: Map<string, SuspenseSubject<any>> = globalThis[PRELOADED_OBSERVABLES] || new Map();
+const preloadedObservables: Map<string, SuspenseSubject<any>> = ((globalThis as any) as ReactFireGlobals)._reactFirePreloadedObservables || new Map();
 
-// @ts-ignore: TS doesn't like globalThis
-if (!globalThis[PRELOADED_OBSERVABLES]) {
-  // @ts-ignore: TS doesn't like globalThis
-  globalThis[PRELOADED_OBSERVABLES] = preloadedObservables;
+if (!((globalThis as any) as ReactFireGlobals)._reactFirePreloadedObservables) {
+  ((globalThis as any) as ReactFireGlobals)._reactFirePreloadedObservables = preloadedObservables;
 }
 
 // Starts listening to an Observable.
