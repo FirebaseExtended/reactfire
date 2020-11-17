@@ -58,7 +58,8 @@ function proxyComponent(componentName: ComponentName): FirebaseNamespaceComponen
       );
     }
 
-    sdkSubject.value; // get value to throw if there's an error
+    // get value to throw if there's an error
+    sdkSubject.value; // eslint-disable-line @typescript-eslint/no-unused-expressions
     return firebase[componentName];
   };
   return new Proxy(useComponent, {
@@ -114,8 +115,8 @@ function preloadFactory(componentName: ComponentName) {
   return (options?: PreloadOptions<FirebaseInstanceFactory>) => preload(componentName, options?.firebaseApp, options?.setup).toPromise();
 }
 
-function preload(componentName: ComponentName, firebaseApp?: App, settingsCallback: (instanceFactory: FirebaseInstanceFactory) => any = () => {}) {
-  const app = firebaseApp || useFirebaseApp();
+function preload(componentName: ComponentName, firebaseApp: App, settingsCallback: (instanceFactory: FirebaseInstanceFactory) => any = () => {}) {
+  const app = firebaseApp;
   return preloadObservable(
     new Observable(emitter => {
       importSDK(componentName)

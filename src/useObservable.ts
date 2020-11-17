@@ -65,7 +65,7 @@ export function useObservable<T>(observableId: string, source: Observable<T | an
       }
     );
     return () => subscription.unsubscribe();
-  }, [observableId]);
+  }, [observable]);
 
   let status: ObservableStatus<T>['status'];
 

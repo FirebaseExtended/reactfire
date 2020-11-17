@@ -20,8 +20,10 @@ interface RemoteConfigWithPrivate extends firebase.remoteConfig.RemoteConfig {
  * @param getter
  * @param remoteConfig
  */
-function typeSafeUse<T>(key: string, getter: Getter$<T>, remoteConfig?: RemoteConfig): ObservableStatus<T> {
+function useRemoteConfigValue_INTERNAL<T>(key: string, getter: Getter$<T>, remoteConfig?: RemoteConfig): ObservableStatus<T> {
+  // TODO: Find an alternative that doesn't break the rules of hooks (conditional hook call)
   remoteConfig = remoteConfig || useRemoteConfig();
+
   // INVESTIGATE need to use a public API to get at the app name, one doesn't appear to exist...
   // we might need to iterate over the Firebase apps and check for remoteConfig equality? this works for now
   const appName = (remoteConfig as RemoteConfigWithPrivate)._storage?.appName;
@@ -39,7 +41,7 @@ function typeSafeUse<T>(key: string, getter: Getter$<T>, remoteConfig?: RemoteCo
  * @param remoteConfig Optional instance. If not provided ReactFire will either grab the default instance or lazy load.
  */
 export function useRemoteConfigValue(key: string, remoteConfig?: RemoteConfig): ObservableStatus<RemoteConfigValue> {
-  return typeSafeUse<RemoteConfigValue>(key, getValue, remoteConfig);
+  return useRemoteConfigValue_INTERNAL<RemoteConfigValue>(key, getValue, remoteConfig);
 }
 
 /**
@@ -48,7 +50,7 @@ export function useRemoteConfigValue(key: string, remoteConfig?: RemoteConfig): 
  * @param remoteConfig Optional instance. If not provided ReactFire will either grab the default instance or lazy load.
  */
 export function useRemoteConfigString(key: string, remoteConfig?: RemoteConfig): ObservableStatus<string> {
-  return typeSafeUse<string>(key, getString, remoteConfig);
+  return useRemoteConfigValue_INTERNAL<string>(key, getString, remoteConfig);
 }
 
 /**
@@ -57,7 +59,7 @@ export function useRemoteConfigString(key: string, remoteConfig?: RemoteConfig):
  * @param remoteConfig Optional instance. If not provided ReactFire will either grab the default instance or lazy load.
  */
 export function useRemoteConfigNumber(key: string, remoteConfig?: RemoteConfig): ObservableStatus<number> {
-  return typeSafeUse<number>(key, getNumber, remoteConfig);
+  return useRemoteConfigValue_INTERNAL<number>(key, getNumber, remoteConfig);
 }
 
 /**
@@ -66,7 +68,7 @@ export function useRemoteConfigNumber(key: string, remoteConfig?: RemoteConfig):
  * @param remoteConfig Optional instance. If not provided ReactFire will either grab the default instance or lazy load.
  */
 export function useRemoteConfigBoolean(key: string, remoteConfig?: RemoteConfig): ObservableStatus<boolean> {
-  return typeSafeUse<boolean>(key, getBoolean, remoteConfig);
+  return useRemoteConfigValue_INTERNAL<boolean>(key, getBoolean, remoteConfig);
 }
 
 /**
@@ -75,5 +77,5 @@ export function useRemoteConfigBoolean(key: string, remoteConfig?: RemoteConfig)
  * @param remoteConfig Optional instance. If not provided ReactFire will either grab the default instance or lazy load.
  */
 export function useRemoteConfigAll(key: string, remoteConfig?: RemoteConfig): ObservableStatus<AllParameters> {
-  return typeSafeUse<AllParameters>(key, getAll, remoteConfig);
+  return useRemoteConfigValue_INTERNAL<AllParameters>(key, getAll, remoteConfig);
 }

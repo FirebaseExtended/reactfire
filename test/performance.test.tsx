@@ -29,7 +29,6 @@ window.performance.getEntriesByName = getEntriesByName;
 
 const PromiseThrower = () => {
   throw new Promise(() => {});
-  return <h1>Hello world</h1>;
 };
 
 const Provider = ({ children }: { children: React.ReactNode }) => <FirebaseAppProvider firebaseApp={mockFirebase}>{children}</FirebaseAppProvider>;

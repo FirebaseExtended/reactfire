@@ -39,7 +39,7 @@ describe('Preload SDK', () => {
 
       const Firestore = () => {
         // @ts-ignore: It's ok that `firestore` is unused here
-        const firestore = useFirestore();
+        const firestore = useFirestore(); // eslint-disable-line @typescript-eslint/no-unused-vars
         return <div data-testid="success"></div>;
       };
 

@@ -25,7 +25,7 @@ export function SuspenseWithPerf({ children, traceId, fallback, firePerf }: Susp
         performance?.mark(endMarkName);
         performance?.measure(traceId, startMarkName, endMarkName);
       };
-    }, [traceId]);
+    }, []);
 
     return <>{fallback}</>;
   };

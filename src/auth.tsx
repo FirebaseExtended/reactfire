@@ -6,7 +6,9 @@ import { from } from 'rxjs';
 import { useFirebaseApp } from './firebaseApp';
 
 export function preloadUser(options?: { firebaseApp?: firebase.app.App }) {
+  // TODO: Find an alternative that doesn't break the rules of hooks (conditional hook call)
   const firebaseApp = options?.firebaseApp || useFirebaseApp();
+
   return preloadAuth({ firebaseApp }).then(auth => {
     const result = preloadObservable(user(auth()), `auth:user:${firebaseApp.name}`);
     return result.toPromise();
@@ -20,6 +22,7 @@ export function preloadUser(options?: { firebaseApp?: firebase.app.App }) {
  * @param options
  */
 export function useUser<T = unknown>(auth?: auth.Auth, options?: ReactFireOptions<T>): ObservableStatus<User> {
+  // TODO: Find an alternative that doesn't break the rules of hooks (conditional hook call)
   auth = auth || useAuth();
 
   const observableId = `auth:user:${auth.app.name}`;

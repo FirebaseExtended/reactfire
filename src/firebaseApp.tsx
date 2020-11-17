@@ -22,33 +22,37 @@ type Props = {
 // @ts-ignore: "__REACTFIRE_VERSION__" is replaced with actual ReactFire version (see babel.config.js)
 export const version = __REACTFIRE_VERSION__;
 
-const shallowEq = (a: { [key: string]: any }, b: { [key: string]: any }) => a == b || [...Object.keys(a), ...Object.keys(b)].every(key => a[key] == b[key]);
+const shallowEq = (a: { [key: string]: any }, b: { [key: string]: any }) => a === b || [...Object.keys(a), ...Object.keys(b)].every(key => a[key] === b[key]);
 
 export function FirebaseAppProvider(props: Props & { [key: string]: unknown }) {
   const { firebaseConfig, appName, suspense } = props;
 
-  const firebaseApp: firebase.app.App =
-    props.firebaseApp ||
-    React.useMemo(() => {
-      const existingApp = firebase.apps.find(app => app.name == (appName || DEFAULT_APP_NAME));
-      if (existingApp) {
-        if (firebaseConfig && shallowEq(existingApp.options, firebaseConfig)) {
-          return existingApp;
-        } else {
-          throw new Error(
-            `Does not match the options already provided to the ${appName || 'default'} firebase app instance, give this new instance a different appName.`
-          );
-        }
+  const firebaseApp: firebase.app.App = React.useMemo(() => {
+    if (props.firebaseApp) {
+      return props.firebaseApp;
+    }
+
+    const existingApp = firebase.apps.find(app => app.name === (appName || DEFAULT_APP_NAME));
+    if (existingApp) {
+      if (firebaseConfig && shallowEq(existingApp.options, firebaseConfig)) {
+        return existingApp;
       } else {
-        if (!firebaseConfig) {
-          throw new Error('No firebaseConfig provided');
-        }
-        const reactVersion = React.version || 'unknown';
-        firebase.registerVersion('react', reactVersion);
-        firebase.registerVersion('reactfire', version);
-        return firebase.initializeApp(firebaseConfig, appName);
+        throw new Error(
+          `Does not match the options already provided to the ${appName || 'default'} firebase app instance, give this new instance a different appName.`
+        );
       }
-    }, [firebaseConfig, appName]);
+    } else {
+      if (!firebaseConfig) {
+        throw new Error('No firebaseConfig provided');
+      }
+
+      // TODO: DOUBLE CHECK THAT THIS GETS CALLED
+      const reactVersion = React.version || 'unknown';
+      firebase.registerVersion('react', reactVersion);
+      firebase.registerVersion('reactfire', version);
+      return firebase.initializeApp(firebaseConfig, appName);
+    }
+  }, [props.firebaseApp, firebaseConfig, appName]);
 
   return (
     <FirebaseAppContext.Provider value={firebaseApp}>

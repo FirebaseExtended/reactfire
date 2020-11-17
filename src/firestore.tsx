@@ -30,7 +30,9 @@ export function preloadFirestoreDoc(
   refProvider: (firestore: firebase.firestore.Firestore) => firestore.DocumentReference,
   options?: { firebaseApp?: firebase.app.App }
 ) {
+  // TODO: Find an alternative that doesn't break the rules of hooks (conditional hook call)
   const firebaseApp = options?.firebaseApp || useFirebaseApp();
+
   return preloadFirestore({ firebaseApp }).then(firestore => {
     const ref = refProvider(firestore());
     return preloadObservable(doc(ref), `firestore:doc:${firebaseApp.name}:${ref.path}`);

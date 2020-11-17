@@ -54,30 +54,57 @@ export function useStorageDownloadURL<T = string>(ref: storage.Reference, option
   const observableId = `storage:downloadUrl:${ref.toString()}`;
   const observable$ = getDownloadURL(ref);
 
-  return useObservable(observableId, observable$, options ? options.initialData : undefined);
+  return useObservable(observableId, observable$, options);
 }
 
 type StorageImageProps = {
   storagePath: string;
   storage?: firebase.storage.Storage;
   suspense?: boolean;
-  placeHolder?: React.ReactNode;
+  placeHolder?: JSX.Element;
 };
 
-export function StorageImage(props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>) {
+function StorageFromContext(props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>) {
+  const storage = useStorage();
+
+  props = { ...props, storage };
+
+  return <INTERNALStorageImage {...props} />;
+}
+
+function INTERNALStorageImage(props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>): JSX.Element {
   let { storage, storagePath, suspense, placeHolder, ...imgProps } = props;
 
   const reactfireOptions: ReactFireOptions<string> = {
     suspense: useSuspenseEnabledFromConfigAndContext(suspense)
   };
 
-  storage = storage || useStorage();
+  if (!storage) {
+    throw new Error('Storage was not passed to component INTERNALStorageImage. This should not be possible');
+  }
 
   const { status, data: imgSrc } = useStorageDownloadURL(storage.ref(storagePath), reactfireOptions);
 
   if (status === 'success') {
-    return <img src={imgSrc} {...imgProps} />;
+    if (!(imgProps.alt || imgProps.alt === '')) {
+      console.warn(
+        `No alt prop provided for StorageImage with storagePath "${storagePath}"`,
+        'img elements must have an alt prop, either with meaningful text, or an empty string for decorative images'
+      );
+    }
+
+    return <img src={imgSrc} alt={imgProps.alt} {...imgProps} />;
   } else {
-    return placeHolder;
+    return placeHolder ?? <>''</>;
+  }
+}
+
+export function StorageImage(props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>) {
+  let { storage } = props;
+
+  if (storage) {
+    return <INTERNALStorageImage {...props} />;
+  } else {
+    return <StorageFromContext {...props} />;
   }
 }
