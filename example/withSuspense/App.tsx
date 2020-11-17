@@ -1,80 +1,100 @@
 import * as React from 'react';
 import {
   FirebaseAppProvider,
+  preloadAuth,
   preloadDatabase,
   preloadFirestore,
-  useDatabase,
-  useDatabaseListData,
-  useFirebaseApp,
-  useFirestore,
-  useFirestoreCollectionData
+  preloadFirestoreDoc,
+  preloadRemoteConfig,
+  preloadStorage,
+  preloadUser,
+  useFirebaseApp
 } from 'reactfire';
-import { useEffect, useState } from 'react';
+import { Card } from '../display/Card';
+import { Auth } from './Auth';
+import { Firestore } from './Firestore';
+import { RealtimeDatabase } from './RealtimeDatabase';
+import { RemoteConfig } from './RemoteConfig';
 
-const AnimalsList = () => {
-  const firestore = useFirestore();
-  const { status, data: animals } = useFirestoreCollectionData(firestore.collection('animals'), { idField: 'id' });
+// Import auth directly because most components need it
+// Other Firebase libraries can be lazy-loaded as-needed
+import 'firebase/auth';
+import { Storage } from './Storage';
 
-  if (status === 'loading') {
-    return <span>Loading animals...</span>;
+const preloadSDKs = firebaseApp => {
+  return Promise.all([
+    preloadFirestore({
+      firebaseApp,
+      setup(firestore) {
+        return firestore().enablePersistence();
+      }
+    }),
+    preloadDatabase({ firebaseApp }),
+    preloadStorage({
+      firebaseApp,
+      setup(storage) {
+        return storage().setMaxUploadRetryTime(10000);
+      }
+    }),
+    preloadAuth({ firebaseApp }),
+    preloadRemoteConfig({
+      firebaseApp,
+      setup(remoteConfig) {
+        remoteConfig().settings = {
+          minimumFetchIntervalMillis: 10000,
+          fetchTimeoutMillis: 10000
+        };
+        return remoteConfig().fetchAndActivate();
+      }
+    })
+  ]);
+};
+
+const preloadData = async firebaseApp => {
+  const user = await preloadUser({ firebaseApp });
+
+  if (user) {
+    await preloadFirestoreDoc(firestore => firestore.doc('count/counter'), firebaseApp);
   }
+};
 
+export const AppWrapper = ({ firebaseConfig }: { firebaseConfig: { [key: string]: unknown } }) => {
   return (
-    <ul>
-      {animals.map(animal => (
-        <li key={animal.id as string}>{animal.commonName as string}</li>
-      ))}
-    </ul>
+    <div className="flex flex-wrap justify-around p-4">
+      <FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={true}>
+        <App />
+      </FirebaseAppProvider>
+    </div>
   );
 };
 
-const ReadDB = () => {
+const App = () => {
   const firebaseApp = useFirebaseApp();
-  const [database, setDatabase] = useState<firebase.firestore.Firestore | undefined>(undefined);
-  useEffect(() => {
-    preloadFirestore({
-      firebaseApp: firebaseApp,
-      setup: async firestore => {
-        return firestore().enablePersistence();
-      }
-    });
-  }, []);
 
-  if (!database) {
-    return <span>Loading...</span>;
-  }
+  // Kick off fetches for SDKs and data that
+  // we know our components will eventually need.
+  //
+  // This is OPTIONAL but encouraged as part of the render-as-you-fetch pattern
+  // https://reactjs.org/docs/concurrent-mode-suspense.html#approach-3-render-as-you-fetch-using-suspense
+  preloadSDKs(firebaseApp).then(() => preloadData(firebaseApp));
 
-  return <AnimalsList />;
-};
-
-export const App = ({ firebaseConfig }: { firebaseConfig: { [key: string]: unknown } }) => {
   return (
-    <div className="flex">
-      <FirebaseAppProvider
-        firebaseConfig={{
-          apiKey: 'AIzaSyBg3u1sJlyJwQCE95oSDH_mtLABS-is8ZM',
-          authDomain: 'rxfire-525a3.firebaseapp.com',
-          databaseURL: 'https://rxfire-525a3.firebaseio.com',
-          projectId: 'rxfire-525a3',
-          storageBucket: 'rxfire-525a3.appspot.com',
-          messagingSenderId: '844180061847',
-          appId: '1:844180061847:web:400f7142e2d1aaeb'
-        }}
-        suspense={true}
-      >
-        <div className="max-w-sm w-full">
-          <div className="h-48 bg-blue-100">
-            <h2>Firestore</h2>
-          </div>
-          <div>
-            <ul>
-              <li>hello</li>
-              <li>world</li>
-            </ul>
-          </div>
-          {/* <ReadDB /> */}
-        </div>
-      </FirebaseAppProvider>
-    </div>
+    <>
+      <Card title="Authentication">
+        <Auth />
+      </Card>
+      <Card title="Firestore">
+        <Firestore />
+      </Card>
+      <Card title="Realtime Database">
+        <RealtimeDatabase />
+      </Card>
+      <Card title="Remote Config">
+        <RemoteConfig />
+      </Card>
+      <Card title="Storage">
+        <Storage />
+      </Card>
+    </>
   );
 };

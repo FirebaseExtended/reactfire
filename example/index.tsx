@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import {} from 'react/experimental';
 import {} from 'react-dom/experimental';
 
-import { App as ConcurrentModeApp } from './withSuspense/App';
+import { AppWrapper as ConcurrentModeApp } from './withSuspense/App';
 import { App as NonConcurrentModeApp } from './withoutSuspense/App';
 import './styles.pcss';
 
@@ -33,6 +33,7 @@ if (!rootElement) {
 if (SUSPENSE_MODE_ENABLED === false) {
   ReactDOM.render(<NonConcurrentModeApp firebaseConfig={firebaseConfig} />, rootElement);
 } else {
+  console.log(typeof unstable_createRoot);
   // https://reactjs.org/docs/concurrent-mode-adoption.html#enabling-concurrent-mode
   ReactDOM.unstable_createRoot(rootElement).render(<ConcurrentModeApp firebaseConfig={firebaseConfig} />);
 }
