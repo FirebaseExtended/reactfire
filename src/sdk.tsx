@@ -97,26 +97,27 @@ export const remoteConfig = useRemoteConfig;
 export const storage = useStorage;
 
 export type PreloadOptions<T> = {
-  firebaseApp?: App;
+  firebaseApp: App;
   setup?: (instanceFactory: T) => void | Promise<any>;
   suspense?: boolean;
 };
 
-function preloadFactory(componentName: 'auth'): (options?: PreloadOptions<App['auth']>) => Promise<App['auth']>;
-function preloadFactory(componentName: 'analytics'): (options?: PreloadOptions<App['analytics']>) => Promise<App['analytics']>;
-function preloadFactory(componentName: 'database'): (options?: PreloadOptions<App['database']>) => Promise<App['database']>;
-function preloadFactory(componentName: 'firestore'): (options?: PreloadOptions<App['firestore']>) => Promise<App['firestore']>;
-function preloadFactory(componentName: 'functions'): (options?: PreloadOptions<App['functions']>) => Promise<App['functions']>;
-function preloadFactory(componentName: 'messaging'): (options?: PreloadOptions<App['messaging']>) => Promise<App['messaging']>;
-function preloadFactory(componentName: 'performance'): (options?: PreloadOptions<App['performance']>) => Promise<App['performance']>;
-function preloadFactory(componentName: 'remoteConfig'): (options?: PreloadOptions<App['remoteConfig']>) => Promise<App['remoteConfig']>;
-function preloadFactory(componentName: 'storage'): (options?: PreloadOptions<App['storage']>) => Promise<App['storage']>;
+function preloadFactory(componentName: 'auth'): (options: PreloadOptions<App['auth']>) => Promise<App['auth']>;
+function preloadFactory(componentName: 'analytics'): (options: PreloadOptions<App['analytics']>) => Promise<App['analytics']>;
+function preloadFactory(componentName: 'database'): (options: PreloadOptions<App['database']>) => Promise<App['database']>;
+function preloadFactory(componentName: 'firestore'): (options: PreloadOptions<App['firestore']>) => Promise<App['firestore']>;
+function preloadFactory(componentName: 'functions'): (options: PreloadOptions<App['functions']>) => Promise<App['functions']>;
+function preloadFactory(componentName: 'messaging'): (options: PreloadOptions<App['messaging']>) => Promise<App['messaging']>;
+function preloadFactory(componentName: 'performance'): (options: PreloadOptions<App['performance']>) => Promise<App['performance']>;
+function preloadFactory(componentName: 'remoteConfig'): (options: PreloadOptions<App['remoteConfig']>) => Promise<App['remoteConfig']>;
+function preloadFactory(componentName: 'storage'): (options: PreloadOptions<App['storage']>) => Promise<App['storage']>;
 function preloadFactory(componentName: ComponentName) {
-  return (options?: PreloadOptions<FirebaseInstanceFactory>) => preload(componentName, options?.firebaseApp, options?.setup).toPromise();
+  return (options: PreloadOptions<FirebaseInstanceFactory>) => preload(componentName, options.firebaseApp, options.setup).toPromise();
 }
 
 function preload(componentName: ComponentName, firebaseApp: App, settingsCallback: (instanceFactory: FirebaseInstanceFactory) => any = () => {}) {
   const app = firebaseApp;
+
   return preloadObservable(
     new Observable(emitter => {
       importSDK(componentName)

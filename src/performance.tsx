@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { preloadPerformance } from './';
+import { useFirebaseApp } from './firebaseApp';
 
 export interface SuspensePerfProps {
   children: React.ReactNode;
@@ -10,7 +11,8 @@ export interface SuspensePerfProps {
 
 export function SuspenseWithPerf({ children, traceId, fallback, firePerf }: SuspensePerfProps): JSX.Element {
   if (!firePerf) {
-    preloadPerformance().then(perf => perf());
+    const firebaseApp = useFirebaseApp();
+    preloadPerformance({ firebaseApp }).then(perf => perf());
   }
 
   const entries = performance?.getEntriesByName(traceId, 'measure') || [];
