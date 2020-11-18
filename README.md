@@ -1,21 +1,25 @@
 # ReactFire
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Hooks, Context Providers, and Components that make it easy to interact with
 Firebase.
-
-⚠️ **Status: Experimental**. The API is intended to be stable, but ReactFire is meant for React Concurrent Mode, which is only
-available in
-[experimental React builds](https://reactjs.org/docs/concurrent-mode-adoption.html#installation).
 
 ## What is ReactFire?
 
 - **Easy realtime updates for your function components** - Hooks
   like `useUser`and `useFirestoreCollection` let you easily subscribe to
   auth state, realtime data, and all other Firebase SDK events. Plus, they automatically unsubscribe when your component unmounts.
+- **Access Firebase libraries from any component** - Need the Firestore SDK? `useFirestore`. Remote Config? `useRemoteConfig`.
+- **Built-in Support for prefetching** - Decrease your load times by starting a connection to products like Firestore, Auth, or Realtime Database before the component that consumes that data is rendered with functions like `preloadUser`
+- **Safely configure Firebase libraries** - Libraries like Firestore and Remote Config require setting like `enablePersistence` to be set before any data fetches are made. This can be tough to support in React's world of re-renders. ReactFire gives you a trusted way to set these settings so you're sure they're set before anything else.
+
+### Experimental [concurrent mode](https://reactjs.org/docs/concurrent-mode-suspense.html) features
+
 - **Loading states handled by `<Suspense>`** - ReactFire's hooks throw promises
   that Suspense can catch. No more `isLoaded ?...` - let React
   [handle it for you](https://reactjs.org/docs/concurrent-mode-suspense.html).
@@ -49,7 +53,9 @@ Check out the
 
 ```jsx
 import React, { Component } from 'react';
-import { createRoot } from 'react-dom';
+import { render } from 'react-dom';
+
+import 'firebase/database';
 import { FirebaseAppProvider, useFirestoreDocData, useFirestore, SuspenseWithPerf } from 'reactfire';
 
 const firebaseConfig = {
@@ -57,34 +63,32 @@ const firebaseConfig = {
 };
 
 function Burrito() {
-  // lazy load the Firestore SDK
-  // and create a ref
+  // easily access the Firestore library
   const burritoRef = useFirestore()
     .collection('tryreactfire')
     .doc('burrito');
 
-  // subscribe to the doc. just one line!
-  // throws a Promise for Suspense to catch,
-  // and then streams live updates
-  const burrito = useFirestoreDocData(burritoRef);
+  // subscribe to a document for realtime updates. just one line!
+  const {status, data} = useFirestoreDocData(burritoRef);
 
-  return <p>The burrito is {burrito.yummy ? 'good' : 'bad'}!</p>;
+  // easily check the loading status
+  if (status === 'loading') {
+    return <p>Fetching burrito flavor...</p>
+  }
+
+  return <p>The burrito is {data.yummy ? 'good' : 'bad'}!</p>;
 }
 
 function App() {
   return (
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
       <h1>🌯</h1>
-      <SuspenseWithPerf fallback={<p>loading burrito status...</p>} traceId={'load-burrito-status'}>
-        <Burrito />
-      </SuspenseWithPerf>
+      <Burrito />
     </FirebaseAppProvider>
   );
 }
 
-// Enable Concurrent Mode
-// https://reactjs.org/docs/concurrent-mode-adoption.html#enabling-concurrent-mode
-createRoot(document.getElementById('root')).render(<App />);
+render(render(<App />, document.getElementById('root'));
 ```
 
 ---
@@ -97,8 +101,7 @@ createRoot(document.getElementById('root')).render(<App />);
 
 ![Status: Experimental](https://img.shields.io/badge/Status-Experimental-blue)
 
-This repository is maintained by Googlers but is not a supported Firebase product.  Issues here are answered by maintainers and other community members on GitHub on a best-effort basis.
-
+This repository is maintained by Googlers but is not a supported Firebase product. Issues here are answered by maintainers and other community members on GitHub on a best-effort basis.
 
 ## Contributors ✨
 
@@ -117,6 +120,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
