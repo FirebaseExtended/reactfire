@@ -1,5 +1,7 @@
 # Using ReactFire
 
+> ⚠️ These examples currently rely use ReactFire's concurrent mode features. We'd love PRs that add samples that work with stable builds of React!
+
 - [Access your `firebase` app from any component](#access-your-firebase-app-from-any-component)
 - [Access the current user](#access-the-current-user)
   - [Decide what to render based on a user's auth state](#decide-what-to-render-based-on-a-users-auth-state)
