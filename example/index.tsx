@@ -33,7 +33,6 @@ if (!rootElement) {
 if (SUSPENSE_MODE_ENABLED === false) {
   ReactDOM.render(<NonConcurrentModeApp firebaseConfig={firebaseConfig} />, rootElement);
 } else {
-  console.log(typeof unstable_createRoot);
   // https://reactjs.org/docs/concurrent-mode-adoption.html#enabling-concurrent-mode
   ReactDOM.unstable_createRoot(rootElement).render(<ConcurrentModeApp firebaseConfig={firebaseConfig} />);
 }
