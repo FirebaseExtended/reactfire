@@ -1,5 +1,7 @@
 # Using ReactFire
 
+> ⚠️ These examples currently rely use ReactFire's concurrent mode features. We'd love PRs that add samples that work with stable builds of React!
+
 - [Access your `firebase` app from any component](#access-your-firebase-app-from-any-component)
 - [Access the current user](#access-the-current-user)
   - [Decide what to render based on a user's auth state](#decide-what-to-render-based-on-a-users-auth-state)
@@ -45,7 +47,7 @@ function MyComponent(props) {
 
 ## Access the current user
 
-The `useUser()` hook returns the currently signed-in [user](https://firebase.google.com/docs/reference/js/firebase.User). Like the other ReactFire Hooks, you need to wrap it in `Suspense` or provide a `startWithValue`.
+The `useUser()` hook returns the currently signed-in [user](https://firebase.google.com/docs/reference/js/firebase.User). Like the other ReactFire Hooks, you need to wrap it in `Suspense` or provide a `initialData`.
 
 ```jsx
 function HomePage(props) {
@@ -221,10 +223,7 @@ ReactFire provides an a wrapper around `Suspense` called `SuspenseWithPerf` that
 ```jsx
 function FoodRatings() {
   return (
-    <SuspenseWithPerf
-      fallback={'loading burrito status...'}
-      traceId={'load-burrito-status'}
-    >
+    <SuspenseWithPerf fallback={'loading burrito status...'} traceId={'load-burrito-status'}>
       <Burrito />
     </SuspenseWithPerf>
   );
@@ -244,10 +243,10 @@ function Burrito() {
     .doc('burrito');
 
   // subscribe to the doc. just one line!
-  // returns the `startWithValue`,
+  // returns the `initialData`,
   // and then streams live updates
   const burritoDoc = useFirestoreDocData(burritoRef, {
-    startWithValue: {
+    initialData: {
       yummy: true
     }
   });
