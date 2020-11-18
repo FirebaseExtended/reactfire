@@ -18,3 +18,4 @@ firestore-debug.log
 
 # npm pack artifacts
 reactfire-*.tgz
+docs/reference/README.md
