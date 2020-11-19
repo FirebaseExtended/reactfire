@@ -44,7 +44,7 @@ Depending on your targeted platforms you may need to install polyfills. The most
 
 - [**Quickstart**](./docs/quickstart.md)
 - [**Common Use Cases**](./docs/use.md)
-- [**API Reference**](./docs/reference.md)
+- [**API Reference**](./docs/reference/globals.md)
 
 ## Example use
 
