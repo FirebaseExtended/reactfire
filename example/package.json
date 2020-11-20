@@ -10,7 +10,7 @@
   "dependencies": {
     "display": "^0.1.9",
     "react-app-polyfill": "^1.0.0",
-    "react-firebaseui": "^4.1.0",
+    "react-firebaseui": "^4.2.0",
     "tailwindcss": "^1.9.1"
   },
   "alias": {
