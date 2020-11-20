@@ -6,28 +6,15 @@ import { useFirestoreDoc, useFirestoreCollection, FirebaseAppProvider, useFirest
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import fetch from 'node-fetch';
+import { baseConfig } from './appConfig';
 
 describe('Firestore', () => {
   let app: firebase.app.App;
 
   beforeAll(async () => {
-    app = firebase.initializeApp(
-      {
-        apiKey: 'AIzaSyBg3u1sJlyJwQCE95oSDH_mtLABS-is8ZM',
-        authDomain: 'rxfire-525a3.firebaseapp.com',
-        databaseURL: 'https://rxfire-525a3.firebaseio.com',
-        projectId: 'rxfire-525a3',
-        storageBucket: 'rxfire-525a3.appspot.com',
-        messagingSenderId: '844180061847',
-        appId: '1:844180061847:web:400f7142e2d1aaeb'
-      },
-      'firestore-test-suite'
-    );
+    app = firebase.initializeApp(baseConfig, 'firestore-test-suite');
 
-    app.firestore().settings({
-      host: 'localhost:8080',
-      ssl: false
-    });
+    app.firestore().useEmulator('localhost', 8080);
   });
 
   afterAll(async () => {
