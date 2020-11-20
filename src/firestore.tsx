@@ -1,4 +1,4 @@
-import { firestore } from 'firebase/app';
+import firebase from 'firebase/app';
 import { collectionData, doc, docData, fromCollectionRef } from 'rxfire/firestore';
 import { preloadFirestore, ReactFireOptions, useObservable, checkIdField, ReactFireGlobals } from './';
 import { preloadObservable, ObservableStatus } from './useObservable';
@@ -6,13 +6,13 @@ import { first } from 'rxjs/operators';
 import { useFirebaseApp } from './firebaseApp';
 
 // Since we're side-effect free, we need to ensure our observableId cache is global
-const cachedQueries: Array<firestore.Query> = ((globalThis as any) as ReactFireGlobals)._reactFireFirestoreQueryCache || [];
+const cachedQueries: Array<firebase.firestore.Query> = ((globalThis as any) as ReactFireGlobals)._reactFireFirestoreQueryCache || [];
 
 if (!((globalThis as any) as ReactFireGlobals)._reactFireFirestoreQueryCache) {
   ((globalThis as any) as ReactFireGlobals)._reactFireFirestoreQueryCache = cachedQueries;
 }
 
-function getUniqueIdForFirestoreQuery(query: firestore.Query) {
+function getUniqueIdForFirestoreQuery(query: firebase.firestore.Query) {
   const index = cachedQueries.findIndex(cachedQuery => cachedQuery.isEqual(query));
   if (index > -1) {
     return index;
@@ -27,7 +27,7 @@ function getUniqueIdForFirestoreQuery(query: firestore.Query) {
 // there's a decent chance this gets called before the Firestore SDK
 // has been imported, so it takes a refProvider instead of a ref
 export function preloadFirestoreDoc(
-  refProvider: (firestore: firebase.firestore.Firestore) => firestore.DocumentReference,
+  refProvider: (firestore: firebase.firestore.Firestore) => firebase.firestore.DocumentReference,
   options?: { firebaseApp?: firebase.app.App }
 ) {
   // TODO: Find an alternative that doesn't break the rules of hooks (conditional hook call)
@@ -46,9 +46,9 @@ export function preloadFirestoreDoc(
  * @param options
  */
 export function useFirestoreDoc<T = unknown>(
-  ref: firestore.DocumentReference,
+  ref: firebase.firestore.DocumentReference,
   options?: ReactFireOptions<T>
-): ObservableStatus<T extends {} ? T : firestore.DocumentSnapshot> {
+): ObservableStatus<T extends {} ? T : firebase.firestore.DocumentSnapshot> {
   const observableId = `firestore:doc:${ref.firestore.app.name}:${ref.path}`;
   const observable$ = doc(ref);
 
@@ -62,9 +62,9 @@ export function useFirestoreDoc<T = unknown>(
  * @param options
  */
 export function useFirestoreDocOnce<T = unknown>(
-  ref: firestore.DocumentReference,
+  ref: firebase.firestore.DocumentReference,
   options?: ReactFireOptions<T>
-): ObservableStatus<T extends {} ? T : firestore.DocumentSnapshot> {
+): ObservableStatus<T extends {} ? T : firebase.firestore.DocumentSnapshot> {
   const observableId = `firestore:docOnce:${ref.firestore.app.name}:${ref.path}`;
   const observable$ = doc(ref).pipe(first());
 
@@ -77,7 +77,7 @@ export function useFirestoreDocOnce<T = unknown>(
  * @param ref - Reference to the document you want to listen to
  * @param options
  */
-export function useFirestoreDocData<T>(ref: firestore.DocumentReference, options?: ReactFireOptions<T>): ObservableStatus<T> {
+export function useFirestoreDocData<T>(ref: firebase.firestore.DocumentReference, options?: ReactFireOptions<T>): ObservableStatus<T> {
   const idField = options ? checkIdField(options) : 'NO_ID_FIELD';
 
   const observableId = `firestore:docData:${ref.firestore.app.name}:${ref.path}:idField=${idField}`;
@@ -92,7 +92,7 @@ export function useFirestoreDocData<T>(ref: firestore.DocumentReference, options
  * @param ref - Reference to the document you want to get
  * @param options
  */
-export function useFirestoreDocDataOnce<T = unknown>(ref: firestore.DocumentReference, options?: ReactFireOptions<T>): ObservableStatus<T> {
+export function useFirestoreDocDataOnce<T = unknown>(ref: firebase.firestore.DocumentReference, options?: ReactFireOptions<T>): ObservableStatus<T> {
   const idField = options ? checkIdField(options) : 'NO_ID_FIELD';
 
   const observableId = `firestore:docDataOnce:${ref.firestore.app.name}:${ref.path}:idField=${idField}`;
@@ -108,9 +108,9 @@ export function useFirestoreDocDataOnce<T = unknown>(ref: firestore.DocumentRefe
  * @param options
  */
 export function useFirestoreCollection<T = { [key: string]: unknown }>(
-  query: firestore.Query,
+  query: firebase.firestore.Query,
   options?: ReactFireOptions<T[]>
-): ObservableStatus<T extends {} ? T[] : firestore.QuerySnapshot> {
+): ObservableStatus<T extends {} ? T[] : firebase.firestore.QuerySnapshot> {
   const observableId = `firestore:collection:${getUniqueIdForFirestoreQuery(query)}`;
   const observable$ = fromCollectionRef(query);
 
@@ -123,7 +123,10 @@ export function useFirestoreCollection<T = { [key: string]: unknown }>(
  * @param ref - Reference to the collection you want to listen to
  * @param options
  */
-export function useFirestoreCollectionData<T = { [key: string]: unknown }>(query: firestore.Query, options?: ReactFireOptions<T[]>): ObservableStatus<T[]> {
+export function useFirestoreCollectionData<T = { [key: string]: unknown }>(
+  query: firebase.firestore.Query,
+  options?: ReactFireOptions<T[]>
+): ObservableStatus<T[]> {
   const idField = options ? checkIdField(options) : 'NO_ID_FIELD';
   const observableId = `firestore:collectionData:${getUniqueIdForFirestoreQuery(query)}:idField=${idField}`;
   const observable$ = collectionData(query, idField);

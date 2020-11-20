@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect';
 import { render, waitFor } from '@testing-library/react';
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import * as React from 'react';
 import { FirebaseAppProvider, preloadFirestore, useFirestore } from '..';
 

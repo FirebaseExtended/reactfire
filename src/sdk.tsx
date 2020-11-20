@@ -1,5 +1,5 @@
 import { useFirebaseApp, useSuspenseEnabledFromConfigAndContext, preloadObservable } from './';
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 
 type ComponentName = 'analytics' | 'auth' | 'database' | 'firestore' | 'functions' | 'messaging' | 'performance' | 'remoteConfig' | 'storage';

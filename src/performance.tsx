@@ -6,7 +6,7 @@ export interface SuspensePerfProps {
   children: React.ReactNode;
   traceId: string;
   fallback: React.ReactNode;
-  firePerf?: import('firebase/app').performance.Performance;
+  firePerf?: import('firebase/app').default.performance.Performance;
 }
 
 export function SuspenseWithPerf({ children, traceId, fallback, firePerf }: SuspensePerfProps): JSX.Element {

@@ -1,6 +1,6 @@
 import { render, waitFor, cleanup, act } from '@testing-library/react';
 import * as React from 'react';
-import * as firebase from 'firebase';
+import firebase from 'firebase';
 import { useDatabaseObject, useDatabaseList, FirebaseAppProvider, ObservableStatus } from '..';
 import { QueryChange } from 'rxfire/database/dist/database';
 
