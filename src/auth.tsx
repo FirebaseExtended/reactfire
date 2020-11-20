@@ -1,4 +1,4 @@
-import { auth, User } from 'firebase/app';
+import firebase from 'firebase/app';
 import * as React from 'react';
 import { user } from 'rxfire/auth';
 import { preloadAuth, preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus } from './';
@@ -21,7 +21,7 @@ export function preloadUser(options?: { firebaseApp?: firebase.app.App }) {
  * @param auth - the [firebase.auth](https://firebase.google.com/docs/reference/js/firebase.auth) object
  * @param options
  */
-export function useUser<T = unknown>(auth?: auth.Auth, options?: ReactFireOptions<T>): ObservableStatus<User> {
+export function useUser<T = unknown>(auth?: firebase.auth.Auth, options?: ReactFireOptions<T>): ObservableStatus<firebase.User> {
   // TODO: Find an alternative that doesn't break the rules of hooks (conditional hook call)
   auth = auth || useAuth();
 
@@ -35,10 +35,10 @@ export function useUser<T = unknown>(auth?: auth.Auth, options?: ReactFireOption
 }
 
 export function useIdTokenResult(
-  user: User,
+  user: firebase.User,
   forceRefresh: boolean = false,
-  options?: ReactFireOptions<auth.IdTokenResult>
-): ObservableStatus<auth.IdTokenResult> {
+  options?: ReactFireOptions<firebase.auth.IdTokenResult>
+): ObservableStatus<firebase.auth.IdTokenResult> {
   if (!user) {
     throw new Error('you must provide a user');
   }
@@ -50,14 +50,14 @@ export function useIdTokenResult(
 }
 
 export interface AuthCheckProps {
-  auth?: auth.Auth;
+  auth?: firebase.auth.Auth;
   fallback: React.ReactNode;
   children: React.ReactNode;
   requiredClaims?: Object;
 }
 
 export interface ClaimsCheckProps {
-  user: User;
+  user: firebase.User;
   fallback: React.ReactNode;
   children: React.ReactNode;
   requiredClaims?: { [key: string]: any };
@@ -87,7 +87,7 @@ export function ClaimsCheck({ user, fallback, children, requiredClaims }: Claims
 }
 
 export function AuthCheck({ auth, fallback, children, requiredClaims }: AuthCheckProps): JSX.Element {
-  const { data: user } = useUser<User>(auth);
+  const { data: user } = useUser<firebase.User>(auth);
 
   if (user) {
     return requiredClaims ? (

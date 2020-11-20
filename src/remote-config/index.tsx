@@ -3,11 +3,11 @@ import { useObservable, ObservableStatus } from '../useObservable';
 import { getValue, getString, getBoolean, getNumber, getAll, AllParameters } from './getValue';
 import { Observable } from 'rxjs';
 
-type RemoteConfig = import('firebase/app').remoteConfig.RemoteConfig;
-type RemoteConfigValue = import('firebase/app').remoteConfig.Value;
+type RemoteConfig = import('firebase/app').default.remoteConfig.RemoteConfig;
+type RemoteConfigValue = import('firebase/app').default.remoteConfig.Value;
 type Getter$<T> = (remoteConfig: RemoteConfig, key: string) => Observable<T>;
 
-interface RemoteConfigWithPrivate extends firebase.remoteConfig.RemoteConfig {
+interface RemoteConfigWithPrivate extends RemoteConfig {
   // This is a private API, assume optional
   _storage?: { appName: string };
 }

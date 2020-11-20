@@ -1,5 +1,5 @@
 import { cleanup, render, waitFor } from '@testing-library/react';
-import { auth } from 'firebase/app';
+import firebase from 'firebase/app';
 import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
 import { FirebaseAppProvider, AuthCheck, useUser } from '..';
@@ -74,7 +74,7 @@ describe('AuthCheck', () => {
     expect(() =>
       render(
         <React.Suspense fallback={'loading'}>
-          <AuthCheck fallback={<h1>not signed in</h1>} auth={(mockFirebase.auth() as unknown) as auth.Auth}>
+          <AuthCheck fallback={<h1>not signed in</h1>} auth={(mockFirebase.auth() as unknown) as firebase.auth.Auth}>
             {'signed in'}
           </AuthCheck>
         </React.Suspense>

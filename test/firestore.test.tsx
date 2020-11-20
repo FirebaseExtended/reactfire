@@ -2,9 +2,9 @@ import { render, waitFor, cleanup, act } from '@testing-library/react';
 
 import * as React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import * as firebase from 'firebase';
 import { useFirestoreDoc, useFirestoreCollection, FirebaseAppProvider, useFirestoreCollectionData, useFirestoreDocData, useFirestoreDocDataOnce } from '..';
-import { firestore } from 'firebase/app';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 import fetch from 'node-fetch';
 
 describe('Firestore', () => {
@@ -64,7 +64,7 @@ describe('Firestore', () => {
         const { data: doc } = useFirestoreDoc(ref);
 
         expect(doc).toBeDefined();
-        const data = (doc as firestore.DocumentSnapshot).data();
+        const data = (doc as firebase.firestore.DocumentSnapshot).data();
         expect(data).toBeDefined();
 
         if (data === undefined) {
@@ -217,7 +217,7 @@ describe('Firestore', () => {
 
         return (
           <ul data-testid="readSuccess">
-            {((collection as unknown) as firestore.QuerySnapshot).docs.map(doc => (
+            {((collection as unknown) as firebase.firestore.QuerySnapshot).docs.map(doc => (
               <li key={doc.id} data-testid="listItem">
                 doc.data().a
               </li>
@@ -252,8 +252,8 @@ describe('Firestore', () => {
         const { data: querySnap } = useFirestoreCollection(ref);
         const { data: filteredQuerySnap } = useFirestoreCollection(filteredRef);
 
-        const filteredList = ((filteredQuerySnap as unknown) as firestore.QuerySnapshot).docs;
-        const list = ((querySnap as unknown) as firestore.QuerySnapshot).docs;
+        const filteredList = ((filteredQuerySnap as unknown) as firebase.firestore.QuerySnapshot).docs;
+        const list = ((querySnap as unknown) as firebase.firestore.QuerySnapshot).docs;
 
         // filteredList's length should be 1 since we only added one value that matches its query
         expect(filteredList.length).toEqual(1);

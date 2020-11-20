@@ -1,4 +1,4 @@
-import { storage } from 'firebase/app';
+import firebase from 'firebase/app';
 import * as React from 'react';
 import { getDownloadURL } from 'rxfire/storage';
 import { Observable } from 'rxjs';
@@ -10,9 +10,9 @@ import { useStorage, useSuspenseEnabledFromConfigAndContext } from './firebaseAp
  *
  * @param task
  */
-function _fromTask(task: storage.UploadTask) {
-  return new Observable<storage.UploadTaskSnapshot>(subscriber => {
-    const progress = (snap: storage.UploadTaskSnapshot) => {
+function _fromTask(task: firebase.storage.UploadTask) {
+  return new Observable<firebase.storage.UploadTaskSnapshot>(subscriber => {
+    const progress = (snap: firebase.storage.UploadTaskSnapshot) => {
       return subscriber.next(snap);
     };
     const error = (e: any) => subscriber.error(e);
@@ -34,10 +34,10 @@ function _fromTask(task: storage.UploadTask) {
  * @param options
  */
 export function useStorageTask<T = unknown>(
-  task: storage.UploadTask,
-  ref: storage.Reference,
+  task: firebase.storage.UploadTask,
+  ref: firebase.storage.Reference,
   options?: ReactFireOptions<T>
-): ObservableStatus<storage.UploadTaskSnapshot | T> {
+): ObservableStatus<firebase.storage.UploadTaskSnapshot | T> {
   const observableId = `storage:task:${ref.toString()}`;
   const observable$ = _fromTask(task);
 
@@ -50,7 +50,7 @@ export function useStorageTask<T = unknown>(
  * @param ref - reference to the blob you want to download
  * @param options
  */
-export function useStorageDownloadURL<T = string>(ref: storage.Reference, options?: ReactFireOptions<T>): ObservableStatus<string | T> {
+export function useStorageDownloadURL<T = string>(ref: firebase.storage.Reference, options?: ReactFireOptions<T>): ObservableStatus<string | T> {
   const observableId = `storage:downloadUrl:${ref.toString()}`;
   const observable$ = getDownloadURL(ref);
 

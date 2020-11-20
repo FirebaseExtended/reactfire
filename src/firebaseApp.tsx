@@ -1,4 +1,4 @@
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import * as React from 'react';
 
 export * from './sdk';
