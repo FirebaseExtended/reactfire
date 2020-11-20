@@ -15,7 +15,10 @@ example/.cache
 # firebase emulator logs
 database-debug.log
 firestore-debug.log
+firebase-debug.log
+ui-debug.log
 
 # npm pack artifacts
 reactfire-*.tgz
 docs/reference/README.md
+
