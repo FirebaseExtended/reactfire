@@ -14,7 +14,7 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test:tsdx": "tsdx test",
-    "test": "firebase emulators:exec --only firestore,database,auth --project rxfire-525a3 \"tsdx test auth --detectOpenHandles --forceExit\"",
+    "test": "firebase emulators:exec --only firestore,database,auth --project rxfire-525a3 \"tsdx test --detectOpenHandles --forceExit\"",
     "lint": "tsdx lint",
     "prepare": "tsdx build",
     "size": "size-limit",
