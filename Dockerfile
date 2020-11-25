@@ -22,6 +22,7 @@ RUN yarn install --frozen-lockfile
 
 COPY . /
 
+RUN yarn build
 RUN yarn test
 
 ARG SHORT_SHA=""
