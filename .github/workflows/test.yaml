@@ -20,9 +20,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
-      - name: yarn
+      - name: Install deps
         run: yarn
-      - name: npm install
-        run: npm install
+      - name: Build
+        run: yarn build
       - name: Run tests
-        run: npm run test
+        run: yarn test
