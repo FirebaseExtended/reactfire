@@ -66,6 +66,7 @@
     "@types/react-dom": "^16.9.8",
     "babel-jest": "^26.6.3",
     "firebase": "^8.1.1",
+    "firebase-tools": "^8.16.2",
     "globalthis": "^1.0.1",
     "husky": "^4.3.0",
     "node-fetch": "^2.6.1",
