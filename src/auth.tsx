@@ -25,11 +25,19 @@ export function useUser<T = unknown>(auth?: firebase.auth.Auth, options?: ReactF
   // TODO: Find an alternative that doesn't break the rules of hooks (conditional hook call)
   auth = auth || useAuth();
 
+  if (!auth) {
+    throw new Error('firebase.auth not found');
+  }
+
   const observableId = `auth:user:${auth.app.name}`;
   const observable$ = user(auth);
 
-  // Skip initialData if currentUser is available
-  const currentUser = auth.currentUser || options?.initialData;
+  let currentUser = auth.currentUser;
+
+  // If currentUser is available, skip initialData
+  if (options?.initialData && !currentUser) {
+    currentUser = options.initialData;
+  }
 
   return useObservable(observableId, observable$, { ...options, initialData: currentUser });
 }

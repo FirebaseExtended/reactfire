@@ -14,7 +14,7 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test:tsdx": "tsdx test",
-    "test": "firebase emulators:exec --only firestore,database --project rxfire-525a3 \"tsdx test --detectOpenHandles --forceExit\"",
+    "test": "firebase emulators:exec --only firestore,database,auth --project rxfire-525a3 \"tsdx test --detectOpenHandles --forceExit\"",
     "lint": "tsdx lint",
     "prepare": "tsdx build",
     "size": "size-limit",
@@ -22,7 +22,8 @@
     "docs": "typedoc --plugin typedoc-plugin-markdown --out ./docs/reference"
   },
   "peerDependencies": {
-    "react": ">=16"
+    "firebase": "^8.1.1",
+    "react": ">=16 || experimental"
   },
   "husky": {
     "hooks": {
@@ -70,11 +71,11 @@
     "globalthis": "^1.0.1",
     "husky": "^4.3.0",
     "node-fetch": "^2.6.1",
-    "react": "^0.0.0-experimental-4ead6b530",
-    "react-dom": "^0.0.0-experimental-4ead6b530",
+    "react": "experimental",
+    "react-dom": "experimental",
     "react-test-renderer": "^16.13.1",
     "size-limit": "^4.6.0",
-    "tsdx": "^0.14.0",
+    "tsdx": "^0.14.1",
     "tslib": "^2.0.1",
     "typedoc": "^0.19.2",
     "typedoc-plugin-markdown": "^3.0.11",

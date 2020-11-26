@@ -3,14 +3,14 @@ import * as React from 'react';
 import firebase from 'firebase';
 import { useDatabaseObject, useDatabaseList, FirebaseAppProvider, ObservableStatus } from '..';
 import { QueryChange } from 'rxfire/database/dist/database';
+import { baseConfig } from './appConfig';
 
 describe('Realtime Database (RTDB)', () => {
   let app: firebase.app.App;
 
   beforeAll(async () => {
-    app = firebase.initializeApp({
-      databaseURL: 'http://localhost:9000?ns=rxfire-525a3'
-    });
+    app = firebase.initializeApp(baseConfig);
+    app.database().useEmulator('localhost', 9000);
   });
 
   afterEach(async () => {
