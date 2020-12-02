@@ -37,12 +37,12 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build
         id: yarn-pack-dir
-        run: yarn build && echo "::set-output name=path::$(npm pack . | tail -n 1)"
+        run: yarn build && mv $(npm pack . | tail -n 1)" reactfire-${{ github.run_id }}.tgz
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v2
         with:
           name: reactfire-${{ github.run_id }}-tgz
-          path: ${{ steps.yarn-pack-dir.outputs.path }}
+          path: reactfire-${{ github.run_id }}.tgz
           retention-days: 1
   test:
     runs-on: ubuntu-latest
@@ -77,13 +77,10 @@ jobs:
           key: firebase_emulators
       - name: Install deps
         run: yarn install --frozen-lockfile
-      - name: 'Download Artifact'
+      - name: 'Download Artifacts'
         uses: actions/download-artifact@v2
-        with:
-          name: reactfire-${{ github.run_id }}-tgz
-          path: reactfire.tgz
       - name: Expand Artifact
-        run: tar -xzvf reactfire.tgz && cp -r package/ .
+        run: tar -xzvf reactfire-${{ github.run_id }}.tgz && cp -r package/ .
       - name: Run tests
         run: yarn test
   publish:
@@ -100,14 +97,11 @@ jobs:
           node-version: '14'
           registry-url: 'https://registry.npmjs.org'
           check-latest: true
-      - name: 'Download Artifact'
+      - name: 'Download Artifacts'
         uses: actions/download-artifact@v2
-        with:
-          name: reactfire-${{ github.run_id }}-tgz
-          path: reactfire.tgz
       - name: Expand Artifact
-        run: tar -xzvf reactfire.tgz && cp -r package/ .
-      - name: Publish
+        run: tar -xzvf reactfire-${{ github.run_id }}.tgz && cp -r package/ .
+      - name: Version and Publish
         run: ./publish.sh
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
