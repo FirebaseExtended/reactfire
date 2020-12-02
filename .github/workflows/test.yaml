@@ -1,19 +1,21 @@
-name: Tests
+name: Test and publish
 
 on:
   push:
     branches:
       - "**"
+    release:
+      types: [published]
     paths-ignore:
       - "**/*.md"
 
 jobs:
-  nodejs:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node: ["12", "14"]
-    name: Node.js ${{ matrix.node }} (Ubuntu)
+    name: Test Node.js ${{ matrix.node }} (Ubuntu)
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -44,3 +46,36 @@ jobs:
         run: yarn build
       - name: Run tests
         run: yarn test
+  publish:
+    runs-on: ubuntu-latest
+    name: Publish (NPM)
+    needs: test
+    if: ${{ github.ref == 'refs/heads/master' || github.event_name == 'release' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: '14'
+          registry-url: 'https://registry.npmjs.org'
+          check-latest: true
+      - name: Get cache directory
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Use yarn cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-
+      - name: Install deps
+        run: yarn install --frozen-lockfile
+      - name: Build
+        run: yarn build
+      - name: Publish
+        run: ./publish.sh
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
