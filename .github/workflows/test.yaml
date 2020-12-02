@@ -37,12 +37,12 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build
         id: yarn-pack-dir
-        run: yarn build && mv $(npm pack . | tail -n 1) reactfire-${{ github.run_id }}.tgz
+        run: yarn build && mv $(npm pack . | tail -n 1) reactfire.tgz
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v2
         with:
-          name: reactfire-${{ github.run_id }}-tgz
-          path: reactfire-${{ github.run_id }}.tgz
+          name: reactfire-${{ github.run_id }}
+          path: reactfire.tgz
           retention-days: 1
   test:
     runs-on: ubuntu-latest
@@ -80,7 +80,7 @@ jobs:
       - name: 'Download Artifacts'
         uses: actions/download-artifact@v2
       - name: Expand Artifact
-        run: tar -xzvf reactfire-${{ github.run_id }}.tgz && cp -r package/ .
+        run: tar -xzvf reactfire-${{ github.run_id }}/reactfire.tgz && cp -r package/ .
       - name: Run tests
         run: yarn test
   publish:
@@ -100,7 +100,7 @@ jobs:
       - name: 'Download Artifacts'
         uses: actions/download-artifact@v2
       - name: Expand Artifact
-        run: tar -xzvf reactfire-${{ github.run_id }}.tgz && cp -r package/ .
+        run: tar -xzvf reactfire-${{ github.run_id }}/reactfire.tgz && cp -r package/ .
       - name: Version and Publish
         run: ./publish.sh
         env:
