@@ -80,7 +80,7 @@ jobs:
       - name: 'Download Artifacts'
         uses: actions/download-artifact@v2
       - name: Expand Artifact
-        run: tar -xzvf reactfire-${{ github.run_id }}/reactfire.tgz && cp -r package/ .
+        run: tar -xzvf reactfire-${{ github.run_id }}/reactfire.tgz && rsync -a package/ ./
       - name: Run tests
         run: yarn test
   publish:
@@ -100,7 +100,7 @@ jobs:
       - name: 'Download Artifacts'
         uses: actions/download-artifact@v2
       - name: Expand Artifact
-        run: tar -xzvf reactfire-${{ github.run_id }}/reactfire.tgz && cp -r package/ .
+        run: tar -xzvf reactfire-${{ github.run_id }}/reactfire.tgz && rsync -a package/ ./
       - name: Version and Publish
         run: ./publish.sh
         env:
