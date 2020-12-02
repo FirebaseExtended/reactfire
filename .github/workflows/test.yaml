@@ -37,7 +37,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build
         id: yarn-pack-dir
-        run: yarn build && echo "::set-output name=path::$(npm pack .)
+        run: yarn build && echo "::set-output name=path::$(npm pack .)"
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v2
         with:
