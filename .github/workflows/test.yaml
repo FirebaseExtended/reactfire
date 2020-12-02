@@ -41,7 +41,7 @@ jobs:
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v2
         with:
-          name: reactfire-${{ github.job }}-tgz
+          name: reactfire-${{ github.run_id }}-tgz
           path: ${{ steps.yarn-pack-dir.outputs.path }}
           retention-days: 1
   test:
@@ -80,7 +80,7 @@ jobs:
       - name: 'Download Artifact'
         uses: actions/download-artifact@v2
         with:
-          name: reactfire-${{ github.job }}-tgz
+          name: reactfire-${{ github.run_id }}-tgz
           path: reactfire.tgz
       - name: Expand Artifact
         run: tar -xzvf reactfire.tgz && cp -r package/ .
@@ -103,7 +103,7 @@ jobs:
       - name: 'Download Artifact'
         uses: actions/download-artifact@v2
         with:
-          name: reactfire-${{ github.job }}-tgz
+          name: reactfire-${{ github.run_id }}-tgz
           path: reactfire.tgz
       - name: Expand Artifact
         run: tar -xzvf reactfire.tgz && cp -r package/ .
