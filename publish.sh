@@ -1,28 +1,21 @@
 LATEST_TEST="^[^-]*$"
+SHORT_SHA=$(git rev-parse --short $GITHUB_SHA)
+TAG_TEST="^refs/tags/v.+$"
 
-if test $NPM_TOKEN; then
-
-    echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
-
-    if test $TAG_NAME; then
-        npm version $(echo $TAG_NAME | sed 's/^v\(.*\)$/\1/')
-
-        if [[ $TAG_NAME =~ $LATEST_TEST ]]; then
-            NPM_TAG=latest
-        else
-            NPM_TAG=next
-        fi
-
-        npm publish . --tag $NPM_TAG
-        ret=$?
+if [[ $GITHUB_REF =~ $TAG_TEST ]]; then
+    OVERRIDE_VERSION=${GITHUB_REF/refs\/tags\/v/}
+    if [[ $OVERRIDE_VERSION =~ $LATEST_TEST ]]; then
+        NPM_TAG=latest
     else
-        npm version $(npm version | sed -n "s/. reactfire: '\(.*\)',/\1/p")-canary.$SHORT_SHA
-        npm publish . --tag canary
-        ret=$?
-    fi
+        NPM_TAG=next
+    fi;
+else
+    OVERRIDE_VERSION=$(npm version | sed -n "s/. reactfire: '\(.*\)',/\1/p")-canary.$SHORT_SHA
+    NPM_TAG=canary
+fi;
 
-    rm -f .npmrc
+#npm --no-git-tag-version --allow-same-version -f version $OVERRIDE_VERSION
+#npm publish . --tag $NPM_TAG
 
-fi
-
-exit $ret
+echo $OVERRIDE_VERSION
+echo $NPM_TAG
