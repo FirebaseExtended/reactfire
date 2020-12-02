@@ -37,7 +37,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build
         id: yarn-pack-dir
-        run: yarn build && mv $(npm pack . | tail -n 1)" reactfire-${{ github.run_id }}.tgz
+        run: yarn build && mv $(npm pack . | tail -n 1) reactfire-${{ github.run_id }}.tgz
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v2
         with:
