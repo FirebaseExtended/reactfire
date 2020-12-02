@@ -14,8 +14,5 @@ else
     NPM_TAG=canary
 fi;
 
-#npm --no-git-tag-version --allow-same-version -f version $OVERRIDE_VERSION
-#npm publish . --tag $NPM_TAG
-
-echo $OVERRIDE_VERSION
-echo $NPM_TAG
+npm --no-git-tag-version --allow-same-version -f version $OVERRIDE_VERSION
+npm publish . --tag $NPM_TAG

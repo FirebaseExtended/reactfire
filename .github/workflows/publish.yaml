@@ -12,8 +12,10 @@ on:
 jobs:
   nodejs:
     runs-on: ubuntu-latest
+    name: NPM
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Setup node
         uses: actions/setup-node@v2-beta
         with:
@@ -23,7 +25,7 @@ jobs:
       - name: Get cache directory
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Pull cache
+      - name: Use yarn cache
         uses: actions/cache@v2
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -31,6 +33,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
             ${{ runner.os }}-
+      - name: Pull Firebase emulator cache
+        uses: actions/cache@v2
+        with:
+          path: /home/runner/.cache/firebase/emulators
+          key: firebase_emulators
       - name: Install deps
         run: yarn install --frozen-lockfile
       - name: Build
