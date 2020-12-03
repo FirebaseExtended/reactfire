@@ -106,6 +106,8 @@ jobs:
       - name: 'Download Artifacts'
         uses: actions/download-artifact@v2
       - name: Publish
-        run: ./reactfire-${{ github.run_id }}/publish.sh
+        run: |
+          chmod +x ./reactfire-${{ github.run_id }}/publish.sh
+          ./reactfire-${{ github.run_id }}/publish.sh
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
