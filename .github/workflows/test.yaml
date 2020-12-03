@@ -60,6 +60,7 @@ jobs:
     strategy:
       matrix:
         node: ["10", "12", "14"]
+      fail-fast: false
     name: Test Node.js ${{ matrix.node }} (Ubuntu)
     steps:
       - name: Checkout
