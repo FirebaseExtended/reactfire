@@ -18,5 +18,5 @@ fi;
 npm --no-git-tag-version --allow-same-version -f version $OVERRIDE_VERSION
 yarn build &&
     mv $(npm pack . | tail -n 1) reactfire.tgz &&
-    echo "npm publish ./reactfire-$GITHUB_RUN_ID/reactfire.tgz --tag $NPM_TAG" > ./publish.sh &&
+    echo "npm publish . --tag $NPM_TAG" > ./publish.sh &&
     chmod +x ./publish.sh
