@@ -4,7 +4,7 @@ LATEST_TEST="^[^-]*$"
 
 if [[ $GITHUB_REF =~ $TAG_TEST ]]; then
     OVERRIDE_VERSION=${GITHUB_REF/refs\/tags\/v/}
-    if [[ $NPM_VERSION =~ $LATEST_TEST ]]; then
+    if [[ $OVERRIDE_VERSION =~ $LATEST_TEST ]]; then
         NPM_TAG=latest
     else
         # TODO when we hit 3.0.0 move back to next
@@ -17,6 +17,5 @@ fi;
 
 npm --no-git-tag-version --allow-same-version -f version $OVERRIDE_VERSION
 yarn build &&
-    mv $(npm pack . | tail -n 1) reactfire.tgz &&
-    echo "npm publish . --tag $NPM_TAG" > ./publish.sh &&
+    echo "npm publish ./$(npm pack . | tail -n 1) --tag $NPM_TAG" > ./publish.sh &&
     chmod +x ./publish.sh

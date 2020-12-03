@@ -106,11 +106,10 @@ jobs:
           node-version: '14'
       - name: 'Download Artifacts'
         uses: actions/download-artifact@v2
-      - name: Expand Artifact
-        run: tar -xzvf reactfire-${{ github.run_id }}/reactfire.tgz && rsync -a package/ ./
       - name: Publish
         run: |
-          chmod +x ./reactfire-${{ github.run_id }}/publish.sh
-          ./reactfire-${{ github.run_id }}/publish.sh
+          cd ./reactfire-${{ github.run_id }}/
+          chmod +x publish.sh
+          ./publish.sh
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
