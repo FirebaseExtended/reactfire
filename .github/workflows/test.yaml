@@ -4,14 +4,49 @@ on:
   push:
     branches:
       - "**"
-    release:
-      types: [published]
     paths-ignore:
       - "**/*.md"
+  release:
+    types:
+      - published
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: '14'
+          check-latest: true
+      - name: Get cache directory
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Use yarn cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-
+      - name: Install deps
+        run: yarn install --frozen-lockfile
+      - name: Build
+        id: yarn-pack-dir
+        run: ./build.sh
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          name: reactfire-${{ github.run_id }}
+          path: reactfire.tgz
+          retention-days: 1
   test:
     runs-on: ubuntu-latest
+    needs: build
     strategy:
       matrix:
         node: ["12", "14"]
@@ -42,8 +77,10 @@ jobs:
           key: firebase_emulators
       - name: Install deps
         run: yarn install --frozen-lockfile
-      - name: Build
-        run: yarn build
+      - name: 'Download Artifacts'
+        uses: actions/download-artifact@v2
+      - name: Expand Artifact
+        run: tar -xzvf reactfire-${{ github.run_id }}/reactfire.tgz && rsync -a package/ ./
       - name: Run tests
         run: yarn test
   publish:
@@ -60,22 +97,9 @@ jobs:
           node-version: '14'
           registry-url: 'https://registry.npmjs.org'
           check-latest: true
-      - name: Get cache directory
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Use yarn cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-            ${{ runner.os }}-
-      - name: Install deps
-        run: yarn install --frozen-lockfile
-      - name: Build
-        run: yarn build
-      - name: Publish
+      - name: 'Download Artifacts'
+        uses: actions/download-artifact@v2
+      - name: Version and Publish
         run: ./publish.sh
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
