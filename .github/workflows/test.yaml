@@ -56,7 +56,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        node: ["12", "14"]
+        node: ["10", "12", "14"]
     name: Test Node.js ${{ matrix.node }} (Ubuntu)
     steps:
       - name: Checkout
