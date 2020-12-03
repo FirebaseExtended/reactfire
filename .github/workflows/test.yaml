@@ -21,7 +21,6 @@ jobs:
         uses: actions/setup-node@v2-beta
         with:
           node-version: '14'
-          check-latest: true
       - name: Get cache directory
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -103,6 +102,8 @@ jobs:
     steps:
       - name: Setup node
         uses: actions/setup-node@v2-beta
+        with:
+          node-version: '14'
       - name: 'Download Artifacts'
         uses: actions/download-artifact@v2
       - name: Publish
