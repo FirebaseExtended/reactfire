@@ -104,6 +104,7 @@ jobs:
         uses: actions/setup-node@v2-beta
         with:
           node-version: '14'
+          registry-url: 'https://registry.npmjs.org'
       - name: 'Download Artifacts'
         uses: actions/download-artifact@v2
       - name: Publish
