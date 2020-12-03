@@ -16,6 +16,11 @@ else
 fi;
 
 npm --no-git-tag-version --allow-same-version -f version $OVERRIDE_VERSION
-yarn build &&
-    echo "npm publish ./$(npm pack . | tail -n 1) --tag $NPM_TAG" > ./publish.sh &&
-    chmod +x ./publish.sh
+yarn build
+TARBALL=$(npm pack . | tail -n 1)
+
+echo "npm publish \$(dirname \"\$0\")/$TARBALL --tag $NPM_TAG" > ./publish.sh
+chmod +x ./publish.sh
+
+echo "tar -xzvf \$(dirname \"\$0\")/$TARBALL && rsync -a package/ ./" > ./unpack.sh
+chmod +x ./unpack.sh

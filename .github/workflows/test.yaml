@@ -49,6 +49,7 @@ jobs:
           path: |
             reactfire.tgz
             publish.sh
+            unpack.sh
           retention-days: 1
   test:
     runs-on: ubuntu-latest
@@ -91,7 +92,9 @@ jobs:
       - name: 'Download Artifacts'
         uses: actions/download-artifact@v2
       - name: Expand Artifact
-        run: tar -xzvf reactfire-${{ github.run_id }}/reactfire.tgz && rsync -a package/ ./
+        run: |
+          chmod +x reactfire-${{ github.run_id }}/unpack.sh
+          ./reactfire-${{ github.run_id }}/unpack.sh
       - name: Run tests
         run: yarn test
   publish:
