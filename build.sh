@@ -18,9 +18,10 @@ fi;
 npm --no-git-tag-version --allow-same-version -f version $OVERRIDE_VERSION
 yarn build
 TARBALL=$(npm pack . | tail -n 1)
+mv $TARBALL reactfire.tgz
 
-echo "npm publish \$(dirname \"\$0\")/$TARBALL --tag $NPM_TAG" > ./publish.sh
+echo "npm publish \$(dirname \"\$0\")/reactfire.tgz --tag $NPM_TAG" > ./publish.sh
 chmod +x ./publish.sh
 
-echo "tar -xzvf \$(dirname \"\$0\")/$TARBALL && rsync -a package/ ./" > ./unpack.sh
+echo "tar -xzvf \$(dirname \"\$0\")/reactfire.tgz && rsync -a package/ ./" > ./unpack.sh
 chmod +x ./unpack.sh
