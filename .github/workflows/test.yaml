@@ -34,7 +34,7 @@ jobs:
             ${{ runner.os }}-yarn-
             ${{ runner.os }}-
       - name: Install deps
-        run: yarn install --frozen-lockfile --prefer-offline
+        run: yarn install --frozen-lockfile --prefer-offline --ignore-scripts
       - name: Build
         id: yarn-pack-dir
         run: ./build.sh
@@ -76,7 +76,7 @@ jobs:
           path: /home/runner/.cache/firebase/emulators
           key: firebase_emulators
       - name: Install deps
-        run: yarn install --frozen-lockfile --prefer-offline
+        run: yarn install --frozen-lockfile --prefer-offline --ignore-scripts
       - name: 'Download Artifacts'
         uses: actions/download-artifact@v2
       - name: Expand Artifact
