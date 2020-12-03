@@ -1,4 +1,4 @@
 import '@testing-library/jest-dom';
 
 // @ts-ignore
-var globalThis = require('globalthis/polyfill')();
+global['globalThis'] = window['globalThis'] = require('globalthis/polyfill')();
