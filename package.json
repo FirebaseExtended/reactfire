@@ -15,7 +15,7 @@
     "build": "tsdx build",
     "test:tsdx": "tsdx test",
     "test": "firebase emulators:exec --only firestore,database,auth --project rxfire-525a3 \"tsdx test --detectOpenHandles --forceExit\"",
-    "lint": "tsdx lint",
+    "lint": "tsdx lint src test",
     "prepare": "tsdx build",
     "size": "size-limit",
     "analyze": "size-limit --why",
@@ -27,7 +27,12 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "tsdx lint"
+      "pre-commit": "yarn lint"
+    }
+  },
+  "eslint": {
+    "rules": {
+      "react-hooks/rules-of-hooks": "warn"
     }
   },
   "prettier": {
