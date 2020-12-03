@@ -35,11 +35,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
             ${{ runner.os }}-
-      - name: Use yarn offline cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm-packages-offline-cache
-          key: yarn-offline
       - name: Install deps
         run: |
           yarn config set yarn-offline-mirror ~/.npm-packages-offline-cache
