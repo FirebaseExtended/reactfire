@@ -7,12 +7,20 @@ node_modules/
 .vscode/*
 
 
-
-reactfire/docs/reactfire-metadata.json
-reactfire/firestore-debug.log
-reactfire/firebase-debug.log
-reactfire/pub/**
-pub
+dist
 yarn-error.log
-reactfire/database-debug.log
-reactfire/reactfire-*.tgz
+
+example/.cache
+
+# firebase emulator logs
+database-debug.log
+firestore-debug.log
+firebase-debug.log
+ui-debug.log
+
+# npm pack artifacts
+reactfire-*.tgz
+reactfire.tgz
+package/
+docs/reference/README.md
+

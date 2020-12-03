@@ -1,0 +1,30 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "dependencies": {
+    "display": "^0.1.9",
+    "react-app-polyfill": "^1.0.0",
+    "react-firebaseui": "^4.2.0",
+    "tailwindcss": "^1.9.1"
+  },
+  "alias": {
+    "react": "../node_modules/react",
+    "react-dom": "../node_modules/react-dom/profiling",
+    "scheduler/tracing": "../node_modules/scheduler/tracing-profiling",
+    "reactfire": "../."
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@types/react": "^16.9.11",
+    "@types/react-dom": "^16.8.4",
+    "babel-preset-env": "^1.7.0",
+    "parcel": "^1.12.3",
+    "typescript": "^3.4.5"
+  }
+}
