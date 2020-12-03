@@ -33,8 +33,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
             ${{ runner.os }}-
+      - name: Use yarn offline cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm-packages-offline-cache
+          key: yarn-offline
       - name: Install deps
-        run: yarn install --frozen-lockfile --prefer-offline --ignore-scripts
+        run:
+          - yarn config set yarn-offline-mirror ~/.npm-packages-offline-cache
+          - yarn config set yarn-offline-mirror-pruning true
+          - yarn install --frozen-lockfile --prefer-offline --ignore-scripts
       - name: Build
         id: yarn-pack-dir
         run: ./build.sh
@@ -70,13 +78,21 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
             ${{ runner.os }}-
-      - name: Pull Firebase emulator cache
+      - name: Use yarn offline cache
         uses: actions/cache@v2
         with:
-          path: /home/runner/.cache/firebase/emulators
+          path: ~/.npm-packages-offline-cache
+          key: yarn-offline
+      - name: Use Firebase emulator cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/firebase/emulators
           key: firebase_emulators
       - name: Install deps
-        run: yarn install --frozen-lockfile --prefer-offline --ignore-scripts
+        run:
+          - yarn config set yarn-offline-mirror ~/.npm-packages-offline-cache
+          - yarn config set yarn-offline-mirror-pruning true
+          - yarn install --frozen-lockfile --prefer-offline --ignore-scripts
       - name: 'Download Artifacts'
         uses: actions/download-artifact@v2
       - name: Expand Artifact
