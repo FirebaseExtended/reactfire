@@ -20,5 +20,7 @@ ui-debug.log
 
 # npm pack artifacts
 reactfire-*.tgz
+reactfire.tgz
+package/
 docs/reference/README.md
 
