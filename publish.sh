@@ -11,4 +11,4 @@ else
     NPM_TAG=next
 fi;
 
-npm publish reactfire-$GITHUB_RUN_ID/reactfire.tgz --tag $NPM_TAG
+npm publish ./reactfire-$GITHUB_RUN_ID/reactfire.tgz --tag $NPM_TAG
