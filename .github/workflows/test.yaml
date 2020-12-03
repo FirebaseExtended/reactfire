@@ -47,7 +47,9 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: reactfire-${{ github.run_id }}
-          path: reactfire.tgz
+          path: |
+            reactfire.tgz
+            publish.sh
           retention-days: 1
   test:
     runs-on: ubuntu-latest
@@ -99,17 +101,11 @@ jobs:
     needs: test
     if: ${{ github.ref == 'refs/heads/master' || github.event_name == 'release' }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Setup node
         uses: actions/setup-node@v2-beta
-        with:
-          node-version: '14'
-          registry-url: 'https://registry.npmjs.org'
-          check-latest: true
       - name: 'Download Artifacts'
         uses: actions/download-artifact@v2
-      - name: Version and Publish
-        run: ./publish.sh
+      - name: Publish
+        run: ./reactfire-${{ github.run_id }}/publish.sh
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
