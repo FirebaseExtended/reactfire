@@ -21,20 +21,23 @@ jobs:
         uses: actions/setup-node@v2-beta
         with:
           node-version: '14'
-      - name: Get cache directory
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Use yarn cache
+      - name: node_modules cache
+        id: node_modules_cache
         uses: actions/cache@v2
         with:
-          path: |
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            ~/.npm-packages-offline-cache
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: ./node_modules
+          key: ${{ runner.os }}-14-node_modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
-            ${{ runner.os }}-
+            ${{ runner.os }}-14-node_modules-
+      - name: Yarn offline cache
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm-packages-offline-cache
+          key: yarn-offline-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-offline
       - name: Install deps
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
         run: |
           yarn config set yarn-offline-mirror ~/.npm-packages-offline-cache
           yarn config set yarn-offline-mirror-pruning true
@@ -66,29 +69,32 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           check-latest: true
-      - name: Get cache directory
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Use yarn cache
+     - name: node_modules cache
+        id: node_modules_cache
         uses: actions/cache@v2
         with:
-          path: |
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            ~/.npm-packages-offline-cache
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: ./node_modules
+          key: ${{ runner.os }}-${{ matrix.node }}-node_modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
-            ${{ runner.os }}-
-      - name: Use Firebase emulator cache
+            ${{ runner.os }}-${{ matrix.node }}-node_modules-
+      - name: Yarn offline cache
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
         uses: actions/cache@v2
         with:
-          path: ~/.cache/firebase/emulators
-          key: firebase_emulators
+          path: ~/.npm-packages-offline-cache
+          key: yarn-offline-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-offline
       - name: Install deps
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
         run: |
           yarn config set yarn-offline-mirror ~/.npm-packages-offline-cache
           yarn config set yarn-offline-mirror-pruning true
           yarn install --frozen-lockfile --prefer-offline
+      - name: Firebase emulator cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/firebase/emulators
+          key: firebase_emulators
       - name: 'Download Artifacts'
         uses: actions/download-artifact@v2
       - name: Expand Artifact
