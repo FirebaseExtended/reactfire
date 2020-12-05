@@ -193,7 +193,7 @@ function App() {
 
 ## _About Firebase Performance Monitoring_
 
-`SuspenseWithPerf` will lazy load the Firebase Performance Monitoring library and report on on our custom trace, `load-burrito-status`, that we set in the `traceId` prop of `SuspenseWithPerf`. In addition, it will automatically measure [common performance stats](https://firebase.google.com/docs/perf-mon/automatic-web)!
+`SuspenseWithPerf` will lazy load the Firebase Performance Monitoring library and report on on our custom trace, `load-burrito-status`, that we set in the `traceId` prop of `SuspenseWithPerf`. In addition, it will automatically measure [common performance stats](https://firebase.google.com/docs/perf-mon/page-load-traces)!
 
 Note that Firebase Performance Monitoring can take about 12 hours to crunch your data and show it in the _Performance_ tab of the Firebase console.
 
