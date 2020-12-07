@@ -52,7 +52,7 @@ The `useUser()` hook returns the currently signed-in [user](https://firebase.goo
 ```jsx
 function HomePage(props) {
   // no need to use useFirebaseApp - useUser calls it under the hood
-  const user = useUser();
+  const { data: user } = useUser();
 
   return <h1>Welcome Back {user.displayName}!</h1>;
 }
@@ -122,7 +122,7 @@ const DEFAULT_IMAGE_PATH = 'userPhotos/default.jpg';
 function ProfileCard() {
   // get the current user.
   // this is safe because we've wrapped this component in an `AuthCheck` component.
-  const user = useUser();
+  const { data: user } = useUser();
 
   // read the user details from Firestore based on the current user's ID
   const userDetailsRef = useFirestore()

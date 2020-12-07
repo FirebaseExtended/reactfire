@@ -131,7 +131,7 @@ describe.skip('Authentication', () => {
   describe('useUser', () => {
     it('always returns a user if inside an <AuthCheck> component', async () => {
       const UserDetails = () => {
-        const user = useUser();
+        const { data: user } = useUser();
 
         expect(user).not.toBeNull();
         expect(user).toBeDefined();
