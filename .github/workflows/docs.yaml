@@ -1,0 +1,42 @@
+name: Check if Reference Docs need to be regenerated
+
+on:
+  pull_request
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    name: Build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: '14'
+      - name: node_modules cache
+        id: node_modules_cache
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-14-node_modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-14-node_modules-
+      - name: Yarn offline cache
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm-packages-offline-cache
+          key: yarn-offline-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-offline
+      - name: Install deps
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
+        run: |
+          yarn config set yarn-offline-mirror ~/.npm-packages-offline-cache
+          yarn config set yarn-offline-mirror-pruning true
+          yarn install --frozen-lockfile --prefer-offline
+      - name: Generate reference docs
+        run: yarn docs
+      - name: Check for diff
+        run: git diff --exit-code -- 'docs/reference***.md'
+
