@@ -23,7 +23,7 @@
 
 •  **children**: React.ReactNode
 
-*Defined in [src/performance.tsx:6](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/performance.tsx#L6)*
+*Defined in [src/performance.tsx:6](https://github.com/FirebaseExtended/reactfire/blob/master/src/performance.tsx#L6)*
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 •  **fallback**: React.ReactNode
 
-*Defined in [src/performance.tsx:8](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/performance.tsx#L8)*
+*Defined in [src/performance.tsx:8](https://github.com/FirebaseExtended/reactfire/blob/master/src/performance.tsx#L8)*
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 • `Optional` **firePerf**: undefined \| Performance
 
-*Defined in [src/performance.tsx:9](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/performance.tsx#L9)*
+*Defined in [src/performance.tsx:9](https://github.com/FirebaseExtended/reactfire/blob/master/src/performance.tsx#L9)*
 
 ___
 
@@ -47,4 +47,4 @@ ___
 
 •  **traceId**: string
 
-*Defined in [src/performance.tsx:7](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/performance.tsx#L7)*
+*Defined in [src/performance.tsx:7](https://github.com/FirebaseExtended/reactfire/blob/master/src/performance.tsx#L7)*

@@ -26,7 +26,7 @@
 
 • `Const` **DEFAULT\_TIMEOUT**: 30000 = 30000
 
-*Defined in [src/useObservable.ts:7](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/useObservable.ts#L7)*
+*Defined in [src/useObservable.ts:7](https://github.com/FirebaseExtended/reactfire/blob/master/src/useObservable.ts#L7)*
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 • `Const` **preloadedObservables**: Map\<string, [SuspenseSubject](../classes/_suspensesubject_.suspensesubject.md)\<any>> = ((globalThis as any) as ReactFireGlobals).\_reactFirePreloadedObservables \|\| new Map()
 
-*Defined in [src/useObservable.ts:10](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/useObservable.ts#L10)*
+*Defined in [src/useObservable.ts:10](https://github.com/FirebaseExtended/reactfire/blob/master/src/useObservable.ts#L10)*
 
 ## Functions
 
@@ -42,7 +42,7 @@ ___
 
 ▸ **preloadObservable**\<T>(`source`: Observable\<T>, `id`: string): [SuspenseSubject](../classes/_suspensesubject_.suspensesubject.md)\<T>
 
-*Defined in [src/useObservable.ts:19](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/useObservable.ts#L19)*
+*Defined in [src/useObservable.ts:19](https://github.com/FirebaseExtended/reactfire/blob/master/src/useObservable.ts#L19)*
 
 #### Type parameters:
 
@@ -65,7 +65,7 @@ ___
 
 ▸ **useObservable**\<T>(`observableId`: string, `source`: Observable\<T \| any>, `config?`: [ReactFireOptions](../interfaces/_index_.reactfireoptions.md)): [ObservableStatus](../interfaces/_useobservable_.observablestatus.md)\<T>
 
-*Defined in [src/useObservable.ts:41](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/useObservable.ts#L41)*
+*Defined in [src/useObservable.ts:41](https://github.com/FirebaseExtended/reactfire/blob/master/src/useObservable.ts#L41)*
 
 #### Type parameters:
 

@@ -477,7 +477,7 @@ Re-exports: [version](_firebaseapp_.md#version)
 
 Ƭ  **ReactFireGlobals**: { _reactFireDatabaseCachedQueries: Array\<Query> ; _reactFireFirestoreQueryCache: Array\<Query> ; _reactFirePreloadedObservables: Map\<string, [SuspenseSubject](../classes/_suspensesubject_.suspensesubject.md)\<any>>  }
 
-*Defined in [src/index.ts:4](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/index.ts#L4)*
+*Defined in [src/index.ts:4](https://github.com/FirebaseExtended/reactfire/blob/master/src/index.ts#L4)*
 
 #### Type declaration:
 
@@ -493,7 +493,7 @@ Name | Type |
 
 ▸ **checkIdField**(`options`: [ReactFireOptions](../interfaces/_index_.reactfireoptions.md)): any
 
-*Defined in [src/index.ts:29](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/index.ts#L29)*
+*Defined in [src/index.ts:29](https://github.com/FirebaseExtended/reactfire/blob/master/src/index.ts#L29)*
 
 #### Parameters:
 
@@ -509,7 +509,7 @@ ___
 
 ▸ **checkOptions**(`options`: [ReactFireOptions](../interfaces/_index_.reactfireoptions.md), `field`: string): any
 
-*Defined in [src/index.ts:16](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/index.ts#L16)*
+*Defined in [src/index.ts:16](https://github.com/FirebaseExtended/reactfire/blob/master/src/index.ts#L16)*
 
 #### Parameters:
 
@@ -526,7 +526,7 @@ ___
 
 ▸ **checkinitialData**(`options`: [ReactFireOptions](../interfaces/_index_.reactfireoptions.md)): any
 
-*Defined in [src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/index.ts#L25)*
+*Defined in [src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob/master/src/index.ts#L25)*
 
 #### Parameters:
 

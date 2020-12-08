@@ -20,7 +20,7 @@
 
 ▸ **SuspenseWithPerf**(`__namedParameters`: { children: ReactNode ; fallback: ReactNode ; firePerf: undefined \| Performance ; traceId: string  }): Element
 
-*Defined in [src/performance.tsx:12](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/performance.tsx#L12)*
+*Defined in [src/performance.tsx:12](https://github.com/FirebaseExtended/reactfire/blob/master/src/performance.tsx#L12)*
 
 #### Parameters:
 

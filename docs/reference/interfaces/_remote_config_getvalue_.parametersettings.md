@@ -28,7 +28,7 @@ Name |
 
 •  **getter**: (key: string) => T
 
-*Defined in [src/remote-config/getValue.tsx:13](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/remote-config/getValue.tsx#L13)*
+*Defined in [src/remote-config/getValue.tsx:13](https://github.com/FirebaseExtended/reactfire/blob/master/src/remote-config/getValue.tsx#L13)*
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 •  **key**: string
 
-*Defined in [src/remote-config/getValue.tsx:12](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/remote-config/getValue.tsx#L12)*
+*Defined in [src/remote-config/getValue.tsx:12](https://github.com/FirebaseExtended/reactfire/blob/master/src/remote-config/getValue.tsx#L12)*
 
 ___
 
@@ -44,4 +44,4 @@ ___
 
 •  **remoteConfig**: RemoteConfig
 
-*Defined in [src/remote-config/getValue.tsx:11](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/remote-config/getValue.tsx#L11)*
+*Defined in [src/remote-config/getValue.tsx:11](https://github.com/FirebaseExtended/reactfire/blob/master/src/remote-config/getValue.tsx#L11)*

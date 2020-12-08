@@ -83,7 +83,7 @@ Name |
 
 *Overrides void*
 
-*Defined in [src/SuspenseSubject.ts:16](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/SuspenseSubject.ts#L16)*
+*Defined in [src/SuspenseSubject.ts:16](https://github.com/FirebaseExtended/reactfire/blob/master/src/SuspenseSubject.ts#L16)*
 
 #### Parameters:
 
@@ -100,7 +100,7 @@ Name | Type |
 
 • `Private` **\_error**: any = undefined
 
-*Defined in [src/SuspenseSubject.ts:9](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/SuspenseSubject.ts#L9)*
+*Defined in [src/SuspenseSubject.ts:9](https://github.com/FirebaseExtended/reactfire/blob/master/src/SuspenseSubject.ts#L9)*
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 • `Private` **\_firstEmission**: Promise\<void>
 
-*Defined in [src/SuspenseSubject.ts:8](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/SuspenseSubject.ts#L8)*
+*Defined in [src/SuspenseSubject.ts:8](https://github.com/FirebaseExtended/reactfire/blob/master/src/SuspenseSubject.ts#L8)*
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 • `Private` **\_hasValue**: boolean = false
 
-*Defined in [src/SuspenseSubject.ts:6](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/SuspenseSubject.ts#L6)*
+*Defined in [src/SuspenseSubject.ts:6](https://github.com/FirebaseExtended/reactfire/blob/master/src/SuspenseSubject.ts#L6)*
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 • `Private` **\_innerObservable**: Observable\<T>
 
-*Defined in [src/SuspenseSubject.ts:10](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/SuspenseSubject.ts#L10)*
+*Defined in [src/SuspenseSubject.ts:10](https://github.com/FirebaseExtended/reactfire/blob/master/src/SuspenseSubject.ts#L10)*
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 • `Private` **\_innerSubscriber**: Subscription
 
-*Defined in [src/SuspenseSubject.ts:14](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/SuspenseSubject.ts#L14)*
+*Defined in [src/SuspenseSubject.ts:14](https://github.com/FirebaseExtended/reactfire/blob/master/src/SuspenseSubject.ts#L14)*
 
 ___
 
@@ -152,7 +152,7 @@ ___
 
 • `Private` **\_resolveFirstEmission**: () => void
 
-*Defined in [src/SuspenseSubject.ts:16](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/SuspenseSubject.ts#L16)*
+*Defined in [src/SuspenseSubject.ts:16](https://github.com/FirebaseExtended/reactfire/blob/master/src/SuspenseSubject.ts#L16)*
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 • `Private` **\_timeoutHandler**: Timeout
 
-*Defined in [src/SuspenseSubject.ts:7](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/SuspenseSubject.ts#L7)*
+*Defined in [src/SuspenseSubject.ts:7](https://github.com/FirebaseExtended/reactfire/blob/master/src/SuspenseSubject.ts#L7)*
 
 ___
 
@@ -168,7 +168,7 @@ ___
 
 • `Private` **\_timeoutWindow**: number
 
-*Defined in [src/SuspenseSubject.ts:18](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/SuspenseSubject.ts#L18)*
+*Defined in [src/SuspenseSubject.ts:18](https://github.com/FirebaseExtended/reactfire/blob/master/src/SuspenseSubject.ts#L18)*
 
 ___
 
@@ -176,7 +176,7 @@ ___
 
 • `Private` **\_value**: T \| undefined
 
-*Defined in [src/SuspenseSubject.ts:5](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/SuspenseSubject.ts#L5)*
+*Defined in [src/SuspenseSubject.ts:5](https://github.com/FirebaseExtended/reactfire/blob/master/src/SuspenseSubject.ts#L5)*
 
 ___
 
@@ -184,7 +184,7 @@ ___
 
 • `Private` **\_warmupSubscription**: Subscription
 
-*Defined in [src/SuspenseSubject.ts:11](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/SuspenseSubject.ts#L11)*
+*Defined in [src/SuspenseSubject.ts:11](https://github.com/FirebaseExtended/reactfire/blob/master/src/SuspenseSubject.ts#L11)*
 
 ___
 
@@ -310,7 +310,7 @@ ___
 
 • get **firstEmission**(): Promise\<void>
 
-*Defined in [src/SuspenseSubject.ts:61](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/SuspenseSubject.ts#L61)*
+*Defined in [src/SuspenseSubject.ts:61](https://github.com/FirebaseExtended/reactfire/blob/master/src/SuspenseSubject.ts#L61)*
 
 **Returns:** Promise\<void>
 
@@ -320,7 +320,7 @@ ___
 
 • get **hasValue**(): boolean
 
-*Defined in [src/SuspenseSubject.ts:44](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/SuspenseSubject.ts#L44)*
+*Defined in [src/SuspenseSubject.ts:44](https://github.com/FirebaseExtended/reactfire/blob/master/src/SuspenseSubject.ts#L44)*
 
 **Returns:** boolean
 
@@ -330,7 +330,7 @@ ___
 
 • get **ourError**(): any
 
-*Defined in [src/SuspenseSubject.ts:90](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/SuspenseSubject.ts#L90)*
+*Defined in [src/SuspenseSubject.ts:90](https://github.com/FirebaseExtended/reactfire/blob/master/src/SuspenseSubject.ts#L90)*
 
 **Returns:** any
 
@@ -340,7 +340,7 @@ ___
 
 • get **value**(): T \| undefined
 
-*Defined in [src/SuspenseSubject.ts:51](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/SuspenseSubject.ts#L51)*
+*Defined in [src/SuspenseSubject.ts:51](https://github.com/FirebaseExtended/reactfire/blob/master/src/SuspenseSubject.ts#L51)*
 
 **Returns:** T \| undefined
 
@@ -350,7 +350,7 @@ ___
 
 ▸ `Private`**_next**(`value`: T): void
 
-*Defined in [src/SuspenseSubject.ts:65](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/SuspenseSubject.ts#L65)*
+*Defined in [src/SuspenseSubject.ts:65](https://github.com/FirebaseExtended/reactfire/blob/master/src/SuspenseSubject.ts#L65)*
 
 #### Parameters:
 
@@ -366,7 +366,7 @@ ___
 
 ▸ `Private`**_reset**(): void
 
-*Defined in [src/SuspenseSubject.ts:71](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/SuspenseSubject.ts#L71)*
+*Defined in [src/SuspenseSubject.ts:71](https://github.com/FirebaseExtended/reactfire/blob/master/src/SuspenseSubject.ts#L71)*
 
 **Returns:** void
 
@@ -378,7 +378,7 @@ ___
 
 *Overrides void*
 
-*Defined in [src/SuspenseSubject.ts:82](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/SuspenseSubject.ts#L82)*
+*Defined in [src/SuspenseSubject.ts:82](https://github.com/FirebaseExtended/reactfire/blob/master/src/SuspenseSubject.ts#L82)*
 
 #### Parameters:
 

@@ -31,7 +31,7 @@ Name |
 
 •  **data**: T
 
-*Defined in [src/useObservable.ts:36](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/useObservable.ts#L36)*
+*Defined in [src/useObservable.ts:36](https://github.com/FirebaseExtended/reactfire/blob/master/src/useObservable.ts#L36)*
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 •  **error**: Error \| undefined
 
-*Defined in [src/useObservable.ts:37](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/useObservable.ts#L37)*
+*Defined in [src/useObservable.ts:37](https://github.com/FirebaseExtended/reactfire/blob/master/src/useObservable.ts#L37)*
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 •  **firstValuePromise**: Promise\<void>
 
-*Defined in [src/useObservable.ts:38](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/useObservable.ts#L38)*
+*Defined in [src/useObservable.ts:38](https://github.com/FirebaseExtended/reactfire/blob/master/src/useObservable.ts#L38)*
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 •  **hasEmitted**: boolean
 
-*Defined in [src/useObservable.ts:34](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/useObservable.ts#L34)*
+*Defined in [src/useObservable.ts:34](https://github.com/FirebaseExtended/reactfire/blob/master/src/useObservable.ts#L34)*
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 •  **isComplete**: boolean
 
-*Defined in [src/useObservable.ts:35](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/useObservable.ts#L35)*
+*Defined in [src/useObservable.ts:35](https://github.com/FirebaseExtended/reactfire/blob/master/src/useObservable.ts#L35)*
 
 ___
 
@@ -71,4 +71,4 @@ ___
 
 •  **status**: \"loading\" \| \"error\" \| \"success\"
 
-*Defined in [src/useObservable.ts:30](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/useObservable.ts#L30)*
+*Defined in [src/useObservable.ts:30](https://github.com/FirebaseExtended/reactfire/blob/master/src/useObservable.ts#L30)*

@@ -39,7 +39,7 @@
 
 • `Optional` **\_storage**: undefined \| { appName: string  }
 
-*Defined in [src/remote-config/index.tsx:12](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/remote-config/index.tsx#L12)*
+*Defined in [src/remote-config/index.tsx:12](https://github.com/FirebaseExtended/reactfire/blob/master/src/remote-config/index.tsx#L12)*
 
 ___
 

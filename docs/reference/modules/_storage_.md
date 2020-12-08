@@ -25,7 +25,7 @@
 
 Ƭ  **StorageImageProps**: { placeHolder?: JSX.Element ; storage?: firebase.storage.Storage ; storagePath: string ; suspense?: undefined \| false \| true  }
 
-*Defined in [src/storage.tsx:60](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/storage.tsx#L60)*
+*Defined in [src/storage.tsx:60](https://github.com/FirebaseExtended/reactfire/blob/master/src/storage.tsx#L60)*
 
 #### Type declaration:
 
@@ -42,7 +42,7 @@ Name | Type |
 
 ▸ **INTERNALStorageImage**(`props`: [StorageImageProps](_storage_.md#storageimageprops) & React.DetailedHTMLProps\<ImgHTMLAttributes\<HTMLImageElement>, HTMLImageElement>): Element
 
-*Defined in [src/storage.tsx:75](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/storage.tsx#L75)*
+*Defined in [src/storage.tsx:75](https://github.com/FirebaseExtended/reactfire/blob/master/src/storage.tsx#L75)*
 
 #### Parameters:
 
@@ -58,7 +58,7 @@ ___
 
 ▸ **StorageFromContext**(`props`: [StorageImageProps](_storage_.md#storageimageprops) & React.DetailedHTMLProps\<ImgHTMLAttributes\<HTMLImageElement>, HTMLImageElement>): Element
 
-*Defined in [src/storage.tsx:67](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/storage.tsx#L67)*
+*Defined in [src/storage.tsx:67](https://github.com/FirebaseExtended/reactfire/blob/master/src/storage.tsx#L67)*
 
 #### Parameters:
 
@@ -74,7 +74,7 @@ ___
 
 ▸ **StorageImage**(`props`: [StorageImageProps](_storage_.md#storageimageprops) & React.DetailedHTMLProps\<ImgHTMLAttributes\<HTMLImageElement>, HTMLImageElement>): Element
 
-*Defined in [src/storage.tsx:102](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/storage.tsx#L102)*
+*Defined in [src/storage.tsx:102](https://github.com/FirebaseExtended/reactfire/blob/master/src/storage.tsx#L102)*
 
 #### Parameters:
 
@@ -90,7 +90,7 @@ ___
 
 ▸ **_fromTask**(`task`: UploadTask): Observable\<UploadTaskSnapshot>
 
-*Defined in [src/storage.tsx:13](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/storage.tsx#L13)*
+*Defined in [src/storage.tsx:13](https://github.com/FirebaseExtended/reactfire/blob/master/src/storage.tsx#L13)*
 
 modified version of rxFire's _fromTask
 
@@ -108,7 +108,7 @@ ___
 
 ▸ **useStorageDownloadURL**\<T>(`ref`: Reference, `options?`: [ReactFireOptions](../interfaces/_index_.reactfireoptions.md)\<T>): [ObservableStatus](../interfaces/_useobservable_.observablestatus.md)\<string \| T>
 
-*Defined in [src/storage.tsx:53](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/storage.tsx#L53)*
+*Defined in [src/storage.tsx:53](https://github.com/FirebaseExtended/reactfire/blob/master/src/storage.tsx#L53)*
 
 Subscribe to a storage ref's download URL
 
@@ -133,7 +133,7 @@ ___
 
 ▸ **useStorageTask**\<T>(`task`: UploadTask, `ref`: Reference, `options?`: [ReactFireOptions](../interfaces/_index_.reactfireoptions.md)\<T>): [ObservableStatus](../interfaces/_useobservable_.observablestatus.md)\<UploadTaskSnapshot \| T>
 
-*Defined in [src/storage.tsx:36](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/storage.tsx#L36)*
+*Defined in [src/storage.tsx:36](https://github.com/FirebaseExtended/reactfire/blob/master/src/storage.tsx#L36)*
 
 Subscribe to the progress of a storage task
 

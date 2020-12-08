@@ -231,7 +231,7 @@ Re-exports: [useStorage](_sdk_.md#usestorage)
 
 Ƭ  **FirebaseAppContextValue**: App
 
-*Defined in [src/firebaseApp.tsx:6](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/firebaseApp.tsx#L6)*
+*Defined in [src/firebaseApp.tsx:6](https://github.com/FirebaseExtended/reactfire/blob/master/src/firebaseApp.tsx#L6)*
 
 ___
 
@@ -239,7 +239,7 @@ ___
 
 Ƭ  **Props**: { appName?: undefined \| string ; firebaseApp?: firebase.app.App ; firebaseConfig?: Object ; suspense?: undefined \| false \| true  }
 
-*Defined in [src/firebaseApp.tsx:15](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/firebaseApp.tsx#L15)*
+*Defined in [src/firebaseApp.tsx:15](https://github.com/FirebaseExtended/reactfire/blob/master/src/firebaseApp.tsx#L15)*
 
 #### Type declaration:
 
@@ -256,7 +256,7 @@ Name | Type |
 
 • `Const` **DEFAULT\_APP\_NAME**: \"[DEFAULT]\" = "[DEFAULT]"
 
-*Defined in [src/firebaseApp.tsx:9](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/firebaseApp.tsx#L9)*
+*Defined in [src/firebaseApp.tsx:9](https://github.com/FirebaseExtended/reactfire/blob/master/src/firebaseApp.tsx#L9)*
 
 ___
 
@@ -264,7 +264,7 @@ ___
 
 • `Const` **FirebaseAppContext**: Context\<undefined \| App> = React.createContext\<FirebaseAppContextValue \| undefined>(undefined)
 
-*Defined in [src/firebaseApp.tsx:11](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/firebaseApp.tsx#L11)*
+*Defined in [src/firebaseApp.tsx:11](https://github.com/FirebaseExtended/reactfire/blob/master/src/firebaseApp.tsx#L11)*
 
 ___
 
@@ -272,7 +272,7 @@ ___
 
 • `Const` **SuspenseEnabledContext**: Context\<boolean> = React.createContext\<boolean>(false)
 
-*Defined in [src/firebaseApp.tsx:13](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/firebaseApp.tsx#L13)*
+*Defined in [src/firebaseApp.tsx:13](https://github.com/FirebaseExtended/reactfire/blob/master/src/firebaseApp.tsx#L13)*
 
 ___
 
@@ -280,7 +280,7 @@ ___
 
 • `Const` **version**: any = \_\_REACTFIRE\_VERSION\_\_
 
-*Defined in [src/firebaseApp.tsx:23](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/firebaseApp.tsx#L23)*
+*Defined in [src/firebaseApp.tsx:23](https://github.com/FirebaseExtended/reactfire/blob/master/src/firebaseApp.tsx#L23)*
 
 ## Functions
 
@@ -288,7 +288,7 @@ ___
 
 ▸ **FirebaseAppProvider**(`props`: [Props](_firebaseapp_.md#props) & { [key:string]: unknown;  }): Element
 
-*Defined in [src/firebaseApp.tsx:27](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/firebaseApp.tsx#L27)*
+*Defined in [src/firebaseApp.tsx:27](https://github.com/FirebaseExtended/reactfire/blob/master/src/firebaseApp.tsx#L27)*
 
 #### Parameters:
 
@@ -304,7 +304,7 @@ ___
 
 ▸ `Const`**shallowEq**(`a`: { [key:string]: any;  }, `b`: { [key:string]: any;  }): boolean
 
-*Defined in [src/firebaseApp.tsx:25](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/firebaseApp.tsx#L25)*
+*Defined in [src/firebaseApp.tsx:25](https://github.com/FirebaseExtended/reactfire/blob/master/src/firebaseApp.tsx#L25)*
 
 #### Parameters:
 
@@ -321,7 +321,7 @@ ___
 
 ▸ **useFirebaseApp**(): App
 
-*Defined in [src/firebaseApp.tsx:82](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/firebaseApp.tsx#L82)*
+*Defined in [src/firebaseApp.tsx:82](https://github.com/FirebaseExtended/reactfire/blob/master/src/firebaseApp.tsx#L82)*
 
 **Returns:** App
 
@@ -331,7 +331,7 @@ ___
 
 ▸ **useIsSuspenseEnabled**(): boolean
 
-*Defined in [src/firebaseApp.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/firebaseApp.tsx#L64)*
+*Defined in [src/firebaseApp.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/master/src/firebaseApp.tsx#L64)*
 
 **Returns:** boolean
 
@@ -341,7 +341,7 @@ ___
 
 ▸ **useSuspenseEnabledFromConfigAndContext**(`suspenseFromConfig?`: undefined \| false \| true): boolean
 
-*Defined in [src/firebaseApp.tsx:71](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/firebaseApp.tsx#L71)*
+*Defined in [src/firebaseApp.tsx:71](https://github.com/FirebaseExtended/reactfire/blob/master/src/firebaseApp.tsx#L71)*
 
 #### Parameters:
 
