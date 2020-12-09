@@ -26,7 +26,7 @@
 
 • `Const` **cachedQueries**: Array\<Query> = ((globalThis as any) as ReactFireGlobals).\_reactFireDatabaseCachedQueries \|\| []
 
-*Defined in [src/database.tsx:9](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/database.tsx#L9)*
+*Defined in [src/database.tsx:9](https://github.com/FirebaseExtended/reactfire/blob/master/src/database.tsx#L9)*
 
 ## Functions
 
@@ -34,7 +34,7 @@
 
 ▸ **changeToData**(`change`: QueryChange, `keyField?`: undefined \| string): object
 
-*Defined in [src/database.tsx:44](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/database.tsx#L44)*
+*Defined in [src/database.tsx:44](https://github.com/FirebaseExtended/reactfire/blob/master/src/database.tsx#L44)*
 
 #### Parameters:
 
@@ -51,7 +51,7 @@ ___
 
 ▸ **getUniqueIdForDatabaseQuery**(`query`: Query): number
 
-*Defined in [src/database.tsx:15](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/database.tsx#L15)*
+*Defined in [src/database.tsx:15](https://github.com/FirebaseExtended/reactfire/blob/master/src/database.tsx#L15)*
 
 #### Parameters:
 
@@ -67,7 +67,7 @@ ___
 
 ▸ **objectVal**\<T>(`query`: Query, `keyField?`: undefined \| string): Observable\<T>
 
-*Defined in [src/database.tsx:40](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/database.tsx#L40)*
+*Defined in [src/database.tsx:40](https://github.com/FirebaseExtended/reactfire/blob/master/src/database.tsx#L40)*
 
 #### Type parameters:
 
@@ -90,7 +90,7 @@ ___
 
 ▸ **useDatabaseList**\<T>(`ref`: Reference \| Query, `options?`: [ReactFireOptions](../interfaces/_index_.reactfireoptions.md)\<T[]>): [ObservableStatus](../interfaces/_useobservable_.observablestatus.md)\<QueryChange[] \| T[]>
 
-*Defined in [src/database.tsx:73](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/database.tsx#L73)*
+*Defined in [src/database.tsx:73](https://github.com/FirebaseExtended/reactfire/blob/master/src/database.tsx#L73)*
 
 Subscribe to a Realtime Database list
 
@@ -115,7 +115,7 @@ ___
 
 ▸ **useDatabaseListData**\<T>(`ref`: Reference \| Query, `options?`: [ReactFireOptions](../interfaces/_index_.reactfireoptions.md)\<T[]>): [ObservableStatus](../interfaces/_useobservable_.observablestatus.md)\<T[]>
 
-*Defined in [src/database.tsx:83](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/database.tsx#L83)*
+*Defined in [src/database.tsx:83](https://github.com/FirebaseExtended/reactfire/blob/master/src/database.tsx#L83)*
 
 #### Type parameters:
 
@@ -138,7 +138,7 @@ ___
 
 ▸ **useDatabaseObject**\<T>(`ref`: Reference, `options?`: [ReactFireOptions](../interfaces/_index_.reactfireoptions.md)\<T>): [ObservableStatus](../interfaces/_useobservable_.observablestatus.md)\<QueryChange \| T>
 
-*Defined in [src/database.tsx:29](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/database.tsx#L29)*
+*Defined in [src/database.tsx:29](https://github.com/FirebaseExtended/reactfire/blob/master/src/database.tsx#L29)*
 
 Subscribe to a Realtime Database object
 
@@ -163,7 +163,7 @@ ___
 
 ▸ **useDatabaseObjectData**\<T>(`ref`: Reference, `options?`: [ReactFireOptions](../interfaces/_index_.reactfireoptions.md)\<T>): [ObservableStatus](../interfaces/_useobservable_.observablestatus.md)\<T>
 
-*Defined in [src/database.tsx:59](https://github.com/FirebaseExtended/reactfire/blob/16b6188/src/database.tsx#L59)*
+*Defined in [src/database.tsx:59](https://github.com/FirebaseExtended/reactfire/blob/master/src/database.tsx#L59)*
 
 #### Type parameters:
 
