@@ -35,8 +35,8 @@ export function useUser<T = unknown>(auth?: firebase.auth.Auth, options?: ReactF
   let currentUser = auth.currentUser;
 
   // If currentUser is available, skip initialData
-  if (options?.initialData && !currentUser) {
-    currentUser = options.initialData;
+  if ((options?.initialData ?? options?.startWithValue) && !currentUser) {
+    currentUser = options.initialData ?? options.startWithValue;
   }
 
   return useObservable(observableId, observable$, { ...options, initialData: currentUser });

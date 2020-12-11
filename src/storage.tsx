@@ -41,7 +41,7 @@ export function useStorageTask<T = unknown>(
   const observableId = `storage:task:${ref.toString()}`;
   const observable$ = _fromTask(task);
 
-  return useObservable(observableId, observable$, options ? options.initialData : undefined);
+  return useObservable(observableId, observable$, options ? options.initialData ?? options.startWithValue : undefined);
 }
 
 /**

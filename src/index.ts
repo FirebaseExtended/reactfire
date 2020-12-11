@@ -10,6 +10,10 @@ export type ReactFireGlobals = {
 export interface ReactFireOptions<T = unknown> {
   idField?: string;
   initialData?: T | any;
+  /**
+   * @deprecated use initialData instead
+   */
+  startWithValue?: T | any;
   suspense?: boolean;
 }
 
