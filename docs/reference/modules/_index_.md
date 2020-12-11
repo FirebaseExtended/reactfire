@@ -493,7 +493,7 @@ Name | Type |
 
 ▸ **checkIdField**(`options`: [ReactFireOptions](../interfaces/_index_.reactfireoptions.md)): any
 
-*Defined in [src/index.ts:29](https://github.com/FirebaseExtended/reactfire/blob/master/src/index.ts#L29)*
+*Defined in [src/index.ts:33](https://github.com/FirebaseExtended/reactfire/blob/master/src/index.ts#L33)*
 
 #### Parameters:
 
@@ -509,7 +509,7 @@ ___
 
 ▸ **checkOptions**(`options`: [ReactFireOptions](../interfaces/_index_.reactfireoptions.md), `field`: string): any
 
-*Defined in [src/index.ts:16](https://github.com/FirebaseExtended/reactfire/blob/master/src/index.ts#L16)*
+*Defined in [src/index.ts:20](https://github.com/FirebaseExtended/reactfire/blob/master/src/index.ts#L20)*
 
 #### Parameters:
 
@@ -526,7 +526,7 @@ ___
 
 ▸ **checkinitialData**(`options`: [ReactFireOptions](../interfaces/_index_.reactfireoptions.md)): any
 
-*Defined in [src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob/master/src/index.ts#L25)*
+*Defined in [src/index.ts:29](https://github.com/FirebaseExtended/reactfire/blob/master/src/index.ts#L29)*
 
 #### Parameters:
 
