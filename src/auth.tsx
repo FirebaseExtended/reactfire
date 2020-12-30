@@ -59,6 +59,7 @@ export function useIdTokenResult(
 
 export interface AuthCheckProps {
   auth?: firebase.auth.Auth;
+  loader?: React.ReactNode;
   fallback: React.ReactNode;
   children: React.ReactNode;
   requiredClaims?: Object;
@@ -94,8 +95,9 @@ export function ClaimsCheck({ user, fallback, children, requiredClaims }: Claims
   }
 }
 
-export function AuthCheck({ auth, fallback, children, requiredClaims }: AuthCheckProps): JSX.Element {
-  const { data: user } = useUser<firebase.User>(auth);
+export function AuthCheck({ auth, loader, fallback, children, requiredClaims }: AuthCheckProps): JSX.Element {
+  const { data: user, status, hasEmitted } = useUser<firebase.User>(auth);
+  const isLoading = status === 'loading' || hasEmitted === false;
 
   if (user) {
     return requiredClaims ? (
@@ -105,6 +107,8 @@ export function AuthCheck({ auth, fallback, children, requiredClaims }: AuthChec
     ) : (
       <>{children}</>
     );
+  } else if (isLoading && loader) {
+    return <>{loader}</>;
   } else {
     return <>{fallback}</>;
   }
