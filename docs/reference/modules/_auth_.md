@@ -23,15 +23,15 @@
 
 ### AuthCheck
 
-▸ **AuthCheck**(`__namedParameters`: { auth: undefined \| Auth ; children: ReactNode ; fallback: ReactNode ; requiredClaims: undefined \| Object  }): Element
+▸ **AuthCheck**(`__namedParameters`: { auth: undefined \| Auth ; children: ReactNode ; fallback: ReactNode ; loader: ReactNode ; requiredClaims: undefined \| Object  }): Element
 
-*Defined in [src/auth.tsx:97](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L97)*
+*Defined in [src/auth.tsx:98](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L98)*
 
 #### Parameters:
 
 Name | Type |
 ------ | ------ |
-`__namedParameters` | { auth: undefined \| Auth ; children: ReactNode ; fallback: ReactNode ; requiredClaims: undefined \| Object  } |
+`__namedParameters` | { auth: undefined \| Auth ; children: ReactNode ; fallback: ReactNode ; loader: ReactNode ; requiredClaims: undefined \| Object  } |
 
 **Returns:** Element
 
@@ -41,7 +41,7 @@ ___
 
 ▸ **ClaimsCheck**(`__namedParameters`: { children: ReactNode ; fallback: ReactNode ; requiredClaims: undefined \| { [key:string]: any;  } ; user: User  }): Element
 
-*Defined in [src/auth.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L74)*
+*Defined in [src/auth.tsx:75](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L75)*
 
 #### Parameters:
 

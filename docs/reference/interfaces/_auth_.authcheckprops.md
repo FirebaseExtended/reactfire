@@ -15,6 +15,7 @@
 * [auth](_auth_.authcheckprops.md#auth)
 * [children](_auth_.authcheckprops.md#children)
 * [fallback](_auth_.authcheckprops.md#fallback)
+* [loader](_auth_.authcheckprops.md#loader)
 * [requiredClaims](_auth_.authcheckprops.md#requiredclaims)
 
 ## Properties
@@ -31,13 +32,21 @@ ___
 
 •  **children**: React.ReactNode
 
-*Defined in [src/auth.tsx:63](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L63)*
+*Defined in [src/auth.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L64)*
 
 ___
 
 ### fallback
 
 •  **fallback**: React.ReactNode
+
+*Defined in [src/auth.tsx:63](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L63)*
+
+___
+
+### loader
+
+• `Optional` **loader**: React.ReactNode
 
 *Defined in [src/auth.tsx:62](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L62)*
 
@@ -47,4 +56,4 @@ ___
 
 • `Optional` **requiredClaims**: Object
 
-*Defined in [src/auth.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L64)*
+*Defined in [src/auth.tsx:65](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L65)*
