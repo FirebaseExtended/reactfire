@@ -55,7 +55,7 @@ Check out the
 import React, { Component } from "react";
 import { render } from "react-dom";
 
-import "firebase/database";
+import "firebase/firestore";
 import {
   FirebaseAppProvider,
   useFirestoreDocData,
@@ -90,7 +90,7 @@ function App() {
   );
 }
 
-render(render(<App />, document.getElementById("root")));
+render(<App />, document.getElementById("root"));
 ```
 
 ---
