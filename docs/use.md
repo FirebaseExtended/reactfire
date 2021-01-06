@@ -188,8 +188,7 @@ Say we have a component called `Burrito` that uses `useFirestoreDoc`:
 
 ```jsx
 function Burrito() {
-  const firebaseApp = useFirestore();
-  const burritoRef = firestore()
+  const burritoRef = useFirestore()
     .collection('tryreactfire')
     .doc('burrito');
 
