@@ -52,11 +52,15 @@ Check out the
 [live version on StackBlitz](https://stackblitz.com/fork/reactfire-sample)!
 
 ```jsx
-import React, { Component } from 'react';
-import { render } from 'react-dom';
+import React, { Component } from "react";
+import { render } from "react-dom";
 
-import 'firebase/database';
-import { FirebaseAppProvider, useFirestoreDocData, useFirestore, SuspenseWithPerf } from 'reactfire';
+import "firebase/database";
+import {
+  FirebaseAppProvider,
+  useFirestoreDocData,
+  useFirestore,
+} from "reactfire";
 
 const firebaseConfig = {
   /* Add your config from the Firebase Console */
@@ -64,19 +68,17 @@ const firebaseConfig = {
 
 function Burrito() {
   // easily access the Firestore library
-  const burritoRef = useFirestore()
-    .collection('tryreactfire')
-    .doc('burrito');
+  const burritoRef = useFirestore().collection("tryreactfire").doc("burrito");
 
   // subscribe to a document for realtime updates. just one line!
-  const {status, data} = useFirestoreDocData(burritoRef);
+  const { status, data } = useFirestoreDocData(burritoRef);
 
   // easily check the loading status
-  if (status === 'loading') {
-    return <p>Fetching burrito flavor...</p>
+  if (status === "loading") {
+    return <p>Fetching burrito flavor...</p>;
   }
 
-  return <p>The burrito is {data.yummy ? 'good' : 'bad'}!</p>;
+  return <p>The burrito is {data.yummy ? "good" : "bad"}!</p>;
 }
 
 function App() {
@@ -88,7 +90,7 @@ function App() {
   );
 }
 
-render(render(<App />, document.getElementById('root'));
+render(render(<App />, document.getElementById("root")));
 ```
 
 ---
