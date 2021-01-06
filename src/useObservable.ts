@@ -44,17 +44,17 @@ export function useObservable<T>(observableId: string, source: Observable<T | an
   }
   const observable = preloadObservable(source, observableId);
 
-  const hasInitialData = Object.keys(config).includes('initialData');
+  const hasInitialData = Object.keys(config).includes('initialData') || Object.keys(config).includes('startWithValue');
 
   const suspenseEnabled = useSuspenseEnabledFromConfigAndContext(config.suspense);
 
-  if (!observable.hasValue && !config?.initialData) {
+  if (!observable.hasValue && (!config?.initialData ?? !config?.startWithValue)) {
     if (suspenseEnabled === true) {
       throw observable.firstEmission;
     }
   }
 
-  const [latest, setValue] = React.useState(() => (observable.hasValue ? observable.value : config.initialData));
+  const [latest, setValue] = React.useState(() => (observable.hasValue ? observable.value : config.initialData ?? config.startWithValue));
   React.useEffect(() => {
     const subscription = observable.subscribe(
       v => {
