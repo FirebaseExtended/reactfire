@@ -114,7 +114,7 @@ npm install --save firebase reactfire
    //...
    ```
 
-## 6. Add the Burrito() function component to `App.js`
+## 6. Add the `Burrito` function component to `App.js`
 
 > Open the src directory and add code to App.js as described below.
 
