@@ -71,7 +71,7 @@ npm install --save firebase reactfire
 
 1. _Register_ the app.
 
-1. Copy the Firebase configuration. This will be used in Step 4.
+1. Copy the Firebase [config object](https://firebase.google.com/docs/web/setup#config-object). This will be used in Step 4.
 
 1. _Continue to Console_
 
@@ -87,14 +87,15 @@ npm install --save firebase reactfire
    //...
    ```
 
-1. Add the Firebase configuration
+1. Add the Firebase [config object](https://firebase.google.com/docs/web/setup#config-object)
 
-   > Add the firebaseConfig constant and paste the configuration from Step 3.
+   > Add the firebaseConfig constant and paste the config object from Step 4.
 
    ```jsx
    //...
    const firebaseConfig = {
-     /* Paste your config object from Firebase console here */
+     /* Paste your config object from Firebase console here
+      */
    };
    //...
    ```
@@ -122,6 +123,7 @@ npm install --save firebase reactfire
 
    ```js
    //...
+   import 'firebase/firestore';
    import { useFirestoreDocData, useFirestore } from 'reactfire';
    //...
    ```
