@@ -72,7 +72,7 @@ export interface ClaimsCheckProps {
 }
 
 export function ClaimsCheck({ user, fallback, children, requiredClaims }: ClaimsCheckProps) {
-  const { data } = useIdTokenResult(user, false);
+  const { data } = useIdTokenResult(user, false, { initialData: { claims: {} } });
   const { claims } = data;
   const missingClaims: { [key: string]: { expected: string; actual: string } } = {};
 
