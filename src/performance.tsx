@@ -15,17 +15,17 @@ export function SuspenseWithPerf({ children, traceId, fallback, firePerf }: Susp
     preloadPerformance({ firebaseApp }).then(perf => perf());
   }
 
-  const entries = performance?.getEntriesByName(traceId, 'measure') || [];
+  const entries = performance?.getEntriesByName?.(traceId, 'measure') || [];
   const startMarkName = `_${traceId}Start[${entries.length}]`;
   const endMarkName = `_${traceId}End[${entries.length}]`;
 
   const Fallback = () => {
     React.useLayoutEffect(() => {
-      performance?.mark(startMarkName);
+      performance?.mark?.(startMarkName);
 
       return () => {
-        performance?.mark(endMarkName);
-        performance?.measure(traceId, startMarkName, endMarkName);
+        performance?.mark?.(endMarkName);
+        performance?.measure?.(traceId, startMarkName, endMarkName);
       };
     }, []);
 
