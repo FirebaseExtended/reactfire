@@ -44,7 +44,7 @@ export function useObservable<T>(observableId: string, source: Observable<T | an
   }
   const observable = preloadObservable(source, observableId);
 
-  const hasInitialData = Object.keys(config).includes('initialData') || Object.keys(config).includes('startWithValue');
+  const hasInitialData = config.hasOwnProperty('initialData') || config.hasOwnProperty('startWithValue');
 
   const suspenseEnabled = useSuspenseEnabledFromConfigAndContext(config.suspense);
 
