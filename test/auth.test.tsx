@@ -1,4 +1,5 @@
 import { cleanup, render, waitFor } from '@testing-library/react';
+import { renderHook, act as hooksAct } from '@testing-library/react-hooks';
 import firebase from 'firebase';
 import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
@@ -33,10 +34,31 @@ describe.skip('Authentication', () => {
     app = firebase.initializeApp(baseConfig);
 
     // useEmulator emits a warning, which adds noise to test output. So, we get rid of console.warn for a moment
-    const realWarn = console.warn;
-    console.warn = jest.fn();
+    const realConsoleInfo = console.info;
+    jest.spyOn(console, 'info').mockImplementation((...args) => {
+      if (
+        typeof args[0] === 'string' &&
+        args[0].includes('You are using the Auth Emulator, which is intended for local testing only.  Do not use with production credentials.')
+      ) {
+        return;
+      }
+      return realConsoleInfo.call(console, args);
+    });
     app.auth().useEmulator('http://localhost:9099/');
-    console.warn = realWarn;
+
+    // <AuthCheck/> causes some extraneous warnings
+    const realError = console.error;
+    jest.spyOn(console, 'error').mockImplementation((...args) => {
+      if (
+        typeof args[0] === 'string' &&
+        args[0].includes('An update to %s inside a test was not wrapped in act(...)') &&
+        typeof args[1] === 'string' &&
+        args[1].includes('AuthCheck')
+      ) {
+        return;
+      }
+      return realError.call(console, ...args);
+    });
 
     signIn = async () => {
       return app
@@ -45,7 +67,15 @@ describe.skip('Authentication', () => {
     };
   });
 
-  test('sanity check - emulator is running', async () => {
+  afterAll(() => {
+    // @ts-ignore console.info is mocked in beforeAll
+    console.info.mockRestore();
+
+    // @ts-ignore console.error is mocked in beforeAll
+    console.error.mockRestore();
+  });
+
+  test('double check - emulator is running', async () => {
     // IF THIS TEST FAILS, MAKE SURE YOU'RE RUNNING THESE TESTS BY DOING:
     // yarn test
 
@@ -130,6 +160,7 @@ describe.skip('Authentication', () => {
 
   describe('useUser', () => {
     it('always returns a user if inside an <AuthCheck> component', async () => {
+      // Since this is wrapped in an AuthCheck component and we never sign in, this should never get rendered
       const UserDetails = () => {
         const { data: user } = useUser();
 
@@ -148,8 +179,29 @@ describe.skip('Authentication', () => {
       );
     });
 
-    test.todo('throws an error if firebase.auth() is not available');
+    it('returns the same value as firebase.auth().currentUser', async () => {
+      const { result } = renderHook(() => useUser(), { wrapper: Provider });
 
-    test.todo('returns the same value as firebase.auth().currentUser()');
+      // Signed out
+      expect(app.auth().currentUser).toBeNull();
+      expect(result.current.data).toEqual(app.auth().currentUser);
+
+      await hooksAct(async () => {
+        await signIn();
+      });
+
+      // Signed in
+      expect(app.auth().currentUser).not.toBeNull();
+      expect(result.current.data).toEqual(app.auth().currentUser);
+    });
+
+    it('synchronously returns a user if one is already signed in', async () => {
+      await signIn();
+
+      const { result } = renderHook(() => useUser(), { wrapper: Provider });
+
+      expect(app.auth().currentUser).not.toBeNull();
+      expect(result.current.data).toEqual(app.auth().currentUser);
+    });
   });
 });
