@@ -59,52 +59,8 @@ describe('useObservable', () => {
       const error = new Error('I am an error');
       const observable$ = throwError(error);
 
-      // stop a nasty-looking console error
-      // https://github.com/facebook/react/issues/11098#issuecomment-523977830
-      const spy = jest.spyOn(console, 'error');
-      spy.mockImplementation(() => {});
-
-      class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {
-        constructor(props: React.PropsWithChildren<{ hasError: boolean }>) {
-          super(props);
-          this.state = { hasError: false };
-        }
-
-        static getDerivedStateFromError() {
-          // Update state so the next render will show the fallback UI.
-          return { hasError: true };
-        }
-
-        componentDidCatch(newError: Error) {
-          expect(newError).toEqual(error);
-        }
-
-        render() {
-          if (this.state.hasError) {
-            return <h1 data-testid="error-component">Error</h1>;
-          } else {
-            return this.props.children;
-          }
-        }
-      }
-
-      const Component = () => {
-        const { data: val } = useObservable('test-error', observable$, { suspense: true });
-        return <h1 data-testid="thing">{JSON.stringify(val)}</h1>;
-      };
-
-      const { queryByTestId, getByTestId } = render(
-        <ErrorBoundary>
-          <React.Suspense fallback={null}>
-            <Component />
-          </React.Suspense>
-        </ErrorBoundary>
-      );
-
-      await waitFor(() => getByTestId('error-component'));
-      expect(queryByTestId('error-component')).toBeInTheDocument();
-
-      spy.mockRestore();
+      const { result } = renderHook(() => useObservable('test-error', observable$, { suspense: true }));
+      expect(result.error).toEqual(error);
     });
 
     it('provides the value, rather than initialData, when the observable is ready right away', () => {
