@@ -1,4 +1,4 @@
-[reactfire](../README.md) / [Exports](../modules.md) / remote-config/getValue
+[ReactFire reference docs](../README.md) / remote-config/getValue
 
 # Module: remote-config/getValue
 
@@ -24,7 +24,7 @@
 
 #### Type declaration:
 
-Defined in: [src/remote-config/getValue.tsx:6](https://github.com/FirebaseExtended/reactfire/blob/master/src/remote-config/getValue.tsx#L6)
+Defined in: [src/remote-config/getValue.tsx:6](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L6)
 
 ## Functions
 
@@ -40,7 +40,7 @@ Name | Type |
 
 **Returns:** *Observable*<[*AllParameters*](remote_config_getvalue.md#allparameters)\>
 
-Defined in: [src/remote-config/getValue.tsx:47](https://github.com/FirebaseExtended/reactfire/blob/master/src/remote-config/getValue.tsx#L47)
+Defined in: [src/remote-config/getValue.tsx:47](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L47)
 
 ___
 
@@ -57,7 +57,7 @@ Name | Type |
 
 **Returns:** *Observable*<boolean\>
 
-Defined in: [src/remote-config/getValue.tsx:42](https://github.com/FirebaseExtended/reactfire/blob/master/src/remote-config/getValue.tsx#L42)
+Defined in: [src/remote-config/getValue.tsx:42](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L42)
 
 ___
 
@@ -74,7 +74,7 @@ Name | Type |
 
 **Returns:** *Observable*<number\>
 
-Defined in: [src/remote-config/getValue.tsx:37](https://github.com/FirebaseExtended/reactfire/blob/master/src/remote-config/getValue.tsx#L37)
+Defined in: [src/remote-config/getValue.tsx:37](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L37)
 
 ___
 
@@ -91,7 +91,7 @@ Name | Type |
 
 **Returns:** *Observable*<string\>
 
-Defined in: [src/remote-config/getValue.tsx:32](https://github.com/FirebaseExtended/reactfire/blob/master/src/remote-config/getValue.tsx#L32)
+Defined in: [src/remote-config/getValue.tsx:32](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L32)
 
 ___
 
@@ -108,4 +108,4 @@ Name | Type |
 
 **Returns:** *Observable*<Value\>
 
-Defined in: [src/remote-config/getValue.tsx:27](https://github.com/FirebaseExtended/reactfire/blob/master/src/remote-config/getValue.tsx#L27)
+Defined in: [src/remote-config/getValue.tsx:27](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L27)

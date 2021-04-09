@@ -1,4 +1,4 @@
-[reactfire](../README.md) / [Exports](../modules.md) / performance
+[ReactFire reference docs](../README.md) / performance
 
 # Module: performance
 
@@ -26,4 +26,4 @@ Name | Type |
 
 **Returns:** JSX.Element
 
-Defined in: [src/performance.tsx:12](https://github.com/FirebaseExtended/reactfire/blob/master/src/performance.tsx#L12)
+Defined in: [src/performance.tsx:12](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L12)

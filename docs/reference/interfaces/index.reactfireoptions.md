@@ -1,4 +1,4 @@
-[reactfire](../README.md) / [Exports](../modules.md) / [index](../modules/index.md) / ReactFireOptions
+[ReactFire reference docs](../README.md) / [index](../modules/index.md) / ReactFireOptions
 
 # Interface: ReactFireOptions<T\>
 
@@ -25,7 +25,7 @@ Name | Default |
 
 • `Optional` **idField**: *string*
 
-Defined in: [src/index.ts:11](https://github.com/FirebaseExtended/reactfire/blob/master/src/index.ts#L11)
+Defined in: [src/index.ts:11](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L11)
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 • `Optional` **initialData**: *any*
 
-Defined in: [src/index.ts:12](https://github.com/FirebaseExtended/reactfire/blob/master/src/index.ts#L12)
+Defined in: [src/index.ts:12](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L12)
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 **`deprecated`** use initialData instead
 
-Defined in: [src/index.ts:16](https://github.com/FirebaseExtended/reactfire/blob/master/src/index.ts#L16)
+Defined in: [src/index.ts:16](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L16)
 
 ___
 
@@ -51,4 +51,4 @@ ___
 
 • `Optional` **suspense**: *boolean*
 
-Defined in: [src/index.ts:17](https://github.com/FirebaseExtended/reactfire/blob/master/src/index.ts#L17)
+Defined in: [src/index.ts:17](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L17)

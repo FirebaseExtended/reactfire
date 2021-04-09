@@ -1,4 +1,4 @@
-[reactfire](../README.md) / [Exports](../modules.md) / auth
+[ReactFire reference docs](../README.md) / auth
 
 # Module: auth
 
@@ -31,7 +31,7 @@ Name | Type |
 
 **Returns:** JSX.Element
 
-Defined in: [src/auth.tsx:97](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L97)
+Defined in: [src/auth.tsx:97](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L97)
 
 ___
 
@@ -47,7 +47,7 @@ Name | Type |
 
 **Returns:** *Element*
 
-Defined in: [src/auth.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L74)
+Defined in: [src/auth.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L74)
 
 ___
 
@@ -64,7 +64,7 @@ Name | Type |
 
 **Returns:** *Promise*<User\>
 
-Defined in: [src/auth.tsx:8](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L8)
+Defined in: [src/auth.tsx:8](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L8)
 
 ___
 
@@ -82,7 +82,7 @@ Name | Type | Default value |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.auth.IdTokenResult\>
 
-Defined in: [src/auth.tsx:45](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L45)
+Defined in: [src/auth.tsx:45](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L45)
 
 ___
 
@@ -107,4 +107,4 @@ Name | Type | Description |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.User\>
 
-Defined in: [src/auth.tsx:24](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L24)
+Defined in: [src/auth.tsx:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L24)

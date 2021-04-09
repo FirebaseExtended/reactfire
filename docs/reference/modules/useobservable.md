@@ -1,4 +1,4 @@
-[reactfire](../README.md) / [Exports](../modules.md) / useObservable
+[ReactFire reference docs](../README.md) / useObservable
 
 # Module: useObservable
 
@@ -34,7 +34,7 @@ Name | Type |
 
 **Returns:** [*SuspenseSubject*](../classes/suspensesubject.suspensesubject-1.md)<T\>
 
-Defined in: [src/useObservable.ts:19](https://github.com/FirebaseExtended/reactfire/blob/master/src/useObservable.ts#L19)
+Defined in: [src/useObservable.ts:19](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L19)
 
 ___
 
@@ -58,4 +58,4 @@ Name | Type | Default value |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T\>
 
-Defined in: [src/useObservable.ts:41](https://github.com/FirebaseExtended/reactfire/blob/master/src/useObservable.ts#L41)
+Defined in: [src/useObservable.ts:41](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L41)

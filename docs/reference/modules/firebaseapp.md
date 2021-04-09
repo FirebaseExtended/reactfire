@@ -1,4 +1,4 @@
-[reactfire](../README.md) / [Exports](../modules.md) / firebaseApp
+[ReactFire reference docs](../README.md) / firebaseApp
 
 # Module: firebaseApp
 
@@ -220,7 +220,7 @@ Re-exports: [useStorage](sdk.md#usestorage)
 
 • `Const` **version**: *any*
 
-Defined in: [src/firebaseApp.tsx:23](https://github.com/FirebaseExtended/reactfire/blob/master/src/firebaseApp.tsx#L23)
+Defined in: [src/firebaseApp.tsx:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L23)
 
 ## Functions
 
@@ -236,7 +236,7 @@ Name | Type |
 
 **Returns:** *Element*
 
-Defined in: [src/firebaseApp.tsx:27](https://github.com/FirebaseExtended/reactfire/blob/master/src/firebaseApp.tsx#L27)
+Defined in: [src/firebaseApp.tsx:27](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L27)
 
 ___
 
@@ -246,7 +246,7 @@ ___
 
 **Returns:** App
 
-Defined in: [src/firebaseApp.tsx:82](https://github.com/FirebaseExtended/reactfire/blob/master/src/firebaseApp.tsx#L82)
+Defined in: [src/firebaseApp.tsx:82](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L82)
 
 ___
 
@@ -256,7 +256,7 @@ ___
 
 **Returns:** *boolean*
 
-Defined in: [src/firebaseApp.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/master/src/firebaseApp.tsx#L64)
+Defined in: [src/firebaseApp.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L64)
 
 ___
 
@@ -272,4 +272,4 @@ Name | Type |
 
 **Returns:** *boolean*
 
-Defined in: [src/firebaseApp.tsx:71](https://github.com/FirebaseExtended/reactfire/blob/master/src/firebaseApp.tsx#L71)
+Defined in: [src/firebaseApp.tsx:71](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L71)

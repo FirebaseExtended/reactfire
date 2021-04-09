@@ -1,4 +1,4 @@
-[reactfire](../README.md) / [Exports](../modules.md) / index
+[ReactFire reference docs](../README.md) / index
 
 # Module: index
 
@@ -483,7 +483,7 @@ Name | Type |
 `_reactFireFirestoreQueryCache` | firebase.firestore.Query[] |
 `_reactFirePreloadedObservables` | *Map*<string, [*SuspenseSubject*](../classes/suspensesubject.suspensesubject-1.md)<any\>\> |
 
-Defined in: [src/index.ts:4](https://github.com/FirebaseExtended/reactfire/blob/master/src/index.ts#L4)
+Defined in: [src/index.ts:4](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L4)
 
 ## Functions
 
@@ -499,7 +499,7 @@ Name | Type |
 
 **Returns:** *any*
 
-Defined in: [src/index.ts:33](https://github.com/FirebaseExtended/reactfire/blob/master/src/index.ts#L33)
+Defined in: [src/index.ts:33](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L33)
 
 ___
 
@@ -516,7 +516,7 @@ Name | Type |
 
 **Returns:** *any*
 
-Defined in: [src/index.ts:20](https://github.com/FirebaseExtended/reactfire/blob/master/src/index.ts#L20)
+Defined in: [src/index.ts:20](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L20)
 
 ___
 
@@ -532,4 +532,4 @@ Name | Type |
 
 **Returns:** *any*
 
-Defined in: [src/index.ts:29](https://github.com/FirebaseExtended/reactfire/blob/master/src/index.ts#L29)
+Defined in: [src/index.ts:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L29)

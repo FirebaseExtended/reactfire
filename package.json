@@ -18,7 +18,7 @@
     "lint": "tsdx lint src test",
     "size": "size-limit",
     "analyze": "size-limit --why",
-    "docs": "typedoc --plugin typedoc-plugin-markdown --out ./docs/reference --gitRevision master ./src"
+    "docs": "typedoc --options typedoc.json"
   },
   "peerDependencies": {
     "firebase": "^8.1.1",

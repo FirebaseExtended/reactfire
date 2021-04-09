@@ -1,4 +1,4 @@
-[reactfire](../README.md) / [Exports](../modules.md) / [performance](../modules/performance.md) / SuspensePerfProps
+[ReactFire reference docs](../README.md) / [performance](../modules/performance.md) / SuspensePerfProps
 
 # Interface: SuspensePerfProps
 
@@ -19,7 +19,7 @@
 
 • **children**: ReactNode
 
-Defined in: [src/performance.tsx:6](https://github.com/FirebaseExtended/reactfire/blob/master/src/performance.tsx#L6)
+Defined in: [src/performance.tsx:6](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L6)
 
 ___
 
@@ -27,7 +27,7 @@ ___
 
 • **fallback**: ReactNode
 
-Defined in: [src/performance.tsx:8](https://github.com/FirebaseExtended/reactfire/blob/master/src/performance.tsx#L8)
+Defined in: [src/performance.tsx:8](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L8)
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 • `Optional` **firePerf**: Performance
 
-Defined in: [src/performance.tsx:9](https://github.com/FirebaseExtended/reactfire/blob/master/src/performance.tsx#L9)
+Defined in: [src/performance.tsx:9](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L9)
 
 ___
 
@@ -43,4 +43,4 @@ ___
 
 • **traceId**: *string*
 
-Defined in: [src/performance.tsx:7](https://github.com/FirebaseExtended/reactfire/blob/master/src/performance.tsx#L7)
+Defined in: [src/performance.tsx:7](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L7)

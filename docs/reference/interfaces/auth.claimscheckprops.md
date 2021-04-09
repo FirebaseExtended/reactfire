@@ -1,4 +1,4 @@
-[reactfire](../README.md) / [Exports](../modules.md) / [auth](../modules/auth.md) / ClaimsCheckProps
+[ReactFire reference docs](../README.md) / [auth](../modules/auth.md) / ClaimsCheckProps
 
 # Interface: ClaimsCheckProps
 
@@ -19,7 +19,7 @@
 
 • **children**: ReactNode
 
-Defined in: [src/auth.tsx:70](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L70)
+Defined in: [src/auth.tsx:70](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L70)
 
 ___
 
@@ -27,7 +27,7 @@ ___
 
 • **fallback**: ReactNode
 
-Defined in: [src/auth.tsx:69](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L69)
+Defined in: [src/auth.tsx:69](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L69)
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 #### Type declaration:
 
-Defined in: [src/auth.tsx:71](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L71)
+Defined in: [src/auth.tsx:71](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L71)
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **user**: User
 
-Defined in: [src/auth.tsx:68](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L68)
+Defined in: [src/auth.tsx:68](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L68)

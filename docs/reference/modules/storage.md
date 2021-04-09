@@ -1,4 +1,4 @@
-[reactfire](../README.md) / [Exports](../modules.md) / storage
+[ReactFire reference docs](../README.md) / storage
 
 # Module: storage
 
@@ -24,7 +24,7 @@ Name | Type |
 
 **Returns:** *Element*
 
-Defined in: [src/storage.tsx:102](https://github.com/FirebaseExtended/reactfire/blob/master/src/storage.tsx#L102)
+Defined in: [src/storage.tsx:102](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L102)
 
 ___
 
@@ -49,7 +49,7 @@ Name | Type | Description |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<string \| T\>
 
-Defined in: [src/storage.tsx:53](https://github.com/FirebaseExtended/reactfire/blob/master/src/storage.tsx#L53)
+Defined in: [src/storage.tsx:53](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L53)
 
 ___
 
@@ -75,4 +75,4 @@ Name | Type | Description |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.storage.UploadTaskSnapshot \| T\>
 
-Defined in: [src/storage.tsx:36](https://github.com/FirebaseExtended/reactfire/blob/master/src/storage.tsx#L36)
+Defined in: [src/storage.tsx:36](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L36)

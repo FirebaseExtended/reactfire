@@ -1,4 +1,4 @@
-[reactfire](../README.md) / [Exports](../modules.md) / SuspenseSubject
+[ReactFire reference docs](../README.md) / SuspenseSubject
 
 # Module: SuspenseSubject
 

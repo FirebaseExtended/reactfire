@@ -1,6 +1,6 @@
-[reactfire](README.md) / Exports
+ReactFire reference docs
 
-# reactfire
+# ReactFire reference docs
 
 ## Table of contents
 

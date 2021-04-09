@@ -1,4 +1,4 @@
-[reactfire](../README.md) / [Exports](../modules.md) / remote-config
+[ReactFire reference docs](../README.md) / remote-config
 
 # Module: remote-config
 
@@ -29,7 +29,7 @@ Name | Type | Description |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<[*AllParameters*](remote_config_getvalue.md#allparameters)\>
 
-Defined in: [src/remote-config/index.tsx:79](https://github.com/FirebaseExtended/reactfire/blob/master/src/remote-config/index.tsx#L79)
+Defined in: [src/remote-config/index.tsx:79](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L79)
 
 ___
 
@@ -48,7 +48,7 @@ Name | Type | Description |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<boolean\>
 
-Defined in: [src/remote-config/index.tsx:70](https://github.com/FirebaseExtended/reactfire/blob/master/src/remote-config/index.tsx#L70)
+Defined in: [src/remote-config/index.tsx:70](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L70)
 
 ___
 
@@ -67,7 +67,7 @@ Name | Type | Description |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<number\>
 
-Defined in: [src/remote-config/index.tsx:61](https://github.com/FirebaseExtended/reactfire/blob/master/src/remote-config/index.tsx#L61)
+Defined in: [src/remote-config/index.tsx:61](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L61)
 
 ___
 
@@ -86,7 +86,7 @@ Name | Type | Description |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<string\>
 
-Defined in: [src/remote-config/index.tsx:52](https://github.com/FirebaseExtended/reactfire/blob/master/src/remote-config/index.tsx#L52)
+Defined in: [src/remote-config/index.tsx:52](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L52)
 
 ___
 
@@ -106,4 +106,4 @@ Name | Type | Description |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<RemoteConfigValue\>
 
-Defined in: [src/remote-config/index.tsx:43](https://github.com/FirebaseExtended/reactfire/blob/master/src/remote-config/index.tsx#L43)
+Defined in: [src/remote-config/index.tsx:43](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L43)

@@ -1,4 +1,4 @@
-[reactfire](../README.md) / [Exports](../modules.md) / [auth](../modules/auth.md) / AuthCheckProps
+[ReactFire reference docs](../README.md) / [auth](../modules/auth.md) / AuthCheckProps
 
 # Interface: AuthCheckProps
 
@@ -19,7 +19,7 @@
 
 • `Optional` **auth**: Auth
 
-Defined in: [src/auth.tsx:61](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L61)
+Defined in: [src/auth.tsx:61](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L61)
 
 ___
 
@@ -27,7 +27,7 @@ ___
 
 • **children**: ReactNode
 
-Defined in: [src/auth.tsx:63](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L63)
+Defined in: [src/auth.tsx:63](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L63)
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 • **fallback**: ReactNode
 
-Defined in: [src/auth.tsx:62](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L62)
+Defined in: [src/auth.tsx:62](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L62)
 
 ___
 
@@ -43,4 +43,4 @@ ___
 
 • `Optional` **requiredClaims**: Object
 
-Defined in: [src/auth.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/master/src/auth.tsx#L64)
+Defined in: [src/auth.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L64)

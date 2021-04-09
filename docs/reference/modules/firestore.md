@@ -1,4 +1,4 @@
-[reactfire](../README.md) / [Exports](../modules.md) / firestore
+[ReactFire reference docs](../README.md) / firestore
 
 # Module: firestore
 
@@ -30,7 +30,7 @@ Name | Type |
 
 **Returns:** *Promise*<[*SuspenseSubject*](../classes/suspensesubject.suspensesubject-1.md)<DocumentSnapshot\>\>
 
-Defined in: [src/firestore.tsx:29](https://github.com/FirebaseExtended/reactfire/blob/master/src/firestore.tsx#L29)
+Defined in: [src/firestore.tsx:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L29)
 
 ___
 
@@ -55,7 +55,7 @@ Name | Type |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T *extends* {} ? T[] : firebase.firestore.QuerySnapshot\>
 
-Defined in: [src/firestore.tsx:110](https://github.com/FirebaseExtended/reactfire/blob/master/src/firestore.tsx#L110)
+Defined in: [src/firestore.tsx:110](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L110)
 
 ___
 
@@ -80,7 +80,7 @@ Name | Type |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T[]\>
 
-Defined in: [src/firestore.tsx:126](https://github.com/FirebaseExtended/reactfire/blob/master/src/firestore.tsx#L126)
+Defined in: [src/firestore.tsx:126](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L126)
 
 ___
 
@@ -105,7 +105,7 @@ Name | Type | Description |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T *extends* {} ? T : firebase.firestore.DocumentSnapshot\>
 
-Defined in: [src/firestore.tsx:48](https://github.com/FirebaseExtended/reactfire/blob/master/src/firestore.tsx#L48)
+Defined in: [src/firestore.tsx:48](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L48)
 
 ___
 
@@ -130,7 +130,7 @@ Name | Type | Description |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T\>
 
-Defined in: [src/firestore.tsx:80](https://github.com/FirebaseExtended/reactfire/blob/master/src/firestore.tsx#L80)
+Defined in: [src/firestore.tsx:80](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L80)
 
 ___
 
@@ -155,7 +155,7 @@ Name | Type | Description |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T\>
 
-Defined in: [src/firestore.tsx:95](https://github.com/FirebaseExtended/reactfire/blob/master/src/firestore.tsx#L95)
+Defined in: [src/firestore.tsx:95](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L95)
 
 ___
 
@@ -180,4 +180,4 @@ Name | Type | Description |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T *extends* {} ? T : firebase.firestore.DocumentSnapshot\>
 
-Defined in: [src/firestore.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/master/src/firestore.tsx#L64)
+Defined in: [src/firestore.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L64)
