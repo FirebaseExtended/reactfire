@@ -1,5 +1,5 @@
 import { cleanup, render, waitFor } from '@testing-library/react';
-import { renderHook, act as hooksAct } from '@testing-library/react-hooks';
+import { renderHook, act as hooksAct, cleanup as hooksCleanup } from '@testing-library/react-hooks';
 import firebase from 'firebase';
 import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
@@ -22,7 +22,7 @@ describe.skip('Authentication', () => {
 
   const Provider = ({ children }: { children: React.ReactNode }) => <FirebaseAppProvider firebaseApp={app}>{children}</FirebaseAppProvider>;
 
-  const Component = (props?: { children?: any }) => (
+  const AuthCheckWrapper = (props?: { children?: any }) => (
     <Provider>
       <React.Suspense fallback={'loading'}>
         <AuthCheck fallback={<h1 data-testid="signed-out">not signed in</h1>}>{props?.children || <h1 data-testid="signed-in">signed in</h1>}</AuthCheck>
@@ -45,20 +45,6 @@ describe.skip('Authentication', () => {
       return realConsoleInfo.call(console, args);
     });
     app.auth().useEmulator('http://localhost:9099/');
-
-    // <AuthCheck/> causes some extraneous warnings
-    const realError = console.error;
-    jest.spyOn(console, 'error').mockImplementation((...args) => {
-      if (
-        typeof args[0] === 'string' &&
-        args[0].includes('An update to %s inside a test was not wrapped in act(...)') &&
-        typeof args[1] === 'string' &&
-        args[1].includes('AuthCheck')
-      ) {
-        return;
-      }
-      return realError.call(console, ...args);
-    });
 
     signIn = async () => {
       return app
@@ -84,39 +70,38 @@ describe.skip('Authentication', () => {
     expect(user).toBeDefined();
   });
 
+  beforeEach(async () => {
+    // clear the signed in user
+    await app.auth().signOut();
+  });
+
+  afterEach(async () => {
+    hooksCleanup();
+    cleanup();
+    jest.clearAllMocks();
+    await app.auth().signOut();
+  });
+
   describe('AuthCheck', () => {
-    beforeEach(async () => {
-      // clear the signed in user
-      await act(async () => {
-        await app.auth().signOut();
-      });
+    it('can find firebase Auth from Context', async () => {
+      const { getByTestId } = render(<AuthCheckWrapper />);
+
+      await waitFor(() => expect(getByTestId('signed-out')).toBeInTheDocument());
     });
 
-    afterEach(() => {
-      act(() => {
-        cleanup();
-        jest.clearAllMocks();
-      });
-    });
-
-    it('can find firebase Auth from Context', () => {
-      expect(() => render(<Component />)).not.toThrow();
-    });
-
-    it('can use firebase Auth from props', () => {
-      expect(() =>
-        render(
-          <React.Suspense fallback={'loading'}>
-            <AuthCheck fallback={<h1>not signed in</h1>} auth={(app.auth() as unknown) as firebase.auth.Auth}>
-              {'signed in'}
-            </AuthCheck>
-          </React.Suspense>
-        )
-      ).not.toThrow();
+    it('can use firebase Auth from props', async () => {
+      const { getByTestId } = render(
+        <React.Suspense fallback={'loading'}>
+          <AuthCheck fallback={<h1 data-testid="signed-out">not signed in</h1>} auth={(app.auth() as unknown) as firebase.auth.Auth}>
+            {'signed in'}
+          </AuthCheck>
+        </React.Suspense>
+      );
+      await waitFor(() => expect(getByTestId('signed-out')).toBeInTheDocument());
     });
 
     it('renders the fallback if a user is not signed in', async () => {
-      const { getByTestId } = render(<Component />);
+      const { getByTestId } = render(<AuthCheckWrapper />);
 
       await waitFor(() => expect(getByTestId('signed-out')).toBeInTheDocument());
 
@@ -132,13 +117,13 @@ describe.skip('Authentication', () => {
         await signIn();
       });
 
-      const { getByTestId } = render(<Component />);
+      const { getByTestId } = render(<AuthCheckWrapper />);
 
       await waitFor(() => expect(getByTestId('signed-in')).toBeInTheDocument());
     });
 
     it('can switch between logged in and logged out', async () => {
-      const { getByTestId } = render(<Component />);
+      const { getByTestId } = render(<AuthCheckWrapper />);
 
       await waitFor(() => expect(getByTestId('signed-out')).toBeInTheDocument());
 
@@ -172,9 +157,9 @@ describe.skip('Authentication', () => {
 
       render(
         <>
-          <Component>
+          <AuthCheckWrapper>
             <UserDetails />
-          </Component>
+          </AuthCheckWrapper>
         </>
       );
     });
