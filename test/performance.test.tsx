@@ -107,7 +107,7 @@ describe('SuspenseWithPerf', () => {
     const promise = new Promise(resolve => {
       o$.subscribe(() => {
         shouldThrow = false;
-        resolve();
+        resolve(true);
       });
     });
 
