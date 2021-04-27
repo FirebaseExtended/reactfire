@@ -21,16 +21,16 @@
 
 #### Type parameters:
 
-Name |
-:------ |
-`T` |
+| Name |
+| :------ |
+| `T` |
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`source` | *Observable*<T\> |
-`id` | *string* |
+| Name | Type |
+| :------ | :------ |
+| `source` | *Observable*<T\> |
+| `id` | *string* |
 
 **Returns:** [*SuspenseSubject*](../classes/suspensesubject.suspensesubject-1.md)<T\>
 
@@ -44,17 +44,17 @@ ___
 
 #### Type parameters:
 
-Name |
-:------ |
-`T` |
+| Name |
+| :------ |
+| `T` |
 
 #### Parameters:
 
-Name | Type | Default value |
-:------ | :------ | :------ |
-`observableId` | *string* | - |
-`source` | *Observable*<T \| any\> | - |
-`config` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md) | {} |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `observableId` | *string* | - |
+| `source` | *Observable*<T \| any\> | - |
+| `config` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md) | {} |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T\>
 

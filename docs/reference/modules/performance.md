@@ -20,9 +20,9 @@
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`__namedParameters` | [*SuspensePerfProps*](../interfaces/performance.suspenseperfprops.md) |
+| Name | Type |
+| :------ | :------ |
+| `__namedParameters` | [*SuspensePerfProps*](../interfaces/performance.suspenseperfprops.md) |
 
 **Returns:** JSX.Element
 

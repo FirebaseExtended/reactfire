@@ -21,16 +21,16 @@ Subscribe to a Realtime Database list
 
 #### Type parameters:
 
-Name | Default |
-:------ | :------ |
-`T` | { [key: string]: *unknown*;  } |
+| Name | Default |
+| :------ | :------ |
+| `T` | { [key: string]: *unknown*;  } |
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`ref` | firebase.database.Reference \| firebase.database.Query | Reference to the DB List you want to listen to   |
-`options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T[]\> |     |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `ref` | firebase.database.Reference \| firebase.database.Query | Reference to the DB List you want to listen to |
+| `options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T[]\> |  |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<QueryChange[] \| T[]\>
 
@@ -44,16 +44,16 @@ ___
 
 #### Type parameters:
 
-Name | Default |
-:------ | :------ |
-`T` | { [key: string]: *unknown*;  } |
+| Name | Default |
+| :------ | :------ |
+| `T` | { [key: string]: *unknown*;  } |
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`ref` | firebase.database.Reference \| firebase.database.Query |
-`options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T[]\> |
+| Name | Type |
+| :------ | :------ |
+| `ref` | firebase.database.Reference \| firebase.database.Query |
+| `options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T[]\> |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T[]\>
 
@@ -69,16 +69,16 @@ Subscribe to a Realtime Database object
 
 #### Type parameters:
 
-Name | Default |
-:------ | :------ |
-`T` | *unknown* |
+| Name | Default |
+| :------ | :------ |
+| `T` | *unknown* |
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`ref` | firebase.database.Reference | Reference to the DB object you want to listen to   |
-`options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\> |     |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `ref` | firebase.database.Reference | Reference to the DB object you want to listen to |
+| `options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\> |  |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<QueryChange \| T\>
 
@@ -92,16 +92,16 @@ ___
 
 #### Type parameters:
 
-Name |
-:------ |
-`T` |
+| Name |
+| :------ |
+| `T` |
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`ref` | firebase.database.Reference |
-`options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\> |
+| Name | Type |
+| :------ | :------ |
+| `ref` | firebase.database.Reference |
+| `options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\> |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T\>
 

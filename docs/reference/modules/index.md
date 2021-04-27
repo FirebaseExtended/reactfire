@@ -477,11 +477,11 @@ Re-exports: [version](firebaseapp.md#version)
 
 #### Type declaration:
 
-Name | Type |
-:------ | :------ |
-`_reactFireDatabaseCachedQueries` | firebase.database.Query[] |
-`_reactFireFirestoreQueryCache` | firebase.firestore.Query[] |
-`_reactFirePreloadedObservables` | *Map*<string, [*SuspenseSubject*](../classes/suspensesubject.suspensesubject-1.md)<any\>\> |
+| Name | Type |
+| :------ | :------ |
+| `_reactFireDatabaseCachedQueries` | firebase.database.Query[] |
+| `_reactFireFirestoreQueryCache` | firebase.firestore.Query[] |
+| `_reactFirePreloadedObservables` | *Map*<string, [*SuspenseSubject*](../classes/suspensesubject.suspensesubject-1.md)<any\>\> |
 
 Defined in: [src/index.ts:4](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L4)
 
@@ -493,9 +493,9 @@ Defined in: [src/index.ts:4](https://github.com/FirebaseExtended/reactfire/blob/
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`options` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md) |
+| Name | Type |
+| :------ | :------ |
+| `options` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md) |
 
 **Returns:** *any*
 
@@ -509,10 +509,10 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`options` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md) |
-`field` | *string* |
+| Name | Type |
+| :------ | :------ |
+| `options` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md) |
+| `field` | *string* |
 
 **Returns:** *any*
 
@@ -526,9 +526,9 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`options` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md) |
+| Name | Type |
+| :------ | :------ |
+| `options` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md) |
 
 **Returns:** *any*
 

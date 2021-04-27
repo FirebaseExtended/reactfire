@@ -6,9 +6,9 @@
 
 ## Type parameters
 
-Name | Default |
-:------ | :------ |
-`T` | *unknown* |
+| Name | Default |
+| :------ | :------ |
+| `T` | *unknown* |
 
 ## Table of contents
 

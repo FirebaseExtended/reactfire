@@ -6,9 +6,9 @@
 
 ## Type parameters
 
-Name |
-:------ |
-`T` |
+| Name |
+| :------ |
+| `T` |
 
 ## Hierarchy
 
@@ -77,20 +77,20 @@ Name |
 
 #### Type parameters:
 
-Name |
-:------ |
-`T` |
+| Name |
+| :------ |
+| `T` |
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`innerObservable` | *Observable*<T\> |
-`_timeoutWindow` | *number* |
+| Name | Type |
+| :------ | :------ |
+| `innerObservable` | *Observable*<T\> |
+| `_timeoutWindow` | *number* |
 
 **Returns:** [*SuspenseSubject*](suspensesubject.suspensesubject-1.md)<T\>
 
-Overrides: Subject&lt;T&gt;.constructor
+Overrides: Subject&lt;T\&gt;.constructor
 
 Defined in: [src/SuspenseSubject.ts:16](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L16)
 
@@ -142,7 +142,7 @@ ___
 
 Internal implementation detail, do not use directly.
 
-Inherited from: Subject._isScalar
+Inherited from: Subject.\_isScalar
 
 Defined in: node_modules/rxjs/internal/Observable.d.ts:15
 
@@ -374,18 +374,18 @@ observableIfYouHaveAccess.subscribe(
 
 #### Type parameters:
 
-Name | Default |
-:------ | :------ |
-`T` | *never* |
-`F` | *never* |
+| Name | Default |
+| :------ | :------ |
+| `T` | *never* |
+| `F` | *never* |
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`condition` | () => *boolean* | Condition which Observable should be chosen.   |
-`trueResult?` | *SubscribableOrPromise*<T\> | - |
-`falseResult?` | *SubscribableOrPromise*<F\> | - |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `condition` | () => *boolean* | Condition which Observable should be chosen. |
+| `trueResult?` | *SubscribableOrPromise*<T\> | - |
+| `falseResult?` | *SubscribableOrPromise*<F\> | - |
 
 **Returns:** *Observable*<T \| F\>
 
@@ -476,10 +476,10 @@ interval(1000).pipe(
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`error` | *any* | The particular Error to pass to the error notification.   |
-`scheduler?` | SchedulerLike | - |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `error` | *any* | The particular Error to pass to the error notification. |
+| `scheduler?` | SchedulerLike | - |
 
 **Returns:** *Observable*<never\>
 
@@ -540,9 +540,9 @@ Defined in: [src/SuspenseSubject.ts:51](https://github.com/FirebaseExtended/reac
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`value` | T |
+| Name | Type |
+| :------ | :------ |
+| `value` | T |
 
 **Returns:** *void*
 
@@ -566,13 +566,13 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`subscriber` | *Subscriber*<T\> |
+| Name | Type |
+| :------ | :------ |
+| `subscriber` | *Subscriber*<T\> |
 
 **Returns:** *Subscription*
 
-Overrides: Subject._subscribe
+Overrides: Subject.\_subscribe
 
 Defined in: [src/SuspenseSubject.ts:82](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L82)
 
@@ -586,13 +586,13 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`subscriber` | *Subscriber*<T\> |
+| Name | Type |
+| :------ | :------ |
+| `subscriber` | *Subscriber*<T\> |
 
 **Returns:** TeardownLogic
 
-Inherited from: Subject._trySubscribe
+Inherited from: Subject.\_trySubscribe
 
 Defined in: node_modules/rxjs/internal/Subject.d.ts:39
 
@@ -634,9 +634,9 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`err` | *any* |
+| Name | Type |
+| :------ | :------ |
+| `err` | *any* |
 
 **Returns:** *void*
 
@@ -654,10 +654,10 @@ ___
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`next` | (`value`: T) => *void* | a handler for each value emitted by the observable   |
-`promiseCtor?` | PromiseConstructorLike | - |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `next` | (`value`: T) => *void* | a handler for each value emitted by the observable |
+| `promiseCtor?` | PromiseConstructorLike | - |
 
 **Returns:** *Promise*<void\>
 
@@ -676,15 +676,15 @@ ___
 
 #### Type parameters:
 
-Name |
-:------ |
-`R` |
+| Name |
+| :------ |
+| `R` |
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`operator` | *Operator*<T, R\> |
+| Name | Type |
+| :------ | :------ |
+| `operator` | *Operator*<T, R\> |
 
 **Returns:** *Observable*<R\>
 
@@ -700,9 +700,9 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`value?` | T |
+| Name | Type |
+| :------ | :------ |
+| `value?` | T |
 
 **Returns:** *void*
 
@@ -726,15 +726,15 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:77
 
 #### Type parameters:
 
-Name |
-:------ |
-`A` |
+| Name |
+| :------ |
+| `A` |
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`op1` | *OperatorFunction*<T, A\> |
+| Name | Type |
+| :------ | :------ |
+| `op1` | *OperatorFunction*<T, A\> |
 
 **Returns:** *Observable*<A\>
 
@@ -746,17 +746,17 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:78
 
 #### Type parameters:
 
-Name |
-:------ |
-`A` |
-`B` |
+| Name |
+| :------ |
+| `A` |
+| `B` |
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`op1` | *OperatorFunction*<T, A\> |
-`op2` | *OperatorFunction*<A, B\> |
+| Name | Type |
+| :------ | :------ |
+| `op1` | *OperatorFunction*<T, A\> |
+| `op2` | *OperatorFunction*<A, B\> |
 
 **Returns:** *Observable*<B\>
 
@@ -768,19 +768,19 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:79
 
 #### Type parameters:
 
-Name |
-:------ |
-`A` |
-`B` |
-`C` |
+| Name |
+| :------ |
+| `A` |
+| `B` |
+| `C` |
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`op1` | *OperatorFunction*<T, A\> |
-`op2` | *OperatorFunction*<A, B\> |
-`op3` | *OperatorFunction*<B, C\> |
+| Name | Type |
+| :------ | :------ |
+| `op1` | *OperatorFunction*<T, A\> |
+| `op2` | *OperatorFunction*<A, B\> |
+| `op3` | *OperatorFunction*<B, C\> |
 
 **Returns:** *Observable*<C\>
 
@@ -792,21 +792,21 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:80
 
 #### Type parameters:
 
-Name |
-:------ |
-`A` |
-`B` |
-`C` |
-`D` |
+| Name |
+| :------ |
+| `A` |
+| `B` |
+| `C` |
+| `D` |
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`op1` | *OperatorFunction*<T, A\> |
-`op2` | *OperatorFunction*<A, B\> |
-`op3` | *OperatorFunction*<B, C\> |
-`op4` | *OperatorFunction*<C, D\> |
+| Name | Type |
+| :------ | :------ |
+| `op1` | *OperatorFunction*<T, A\> |
+| `op2` | *OperatorFunction*<A, B\> |
+| `op3` | *OperatorFunction*<B, C\> |
+| `op4` | *OperatorFunction*<C, D\> |
 
 **Returns:** *Observable*<D\>
 
@@ -818,23 +818,23 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:81
 
 #### Type parameters:
 
-Name |
-:------ |
-`A` |
-`B` |
-`C` |
-`D` |
-`E` |
+| Name |
+| :------ |
+| `A` |
+| `B` |
+| `C` |
+| `D` |
+| `E` |
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`op1` | *OperatorFunction*<T, A\> |
-`op2` | *OperatorFunction*<A, B\> |
-`op3` | *OperatorFunction*<B, C\> |
-`op4` | *OperatorFunction*<C, D\> |
-`op5` | *OperatorFunction*<D, E\> |
+| Name | Type |
+| :------ | :------ |
+| `op1` | *OperatorFunction*<T, A\> |
+| `op2` | *OperatorFunction*<A, B\> |
+| `op3` | *OperatorFunction*<B, C\> |
+| `op4` | *OperatorFunction*<C, D\> |
+| `op5` | *OperatorFunction*<D, E\> |
 
 **Returns:** *Observable*<E\>
 
@@ -846,25 +846,25 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:82
 
 #### Type parameters:
 
-Name |
-:------ |
-`A` |
-`B` |
-`C` |
-`D` |
-`E` |
-`F` |
+| Name |
+| :------ |
+| `A` |
+| `B` |
+| `C` |
+| `D` |
+| `E` |
+| `F` |
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`op1` | *OperatorFunction*<T, A\> |
-`op2` | *OperatorFunction*<A, B\> |
-`op3` | *OperatorFunction*<B, C\> |
-`op4` | *OperatorFunction*<C, D\> |
-`op5` | *OperatorFunction*<D, E\> |
-`op6` | *OperatorFunction*<E, F\> |
+| Name | Type |
+| :------ | :------ |
+| `op1` | *OperatorFunction*<T, A\> |
+| `op2` | *OperatorFunction*<A, B\> |
+| `op3` | *OperatorFunction*<B, C\> |
+| `op4` | *OperatorFunction*<C, D\> |
+| `op5` | *OperatorFunction*<D, E\> |
+| `op6` | *OperatorFunction*<E, F\> |
 
 **Returns:** *Observable*<F\>
 
@@ -876,27 +876,27 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:83
 
 #### Type parameters:
 
-Name |
-:------ |
-`A` |
-`B` |
-`C` |
-`D` |
-`E` |
-`F` |
-`G` |
+| Name |
+| :------ |
+| `A` |
+| `B` |
+| `C` |
+| `D` |
+| `E` |
+| `F` |
+| `G` |
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`op1` | *OperatorFunction*<T, A\> |
-`op2` | *OperatorFunction*<A, B\> |
-`op3` | *OperatorFunction*<B, C\> |
-`op4` | *OperatorFunction*<C, D\> |
-`op5` | *OperatorFunction*<D, E\> |
-`op6` | *OperatorFunction*<E, F\> |
-`op7` | *OperatorFunction*<F, G\> |
+| Name | Type |
+| :------ | :------ |
+| `op1` | *OperatorFunction*<T, A\> |
+| `op2` | *OperatorFunction*<A, B\> |
+| `op3` | *OperatorFunction*<B, C\> |
+| `op4` | *OperatorFunction*<C, D\> |
+| `op5` | *OperatorFunction*<D, E\> |
+| `op6` | *OperatorFunction*<E, F\> |
+| `op7` | *OperatorFunction*<F, G\> |
 
 **Returns:** *Observable*<G\>
 
@@ -908,29 +908,29 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:84
 
 #### Type parameters:
 
-Name |
-:------ |
-`A` |
-`B` |
-`C` |
-`D` |
-`E` |
-`F` |
-`G` |
-`H` |
+| Name |
+| :------ |
+| `A` |
+| `B` |
+| `C` |
+| `D` |
+| `E` |
+| `F` |
+| `G` |
+| `H` |
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`op1` | *OperatorFunction*<T, A\> |
-`op2` | *OperatorFunction*<A, B\> |
-`op3` | *OperatorFunction*<B, C\> |
-`op4` | *OperatorFunction*<C, D\> |
-`op5` | *OperatorFunction*<D, E\> |
-`op6` | *OperatorFunction*<E, F\> |
-`op7` | *OperatorFunction*<F, G\> |
-`op8` | *OperatorFunction*<G, H\> |
+| Name | Type |
+| :------ | :------ |
+| `op1` | *OperatorFunction*<T, A\> |
+| `op2` | *OperatorFunction*<A, B\> |
+| `op3` | *OperatorFunction*<B, C\> |
+| `op4` | *OperatorFunction*<C, D\> |
+| `op5` | *OperatorFunction*<D, E\> |
+| `op6` | *OperatorFunction*<E, F\> |
+| `op7` | *OperatorFunction*<F, G\> |
+| `op8` | *OperatorFunction*<G, H\> |
 
 **Returns:** *Observable*<H\>
 
@@ -942,31 +942,31 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:85
 
 #### Type parameters:
 
-Name |
-:------ |
-`A` |
-`B` |
-`C` |
-`D` |
-`E` |
-`F` |
-`G` |
-`H` |
-`I` |
+| Name |
+| :------ |
+| `A` |
+| `B` |
+| `C` |
+| `D` |
+| `E` |
+| `F` |
+| `G` |
+| `H` |
+| `I` |
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`op1` | *OperatorFunction*<T, A\> |
-`op2` | *OperatorFunction*<A, B\> |
-`op3` | *OperatorFunction*<B, C\> |
-`op4` | *OperatorFunction*<C, D\> |
-`op5` | *OperatorFunction*<D, E\> |
-`op6` | *OperatorFunction*<E, F\> |
-`op7` | *OperatorFunction*<F, G\> |
-`op8` | *OperatorFunction*<G, H\> |
-`op9` | *OperatorFunction*<H, I\> |
+| Name | Type |
+| :------ | :------ |
+| `op1` | *OperatorFunction*<T, A\> |
+| `op2` | *OperatorFunction*<A, B\> |
+| `op3` | *OperatorFunction*<B, C\> |
+| `op4` | *OperatorFunction*<C, D\> |
+| `op5` | *OperatorFunction*<D, E\> |
+| `op6` | *OperatorFunction*<E, F\> |
+| `op7` | *OperatorFunction*<F, G\> |
+| `op8` | *OperatorFunction*<G, H\> |
+| `op9` | *OperatorFunction*<H, I\> |
 
 **Returns:** *Observable*<I\>
 
@@ -978,32 +978,32 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:86
 
 #### Type parameters:
 
-Name |
-:------ |
-`A` |
-`B` |
-`C` |
-`D` |
-`E` |
-`F` |
-`G` |
-`H` |
-`I` |
+| Name |
+| :------ |
+| `A` |
+| `B` |
+| `C` |
+| `D` |
+| `E` |
+| `F` |
+| `G` |
+| `H` |
+| `I` |
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`op1` | *OperatorFunction*<T, A\> |
-`op2` | *OperatorFunction*<A, B\> |
-`op3` | *OperatorFunction*<B, C\> |
-`op4` | *OperatorFunction*<C, D\> |
-`op5` | *OperatorFunction*<D, E\> |
-`op6` | *OperatorFunction*<E, F\> |
-`op7` | *OperatorFunction*<F, G\> |
-`op8` | *OperatorFunction*<G, H\> |
-`op9` | *OperatorFunction*<H, I\> |
-`...operations` | *OperatorFunction*<any, any\>[] |
+| Name | Type |
+| :------ | :------ |
+| `op1` | *OperatorFunction*<T, A\> |
+| `op2` | *OperatorFunction*<A, B\> |
+| `op3` | *OperatorFunction*<B, C\> |
+| `op4` | *OperatorFunction*<C, D\> |
+| `op5` | *OperatorFunction*<D, E\> |
+| `op6` | *OperatorFunction*<E, F\> |
+| `op7` | *OperatorFunction*<F, G\> |
+| `op8` | *OperatorFunction*<G, H\> |
+| `op9` | *OperatorFunction*<H, I\> |
+| `...operations` | *OperatorFunction*<any, any\>[] |
 
 **Returns:** *Observable*<{}\>
 
@@ -1019,9 +1019,9 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`observer?` | *PartialObserver*<T\> |
+| Name | Type |
+| :------ | :------ |
+| `observer?` | *PartialObserver*<T\> |
 
 **Returns:** *Subscription*
 
@@ -1029,17 +1029,17 @@ Inherited from: Subject.subscribe
 
 Defined in: node_modules/rxjs/internal/Observable.d.ts:47
 
-▸ **subscribe**(`next`: *undefined* \| *null*, `error`: *undefined* \| *null*, `complete`: () => *void*): *Subscription*
+▸ **subscribe**(`next`: *undefined* \| ``null``, `error`: *undefined* \| ``null``, `complete`: () => *void*): *Subscription*
 
 **`deprecated`** Use an observer instead of a complete callback
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`next` | *undefined* \| *null* |
-`error` | *undefined* \| *null* |
-`complete` | () => *void* |
+| Name | Type |
+| :------ | :------ |
+| `next` | *undefined* \| ``null`` |
+| `error` | *undefined* \| ``null`` |
+| `complete` | () => *void* |
 
 **Returns:** *Subscription*
 
@@ -1047,17 +1047,17 @@ Inherited from: Subject.subscribe
 
 Defined in: node_modules/rxjs/internal/Observable.d.ts:49
 
-▸ **subscribe**(`next`: *undefined* \| *null*, `error`: (`error`: *any*) => *void*, `complete?`: () => *void*): *Subscription*
+▸ **subscribe**(`next`: *undefined* \| ``null``, `error`: (`error`: *any*) => *void*, `complete?`: () => *void*): *Subscription*
 
 **`deprecated`** Use an observer instead of an error callback
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`next` | *undefined* \| *null* |
-`error` | (`error`: *any*) => *void* |
-`complete?` | () => *void* |
+| Name | Type |
+| :------ | :------ |
+| `next` | *undefined* \| ``null`` |
+| `error` | (`error`: *any*) => *void* |
+| `complete?` | () => *void* |
 
 **Returns:** *Subscription*
 
@@ -1065,17 +1065,17 @@ Inherited from: Subject.subscribe
 
 Defined in: node_modules/rxjs/internal/Observable.d.ts:51
 
-▸ **subscribe**(`next`: (`value`: T) => *void*, `error`: *undefined* \| *null*, `complete`: () => *void*): *Subscription*
+▸ **subscribe**(`next`: (`value`: T) => *void*, `error`: *undefined* \| ``null``, `complete`: () => *void*): *Subscription*
 
 **`deprecated`** Use an observer instead of a complete callback
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`next` | (`value`: T) => *void* |
-`error` | *undefined* \| *null* |
-`complete` | () => *void* |
+| Name | Type |
+| :------ | :------ |
+| `next` | (`value`: T) => *void* |
+| `error` | *undefined* \| ``null`` |
+| `complete` | () => *void* |
 
 **Returns:** *Subscription*
 
@@ -1087,11 +1087,11 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:53
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`next?` | (`value`: T) => *void* |
-`error?` | (`error`: *any*) => *void* |
-`complete?` | () => *void* |
+| Name | Type |
+| :------ | :------ |
+| `next?` | (`value`: T) => *void* |
+| `error?` | (`error`: *any*) => *void* |
+| `complete?` | () => *void* |
 
 **Returns:** *Subscription*
 
@@ -1107,9 +1107,9 @@ ___
 
 #### Type parameters:
 
-Name |
-:------ |
-`T` |
+| Name |
+| :------ |
+| `T` |
 
 **Returns:** *Promise*<T\>
 
@@ -1121,15 +1121,15 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:88
 
 #### Type parameters:
 
-Name |
-:------ |
-`T` |
+| Name |
+| :------ |
+| `T` |
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`PromiseCtor` | PromiseConstructor |
+| Name | Type |
+| :------ | :------ |
+| `PromiseCtor` | PromiseConstructor |
 
 **Returns:** *Promise*<T\>
 
@@ -1141,15 +1141,15 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:89
 
 #### Type parameters:
 
-Name |
-:------ |
-`T` |
+| Name |
+| :------ |
+| `T` |
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`PromiseCtor` | PromiseConstructorLike |
+| Name | Type |
+| :------ | :------ |
+| `PromiseCtor` | PromiseConstructorLike |
 
 **Returns:** *Promise*<T\>
 

@@ -18,9 +18,9 @@
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`props` | StorageImageProps & *React.DetailedHTMLProps*<React.ImgHTMLAttributes<HTMLImageElement\>, HTMLImageElement\> |
+| Name | Type |
+| :------ | :------ |
+| `props` | StorageImageProps & *React.DetailedHTMLProps*<React.ImgHTMLAttributes<HTMLImageElement\>, HTMLImageElement\> |
 
 **Returns:** *Element*
 
@@ -36,16 +36,16 @@ Subscribe to a storage ref's download URL
 
 #### Type parameters:
 
-Name | Default |
-:------ | :------ |
-`T` | *string* |
+| Name | Default |
+| :------ | :------ |
+| `T` | *string* |
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`ref` | firebase.storage.Reference | reference to the blob you want to download   |
-`options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\> |     |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `ref` | firebase.storage.Reference | reference to the blob you want to download |
+| `options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\> |  |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<string \| T\>
 
@@ -61,17 +61,17 @@ Subscribe to the progress of a storage task
 
 #### Type parameters:
 
-Name | Default |
-:------ | :------ |
-`T` | *unknown* |
+| Name | Default |
+| :------ | :------ |
+| `T` | *unknown* |
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`task` | firebase.storage.UploadTask | the task you want to listen to   |
-`ref` | firebase.storage.Reference | reference to the blob the task is acting on   |
-`options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\> |     |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `task` | firebase.storage.UploadTask | the task you want to listen to |
+| `ref` | firebase.storage.Reference | reference to the blob the task is acting on |
+| `options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\> |  |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.storage.UploadTaskSnapshot \| T\>
 

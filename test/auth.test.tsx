@@ -7,16 +7,7 @@ import { FirebaseAppProvider, AuthCheck, useUser } from '..';
 import { act } from 'react-dom/test-utils';
 import { baseConfig } from './appConfig';
 
-/**
- * These tests have to be skipped in CI because of an issue with jsdom.
- *
- * The Auth emulator server sets `access-control-allow-headers: *`
- * jsdom doesn't currently work with that setting: https://github.com/jsdom/jsdom/issues/2408#issuecomment-480969435
- *
- * To fix this when running tests manually, modify `node_modules/jsdom/lib/jsdom/living/xhr-utils.js`
- * with the changes in https://github.com/jsdom/jsdom/pull/3073
- */
-describe.skip('Authentication', () => {
+describe('Authentication', () => {
   let app: firebase.app.App;
   let signIn: () => Promise<firebase.auth.UserCredential>;
 

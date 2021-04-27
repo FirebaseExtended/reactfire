@@ -230,9 +230,9 @@ Defined in: [src/firebaseApp.tsx:23](https://github.com/FirebaseExtended/reactfi
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`props` | Props & { [key: string]: *unknown*;  } |
+| Name | Type |
+| :------ | :------ |
+| `props` | Props & { [key: string]: *unknown*;  } |
 
 **Returns:** *Element*
 
@@ -266,9 +266,9 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`suspenseFromConfig?` | *boolean* |
+| Name | Type |
+| :------ | :------ |
+| `suspenseFromConfig?` | *boolean* |
 
 **Returns:** *boolean*
 
