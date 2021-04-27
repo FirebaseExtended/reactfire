@@ -6,9 +6,9 @@
 
 ## Type parameters
 
-Name |
-:------ |
-`T` |
+| Name |
+| :------ |
+| `T` |
 
 ## Table of contents
 
@@ -65,6 +65,6 @@ ___
 
 ### status
 
-• **status**: *loading* \| *error* \| *success*
+• **status**: ``"loading"`` \| ``"error"`` \| ``"success"``
 
 Defined in: [src/useObservable.ts:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L30)

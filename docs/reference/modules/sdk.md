@@ -49,17 +49,17 @@
 
 #### Type parameters:
 
-Name |
-:------ |
-`T` |
+| Name |
+| :------ |
+| `T` |
 
 #### Type declaration:
 
-Name | Type |
-:------ | :------ |
-`firebaseApp` | App |
-`setup`? | (`instanceFactory`: T) => *void* \| *Promise*<any\> |
-`suspense`? | *boolean* |
+| Name | Type |
+| :------ | :------ |
+| `firebaseApp` | App |
+| `setup?` | (`instanceFactory`: T) => *void* \| *Promise*<any\> |
+| `suspense?` | *boolean* |
 
 Defined in: [src/sdk.tsx:99](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L99)
 
@@ -183,9 +183,9 @@ Defined in: [src/sdk.tsx:87](https://github.com/FirebaseExtended/reactfire/blob/
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`app?` | firebase.app.App |
+| Name | Type |
+| :------ | :------ |
+| `app?` | firebase.app.App |
 
 **Returns:** firebase.performance.Performance
 
@@ -199,9 +199,9 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`options` | [*PreloadOptions*](sdk.md#preloadoptions)<() => Analytics\> |
+| Name | Type |
+| :------ | :------ |
+| `options` | [*PreloadOptions*](sdk.md#preloadoptions)<() => Analytics\> |
 
 **Returns:** *Promise*<() => Analytics\>
 
@@ -215,9 +215,9 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`options` | [*PreloadOptions*](sdk.md#preloadoptions)<() => Auth\> |
+| Name | Type |
+| :------ | :------ |
+| `options` | [*PreloadOptions*](sdk.md#preloadoptions)<() => Auth\> |
 
 **Returns:** *Promise*<() => Auth\>
 
@@ -231,9 +231,9 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`options` | [*PreloadOptions*](sdk.md#preloadoptions)<(`url?`: *string*) => Database\> |
+| Name | Type |
+| :------ | :------ |
+| `options` | [*PreloadOptions*](sdk.md#preloadoptions)<(`url?`: *string*) => Database\> |
 
 **Returns:** *Promise*<(`url?`: *string*) => Database\>
 
@@ -247,9 +247,9 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`options` | [*PreloadOptions*](sdk.md#preloadoptions)<() => *Firestore*\> |
+| Name | Type |
+| :------ | :------ |
+| `options` | [*PreloadOptions*](sdk.md#preloadoptions)<() => *Firestore*\> |
 
 **Returns:** *Promise*<() => *Firestore*\>
 
@@ -263,9 +263,9 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`options` | [*PreloadOptions*](sdk.md#preloadoptions)<(`regionOrCustomDomain?`: *string*) => *Functions*\> |
+| Name | Type |
+| :------ | :------ |
+| `options` | [*PreloadOptions*](sdk.md#preloadoptions)<(`regionOrCustomDomain?`: *string*) => *Functions*\> |
 
 **Returns:** *Promise*<(`regionOrCustomDomain?`: *string*) => *Functions*\>
 
@@ -279,9 +279,9 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`options` | [*PreloadOptions*](sdk.md#preloadoptions)<() => Messaging\> |
+| Name | Type |
+| :------ | :------ |
+| `options` | [*PreloadOptions*](sdk.md#preloadoptions)<() => Messaging\> |
 
 **Returns:** *Promise*<() => Messaging\>
 
@@ -295,9 +295,9 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`options` | [*PreloadOptions*](sdk.md#preloadoptions)<() => Performance\> |
+| Name | Type |
+| :------ | :------ |
+| `options` | [*PreloadOptions*](sdk.md#preloadoptions)<() => Performance\> |
 
 **Returns:** *Promise*<() => Performance\>
 
@@ -311,9 +311,9 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`options` | [*PreloadOptions*](sdk.md#preloadoptions)<() => RemoteConfig\> |
+| Name | Type |
+| :------ | :------ |
+| `options` | [*PreloadOptions*](sdk.md#preloadoptions)<() => RemoteConfig\> |
 
 **Returns:** *Promise*<() => RemoteConfig\>
 
@@ -327,9 +327,9 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`options` | [*PreloadOptions*](sdk.md#preloadoptions)<(`url?`: *string*) => Storage\> |
+| Name | Type |
+| :------ | :------ |
+| `options` | [*PreloadOptions*](sdk.md#preloadoptions)<(`url?`: *string*) => Storage\> |
 
 **Returns:** *Promise*<(`url?`: *string*) => Storage\>
 
@@ -343,9 +343,9 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`app?` | firebase.app.App |
+| Name | Type |
+| :------ | :------ |
+| `app?` | firebase.app.App |
 
 **Returns:** firebase.remoteConfig.RemoteConfig
 
@@ -359,9 +359,9 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`app?` | firebase.app.App |
+| Name | Type |
+| :------ | :------ |
+| `app?` | firebase.app.App |
 
 **Returns:** firebase.performance.Performance
 
@@ -375,9 +375,9 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`app?` | firebase.app.App |
+| Name | Type |
+| :------ | :------ |
+| `app?` | firebase.app.App |
 
 **Returns:** firebase.remoteConfig.RemoteConfig
 

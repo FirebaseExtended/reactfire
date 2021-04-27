@@ -34,9 +34,9 @@ Defined in: [src/remote-config/getValue.tsx:6](https://github.com/FirebaseExtend
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`remoteConfig` | RemoteConfig |
+| Name | Type |
+| :------ | :------ |
+| `remoteConfig` | RemoteConfig |
 
 **Returns:** *Observable*<[*AllParameters*](remote_config_getvalue.md#allparameters)\>
 
@@ -50,10 +50,10 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`remoteConfig` | RemoteConfig |
-`key` | *string* |
+| Name | Type |
+| :------ | :------ |
+| `remoteConfig` | RemoteConfig |
+| `key` | *string* |
 
 **Returns:** *Observable*<boolean\>
 
@@ -67,10 +67,10 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`remoteConfig` | RemoteConfig |
-`key` | *string* |
+| Name | Type |
+| :------ | :------ |
+| `remoteConfig` | RemoteConfig |
+| `key` | *string* |
 
 **Returns:** *Observable*<number\>
 
@@ -84,10 +84,10 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`remoteConfig` | RemoteConfig |
-`key` | *string* |
+| Name | Type |
+| :------ | :------ |
+| `remoteConfig` | RemoteConfig |
+| `key` | *string* |
 
 **Returns:** *Observable*<string\>
 
@@ -101,10 +101,10 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`remoteConfig` | RemoteConfig |
-`key` | *string* |
+| Name | Type |
+| :------ | :------ |
+| `remoteConfig` | RemoteConfig |
+| `key` | *string* |
 
 **Returns:** *Observable*<Value\>
 

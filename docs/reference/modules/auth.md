@@ -25,9 +25,9 @@
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`__namedParameters` | [*AuthCheckProps*](../interfaces/auth.authcheckprops.md) |
+| Name | Type |
+| :------ | :------ |
+| `__namedParameters` | [*AuthCheckProps*](../interfaces/auth.authcheckprops.md) |
 
 **Returns:** JSX.Element
 
@@ -41,9 +41,9 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`__namedParameters` | [*ClaimsCheckProps*](../interfaces/auth.claimscheckprops.md) |
+| Name | Type |
+| :------ | :------ |
+| `__namedParameters` | [*ClaimsCheckProps*](../interfaces/auth.claimscheckprops.md) |
 
 **Returns:** *Element*
 
@@ -57,10 +57,10 @@ ___
 
 #### Parameters:
 
-Name | Type |
-:------ | :------ |
-`options?` | *object* |
-`options.firebaseApp?` | firebase.app.App |
+| Name | Type |
+| :------ | :------ |
+| `options?` | *object* |
+| `options.firebaseApp?` | firebase.app.App |
 
 **Returns:** *Promise*<User\>
 
@@ -74,11 +74,11 @@ ___
 
 #### Parameters:
 
-Name | Type | Default value |
-:------ | :------ | :------ |
-`user` | firebase.User | - |
-`forceRefresh` | *boolean* | false |
-`options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<firebase.auth.IdTokenResult\> | - |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `user` | firebase.User | - |
+| `forceRefresh` | *boolean* | false |
+| `options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<firebase.auth.IdTokenResult\> | - |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.auth.IdTokenResult\>
 
@@ -94,16 +94,16 @@ Subscribe to Firebase auth state changes, including token refresh
 
 #### Type parameters:
 
-Name | Default |
-:------ | :------ |
-`T` | *unknown* |
+| Name | Default |
+| :------ | :------ |
+| `T` | *unknown* |
 
 #### Parameters:
 
-Name | Type | Description |
-:------ | :------ | :------ |
-`auth?` | firebase.auth.Auth | the [firebase.auth](https://firebase.google.com/docs/reference/js/firebase.auth) object   |
-`options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\> |     |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `auth?` | firebase.auth.Auth | the [firebase.auth](https://firebase.google.com/docs/reference/js/firebase.auth) object |
+| `options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\> |  |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.User\>
 
