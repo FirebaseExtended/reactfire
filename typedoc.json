@@ -1,0 +1,8 @@
+{
+  "entryPoints": ["./src"],
+  "out": "./docs/reference",
+  "gitRevision": "main",
+  "readme": "none",
+  "plugin": "typedoc-plugin-markdown",
+  "name": "ReactFire reference docs"
+}

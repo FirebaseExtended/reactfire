@@ -23,7 +23,7 @@ describe('Realtime Database (RTDB)', () => {
       .set(null);
   });
 
-  test('sanity check - emulator is running', () => {
+  test('double check - emulator is running', () => {
     // IF THIS TEST FAILS, MAKE SURE YOU'RE RUNNING THESE TESTS BY DOING:
     // yarn test
 

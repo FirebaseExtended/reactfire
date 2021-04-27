@@ -89,14 +89,11 @@ describe('useFirebaseApp', () => {
       </div>
     );
 
-    try {
-      renderHook(() => useFirebaseApp(), { wrapper });
-      fail('expected a throw');
-    } catch (e) {
-      expect(e.message).toEqual(
-        'Does not match the options already provided to the default firebase app instance, give this new instance a different appName.'
-      );
-    }
+    const { result } = renderHook(() => useFirebaseApp(), { wrapper });
+    expect(result.error).toBeDefined();
+    expect(result.error?.message).toEqual(
+      'Does not match the options already provided to the default firebase app instance, give this new instance a different appName.'
+    );
 
     // initializeApp should be called the first time, but not the second time
     expect(initializeApp).toBeCalledTimes(1);
