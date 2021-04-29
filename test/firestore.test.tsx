@@ -15,6 +15,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import fetch from 'node-fetch';
 import { baseConfig } from './appConfig';
+import { randomString } from './test-utils';
 
 describe('Firestore', () => {
   let app: firebase.app.App;
@@ -44,7 +45,7 @@ describe('Firestore', () => {
 
     return app
       .firestore()
-      .collection('test')
+      .collection(randomString())
       .add({ a: 'hello' });
   });
 
@@ -54,8 +55,8 @@ describe('Firestore', () => {
 
       const ref = app
         .firestore()
-        .collection('testDoc')
-        .doc('test1');
+        .collection(randomString())
+        .doc(randomString());
 
       await ref.set(mockData);
 
@@ -78,9 +79,8 @@ describe('Firestore', () => {
 
       const ref = app
         .firestore()
-        .collection('testDoc')
-        // 'readSuccess' is set to the data-testid={data.id} attribute
-        .doc('readSuccess');
+        .collection(randomString())
+        .doc(randomString());
 
       await ref.set(mockData);
 
@@ -103,8 +103,8 @@ describe('Firestore', () => {
     it('works when the document does not exist, and does not update when it is created', async () => {
       const ref = app
         .firestore()
-        .collection('testDoc')
-        .doc('emptydoc');
+        .collection(randomString())
+        .doc(randomString());
 
       const { result: subscribeResult, waitFor: waitForSubscribe } = renderHook(() => useFirestoreDoc<any>(ref), { wrapper: Provider });
       const { result: onceResult, waitFor: waitForOnce } = renderHook(() => useFirestoreDocOnce<any>(ref), { wrapper: Provider });
@@ -129,8 +129,8 @@ describe('Firestore', () => {
 
       const ref = app
         .firestore()
-        .collection('testDoc')
-        .doc('readSuccess');
+        .collection(randomString())
+        .doc(randomString());
 
       await ref.set(mockData1);
       const { result: subscribeResult, waitFor: waitForSubscribe } = renderHook(
@@ -162,7 +162,7 @@ describe('Firestore', () => {
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
-      const ref = app.firestore().collection('testCollection');
+      const ref = app.firestore().collection(randomString());
 
       await ref.add(mockData1);
       await ref.add(mockData2);
@@ -179,7 +179,7 @@ describe('Firestore', () => {
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
-      const ref = app.firestore().collection('testCollection');
+      const ref = app.firestore().collection(randomString());
       const filteredRef = ref.where('a', '==', 'hello');
 
       await ref.add(mockData1);
@@ -207,7 +207,7 @@ describe('Firestore', () => {
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
-      const ref = app.firestore().collection('testCollection');
+      const ref = app.firestore().collection(randomString());
 
       await ref.add(mockData1);
       await ref.add(mockData2);
@@ -226,7 +226,7 @@ describe('Firestore', () => {
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
-      const ref = app.firestore().collection('testCollection');
+      const ref = app.firestore().collection(randomString());
       const filteredRef = ref.where('a', '==', 'hello');
 
       await ref.add(mockData1);
