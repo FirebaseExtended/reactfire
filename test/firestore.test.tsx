@@ -63,7 +63,7 @@ describe('Firestore', () => {
 
       await waitFor(() => result.current.status === 'success');
 
-      const doc: firebase.firestore.DocumentSnapshot = (result.current.data as unknown) as firebase.firestore.DocumentSnapshot;
+      const doc = result.current.data;
 
       expect(doc).toBeDefined();
       const data = doc.data();
@@ -171,7 +171,7 @@ describe('Firestore', () => {
 
       await waitFor(() => result.current.status === 'success');
 
-      const collectionSnap = (result.current.data as unknown) as firebase.firestore.QuerySnapshot;
+      const collectionSnap = result.current.data;
       expect(collectionSnap.docs.length).toEqual(2);
     });
 
@@ -191,8 +191,8 @@ describe('Firestore', () => {
       await waitForUnfiltered(() => unfilteredResult.current.status === 'success');
       await waitForFiltered(() => filteredResult.current.status === 'success');
 
-      const filteredSnap = (filteredResult.current.data as unknown) as firebase.firestore.QuerySnapshot;
-      const unfilteredSnap = (unfilteredResult.current.data as unknown) as firebase.firestore.QuerySnapshot;
+      const filteredSnap = filteredResult.current.data;
+      const unfilteredSnap = unfilteredResult.current.data;
 
       // filteredList's length should be 1 since we only added one value that matches its query
       expect(filteredSnap.docs.length).toEqual(1);
