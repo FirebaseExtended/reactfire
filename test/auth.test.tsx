@@ -159,7 +159,7 @@ describe('Authentication', () => {
         disabled: false
       });
 
-      expect(userRecord.uid).toBeTruthy;
+      expect(userRecord.uid).toBeTruthy();
 
       const customClaims = { canModifyPages: true, moderator: true };
 
