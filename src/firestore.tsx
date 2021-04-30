@@ -3,7 +3,6 @@ import { collectionData, doc, docData, fromCollectionRef } from 'rxfire/firestor
 import { preloadFirestore, ReactFireOptions, useObservable, checkIdField, ReactFireGlobals } from './';
 import { preloadObservable, ObservableStatus } from './useObservable';
 import { first } from 'rxjs/operators';
-import { useFirebaseApp } from './firebaseApp';
 
 // Since we're side-effect free, we need to ensure our observableId cache is global
 const cachedQueries: Array<firebase.firestore.Query> = ((globalThis as any) as ReactFireGlobals)._reactFireFirestoreQueryCache || [];
@@ -28,10 +27,9 @@ function getUniqueIdForFirestoreQuery(query: firebase.firestore.Query) {
 // has been imported, so it takes a refProvider instead of a ref
 export function preloadFirestoreDoc(
   refProvider: (firestore: firebase.firestore.Firestore) => firebase.firestore.DocumentReference,
-  options?: { firebaseApp?: firebase.app.App }
+  options: { firebaseApp: firebase.app.App }
 ) {
-  // TODO: Find an alternative that doesn't break the rules of hooks (conditional hook call)
-  const firebaseApp = options?.firebaseApp || useFirebaseApp();
+  const firebaseApp = options.firebaseApp;
 
   return preloadFirestore({ firebaseApp }).then(firestore => {
     const ref = refProvider(firestore());

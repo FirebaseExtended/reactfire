@@ -10,8 +10,9 @@ export interface SuspensePerfProps {
 }
 
 export function SuspenseWithPerf({ children, traceId, fallback, firePerf }: SuspensePerfProps): JSX.Element {
+  const firebaseApp = useFirebaseApp();
+
   if (!firePerf) {
-    const firebaseApp = useFirebaseApp();
     preloadPerformance({ firebaseApp }).then(perf => perf());
   }
 

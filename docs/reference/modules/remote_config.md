@@ -16,7 +16,7 @@
 
 ### useRemoteConfigAll
 
-▸ **useRemoteConfigAll**(`key`: *string*, `remoteConfig?`: RemoteConfig): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<[*AllParameters*](remote_config_getvalue.md#allparameters)\>
+▸ **useRemoteConfigAll**(`key`: *string*): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<[*AllParameters*](remote_config_getvalue.md#allparameters)\>
 
 Convience method similar to useRemoteConfigValue. Returns allRemote Config parameters.
 
@@ -25,17 +25,16 @@ Convience method similar to useRemoteConfigValue. Returns allRemote Config param
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `key` | *string* | The parameter key in Remote Config |
-| `remoteConfig?` | RemoteConfig | Optional instance. If not provided ReactFire will either grab the default instance or lazy load. |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<[*AllParameters*](remote_config_getvalue.md#allparameters)\>
 
-Defined in: [src/remote-config/index.tsx:79](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L79)
+Defined in: [src/remote-config/index.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L78)
 
 ___
 
 ### useRemoteConfigBoolean
 
-▸ **useRemoteConfigBoolean**(`key`: *string*, `remoteConfig?`: RemoteConfig): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<boolean\>
+▸ **useRemoteConfigBoolean**(`key`: *string*): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<boolean\>
 
 Convience method similar to useRemoteConfigValue. Returns a `boolean` from a Remote Config parameter.
 
@@ -44,17 +43,16 @@ Convience method similar to useRemoteConfigValue. Returns a `boolean` from a Rem
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `key` | *string* | The parameter key in Remote Config |
-| `remoteConfig?` | RemoteConfig | Optional instance. If not provided ReactFire will either grab the default instance or lazy load. |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<boolean\>
 
-Defined in: [src/remote-config/index.tsx:70](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L70)
+Defined in: [src/remote-config/index.tsx:69](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L69)
 
 ___
 
 ### useRemoteConfigNumber
 
-▸ **useRemoteConfigNumber**(`key`: *string*, `remoteConfig?`: RemoteConfig): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<number\>
+▸ **useRemoteConfigNumber**(`key`: *string*): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<number\>
 
 Convience method similar to useRemoteConfigValue. Returns a `number` from a Remote Config parameter.
 
@@ -63,17 +61,16 @@ Convience method similar to useRemoteConfigValue. Returns a `number` from a Remo
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `key` | *string* | The parameter key in Remote Config |
-| `remoteConfig?` | RemoteConfig | Optional instance. If not provided ReactFire will either grab the default instance or lazy load. |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<number\>
 
-Defined in: [src/remote-config/index.tsx:61](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L61)
+Defined in: [src/remote-config/index.tsx:60](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L60)
 
 ___
 
 ### useRemoteConfigString
 
-▸ **useRemoteConfigString**(`key`: *string*, `remoteConfig?`: RemoteConfig): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<string\>
+▸ **useRemoteConfigString**(`key`: *string*): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<string\>
 
 Convience method similar to useRemoteConfigValue. Returns a `string` from a Remote Config parameter.
 
@@ -82,17 +79,16 @@ Convience method similar to useRemoteConfigValue. Returns a `string` from a Remo
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `key` | *string* | The parameter key in Remote Config |
-| `remoteConfig?` | RemoteConfig | Optional instance. If not provided ReactFire will either grab the default instance or lazy load. |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<string\>
 
-Defined in: [src/remote-config/index.tsx:52](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L52)
+Defined in: [src/remote-config/index.tsx:51](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L51)
 
 ___
 
 ### useRemoteConfigValue
 
-▸ **useRemoteConfigValue**(`key`: *string*, `remoteConfig?`: RemoteConfig): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<RemoteConfigValue\>
+▸ **useRemoteConfigValue**(`key`: *string*): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<RemoteConfigValue\>
 
 Accepts a key and optionally a Remote Config instance. Returns a
 Remote Config Value.
@@ -102,8 +98,7 @@ Remote Config Value.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `key` | *string* | The parameter key in Remote Config |
-| `remoteConfig?` | RemoteConfig | Optional instance. If not provided ReactFire will either grab the default instance or lazy load. |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<RemoteConfigValue\>
 
-Defined in: [src/remote-config/index.tsx:43](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L43)
+Defined in: [src/remote-config/index.tsx:42](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L42)
