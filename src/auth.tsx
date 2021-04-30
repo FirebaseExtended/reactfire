@@ -146,7 +146,7 @@ export function useSigninCheck(options?: SignInCheckOptions): ObservableStatus<S
           })
         );
       } else {
-        return of({ signedIn: true });
+        return of({ signedIn: true, hasRequiredClaims: true });
       }
     })
   );
