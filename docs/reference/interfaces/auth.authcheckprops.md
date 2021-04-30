@@ -8,26 +8,17 @@
 
 ### Properties
 
-- [auth](auth.authcheckprops.md#auth)
 - [children](auth.authcheckprops.md#children)
 - [fallback](auth.authcheckprops.md#fallback)
 - [requiredClaims](auth.authcheckprops.md#requiredclaims)
 
 ## Properties
 
-### auth
-
-• `Optional` **auth**: Auth
-
-Defined in: [src/auth.tsx:61](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L61)
-
-___
-
 ### children
 
 • **children**: ReactNode
 
-Defined in: [src/auth.tsx:63](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L63)
+Defined in: [src/auth.tsx:54](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L54)
 
 ___
 
@@ -35,7 +26,7 @@ ___
 
 • **fallback**: ReactNode
 
-Defined in: [src/auth.tsx:62](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L62)
+Defined in: [src/auth.tsx:53](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L53)
 
 ___
 
@@ -43,4 +34,4 @@ ___
 
 • `Optional` **requiredClaims**: Object
 
-Defined in: [src/auth.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L64)
+Defined in: [src/auth.tsx:55](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L55)

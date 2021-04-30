@@ -18,19 +18,19 @@
 
 ### preloadFirestoreDoc
 
-▸ **preloadFirestoreDoc**(`refProvider`: (`firestore`: firebase.firestore.Firestore) => firebase.firestore.DocumentReference, `options?`: { `firebaseApp?`: firebase.app.App  }): *Promise*<[*SuspenseSubject*](../classes/suspensesubject.suspensesubject-1.md)<DocumentSnapshot\>\>
+▸ **preloadFirestoreDoc**(`refProvider`: (`firestore`: firebase.firestore.Firestore) => firebase.firestore.DocumentReference, `options`: { `firebaseApp`: firebase.app.App  }): *Promise*<[*SuspenseSubject*](../classes/suspensesubject.suspensesubject-1.md)<DocumentSnapshot\>\>
 
 #### Parameters:
 
 | Name | Type |
 | :------ | :------ |
 | `refProvider` | (`firestore`: firebase.firestore.Firestore) => firebase.firestore.DocumentReference |
-| `options?` | *object* |
-| `options.firebaseApp?` | firebase.app.App |
+| `options` | *object* |
+| `options.firebaseApp` | firebase.app.App |
 
 **Returns:** *Promise*<[*SuspenseSubject*](../classes/suspensesubject.suspensesubject-1.md)<DocumentSnapshot\>\>
 
-Defined in: [src/firestore.tsx:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L29)
+Defined in: [src/firestore.tsx:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L28)
 
 ___
 
@@ -55,7 +55,7 @@ Subscribe to a Firestore collection
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T *extends* {} ? T[] : firebase.firestore.QuerySnapshot\>
 
-Defined in: [src/firestore.tsx:110](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L110)
+Defined in: [src/firestore.tsx:108](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L108)
 
 ___
 
@@ -80,7 +80,7 @@ Subscribe to a Firestore collection and unwrap the snapshot.
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T[]\>
 
-Defined in: [src/firestore.tsx:126](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L126)
+Defined in: [src/firestore.tsx:124](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L124)
 
 ___
 
@@ -105,7 +105,7 @@ Suscribe to Firestore Document changes
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T *extends* {} ? T : firebase.firestore.DocumentSnapshot\>
 
-Defined in: [src/firestore.tsx:48](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L48)
+Defined in: [src/firestore.tsx:46](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L46)
 
 ___
 
@@ -130,7 +130,7 @@ Suscribe to Firestore Document changes
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T\>
 
-Defined in: [src/firestore.tsx:80](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L80)
+Defined in: [src/firestore.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L78)
 
 ___
 
@@ -155,7 +155,7 @@ Get a firestore document and don't subscribe to changes
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T\>
 
-Defined in: [src/firestore.tsx:95](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L95)
+Defined in: [src/firestore.tsx:93](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L93)
 
 ___
 
@@ -180,4 +180,4 @@ Get a firestore document and don't subscribe to changes
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T *extends* {} ? T : firebase.firestore.DocumentSnapshot\>
 
-Defined in: [src/firestore.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L64)
+Defined in: [src/firestore.tsx:62](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L62)

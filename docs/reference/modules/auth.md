@@ -31,7 +31,7 @@
 
 **Returns:** JSX.Element
 
-Defined in: [src/auth.tsx:97](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L97)
+Defined in: [src/auth.tsx:88](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L88)
 
 ___
 
@@ -47,24 +47,24 @@ ___
 
 **Returns:** *Element*
 
-Defined in: [src/auth.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L74)
+Defined in: [src/auth.tsx:65](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L65)
 
 ___
 
 ### preloadUser
 
-▸ **preloadUser**(`options?`: { `firebaseApp?`: firebase.app.App  }): *Promise*<User\>
+▸ **preloadUser**(`options`: { `firebaseApp`: firebase.app.App  }): *Promise*<User\>
 
 #### Parameters:
 
 | Name | Type |
 | :------ | :------ |
-| `options?` | *object* |
-| `options.firebaseApp?` | firebase.app.App |
+| `options` | *object* |
+| `options.firebaseApp` | firebase.app.App |
 
 **Returns:** *Promise*<User\>
 
-Defined in: [src/auth.tsx:8](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L8)
+Defined in: [src/auth.tsx:7](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L7)
 
 ___
 
@@ -82,13 +82,13 @@ ___
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.auth.IdTokenResult\>
 
-Defined in: [src/auth.tsx:45](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L45)
+Defined in: [src/auth.tsx:37](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L37)
 
 ___
 
 ### useUser
 
-▸ **useUser**<T\>(`auth?`: firebase.auth.Auth, `options?`: [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\>): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.User\>
+▸ **useUser**<T\>(`options?`: [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\>): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.User\>
 
 Subscribe to Firebase auth state changes, including token refresh
 
@@ -100,11 +100,10 @@ Subscribe to Firebase auth state changes, including token refresh
 
 #### Parameters:
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `auth?` | firebase.auth.Auth | the [firebase.auth](https://firebase.google.com/docs/reference/js/firebase.auth) object |
-| `options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\> |  |
+| Name | Type |
+| :------ | :------ |
+| `options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\> |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.User\>
 
-Defined in: [src/auth.tsx:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L24)
+Defined in: [src/auth.tsx:21](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L21)
