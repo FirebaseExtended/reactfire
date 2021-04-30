@@ -80,17 +80,6 @@ describe('Authentication', () => {
       await waitFor(() => expect(getByTestId('signed-out')).toBeInTheDocument());
     });
 
-    it('can use firebase Auth from props', async () => {
-      const { getByTestId } = render(
-        <React.Suspense fallback={'loading'}>
-          <AuthCheck fallback={<h1 data-testid="signed-out">not signed in</h1>} auth={(app.auth() as unknown) as firebase.auth.Auth}>
-            {'signed in'}
-          </AuthCheck>
-        </React.Suspense>
-      );
-      await waitFor(() => expect(getByTestId('signed-out')).toBeInTheDocument());
-    });
-
     it('renders the fallback if a user is not signed in', async () => {
       const { getByTestId } = render(<AuthCheckWrapper />);
 
