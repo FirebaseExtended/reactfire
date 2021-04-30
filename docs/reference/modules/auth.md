@@ -8,6 +8,11 @@
 
 - [AuthCheckProps](../interfaces/auth.authcheckprops.md)
 - [ClaimsCheckProps](../interfaces/auth.claimscheckprops.md)
+- [SignInCheckOptions](../interfaces/auth.signincheckoptions.md)
+
+### Type aliases
+
+- [SigninCheckResult](auth.md#signincheckresult)
 
 ### Functions
 
@@ -15,13 +20,24 @@
 - [ClaimsCheck](auth.md#claimscheck)
 - [preloadUser](auth.md#preloaduser)
 - [useIdTokenResult](auth.md#useidtokenresult)
+- [useSigninCheck](auth.md#usesignincheck)
 - [useUser](auth.md#useuser)
+
+## Type aliases
+
+### SigninCheckResult
+
+Ƭ **SigninCheckResult**: { `hasRequiredClaims`: ``false`` ; `signedIn`: ``false``  } \| { `hasRequiredClaims`: *boolean* ; `missingClaims`: MissingClaims ; `signedIn`: ``true``  }
+
+Defined in: [src/auth.tsx:79](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L79)
 
 ## Functions
 
 ### AuthCheck
 
 ▸ **AuthCheck**(`__namedParameters`: [*AuthCheckProps*](../interfaces/auth.authcheckprops.md)): JSX.Element
+
+**`deprecated`** Use `useSignInCheck` instead
 
 #### Parameters:
 
@@ -31,13 +47,15 @@
 
 **Returns:** JSX.Element
 
-Defined in: [src/auth.tsx:97](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L97)
+Defined in: [src/auth.tsx:195](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L195)
 
 ___
 
 ### ClaimsCheck
 
 ▸ **ClaimsCheck**(`__namedParameters`: [*ClaimsCheckProps*](../interfaces/auth.claimscheckprops.md)): *Element*
+
+**`deprecated`** Use `useSignInCheck` instead
 
 #### Parameters:
 
@@ -47,7 +65,7 @@ ___
 
 **Returns:** *Element*
 
-Defined in: [src/auth.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L74)
+Defined in: [src/auth.tsx:169](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L169)
 
 ___
 
@@ -64,7 +82,7 @@ ___
 
 **Returns:** *Promise*<User\>
 
-Defined in: [src/auth.tsx:8](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L8)
+Defined in: [src/auth.tsx:9](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L9)
 
 ___
 
@@ -82,7 +100,62 @@ ___
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.auth.IdTokenResult\>
 
-Defined in: [src/auth.tsx:45](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L45)
+Defined in: [src/auth.tsx:46](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L46)
+
+___
+
+### useSigninCheck
+
+▸ **useSigninCheck**(`options?`: [*SignInCheckOptions*](../interfaces/auth.signincheckoptions.md)): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<[*SigninCheckResult*](auth.md#signincheckresult)\>
+
+Subscribe to the signed-in status of a user.
+
+Simple use case:
+
+```jsx
+function UserFavorites() {
+   const {status, data: signInCheckResult} = useSigninCheck();
+
+   if (status === 'loading') {
+     return <LoadingSpinner />
+   }
+
+   if (signInCheckResult.signedIn === true) {
+     return <FavoritesList />
+   } else {
+     return <SignInForm />
+   }
+}
+```
+
+Advanced: You can also optionally check [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims). Example:
+
+```jsx
+function ProductPricesAdminPanel() {
+   const {status, data: signInCheckResult} = useSigninCheck({requiredClaims: {admin: true, canModifyPrices: true}});
+
+   if (status === 'loading') {
+     return <LoadingSpinner />
+   }
+
+   if (signInCheckResult.signedIn && signInCheckResult.hasRequiredClaims) {
+     return <FavoritesList />
+   } else {
+     console.warn('missing claims', signInCheckResult.missingClaims);
+     return <SignInForm />
+   }
+}
+```
+
+#### Parameters:
+
+| Name | Type |
+| :------ | :------ |
+| `options?` | [*SignInCheckOptions*](../interfaces/auth.signincheckoptions.md) |
+
+**Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<[*SigninCheckResult*](auth.md#signincheckresult)\>
+
+Defined in: [src/auth.tsx:131](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L131)
 
 ___
 
@@ -107,4 +180,4 @@ Subscribe to Firebase auth state changes, including token refresh
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.User\>
 
-Defined in: [src/auth.tsx:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L24)
+Defined in: [src/auth.tsx:25](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L25)

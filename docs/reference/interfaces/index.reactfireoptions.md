@@ -10,6 +10,12 @@
 | :------ | :------ |
 | `T` | *unknown* |
 
+## Hierarchy
+
+* **ReactFireOptions**
+
+  ↳ [*SignInCheckOptions*](auth.signincheckoptions.md)
+
 ## Table of contents
 
 ### Properties

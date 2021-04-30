@@ -13,6 +13,8 @@
 - [FirebaseAppProvider](index.md#firebaseappprovider)
 - [ObservableStatus](index.md#observablestatus)
 - [PreloadOptions](index.md#preloadoptions)
+- [SignInCheckOptions](index.md#signincheckoptions)
+- [SigninCheckResult](index.md#signincheckresult)
 - [StorageImage](index.md#storageimage)
 - [SuspensePerfProps](index.md#suspenseperfprops)
 - [SuspenseWithPerf](index.md#suspensewithperf)
@@ -64,6 +66,7 @@
 - [useRemoteConfigNumber](index.md#useremoteconfignumber)
 - [useRemoteConfigString](index.md#useremoteconfigstring)
 - [useRemoteConfigValue](index.md#useremoteconfigvalue)
+- [useSigninCheck](index.md#usesignincheck)
 - [useStorage](index.md#usestorage)
 - [useStorageDownloadURL](index.md#usestoragedownloadurl)
 - [useStorageTask](index.md#usestoragetask)
@@ -126,6 +129,18 @@ ___
 ### PreloadOptions
 
 Re-exports: [PreloadOptions](sdk.md#preloadoptions)
+
+___
+
+### SignInCheckOptions
+
+Re-exports: [SignInCheckOptions](../interfaces/auth.signincheckoptions.md)
+
+___
+
+### SigninCheckResult
+
+Re-exports: [SigninCheckResult](auth.md#signincheckresult)
 
 ___
 
@@ -432,6 +447,12 @@ ___
 ### useRemoteConfigValue
 
 Re-exports: [useRemoteConfigValue](remote_config.md#useremoteconfigvalue)
+
+___
+
+### useSigninCheck
+
+Re-exports: [useSigninCheck](auth.md#usesignincheck)
 
 ___
 
