@@ -28,10 +28,9 @@ function getUniqueIdForFirestoreQuery(query: firebase.firestore.Query) {
 // has been imported, so it takes a refProvider instead of a ref
 export function preloadFirestoreDoc(
   refProvider: (firestore: firebase.firestore.Firestore) => firebase.firestore.DocumentReference,
-  options?: { firebaseApp?: firebase.app.App }
+  options: { firebaseApp: firebase.app.App }
 ) {
-  // TODO: Find an alternative that doesn't break the rules of hooks (conditional hook call)
-  const firebaseApp = options?.firebaseApp || useFirebaseApp();
+  const firebaseApp = options.firebaseApp;
 
   return preloadFirestore({ firebaseApp }).then(firestore => {
     const ref = refProvider(firestore());
