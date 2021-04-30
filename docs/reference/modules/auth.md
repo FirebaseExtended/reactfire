@@ -27,7 +27,7 @@
 
 ### SigninCheckResult
 
-Ƭ **SigninCheckResult**: { `hasRequiredClaims`: ``false`` ; `signedIn`: ``false``  } \| { `hasRequiredClaims`: *boolean* ; `missingClaims`: MissingClaims ; `signedIn`: ``true``  }
+Ƭ **SigninCheckResult**: { `hasRequiredClaims`: ``false`` ; `signedIn`: ``false``  } \| { `hasRequiredClaims`: *boolean* ; `missingClaims?`: MissingClaims ; `signedIn`: ``true`` ; `user`: firebase.User  }
 
 Defined in: [src/auth.tsx:70](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L70)
 
@@ -51,7 +51,7 @@ Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More 
 
 **Returns:** JSX.Element
 
-Defined in: [src/auth.tsx:194](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L194)
+Defined in: [src/auth.tsx:199](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L199)
 
 ___
 
@@ -73,7 +73,7 @@ Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More 
 
 **Returns:** *Element*
 
-Defined in: [src/auth.tsx:164](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L164)
+Defined in: [src/auth.tsx:169](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L169)
 
 ___
 
@@ -163,7 +163,7 @@ function ProductPricesAdminPanel() {
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<[*SigninCheckResult*](auth.md#signincheckresult)\>
 
-Defined in: [src/auth.tsx:122](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L122)
+Defined in: [src/auth.tsx:127](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L127)
 
 ___
 

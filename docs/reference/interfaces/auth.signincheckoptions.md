@@ -27,7 +27,7 @@
 
 • `Optional` **forceRefresh**: *boolean*
 
-Defined in: [src/auth.tsx:79](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L79)
+Defined in: [src/auth.tsx:84](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L84)
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 #### Type declaration:
 
-Defined in: [src/auth.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L78)
+Defined in: [src/auth.tsx:83](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L83)
 
 ___
 

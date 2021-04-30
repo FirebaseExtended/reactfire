@@ -143,7 +143,7 @@ describe('Authentication', () => {
 
       // Signed in
       expect(app.auth().currentUser).not.toBeNull();
-      expect(result.current.data).toEqual({ signedIn: true, hasRequiredClaims: true });
+      expect(result.current.data).toEqual({ signedIn: true, hasRequiredClaims: true, user: app.auth().currentUser });
     });
 
     // Skipping this because of an issue setting custom claims

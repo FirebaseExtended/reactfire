@@ -72,7 +72,12 @@ export type SigninCheckResult =
       signedIn: false;
       hasRequiredClaims: false;
     }
-  | { signedIn: true; hasRequiredClaims: boolean; missingClaims: MissingClaims };
+  | {
+      signedIn: true;
+      hasRequiredClaims: boolean;
+      missingClaims?: MissingClaims;
+      user: firebase.User;
+    };
 
 export interface SignInCheckOptions extends ReactFireOptions<SigninCheckResult> {
   requiredClaims?: { [key: string]: any };
@@ -122,7 +127,7 @@ export interface SignInCheckOptions extends ReactFireOptions<SigninCheckResult> 
 export function useSigninCheck(options?: SignInCheckOptions): ObservableStatus<SigninCheckResult> {
   const auth = useAuth();
 
-  const observableId = `auth:signInCheck:${auth.app.name}:requiredClaims:${JSON.stringify(options?.requiredClaims)}`;
+  const observableId = `auth:signInCheck:${auth.app.name}:requiredClaims:${JSON.stringify(options?.requiredClaims)}:forceRefresh:${!!options?.forceRefresh}`;
   const observable = user(auth).pipe(
     switchMap(user => {
       if (!user) {
@@ -142,11 +147,11 @@ export function useSigninCheck(options?: SignInCheckOptions): ObservableStatus<S
               }
             });
 
-            return { signedIn: true, hasRequiredClaims: Object.keys(missingClaims).length === 0, missingClaims };
+            return { signedIn: true, hasRequiredClaims: Object.keys(missingClaims).length === 0, missingClaims, user: user };
           })
         );
       } else {
-        return of({ signedIn: true, hasRequiredClaims: true });
+        return of({ signedIn: true, hasRequiredClaims: true, user: user });
       }
     })
   );
