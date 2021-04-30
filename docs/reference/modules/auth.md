@@ -39,6 +39,10 @@ Defined in: [src/auth.tsx:70](https://github.com/FirebaseExtended/reactfire/blob
 
 **`deprecated`** Use `useSignInCheck` instead
 
+Conditionally render children based on signed-in status and [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims).
+
+Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
+
 #### Parameters:
 
 | Name | Type |
@@ -47,7 +51,7 @@ Defined in: [src/auth.tsx:70](https://github.com/FirebaseExtended/reactfire/blob
 
 **Returns:** JSX.Element
 
-Defined in: [src/auth.tsx:186](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L186)
+Defined in: [src/auth.tsx:194](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L194)
 
 ___
 
@@ -57,6 +61,10 @@ ___
 
 **`deprecated`** Use `useSignInCheck` instead
 
+Conditionally render children based on [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims).
+
+Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
+
 #### Parameters:
 
 | Name | Type |
@@ -65,7 +73,7 @@ ___
 
 **Returns:** *Element*
 
-Defined in: [src/auth.tsx:160](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L160)
+Defined in: [src/auth.tsx:164](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L164)
 
 ___
 

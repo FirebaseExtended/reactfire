@@ -156,6 +156,10 @@ export function useSigninCheck(options?: SignInCheckOptions): ObservableStatus<S
 
 /**
  * @deprecated Use `useSignInCheck` instead
+ *
+ * Conditionally render children based on [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims).
+ *
+ * Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
  */
 export function ClaimsCheck({ user, fallback, children, requiredClaims }: ClaimsCheckProps) {
   const { data } = useIdTokenResult(user, false);
@@ -182,6 +186,10 @@ export function ClaimsCheck({ user, fallback, children, requiredClaims }: Claims
 
 /**
  * @deprecated Use `useSignInCheck` instead
+ *
+ * Conditionally render children based on signed-in status and [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims).
+ *
+ * Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
  */
 export function AuthCheck({ fallback, children, requiredClaims }: AuthCheckProps): JSX.Element {
   const { data: user } = useUser<firebase.User>();
