@@ -3,7 +3,6 @@ import { collectionData, doc, docData, fromCollectionRef } from 'rxfire/firestor
 import { preloadFirestore, ReactFireOptions, useObservable, checkIdField, ReactFireGlobals } from './';
 import { preloadObservable, ObservableStatus } from './useObservable';
 import { first } from 'rxjs/operators';
-import { useFirebaseApp } from './firebaseApp';
 
 // Since we're side-effect free, we need to ensure our observableId cache is global
 const cachedQueries: Array<firebase.firestore.Query> = ((globalThis as any) as ReactFireGlobals)._reactFireFirestoreQueryCache || [];
@@ -28,10 +27,9 @@ function getUniqueIdForFirestoreQuery(query: firebase.firestore.Query) {
 // has been imported, so it takes a refProvider instead of a ref
 export function preloadFirestoreDoc(
   refProvider: (firestore: firebase.firestore.Firestore) => firebase.firestore.DocumentReference,
-  options?: { firebaseApp?: firebase.app.App }
+  options: { firebaseApp: firebase.app.App }
 ) {
-  // TODO: Find an alternative that doesn't break the rules of hooks (conditional hook call)
-  const firebaseApp = options?.firebaseApp || useFirebaseApp();
+  const firebaseApp = options.firebaseApp;
 
   return preloadFirestore({ firebaseApp }).then(firestore => {
     const ref = refProvider(firestore());
@@ -45,10 +43,10 @@ export function preloadFirestoreDoc(
  * @param ref - Reference to the document you want to listen to
  * @param options
  */
-export function useFirestoreDoc<T = unknown>(
+export function useFirestoreDoc<T = firebase.firestore.DocumentData>(
   ref: firebase.firestore.DocumentReference,
   options?: ReactFireOptions<T>
-): ObservableStatus<T extends {} ? T : firebase.firestore.DocumentSnapshot> {
+): ObservableStatus<firebase.firestore.DocumentSnapshot<T>> {
   const observableId = `firestore:doc:${ref.firestore.app.name}:${ref.path}`;
   const observable$ = doc(ref);
 
@@ -107,10 +105,10 @@ export function useFirestoreDocDataOnce<T = unknown>(ref: firebase.firestore.Doc
  * @param ref - Reference to the collection you want to listen to
  * @param options
  */
-export function useFirestoreCollection<T = { [key: string]: unknown }>(
+export function useFirestoreCollection<T = firebase.firestore.DocumentData>(
   query: firebase.firestore.Query,
   options?: ReactFireOptions<T[]>
-): ObservableStatus<T extends {} ? T[] : firebase.firestore.QuerySnapshot> {
+): ObservableStatus<firebase.firestore.QuerySnapshot<T>> {
   const observableId = `firestore:collection:${getUniqueIdForFirestoreQuery(query)}`;
   const observable$ = fromCollectionRef(query);
 

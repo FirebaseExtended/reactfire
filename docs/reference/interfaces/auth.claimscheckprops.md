@@ -19,7 +19,7 @@
 
 • **children**: ReactNode
 
-Defined in: [src/auth.tsx:71](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L71)
+Defined in: [src/auth.tsx:62](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L62)
 
 ___
 
@@ -27,7 +27,7 @@ ___
 
 • **fallback**: ReactNode
 
-Defined in: [src/auth.tsx:70](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L70)
+Defined in: [src/auth.tsx:61](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L61)
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 #### Type declaration:
 
-Defined in: [src/auth.tsx:72](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L72)
+Defined in: [src/auth.tsx:63](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L63)
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **user**: User
 
-Defined in: [src/auth.tsx:69](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L69)
+Defined in: [src/auth.tsx:60](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L60)

@@ -29,7 +29,7 @@
 
 Ƭ **SigninCheckResult**: { `hasRequiredClaims`: ``false`` ; `signedIn`: ``false``  } \| { `hasRequiredClaims`: *boolean* ; `missingClaims`: MissingClaims ; `signedIn`: ``true``  }
 
-Defined in: [src/auth.tsx:79](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L79)
+Defined in: [src/auth.tsx:70](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L70)
 
 ## Functions
 
@@ -47,7 +47,7 @@ Defined in: [src/auth.tsx:79](https://github.com/FirebaseExtended/reactfire/blob
 
 **Returns:** JSX.Element
 
-Defined in: [src/auth.tsx:195](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L195)
+Defined in: [src/auth.tsx:186](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L186)
 
 ___
 
@@ -65,24 +65,24 @@ ___
 
 **Returns:** *Element*
 
-Defined in: [src/auth.tsx:169](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L169)
+Defined in: [src/auth.tsx:160](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L160)
 
 ___
 
 ### preloadUser
 
-▸ **preloadUser**(`options?`: { `firebaseApp?`: firebase.app.App  }): *Promise*<User\>
+▸ **preloadUser**(`options`: { `firebaseApp`: firebase.app.App  }): *Promise*<User\>
 
 #### Parameters:
 
 | Name | Type |
 | :------ | :------ |
-| `options?` | *object* |
-| `options.firebaseApp?` | firebase.app.App |
+| `options` | *object* |
+| `options.firebaseApp` | firebase.app.App |
 
 **Returns:** *Promise*<User\>
 
-Defined in: [src/auth.tsx:9](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L9)
+Defined in: [src/auth.tsx:8](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L8)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.auth.IdTokenResult\>
 
-Defined in: [src/auth.tsx:46](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L46)
+Defined in: [src/auth.tsx:38](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L38)
 
 ___
 
@@ -155,13 +155,13 @@ function ProductPricesAdminPanel() {
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<[*SigninCheckResult*](auth.md#signincheckresult)\>
 
-Defined in: [src/auth.tsx:131](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L131)
+Defined in: [src/auth.tsx:122](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L122)
 
 ___
 
 ### useUser
 
-▸ **useUser**<T\>(`auth?`: firebase.auth.Auth, `options?`: [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\>): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.User\>
+▸ **useUser**<T\>(`options?`: [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\>): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.User\>
 
 Subscribe to Firebase auth state changes, including token refresh
 
@@ -173,11 +173,10 @@ Subscribe to Firebase auth state changes, including token refresh
 
 #### Parameters:
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `auth?` | firebase.auth.Auth | the [firebase.auth](https://firebase.google.com/docs/reference/js/firebase.auth) object |
-| `options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\> |  |
+| Name | Type |
+| :------ | :------ |
+| `options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\> |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.User\>
 
-Defined in: [src/auth.tsx:25](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L25)
+Defined in: [src/auth.tsx:22](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L22)
