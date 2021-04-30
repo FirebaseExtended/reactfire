@@ -43,10 +43,10 @@ export function preloadFirestoreDoc(
  * @param ref - Reference to the document you want to listen to
  * @param options
  */
-export function useFirestoreDoc<T = unknown>(
+export function useFirestoreDoc<T = firebase.firestore.DocumentData>(
   ref: firebase.firestore.DocumentReference,
   options?: ReactFireOptions<T>
-): ObservableStatus<T extends {} ? T : firebase.firestore.DocumentSnapshot> {
+): ObservableStatus<firebase.firestore.DocumentSnapshot<T>> {
   const observableId = `firestore:doc:${ref.firestore.app.name}:${ref.path}`;
   const observable$ = doc(ref);
 
@@ -105,10 +105,10 @@ export function useFirestoreDocDataOnce<T = unknown>(ref: firebase.firestore.Doc
  * @param ref - Reference to the collection you want to listen to
  * @param options
  */
-export function useFirestoreCollection<T = { [key: string]: unknown }>(
+export function useFirestoreCollection<T = firebase.firestore.DocumentData>(
   query: firebase.firestore.Query,
   options?: ReactFireOptions<T[]>
-): ObservableStatus<T extends {} ? T[] : firebase.firestore.QuerySnapshot> {
+): ObservableStatus<firebase.firestore.QuerySnapshot<T>> {
   const observableId = `firestore:collection:${getUniqueIdForFirestoreQuery(query)}`;
   const observable$ = fromCollectionRef(query);
 
