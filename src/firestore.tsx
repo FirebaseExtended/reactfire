@@ -3,7 +3,6 @@ import { collectionData, doc, docData, fromCollectionRef } from 'rxfire/firestor
 import { preloadFirestore, ReactFireOptions, useObservable, checkIdField, ReactFireGlobals } from './';
 import { preloadObservable, ObservableStatus } from './useObservable';
 import { first } from 'rxjs/operators';
-import { useFirebaseApp } from './firebaseApp';
 
 // Since we're side-effect free, we need to ensure our observableId cache is global
 const cachedQueries: Array<firebase.firestore.Query> = ((globalThis as any) as ReactFireGlobals)._reactFireFirestoreQueryCache || [];
