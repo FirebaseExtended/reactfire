@@ -3,9 +3,10 @@ import { renderHook, act as hooksAct, cleanup as hooksCleanup } from '@testing-l
 import firebase from 'firebase';
 import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
-import { FirebaseAppProvider, AuthCheck, useUser } from '..';
+import { FirebaseAppProvider, AuthCheck, useUser, useSigninCheck } from '..';
 import { act } from 'react-dom/test-utils';
 import { baseConfig } from './appConfig';
+import * as firebaseAdmin from 'firebase-admin';
 
 describe('Authentication', () => {
   let app: firebase.app.App;
@@ -36,6 +37,9 @@ describe('Authentication', () => {
       return realConsoleInfo.call(console, args);
     });
     app.auth().useEmulator('http://localhost:9099/');
+
+    // Use admin to test custom claims
+    firebaseAdmin.initializeApp({ projectId: 'some-project' });
 
     signIn = async () => {
       return app
@@ -121,6 +125,67 @@ describe('Authentication', () => {
     });
 
     test.todo('checks requiredClaims');
+  });
+
+  describe('useSigninCheck()', () => {
+    it('accurately reflects signed-in state', async () => {
+      const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck(), { wrapper: Provider });
+
+      await waitForHookCondition(() => result.current.status === 'success');
+
+      // Signed out
+      expect(app.auth().currentUser).toBeNull();
+      expect(result.current.data).toEqual({ signedIn: false, hasRequiredClaims: false });
+
+      await hooksAct(async () => {
+        await signIn();
+      });
+
+      // Signed in
+      expect(app.auth().currentUser).not.toBeNull();
+      expect(result.current.data).toEqual({ signedIn: true, hasRequiredClaims: true });
+    });
+
+    // Skipping this because of an issue setting custom claims
+    // https://github.com/firebase/firebase-tools/issues/3083
+    it.skip('checks custom claims', async () => {
+      const userRecord = await firebaseAdmin.auth().createUser({
+        email: 'user@example.com',
+        emailVerified: false,
+        phoneNumber: '+11234567890',
+        password: 'secretPassword',
+        displayName: 'John Doe',
+        photoURL: 'http://www.example.com/12345678/photo.png',
+        disabled: false
+      });
+
+      expect(userRecord.uid).toBeTruthy;
+
+      const customClaims = { canModifyPages: true, moderator: true };
+
+      const record = await firebaseAdmin.auth().getUser(userRecord.uid);
+      console.log(record);
+
+      await firebaseAdmin.auth().setCustomUserClaims(userRecord.uid, customClaims);
+
+      const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck({ requiredClaims: { ...customClaims, anExtraClaim: true } }), {
+        wrapper: Provider
+      });
+
+      await waitForHookCondition(() => result.current.status === 'success');
+
+      // Signed out
+      expect(app.auth().currentUser).toBeNull();
+      expect(result.current.data).toEqual({ signedIn: false, hasRequiredClaims: false });
+
+      await hooksAct(async () => {
+        await app.auth().signInWithEmailAndPassword('user@example.com', 'secretPassword');
+      });
+
+      // Signed in
+      expect(app.auth().currentUser).not.toBeNull();
+      expect(result.current.data).toEqual({ signedIn: true, hasRequiredClaims: true });
+    });
   });
 
   describe('useUser', () => {
