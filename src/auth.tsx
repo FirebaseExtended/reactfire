@@ -2,8 +2,9 @@ import firebase from 'firebase/app';
 import * as React from 'react';
 import { user } from 'rxfire/auth';
 import { preloadAuth, preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus } from './';
-import { from } from 'rxjs';
+import { from, of } from 'rxjs';
 import { useFirebaseApp } from './firebaseApp';
+import { map, switchMap } from 'rxjs/operators';
 
 export function preloadUser(options?: { firebaseApp?: firebase.app.App }) {
   // TODO: Find an alternative that doesn't break the rules of hooks (conditional hook call)
@@ -68,9 +69,103 @@ export interface ClaimsCheckProps {
   user: firebase.User;
   fallback: React.ReactNode;
   children: React.ReactNode;
-  requiredClaims?: { [key: string]: any };
+  requiredClaims: { [key: string]: any };
 }
 
+interface MissingClaims {
+  [key: string]: { expected: string; actual: string };
+}
+
+export type SigninCheckResult =
+  | {
+      signedIn: false;
+      hasRequiredClaims: false;
+    }
+  | { signedIn: true; hasRequiredClaims: boolean; missingClaims: MissingClaims };
+
+export interface SignInCheckOptions extends ReactFireOptions<SigninCheckResult> {
+  requiredClaims?: { [key: string]: any };
+  forceRefresh?: boolean;
+}
+
+/**
+ * Subscribe to the signed-in status of a user.
+ *
+ * Simple use case:
+ *
+ * ```jsx
+ * function UserFavorites() {
+ *    const {status, data: signInCheckResult} = useSigninCheck();
+ *
+ *    if (status === 'loading') {
+ *      return <LoadingSpinner />
+ *    }
+ *
+ *    if (signInCheckResult.signedIn === true) {
+ *      return <FavoritesList />
+ *    } else {
+ *      return <SignInForm />
+ *    }
+ * }
+ * ```
+ *
+ * Advanced: You can also optionally check [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims). Example:
+ *
+ * ```jsx
+ * function ProductPricesAdminPanel() {
+ *    const {status, data: signInCheckResult} = useSigninCheck({requiredClaims: {admin: true, canModifyPrices: true}});
+ *
+ *    if (status === 'loading') {
+ *      return <LoadingSpinner />
+ *    }
+ *
+ *    if (signInCheckResult.signedIn && signInCheckResult.hasRequiredClaims) {
+ *      return <FavoritesList />
+ *    } else {
+ *      console.warn('missing claims', signInCheckResult.missingClaims);
+ *      return <SignInForm />
+ *    }
+ * }
+ * ```
+ */
+export function useSigninCheck(options?: SignInCheckOptions): ObservableStatus<SigninCheckResult> {
+  const auth = useAuth();
+
+  const observableId = `auth:signInCheck:${auth.app.name}:requiredClaims:${JSON.stringify(options?.requiredClaims)}`;
+  const observable = user(auth).pipe(
+    switchMap(user => {
+      if (!user) {
+        return of({ signedIn: false, hasRequiredClaims: false });
+      } else if (options?.requiredClaims !== undefined) {
+        return from(user.getIdTokenResult(options?.forceRefresh ?? false)).pipe(
+          map(idTokenResult => {
+            const missingClaims: MissingClaims = {};
+            const requiredClaims = options.requiredClaims as { [key: string]: any };
+
+            Object.keys(requiredClaims).forEach(claim => {
+              if (requiredClaims[claim] !== idTokenResult.claims[claim]) {
+                missingClaims[claim] = {
+                  expected: requiredClaims[claim],
+                  actual: idTokenResult.claims[claim]
+                };
+              }
+            });
+
+            return { signedIn: true, hasRequiredClaims: Object.keys(missingClaims).length === 0, missingClaims };
+          })
+        );
+      } else {
+        return of({ signedIn: true });
+      }
+    })
+  );
+
+  return useObservable(observableId, observable);
+}
+
+/**
+ * @deprecated Use `useSignInCheck` instead
+ */
 export function ClaimsCheck({ user, fallback, children, requiredClaims }: ClaimsCheckProps) {
   const { data } = useIdTokenResult(user, false);
   const { claims } = data;
@@ -94,6 +189,9 @@ export function ClaimsCheck({ user, fallback, children, requiredClaims }: Claims
   }
 }
 
+/**
+ * @deprecated Use `useSignInCheck` instead
+ */
 export function AuthCheck({ auth, fallback, children, requiredClaims }: AuthCheckProps): JSX.Element {
   const { data: user } = useUser<firebase.User>(auth);
 
