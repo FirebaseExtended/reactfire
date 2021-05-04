@@ -14,7 +14,7 @@
 
 * **ReactFireOptions**
 
-  ↳ [*SignInCheckOptions*](auth.signincheckoptions.md)
+  ↳ [*SignInCheckOptionsBasic*](auth.signincheckoptionsbasic.md)
 
 ## Table of contents
 

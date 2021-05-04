@@ -10,10 +10,13 @@
 - [AuthCheckProps](index.md#authcheckprops)
 - [ClaimsCheck](index.md#claimscheck)
 - [ClaimsCheckProps](index.md#claimscheckprops)
+- [ClaimsValidator](index.md#claimsvalidator)
 - [FirebaseAppProvider](index.md#firebaseappprovider)
 - [ObservableStatus](index.md#observablestatus)
 - [PreloadOptions](index.md#preloadoptions)
-- [SignInCheckOptions](index.md#signincheckoptions)
+- [SignInCheckOptionsBasic](index.md#signincheckoptionsbasic)
+- [SignInCheckOptionsClaimsObject](index.md#signincheckoptionsclaimsobject)
+- [SignInCheckOptionsClaimsValidator](index.md#signincheckoptionsclaimsvalidator)
 - [SigninCheckResult](index.md#signincheckresult)
 - [StorageImage](index.md#storageimage)
 - [SuspensePerfProps](index.md#suspenseperfprops)
@@ -114,6 +117,12 @@ Re-exports: [ClaimsCheckProps](../interfaces/auth.claimscheckprops.md)
 
 ___
 
+### ClaimsValidator
+
+Re-exports: [ClaimsValidator](../interfaces/auth.claimsvalidator.md)
+
+___
+
 ### FirebaseAppProvider
 
 Re-exports: [FirebaseAppProvider](firebaseapp.md#firebaseappprovider)
@@ -132,9 +141,21 @@ Re-exports: [PreloadOptions](sdk.md#preloadoptions)
 
 ___
 
-### SignInCheckOptions
+### SignInCheckOptionsBasic
 
-Re-exports: [SignInCheckOptions](../interfaces/auth.signincheckoptions.md)
+Re-exports: [SignInCheckOptionsBasic](../interfaces/auth.signincheckoptionsbasic.md)
+
+___
+
+### SignInCheckOptionsClaimsObject
+
+Re-exports: [SignInCheckOptionsClaimsObject](../interfaces/auth.signincheckoptionsclaimsobject.md)
+
+___
+
+### SignInCheckOptionsClaimsValidator
+
+Re-exports: [SignInCheckOptionsClaimsValidator](../interfaces/auth.signincheckoptionsclaimsvalidator.md)
 
 ___
 

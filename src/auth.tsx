@@ -63,8 +63,8 @@ export interface ClaimsCheckProps {
   requiredClaims: { [key: string]: any };
 }
 
-interface MissingClaims {
-  [key: string]: { expected: string; actual: string };
+interface ClaimCheckErrors {
+  [key: string]: String[];
 }
 
 export type SigninCheckResult =
@@ -75,79 +75,86 @@ export type SigninCheckResult =
   | {
       signedIn: true;
       hasRequiredClaims: boolean;
-      missingClaims?: MissingClaims;
+      errors?: ClaimCheckErrors;
       user: firebase.User;
     };
 
-export interface SignInCheckOptions extends ReactFireOptions<SigninCheckResult> {
-  requiredClaims?: { [key: string]: any };
+export interface SignInCheckOptionsBasic extends ReactFireOptions<SigninCheckResult> {
   forceRefresh?: boolean;
+}
+
+export interface SignInCheckOptionsClaimsObject extends SignInCheckOptionsBasic {
+  requiredClaims: firebase.auth.IdTokenResult['claims'];
+}
+
+export interface ClaimsValidator {
+  (claims: firebase.auth.IdTokenResult['claims']): {
+    hasRequiredClaims: boolean;
+    errors?: ClaimCheckErrors;
+  };
+}
+
+export interface SignInCheckOptionsClaimsValidator extends SignInCheckOptionsBasic {
+  validateCustomClaims: ClaimsValidator;
 }
 
 /**
  * Subscribe to the signed-in status of a user.
  *
- * Simple use case:
+ * Optionally check [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims) of a user as well.
  *
- * ```jsx
- * function UserFavorites() {
- *    const {status, data: signInCheckResult} = useSigninCheck();
+ * ```ts
+ * // pass in an object describing the custom claims a user must have
+ * const {status, data: signInCheckResult} = useSignInCheck({requiredClaims: {admin: true}});
  *
- *    if (status === 'loading') {
- *      return <LoadingSpinner />
- *    }
+ * // pass in a custom claims validator function
+ * const {status, data: signInCheckResult} = useSignInCheck({validateCustomClaims: (userClaims) => {
+ *   // custom validation logic...
+ * }});
  *
- *    if (signInCheckResult.signedIn === true) {
- *      return <FavoritesList />
- *    } else {
- *      return <SignInForm />
- *    }
- * }
- * ```
- *
- * Advanced: You can also optionally check [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims). Example:
- *
- * ```jsx
- * function ProductPricesAdminPanel() {
- *    const {status, data: signInCheckResult} = useSigninCheck({requiredClaims: {admin: true, canModifyPrices: true}});
- *
- *    if (status === 'loading') {
- *      return <LoadingSpinner />
- *    }
- *
- *    if (signInCheckResult.signedIn && signInCheckResult.hasRequiredClaims) {
- *      return <FavoritesList />
- *    } else {
- *      console.warn('missing claims', signInCheckResult.missingClaims);
- *      return <SignInForm />
- *    }
- * }
+ * // You can optionally, force refresh the token
+ * const {status, data: signInCheckResult} = useSignInCheck({forceRefresh: true, requiredClaims: {admin: true}});
  * ```
  */
-export function useSigninCheck(options?: SignInCheckOptions): ObservableStatus<SigninCheckResult> {
+export function useSigninCheck(
+  options?: SignInCheckOptionsBasic | SignInCheckOptionsClaimsObject | SignInCheckOptionsClaimsValidator
+): ObservableStatus<SigninCheckResult> {
   const auth = useAuth();
 
-  const observableId = `auth:signInCheck:${auth.app.name}:requiredClaims:${JSON.stringify(options?.requiredClaims)}:forceRefresh:${!!options?.forceRefresh}`;
+  if (options?.hasOwnProperty('requiredClaims') && options?.hasOwnProperty('validateClaims')) {
+    throw new Error('Cannot have both "requiredClaims" and "validateClaims". Use one or the other.');
+  }
+
+  let observableId = `auth:signInCheck:${auth.app.name}::forceRefresh:${!!options?.forceRefresh}`;
+
+  if (options?.forceRefresh) {
+    observableId = `${observableId}:forceRefresh:${options.forceRefresh}`;
+  }
+
+  if (options?.hasOwnProperty('requiredClaims')) {
+    observableId = `${observableId}:requiredClaims:${JSON.stringify((options as SignInCheckOptionsClaimsObject).requiredClaims)}`;
+  } else if (options?.hasOwnProperty('validateCustomClaims')) {
+    observableId = `${observableId}:validateClaims:${JSON.stringify((options as SignInCheckOptionsClaimsValidator).validateCustomClaims)}`;
+  }
+
   const observable = user(auth).pipe(
     switchMap(user => {
       if (!user) {
         return of({ signedIn: false, hasRequiredClaims: false });
-      } else if (options?.requiredClaims !== undefined) {
+      } else if (options && (options.hasOwnProperty('requiredClaims') || options.hasOwnProperty('validateClaims'))) {
         return from(user.getIdTokenResult(options?.forceRefresh ?? false)).pipe(
           map(idTokenResult => {
-            const missingClaims: MissingClaims = {};
-            const requiredClaims = options.requiredClaims as { [key: string]: any };
+            let validator: ClaimsValidator;
 
-            Object.keys(requiredClaims).forEach(claim => {
-              if (requiredClaims[claim] !== idTokenResult.claims[claim]) {
-                missingClaims[claim] = {
-                  expected: requiredClaims[claim],
-                  actual: idTokenResult.claims[claim]
-                };
-              }
-            });
+            if (options.hasOwnProperty('requiredClaims')) {
+              validator = getClaimsObjectValidator((options as SignInCheckOptionsClaimsObject).requiredClaims);
+            } else {
+              validator = (options as SignInCheckOptionsClaimsValidator).validateCustomClaims;
+            }
 
-            return { signedIn: true, hasRequiredClaims: Object.keys(missingClaims).length === 0, missingClaims, user: user };
+            const { hasRequiredClaims, errors } = validator(idTokenResult.claims);
+
+            return { signedIn: true, hasRequiredClaims, errors, user: user };
           })
         );
       } else {
@@ -157,6 +164,23 @@ export function useSigninCheck(options?: SignInCheckOptions): ObservableStatus<S
   );
 
   return useObservable(observableId, observable);
+}
+
+function getClaimsObjectValidator(requiredClaims: firebase.auth.IdTokenResult['claims']): ClaimsValidator {
+  return function claimsObjectValidator(userClaims) {
+    const errors: { [key: string]: String[] } = {};
+
+    Object.keys(requiredClaims).forEach(claim => {
+      if (requiredClaims[claim] !== userClaims[claim]) {
+        errors[claim] = [`Expected "${requiredClaims[claim]}", but user has "${userClaims[claim]}" instead`];
+      }
+    });
+
+    return {
+      hasRequiredClaims: Object.keys(errors).length === 0,
+      errors
+    };
+  };
 }
 
 /**

@@ -8,7 +8,10 @@
 
 - [AuthCheckProps](../interfaces/auth.authcheckprops.md)
 - [ClaimsCheckProps](../interfaces/auth.claimscheckprops.md)
-- [SignInCheckOptions](../interfaces/auth.signincheckoptions.md)
+- [ClaimsValidator](../interfaces/auth.claimsvalidator.md)
+- [SignInCheckOptionsBasic](../interfaces/auth.signincheckoptionsbasic.md)
+- [SignInCheckOptionsClaimsObject](../interfaces/auth.signincheckoptionsclaimsobject.md)
+- [SignInCheckOptionsClaimsValidator](../interfaces/auth.signincheckoptionsclaimsvalidator.md)
 
 ### Type aliases
 
@@ -27,7 +30,7 @@
 
 ### SigninCheckResult
 
-Ƭ **SigninCheckResult**: { `hasRequiredClaims`: ``false`` ; `signedIn`: ``false``  } \| { `hasRequiredClaims`: *boolean* ; `missingClaims?`: MissingClaims ; `signedIn`: ``true`` ; `user`: firebase.User  }
+Ƭ **SigninCheckResult**: { `hasRequiredClaims`: ``false`` ; `signedIn`: ``false``  } \| { `errors?`: ClaimCheckErrors ; `hasRequiredClaims`: *boolean* ; `signedIn`: ``true`` ; `user`: firebase.User  }
 
 Defined in: [src/auth.tsx:70](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L70)
 
@@ -51,7 +54,7 @@ Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More 
 
 **Returns:** JSX.Element
 
-Defined in: [src/auth.tsx:199](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L199)
+Defined in: [src/auth.tsx:223](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L223)
 
 ___
 
@@ -73,7 +76,7 @@ Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More 
 
 **Returns:** *Element*
 
-Defined in: [src/auth.tsx:169](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L169)
+Defined in: [src/auth.tsx:193](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L193)
 
 ___
 
@@ -114,56 +117,34 @@ ___
 
 ### useSigninCheck
 
-▸ **useSigninCheck**(`options?`: [*SignInCheckOptions*](../interfaces/auth.signincheckoptions.md)): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<[*SigninCheckResult*](auth.md#signincheckresult)\>
+▸ **useSigninCheck**(`options?`: [*SignInCheckOptionsBasic*](../interfaces/auth.signincheckoptionsbasic.md) \| [*SignInCheckOptionsClaimsObject*](../interfaces/auth.signincheckoptionsclaimsobject.md) \| [*SignInCheckOptionsClaimsValidator*](../interfaces/auth.signincheckoptionsclaimsvalidator.md)): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<[*SigninCheckResult*](auth.md#signincheckresult)\>
 
 Subscribe to the signed-in status of a user.
 
-Simple use case:
+Optionally check [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims) of a user as well.
 
-```jsx
-function UserFavorites() {
-   const {status, data: signInCheckResult} = useSigninCheck();
+```ts
+// pass in an object describing the custom claims a user must have
+const {status, data: signInCheckResult} = useSignInCheck({requiredClaims: {admin: true}});
 
-   if (status === 'loading') {
-     return <LoadingSpinner />
-   }
+// pass in a custom claims validator function
+const {status, data: signInCheckResult} = useSignInCheck({validateCustomClaims: (userClaims) => {
+  // custom validation logic...
+}});
 
-   if (signInCheckResult.signedIn === true) {
-     return <FavoritesList />
-   } else {
-     return <SignInForm />
-   }
-}
-```
-
-Advanced: You can also optionally check [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims). Example:
-
-```jsx
-function ProductPricesAdminPanel() {
-   const {status, data: signInCheckResult} = useSigninCheck({requiredClaims: {admin: true, canModifyPrices: true}});
-
-   if (status === 'loading') {
-     return <LoadingSpinner />
-   }
-
-   if (signInCheckResult.signedIn && signInCheckResult.hasRequiredClaims) {
-     return <FavoritesList />
-   } else {
-     console.warn('missing claims', signInCheckResult.missingClaims);
-     return <SignInForm />
-   }
-}
+// You can optionally, force refresh the token
+const {status, data: signInCheckResult} = useSignInCheck({forceRefresh: true, requiredClaims: {admin: true}});
 ```
 
 #### Parameters:
 
 | Name | Type |
 | :------ | :------ |
-| `options?` | [*SignInCheckOptions*](../interfaces/auth.signincheckoptions.md) |
+| `options?` | [*SignInCheckOptionsBasic*](../interfaces/auth.signincheckoptionsbasic.md) \| [*SignInCheckOptionsClaimsObject*](../interfaces/auth.signincheckoptionsclaimsobject.md) \| [*SignInCheckOptionsClaimsValidator*](../interfaces/auth.signincheckoptionsclaimsvalidator.md) |
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<[*SigninCheckResult*](auth.md#signincheckresult)\>
 
-Defined in: [src/auth.tsx:127](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L127)
+Defined in: [src/auth.tsx:119](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L119)
 
 ___
 
