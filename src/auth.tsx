@@ -112,25 +112,25 @@ export interface SignInCheckOptionsClaimsValidator extends SignInCheckOptionsBas
  *   // custom validation logic...
  * }});
  *
- * // You can optionally, force refresh the token
+ * // You can optionally force-refresh the token
  * const {status, data: signInCheckResult} = useSignInCheck({forceRefresh: true, requiredClaims: {admin: true}});
  * ```
  */
 export function useSigninCheck(
   options?: SignInCheckOptionsBasic | SignInCheckOptionsClaimsObject | SignInCheckOptionsClaimsValidator
 ): ObservableStatus<SigninCheckResult> {
-  const auth = useAuth();
-
+  // If both `requiredClaims` and `validateClaims` are provided, we won't know which one to use
   if (options?.hasOwnProperty('requiredClaims') && options?.hasOwnProperty('validateClaims')) {
     throw new Error('Cannot have both "requiredClaims" and "validateClaims". Use one or the other.');
   }
 
-  let observableId = `auth:signInCheck:${auth.app.name}::forceRefresh:${!!options?.forceRefresh}`;
+  const auth = useAuth();
 
+  // ObservableId should change for different options configurations to ensure no cache collisions
+  let observableId = `auth:signInCheck:${auth.app.name}::forceRefresh:${!!options?.forceRefresh}`;
   if (options?.forceRefresh) {
     observableId = `${observableId}:forceRefresh:${options.forceRefresh}`;
   }
-
   if (options?.hasOwnProperty('requiredClaims')) {
     observableId = `${observableId}:requiredClaims:${JSON.stringify((options as SignInCheckOptionsClaimsObject).requiredClaims)}`;
   } else if (options?.hasOwnProperty('validateCustomClaims')) {
@@ -153,11 +153,11 @@ export function useSigninCheck(
             }
 
             const { hasRequiredClaims, errors } = validator(idTokenResult.claims);
-
             return { signedIn: true, hasRequiredClaims, errors, user: user };
           })
         );
       } else {
+        // If no claims are provided to be checked, `hasRequiredClaims` is true
         return of({ signedIn: true, hasRequiredClaims: true, user: user });
       }
     })

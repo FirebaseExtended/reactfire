@@ -132,7 +132,7 @@ const {status, data: signInCheckResult} = useSignInCheck({validateCustomClaims: 
   // custom validation logic...
 }});
 
-// You can optionally, force refresh the token
+// You can optionally force-refresh the token
 const {status, data: signInCheckResult} = useSignInCheck({forceRefresh: true, requiredClaims: {admin: true}});
 ```
 
