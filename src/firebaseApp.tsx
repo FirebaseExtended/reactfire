@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { getApps, initializeApp, registerVersion } from 'firebase/app';
 
-type FirebaseApp = import('firebase/app').FirebaseApp;
-type FirebaseOptions = import('firebase/app').FirebaseOptions;
+import type {FirebaseApp, FirebaseOptions} from 'firebase/app';
 
 // INVESTIGATE I don't like magic strings, can we have export this in js-sdk?
 const DEFAULT_APP_NAME = '[DEFAULT]';
