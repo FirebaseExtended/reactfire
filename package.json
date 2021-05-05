@@ -91,7 +91,7 @@
   },
   "dependencies": {
     "babel-plugin-minify-replace": "^0.5.0",
-    "rxfire": "^0.500.0-canary.0df3466",
+    "rxfire": "0.500.0-canary.0df3466",
     "rxjs": "^6.6.3"
   },
   "resolutions": {
