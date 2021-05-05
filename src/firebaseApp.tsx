@@ -1,20 +1,19 @@
-import firebase from 'firebase/app';
 import * as React from 'react';
+import { getApps, initializeApp, registerVersion } from 'firebase/app';
 
-export * from './sdk';
-
-type FirebaseAppContextValue = firebase.app.App;
+type FirebaseApp = import('firebase/app').FirebaseApp;
+type FirebaseOptions = import('firebase/app').FirebaseOptions;
 
 // INVESTIGATE I don't like magic strings, can we have export this in js-sdk?
 const DEFAULT_APP_NAME = '[DEFAULT]';
 
-const FirebaseAppContext = React.createContext<FirebaseAppContextValue | undefined>(undefined);
+const FirebaseAppContext = React.createContext<FirebaseApp | undefined>(undefined);
 
 const SuspenseEnabledContext = React.createContext<boolean>(false);
 
 type Props = {
-  firebaseApp?: firebase.app.App;
-  firebaseConfig?: Object;
+  firebaseApp?: FirebaseApp;
+  firebaseConfig?: FirebaseOptions;
   appName?: string;
   suspense?: boolean;
 };
@@ -27,12 +26,12 @@ const shallowEq = (a: { [key: string]: any }, b: { [key: string]: any }) => a ==
 export function FirebaseAppProvider(props: Props & { [key: string]: unknown }) {
   const { firebaseConfig, appName, suspense } = props;
 
-  const firebaseApp: firebase.app.App = React.useMemo(() => {
+  const firebaseApp: FirebaseApp = React.useMemo(() => {
     if (props.firebaseApp) {
       return props.firebaseApp;
     }
 
-    const existingApp = firebase.apps.find(app => app.name === (appName || DEFAULT_APP_NAME));
+    const existingApp = getApps().find(app => app.name === (appName || DEFAULT_APP_NAME));
     if (existingApp) {
       if (firebaseConfig && shallowEq(existingApp.options, firebaseConfig)) {
         return existingApp;
@@ -46,11 +45,10 @@ export function FirebaseAppProvider(props: Props & { [key: string]: unknown }) {
         throw new Error('No firebaseConfig provided');
       }
 
-      // TODO: DOUBLE CHECK THAT THIS GETS CALLED
       const reactVersion = React.version || 'unknown';
-      firebase.registerVersion('react', reactVersion);
-      firebase.registerVersion('reactfire', version);
-      return firebase.initializeApp(firebaseConfig, appName);
+      registerVersion('react', reactVersion);
+      registerVersion('reactfire', version);
+      return initializeApp(firebaseConfig, appName);
     }
   }, [props.firebaseApp, firebaseConfig, appName]);
 
