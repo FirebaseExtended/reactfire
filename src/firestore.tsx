@@ -12,7 +12,7 @@ if (!((globalThis as any) as ReactFireGlobals)._reactFireFirestoreQueryCache) {
 }
 
 function getUniqueIdForFirestoreQuery(query: firebase.firestore.Query) {
-  const index = cachedQueries.findIndex(cachedQuery => cachedQuery.isEqual(query));
+  const index = cachedQueries.findIndex((cachedQuery) => cachedQuery.isEqual(query));
   if (index > -1) {
     return index;
   }
@@ -31,7 +31,7 @@ export function preloadFirestoreDoc(
 ) {
   const firebaseApp = options.firebaseApp;
 
-  return preloadFirestore({ firebaseApp }).then(firestore => {
+  return preloadFirestore({ firebaseApp }).then((firestore) => {
     const ref = refProvider(firestore());
     return preloadObservable(doc(ref), `firestore:doc:${firebaseApp.name}:${ref.path}`);
   });

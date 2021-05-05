@@ -15,7 +15,7 @@ interface ParameterSettings<T> {
 
 // TODO(davideast): Replace with RxFire functions when they land
 function parameter$<T>({ remoteConfig, key, getter }: ParameterSettings<T>): Observable<T> {
-  return new Observable(subscriber => {
+  return new Observable((subscriber) => {
     remoteConfig.ensureInitialized().then(() => {
       // 'this' for the getter loses context in the next()
       // call, so it needs to be bound.

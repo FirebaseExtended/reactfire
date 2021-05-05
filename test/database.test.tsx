@@ -17,20 +17,14 @@ describe('Realtime Database (RTDB)', () => {
     cleanup();
 
     // clear out the database
-    app
-      .database()
-      .ref()
-      .set(null);
+    app.database().ref().set(null);
   });
 
   test('double check - emulator is running', () => {
     // IF THIS TEST FAILS, MAKE SURE YOU'RE RUNNING THESE TESTS BY DOING:
     // yarn test
 
-    return app
-      .database()
-      .ref('hello')
-      .set({ a: 'world' });
+    return app.database().ref('hello').set({ a: 'world' });
   });
 
   describe('useDatabaseObject', () => {

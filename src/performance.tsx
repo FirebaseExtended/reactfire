@@ -13,7 +13,7 @@ export function SuspenseWithPerf({ children, traceId, fallback, firePerf }: Susp
   const firebaseApp = useFirebaseApp();
 
   if (!firePerf) {
-    preloadPerformance({ firebaseApp }).then(perf => perf());
+    preloadPerformance({ firebaseApp }).then((perf) => perf());
   }
 
   const entries = performance?.getEntriesByName?.(traceId, 'measure') || [];

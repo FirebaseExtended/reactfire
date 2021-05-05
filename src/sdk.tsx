@@ -53,8 +53,9 @@ function proxyComponent(componentName: ComponentName): FirebaseNamespaceComponen
       throw sdkSubject.firstEmission;
     } else if (!sdkSubject.hasValue && !suspenseEnabled && !firebase[componentName]) {
       throw new Error(
-        `ReactFire: "firebase/${componentName}" not found. Please import it in your component, or call preload${componentName.charAt(0).toUpperCase() +
-          componentName.slice(1)} and wait for it to resolve. ReactFire can only auto-import Firebase libraries if Suspense mode is enabled.`
+        `ReactFire: "firebase/${componentName}" not found. Please import it in your component, or call preload${
+          componentName.charAt(0).toUpperCase() + componentName.slice(1)
+        } and wait for it to resolve. ReactFire can only auto-import Firebase libraries if Suspense mode is enabled.`
       );
     }
 
@@ -72,7 +73,7 @@ function proxyComponent(componentName: ComponentName): FirebaseNamespaceComponen
         args[0] = contextualApp;
       }
       return component(...args);
-    }
+    },
   }) as any;
 }
 
@@ -119,7 +120,7 @@ function preload(componentName: ComponentName, firebaseApp: App, settingsCallbac
   const app = firebaseApp;
 
   return preloadObservable(
-    new Observable(emitter => {
+    new Observable((emitter) => {
       importSDK(componentName)
         .then(() => {
           const instanceFactory: FirebaseInstanceFactory = app[componentName].bind(app);
@@ -128,7 +129,7 @@ function preload(componentName: ComponentName, firebaseApp: App, settingsCallbac
             emitter.complete();
           });
         })
-        .catch(e => {
+        .catch((e) => {
           emitter.error(e);
           emitter.complete();
         });

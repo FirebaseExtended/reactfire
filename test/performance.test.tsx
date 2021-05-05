@@ -8,7 +8,7 @@ const traceEnd = jest.fn();
 
 const createTrace = jest.fn(() => ({
   start: traceStart,
-  stop: traceEnd
+  stop: traceEnd,
 }));
 
 const mockPerf = (jest.fn(() => {
@@ -16,7 +16,7 @@ const mockPerf = (jest.fn(() => {
 }) as any) as () => firebase.default.performance.Performance;
 
 const mockFirebase: firebase.default.app.App = {
-  performance: mockPerf
+  performance: mockPerf,
 } as any;
 
 const mark = jest.fn();
@@ -104,7 +104,7 @@ describe('SuspenseWithPerf', () => {
     const o$ = new Subject();
     let shouldThrow = true;
 
-    const promise = new Promise(resolve => {
+    const promise = new Promise((resolve) => {
       o$.subscribe(() => {
         shouldThrow = false;
         resolve(true);

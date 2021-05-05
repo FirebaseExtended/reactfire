@@ -13,7 +13,7 @@ if (!((globalThis as any) as ReactFireGlobals)._reactFireDatabaseCachedQueries) 
 }
 
 function getUniqueIdForDatabaseQuery(query: firebase.database.Query) {
-  const index = cachedQueries.findIndex(cachedQuery => cachedQuery.isEqual(query));
+  const index = cachedQueries.findIndex((cachedQuery) => cachedQuery.isEqual(query));
   if (index > -1) {
     return index;
   }
@@ -38,7 +38,7 @@ export function useDatabaseObject<T = unknown>(ref: firebase.database.Reference,
 // https://github.com/firebase/firebase-js-sdk/pull/2352
 
 function objectVal<T>(query: firebase.database.Query, keyField?: string): Observable<T> {
-  return object(query).pipe(map(change => changeToData(change, keyField) as T));
+  return object(query).pipe(map((change) => changeToData(change, keyField) as T));
 }
 
 function changeToData(change: QueryChange, keyField?: string): {} {
@@ -51,7 +51,7 @@ function changeToData(change: QueryChange, keyField?: string): {} {
 
   return {
     ...change.snapshot.val(),
-    ...(keyField ? { [keyField]: change.snapshot.key } : null)
+    ...(keyField ? { [keyField]: change.snapshot.key } : null),
   };
 }
 // ============================================================================

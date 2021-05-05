@@ -16,7 +16,7 @@ describe('Preload SDK', () => {
         projectId: 'rxfire-525a3',
         storageBucket: 'rxfire-525a3.appspot.com',
         messagingSenderId: '844180061847',
-        appId: '1:844180061847:web:400f7142e2d1aaeb'
+        appId: '1:844180061847:web:400f7142e2d1aaeb',
       },
       'preloadsdk-test-suite'
     );
@@ -34,7 +34,7 @@ describe('Preload SDK', () => {
 
       preloadFirestore({
         firebaseApp: app,
-        setup: () => new Promise(resolve => (preloadResolve = resolve))
+        setup: () => new Promise((resolve) => (preloadResolve = resolve)),
       }).then(() => (preloadResolved = true));
 
       const Firestore = () => {

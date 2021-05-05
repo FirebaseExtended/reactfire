@@ -57,10 +57,10 @@ export function useObservable<T>(observableId: string, source: Observable<T | an
   const [latest, setValue] = React.useState(() => (observable.hasValue ? observable.value : config.initialData ?? config.startWithValue));
   React.useEffect(() => {
     const subscription = observable.subscribe(
-      v => {
+      (v) => {
         setValue(() => v);
       },
-      e => {
+      (e) => {
         throw e;
       }
     );
@@ -83,6 +83,6 @@ export function useObservable<T>(observableId: string, source: Observable<T | an
     isComplete: observable.isStopped,
     data: latest,
     error: observable.ourError,
-    firstValuePromise: observable.firstEmission
+    firstValuePromise: observable.firstEmission,
   };
 }

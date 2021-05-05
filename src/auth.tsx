@@ -7,7 +7,7 @@ import { from } from 'rxjs';
 export function preloadUser(options: { firebaseApp: firebase.app.App }) {
   const firebaseApp = options.firebaseApp;
 
-  return preloadAuth({ firebaseApp }).then(auth => {
+  return preloadAuth({ firebaseApp }).then((auth) => {
     const result = preloadObservable(user(auth()), `auth:user:${firebaseApp.name}`);
     return result.toPromise();
   });
@@ -68,11 +68,11 @@ export function ClaimsCheck({ user, fallback, children, requiredClaims }: Claims
   const missingClaims: { [key: string]: { expected: string; actual: string } } = {};
 
   if (requiredClaims) {
-    Object.keys(requiredClaims).forEach(claim => {
+    Object.keys(requiredClaims).forEach((claim) => {
       if (requiredClaims[claim] !== claims[claim]) {
         missingClaims[claim] = {
           expected: requiredClaims[claim],
-          actual: claims[claim]
+          actual: claims[claim],
         };
       }
     });

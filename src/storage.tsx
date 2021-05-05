@@ -11,7 +11,7 @@ import { useStorage, useSuspenseEnabledFromConfigAndContext } from './firebaseAp
  * @param task
  */
 function _fromTask(task: firebase.storage.UploadTask) {
-  return new Observable<firebase.storage.UploadTaskSnapshot>(subscriber => {
+  return new Observable<firebase.storage.UploadTaskSnapshot>((subscriber) => {
     const progress = (snap: firebase.storage.UploadTaskSnapshot) => {
       return subscriber.next(snap);
     };
@@ -76,7 +76,7 @@ function INTERNALStorageImage(props: StorageImageProps & React.DetailedHTMLProps
   let { storage, storagePath, suspense, placeHolder, ...imgProps } = props;
 
   const reactfireOptions: ReactFireOptions<string> = {
-    suspense: useSuspenseEnabledFromConfigAndContext(suspense)
+    suspense: useSuspenseEnabledFromConfigAndContext(suspense),
   };
 
   if (!storage) {

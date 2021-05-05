@@ -9,7 +9,7 @@ import {
   useFirestoreCollectionData,
   useFirestoreDocData,
   useFirestoreDocOnce,
-  useFirestoreDocDataOnce
+  useFirestoreDocDataOnce,
 } from '..';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
@@ -43,20 +43,14 @@ describe('Firestore', () => {
     // IF THIS TEST FAILS, MAKE SURE YOU'RE RUNNING THESE TESTS BY DOING:
     // yarn test
 
-    return app
-      .firestore()
-      .collection(randomString())
-      .add({ a: 'hello' });
+    return app.firestore().collection(randomString()).add({ a: 'hello' });
   });
 
   describe('useFirestoreDoc', () => {
     it('can get a Firestore document [TEST REQUIRES EMULATOR]', async () => {
       const mockData = { a: 'hello' };
 
-      const ref = app
-        .firestore()
-        .collection(randomString())
-        .doc(randomString());
+      const ref = app.firestore().collection(randomString()).doc(randomString());
 
       await ref.set(mockData);
 
@@ -77,10 +71,7 @@ describe('Firestore', () => {
     it('can get a Firestore document [TEST REQUIRES EMULATOR]', async () => {
       const mockData = { a: 'hello' };
 
-      const ref = app
-        .firestore()
-        .collection(randomString())
-        .doc(randomString());
+      const ref = app.firestore().collection(randomString()).doc(randomString());
 
       await ref.set(mockData);
 
@@ -101,10 +92,7 @@ describe('Firestore', () => {
 
   describe('useFirestoreDocOnce', () => {
     it('works when the document does not exist, and does not update when it is created', async () => {
-      const ref = app
-        .firestore()
-        .collection(randomString())
-        .doc(randomString());
+      const ref = app.firestore().collection(randomString()).doc(randomString());
 
       const { result: subscribeResult, waitFor: waitForSubscribe } = renderHook(() => useFirestoreDoc<any>(ref), { wrapper: Provider });
       const { result: onceResult, waitFor: waitForOnce } = renderHook(() => useFirestoreDocOnce<any>(ref), { wrapper: Provider });
@@ -127,10 +115,7 @@ describe('Firestore', () => {
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
-      const ref = app
-        .firestore()
-        .collection(randomString())
-        .doc(randomString());
+      const ref = app.firestore().collection(randomString()).doc(randomString());
 
       await ref.set(mockData1);
       const { result: subscribeResult, waitFor: waitForSubscribe } = renderHook(
@@ -239,7 +224,7 @@ describe('Firestore', () => {
       const { result: filteredResult, waitFor: waitForUnfiltered } = renderHook(
         () =>
           useFirestoreCollectionData<any>(filteredRef, {
-            idField: 'id'
+            idField: 'id',
           }),
         { wrapper: Provider }
       );
