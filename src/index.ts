@@ -1,9 +1,11 @@
-import firebase from 'firebase/app';
 import { SuspenseSubject } from './SuspenseSubject';
 
+import type {Query as FirestoreQuery} from 'firebase/firestore';
+import type {Query as DatabaseQuery} from 'firebase/database';
+
 export type ReactFireGlobals = {
-  _reactFireDatabaseCachedQueries: Array<firebase.database.Query>;
-  _reactFireFirestoreQueryCache: Array<firebase.firestore.Query>;
+  _reactFireDatabaseCachedQueries: Array<DatabaseQuery>;
+  _reactFireFirestoreQueryCache: Array<FirestoreQuery>;
   _reactFirePreloadedObservables: Map<string, SuspenseSubject<any>>;
 };
 
