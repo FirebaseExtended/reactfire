@@ -1,18 +1,19 @@
-import firebase from 'firebase/app';
 import { list, object, QueryChange, listVal } from 'rxfire/database';
 import { ReactFireOptions, useObservable, checkIdField, ObservableStatus, ReactFireGlobals } from './';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import type { Query as DatabaseQuery, Reference } from 'firebase/database';
+
 // Since we're side-effect free, we need to ensure our observableId cache is global
-const cachedQueries: Array<firebase.database.Query> = ((globalThis as any) as ReactFireGlobals)._reactFireDatabaseCachedQueries || [];
+const cachedQueries: Array<DatabaseQuery> = ((globalThis as any) as ReactFireGlobals)._reactFireDatabaseCachedQueries || [];
 
 if (!((globalThis as any) as ReactFireGlobals)._reactFireDatabaseCachedQueries) {
   ((globalThis as any) as ReactFireGlobals)._reactFireDatabaseCachedQueries = cachedQueries;
 }
 
-function getUniqueIdForDatabaseQuery(query: firebase.database.Query) {
+function getUniqueIdForDatabaseQuery(query: DatabaseQuery) {
   const index = cachedQueries.findIndex((cachedQuery) => cachedQuery.isEqual(query));
   if (index > -1) {
     return index;
@@ -26,7 +27,7 @@ function getUniqueIdForDatabaseQuery(query: firebase.database.Query) {
  * @param ref - Reference to the DB object you want to listen to
  * @param options
  */
-export function useDatabaseObject<T = unknown>(ref: firebase.database.Reference, options?: ReactFireOptions<T>): ObservableStatus<QueryChange | T> {
+export function useDatabaseObject<T = unknown>(ref: Reference, options?: ReactFireOptions<T>): ObservableStatus<QueryChange | T> {
   const observableId = `database:object:${ref.toString()}`;
   const observable$ = object(ref);
 
@@ -37,7 +38,7 @@ export function useDatabaseObject<T = unknown>(ref: firebase.database.Reference,
 // TODO: switch to rxfire's objectVal once this PR is merged:
 // https://github.com/firebase/firebase-js-sdk/pull/2352
 
-function objectVal<T>(query: firebase.database.Query, keyField?: string): Observable<T> {
+function objectVal<T>(query: DatabaseQuery, keyField?: string): Observable<T> {
   return object(query).pipe(map((change) => changeToData(change, keyField) as T));
 }
 
@@ -56,7 +57,7 @@ function changeToData(change: QueryChange, keyField?: string): {} {
 }
 // ============================================================================
 
-export function useDatabaseObjectData<T>(ref: firebase.database.Reference, options?: ReactFireOptions<T>): ObservableStatus<T> {
+export function useDatabaseObjectData<T>(ref: Reference, options?: ReactFireOptions<T>): ObservableStatus<T> {
   const idField = options ? checkIdField(options) : 'NO_ID_FIELD';
   const observableId = `database:objectVal:${ref.toString()}:idField=${idField}`;
   const observable$ = objectVal(ref, idField);
@@ -71,7 +72,7 @@ export function useDatabaseObjectData<T>(ref: firebase.database.Reference, optio
  * @param options
  */
 export function useDatabaseList<T = { [key: string]: unknown }>(
-  ref: firebase.database.Reference | firebase.database.Query,
+  ref: Reference | DatabaseQuery,
   options?: ReactFireOptions<T[]>
 ): ObservableStatus<QueryChange[] | T[]> {
   const hash = `database:list:${getUniqueIdForDatabaseQuery(ref)}`;
@@ -80,10 +81,7 @@ export function useDatabaseList<T = { [key: string]: unknown }>(
   return useObservable(hash, observable$, options);
 }
 
-export function useDatabaseListData<T = { [key: string]: unknown }>(
-  ref: firebase.database.Reference | firebase.database.Query,
-  options?: ReactFireOptions<T[]>
-): ObservableStatus<T[]> {
+export function useDatabaseListData<T = { [key: string]: unknown }>(ref: Reference | DatabaseQuery, options?: ReactFireOptions<T[]>): ObservableStatus<T[]> {
   const idField = options ? checkIdField(options) : 'NO_ID_FIELD';
   const observableId = `database:listVal:${getUniqueIdForDatabaseQuery(ref)}:idField=${idField}`;
   const observable$ = listVal(ref, idField);
