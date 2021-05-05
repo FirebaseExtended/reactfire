@@ -1,16 +1,13 @@
-import firebase from 'firebase/app';
 import * as React from 'react';
 import { user } from 'rxfire/auth';
-import { preloadAuth, preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus } from './';
+import { preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus } from './';
 import { from } from 'rxjs';
 
-export function preloadUser(options: { firebaseApp: firebase.app.App }) {
-  const firebaseApp = options.firebaseApp;
+import type { Auth, User, IdTokenResult } from 'firebase/auth';
 
-  return preloadAuth({ firebaseApp }).then((auth) => {
-    const result = preloadObservable(user(auth()), `auth:user:${firebaseApp.name}`);
-    return result.toPromise();
-  });
+export async function preloadUser(authResolver: () => Promise<Auth>) {
+  const auth = await authResolver();
+  return preloadObservable(user(auth), `auth:user:${auth.name}`);
 }
 
 /**
@@ -18,7 +15,7 @@ export function preloadUser(options: { firebaseApp: firebase.app.App }) {
  *
  * @param options
  */
-export function useUser<T = unknown>(options?: ReactFireOptions<T>): ObservableStatus<firebase.User> {
+export function useUser<T = unknown>(options?: ReactFireOptions<T>): ObservableStatus<User> {
   const auth = useAuth();
 
   const observableId = `auth:user:${auth.app.name}`;
@@ -34,11 +31,7 @@ export function useUser<T = unknown>(options?: ReactFireOptions<T>): ObservableS
   return useObservable(observableId, observable$, { ...options, initialData: currentUser });
 }
 
-export function useIdTokenResult(
-  user: firebase.User,
-  forceRefresh: boolean = false,
-  options?: ReactFireOptions<firebase.auth.IdTokenResult>
-): ObservableStatus<firebase.auth.IdTokenResult> {
+export function useIdTokenResult(user: User, forceRefresh: boolean = false, options?: ReactFireOptions<IdTokenResult>): ObservableStatus<IdTokenResult> {
   if (!user) {
     throw new Error('you must provide a user');
   }
@@ -56,7 +49,7 @@ export interface AuthCheckProps {
 }
 
 export interface ClaimsCheckProps {
-  user: firebase.User;
+  user: User;
   fallback: React.ReactNode;
   children: React.ReactNode;
   requiredClaims?: { [key: string]: any };
@@ -65,14 +58,14 @@ export interface ClaimsCheckProps {
 export function ClaimsCheck({ user, fallback, children, requiredClaims }: ClaimsCheckProps) {
   const { data } = useIdTokenResult(user, false);
   const { claims } = data;
-  const missingClaims: { [key: string]: { expected: string; actual: string } } = {};
+  const missingClaims: { [key: string]: { expected: string; actual: string | undefined } } = {};
 
   if (requiredClaims) {
     Object.keys(requiredClaims).forEach((claim) => {
       if (requiredClaims[claim] !== claims[claim]) {
         missingClaims[claim] = {
           expected: requiredClaims[claim],
-          actual: claims[claim],
+          actual: claims[claim]?.toString(),
         };
       }
     });
@@ -86,7 +79,7 @@ export function ClaimsCheck({ user, fallback, children, requiredClaims }: Claims
 }
 
 export function AuthCheck({ fallback, children, requiredClaims }: AuthCheckProps): JSX.Element {
-  const { data: user } = useUser<firebase.User>();
+  const { data: user } = useUser<User>();
 
   if (user) {
     return requiredClaims ? (
