@@ -18,7 +18,7 @@ export async function preloadUser(authResolver: () => Promise<Auth>) {
 export function useUser<T = unknown>(options?: ReactFireOptions<T>): ObservableStatus<User> {
   const auth = useAuth();
 
-  const observableId = `auth:user:${auth.app.name}`;
+  const observableId = `auth:user:${auth.name}`;
   const observable$ = user(auth);
 
   let currentUser = auth.currentUser;

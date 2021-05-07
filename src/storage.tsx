@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { getDownloadURL } from 'rxfire/storage';
 import { Observable } from 'rxjs';
-import { ReactFireOptions, useObservable, ObservableStatus } from './';
-import { useStorage, useSuspenseEnabledFromConfigAndContext } from './firebaseApp';
+import { ReactFireOptions, useObservable, ObservableStatus, useStorage } from './';
+import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp';
+import { ref } from 'firebase/storage';
 
-import type { UploadTask, UploadTaskSnapshot, StorageReference } from 'firebase/storage';
+import type { UploadTask, UploadTaskSnapshot, StorageReference, StorageService } from 'firebase/storage';
 
 /**
  * modified version of rxFire's _fromTask
@@ -56,7 +57,7 @@ export function useStorageDownloadURL<T = string>(ref: StorageReference, options
 
 type StorageImageProps = {
   storagePath: string;
-  storage?: Storage;
+  storage?: StorageService;
   suspense?: boolean;
   placeHolder?: JSX.Element;
 };
@@ -80,7 +81,7 @@ function INTERNALStorageImage(props: StorageImageProps & React.DetailedHTMLProps
     throw new Error('Storage was not passed to component INTERNALStorageImage. This should not be possible');
   }
 
-  const { status, data: imgSrc } = useStorageDownloadURL(storage.ref(storagePath), reactfireOptions);
+  const { status, data: imgSrc } = useStorageDownloadURL(ref(storage, storagePath), reactfireOptions);
 
   if (status === 'success') {
     if (!(imgProps.alt || imgProps.alt === '')) {

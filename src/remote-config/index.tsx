@@ -1,4 +1,4 @@
-import { useRemoteConfig } from '../firebaseApp';
+import { useRemoteConfig } from '../';
 import { useObservable, ObservableStatus } from '../useObservable';
 import { getValue, getString, getBoolean, getNumber, getAll, AllParameters } from './getValue';
 import { Observable } from 'rxjs';
