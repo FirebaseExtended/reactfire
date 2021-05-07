@@ -7,22 +7,21 @@ import type { FirebaseApp, FirebaseOptions } from 'firebase/app';
 const DEFAULT_APP_NAME = '[DEFAULT]';
 
 const FirebaseAppContext = React.createContext<FirebaseApp | undefined>(undefined);
-
 const SuspenseEnabledContext = React.createContext<boolean>(false);
 
-type Props = {
+interface FirebaseAppProviderProps {
   firebaseApp?: FirebaseApp;
   firebaseConfig?: FirebaseOptions;
   appName?: string;
   suspense?: boolean;
-};
+}
 
 // @ts-ignore: "__REACTFIRE_VERSION__" is replaced with actual ReactFire version (see babel.config.js)
 export const version = __REACTFIRE_VERSION__;
 
 const shallowEq = (a: { [key: string]: any }, b: { [key: string]: any }) => a === b || [...Object.keys(a), ...Object.keys(b)].every((key) => a[key] === b[key]);
 
-export function FirebaseAppProvider(props: Props & { [key: string]: unknown }) {
+export function FirebaseAppProvider(props: React.PropsWithChildren<FirebaseAppProviderProps>) {
   const { firebaseConfig, appName, suspense } = props;
 
   const firebaseApp: FirebaseApp = React.useMemo(() => {
