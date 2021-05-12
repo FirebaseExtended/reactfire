@@ -91,7 +91,7 @@ export interface SignInCheckOptionsClaimsObject extends SignInCheckOptionsBasic 
 export interface ClaimsValidator {
   (claims: firebase.auth.IdTokenResult['claims']): {
     hasRequiredClaims: boolean;
-    errors?: ClaimCheckErrors;
+    errors: ClaimCheckErrors | {};
   };
 }
 
