@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import * as React from 'react';
 import { user } from 'rxfire/auth';
-import { preloadAuth, preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus } from './';
+import { preloadAuth, preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus, ReactFireError } from './';
 import { from, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
@@ -64,18 +64,19 @@ export interface ClaimsCheckProps {
 }
 
 interface ClaimCheckErrors {
-  [key: string]: String[];
+  [key: string]: ReactFireError[];
 }
 
 export type SigninCheckResult =
   | {
       signedIn: false;
       hasRequiredClaims: false;
+      errors: {};
     }
   | {
       signedIn: true;
       hasRequiredClaims: boolean;
-      errors?: ClaimCheckErrors;
+      errors: ClaimCheckErrors;
       user: firebase.User;
     };
 
@@ -134,6 +135,7 @@ export function useSigninCheck(
   if (options?.hasOwnProperty('requiredClaims')) {
     observableId = `${observableId}:requiredClaims:${JSON.stringify((options as SignInCheckOptionsClaimsObject).requiredClaims)}`;
   } else if (options?.hasOwnProperty('validateCustomClaims')) {
+    // TODO(jamesdaniels): Check if stringifying this function breaks in IE11
     observableId = `${observableId}:validateClaims:${JSON.stringify((options as SignInCheckOptionsClaimsValidator).validateCustomClaims)}`;
   }
 
@@ -168,11 +170,11 @@ export function useSigninCheck(
 
 function getClaimsObjectValidator(requiredClaims: firebase.auth.IdTokenResult['claims']): ClaimsValidator {
   return function claimsObjectValidator(userClaims) {
-    const errors: { [key: string]: String[] } = {};
+    const errors: { [key: string]: ReactFireError[] } = {};
 
     Object.keys(requiredClaims).forEach(claim => {
       if (requiredClaims[claim] !== userClaims[claim]) {
-        errors[claim] = [`Expected "${requiredClaims[claim]}", but user has "${userClaims[claim]}" instead`];
+        errors[claim] = [new ReactFireError('auth/missing-claim', `Expected "${requiredClaims[claim]}", but user has "${userClaims[claim]}" instead`)];
       }
     });
 
