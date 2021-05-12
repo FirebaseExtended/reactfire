@@ -54,7 +54,7 @@ Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More 
 
 **Returns:** JSX.Element
 
-Defined in: [src/auth.tsx:225](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L225)
+Defined in: [src/auth.tsx:239](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L239)
 
 ___
 
@@ -76,7 +76,7 @@ Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More 
 
 **Returns:** *Element*
 
-Defined in: [src/auth.tsx:195](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L195)
+Defined in: [src/auth.tsx:209](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L209)
 
 ___
 
@@ -121,6 +121,19 @@ ___
 
 Subscribe to the signed-in status of a user.
 
+```ts
+const { status, data:signInCheckResult } = useSigninCheck();
+
+if (status === 'loading') {
+  return <LoadingSpinner />}
+
+if (signInCheckResult.signedIn === true) {
+  return <ProfilePage user={signInCheckResult.user}/>
+} else {
+  return <SignInForm />
+}
+```
+
 Optionally check [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims) of a user as well.
 
 ```ts
@@ -144,7 +157,7 @@ const {status, data: signInCheckResult} = useSignInCheck({forceRefresh: true, re
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<[*SigninCheckResult*](auth.md#signincheckresult)\>
 
-Defined in: [src/auth.tsx:120](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L120)
+Defined in: [src/auth.tsx:134](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L134)
 
 ___
 

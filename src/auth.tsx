@@ -102,6 +102,20 @@ export interface SignInCheckOptionsClaimsValidator extends SignInCheckOptionsBas
 /**
  * Subscribe to the signed-in status of a user.
  *
+ * ```ts
+ * const { status, data:signInCheckResult } = useSigninCheck();
+ *
+ * if (status === 'loading') {
+ *   return <LoadingSpinner />}
+ *
+ *
+ * if (signInCheckResult.signedIn === true) {
+ *   return <ProfilePage user={signInCheckResult.user}/>
+ * } else {
+ *   return <SignInForm />
+ * }
+ * ```
+ *
  * Optionally check [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims) of a user as well.
  *
  * ```ts
