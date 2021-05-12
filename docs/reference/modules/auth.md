@@ -30,7 +30,7 @@
 
 ### SigninCheckResult
 
-Ƭ **SigninCheckResult**: { `hasRequiredClaims`: ``false`` ; `signedIn`: ``false``  } \| { `errors?`: ClaimCheckErrors ; `hasRequiredClaims`: *boolean* ; `signedIn`: ``true`` ; `user`: firebase.User  }
+Ƭ **SigninCheckResult**: { `errors`: {} ; `hasRequiredClaims`: ``false`` ; `signedIn`: ``false``  } \| { `errors`: ClaimCheckErrors ; `hasRequiredClaims`: *boolean* ; `signedIn`: ``true`` ; `user`: firebase.User  }
 
 Defined in: [src/auth.tsx:70](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L70)
 
@@ -54,7 +54,7 @@ Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More 
 
 **Returns:** JSX.Element
 
-Defined in: [src/auth.tsx:223](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L223)
+Defined in: [src/auth.tsx:225](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L225)
 
 ___
 
@@ -76,7 +76,7 @@ Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More 
 
 **Returns:** *Element*
 
-Defined in: [src/auth.tsx:193](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L193)
+Defined in: [src/auth.tsx:195](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L195)
 
 ___
 
@@ -144,7 +144,7 @@ const {status, data: signInCheckResult} = useSignInCheck({forceRefresh: true, re
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<[*SigninCheckResult*](auth.md#signincheckresult)\>
 
-Defined in: [src/auth.tsx:119](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L119)
+Defined in: [src/auth.tsx:120](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L120)
 
 ___
 

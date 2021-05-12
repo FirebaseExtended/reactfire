@@ -77,6 +77,10 @@
 - [useUser](index.md#useuser)
 - [version](index.md#version)
 
+### Classes
+
+- [ReactFireError](../classes/index.reactfireerror.md)
+
 ### Interfaces
 
 - [ReactFireOptions](../interfaces/index.reactfireoptions.md)
@@ -541,7 +545,7 @@ Defined in: [src/index.ts:4](https://github.com/FirebaseExtended/reactfire/blob/
 
 **Returns:** *any*
 
-Defined in: [src/index.ts:33](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L33)
+Defined in: [src/index.ts:45](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L45)
 
 ___
 
@@ -558,7 +562,7 @@ ___
 
 **Returns:** *any*
 
-Defined in: [src/index.ts:20](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L20)
+Defined in: [src/index.ts:32](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L32)
 
 ___
 
@@ -574,4 +578,4 @@ ___
 
 **Returns:** *any*
 
-Defined in: [src/index.ts:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L29)
+Defined in: [src/index.ts:41](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L41)

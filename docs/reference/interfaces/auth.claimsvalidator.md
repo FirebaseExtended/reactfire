@@ -21,4 +21,4 @@
 | `errors?` | ClaimCheckErrors |
 | `hasRequiredClaims` | *boolean* |
 
-Defined in: [src/auth.tsx:90](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L90)
+Defined in: [src/auth.tsx:91](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L91)

@@ -30,7 +30,7 @@
 
 • `Optional` **forceRefresh**: *boolean*
 
-Defined in: [src/auth.tsx:83](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L83)
+Defined in: [src/auth.tsx:84](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L84)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 Inherited from: [ReactFireOptions](index.reactfireoptions.md).[idField](index.reactfireoptions.md#idfield)
 
-Defined in: [src/index.ts:11](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L11)
+Defined in: [src/index.ts:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L23)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 Inherited from: [ReactFireOptions](index.reactfireoptions.md).[initialData](index.reactfireoptions.md#initialdata)
 
-Defined in: [src/index.ts:12](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L12)
+Defined in: [src/index.ts:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L24)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 Inherited from: [ReactFireOptions](index.reactfireoptions.md).[startWithValue](index.reactfireoptions.md#startwithvalue)
 
-Defined in: [src/index.ts:16](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L16)
+Defined in: [src/index.ts:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L28)
 
 ___
 
@@ -72,4 +72,4 @@ ___
 
 Inherited from: [ReactFireOptions](index.reactfireoptions.md).[suspense](index.reactfireoptions.md#suspense)
 
-Defined in: [src/index.ts:17](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L17)
+Defined in: [src/index.ts:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L29)
