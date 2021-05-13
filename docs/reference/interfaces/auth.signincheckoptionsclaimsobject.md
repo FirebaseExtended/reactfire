@@ -29,7 +29,7 @@
 
 Inherited from: [SignInCheckOptionsBasic](auth.signincheckoptionsbasic.md).[forceRefresh](auth.signincheckoptionsbasic.md#forcerefresh)
 
-Defined in: [src/auth.tsx:84](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L84)
+Defined in: [src/auth.tsx:85](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L85)
 
 ___
 
@@ -59,7 +59,7 @@ ___
 
 #### Type declaration:
 
-Defined in: [src/auth.tsx:88](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L88)
+Defined in: [src/auth.tsx:89](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L89)
 
 ___
 

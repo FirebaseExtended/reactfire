@@ -29,7 +29,7 @@
 
 Inherited from: [SignInCheckOptionsBasic](auth.signincheckoptionsbasic.md).[forceRefresh](auth.signincheckoptionsbasic.md#forcerefresh)
 
-Defined in: [src/auth.tsx:84](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L84)
+Defined in: [src/auth.tsx:85](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L85)
 
 ___
 
@@ -79,4 +79,4 @@ ___
 
 • **validateCustomClaims**: [*ClaimsValidator*](auth.claimsvalidator.md)
 
-Defined in: [src/auth.tsx:99](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L99)
+Defined in: [src/auth.tsx:100](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L100)
