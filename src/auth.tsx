@@ -72,6 +72,7 @@ export type SigninCheckResult =
       signedIn: false;
       hasRequiredClaims: false;
       errors: {};
+      user: null;
     }
   | {
       signedIn: true;
