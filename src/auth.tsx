@@ -149,12 +149,12 @@ export function useSigninCheck(
   }
 
   const observable = user(auth).pipe(
-    switchMap(user => {
+    switchMap((user) => {
       if (!user) {
         return of({ signedIn: false, hasRequiredClaims: false });
       } else if (options && (options.hasOwnProperty('requiredClaims') || options.hasOwnProperty('validateClaims'))) {
         return from(user.getIdTokenResult(options?.forceRefresh ?? false)).pipe(
-          map(idTokenResult => {
+          map((idTokenResult) => {
             let validator: ClaimsValidator;
 
             if (options.hasOwnProperty('requiredClaims')) {
@@ -181,7 +181,7 @@ function getClaimsObjectValidator(requiredClaims: Claims): ClaimsValidator {
   return function claimsObjectValidator(userClaims) {
     const errors: { [key: string]: ReactFireError[] } = {};
 
-    Object.keys(requiredClaims).forEach(claim => {
+    Object.keys(requiredClaims).forEach((claim) => {
       if (requiredClaims[claim] !== userClaims[claim]) {
         errors[claim] = [new ReactFireError('auth/missing-claim', `Expected "${requiredClaims[claim]}", but user has "${userClaims[claim]}" instead`)];
       }
@@ -189,7 +189,7 @@ function getClaimsObjectValidator(requiredClaims: Claims): ClaimsValidator {
 
     return {
       hasRequiredClaims: Object.keys(errors).length === 0,
-      errors
+      errors,
     };
   };
 }

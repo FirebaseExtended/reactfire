@@ -151,11 +151,11 @@ describe('Authentication', () => {
 
       const withClaimsCustomToken = {
         uid: 'aUserWithCustomClaims',
-        claims: requiredClaims
+        claims: requiredClaims,
       };
 
       const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck({ requiredClaims: requiredClaims }), {
-        wrapper: Provider
+        wrapper: Provider,
       });
 
       await hooksAct(async () => {
@@ -173,12 +173,12 @@ describe('Authentication', () => {
 
       const withClaimsCustomToken = {
         uid: 'aUserWithCustomClaims',
-        claims: requiredClaims
+        claims: requiredClaims,
       };
 
       // Extra claim passed to useSignInCheck
       const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck({ requiredClaims: { ...requiredClaims, anExtraClaim: true } }), {
-        wrapper: Provider
+        wrapper: Provider,
       });
 
       await hooksAct(async () => {
@@ -195,10 +195,10 @@ describe('Authentication', () => {
     it('accepts a custom claims validator', async () => {
       const withClaimsCustomToken = {
         uid: 'aUserWithCustomClaims',
-        claims: { someClaim: true, someOtherClaim: false }
+        claims: { someClaim: true, someOtherClaim: false },
       };
 
-      const claimsValidator: ClaimsValidator = userClaims => {
+      const claimsValidator: ClaimsValidator = (userClaims) => {
         const validClaimsSet = ['someClaim', 'someOtherClaim'];
         let hasAnyClaim = false;
 
@@ -211,12 +211,12 @@ describe('Authentication', () => {
 
         return {
           hasRequiredClaims: hasAnyClaim,
-          errors: hasAnyClaim ? {} : validClaimsSet
+          errors: hasAnyClaim ? {} : validClaimsSet,
         };
       };
 
       const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck({ validateCustomClaims: claimsValidator }), {
-        wrapper: Provider
+        wrapper: Provider,
       });
 
       await hooksAct(async () => {
