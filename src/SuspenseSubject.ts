@@ -38,7 +38,7 @@ export class SuspenseSubject<T> extends Subject<T> {
 
     // set a timeout for reseting the cache, subscriptions will cancel the timeout
     // and reschedule again on unsubscribe
-    this._timeoutHandler = setTimeout(this._reset, this._timeoutWindow);
+    this._timeoutHandler = setTimeout(this._reset.bind(this), this._timeoutWindow);
   }
 
   get hasValue(): boolean {
@@ -84,7 +84,8 @@ export class SuspenseSubject<T> extends Subject<T> {
       clearTimeout(this._timeoutHandler);
     }
     this._innerSubscriber = this._innerObservable.subscribe(subscriber);
-    return this._innerSubscriber.add(this._reset);
+    this._innerSubscriber.add(this._reset.bind(this));
+    return this._innerSubscriber;
   }
 
   get ourError() {
