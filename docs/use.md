@@ -62,14 +62,22 @@ Note: `useUser` will also automatically lazily import the `firebase/auth` SDK if
 
 ### Decide what to render based on a user's auth state
 
-The `AuthCheck` component makes it easy to hide/show UI elements based on a user's auth state. It will render its children if a user is signed in, but if they are not signed in, it renders its `fallback` prop:
+The `useSignInCheck` hook makes it easy to decide whether to hide or show UI elements based on a user's auth state, and even their [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims). It will render its children if a user is signed in, but if they are not signed in, it renders its `fallback` prop:
 
 ```jsx
-render(
-  <AuthCheck fallback={<LoginPage />}>
-    <HomePage />
-  </AuthCheck>
-);
+function UserFavorites() {
+  const { status, data: signInCheckResult } = useSigninCheck();
+
+  if (status === 'loading') {
+    return <LoadingSpinner />;
+  }
+
+  if (signInCheckResult.signedIn === true) {
+    return <FavoritesList />;
+  } else {
+    return <SignInForm />;
+  }
+}
 ```
 
 ## Log Page Views to Google Analytics for Firebase with React Router

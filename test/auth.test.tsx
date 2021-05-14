@@ -3,9 +3,10 @@ import { renderHook, act as hooksAct, cleanup as hooksCleanup } from '@testing-l
 import firebase from 'firebase';
 import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
-import { FirebaseAppProvider, AuthCheck, useUser } from '..';
+import { FirebaseAppProvider, AuthCheck, useUser, useSigninCheck, ClaimCheckErrors, ClaimsValidator } from '..';
 import { act } from 'react-dom/test-utils';
 import { baseConfig } from './appConfig';
+import * as firebaseAdmin from 'firebase-admin';
 
 describe('Authentication', () => {
   let app: firebase.app.App;
@@ -36,6 +37,9 @@ describe('Authentication', () => {
       return realConsoleInfo.call(console, args);
     });
     app.auth().useEmulator('http://localhost:9099/');
+
+    // Use admin to test custom claims
+    firebaseAdmin.initializeApp({ projectId: 'some-project' });
 
     signIn = async () => {
       return app
@@ -121,6 +125,109 @@ describe('Authentication', () => {
     });
 
     test.todo('checks requiredClaims');
+  });
+
+  describe('useSigninCheck()', () => {
+    it('accurately reflects signed-in state', async () => {
+      const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck(), { wrapper: Provider });
+
+      await waitForHookCondition(() => result.current.status === 'success');
+
+      // Signed out
+      expect(app.auth().currentUser).toBeNull();
+      expect(result.current.data).toEqual({ signedIn: false, hasRequiredClaims: false });
+
+      await hooksAct(async () => {
+        await signIn();
+      });
+
+      // Signed in
+      expect(app.auth().currentUser).not.toBeNull();
+      expect(result.current.data).toEqual({ signedIn: true, hasRequiredClaims: true, user: app.auth().currentUser });
+    });
+
+    it('recognizes valid custom claims', async () => {
+      const requiredClaims = { canModifyPages: true, moderator: true };
+
+      const withClaimsCustomToken = {
+        uid: 'aUserWithCustomClaims',
+        claims: requiredClaims
+      };
+
+      const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck({ requiredClaims: requiredClaims }), {
+        wrapper: Provider
+      });
+
+      await hooksAct(async () => {
+        await app.auth().signInWithCustomToken(JSON.stringify(withClaimsCustomToken));
+      });
+
+      await waitForHookCondition(() => result.current.status === 'success');
+
+      expect(result.current.data.signedIn).toEqual(true);
+      expect(result.current.data.hasRequiredClaims).toEqual(true);
+    });
+
+    it('recognizes invalid custom claims', async () => {
+      const requiredClaims = { canModifyPages: true, moderator: true };
+
+      const withClaimsCustomToken = {
+        uid: 'aUserWithCustomClaims',
+        claims: requiredClaims
+      };
+
+      // Extra claim passed to useSignInCheck
+      const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck({ requiredClaims: { ...requiredClaims, anExtraClaim: true } }), {
+        wrapper: Provider
+      });
+
+      await hooksAct(async () => {
+        await app.auth().signInWithCustomToken(JSON.stringify(withClaimsCustomToken));
+      });
+
+      await waitForHookCondition(() => result.current.status === 'success');
+
+      expect(result.current.data.signedIn).toEqual(true);
+      expect(result.current.data.hasRequiredClaims).toEqual(false);
+      expect(result.current.data.errors as ClaimCheckErrors);
+    });
+
+    it('accepts a custom claims validator', async () => {
+      const withClaimsCustomToken = {
+        uid: 'aUserWithCustomClaims',
+        claims: { someClaim: true, someOtherClaim: false }
+      };
+
+      const claimsValidator: ClaimsValidator = userClaims => {
+        const validClaimsSet = ['someClaim', 'someOtherClaim'];
+        let hasAnyClaim = false;
+
+        for (const claim of validClaimsSet) {
+          if (userClaims[claim] === true) {
+            hasAnyClaim = true;
+            break;
+          }
+        }
+
+        return {
+          hasRequiredClaims: hasAnyClaim,
+          errors: hasAnyClaim ? {} : validClaimsSet
+        };
+      };
+
+      const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck({ validateCustomClaims: claimsValidator }), {
+        wrapper: Provider
+      });
+
+      await hooksAct(async () => {
+        await app.auth().signInWithCustomToken(JSON.stringify(withClaimsCustomToken));
+      });
+
+      await waitForHookCondition(() => result.current.status === 'success');
+
+      expect(result.current.data.signedIn).toEqual(true);
+      expect(result.current.data.hasRequiredClaims).toEqual(true);
+    });
   });
 
   describe('useUser', () => {

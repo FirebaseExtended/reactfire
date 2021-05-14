@@ -8,11 +8,17 @@
 
 - [AuthCheck](index.md#authcheck)
 - [AuthCheckProps](index.md#authcheckprops)
+- [ClaimCheckErrors](index.md#claimcheckerrors)
 - [ClaimsCheck](index.md#claimscheck)
 - [ClaimsCheckProps](index.md#claimscheckprops)
+- [ClaimsValidator](index.md#claimsvalidator)
 - [FirebaseAppProvider](index.md#firebaseappprovider)
 - [ObservableStatus](index.md#observablestatus)
 - [PreloadOptions](index.md#preloadoptions)
+- [SignInCheckOptionsBasic](index.md#signincheckoptionsbasic)
+- [SignInCheckOptionsClaimsObject](index.md#signincheckoptionsclaimsobject)
+- [SignInCheckOptionsClaimsValidator](index.md#signincheckoptionsclaimsvalidator)
+- [SigninCheckResult](index.md#signincheckresult)
 - [StorageImage](index.md#storageimage)
 - [SuspensePerfProps](index.md#suspenseperfprops)
 - [SuspenseWithPerf](index.md#suspensewithperf)
@@ -64,12 +70,17 @@
 - [useRemoteConfigNumber](index.md#useremoteconfignumber)
 - [useRemoteConfigString](index.md#useremoteconfigstring)
 - [useRemoteConfigValue](index.md#useremoteconfigvalue)
+- [useSigninCheck](index.md#usesignincheck)
 - [useStorage](index.md#usestorage)
 - [useStorageDownloadURL](index.md#usestoragedownloadurl)
 - [useStorageTask](index.md#usestoragetask)
 - [useSuspenseEnabledFromConfigAndContext](index.md#usesuspenseenabledfromconfigandcontext)
 - [useUser](index.md#useuser)
 - [version](index.md#version)
+
+### Classes
+
+- [ReactFireError](../classes/index.reactfireerror.md)
 
 ### Interfaces
 
@@ -99,6 +110,12 @@ Re-exports: [AuthCheckProps](../interfaces/auth.authcheckprops.md)
 
 ___
 
+### ClaimCheckErrors
+
+Re-exports: [ClaimCheckErrors](../interfaces/auth.claimcheckerrors.md)
+
+___
+
 ### ClaimsCheck
 
 Re-exports: [ClaimsCheck](auth.md#claimscheck)
@@ -108,6 +125,12 @@ ___
 ### ClaimsCheckProps
 
 Re-exports: [ClaimsCheckProps](../interfaces/auth.claimscheckprops.md)
+
+___
+
+### ClaimsValidator
+
+Re-exports: [ClaimsValidator](../interfaces/auth.claimsvalidator.md)
 
 ___
 
@@ -126,6 +149,30 @@ ___
 ### PreloadOptions
 
 Re-exports: [PreloadOptions](sdk.md#preloadoptions)
+
+___
+
+### SignInCheckOptionsBasic
+
+Re-exports: [SignInCheckOptionsBasic](../interfaces/auth.signincheckoptionsbasic.md)
+
+___
+
+### SignInCheckOptionsClaimsObject
+
+Re-exports: [SignInCheckOptionsClaimsObject](../interfaces/auth.signincheckoptionsclaimsobject.md)
+
+___
+
+### SignInCheckOptionsClaimsValidator
+
+Re-exports: [SignInCheckOptionsClaimsValidator](../interfaces/auth.signincheckoptionsclaimsvalidator.md)
+
+___
+
+### SigninCheckResult
+
+Re-exports: [SigninCheckResult](auth.md#signincheckresult)
 
 ___
 
@@ -435,6 +482,12 @@ Re-exports: [useRemoteConfigValue](remote_config.md#useremoteconfigvalue)
 
 ___
 
+### useSigninCheck
+
+Re-exports: [useSigninCheck](auth.md#usesignincheck)
+
+___
+
 ### useStorage
 
 Re-exports: [useStorage](sdk.md#usestorage)
@@ -499,7 +552,7 @@ Defined in: [src/index.ts:4](https://github.com/FirebaseExtended/reactfire/blob/
 
 **Returns:** *any*
 
-Defined in: [src/index.ts:33](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L33)
+Defined in: [src/index.ts:45](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L45)
 
 ___
 
@@ -516,7 +569,7 @@ ___
 
 **Returns:** *any*
 
-Defined in: [src/index.ts:20](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L20)
+Defined in: [src/index.ts:32](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L32)
 
 ___
 
@@ -532,4 +585,4 @@ ___
 
 **Returns:** *any*
 
-Defined in: [src/index.ts:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L29)
+Defined in: [src/index.ts:41](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L41)
