@@ -2,7 +2,7 @@ import { render, waitFor, cleanup, act } from '@testing-library/react';
 import * as React from 'react';
 import firebase from 'firebase';
 import { useDatabaseObject, useDatabaseList, FirebaseAppProvider, ObservableStatus } from '..';
-import { QueryChange } from 'rxfire/database/dist/database';
+import { QueryChange } from 'rxfire/database';
 import { baseConfig } from './appConfig';
 
 describe('Realtime Database (RTDB)', () => {
