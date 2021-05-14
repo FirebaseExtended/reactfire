@@ -81,14 +81,14 @@ export function useObservable<T>(observableId: string, source: Observable<T | an
 
   const [latest, setValue] = React.useState(() => (observable.hasValue ? observable.value : config.initialData ?? config.startWithValue));
   React.useEffect(() => {
-    const subscription = observable.subscribe(
-      v => {
+    const subscription = observable.subscribe({
+      next: v => {
         setValue(() => v);
       },
-      e => {
+      error: e => {
         throw e;
       }
-    );
+    });
     return () => subscription.unsubscribe();
   }, [observable]);
 
