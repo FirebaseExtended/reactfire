@@ -74,6 +74,7 @@
     "@types/react": "^16.9.49",
     "@types/react-dom": "^16.9.8",
     "babel-jest": "^26.6.3",
+    "babel-plugin-minify-replace": "^0.5.0",
     "firebase": "^8.1.1",
     "firebase-admin": "^9.7.0",
     "firebase-tools": "^9.10.0",
@@ -86,18 +87,18 @@
     "react-test-renderer": "^16.13.1",
     "size-limit": "^4.6.0",
     "tsdx": "^0.14.1",
-    "tslib": "^2.0.1",
+    "tslib": "^2.2.0",
     "typedoc": "^0.20.35",
     "typedoc-plugin-markdown": "^3.6.1",
-    "typescript": "^4.0.3"
+    "typescript": "^4.2.4"
   },
   "dependencies": {
-    "babel-plugin-minify-replace": "^0.5.0",
     "rxfire": "5.0.0-rc.0",
     "rxjs": "^7.0.1"
   },
   "resolutions": {
     "tsdx/**/jest": "^26.6.3",
-    "tsdx/**/ts-jest": "^26.5.5"
+    "tsdx/**/ts-jest": "^26.5.5",
+    "tsdx/**/typescript": "^4.2.4"
   }
 }
