@@ -8,6 +8,7 @@
 
 - [AuthCheck](index.md#authcheck)
 - [AuthCheckProps](index.md#authcheckprops)
+- [ClaimCheckErrors](index.md#claimcheckerrors)
 - [ClaimsCheck](index.md#claimscheck)
 - [ClaimsCheckProps](index.md#claimscheckprops)
 - [ClaimsValidator](index.md#claimsvalidator)
@@ -106,6 +107,12 @@ ___
 ### AuthCheckProps
 
 Re-exports: [AuthCheckProps](../interfaces/auth.authcheckprops.md)
+
+___
+
+### ClaimCheckErrors
+
+Re-exports: [ClaimCheckErrors](../interfaces/auth.claimcheckerrors.md)
 
 ___
 

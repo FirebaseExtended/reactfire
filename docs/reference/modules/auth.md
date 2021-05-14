@@ -7,6 +7,7 @@
 ### Interfaces
 
 - [AuthCheckProps](../interfaces/auth.authcheckprops.md)
+- [ClaimCheckErrors](../interfaces/auth.claimcheckerrors.md)
 - [ClaimsCheckProps](../interfaces/auth.claimscheckprops.md)
 - [ClaimsValidator](../interfaces/auth.claimsvalidator.md)
 - [SignInCheckOptionsBasic](../interfaces/auth.signincheckoptionsbasic.md)
@@ -30,7 +31,7 @@
 
 ### SigninCheckResult
 
-Ƭ **SigninCheckResult**: { `errors`: {} ; `hasRequiredClaims`: ``false`` ; `signedIn`: ``false`` ; `user`: ``null``  } \| { `errors`: ClaimCheckErrors ; `hasRequiredClaims`: *boolean* ; `signedIn`: ``true`` ; `user`: firebase.User  }
+Ƭ **SigninCheckResult**: { `errors`: {} ; `hasRequiredClaims`: ``false`` ; `signedIn`: ``false`` ; `user`: ``null``  } \| { `errors`: [*ClaimCheckErrors*](../interfaces/auth.claimcheckerrors.md) ; `hasRequiredClaims`: *boolean* ; `signedIn`: ``true`` ; `user`: firebase.User  }
 
 Defined in: [src/auth.tsx:70](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L70)
 

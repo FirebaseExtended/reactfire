@@ -63,7 +63,7 @@ export interface ClaimsCheckProps {
   requiredClaims: { [key: string]: any };
 }
 
-interface ClaimCheckErrors {
+export interface ClaimCheckErrors {
   [key: string]: any[];
 }
 
