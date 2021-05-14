@@ -3,7 +3,7 @@ import { renderHook, act as hooksAct, cleanup as hooksCleanup } from '@testing-l
 import firebase from 'firebase';
 import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
-import { FirebaseAppProvider, AuthCheck, useUser, useSigninCheck } from '..';
+import { FirebaseAppProvider, AuthCheck, useUser, useSigninCheck, ClaimCheckErrors, ClaimsValidator } from '..';
 import { act } from 'react-dom/test-utils';
 import { baseConfig } from './appConfig';
 import * as firebaseAdmin from 'firebase-admin';
@@ -189,6 +189,44 @@ describe('Authentication', () => {
 
       expect(result.current.data.signedIn).toEqual(true);
       expect(result.current.data.hasRequiredClaims).toEqual(false);
+      expect(result.current.data.errors as ClaimCheckErrors);
+    });
+
+    it('accepts a custom claims validator', async () => {
+      const withClaimsCustomToken = {
+        uid: 'aUserWithCustomClaims',
+        claims: { someClaim: true, someOtherClaim: false }
+      };
+
+      const claimsValidator: ClaimsValidator = userClaims => {
+        const validClaimsSet = ['someClaim', 'someOtherClaim'];
+        let hasAnyClaim = false;
+
+        for (const claim of validClaimsSet) {
+          if (userClaims[claim] === true) {
+            hasAnyClaim = true;
+            break;
+          }
+        }
+
+        return {
+          hasRequiredClaims: hasAnyClaim,
+          errors: hasAnyClaim ? {} : validClaimsSet
+        };
+      };
+
+      const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck({ validateCustomClaims: claimsValidator }), {
+        wrapper: Provider
+      });
+
+      await hooksAct(async () => {
+        await app.auth().signInWithCustomToken(JSON.stringify(withClaimsCustomToken));
+      });
+
+      await waitForHookCondition(() => result.current.status === 'success');
+
+      expect(result.current.data.signedIn).toEqual(true);
+      expect(result.current.data.hasRequiredClaims).toEqual(true);
     });
   });
 
