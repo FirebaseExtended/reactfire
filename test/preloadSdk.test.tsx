@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect';
-import { render, waitFor } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import firebase from 'firebase/app';
 import * as React from 'react';
 import { FirebaseAppProvider, preloadFirestore, useFirestore } from '..';
@@ -28,22 +28,28 @@ describe('Preload SDK', () => {
   });
 
   describe('useFirestore', () => {
-    it('awaits the preloadFirestore setup', async () => {
+    it.only('awaits the preloadFirestore setup', async () => {
       let preloadResolved = false;
       let preloadResolve: (v?: unknown) => void;
 
       preloadFirestore({
         firebaseApp: app,
         setup: () => new Promise(resolve => (preloadResolve = resolve))
-      }).then(() => (preloadResolved = true));
+      }).then(() => {
+        preloadResolved = true;
+        console.log('RESOLVED');
+      });
 
       const Firestore = () => {
         // @ts-ignore: It's ok that `firestore` is unused here
         const firestore = useFirestore(); // eslint-disable-line @typescript-eslint/no-unused-vars
+
+        expect(preloadResolved).toEqual(true);
+
         return <div data-testid="success"></div>;
       };
 
-      const { getByTestId } = render(
+      const { findByTestId } = render(
         <FirebaseAppProvider firebaseApp={app} suspense={true}>
           <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
             <Firestore />
@@ -51,18 +57,18 @@ describe('Preload SDK', () => {
         </FirebaseAppProvider>
       );
 
-      await waitFor(() => getByTestId('fallback'));
+      await findByTestId('fallback');
       expect(preloadResolved).toEqual(false);
 
-      await waitFor(() => getByTestId('success'))
+      await findByTestId('success')
         .then(() => fail('expected throw'))
         .catch(() => {});
       expect(preloadResolved).toEqual(false);
 
       // @ts-ignore: "used before assigned" doesn't apply here because we shouldn't get here until resolve is set
-      preloadResolve();
+      act(() => preloadResolve());
 
-      await waitFor(() => getByTestId('success'));
+      await findByTestId('success');
       expect(preloadResolved).toEqual(true);
     });
   });
