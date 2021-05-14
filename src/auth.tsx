@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { user } from 'rxfire/auth';
-import { preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus } from './';
-import { from } from 'rxjs';
+import { preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus, ReactFireError } from './';
+import { from, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
 import type { Auth, User, IdTokenResult } from 'firebase/auth';
+type Claims = IdTokenResult['claims'];
 
 export async function preloadUser(authResolver: () => Promise<Auth>) {
   const auth = await authResolver();
@@ -52,9 +54,153 @@ export interface ClaimsCheckProps {
   user: User;
   fallback: React.ReactNode;
   children: React.ReactNode;
-  requiredClaims?: { [key: string]: any };
+  requiredClaims: { [key: string]: any };
 }
 
+export interface ClaimCheckErrors {
+  [key: string]: any[];
+}
+
+export type SigninCheckResult =
+  | {
+      signedIn: false;
+      hasRequiredClaims: false;
+      errors: {};
+      user: null;
+    }
+  | {
+      signedIn: true;
+      hasRequiredClaims: boolean;
+      errors: ClaimCheckErrors;
+      user: User;
+    };
+
+export interface SignInCheckOptionsBasic extends ReactFireOptions<SigninCheckResult> {
+  forceRefresh?: boolean;
+}
+
+export interface SignInCheckOptionsClaimsObject extends SignInCheckOptionsBasic {
+  requiredClaims: Claims;
+}
+
+export interface ClaimsValidator {
+  (claims: Claims): {
+    hasRequiredClaims: boolean;
+    errors: ClaimCheckErrors | {};
+  };
+}
+
+export interface SignInCheckOptionsClaimsValidator extends SignInCheckOptionsBasic {
+  validateCustomClaims: ClaimsValidator;
+}
+
+/**
+ * Subscribe to the signed-in status of a user.
+ *
+ * ```ts
+ * const { status, data:signInCheckResult } = useSigninCheck();
+ *
+ * if (status === 'loading') {
+ *   return <LoadingSpinner />}
+ *
+ *
+ * if (signInCheckResult.signedIn === true) {
+ *   return <ProfilePage user={signInCheckResult.user}/>
+ * } else {
+ *   return <SignInForm />
+ * }
+ * ```
+ *
+ * Optionally check [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims) of a user as well.
+ *
+ * ```ts
+ * // pass in an object describing the custom claims a user must have
+ * const {status, data: signInCheckResult} = useSignInCheck({requiredClaims: {admin: true}});
+ *
+ * // pass in a custom claims validator function
+ * const {status, data: signInCheckResult} = useSignInCheck({validateCustomClaims: (userClaims) => {
+ *   // custom validation logic...
+ * }});
+ *
+ * // You can optionally force-refresh the token
+ * const {status, data: signInCheckResult} = useSignInCheck({forceRefresh: true, requiredClaims: {admin: true}});
+ * ```
+ */
+export function useSigninCheck(
+  options?: SignInCheckOptionsBasic | SignInCheckOptionsClaimsObject | SignInCheckOptionsClaimsValidator
+): ObservableStatus<SigninCheckResult> {
+  // If both `requiredClaims` and `validateClaims` are provided, we won't know which one to use
+  if (options?.hasOwnProperty('requiredClaims') && options?.hasOwnProperty('validateClaims')) {
+    throw new Error('Cannot have both "requiredClaims" and "validateClaims". Use one or the other.');
+  }
+
+  const auth = useAuth();
+
+  // ObservableId should change for different options configurations to ensure no cache collisions
+  let observableId = `auth:signInCheck:${auth.name}::forceRefresh:${!!options?.forceRefresh}`;
+  if (options?.forceRefresh) {
+    observableId = `${observableId}:forceRefresh:${options.forceRefresh}`;
+  }
+  if (options?.hasOwnProperty('requiredClaims')) {
+    observableId = `${observableId}:requiredClaims:${JSON.stringify((options as SignInCheckOptionsClaimsObject).requiredClaims)}`;
+  } else if (options?.hasOwnProperty('validateCustomClaims')) {
+    // TODO(jamesdaniels): Check if stringifying this function breaks in IE11
+    observableId = `${observableId}:validateClaims:${JSON.stringify((options as SignInCheckOptionsClaimsValidator).validateCustomClaims)}`;
+  }
+
+  const observable = user(auth).pipe(
+    switchMap(user => {
+      if (!user) {
+        return of({ signedIn: false, hasRequiredClaims: false });
+      } else if (options && (options.hasOwnProperty('requiredClaims') || options.hasOwnProperty('validateClaims'))) {
+        return from(user.getIdTokenResult(options?.forceRefresh ?? false)).pipe(
+          map(idTokenResult => {
+            let validator: ClaimsValidator;
+
+            if (options.hasOwnProperty('requiredClaims')) {
+              validator = getClaimsObjectValidator((options as SignInCheckOptionsClaimsObject).requiredClaims);
+            } else {
+              validator = (options as SignInCheckOptionsClaimsValidator).validateCustomClaims;
+            }
+
+            const { hasRequiredClaims, errors } = validator(idTokenResult.claims);
+            return { signedIn: true, hasRequiredClaims, errors, user: user };
+          })
+        );
+      } else {
+        // If no claims are provided to be checked, `hasRequiredClaims` is true
+        return of({ signedIn: true, hasRequiredClaims: true, user: user });
+      }
+    })
+  );
+
+  return useObservable(observableId, observable);
+}
+
+function getClaimsObjectValidator(requiredClaims: Claims): ClaimsValidator {
+  return function claimsObjectValidator(userClaims) {
+    const errors: { [key: string]: ReactFireError[] } = {};
+
+    Object.keys(requiredClaims).forEach(claim => {
+      if (requiredClaims[claim] !== userClaims[claim]) {
+        errors[claim] = [new ReactFireError('auth/missing-claim', `Expected "${requiredClaims[claim]}", but user has "${userClaims[claim]}" instead`)];
+      }
+    });
+
+    return {
+      hasRequiredClaims: Object.keys(errors).length === 0,
+      errors
+    };
+  };
+}
+
+/**
+ * @deprecated Use `useSignInCheck` instead
+ *
+ * Conditionally render children based on [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims).
+ *
+ * Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
+ */
 export function ClaimsCheck({ user, fallback, children, requiredClaims }: ClaimsCheckProps) {
   const { data } = useIdTokenResult(user, false);
   const { claims } = data;
@@ -78,6 +224,13 @@ export function ClaimsCheck({ user, fallback, children, requiredClaims }: Claims
   }
 }
 
+/**
+ * @deprecated Use `useSignInCheck` instead
+ *
+ * Conditionally render children based on signed-in status and [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims).
+ *
+ * Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
+ */
 export function AuthCheck({ fallback, children, requiredClaims }: AuthCheckProps): JSX.Element {
   const { data: user } = useUser<User>();
 

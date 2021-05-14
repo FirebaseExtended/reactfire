@@ -58,4 +58,4 @@ ___
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T\>
 
-Defined in: [src/useObservable.ts:41](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L41)
+Defined in: [src/useObservable.ts:66](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L66)

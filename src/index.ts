@@ -9,6 +9,18 @@ export type ReactFireGlobals = {
   _reactFirePreloadedObservables: Map<string, SuspenseSubject<any>>;
 };
 
+export class ReactFireError extends Error {
+  readonly name = 'ReactFireError';
+
+  constructor(readonly code: string, message: string, public customData?: Record<string, unknown>) {
+    super(message);
+
+    // Fix For ES5
+    // https://github.com/Microsoft/TypeScript-wiki/blob/master/Breaking-Changes.md#extending-built-ins-like-error-array-and-map-may-no-longer-work
+    Object.setPrototypeOf(this, ReactFireError.prototype);
+  }
+}
+
 export interface ReactFireOptions<T = unknown> {
   idField?: string;
   initialData?: T | any;

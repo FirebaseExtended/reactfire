@@ -29,6 +29,30 @@ describe('useObservable', () => {
       expect(result.current.isComplete).toEqual(false);
       expect(result.current.status).toEqual('success');
     });
+
+    it('Sets status correctly when passed initialData', () => {
+      const observable$: Subject<any> = new Subject();
+
+      const initialData = 1;
+      const asyncData = 2;
+
+      const { result } = renderHook(() => useObservable('non-suspense test with initialData', observable$, { suspense: false, initialData }));
+
+      expect(result.current.data).toEqual(initialData);
+      expect(result.current.error).toBeUndefined();
+      expect(result.current.firstValuePromise).toBeInstanceOf(Promise);
+      expect(result.current.hasEmitted).toEqual(true); // set `hasEmitted` to true since there is data
+      expect(result.current.isComplete).toEqual(false);
+      expect(result.current.status).toEqual('success'); // skip 'loading'
+
+      actOnHook(() => observable$.next(asyncData));
+
+      expect(result.current.data).toEqual(asyncData);
+      expect(result.current.error).toBeUndefined();
+      expect(result.current.hasEmitted).toEqual(true);
+      expect(result.current.isComplete).toEqual(false);
+      expect(result.current.status).toEqual('success');
+    });
   });
 
   describe('Suspense Mode', () => {
