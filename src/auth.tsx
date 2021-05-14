@@ -64,7 +64,7 @@ export interface ClaimsCheckProps {
 }
 
 interface ClaimCheckErrors {
-  [key: string]: ReactFireError[];
+  [key: string]: any[];
 }
 
 export type SigninCheckResult =
