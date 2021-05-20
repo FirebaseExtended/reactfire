@@ -4,6 +4,7 @@ import { user } from 'rxfire/auth';
 import { preloadAuth, preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus, ReactFireError } from './';
 import { from, lastValueFrom, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp';
 
 export function preloadUser(options: { firebaseApp: firebase.app.App }) {
   const firebaseApp = options.firebaseApp;
@@ -212,6 +213,13 @@ export function ClaimsCheck({ user, fallback, children, requiredClaims }: Claims
   const { claims } = data;
   const missingClaims: { [key: string]: { expected: string; actual: string } } = {};
 
+  const suspenseMode = useSuspenseEnabledFromConfigAndContext();
+  if (!suspenseMode) {
+    console.warn(
+      'ClaimsCheck is deprecated and only works when ReactFire is in experimental Suspense Mode. Use useSigninCheck or set suspense={true} in FirebaseAppProvider if you want to use this component.'
+    );
+  }
+
   if (requiredClaims) {
     Object.keys(requiredClaims).forEach(claim => {
       if (requiredClaims[claim] !== claims[claim]) {
@@ -239,6 +247,13 @@ export function ClaimsCheck({ user, fallback, children, requiredClaims }: Claims
  */
 export function AuthCheck({ fallback, children, requiredClaims }: AuthCheckProps): JSX.Element {
   const { data: user } = useUser<firebase.User>();
+
+  const suspenseMode = useSuspenseEnabledFromConfigAndContext();
+  if (!suspenseMode) {
+    console.warn(
+      'AuthCheck is deprecated and only works when ReactFire is in experimental Suspense Mode. Use useSigninCheck or set suspense={true} in FirebaseAppProvider if you want to use this component.'
+    );
+  }
 
   if (user) {
     return requiredClaims ? (

@@ -49,18 +49,20 @@ function proxyComponent(componentName: ComponentName): FirebaseNamespaceComponen
 
     const sdkSubject = preload(componentName, app || contextualApp);
 
-    if (!sdkSubject.hasValue && suspenseEnabled) {
-      throw sdkSubject.firstEmission;
-    } else if (!sdkSubject.hasValue && !suspenseEnabled && !firebase[componentName]) {
-      throw new Error(
-        `ReactFire: "firebase/${componentName}" not found. Please import it in your component, or call preload${componentName.charAt(0).toUpperCase() +
-          componentName.slice(1)} and wait for it to resolve. ReactFire can only auto-import Firebase libraries if Suspense mode is enabled.`
-      );
+    if (sdkSubject.hasValue) {
+      // get value to throw if there's an error
+      sdkSubject.value; // eslint-disable-line @typescript-eslint/no-unused-expressions
+      return firebase[componentName];
     }
 
-    // get value to throw if there's an error
-    sdkSubject.value; // eslint-disable-line @typescript-eslint/no-unused-expressions
-    return firebase[componentName];
+    if (suspenseEnabled) {
+      throw sdkSubject.firstEmission;
+    }
+
+    const uppercasedComponentName = componentName.charAt(0).toUpperCase() + componentName.slice(1);
+    throw new Error(
+      `ReactFire: "firebase/${componentName}" not found or not ready. Please import it in your component, or call preload${uppercasedComponentName} and wait for it to resolve. ReactFire can only auto-import ${uppercasedComponentName} (or wait for preload${uppercasedComponentName}) if Suspense mode is enabled.`
+    );
   };
   return new Proxy(useComponent, {
     // @ts-ignore: TODO: Fix the types here

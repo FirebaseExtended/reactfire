@@ -15,11 +15,11 @@ describe('Authentication', () => {
   const Provider = ({ children }: { children: React.ReactNode }) => <FirebaseAppProvider firebaseApp={app}>{children}</FirebaseAppProvider>;
 
   const AuthCheckWrapper = (props?: { children?: any }) => (
-    <Provider>
+    <FirebaseAppProvider firebaseApp={app} suspense={true}>
       <React.Suspense fallback={'loading'}>
         <AuthCheck fallback={<h1 data-testid="signed-out">not signed in</h1>}>{props?.children || <h1 data-testid="signed-in">signed in</h1>}</AuthCheck>
       </React.Suspense>
-    </Provider>
+    </FirebaseAppProvider>
   );
 
   beforeAll(() => {
