@@ -6,7 +6,7 @@
 
 ## Hierarchy
 
-* [*ReactFireOptions*](index.reactfireoptions.md)<[*SigninCheckResult*](../modules/auth.md#signincheckresult)\>
+- [*ReactFireOptions*](index.reactfireoptions.md)<[*SigninCheckResult*](../modules/auth.md#signincheckresult)\>
 
   ↳ **SignInCheckOptionsBasic**
 
@@ -30,7 +30,7 @@
 
 • `Optional` **forceRefresh**: *boolean*
 
-Defined in: [src/auth.tsx:85](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L85)
+Defined in: [src/auth.tsx:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L86)
 
 ___
 

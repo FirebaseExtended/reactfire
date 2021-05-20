@@ -8,7 +8,7 @@
 
 ▸ **ClaimsValidator**(`claims`: { [key: string]: *any*;  }): *object*
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -21,4 +21,4 @@
 | `errors` | {} \| [*ClaimCheckErrors*](auth.claimcheckerrors.md) |
 | `hasRequiredClaims` | *boolean* |
 
-Defined in: [src/auth.tsx:92](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L92)
+Defined in: [src/auth.tsx:93](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L93)

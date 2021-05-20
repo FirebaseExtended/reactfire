@@ -22,7 +22,7 @@
 
 Ƭ **AllParameters**: *object*
 
-#### Type declaration:
+#### Type declaration
 
 Defined in: [src/remote-config/getValue.tsx:6](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L6)
 
@@ -32,7 +32,7 @@ Defined in: [src/remote-config/getValue.tsx:6](https://github.com/FirebaseExtend
 
 ▸ **getAll**(`remoteConfig`: RemoteConfig): *Observable*<[*AllParameters*](remote_config_getvalue.md#allparameters)\>
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -48,7 +48,7 @@ ___
 
 ▸ **getBoolean**(`remoteConfig`: RemoteConfig, `key`: *string*): *Observable*<boolean\>
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -65,7 +65,7 @@ ___
 
 ▸ **getNumber**(`remoteConfig`: RemoteConfig, `key`: *string*): *Observable*<number\>
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -82,7 +82,7 @@ ___
 
 ▸ **getString**(`remoteConfig`: RemoteConfig, `key`: *string*): *Observable*<string\>
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -99,7 +99,7 @@ ___
 
 ▸ **getValue**(`remoteConfig`: RemoteConfig, `key`: *string*): *Observable*<Value\>
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |

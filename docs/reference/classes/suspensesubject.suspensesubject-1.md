@@ -12,7 +12,7 @@
 
 ## Hierarchy
 
-* *Subject*<T\>
+- *Subject*<T\>
 
   ↳ **SuspenseSubject**
 
@@ -29,7 +29,6 @@
 - [\_hasValue](suspensesubject.suspensesubject-1.md#_hasvalue)
 - [\_innerObservable](suspensesubject.suspensesubject-1.md#_innerobservable)
 - [\_innerSubscriber](suspensesubject.suspensesubject-1.md#_innersubscriber)
-- [\_isScalar](suspensesubject.suspensesubject-1.md#_isscalar)
 - [\_resolveFirstEmission](suspensesubject.suspensesubject-1.md#_resolvefirstemission)
 - [\_timeoutHandler](suspensesubject.suspensesubject-1.md#_timeouthandler)
 - [\_value](suspensesubject.suspensesubject-1.md#_value)
@@ -42,8 +41,6 @@
 - [source](suspensesubject.suspensesubject-1.md#source)
 - [thrownError](suspensesubject.suspensesubject-1.md#thrownerror)
 - [create](suspensesubject.suspensesubject-1.md#create)
-- [if](suspensesubject.suspensesubject-1.md#if)
-- [throw](suspensesubject.suspensesubject-1.md#throw)
 
 ### Accessors
 
@@ -57,7 +54,6 @@
 - [\_next](suspensesubject.suspensesubject-1.md#_next)
 - [\_reset](suspensesubject.suspensesubject-1.md#_reset)
 - [\_subscribe](suspensesubject.suspensesubject-1.md#_subscribe)
-- [\_trySubscribe](suspensesubject.suspensesubject-1.md#_trysubscribe)
 - [asObservable](suspensesubject.suspensesubject-1.md#asobservable)
 - [complete](suspensesubject.suspensesubject-1.md#complete)
 - [error](suspensesubject.suspensesubject-1.md#error)
@@ -75,13 +71,13 @@
 
 \+ **new SuspenseSubject**<T\>(`innerObservable`: *Observable*<T\>, `_timeoutWindow`: *number*): [*SuspenseSubject*](suspensesubject.suspensesubject-1.md)<T\>
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
 | `T` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -136,29 +132,15 @@ Defined in: [src/SuspenseSubject.ts:14](https://github.com/FirebaseExtended/reac
 
 ___
 
-### \_isScalar
-
-• **\_isScalar**: *boolean*
-
-Internal implementation detail, do not use directly.
-
-Inherited from: Subject.\_isScalar
-
-Defined in: node_modules/rxjs/internal/Observable.d.ts:15
-
-___
-
 ### \_resolveFirstEmission
 
 • `Private` **\_resolveFirstEmission**: () => *void*
 
-#### Type declaration:
+#### Type declaration
 
 ▸ (): *void*
 
 **Returns:** *void*
-
-Defined in: [src/SuspenseSubject.ts:16](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L16)
 
 Defined in: [src/SuspenseSubject.ts:16](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L16)
 
@@ -194,7 +176,7 @@ ___
 
 Inherited from: Subject.closed
 
-Defined in: node_modules/rxjs/internal/Subject.d.ts:24
+Defined in: node_modules/rxjs/dist/types/internal/Subject.d.ts:12
 
 ___
 
@@ -202,9 +184,11 @@ ___
 
 • **hasError**: *boolean*
 
+**`deprecated`** Internal implementation detail, do not use directly. Will be made internal in v8.
+
 Inherited from: Subject.hasError
 
-Defined in: node_modules/rxjs/internal/Subject.d.ts:26
+Defined in: node_modules/rxjs/dist/types/internal/Subject.d.ts:18
 
 ___
 
@@ -212,9 +196,11 @@ ___
 
 • **isStopped**: *boolean*
 
+**`deprecated`** Internal implementation detail, do not use directly. Will be made internal in v8.
+
 Inherited from: Subject.isStopped
 
-Defined in: node_modules/rxjs/internal/Subject.d.ts:25
+Defined in: node_modules/rxjs/dist/types/internal/Subject.d.ts:16
 
 ___
 
@@ -222,33 +208,35 @@ ___
 
 • **observers**: *Observer*<T\>[]
 
+**`deprecated`** Internal implementation detail, do not use directly. Will be made internal in v8.
+
 Inherited from: Subject.observers
 
-Defined in: node_modules/rxjs/internal/Subject.d.ts:23
+Defined in: node_modules/rxjs/dist/types/internal/Subject.d.ts:14
 
 ___
 
 ### operator
 
-• **operator**: *Operator*<any, T\>
+• **operator**: *undefined* \| *Operator*<any, T\>
 
-**`deprecated`** This is an internal implementation detail, do not use.
+**`deprecated`** Internal implementation detail, do not use directly. Will be made internal in v8.
 
 Inherited from: Subject.operator
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:19
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:22
 
 ___
 
 ### source
 
-• **source**: *Observable*<any\>
+• **source**: *undefined* \| *Observable*<any\>
 
-**`deprecated`** This is an internal implementation detail, do not use.
+**`deprecated`** Internal implementation detail, do not use directly. Will be made internal in v8.
 
 Inherited from: Subject.source
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:17
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:18
 
 ___
 
@@ -256,241 +244,39 @@ ___
 
 • **thrownError**: *any*
 
+**`deprecated`** Internal implementation detail, do not use directly. Will be made internal in v8.
+
 Inherited from: Subject.thrownError
 
-Defined in: node_modules/rxjs/internal/Subject.d.ts:27
+Defined in: node_modules/rxjs/dist/types/internal/Subject.d.ts:20
 
 ___
 
 ### create
 
-▪ `Static` **create**: Function
+▪ `Static` **create**: (...`args`: *any*[]) => *any*
 
-**`nocollapse`** 
+Creates a "subject" by basically gluing an observer to an observable.
 
-**`deprecated`** use new Subject() instead
+**`nocollapse`**
+
+**`deprecated`** Recommended you do not use. Will be removed at some point in the future. Plans for replacement still under discussion.
+
+#### Type declaration
+
+▸ (...`args`: *any*[]): *any*
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...args` | *any*[] |
+
+**Returns:** *any*
 
 Inherited from: Subject.create
 
-Defined in: node_modules/rxjs/internal/Subject.d.ts:32
-
-___
-
-### if
-
-▪ `Static` **if**: <T, F\>(`condition`: () => *boolean*, `trueResult?`: *SubscribableOrPromise*<T\>, `falseResult?`: *SubscribableOrPromise*<F\>) => *Observable*<T \| F\>
-
-**`nocollapse`** 
-
-**`deprecated`** In favor of iif creation function: import { iif } from 'rxjs';
-
-#### Type declaration:
-
-▸ <T, F\>(`condition`: () => *boolean*, `trueResult?`: *SubscribableOrPromise*<T\>, `falseResult?`: *SubscribableOrPromise*<F\>): *Observable*<T \| F\>
-
-Decides at subscription time which Observable will actually be subscribed.
-
-<span class="informal">`If` statement for Observables.</span>
-
-`iif` accepts a condition function and two Observables. When
-an Observable returned by the operator is subscribed, condition function will be called.
-Based on what boolean it returns at that moment, consumer will subscribe either to
-the first Observable (if condition was true) or to the second (if condition was false). Condition
-function may also not return anything - in that case condition will be evaluated as false and
-second Observable will be subscribed.
-
-Note that Observables for both cases (true and false) are optional. If condition points to an Observable that
-was left undefined, resulting stream will simply complete immediately. That allows you to, rather
-than controlling which Observable will be subscribed, decide at runtime if consumer should have access
-to given Observable or not.
-
-If you have more complex logic that requires decision between more than two Observables, {@link defer}
-will probably be a better choice. Actually `iif` can be easily implemented with {@link defer}
-and exists only for convenience and readability reasons.
-
-## Examples
-### Change at runtime which Observable will be subscribed
-```ts
-import { iif, of } from 'rxjs';
-
-let subscribeToFirst;
-const firstOrSecond = iif(
-  () => subscribeToFirst,
-  of('first'),
-  of('second'),
-);
-
-subscribeToFirst = true;
-firstOrSecond.subscribe(value => console.log(value));
-
-// Logs:
-// "first"
-
-subscribeToFirst = false;
-firstOrSecond.subscribe(value => console.log(value));
-
-// Logs:
-// "second"
-
-```
-
-### Control an access to an Observable
-```ts
-let accessGranted;
-const observableIfYouHaveAccess = iif(
-  () => accessGranted,
-  of('It seems you have an access...'), // Note that only one Observable is passed to the operator.
-);
-
-accessGranted = true;
-observableIfYouHaveAccess.subscribe(
-  value => console.log(value),
-  err => {},
-  () => console.log('The end'),
-);
-
-// Logs:
-// "It seems you have an access..."
-// "The end"
-
-accessGranted = false;
-observableIfYouHaveAccess.subscribe(
-  value => console.log(value),
-  err => {},
-  () => console.log('The end'),
-);
-
-// Logs:
-// "The end"
-```
-
-**`see`** {@link defer}
-
-**`static`** true
-
-**`name`** iif
-
-**`owner`** Observable
-
-#### Type parameters:
-
-| Name | Default |
-| :------ | :------ |
-| `T` | *never* |
-| `F` | *never* |
-
-#### Parameters:
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `condition` | () => *boolean* | Condition which Observable should be chosen. |
-| `trueResult?` | *SubscribableOrPromise*<T\> | - |
-| `falseResult?` | *SubscribableOrPromise*<F\> | - |
-
-**Returns:** *Observable*<T \| F\>
-
-Either first or second Observable, depending on condition.
-
-Defined in: node_modules/rxjs/internal/observable/iif.d.ts:91
-
-Inherited from: Subject.if
-
-Defined in: node_modules/rxjs/internal/Observable.d.ts:71
-
-___
-
-### throw
-
-▪ `Static` **throw**: (`error`: *any*, `scheduler?`: SchedulerLike) => *Observable*<never\>
-
-**`nocollapse`** 
-
-**`deprecated`** In favor of throwError creation function: import { throwError } from 'rxjs';
-
-#### Type declaration:
-
-▸ (`error`: *any*, `scheduler?`: SchedulerLike): *Observable*<never\>
-
-Creates an Observable that emits no items to the Observer and immediately
-emits an error notification.
-
-<span class="informal">Just emits 'error', and nothing else.
-</span>
-
-![](throw.png)
-
-This static operator is useful for creating a simple Observable that only
-emits the error notification. It can be used for composing with other
-Observables, such as in a {@link mergeMap}.
-
-## Examples
-### Emit the number 7, then emit an error
-```ts
-import { throwError, concat, of } from 'rxjs';
-
-const result = concat(of(7), throwError(new Error('oops!')));
-result.subscribe(x => console.log(x), e => console.error(e));
-
-// Logs:
-// 7
-// Error: oops!
-```
-
----
-
-### Map and flatten numbers to the sequence 'a', 'b', 'c', but throw an error for 2
-```ts
-import { throwError, interval, of } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
-
-interval(1000).pipe(
-  mergeMap(x => x === 2
-    ? throwError('Twos are bad')
-    : of('a', 'b', 'c')
-  ),
-).subscribe(x => console.log(x), e => console.error(e));
-
-// Logs:
-// a
-// b
-// c
-// a
-// b
-// c
-// Twos are bad
-```
-
-**`see`** {@link Observable}
-
-**`see`** {@link empty}
-
-**`see`** {@link never}
-
-**`see`** {@link of}
-
-**`static`** true
-
-**`name`** throwError
-
-**`owner`** Observable
-
-#### Parameters:
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `error` | *any* | The particular Error to pass to the error notification. |
-| `scheduler?` | SchedulerLike | - |
-
-**Returns:** *Observable*<never\>
-
-An error Observable: emits only the error notification
-using the given error argument.
-
-Defined in: node_modules/rxjs/internal/observable/throwError.d.ts:67
-
-Inherited from: Subject.throw
-
-Defined in: node_modules/rxjs/internal/Observable.d.ts:76
+Defined in: node_modules/rxjs/dist/types/internal/Subject.d.ts:27
 
 ## Accessors
 
@@ -520,7 +306,7 @@ ___
 
 **Returns:** *any*
 
-Defined in: [src/SuspenseSubject.ts:90](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L90)
+Defined in: [src/SuspenseSubject.ts:91](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L91)
 
 ___
 
@@ -536,9 +322,9 @@ Defined in: [src/SuspenseSubject.ts:51](https://github.com/FirebaseExtended/reac
 
 ### \_next
 
-▸ `Private`**_next**(`value`: T): *void*
+▸ `Private` **_next**(`value`: T): *void*
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -552,7 +338,7 @@ ___
 
 ### \_reset
 
-▸ `Private`**_reset**(): *void*
+▸ `Private` **_reset**(): *void*
 
 **Returns:** *void*
 
@@ -564,7 +350,7 @@ ___
 
 ▸ **_subscribe**(`subscriber`: *Subscriber*<T\>): *Subscription*
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -572,29 +358,7 @@ ___
 
 **Returns:** *Subscription*
 
-Overrides: Subject.\_subscribe
-
 Defined in: [src/SuspenseSubject.ts:82](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L82)
-
-___
-
-### \_trySubscribe
-
-▸ **_trySubscribe**(`subscriber`: *Subscriber*<T\>): TeardownLogic
-
-**`deprecated`** This is an internal implementation detail, do not use.
-
-#### Parameters:
-
-| Name | Type |
-| :------ | :------ |
-| `subscriber` | *Subscriber*<T\> |
-
-**Returns:** TeardownLogic
-
-Inherited from: Subject.\_trySubscribe
-
-Defined in: node_modules/rxjs/internal/Subject.d.ts:39
 
 ___
 
@@ -612,7 +376,7 @@ Observable that the Subject casts to
 
 Inherited from: Subject.asObservable
 
-Defined in: node_modules/rxjs/internal/Subject.d.ts:48
+Defined in: node_modules/rxjs/dist/types/internal/Subject.d.ts:41
 
 ___
 
@@ -624,7 +388,7 @@ ___
 
 Inherited from: Subject.complete
 
-Defined in: node_modules/rxjs/internal/Subject.d.ts:36
+Defined in: node_modules/rxjs/dist/types/internal/Subject.d.ts:33
 
 ___
 
@@ -632,7 +396,7 @@ ___
 
 ▸ **error**(`err`: *any*): *void*
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -642,22 +406,59 @@ ___
 
 Inherited from: Subject.error
 
-Defined in: node_modules/rxjs/internal/Subject.d.ts:35
+Defined in: node_modules/rxjs/dist/types/internal/Subject.d.ts:32
 
 ___
 
 ### forEach
 
-▸ **forEach**(`next`: (`value`: T) => *void*, `promiseCtor?`: PromiseConstructorLike): *Promise*<void\>
+▸ **forEach**(`next`: (`value`: T) => *void*): *Promise*<void\>
 
-**`method`** forEach
+Used as a NON-CANCELLABLE means of subscribing to an observable, for use with
+APIs that expect promises, like `async/await`. You cannot unsubscribe from this.
 
-#### Parameters:
+**WARNING**: Only use this with observables you *know* will complete. If the source
+observable does not complete, you will end up with a promise that is hung up, and
+potentially all of the state of an async function hanging out in memory. To avoid
+this situation, look into adding something like {@link timeout}, {@link take},
+{@link takeWhile}, or {@link takeUntil} amongst others.
+
+### Example:
+
+```ts
+import { interval } from 'rxjs';
+import { take } from 'rxjs/operators';
+
+const source$ = interval(1000).pipe(take(4));
+
+async function getTotal() {
+   let total = 0;
+
+   await source$.forEach(value => {
+     total += value;
+     console.log('observable -> ', value);
+   });
+
+   return total;
+}
+
+getTotal().then(
+   total => console.log('Total:', total)
+)
+
+// Expected:
+// "observable -> 0"
+// "observable -> 1"
+// "observable -> 2"
+// "observable -> 3"
+// "Total: 6"
+```
+
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `next` | (`value`: T) => *void* | a handler for each value emitted by the observable |
-| `promiseCtor?` | PromiseConstructorLike | - |
 
 **Returns:** *Promise*<void\>
 
@@ -666,7 +467,31 @@ a promise that either resolves on observable completion or
 
 Inherited from: Subject.forEach
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:64
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:105
+
+▸ **forEach**(`next`: (`value`: T) => *void*, `promiseCtor`: PromiseConstructorLike): *Promise*<void\>
+
+**`deprecated`** Passing a Promise constructor will no longer be available
+in upcoming versions of RxJS. This is because it adds weight to the library, for very
+little benefit. If you need this functionality, it is recommended that you either
+polyfill Promise, or you create an adapter to convert the returned native promise
+to whatever promise implementation you wanted. Will be removed in v8.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `next` | (`value`: T) => *void* | a handler for each value emitted by the observable |
+| `promiseCtor` | PromiseConstructorLike | a constructor function used to instantiate the Promise |
+
+**Returns:** *Promise*<void\>
+
+a promise that either resolves on observable completion or
+ rejects with the handled error
+
+Inherited from: Subject.forEach
+
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:117
 
 ___
 
@@ -674,13 +499,15 @@ ___
 
 ▸ **lift**<R\>(`operator`: *Operator*<T, R\>): *Observable*<R\>
 
-#### Type parameters:
+**`deprecated`** Internal implementation detail, do not use directly. Will be made internal in v8.
+
+#### Type parameters
 
 | Name |
 | :------ |
 | `R` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -690,25 +517,25 @@ ___
 
 Inherited from: Subject.lift
 
-Defined in: node_modules/rxjs/internal/Subject.d.ts:33
+Defined in: node_modules/rxjs/dist/types/internal/Subject.d.ts:30
 
 ___
 
 ### next
 
-▸ **next**(`value?`: T): *void*
+▸ **next**(`value`: T): *void*
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `value?` | T |
+| `value` | T |
 
 **Returns:** *void*
 
 Inherited from: Subject.next
 
-Defined in: node_modules/rxjs/internal/Subject.d.ts:34
+Defined in: node_modules/rxjs/dist/types/internal/Subject.d.ts:31
 
 ___
 
@@ -720,17 +547,17 @@ ___
 
 Inherited from: Subject.pipe
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:77
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:118
 
 ▸ **pipe**<A\>(`op1`: *OperatorFunction*<T, A\>): *Observable*<A\>
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
 | `A` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -740,18 +567,18 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:77
 
 Inherited from: Subject.pipe
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:78
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:119
 
 ▸ **pipe**<A, B\>(`op1`: *OperatorFunction*<T, A\>, `op2`: *OperatorFunction*<A, B\>): *Observable*<B\>
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
 | `A` |
 | `B` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -762,11 +589,11 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:78
 
 Inherited from: Subject.pipe
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:79
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:120
 
 ▸ **pipe**<A, B, C\>(`op1`: *OperatorFunction*<T, A\>, `op2`: *OperatorFunction*<A, B\>, `op3`: *OperatorFunction*<B, C\>): *Observable*<C\>
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
@@ -774,7 +601,7 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:79
 | `B` |
 | `C` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -786,11 +613,11 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:79
 
 Inherited from: Subject.pipe
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:80
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:121
 
 ▸ **pipe**<A, B, C, D\>(`op1`: *OperatorFunction*<T, A\>, `op2`: *OperatorFunction*<A, B\>, `op3`: *OperatorFunction*<B, C\>, `op4`: *OperatorFunction*<C, D\>): *Observable*<D\>
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
@@ -799,7 +626,7 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:80
 | `C` |
 | `D` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -812,11 +639,11 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:80
 
 Inherited from: Subject.pipe
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:81
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:122
 
 ▸ **pipe**<A, B, C, D, E\>(`op1`: *OperatorFunction*<T, A\>, `op2`: *OperatorFunction*<A, B\>, `op3`: *OperatorFunction*<B, C\>, `op4`: *OperatorFunction*<C, D\>, `op5`: *OperatorFunction*<D, E\>): *Observable*<E\>
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
@@ -826,7 +653,7 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:81
 | `D` |
 | `E` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -840,11 +667,11 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:81
 
 Inherited from: Subject.pipe
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:82
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:123
 
 ▸ **pipe**<A, B, C, D, E, F\>(`op1`: *OperatorFunction*<T, A\>, `op2`: *OperatorFunction*<A, B\>, `op3`: *OperatorFunction*<B, C\>, `op4`: *OperatorFunction*<C, D\>, `op5`: *OperatorFunction*<D, E\>, `op6`: *OperatorFunction*<E, F\>): *Observable*<F\>
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
@@ -855,7 +682,7 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:82
 | `E` |
 | `F` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -870,11 +697,11 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:82
 
 Inherited from: Subject.pipe
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:83
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:124
 
 ▸ **pipe**<A, B, C, D, E, F, G\>(`op1`: *OperatorFunction*<T, A\>, `op2`: *OperatorFunction*<A, B\>, `op3`: *OperatorFunction*<B, C\>, `op4`: *OperatorFunction*<C, D\>, `op5`: *OperatorFunction*<D, E\>, `op6`: *OperatorFunction*<E, F\>, `op7`: *OperatorFunction*<F, G\>): *Observable*<G\>
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
@@ -886,7 +713,7 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:83
 | `F` |
 | `G` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -902,11 +729,11 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:83
 
 Inherited from: Subject.pipe
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:84
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:125
 
 ▸ **pipe**<A, B, C, D, E, F, G, H\>(`op1`: *OperatorFunction*<T, A\>, `op2`: *OperatorFunction*<A, B\>, `op3`: *OperatorFunction*<B, C\>, `op4`: *OperatorFunction*<C, D\>, `op5`: *OperatorFunction*<D, E\>, `op6`: *OperatorFunction*<E, F\>, `op7`: *OperatorFunction*<F, G\>, `op8`: *OperatorFunction*<G, H\>): *Observable*<H\>
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
@@ -919,7 +746,7 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:84
 | `G` |
 | `H` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -936,11 +763,11 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:84
 
 Inherited from: Subject.pipe
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:85
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:126
 
 ▸ **pipe**<A, B, C, D, E, F, G, H, I\>(`op1`: *OperatorFunction*<T, A\>, `op2`: *OperatorFunction*<A, B\>, `op3`: *OperatorFunction*<B, C\>, `op4`: *OperatorFunction*<C, D\>, `op5`: *OperatorFunction*<D, E\>, `op6`: *OperatorFunction*<E, F\>, `op7`: *OperatorFunction*<F, G\>, `op8`: *OperatorFunction*<G, H\>, `op9`: *OperatorFunction*<H, I\>): *Observable*<I\>
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
@@ -954,7 +781,7 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:85
 | `H` |
 | `I` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -972,11 +799,11 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:85
 
 Inherited from: Subject.pipe
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:86
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:127
 
-▸ **pipe**<A, B, C, D, E, F, G, H, I\>(`op1`: *OperatorFunction*<T, A\>, `op2`: *OperatorFunction*<A, B\>, `op3`: *OperatorFunction*<B, C\>, `op4`: *OperatorFunction*<C, D\>, `op5`: *OperatorFunction*<D, E\>, `op6`: *OperatorFunction*<E, F\>, `op7`: *OperatorFunction*<F, G\>, `op8`: *OperatorFunction*<G, H\>, `op9`: *OperatorFunction*<H, I\>, ...`operations`: *OperatorFunction*<any, any\>[]): *Observable*<{}\>
+▸ **pipe**<A, B, C, D, E, F, G, H, I\>(`op1`: *OperatorFunction*<T, A\>, `op2`: *OperatorFunction*<A, B\>, `op3`: *OperatorFunction*<B, C\>, `op4`: *OperatorFunction*<C, D\>, `op5`: *OperatorFunction*<D, E\>, `op6`: *OperatorFunction*<E, F\>, `op7`: *OperatorFunction*<F, G\>, `op8`: *OperatorFunction*<G, H\>, `op9`: *OperatorFunction*<H, I\>, ...`operations`: *OperatorFunction*<any, any\>[]): *Observable*<unknown\>
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
@@ -990,7 +817,7 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:86
 | `H` |
 | `I` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -1005,157 +832,107 @@ Defined in: node_modules/rxjs/internal/Observable.d.ts:86
 | `op9` | *OperatorFunction*<H, I\> |
 | `...operations` | *OperatorFunction*<any, any\>[] |
 
-**Returns:** *Observable*<{}\>
+**Returns:** *Observable*<unknown\>
 
 Inherited from: Subject.pipe
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:87
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:128
 
 ___
 
 ### subscribe
 
-▸ **subscribe**(`observer?`: *PartialObserver*<T\>): *Subscription*
+▸ **subscribe**(`observer?`: *Partial*<Observer<T\>\>): *Subscription*
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `observer?` | *PartialObserver*<T\> |
+| `observer?` | *Partial*<Observer<T\>\> |
 
 **Returns:** *Subscription*
 
 Inherited from: Subject.subscribe
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:47
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:53
 
-▸ **subscribe**(`next`: *undefined* \| ``null``, `error`: *undefined* \| ``null``, `complete`: () => *void*): *Subscription*
+▸ **subscribe**(`next`: (`value`: T) => *void*): *Subscription*
 
-**`deprecated`** Use an observer instead of a complete callback
-
-#### Parameters:
-
-| Name | Type |
-| :------ | :------ |
-| `next` | *undefined* \| ``null`` |
-| `error` | *undefined* \| ``null`` |
-| `complete` | () => *void* |
-
-**Returns:** *Subscription*
-
-Inherited from: Subject.subscribe
-
-Defined in: node_modules/rxjs/internal/Observable.d.ts:49
-
-▸ **subscribe**(`next`: *undefined* \| ``null``, `error`: (`error`: *any*) => *void*, `complete?`: () => *void*): *Subscription*
-
-**`deprecated`** Use an observer instead of an error callback
-
-#### Parameters:
-
-| Name | Type |
-| :------ | :------ |
-| `next` | *undefined* \| ``null`` |
-| `error` | (`error`: *any*) => *void* |
-| `complete?` | () => *void* |
-
-**Returns:** *Subscription*
-
-Inherited from: Subject.subscribe
-
-Defined in: node_modules/rxjs/internal/Observable.d.ts:51
-
-▸ **subscribe**(`next`: (`value`: T) => *void*, `error`: *undefined* \| ``null``, `complete`: () => *void*): *Subscription*
-
-**`deprecated`** Use an observer instead of a complete callback
-
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `next` | (`value`: T) => *void* |
-| `error` | *undefined* \| ``null`` |
-| `complete` | () => *void* |
 
 **Returns:** *Subscription*
 
 Inherited from: Subject.subscribe
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:53
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:54
 
-▸ **subscribe**(`next?`: (`value`: T) => *void*, `error?`: (`error`: *any*) => *void*, `complete?`: () => *void*): *Subscription*
+▸ **subscribe**(`next?`: ``null`` \| (`value`: T) => *void*, `error?`: ``null`` \| (`error`: *any*) => *void*, `complete?`: ``null`` \| () => *void*): *Subscription*
 
-#### Parameters:
+**`deprecated`** Instead of passing separate callback arguments, use an observer argument. Signatures taking separate callback arguments will be removed in v8. Details: https://rxjs.dev/deprecations/subscribe-arguments
+
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `next?` | (`value`: T) => *void* |
-| `error?` | (`error`: *any*) => *void* |
-| `complete?` | () => *void* |
+| `next?` | ``null`` \| (`value`: T) => *void* |
+| `error?` | ``null`` \| (`error`: *any*) => *void* |
+| `complete?` | ``null`` \| () => *void* |
 
 **Returns:** *Subscription*
 
 Inherited from: Subject.subscribe
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:54
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:56
 
 ___
 
 ### toPromise
 
-▸ **toPromise**<T\>(): *Promise*<T\>
+▸ **toPromise**(): *Promise*<undefined \| T\>
 
-#### Type parameters:
+**`deprecated`** Replaced with {@link firstValueFrom} and {@link lastValueFrom}. Will be removed in v8. Details: https://rxjs.dev/deprecations/to-promise
 
-| Name |
-| :------ |
-| `T` |
-
-**Returns:** *Promise*<T\>
+**Returns:** *Promise*<undefined \| T\>
 
 Inherited from: Subject.toPromise
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:88
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:130
 
-▸ **toPromise**<T\>(`PromiseCtor`: PromiseConstructor): *Promise*<T\>
+▸ **toPromise**(`PromiseCtor`: PromiseConstructor): *Promise*<undefined \| T\>
 
-#### Type parameters:
+**`deprecated`** Replaced with {@link firstValueFrom} and {@link lastValueFrom}. Will be removed in v8. Details: https://rxjs.dev/deprecations/to-promise
 
-| Name |
-| :------ |
-| `T` |
-
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `PromiseCtor` | PromiseConstructor |
 
-**Returns:** *Promise*<T\>
+**Returns:** *Promise*<undefined \| T\>
 
 Inherited from: Subject.toPromise
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:89
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:132
 
-▸ **toPromise**<T\>(`PromiseCtor`: PromiseConstructorLike): *Promise*<T\>
+▸ **toPromise**(`PromiseCtor`: PromiseConstructorLike): *Promise*<undefined \| T\>
 
-#### Type parameters:
+**`deprecated`** Replaced with {@link firstValueFrom} and {@link lastValueFrom}. Will be removed in v8. Details: https://rxjs.dev/deprecations/to-promise
 
-| Name |
-| :------ |
-| `T` |
-
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `PromiseCtor` | PromiseConstructorLike |
 
-**Returns:** *Promise*<T\>
+**Returns:** *Promise*<undefined \| T\>
 
 Inherited from: Subject.toPromise
 
-Defined in: node_modules/rxjs/internal/Observable.d.ts:90
+Defined in: node_modules/rxjs/dist/types/internal/Observable.d.ts:134
 
 ___
 
@@ -1167,4 +944,4 @@ ___
 
 Inherited from: Subject.unsubscribe
 
-Defined in: node_modules/rxjs/internal/Subject.d.ts:37
+Defined in: node_modules/rxjs/dist/types/internal/Subject.d.ts:34

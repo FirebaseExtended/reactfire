@@ -528,7 +528,7 @@ Re-exports: [version](firebaseapp.md#version)
 
 Ƭ **ReactFireGlobals**: *object*
 
-#### Type declaration:
+#### Type declaration
 
 | Name | Type |
 | :------ | :------ |
@@ -544,7 +544,7 @@ Defined in: [src/index.ts:4](https://github.com/FirebaseExtended/reactfire/blob/
 
 ▸ **checkIdField**(`options`: [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)): *any*
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -560,7 +560,7 @@ ___
 
 ▸ **checkOptions**(`options`: [*ReactFireOptions*](../interfaces/index.reactfireoptions.md), `field`: *string*): *any*
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -577,7 +577,7 @@ ___
 
 ▸ **checkinitialData**(`options`: [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)): *any*
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |

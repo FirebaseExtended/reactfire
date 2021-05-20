@@ -16,7 +16,7 @@
 
 ▸ **StorageImage**(`props`: StorageImageProps & *React.DetailedHTMLProps*<React.ImgHTMLAttributes<HTMLImageElement\>, HTMLImageElement\>): *Element*
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -34,13 +34,13 @@ ___
 
 Subscribe to a storage ref's download URL
 
-#### Type parameters:
+#### Type parameters
 
 | Name | Default |
 | :------ | :------ |
 | `T` | *string* |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -59,13 +59,13 @@ ___
 
 Subscribe to the progress of a storage task
 
-#### Type parameters:
+#### Type parameters
 
 | Name | Default |
 | :------ | :------ |
 | `T` | *unknown* |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

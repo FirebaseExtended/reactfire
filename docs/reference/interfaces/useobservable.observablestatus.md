@@ -79,7 +79,7 @@ ___
 
 ### status
 
-• **status**: ``"loading"`` \| ``"error"`` \| ``"success"``
+• **status**: ``"error"`` \| ``"loading"`` \| ``"success"``
 
 The loading status.
 

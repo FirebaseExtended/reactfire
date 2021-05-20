@@ -18,7 +18,7 @@
 
 ▸ **SuspenseWithPerf**(`__namedParameters`: [*SuspensePerfProps*](../interfaces/performance.suspenseperfprops.md)): JSX.Element
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |

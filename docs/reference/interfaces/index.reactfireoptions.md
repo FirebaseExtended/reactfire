@@ -12,7 +12,7 @@
 
 ## Hierarchy
 
-* **ReactFireOptions**
+- **ReactFireOptions**
 
   ↳ [*SignInCheckOptionsBasic*](auth.signincheckoptionsbasic.md)
 

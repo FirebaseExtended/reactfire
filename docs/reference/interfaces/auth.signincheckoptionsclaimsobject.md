@@ -6,7 +6,7 @@
 
 ## Hierarchy
 
-* [*SignInCheckOptionsBasic*](auth.signincheckoptionsbasic.md)
+- [*SignInCheckOptionsBasic*](auth.signincheckoptionsbasic.md)
 
   ↳ **SignInCheckOptionsClaimsObject**
 
@@ -29,7 +29,7 @@
 
 Inherited from: [SignInCheckOptionsBasic](auth.signincheckoptionsbasic.md).[forceRefresh](auth.signincheckoptionsbasic.md#forcerefresh)
 
-Defined in: [src/auth.tsx:85](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L85)
+Defined in: [src/auth.tsx:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L86)
 
 ___
 
@@ -57,9 +57,9 @@ ___
 
 • **requiredClaims**: *object*
 
-#### Type declaration:
+#### Type declaration
 
-Defined in: [src/auth.tsx:89](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L89)
+Defined in: [src/auth.tsx:90](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L90)
 
 ___
 

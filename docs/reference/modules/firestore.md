@@ -18,9 +18,9 @@
 
 ### preloadFirestoreDoc
 
-▸ **preloadFirestoreDoc**(`refProvider`: (`firestore`: firebase.firestore.Firestore) => firebase.firestore.DocumentReference, `options`: { `firebaseApp`: firebase.app.App  }): *Promise*<[*SuspenseSubject*](../classes/suspensesubject.suspensesubject-1.md)<DocumentSnapshot\>\>
+▸ **preloadFirestoreDoc**(`refProvider`: (`firestore`: firebase.firestore.Firestore) => firebase.firestore.DocumentReference, `options`: { `firebaseApp`: firebase.app.App  }): *Promise*<[*SuspenseSubject*](../classes/suspensesubject.suspensesubject-1.md)<DocumentSnapshot<DocumentData\>\>\>
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -28,7 +28,7 @@
 | `options` | *object* |
 | `options.firebaseApp` | firebase.app.App |
 
-**Returns:** *Promise*<[*SuspenseSubject*](../classes/suspensesubject.suspensesubject-1.md)<DocumentSnapshot\>\>
+**Returns:** *Promise*<[*SuspenseSubject*](../classes/suspensesubject.suspensesubject-1.md)<DocumentSnapshot<DocumentData\>\>\>
 
 Defined in: [src/firestore.tsx:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L28)
 
@@ -40,13 +40,13 @@ ___
 
 Subscribe to a Firestore collection
 
-#### Type parameters:
+#### Type parameters
 
 | Name | Default |
 | :------ | :------ |
 | `T` | DocumentData |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -65,13 +65,13 @@ ___
 
 Subscribe to a Firestore collection and unwrap the snapshot.
 
-#### Type parameters:
+#### Type parameters
 
 | Name | Default |
 | :------ | :------ |
 | `T` | { [key: string]: *unknown*;  } |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -90,13 +90,13 @@ ___
 
 Suscribe to Firestore Document changes
 
-#### Type parameters:
+#### Type parameters
 
 | Name | Default |
 | :------ | :------ |
 | `T` | DocumentData |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -115,13 +115,13 @@ ___
 
 Suscribe to Firestore Document changes
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
 | `T` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -140,13 +140,13 @@ ___
 
 Get a firestore document and don't subscribe to changes
 
-#### Type parameters:
+#### Type parameters
 
 | Name | Default |
 | :------ | :------ |
 | `T` | *unknown* |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -165,13 +165,13 @@ ___
 
 Get a firestore document and don't subscribe to changes
 
-#### Type parameters:
+#### Type parameters
 
 | Name | Default |
 | :------ | :------ |
 | `T` | *unknown* |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

@@ -20,7 +20,7 @@
 
 Convience method similar to useRemoteConfigValue. Returns allRemote Config parameters.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -38,7 +38,7 @@ ___
 
 Convience method similar to useRemoteConfigValue. Returns a `boolean` from a Remote Config parameter.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -56,7 +56,7 @@ ___
 
 Convience method similar to useRemoteConfigValue. Returns a `number` from a Remote Config parameter.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -74,7 +74,7 @@ ___
 
 Convience method similar to useRemoteConfigValue. Returns a `string` from a Remote Config parameter.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -93,7 +93,7 @@ ___
 Accepts a key and optionally a Remote Config instance. Returns a
 Remote Config Value.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |

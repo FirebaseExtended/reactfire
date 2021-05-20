@@ -19,13 +19,13 @@
 
 ▸ **preloadObservable**<T\>(`source`: *Observable*<T\>, `id`: *string*): [*SuspenseSubject*](../classes/suspensesubject.suspensesubject-1.md)<T\>
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
 | `T` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -42,13 +42,13 @@ ___
 
 ▸ **useObservable**<T\>(`observableId`: *string*, `source`: *Observable*<T \| any\>, `config?`: [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T\>
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
 | `T` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |

@@ -33,7 +33,7 @@
 
 Ƭ **SigninCheckResult**: { `errors`: {} ; `hasRequiredClaims`: ``false`` ; `signedIn`: ``false`` ; `user`: ``null``  } \| { `errors`: [*ClaimCheckErrors*](../interfaces/auth.claimcheckerrors.md) ; `hasRequiredClaims`: *boolean* ; `signedIn`: ``true`` ; `user`: firebase.User  }
 
-Defined in: [src/auth.tsx:70](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L70)
+Defined in: [src/auth.tsx:71](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L71)
 
 ## Functions
 
@@ -47,7 +47,7 @@ Conditionally render children based on signed-in status and [custom claims](http
 
 Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -55,7 +55,7 @@ Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More 
 
 **Returns:** JSX.Element
 
-Defined in: [src/auth.tsx:240](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L240)
+Defined in: [src/auth.tsx:248](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L248)
 
 ___
 
@@ -69,7 +69,7 @@ Conditionally render children based on [custom claims](https://firebase.google.c
 
 Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -77,24 +77,24 @@ Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More 
 
 **Returns:** *Element*
 
-Defined in: [src/auth.tsx:210](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L210)
+Defined in: [src/auth.tsx:211](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L211)
 
 ___
 
 ### preloadUser
 
-▸ **preloadUser**(`options`: { `firebaseApp`: firebase.app.App  }): *Promise*<User\>
+▸ **preloadUser**(`options`: { `firebaseApp`: firebase.app.App  }): *Promise*<``null`` \| User\>
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `options` | *object* |
 | `options.firebaseApp` | firebase.app.App |
 
-**Returns:** *Promise*<User\>
+**Returns:** *Promise*<``null`` \| User\>
 
-Defined in: [src/auth.tsx:8](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L8)
+Defined in: [src/auth.tsx:9](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L9)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 ▸ **useIdTokenResult**(`user`: firebase.User, `forceRefresh?`: *boolean*, `options?`: [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<firebase.auth.IdTokenResult\>): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.auth.IdTokenResult\>
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
@@ -112,7 +112,7 @@ ___
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.auth.IdTokenResult\>
 
-Defined in: [src/auth.tsx:38](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L38)
+Defined in: [src/auth.tsx:39](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L39)
 
 ___
 
@@ -150,7 +150,7 @@ const {status, data: signInCheckResult} = useSignInCheck({validateCustomClaims: 
 const {status, data: signInCheckResult} = useSignInCheck({forceRefresh: true, requiredClaims: {admin: true}});
 ```
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -158,7 +158,7 @@ const {status, data: signInCheckResult} = useSignInCheck({forceRefresh: true, re
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<[*SigninCheckResult*](auth.md#signincheckresult)\>
 
-Defined in: [src/auth.tsx:135](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L135)
+Defined in: [src/auth.tsx:136](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L136)
 
 ___
 
@@ -168,13 +168,13 @@ ___
 
 Subscribe to Firebase auth state changes, including token refresh
 
-#### Type parameters:
+#### Type parameters
 
 | Name | Default |
 | :------ | :------ |
 | `T` | *unknown* |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -182,4 +182,4 @@ Subscribe to Firebase auth state changes, including token refresh
 
 **Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.User\>
 
-Defined in: [src/auth.tsx:22](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L22)
+Defined in: [src/auth.tsx:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L23)

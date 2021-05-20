@@ -19,13 +19,13 @@
 
 Subscribe to a Realtime Database list
 
-#### Type parameters:
+#### Type parameters
 
 | Name | Default |
 | :------ | :------ |
 | `T` | { [key: string]: *unknown*;  } |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -42,13 +42,13 @@ ___
 
 ▸ **useDatabaseListData**<T\>(`ref`: firebase.database.Reference \| firebase.database.Query, `options?`: [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T[]\>): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T[]\>
 
-#### Type parameters:
+#### Type parameters
 
 | Name | Default |
 | :------ | :------ |
 | `T` | { [key: string]: *unknown*;  } |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -67,13 +67,13 @@ ___
 
 Subscribe to a Realtime Database object
 
-#### Type parameters:
+#### Type parameters
 
 | Name | Default |
 | :------ | :------ |
 | `T` | *unknown* |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
@@ -90,13 +90,13 @@ ___
 
 ▸ **useDatabaseObjectData**<T\>(`ref`: firebase.database.Reference, `options?`: [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\>): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T\>
 
-#### Type parameters:
+#### Type parameters
 
 | Name |
 | :------ |
 | `T` |
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
