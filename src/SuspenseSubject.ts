@@ -36,7 +36,7 @@ export class SuspenseSubject<T> extends Subject<T> {
     // warm up the observable
     this._warmupSubscription = this._innerObservable.subscribe();
 
-    // set a timeout for reseting the cache, subscriptions will cancel the timeout
+    // set a timeout for resetting the cache, subscriptions will cancel the timeout
     // and reschedule again on unsubscribe
     this._timeoutHandler = setTimeout(this._reset.bind(this), this._timeoutWindow);
   }
