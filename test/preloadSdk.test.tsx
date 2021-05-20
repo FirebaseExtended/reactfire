@@ -28,7 +28,7 @@ describe('Preload SDK', () => {
   });
 
   describe('useFirestore', () => {
-    it.only('awaits the preloadFirestore setup', async () => {
+    it('awaits the preloadFirestore setup', async () => {
       let resolver: Function;
       const promise = new Promise(res => {
         resolver = res;
@@ -49,7 +49,9 @@ describe('Preload SDK', () => {
         )
       });
 
-      // should be empty until we call resolver
+      // Even though Firestore is available, useFirestore
+      // shouldn't return until the setup function resolvess
+      await waitFor(() => !!app.firestore);
       expect(result.current).toBe(undefined);
 
       actOnHook(() => resolver());
