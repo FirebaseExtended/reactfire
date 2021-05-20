@@ -1,3 +1,0 @@
-# Treat auto-generated markdown as binary
-# to reduce PR noise.
-./**/*.md binary
