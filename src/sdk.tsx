@@ -1,6 +1,6 @@
 import { useFirebaseApp, useSuspenseEnabledFromConfigAndContext, preloadObservable } from './';
 import firebase from 'firebase/app';
-import { Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 
 type ComponentName = 'analytics' | 'auth' | 'database' | 'firestore' | 'functions' | 'messaging' | 'performance' | 'remoteConfig' | 'storage';
 
@@ -112,7 +112,7 @@ function preloadFactory(componentName: 'performance'): (options: PreloadOptions<
 function preloadFactory(componentName: 'remoteConfig'): (options: PreloadOptions<App['remoteConfig']>) => Promise<App['remoteConfig']>;
 function preloadFactory(componentName: 'storage'): (options: PreloadOptions<App['storage']>) => Promise<App['storage']>;
 function preloadFactory(componentName: ComponentName) {
-  return (options: PreloadOptions<FirebaseInstanceFactory>) => preload(componentName, options.firebaseApp, options.setup).toPromise();
+  return (options: PreloadOptions<FirebaseInstanceFactory>) => lastValueFrom(preload(componentName, options.firebaseApp, options.setup));
 }
 
 function preload(componentName: ComponentName, firebaseApp: App, settingsCallback: (instanceFactory: FirebaseInstanceFactory) => any = () => {}) {

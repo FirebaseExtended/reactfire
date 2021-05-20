@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import * as React from 'react';
 import { user } from 'rxfire/auth';
 import { preloadAuth, preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus, ReactFireError } from './';
-import { from, of } from 'rxjs';
+import { from, lastValueFrom, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
 export function preloadUser(options: { firebaseApp: firebase.app.App }) {
@@ -10,7 +10,7 @@ export function preloadUser(options: { firebaseApp: firebase.app.App }) {
 
   return preloadAuth({ firebaseApp }).then(auth => {
     const result = preloadObservable(user(auth()), `auth:user:${firebaseApp.name}`);
-    return result.toPromise();
+    return lastValueFrom(result);
   });
 }
 
