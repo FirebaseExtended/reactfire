@@ -123,12 +123,14 @@ function preload(componentName: ComponentName, firebaseApp: App, settingsCallbac
   return preloadObservable(
     new Observable(emitter => {
       importSDK(componentName)
-        .then(() => {
+        .then(async () => {
           const instanceFactory: FirebaseInstanceFactory = app[componentName].bind(app);
-          Promise.resolve(settingsCallback(instanceFactory)).then(() => {
-            emitter.next(instanceFactory);
-            emitter.complete();
-          });
+
+          // Make sure settingsCallback completes before returning the SDK
+          // Often, SDK settings must be set before any other calls to that SDK can be made
+          await Promise.resolve(settingsCallback(instanceFactory));
+          emitter.next(instanceFactory);
+          emitter.complete();
         })
         .catch(e => {
           emitter.error(e);
