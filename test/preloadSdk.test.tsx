@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom/extend-expect';
-import { render, act } from '@testing-library/react';
+import { act as actOnHook, renderHook } from '@testing-library/react-hooks';
 import firebase from 'firebase/app';
-import * as React from 'react';
 import { FirebaseAppProvider, preloadFirestore, useFirestore } from '..';
+import * as React from 'react';
 
 describe('Preload SDK', () => {
   let app: firebase.app.App;
@@ -29,47 +29,40 @@ describe('Preload SDK', () => {
 
   describe('useFirestore', () => {
     it.only('awaits the preloadFirestore setup', async () => {
-      let preloadResolved = false;
-      let preloadResolve: (v?: unknown) => void;
-
-      preloadFirestore({
-        firebaseApp: app,
-        setup: () => new Promise(resolve => (preloadResolve = resolve))
-      }).then(() => {
-        preloadResolved = true;
-        console.log('RESOLVED');
+      let resolver: Function;
+      const promise = new Promise(res => {
+        resolver = res;
       });
 
-      const Firestore = () => {
-        // @ts-ignore: It's ok that `firestore` is unused here
-        const firestore = useFirestore(); // eslint-disable-line @typescript-eslint/no-unused-vars
+      const preloadPromise = preloadFirestore({
+        firebaseApp: app,
+        setup: async () => {
+          await promise;
+        }
+      });
 
-        expect(preloadResolved).toEqual(true);
+      const { result, waitFor } = renderHook(() => useFirestore(), {
+        wrapper: ({ children }: { children: React.ReactNode }) => (
+          <FirebaseAppProvider firebaseApp={app} suspense={true}>
+            {children}
+          </FirebaseAppProvider>
+        )
+      });
 
-        return <div data-testid="success"></div>;
-      };
+      // should be empty until we call resolver
+      expect(result.current).toBe(undefined);
 
-      const { findByTestId } = render(
-        <FirebaseAppProvider firebaseApp={app} suspense={true}>
-          <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
-            <Firestore />
-          </React.Suspense>
-        </FirebaseAppProvider>
-      );
+      actOnHook(() => resolver());
+      await preloadPromise;
+      await waitFor(() => {
+        if (result.all.length > 0) {
+          return true;
+        } else {
+          return false;
+        }
+      });
 
-      await findByTestId('fallback');
-      expect(preloadResolved).toEqual(false);
-
-      await findByTestId('success')
-        .then(() => fail('expected throw'))
-        .catch(() => {});
-      expect(preloadResolved).toEqual(false);
-
-      // @ts-ignore: "used before assigned" doesn't apply here because we shouldn't get here until resolve is set
-      act(() => preloadResolve());
-
-      await findByTestId('success');
-      expect(preloadResolved).toEqual(true);
+      expect(result.current).toBeDefined();
     });
   });
 });
