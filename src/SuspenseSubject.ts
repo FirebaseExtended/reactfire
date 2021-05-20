@@ -19,17 +19,17 @@ export class SuspenseSubject<T> extends Subject<T> {
     super();
     this._firstEmission = new Promise<void>(resolve => (this._resolveFirstEmission = resolve));
     this._innerObservable = innerObservable.pipe(
-      tap(
-        v => {
+      tap({
+        next: v => {
           this._next(v);
         },
-        e => {
+        error: e => {
           // save the error, so that we can raise on subscription or .value
           // resolve the promise, so suspense tries again
           this._error = e;
           this._resolveFirstEmission();
         }
-      ),
+      }),
       catchError(() => empty()),
       shareReplay(1)
     );
