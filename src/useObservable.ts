@@ -73,10 +73,8 @@ export function useObservable<T>(observableId: string, source: Observable<T | an
 
   const suspenseEnabled = useSuspenseEnabledFromConfigAndContext(config.suspense);
 
-  if (!observable.hasValue && (!config?.initialData ?? !config?.startWithValue)) {
-    if (suspenseEnabled === true) {
-      throw observable.firstEmission;
-    }
+  if (suspenseEnabled === true && !observable.hasValue && (!config?.initialData ?? !config?.startWithValue)) {
+    throw observable.firstEmission;
   }
 
   const [latest, setValue] = React.useState(() => (observable.hasValue ? observable.value : config.initialData ?? config.startWithValue));
