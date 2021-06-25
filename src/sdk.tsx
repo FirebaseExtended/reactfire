@@ -114,7 +114,7 @@ function preloadFactory(componentName: 'performance'): (options: PreloadOptions<
 function preloadFactory(componentName: 'remoteConfig'): (options: PreloadOptions<App['remoteConfig']>) => Promise<App['remoteConfig']>;
 function preloadFactory(componentName: 'storage'): (options: PreloadOptions<App['storage']>) => Promise<App['storage']>;
 function preloadFactory(componentName: ComponentName) {
-  return (options: PreloadOptions<FirebaseInstanceFactory>) => firstValueFrom(preload(componentName, options.firebaseApp, options.setup));
+  return (options: PreloadOptions<FirebaseInstanceFactory>) => preload(componentName, options.firebaseApp, options.setup).toPromise();
 }
 
 function preload(componentName: ComponentName, firebaseApp: App, settingsCallback: (instanceFactory: FirebaseInstanceFactory) => any = () => {}) {
