@@ -62,7 +62,7 @@ Note: `useUser` will also automatically lazily import the `firebase/auth` SDK if
 
 ### Decide what to render based on a user's auth state
 
-The `useSignInCheck` hook makes it easy to decide whether to hide or show UI elements based on a user's auth state, and even their [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims). It will render its children if a user is signed in, but if they are not signed in, it renders its `fallback` prop:
+The `useSigninCheck` hook makes it easy to decide whether to hide or show UI elements based on a user's auth state, and even their [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims). It will render its children if a user is signed in, but if they are not signed in, it renders its `fallback` prop:
 
 ```jsx
 function UserFavorites() {
