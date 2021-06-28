@@ -1,6 +1,6 @@
-# Getting Started with ReactFire + React [Concurrent Mode](https://reactjs.org/docs/concurrent-mode-intro.html)
+# Getting Started with ReactFire + React [concurrent rendering](https://reactjs.org/docs/concurrent-mode-intro.html)
 
-> ⚠️ This quickstart relies on ReactFire's concurrent mode features. We'd love PRs that add samples that work with stable builds of React!
+> ⚠️ This quickstart relies on ReactFire's concurrent rendering features. We'd love PRs that add samples that work with stable builds of React!
 
 ⚛ + 🔥 = 🌯
 
@@ -142,7 +142,7 @@ npm install --save firebase reactfire
        .doc('burrito');
 
      // subscribe to the doc. just one line!
-     const burrito = useFirestoreDocData(burritoRef);
+     const { data: burrito } = useFirestoreDocData(burritoRef);
 
      // get the value from the doc
      const isYummy = burrito.yummy;
