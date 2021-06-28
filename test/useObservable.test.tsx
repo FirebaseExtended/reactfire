@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { act, cleanup, render, waitFor } from '@testing-library/react';
 import { act as actOnHook, renderHook } from '@testing-library/react-hooks';
 import * as React from 'react';
-import { of, Subject, throwError } from 'rxjs';
+import { of, Subject, BehaviorSubject, throwError } from 'rxjs';
 import { useObservable } from '..';
 
 describe('useObservable', () => {
@@ -52,6 +52,55 @@ describe('useObservable', () => {
       expect(result.current.hasEmitted).toEqual(true);
       expect(result.current.isComplete).toEqual(false);
       expect(result.current.status).toEqual('success');
+    });
+
+    it('can get the value from an observable that already has one', async () => {
+      const startVal = 'start';
+      const observable$ = new BehaviorSubject(startVal);
+
+      const { result } = renderHook(() => useObservable('test-warm-observable', observable$, { suspense: false }));
+
+      expect(result.current.data).toEqual(startVal);
+    });
+
+    it('does not show stale data after navigating away', async () => {
+      const startVal = 'start';
+      const newVal = 'anotherValue';
+      const observable$ = new BehaviorSubject(startVal);
+
+      // a component that subscribes to the observable
+      const Comp = () => {
+        const { data } = useObservable('test-stale-on-rerender', observable$, { suspense: false });
+
+        return <span data-testid="comp">{`${data}`}</span>;
+      };
+
+      // a component that conditionally renders its child based on props
+      const ConditionalRenderer = ({ renderChildren }: { renderChildren: boolean }) => {
+        if (renderChildren) {
+          return <Comp />;
+        } else {
+          return <span data-testid="no-children">Filler</span>;
+        }
+      };
+
+      // render the child and make sure it has the initial value
+      const { findByTestId, rerender } = render(<ConditionalRenderer renderChildren={true} />);
+      const element = await findByTestId('comp');
+      expect(element).toHaveTextContent(startVal);
+
+      // unrender the child, causing it to get cleaned up and not listen any more
+      rerender(<ConditionalRenderer renderChildren={false} />);
+      const placeHolderElement = await findByTestId('no-children');
+      expect(placeHolderElement).toHaveTextContent('Filler');
+
+      // while no components are actively subscribed, emit a new value
+      act(() => observable$.next(newVal));
+
+      // render the child again and make sure it has the new value, not a stale one
+      rerender(<ConditionalRenderer renderChildren={true} />);
+      await findByTestId('comp');
+      expect(element).toHaveTextContent(startVal);
     });
   });
 

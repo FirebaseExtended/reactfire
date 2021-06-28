@@ -281,23 +281,35 @@ describe('Authentication', () => {
       expect(result.current.data).toEqual(app.auth().currentUser);
     });
 
-    it.only('does not show a logged-out user after navigating away', async () => {
+    it('does not show a logged-out user after navigating away', async () => {
       await preloadAuth({ firebaseApp: app });
 
       await signIn();
 
-      const { result, unmount, rerender } = renderHook(() => useUser(), { wrapper: Provider });
+      // a component that conditionally renders its child based on props
+      const ConditionalRenderer = ({ renderChildren }: { renderChildren: boolean }) => {
+        if (renderChildren) {
+          return <AuthCheckWrapper />;
+        } else {
+          return <span data-testid="no-children">Filler</span>;
+        }
+      };
 
-      expect(result.current.data).toEqual(app.auth().currentUser);
+      // render the child and make sure it has the initial value
+      const { findByTestId, rerender } = render(<ConditionalRenderer renderChildren={true} />);
+      await findByTestId('signed-in');
 
-      // as if we navigated away, signed out, and then came back
-      unmount();
-      await hooksAct(async () => {
-        await app.auth().signOut();
-      });
-      rerender();
+      // unrender the child, causing it to get cleaned up and not listen any more
+      rerender(<ConditionalRenderer renderChildren={false} />);
+      const placeHolderElement = await findByTestId('no-children');
+      expect(placeHolderElement).toHaveTextContent('Filler');
 
-      expect(result.current.data).toEqual(app.auth().currentUser);
+      // while no components are actively subscribed, sign out
+      await act(async () => await app.auth().signOut());
+
+      // render the child again and make sure it has the new value, not a stale one
+      rerender(<ConditionalRenderer renderChildren={true} />);
+      await findByTestId('signed-out');
     });
   });
 });
