@@ -16,14 +16,18 @@
 
 ### SuspenseWithPerf
 
-▸ **SuspenseWithPerf**(`__namedParameters`: [*SuspensePerfProps*](../interfaces/performance.suspenseperfprops.md)): JSX.Element
+▸ **SuspenseWithPerf**(`__namedParameters`): `JSX.Element`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `__namedParameters` | [*SuspensePerfProps*](../interfaces/performance.suspenseperfprops.md) |
+| `__namedParameters` | [`SuspensePerfProps`](../interfaces/performance.suspenseperfprops.md) |
 
-**Returns:** JSX.Element
+#### Returns
 
-Defined in: [src/performance.tsx:12](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L12)
+`JSX.Element`
+
+#### Defined in
+
+[src/performance.tsx:12](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L12)

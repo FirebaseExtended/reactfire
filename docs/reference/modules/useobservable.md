@@ -17,7 +17,7 @@
 
 ### preloadObservable
 
-▸ **preloadObservable**<T\>(`source`: *Observable*<T\>, `id`: *string*): [*SuspenseSubject*](../classes/suspensesubject.suspensesubject-1.md)<T\>
+▸ **preloadObservable**<`T`\>(`source`, `id`): [`SuspenseSubject`](../classes/suspensesubject.suspensesubject-1.md)<`T`\>
 
 #### Type parameters
 
@@ -29,18 +29,22 @@
 
 | Name | Type |
 | :------ | :------ |
-| `source` | *Observable*<T\> |
-| `id` | *string* |
+| `source` | `Observable`<`T`\> |
+| `id` | `string` |
 
-**Returns:** [*SuspenseSubject*](../classes/suspensesubject.suspensesubject-1.md)<T\>
+#### Returns
 
-Defined in: [src/useObservable.ts:19](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L19)
+[`SuspenseSubject`](../classes/suspensesubject.suspensesubject-1.md)<`T`\>
+
+#### Defined in
+
+[src/useObservable.ts:19](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L19)
 
 ___
 
 ### useObservable
 
-▸ **useObservable**<T\>(`observableId`: *string*, `source`: *Observable*<T \| any\>, `config?`: [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T\>
+▸ **useObservable**<`T`\>(`observableId`, `source`, `config?`): [`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`T`\>
 
 #### Type parameters
 
@@ -50,12 +54,16 @@ ___
 
 #### Parameters
 
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `observableId` | *string* | - |
-| `source` | *Observable*<T \| any\> | - |
-| `config` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md) | {} |
+| Name | Type |
+| :------ | :------ |
+| `observableId` | `string` |
+| `source` | `Observable`<`T` \| `any`\> |
+| `config` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md) |
 
-**Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<T\>
+#### Returns
 
-Defined in: [src/useObservable.ts:66](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L66)
+[`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`T`\>
+
+#### Defined in
+
+[src/useObservable.ts:66](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L66)

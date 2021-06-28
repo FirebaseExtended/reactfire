@@ -526,63 +526,77 @@ Re-exports: [version](firebaseapp.md#version)
 
 ### ReactFireGlobals
 
-Ƭ **ReactFireGlobals**: *object*
+Ƭ **ReactFireGlobals**: `Object`
 
 #### Type declaration
 
 | Name | Type |
 | :------ | :------ |
-| `_reactFireDatabaseCachedQueries` | firebase.database.Query[] |
-| `_reactFireFirestoreQueryCache` | firebase.firestore.Query[] |
-| `_reactFirePreloadedObservables` | *Map*<string, [*SuspenseSubject*](../classes/suspensesubject.suspensesubject-1.md)<any\>\> |
+| `_reactFireDatabaseCachedQueries` | `firebase.database.Query`[] |
+| `_reactFireFirestoreQueryCache` | `firebase.firestore.Query`[] |
+| `_reactFirePreloadedObservables` | `Map`<`string`, [`SuspenseSubject`](../classes/suspensesubject.suspensesubject-1.md)<`any`\>\> |
 
-Defined in: [src/index.ts:4](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L4)
+#### Defined in
+
+[src/index.ts:4](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L4)
 
 ## Functions
 
 ### checkIdField
 
-▸ **checkIdField**(`options`: [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)): *any*
+▸ **checkIdField**(`options`): `any`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `options` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md) |
+| `options` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md) |
 
-**Returns:** *any*
+#### Returns
 
-Defined in: [src/index.ts:45](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L45)
+`any`
+
+#### Defined in
+
+[src/index.ts:45](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L45)
 
 ___
 
 ### checkOptions
 
-▸ **checkOptions**(`options`: [*ReactFireOptions*](../interfaces/index.reactfireoptions.md), `field`: *string*): *any*
+▸ **checkOptions**(`options`, `field`): `any`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `options` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md) |
-| `field` | *string* |
+| `options` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md) |
+| `field` | `string` |
 
-**Returns:** *any*
+#### Returns
 
-Defined in: [src/index.ts:32](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L32)
+`any`
+
+#### Defined in
+
+[src/index.ts:32](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L32)
 
 ___
 
 ### checkinitialData
 
-▸ **checkinitialData**(`options`: [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)): *any*
+▸ **checkinitialData**(`options`): `any`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `options` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md) |
+| `options` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md) |
 
-**Returns:** *any*
+#### Returns
 
-Defined in: [src/index.ts:41](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L41)
+`any`
+
+#### Defined in
+
+[src/index.ts:41](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L41)

@@ -20,92 +20,116 @@
 
 ### AllParameters
 
-Ƭ **AllParameters**: *object*
+Ƭ **AllParameters**: `Object`
 
-#### Type declaration
+#### Index signature
 
-Defined in: [src/remote-config/getValue.tsx:6](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L6)
+▪ [key: `string`]: `RemoteConfigValue`
+
+#### Defined in
+
+[src/remote-config/getValue.tsx:6](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L6)
 
 ## Functions
 
 ### getAll
 
-▸ **getAll**(`remoteConfig`: RemoteConfig): *Observable*<[*AllParameters*](remote_config_getvalue.md#allparameters)\>
+▸ **getAll**(`remoteConfig`): `Observable`<[`AllParameters`](remote_config_getvalue.md#allparameters)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `remoteConfig` | RemoteConfig |
+| `remoteConfig` | `RemoteConfig` |
 
-**Returns:** *Observable*<[*AllParameters*](remote_config_getvalue.md#allparameters)\>
+#### Returns
 
-Defined in: [src/remote-config/getValue.tsx:47](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L47)
+`Observable`<[`AllParameters`](remote_config_getvalue.md#allparameters)\>
+
+#### Defined in
+
+[src/remote-config/getValue.tsx:47](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L47)
 
 ___
 
 ### getBoolean
 
-▸ **getBoolean**(`remoteConfig`: RemoteConfig, `key`: *string*): *Observable*<boolean\>
+▸ **getBoolean**(`remoteConfig`, `key`): `Observable`<`boolean`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `remoteConfig` | RemoteConfig |
-| `key` | *string* |
+| `remoteConfig` | `RemoteConfig` |
+| `key` | `string` |
 
-**Returns:** *Observable*<boolean\>
+#### Returns
 
-Defined in: [src/remote-config/getValue.tsx:42](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L42)
+`Observable`<`boolean`\>
+
+#### Defined in
+
+[src/remote-config/getValue.tsx:42](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L42)
 
 ___
 
 ### getNumber
 
-▸ **getNumber**(`remoteConfig`: RemoteConfig, `key`: *string*): *Observable*<number\>
+▸ **getNumber**(`remoteConfig`, `key`): `Observable`<`number`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `remoteConfig` | RemoteConfig |
-| `key` | *string* |
+| `remoteConfig` | `RemoteConfig` |
+| `key` | `string` |
 
-**Returns:** *Observable*<number\>
+#### Returns
 
-Defined in: [src/remote-config/getValue.tsx:37](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L37)
+`Observable`<`number`\>
+
+#### Defined in
+
+[src/remote-config/getValue.tsx:37](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L37)
 
 ___
 
 ### getString
 
-▸ **getString**(`remoteConfig`: RemoteConfig, `key`: *string*): *Observable*<string\>
+▸ **getString**(`remoteConfig`, `key`): `Observable`<`string`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `remoteConfig` | RemoteConfig |
-| `key` | *string* |
+| `remoteConfig` | `RemoteConfig` |
+| `key` | `string` |
 
-**Returns:** *Observable*<string\>
+#### Returns
 
-Defined in: [src/remote-config/getValue.tsx:32](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L32)
+`Observable`<`string`\>
+
+#### Defined in
+
+[src/remote-config/getValue.tsx:32](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L32)
 
 ___
 
 ### getValue
 
-▸ **getValue**(`remoteConfig`: RemoteConfig, `key`: *string*): *Observable*<Value\>
+▸ **getValue**(`remoteConfig`, `key`): `Observable`<`Value`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `remoteConfig` | RemoteConfig |
-| `key` | *string* |
+| `remoteConfig` | `RemoteConfig` |
+| `key` | `string` |
 
-**Returns:** *Observable*<Value\>
+#### Returns
 
-Defined in: [src/remote-config/getValue.tsx:27](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L27)
+`Observable`<`Value`\>
+
+#### Defined in
+
+[src/remote-config/getValue.tsx:27](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L27)

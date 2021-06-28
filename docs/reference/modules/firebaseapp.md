@@ -218,58 +218,76 @@ Re-exports: [useStorage](sdk.md#usestorage)
 
 ### version
 
-• `Const` **version**: *any*
+• `Const` **version**: `any`
 
-Defined in: [src/firebaseApp.tsx:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L23)
+#### Defined in
+
+[src/firebaseApp.tsx:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L23)
 
 ## Functions
 
 ### FirebaseAppProvider
 
-▸ **FirebaseAppProvider**(`props`: Props & { [key: string]: *unknown*;  }): *Element*
+▸ **FirebaseAppProvider**(`props`): `Element`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `props` | Props & { [key: string]: *unknown*;  } |
+| `props` | `Props` & { [key: string]: `unknown`;  } |
 
-**Returns:** *Element*
+#### Returns
 
-Defined in: [src/firebaseApp.tsx:27](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L27)
+`Element`
+
+#### Defined in
+
+[src/firebaseApp.tsx:27](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L27)
 
 ___
 
 ### useFirebaseApp
 
-▸ **useFirebaseApp**(): App
+▸ **useFirebaseApp**(): `App`
 
-**Returns:** App
+#### Returns
 
-Defined in: [src/firebaseApp.tsx:82](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L82)
+`App`
+
+#### Defined in
+
+[src/firebaseApp.tsx:82](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L82)
 
 ___
 
 ### useIsSuspenseEnabled
 
-▸ **useIsSuspenseEnabled**(): *boolean*
+▸ **useIsSuspenseEnabled**(): `boolean`
 
-**Returns:** *boolean*
+#### Returns
 
-Defined in: [src/firebaseApp.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L64)
+`boolean`
+
+#### Defined in
+
+[src/firebaseApp.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L64)
 
 ___
 
 ### useSuspenseEnabledFromConfigAndContext
 
-▸ **useSuspenseEnabledFromConfigAndContext**(`suspenseFromConfig?`: *boolean*): *boolean*
+▸ **useSuspenseEnabledFromConfigAndContext**(`suspenseFromConfig?`): `boolean`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `suspenseFromConfig?` | *boolean* |
+| `suspenseFromConfig?` | `boolean` |
 
-**Returns:** *boolean*
+#### Returns
 
-Defined in: [src/firebaseApp.tsx:71](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L71)
+`boolean`
+
+#### Defined in
+
+[src/firebaseApp.tsx:71](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L71)

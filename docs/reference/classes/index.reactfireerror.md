@@ -6,9 +6,9 @@
 
 ## Hierarchy
 
-- *Error*
+- `Error`
 
-  ↳ **ReactFireError**
+  ↳ **`ReactFireError`**
 
 ## Table of contents
 
@@ -34,106 +34,128 @@
 
 ### constructor
 
-\+ **new ReactFireError**(`code`: *string*, `message`: *string*, `customData?`: *Record*<string, unknown\>): [*ReactFireError*](index.reactfireerror.md)
+• **new ReactFireError**(`code`, `message`, `customData?`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `code` | *string* |
-| `message` | *string* |
-| `customData?` | *Record*<string, unknown\> |
+| `code` | `string` |
+| `message` | `string` |
+| `customData?` | `Record`<`string`, `unknown`\> |
 
-**Returns:** [*ReactFireError*](index.reactfireerror.md)
+#### Overrides
 
-Overrides: Error.constructor
+Error.constructor
 
-Defined in: [src/index.ts:11](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L11)
+#### Defined in
+
+[src/index.ts:11](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L11)
 
 ## Properties
 
 ### code
 
-• `Readonly` **code**: *string*
+• `Readonly` **code**: `string`
 
 ___
 
 ### customData
 
-• `Optional` **customData**: *Record*<string, unknown\>
+• `Optional` **customData**: `Record`<`string`, `unknown`\>
 
 ___
 
 ### message
 
-• **message**: *string*
+• **message**: `string`
 
-Inherited from: Error.message
+#### Inherited from
 
-Defined in: node_modules/typescript/lib/lib.es5.d.ts:974
+Error.message
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es5.d.ts:974
 
 ___
 
 ### name
 
-• `Readonly` **name**: ``"ReactFireError"``= 'ReactFireError'
+• `Readonly` **name**: ``"ReactFireError"``
 
-Overrides: Error.name
+#### Overrides
 
-Defined in: [src/index.ts:11](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L11)
+Error.name
+
+#### Defined in
+
+[src/index.ts:11](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L11)
 
 ___
 
 ### stack
 
-• `Optional` **stack**: *string*
+• `Optional` **stack**: `string`
 
-Inherited from: Error.stack
+#### Inherited from
 
-Defined in: node_modules/typescript/lib/lib.es5.d.ts:975
+Error.stack
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es5.d.ts:975
 
 ___
 
 ### prepareStackTrace
 
-▪ `Static` `Optional` **prepareStackTrace**: (`err`: Error, `stackTraces`: CallSite[]) => *any*
-
-Optional override for formatting stack traces
-
-**`see`** https://v8.dev/docs/stack-trace-api#customizing-stack-traces
+▪ `Static` `Optional` **prepareStackTrace**: (`err`: `Error`, `stackTraces`: `CallSite`[]) => `any`
 
 #### Type declaration
 
-▸ (`err`: Error, `stackTraces`: CallSite[]): *any*
+▸ (`err`, `stackTraces`): `any`
 
-#### Parameters
+Optional override for formatting stack traces
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `err` | Error |
-| `stackTraces` | CallSite[] |
+| `err` | `Error` |
+| `stackTraces` | `CallSite`[] |
 
-**Returns:** *any*
+##### Returns
 
-Inherited from: Error.prepareStackTrace
+`any`
 
-Defined in: node_modules/@types/node/globals.d.ts:11
+#### Inherited from
+
+Error.prepareStackTrace
+
+#### Defined in
+
+node_modules/@types/node/globals.d.ts:11
 
 ___
 
 ### stackTraceLimit
 
-▪ `Static` **stackTraceLimit**: *number*
+▪ `Static` **stackTraceLimit**: `number`
 
-Inherited from: Error.stackTraceLimit
+#### Inherited from
 
-Defined in: node_modules/@types/node/globals.d.ts:13
+Error.stackTraceLimit
+
+#### Defined in
+
+node_modules/@types/node/globals.d.ts:13
 
 ## Methods
 
 ### captureStackTrace
 
-▸ `Static` **captureStackTrace**(`targetObject`: *object*, `constructorOpt?`: Function): *void*
+▸ `Static` **captureStackTrace**(`targetObject`, `constructorOpt?`): `void`
 
 Create .stack property on a target object
 
@@ -141,11 +163,17 @@ Create .stack property on a target object
 
 | Name | Type |
 | :------ | :------ |
-| `targetObject` | *object* |
-| `constructorOpt?` | Function |
+| `targetObject` | `object` |
+| `constructorOpt?` | `Function` |
 
-**Returns:** *void*
+#### Returns
 
-Inherited from: Error.captureStackTrace
+`void`
 
-Defined in: node_modules/@types/node/globals.d.ts:4
+#### Inherited from
+
+Error.captureStackTrace
+
+#### Defined in
+
+node_modules/@types/node/globals.d.ts:4

@@ -93,7 +93,7 @@
     "size-limit": "^4.6.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.2.0",
-    "typedoc": "^0.20.35",
+    "typedoc": "^0.21.2",
     "typedoc-plugin-markdown": "^3.6.1",
     "typescript": "^4.2.4"
   },

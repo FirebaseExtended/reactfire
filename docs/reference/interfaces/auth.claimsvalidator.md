@@ -6,19 +6,25 @@
 
 ## Callable
 
-▸ **ClaimsValidator**(`claims`: { [key: string]: *any*;  }): *object*
+### ClaimsValidator
+
+▸ **ClaimsValidator**(`claims`): `Object`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `claims` | *object* |
+| `claims` | `Object` |
 
-**Returns:** *object*
+#### Returns
+
+`Object`
 
 | Name | Type |
 | :------ | :------ |
-| `errors` | {} \| [*ClaimCheckErrors*](auth.claimcheckerrors.md) |
-| `hasRequiredClaims` | *boolean* |
+| `errors` | {} \| [`ClaimCheckErrors`](auth.claimcheckerrors.md) |
+| `hasRequiredClaims` | `boolean` |
 
-Defined in: [src/auth.tsx:93](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L93)
+#### Defined in
+
+[src/auth.tsx:93](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L93)
