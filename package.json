@@ -35,8 +35,12 @@
   },
   "eslint": {
     "rules": {
-      "react-hooks/rules-of-hooks": "error"
-    }
+      "react-hooks/rules-of-hooks": "error",
+      "no-only-tests/no-only-tests": "error"
+    },
+    "plugins": [
+      "no-only-tests"
+    ]
   },
   "prettier": {
     "singleQuote": true,
@@ -75,6 +79,7 @@
     "@types/react-dom": "^16.9.8",
     "babel-jest": "^26.6.3",
     "babel-plugin-minify-replace": "^0.5.0",
+    "eslint-plugin-no-only-tests": "^2.6.0",
     "firebase": "^8.1.1",
     "firebase-admin": "^9.7.0",
     "firebase-tools": "^9.10.0",
