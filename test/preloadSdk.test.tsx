@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom/extend-expect';
-import { render, waitFor } from '@testing-library/react';
+import { act as actOnHook, renderHook } from '@testing-library/react-hooks';
 import firebase from 'firebase/app';
-import * as React from 'react';
 import { FirebaseAppProvider, preloadFirestore, useFirestore } from '..';
+import * as React from 'react';
 
 describe('Preload SDK', () => {
   let app: firebase.app.App;
@@ -29,41 +29,42 @@ describe('Preload SDK', () => {
 
   describe('useFirestore', () => {
     it('awaits the preloadFirestore setup', async () => {
-      let preloadResolved = false;
-      let preloadResolve: (v?: unknown) => void;
+      let resolver: Function;
+      const promise = new Promise((res) => {
+        resolver = res;
+      });
 
-      preloadFirestore({
+      const preloadPromise = preloadFirestore({
         firebaseApp: app,
-        setup: () => new Promise((resolve) => (preloadResolve = resolve)),
-      }).then(() => (preloadResolved = true));
+        setup: async () => {
+          await promise;
+        },
+      });
 
-      const Firestore = () => {
-        // @ts-ignore: It's ok that `firestore` is unused here
-        const firestore = useFirestore(); // eslint-disable-line @typescript-eslint/no-unused-vars
-        return <div data-testid="success"></div>;
-      };
+      const { result, waitFor } = renderHook(() => useFirestore(), {
+        wrapper: ({ children }: { children: React.ReactNode }) => (
+          <FirebaseAppProvider firebaseApp={app} suspense={true}>
+            {children}
+          </FirebaseAppProvider>
+        ),
+      });
 
-      const { getByTestId } = render(
-        <FirebaseAppProvider firebaseApp={app} suspense={true}>
-          <React.Suspense fallback={<h1 data-testid="fallback">Fallback</h1>}>
-            <Firestore />
-          </React.Suspense>
-        </FirebaseAppProvider>
-      );
+      // Even though Firestore is available, useFirestore
+      // shouldn't return until the setup function resolvess
+      await waitFor(() => !!app.firestore);
+      expect(result.current).toBe(undefined);
 
-      await waitFor(() => getByTestId('fallback'));
-      expect(preloadResolved).toEqual(false);
+      actOnHook(() => resolver());
+      await preloadPromise;
+      await waitFor(() => {
+        if (result.all.length > 0) {
+          return true;
+        } else {
+          return false;
+        }
+      });
 
-      await waitFor(() => getByTestId('success'))
-        .then(() => fail('expected throw'))
-        .catch(() => {});
-      expect(preloadResolved).toEqual(false);
-
-      // @ts-ignore: "used before assigned" doesn't apply here because we shouldn't get here until resolve is set
-      preloadResolve();
-
-      await waitFor(() => getByTestId('success'));
-      expect(preloadResolved).toEqual(true);
+      expect(result.current).toBeDefined();
     });
   });
 });

@@ -5,11 +5,11 @@ import { Auth } from './Auth';
 import { Firestore } from './Firestore';
 import { RealtimeDatabase } from './RealtimeDatabase';
 import { RemoteConfig } from './RemoteConfig';
+import { Storage } from './Storage';
 
 // Import auth directly because most components need it
 // Other Firebase libraries can be lazy-loaded as-needed
 import 'firebase/auth';
-import { Storage } from './Storage';
 
 export const App = ({ firebaseConfig }: { firebaseConfig: { [key: string]: unknown } }) => {
   return (

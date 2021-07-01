@@ -3,10 +3,9 @@ import { renderHook, act as hooksAct, cleanup as hooksCleanup } from '@testing-l
 import firebase from 'firebase';
 import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
-import { FirebaseAppProvider, AuthCheck, useUser, useSigninCheck, ClaimCheckErrors, ClaimsValidator } from '..';
+import { FirebaseAppProvider, AuthCheck, useUser, useSigninCheck, ClaimCheckErrors, ClaimsValidator, preloadAuth } from '..';
 import { act } from 'react-dom/test-utils';
 import { baseConfig } from './appConfig';
-import * as firebaseAdmin from 'firebase-admin';
 
 describe('Authentication', () => {
   let app: firebase.app.App;
@@ -15,11 +14,11 @@ describe('Authentication', () => {
   const Provider = ({ children }: { children: React.ReactNode }) => <FirebaseAppProvider firebaseApp={app}>{children}</FirebaseAppProvider>;
 
   const AuthCheckWrapper = (props?: { children?: any }) => (
-    <Provider>
+    <FirebaseAppProvider firebaseApp={app} suspense={true}>
       <React.Suspense fallback={'loading'}>
         <AuthCheck fallback={<h1 data-testid="signed-out">not signed in</h1>}>{props?.children || <h1 data-testid="signed-in">signed in</h1>}</AuthCheck>
       </React.Suspense>
-    </Provider>
+    </FirebaseAppProvider>
   );
 
   beforeAll(() => {
@@ -37,9 +36,6 @@ describe('Authentication', () => {
       return realConsoleInfo.call(console, args);
     });
     app.auth().useEmulator('http://localhost:9099/');
-
-    // Use admin to test custom claims
-    firebaseAdmin.initializeApp({ projectId: 'some-project' });
 
     signIn = async () => {
       return app
@@ -129,6 +125,8 @@ describe('Authentication', () => {
 
   describe('useSigninCheck()', () => {
     it('accurately reflects signed-in state', async () => {
+      await preloadAuth({ firebaseApp: app });
+
       const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck(), { wrapper: Provider });
 
       await waitForHookCondition(() => result.current.status === 'success');
@@ -144,6 +142,13 @@ describe('Authentication', () => {
       // Signed in
       expect(app.auth().currentUser).not.toBeNull();
       expect(result.current.data).toEqual({ signedIn: true, hasRequiredClaims: true, user: app.auth().currentUser });
+
+      // Signed out again
+      await hooksAct(async () => {
+        await app.auth().signOut();
+      });
+      expect(app.auth().currentUser).toBeNull();
+      expect(result.current.data).toEqual({ signedIn: false, hasRequiredClaims: false });
     });
 
     it('recognizes valid custom claims', async () => {
@@ -274,6 +279,37 @@ describe('Authentication', () => {
 
       expect(app.auth().currentUser).not.toBeNull();
       expect(result.current.data).toEqual(app.auth().currentUser);
+    });
+
+    it('does not show a logged-out user after navigating away', async () => {
+      await preloadAuth({ firebaseApp: app });
+
+      await signIn();
+
+      // a component that conditionally renders its child based on props
+      const ConditionalRenderer = ({ renderChildren }: { renderChildren: boolean }) => {
+        if (renderChildren) {
+          return <AuthCheckWrapper />;
+        } else {
+          return <span data-testid="no-children">Filler</span>;
+        }
+      };
+
+      // render the child and make sure it has the initial value
+      const { findByTestId, rerender } = render(<ConditionalRenderer renderChildren={true} />);
+      await findByTestId('signed-in');
+
+      // unrender the child, causing it to get cleaned up and not listen any more
+      rerender(<ConditionalRenderer renderChildren={false} />);
+      const placeHolderElement = await findByTestId('no-children');
+      expect(placeHolderElement).toHaveTextContent('Filler');
+
+      // while no components are actively subscribed, sign out
+      await act(async () => await app.auth().signOut());
+
+      // render the child again and make sure it has the new value, not a stale one
+      rerender(<ConditionalRenderer renderChildren={true} />);
+      await findByTestId('signed-out');
     });
   });
 });

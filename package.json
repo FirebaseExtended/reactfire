@@ -35,8 +35,12 @@
   },
   "eslint": {
     "rules": {
-      "react-hooks/rules-of-hooks": "error"
-    }
+      "react-hooks/rules-of-hooks": "error",
+      "no-only-tests/no-only-tests": "error"
+    },
+    "plugins": [
+      "no-only-tests"
+    ]
   },
   "prettier": {
     "singleQuote": true,
@@ -74,31 +78,33 @@
     "@types/react": "^16.9.49",
     "@types/react-dom": "^16.9.8",
     "babel-jest": "^26.6.3",
-    "firebase": "9.0.0-beta.1",
+    "babel-plugin-minify-replace": "^0.5.0",
+    "eslint-plugin-no-only-tests": "^2.6.0",
+    "firebase": "9.0.0-beta.5",
     "firebase-admin": "^9.7.0",
     "firebase-tools": "^9.10.0",
     "globalthis": "^1.0.1",
     "husky": "^4.3.0",
     "jest-environment-jsdom": "^26.6.2",
     "node-fetch": "^2.6.1",
-    "react": "experimental",
-    "react-dom": "experimental",
-    "react-test-renderer": "^16.13.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-test-renderer": "^17.0.2",
     "size-limit": "^4.6.0",
     "tsdx": "^0.14.1",
-    "tslib": "^2.0.1",
-    "typedoc": "^0.20.35",
+    "tslib": "^2.2.0",
+    "typedoc": "^0.21.2",
     "typedoc-plugin-markdown": "^3.6.1",
-    "typescript": "^4.0.3"
+    "typescript": "^4.2.4"
   },
   "dependencies": {
-    "babel-plugin-minify-replace": "^0.5.0",
-    "rxfire": "0.500.0-canary.0df3466",
-    "rxjs": "^6.6.3"
+    "rxfire": "6.0.0-canary.da26625",
+    "rxjs": "^6.6.3 || ^7.0.1"
   },
   "resolutions": {
     "tsdx/**/jest": "^26.6.3",
     "tsdx/**/ts-jest": "^26.5.5",
-    "tsdx/**/prettier": "^2.2.1"
+    "tsdx/**/prettier": "^2.2.1",
+    "tsdx/**/typescript": "^4.2.4"
   }
 }

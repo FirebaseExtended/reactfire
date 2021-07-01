@@ -1,15 +1,17 @@
 import * as React from 'react';
 import { user } from 'rxfire/auth';
 import { preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus, ReactFireError } from './';
-import { from, of } from 'rxjs';
+import { from, lastValueFrom, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp';
 
 import type { Auth, User, IdTokenResult } from 'firebase/auth';
 type Claims = IdTokenResult['claims'];
 
 export async function preloadUser(authResolver: () => Promise<Auth>) {
   const auth = await authResolver();
-  return preloadObservable(user(auth), `auth:user:${auth.name}`);
+  const user$ = preloadObservable(user(auth), `auth:user:${auth.name}`);
+  return lastValueFrom(user$);
 }
 
 /**
@@ -206,6 +208,13 @@ export function ClaimsCheck({ user, fallback, children, requiredClaims }: Claims
   const { claims } = data;
   const missingClaims: { [key: string]: { expected: string; actual: string | undefined } } = {};
 
+  const suspenseMode = useSuspenseEnabledFromConfigAndContext();
+  if (!suspenseMode) {
+    console.warn(
+      'ClaimsCheck is deprecated and only works when ReactFire is in experimental Suspense Mode. Use useSigninCheck or set suspense={true} in FirebaseAppProvider if you want to use this component.'
+    );
+  }
+
   if (requiredClaims) {
     Object.keys(requiredClaims).forEach((claim) => {
       if (requiredClaims[claim] !== claims[claim]) {
@@ -233,6 +242,13 @@ export function ClaimsCheck({ user, fallback, children, requiredClaims }: Claims
  */
 export function AuthCheck({ fallback, children, requiredClaims }: AuthCheckProps): JSX.Element {
   const { data: user } = useUser<User>();
+
+  const suspenseMode = useSuspenseEnabledFromConfigAndContext();
+  if (!suspenseMode) {
+    console.warn(
+      'AuthCheck is deprecated and only works when ReactFire is in experimental Suspense Mode. Use useSigninCheck or set suspense={true} in FirebaseAppProvider if you want to use this component.'
+    );
+  }
 
   if (user) {
     return requiredClaims ? (

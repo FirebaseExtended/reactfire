@@ -6,13 +6,13 @@
 
 ## Hierarchy
 
-* [*ReactFireOptions*](index.reactfireoptions.md)<[*SigninCheckResult*](../modules/auth.md#signincheckresult)\>
+- [`ReactFireOptions`](index.reactfireoptions.md)<[`SigninCheckResult`](../modules/auth.md#signincheckresult)\>
 
-  ↳ **SignInCheckOptionsBasic**
+  ↳ **`SignInCheckOptionsBasic`**
 
-  ↳↳ [*SignInCheckOptionsClaimsObject*](auth.signincheckoptionsclaimsobject.md)
+  ↳↳ [`SignInCheckOptionsClaimsObject`](auth.signincheckoptionsclaimsobject.md)
 
-  ↳↳ [*SignInCheckOptionsClaimsValidator*](auth.signincheckoptionsclaimsvalidator.md)
+  ↳↳ [`SignInCheckOptionsClaimsValidator`](auth.signincheckoptionsclaimsvalidator.md)
 
 ## Table of contents
 
@@ -28,48 +28,66 @@
 
 ### forceRefresh
 
-• `Optional` **forceRefresh**: *boolean*
+• `Optional` **forceRefresh**: `boolean`
 
-Defined in: [src/auth.tsx:85](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L85)
+#### Defined in
+
+[src/auth.tsx:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L86)
 
 ___
 
 ### idField
 
-• `Optional` **idField**: *string*
+• `Optional` **idField**: `string`
 
-Inherited from: [ReactFireOptions](index.reactfireoptions.md).[idField](index.reactfireoptions.md#idfield)
+#### Inherited from
 
-Defined in: [src/index.ts:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L23)
+[ReactFireOptions](index.reactfireoptions.md).[idField](index.reactfireoptions.md#idfield)
+
+#### Defined in
+
+[src/index.ts:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L23)
 
 ___
 
 ### initialData
 
-• `Optional` **initialData**: *any*
+• `Optional` **initialData**: `any`
 
-Inherited from: [ReactFireOptions](index.reactfireoptions.md).[initialData](index.reactfireoptions.md#initialdata)
+#### Inherited from
 
-Defined in: [src/index.ts:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L24)
+[ReactFireOptions](index.reactfireoptions.md).[initialData](index.reactfireoptions.md#initialdata)
+
+#### Defined in
+
+[src/index.ts:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L24)
 
 ___
 
 ### startWithValue
 
-• `Optional` **startWithValue**: *any*
+• `Optional` **startWithValue**: `any`
 
 **`deprecated`** use initialData instead
 
-Inherited from: [ReactFireOptions](index.reactfireoptions.md).[startWithValue](index.reactfireoptions.md#startwithvalue)
+#### Inherited from
 
-Defined in: [src/index.ts:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L28)
+[ReactFireOptions](index.reactfireoptions.md).[startWithValue](index.reactfireoptions.md#startwithvalue)
+
+#### Defined in
+
+[src/index.ts:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L28)
 
 ___
 
 ### suspense
 
-• `Optional` **suspense**: *boolean*
+• `Optional` **suspense**: `boolean`
 
-Inherited from: [ReactFireOptions](index.reactfireoptions.md).[suspense](index.reactfireoptions.md#suspense)
+#### Inherited from
 
-Defined in: [src/index.ts:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L29)
+[ReactFireOptions](index.reactfireoptions.md).[suspense](index.reactfireoptions.md#suspense)
+
+#### Defined in
+
+[src/index.ts:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L29)

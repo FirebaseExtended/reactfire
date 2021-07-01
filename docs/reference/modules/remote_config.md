@@ -16,89 +16,109 @@
 
 ### useRemoteConfigAll
 
-▸ **useRemoteConfigAll**(`key`: *string*): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<[*AllParameters*](remote_config_getvalue.md#allparameters)\>
+▸ **useRemoteConfigAll**(`key`): [`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<[`AllParameters`](remote_config_getvalue.md#allparameters)\>
 
 Convience method similar to useRemoteConfigValue. Returns allRemote Config parameters.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `key` | *string* | The parameter key in Remote Config |
+| `key` | `string` | The parameter key in Remote Config |
 
-**Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<[*AllParameters*](remote_config_getvalue.md#allparameters)\>
+#### Returns
 
-Defined in: [src/remote-config/index.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L78)
+[`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<[`AllParameters`](remote_config_getvalue.md#allparameters)\>
+
+#### Defined in
+
+[src/remote-config/index.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L78)
 
 ___
 
 ### useRemoteConfigBoolean
 
-▸ **useRemoteConfigBoolean**(`key`: *string*): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<boolean\>
+▸ **useRemoteConfigBoolean**(`key`): [`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`boolean`\>
 
 Convience method similar to useRemoteConfigValue. Returns a `boolean` from a Remote Config parameter.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `key` | *string* | The parameter key in Remote Config |
+| `key` | `string` | The parameter key in Remote Config |
 
-**Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<boolean\>
+#### Returns
 
-Defined in: [src/remote-config/index.tsx:69](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L69)
+[`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`boolean`\>
+
+#### Defined in
+
+[src/remote-config/index.tsx:69](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L69)
 
 ___
 
 ### useRemoteConfigNumber
 
-▸ **useRemoteConfigNumber**(`key`: *string*): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<number\>
+▸ **useRemoteConfigNumber**(`key`): [`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`number`\>
 
 Convience method similar to useRemoteConfigValue. Returns a `number` from a Remote Config parameter.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `key` | *string* | The parameter key in Remote Config |
+| `key` | `string` | The parameter key in Remote Config |
 
-**Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<number\>
+#### Returns
 
-Defined in: [src/remote-config/index.tsx:60](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L60)
+[`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`number`\>
+
+#### Defined in
+
+[src/remote-config/index.tsx:60](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L60)
 
 ___
 
 ### useRemoteConfigString
 
-▸ **useRemoteConfigString**(`key`: *string*): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<string\>
+▸ **useRemoteConfigString**(`key`): [`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`string`\>
 
 Convience method similar to useRemoteConfigValue. Returns a `string` from a Remote Config parameter.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `key` | *string* | The parameter key in Remote Config |
+| `key` | `string` | The parameter key in Remote Config |
 
-**Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<string\>
+#### Returns
 
-Defined in: [src/remote-config/index.tsx:51](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L51)
+[`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`string`\>
+
+#### Defined in
+
+[src/remote-config/index.tsx:51](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L51)
 
 ___
 
 ### useRemoteConfigValue
 
-▸ **useRemoteConfigValue**(`key`: *string*): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<RemoteConfigValue\>
+▸ **useRemoteConfigValue**(`key`): [`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`RemoteConfigValue`\>
 
 Accepts a key and optionally a Remote Config instance. Returns a
 Remote Config Value.
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `key` | *string* | The parameter key in Remote Config |
+| `key` | `string` | The parameter key in Remote Config |
 
-**Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<RemoteConfigValue\>
+#### Returns
 
-Defined in: [src/remote-config/index.tsx:42](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L42)
+[`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`RemoteConfigValue`\>
+
+#### Defined in
+
+[src/remote-config/index.tsx:42](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L42)

@@ -73,28 +73,32 @@ export function useObservable<T>(observableId: string, source: Observable<T | an
 
   const suspenseEnabled = useSuspenseEnabledFromConfigAndContext(config.suspense);
 
-  if (!observable.hasValue && (!config?.initialData ?? !config?.startWithValue)) {
-    if (suspenseEnabled === true) {
-      throw observable.firstEmission;
-    }
+  if (suspenseEnabled === true && !observable.hasValue && (!config?.initialData ?? !config?.startWithValue)) {
+    throw observable.firstEmission;
   }
 
   const [latest, setValue] = React.useState(() => (observable.hasValue ? observable.value : config.initialData ?? config.startWithValue));
+  const [isComplete, setIsComplete] = React.useState(false);
+  const [hasError, setHasError] = React.useState(false);
   React.useEffect(() => {
-    const subscription = observable.subscribe(
-      (v) => {
+    const subscription = observable.subscribe({
+      next: (v) => {
         setValue(() => v);
       },
-      (e) => {
+      error: (e) => {
+        setHasError(true);
         throw e;
-      }
-    );
+      },
+      complete: () => {
+        setIsComplete(true);
+      },
+    });
     return () => subscription.unsubscribe();
   }, [observable]);
 
   let status: ObservableStatus<T>['status'];
 
-  if (observable.hasError) {
+  if (hasError) {
     status = 'error';
   } else if (observable.hasValue || hasInitialData) {
     status = 'success';
@@ -105,7 +109,7 @@ export function useObservable<T>(observableId: string, source: Observable<T | an
   return {
     status,
     hasEmitted: observable.hasValue || hasInitialData,
-    isComplete: observable.isStopped,
+    isComplete: isComplete,
     data: latest,
     error: observable.ourError,
     firstValuePromise: observable.firstEmission,

@@ -6,15 +6,15 @@
 
 ## Type parameters
 
-| Name | Default |
+| Name | Type |
 | :------ | :------ |
-| `T` | *unknown* |
+| `T` | `unknown` |
 
 ## Hierarchy
 
-* **ReactFireOptions**
+- **`ReactFireOptions`**
 
-  ↳ [*SignInCheckOptionsBasic*](auth.signincheckoptionsbasic.md)
+  ↳ [`SignInCheckOptionsBasic`](auth.signincheckoptionsbasic.md)
 
 ## Table of contents
 
@@ -29,32 +29,40 @@
 
 ### idField
 
-• `Optional` **idField**: *string*
+• `Optional` **idField**: `string`
 
-Defined in: [src/index.ts:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L23)
+#### Defined in
+
+[src/index.ts:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L23)
 
 ___
 
 ### initialData
 
-• `Optional` **initialData**: *any*
+• `Optional` **initialData**: `any`
 
-Defined in: [src/index.ts:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L24)
+#### Defined in
+
+[src/index.ts:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L24)
 
 ___
 
 ### startWithValue
 
-• `Optional` **startWithValue**: *any*
+• `Optional` **startWithValue**: `any`
 
 **`deprecated`** use initialData instead
 
-Defined in: [src/index.ts:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L28)
+#### Defined in
+
+[src/index.ts:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L28)
 
 ___
 
 ### suspense
 
-• `Optional` **suspense**: *boolean*
+• `Optional` **suspense**: `boolean`
 
-Defined in: [src/index.ts:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L29)
+#### Defined in
+
+[src/index.ts:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L29)

@@ -1,0 +1,2 @@
+# Reduce PR noise for auto-generated markdown.
+docs/reference/**/*.md linguist-generated=true
