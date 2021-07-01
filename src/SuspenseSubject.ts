@@ -19,26 +19,26 @@ export class SuspenseSubject<T> extends Subject<T> {
     super();
     this._firstEmission = new Promise<void>(resolve => (this._resolveFirstEmission = resolve));
     this._innerObservable = innerObservable.pipe(
-      tap(
-        v => {
+      tap({
+        next: v => {
           this._next(v);
         },
-        e => {
+        error: e => {
           // save the error, so that we can raise on subscription or .value
           // resolve the promise, so suspense tries again
           this._error = e;
           this._resolveFirstEmission();
         }
-      ),
+      }),
       catchError(() => empty()),
       shareReplay(1)
     );
     // warm up the observable
     this._warmupSubscription = this._innerObservable.subscribe();
 
-    // set a timeout for reseting the cache, subscriptions will cancel the timeout
+    // set a timeout for resetting the cache, subscriptions will cancel the timeout
     // and reschedule again on unsubscribe
-    this._timeoutHandler = setTimeout(this._reset, this._timeoutWindow);
+    this._timeoutHandler = setTimeout(this._reset.bind(this), this._timeoutWindow);
   }
 
   get hasValue(): boolean {
@@ -84,7 +84,7 @@ export class SuspenseSubject<T> extends Subject<T> {
       clearTimeout(this._timeoutHandler);
     }
     this._innerSubscriber = this._innerObservable.subscribe(subscriber);
-    return this._innerSubscriber.add(this._reset);
+    return this._innerSubscriber;
   }
 
   get ourError() {

@@ -6,9 +6,9 @@
 
 ## Hierarchy
 
-* [*SignInCheckOptionsBasic*](auth.signincheckoptionsbasic.md)
+- [`SignInCheckOptionsBasic`](auth.signincheckoptionsbasic.md)
 
-  ↳ **SignInCheckOptionsClaimsValidator**
+  ↳ **`SignInCheckOptionsClaimsValidator`**
 
 ## Table of contents
 
@@ -25,58 +25,80 @@
 
 ### forceRefresh
 
-• `Optional` **forceRefresh**: *boolean*
+• `Optional` **forceRefresh**: `boolean`
 
-Inherited from: [SignInCheckOptionsBasic](auth.signincheckoptionsbasic.md).[forceRefresh](auth.signincheckoptionsbasic.md#forcerefresh)
+#### Inherited from
 
-Defined in: [src/auth.tsx:85](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L85)
+[SignInCheckOptionsBasic](auth.signincheckoptionsbasic.md).[forceRefresh](auth.signincheckoptionsbasic.md#forcerefresh)
+
+#### Defined in
+
+[src/auth.tsx:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L86)
 
 ___
 
 ### idField
 
-• `Optional` **idField**: *string*
+• `Optional` **idField**: `string`
 
-Inherited from: [SignInCheckOptionsBasic](auth.signincheckoptionsbasic.md).[idField](auth.signincheckoptionsbasic.md#idfield)
+#### Inherited from
 
-Defined in: [src/index.ts:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L23)
+[SignInCheckOptionsBasic](auth.signincheckoptionsbasic.md).[idField](auth.signincheckoptionsbasic.md#idfield)
+
+#### Defined in
+
+[src/index.ts:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L23)
 
 ___
 
 ### initialData
 
-• `Optional` **initialData**: *any*
+• `Optional` **initialData**: `any`
 
-Inherited from: [SignInCheckOptionsBasic](auth.signincheckoptionsbasic.md).[initialData](auth.signincheckoptionsbasic.md#initialdata)
+#### Inherited from
 
-Defined in: [src/index.ts:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L24)
+[SignInCheckOptionsBasic](auth.signincheckoptionsbasic.md).[initialData](auth.signincheckoptionsbasic.md#initialdata)
+
+#### Defined in
+
+[src/index.ts:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L24)
 
 ___
 
 ### startWithValue
 
-• `Optional` **startWithValue**: *any*
+• `Optional` **startWithValue**: `any`
 
 **`deprecated`** use initialData instead
 
-Inherited from: [SignInCheckOptionsBasic](auth.signincheckoptionsbasic.md).[startWithValue](auth.signincheckoptionsbasic.md#startwithvalue)
+#### Inherited from
 
-Defined in: [src/index.ts:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L28)
+[SignInCheckOptionsBasic](auth.signincheckoptionsbasic.md).[startWithValue](auth.signincheckoptionsbasic.md#startwithvalue)
+
+#### Defined in
+
+[src/index.ts:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L28)
 
 ___
 
 ### suspense
 
-• `Optional` **suspense**: *boolean*
+• `Optional` **suspense**: `boolean`
 
-Inherited from: [SignInCheckOptionsBasic](auth.signincheckoptionsbasic.md).[suspense](auth.signincheckoptionsbasic.md#suspense)
+#### Inherited from
 
-Defined in: [src/index.ts:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L29)
+[SignInCheckOptionsBasic](auth.signincheckoptionsbasic.md).[suspense](auth.signincheckoptionsbasic.md#suspense)
+
+#### Defined in
+
+[src/index.ts:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L29)
 
 ___
 
 ### validateCustomClaims
 
-• **validateCustomClaims**: [*ClaimsValidator*](auth.claimsvalidator.md)
+• **validateCustomClaims**: [`ClaimsValidator`](auth.claimsvalidator.md)
 
-Defined in: [src/auth.tsx:100](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L100)
+#### Defined in
+
+[src/auth.tsx:101](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L101)

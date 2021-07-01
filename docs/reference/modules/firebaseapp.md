@@ -7,13 +7,6 @@
 ### References
 
 - [PreloadOptions](firebaseapp.md#preloadoptions)
-- [analytics](firebaseapp.md#analytics)
-- [auth](firebaseapp.md#auth)
-- [database](firebaseapp.md#database)
-- [firestore](firebaseapp.md#firestore)
-- [functions](firebaseapp.md#functions)
-- [messaging](firebaseapp.md#messaging)
-- [performance](firebaseapp.md#performance)
 - [preloadAnalytics](firebaseapp.md#preloadanalytics)
 - [preloadAuth](firebaseapp.md#preloadauth)
 - [preloadDatabase](firebaseapp.md#preloaddatabase)
@@ -23,8 +16,6 @@
 - [preloadPerformance](firebaseapp.md#preloadperformance)
 - [preloadRemoteConfig](firebaseapp.md#preloadremoteconfig)
 - [preloadStorage](firebaseapp.md#preloadstorage)
-- [remoteConfig](firebaseapp.md#remoteconfig)
-- [storage](firebaseapp.md#storage)
 - [useAnalytics](firebaseapp.md#useanalytics)
 - [useAuth](firebaseapp.md#useauth)
 - [useDatabase](firebaseapp.md#usedatabase)
@@ -51,48 +42,6 @@
 ### PreloadOptions
 
 Re-exports: [PreloadOptions](sdk.md#preloadoptions)
-
-___
-
-### analytics
-
-Re-exports: [analytics](sdk.md#analytics)
-
-___
-
-### auth
-
-Re-exports: [auth](sdk.md#auth)
-
-___
-
-### database
-
-Re-exports: [database](sdk.md#database)
-
-___
-
-### firestore
-
-Re-exports: [firestore](sdk.md#firestore)
-
-___
-
-### functions
-
-Re-exports: [functions](sdk.md#functions)
-
-___
-
-### messaging
-
-Re-exports: [messaging](sdk.md#messaging)
-
-___
-
-### performance
-
-Re-exports: [performance](sdk.md#performance)
 
 ___
 
@@ -147,18 +96,6 @@ ___
 ### preloadStorage
 
 Re-exports: [preloadStorage](sdk.md#preloadstorage)
-
-___
-
-### remoteConfig
-
-Re-exports: [remoteConfig](sdk.md#remoteconfig)
-
-___
-
-### storage
-
-Re-exports: [storage](sdk.md#storage)
 
 ___
 
@@ -218,58 +155,76 @@ Re-exports: [useStorage](sdk.md#usestorage)
 
 ### version
 
-• `Const` **version**: *any*
+• `Const` **version**: `any`
 
-Defined in: [src/firebaseApp.tsx:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L23)
+#### Defined in
+
+[src/firebaseApp.tsx:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L23)
 
 ## Functions
 
 ### FirebaseAppProvider
 
-▸ **FirebaseAppProvider**(`props`: Props & { [key: string]: *unknown*;  }): *Element*
+▸ **FirebaseAppProvider**(`props`): `Element`
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `props` | Props & { [key: string]: *unknown*;  } |
+| `props` | `Props` & { [key: string]: `unknown`;  } |
 
-**Returns:** *Element*
+#### Returns
 
-Defined in: [src/firebaseApp.tsx:27](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L27)
+`Element`
+
+#### Defined in
+
+[src/firebaseApp.tsx:27](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L27)
 
 ___
 
 ### useFirebaseApp
 
-▸ **useFirebaseApp**(): App
+▸ **useFirebaseApp**(): `App`
 
-**Returns:** App
+#### Returns
 
-Defined in: [src/firebaseApp.tsx:82](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L82)
+`App`
+
+#### Defined in
+
+[src/firebaseApp.tsx:82](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L82)
 
 ___
 
 ### useIsSuspenseEnabled
 
-▸ **useIsSuspenseEnabled**(): *boolean*
+▸ **useIsSuspenseEnabled**(): `boolean`
 
-**Returns:** *boolean*
+#### Returns
 
-Defined in: [src/firebaseApp.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L64)
+`boolean`
+
+#### Defined in
+
+[src/firebaseApp.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L64)
 
 ___
 
 ### useSuspenseEnabledFromConfigAndContext
 
-▸ **useSuspenseEnabledFromConfigAndContext**(`suspenseFromConfig?`: *boolean*): *boolean*
+▸ **useSuspenseEnabledFromConfigAndContext**(`suspenseFromConfig?`): `boolean`
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `suspenseFromConfig?` | *boolean* |
+| `suspenseFromConfig?` | `boolean` |
 
-**Returns:** *boolean*
+#### Returns
 
-Defined in: [src/firebaseApp.tsx:71](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L71)
+`boolean`
+
+#### Defined in
+
+[src/firebaseApp.tsx:71](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L71)

@@ -24,3 +24,5 @@ reactfire.tgz
 package/
 publish.sh
 unpack.sh
+
+example/.parcel-cache/

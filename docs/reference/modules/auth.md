@@ -31,15 +31,17 @@
 
 ### SigninCheckResult
 
-Ƭ **SigninCheckResult**: { `errors`: {} ; `hasRequiredClaims`: ``false`` ; `signedIn`: ``false`` ; `user`: ``null``  } \| { `errors`: [*ClaimCheckErrors*](../interfaces/auth.claimcheckerrors.md) ; `hasRequiredClaims`: *boolean* ; `signedIn`: ``true`` ; `user`: firebase.User  }
+Ƭ **SigninCheckResult**: { `errors`: {} ; `hasRequiredClaims`: ``false`` ; `signedIn`: ``false`` ; `user`: ``null``  } \| { `errors`: [`ClaimCheckErrors`](../interfaces/auth.claimcheckerrors.md) ; `hasRequiredClaims`: `boolean` ; `signedIn`: ``true`` ; `user`: `firebase.User`  }
 
-Defined in: [src/auth.tsx:70](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L70)
+#### Defined in
+
+[src/auth.tsx:71](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L71)
 
 ## Functions
 
 ### AuthCheck
 
-▸ **AuthCheck**(`__namedParameters`: [*AuthCheckProps*](../interfaces/auth.authcheckprops.md)): JSX.Element
+▸ **AuthCheck**(`__namedParameters`): `JSX.Element`
 
 **`deprecated`** Use `useSignInCheck` instead
 
@@ -47,21 +49,25 @@ Conditionally render children based on signed-in status and [custom claims](http
 
 Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `__namedParameters` | [*AuthCheckProps*](../interfaces/auth.authcheckprops.md) |
+| `__namedParameters` | [`AuthCheckProps`](../interfaces/auth.authcheckprops.md) |
 
-**Returns:** JSX.Element
+#### Returns
 
-Defined in: [src/auth.tsx:240](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L240)
+`JSX.Element`
+
+#### Defined in
+
+[src/auth.tsx:248](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L248)
 
 ___
 
 ### ClaimsCheck
 
-▸ **ClaimsCheck**(`__namedParameters`: [*ClaimsCheckProps*](../interfaces/auth.claimscheckprops.md)): *Element*
+▸ **ClaimsCheck**(`__namedParameters`): `Element`
 
 **`deprecated`** Use `useSignInCheck` instead
 
@@ -69,56 +75,68 @@ Conditionally render children based on [custom claims](https://firebase.google.c
 
 Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `__namedParameters` | [*ClaimsCheckProps*](../interfaces/auth.claimscheckprops.md) |
+| `__namedParameters` | [`ClaimsCheckProps`](../interfaces/auth.claimscheckprops.md) |
 
-**Returns:** *Element*
+#### Returns
 
-Defined in: [src/auth.tsx:210](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L210)
+`Element`
+
+#### Defined in
+
+[src/auth.tsx:211](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L211)
 
 ___
 
 ### preloadUser
 
-▸ **preloadUser**(`options`: { `firebaseApp`: firebase.app.App  }): *Promise*<User\>
+▸ **preloadUser**(`options`): `Promise`<``null`` \| `User`\>
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `options` | *object* |
-| `options.firebaseApp` | firebase.app.App |
+| `options` | `Object` |
+| `options.firebaseApp` | `firebase.app.App` |
 
-**Returns:** *Promise*<User\>
+#### Returns
 
-Defined in: [src/auth.tsx:8](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L8)
+`Promise`<``null`` \| `User`\>
+
+#### Defined in
+
+[src/auth.tsx:9](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L9)
 
 ___
 
 ### useIdTokenResult
 
-▸ **useIdTokenResult**(`user`: firebase.User, `forceRefresh?`: *boolean*, `options?`: [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<firebase.auth.IdTokenResult\>): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.auth.IdTokenResult\>
+▸ **useIdTokenResult**(`user`, `forceRefresh?`, `options?`): [`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`firebase.auth.IdTokenResult`\>
 
-#### Parameters:
+#### Parameters
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
-| `user` | firebase.User | - |
-| `forceRefresh` | *boolean* | false |
-| `options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<firebase.auth.IdTokenResult\> | - |
+| `user` | `firebase.User` | `undefined` |
+| `forceRefresh` | `boolean` | `false` |
+| `options?` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md)<`firebase.auth.IdTokenResult`\> | `undefined` |
 
-**Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.auth.IdTokenResult\>
+#### Returns
 
-Defined in: [src/auth.tsx:38](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L38)
+[`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`firebase.auth.IdTokenResult`\>
+
+#### Defined in
+
+[src/auth.tsx:39](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L39)
 
 ___
 
 ### useSigninCheck
 
-▸ **useSigninCheck**(`options?`: [*SignInCheckOptionsBasic*](../interfaces/auth.signincheckoptionsbasic.md) \| [*SignInCheckOptionsClaimsObject*](../interfaces/auth.signincheckoptionsclaimsobject.md) \| [*SignInCheckOptionsClaimsValidator*](../interfaces/auth.signincheckoptionsclaimsvalidator.md)): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<[*SigninCheckResult*](auth.md#signincheckresult)\>
+▸ **useSigninCheck**(`options?`): [`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<[`SigninCheckResult`](auth.md#signincheckresult)\>
 
 Subscribe to the signed-in status of a user.
 
@@ -150,36 +168,44 @@ const {status, data: signInCheckResult} = useSignInCheck({validateCustomClaims: 
 const {status, data: signInCheckResult} = useSignInCheck({forceRefresh: true, requiredClaims: {admin: true}});
 ```
 
-#### Parameters:
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `options?` | [*SignInCheckOptionsBasic*](../interfaces/auth.signincheckoptionsbasic.md) \| [*SignInCheckOptionsClaimsObject*](../interfaces/auth.signincheckoptionsclaimsobject.md) \| [*SignInCheckOptionsClaimsValidator*](../interfaces/auth.signincheckoptionsclaimsvalidator.md) |
+| `options?` | [`SignInCheckOptionsBasic`](../interfaces/auth.signincheckoptionsbasic.md) \| [`SignInCheckOptionsClaimsObject`](../interfaces/auth.signincheckoptionsclaimsobject.md) \| [`SignInCheckOptionsClaimsValidator`](../interfaces/auth.signincheckoptionsclaimsvalidator.md) |
 
-**Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<[*SigninCheckResult*](auth.md#signincheckresult)\>
+#### Returns
 
-Defined in: [src/auth.tsx:135](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L135)
+[`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<[`SigninCheckResult`](auth.md#signincheckresult)\>
+
+#### Defined in
+
+[src/auth.tsx:136](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L136)
 
 ___
 
 ### useUser
 
-▸ **useUser**<T\>(`options?`: [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\>): [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.User\>
+▸ **useUser**<`T`\>(`options?`): [`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`firebase.User`\>
 
 Subscribe to Firebase auth state changes, including token refresh
 
-#### Type parameters:
-
-| Name | Default |
-| :------ | :------ |
-| `T` | *unknown* |
-
-#### Parameters:
+#### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `options?` | [*ReactFireOptions*](../interfaces/index.reactfireoptions.md)<T\> |
+| `T` | `unknown` |
 
-**Returns:** [*ObservableStatus*](../interfaces/useobservable.observablestatus.md)<firebase.User\>
+#### Parameters
 
-Defined in: [src/auth.tsx:22](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L22)
+| Name | Type |
+| :------ | :------ |
+| `options?` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md)<`T`\> |
+
+#### Returns
+
+[`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`firebase.User`\>
+
+#### Defined in
+
+[src/auth.tsx:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L23)

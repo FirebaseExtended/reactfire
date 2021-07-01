@@ -44,24 +44,35 @@ function proxyComponent(componentName: 'storage'): typeof firebase.storage;
 function proxyComponent(componentName: ComponentName): FirebaseNamespaceComponent {
   let contextualApp: App | undefined;
   const useComponent = (app?: App, suspense?: boolean) => {
+    // Get the app from context,
+    // but prefer a passed-in app over the one from context
     contextualApp = useFirebaseApp();
+    const firebaseApp = app || contextualApp;
+
     const suspenseEnabled = useSuspenseEnabledFromConfigAndContext(suspense);
+    if (suspenseEnabled) {
+      // automatically kick off a lazy-load of the requested SDK
+      const sdkSubject = preload(componentName, firebaseApp);
 
-    const sdkSubject = preload(componentName, app || contextualApp);
-
-    if (!sdkSubject.hasValue && suspenseEnabled) {
-      throw sdkSubject.firstEmission;
-    } else if (!sdkSubject.hasValue && !suspenseEnabled && !firebase[componentName]) {
+      if (sdkSubject.hasValue) {
+        // get value to throw in case there's an error
+        sdkSubject.value; // eslint-disable-line @typescript-eslint/no-unused-expressions
+        return firebase[componentName];
+      } else {
+        throw sdkSubject.firstEmission;
+      }
+    } else if (firebaseApp[componentName]) {
+      // TODO(jamesdaniels): Shouldn't this be firebaseApp?
+      // firebaseApp[componentName].bind(firebaseApp) doesn't seem to work, though
+      return firebase[componentName];
+    } else {
       throw new Error(
         `ReactFire: "firebase/${componentName}" not found. Please import it in your component, or call preload${componentName.charAt(0).toUpperCase() +
           componentName.slice(1)} and wait for it to resolve. ReactFire can only auto-import Firebase libraries if Suspense mode is enabled.`
       );
     }
-
-    // get value to throw if there's an error
-    sdkSubject.value; // eslint-disable-line @typescript-eslint/no-unused-expressions
-    return firebase[componentName];
   };
+
   return new Proxy(useComponent, {
     // @ts-ignore: TODO: Fix the types here
     get: (target, p) => target()[p],
@@ -85,16 +96,6 @@ export const useMessaging = proxyComponent('messaging');
 export const usePerformance = proxyComponent('performance');
 export const useRemoteConfig = proxyComponent('remoteConfig');
 export const useStorage = proxyComponent('storage');
-
-export const auth = useAuth;
-export const analytics = useAnalytics;
-export const database = useDatabase;
-export const firestore = useFirestore;
-export const functions = useFunctions;
-export const messaging = useMessaging;
-export const performance = usePerformance;
-export const remoteConfig = useRemoteConfig;
-export const storage = useStorage;
 
 export type PreloadOptions<T> = {
   firebaseApp: App;
@@ -121,12 +122,14 @@ function preload(componentName: ComponentName, firebaseApp: App, settingsCallbac
   return preloadObservable(
     new Observable(emitter => {
       importSDK(componentName)
-        .then(() => {
+        .then(async () => {
           const instanceFactory: FirebaseInstanceFactory = app[componentName].bind(app);
-          Promise.resolve(settingsCallback(instanceFactory)).then(() => {
-            emitter.next(instanceFactory);
-            emitter.complete();
-          });
+
+          // Make sure settingsCallback completes before returning the SDK
+          // Often, SDK settings must be set before any other calls to that SDK can be made
+          await Promise.resolve(settingsCallback(instanceFactory));
+          emitter.next(instanceFactory);
+          emitter.complete();
         })
         .catch(e => {
           emitter.error(e);
