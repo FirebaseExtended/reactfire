@@ -13,6 +13,9 @@
     "react-firebaseui": "^4.2.0",
     "tailwindcss": "^1.9.1"
   },
+  "browserslist": [
+    "last 1 Chrome version"
+  ],
   "alias": {
     "react": "../node_modules/react",
     "react-dom": "../node_modules/react-dom",
