@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "display": "^0.1.9",
+    "firebase": "^9.0.0-beta.5",
     "react-app-polyfill": "^1.0.0",
     "react-firebaseui": "^4.2.0",
     "tailwindcss": "^1.9.1"

@@ -10713,10 +10713,10 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   dependencies:
     aproba "^1.1.1"
 
-rxfire@6.0.0-canary.da26625:
-  version "6.0.0-canary.da26625"
-  resolved "https://registry.yarnpkg.com/rxfire/-/rxfire-6.0.0-canary.da26625.tgz#32e81227ea98314926adb2af4318ec2ce442ffad"
-  integrity sha512-G1Z1I1joCVm1lasfrpOzbeXsiW2jn/+InVmY+jBs7mmVFOliu6x7nD+719X055JxhK7uhekSvm76UnJOMR4suA==
+rxfire@6.0.0-canary.a9a1aa5:
+  version "6.0.0-canary.a9a1aa5"
+  resolved "https://registry.yarnpkg.com/rxfire/-/rxfire-6.0.0-canary.a9a1aa5.tgz#8f2787c22e98ce43ddbcfd1fb4429a8491b79040"
+  integrity sha512-BZ/E0Db689LvsuDAz7rvaydTvHVh94QATR1ADfUNVNjxtU16ojeOOs4y1zyJ4xvzNI89JLZfaH7haTG+8UFGgw==
   dependencies:
     tslib "^1.9.0 || ~2.1.0"
 
