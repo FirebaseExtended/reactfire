@@ -6,6 +6,7 @@ import type { FirebaseFirestore } from 'firebase/firestore';
 import type { FirebasePerformance } from 'firebase/performance';
 import type { StorageService } from 'firebase/storage';
 import type { RemoteConfig } from 'firebase/remote-config';
+import { useFirebaseApp } from './firebaseApp';
 
 const AuthSdkContext = React.createContext<Auth | undefined>(undefined);
 const DatabaseSdkContext = React.createContext<FirebaseDatabase | undefined>(undefined);
@@ -14,8 +15,28 @@ const StorageSdkContext = React.createContext<StorageService | undefined>(undefi
 const PerformanceSdkContext = React.createContext<FirebasePerformance | undefined>(undefined);
 const RemoteConfigSdkContext = React.createContext<RemoteConfig | undefined>(undefined);
 
-function getSdkProvider<Sdk>(SdkContext: React.Context<Sdk | undefined>) {
+type FirebaseSdks = Auth | FirebaseDatabase | FirebaseFirestore | FirebasePerformance | StorageService | RemoteConfig;
+
+function getSdkProvider<Sdk extends FirebaseSdks>(SdkContext: React.Context<Sdk | undefined>) {
   return function SdkProvider(props: React.PropsWithChildren<{ sdk: Sdk }>) {
+    const contextualAppName = useFirebaseApp().name;
+    let sdkAppName;
+
+    // @ts-ignore Auth doesn't have field 'app'
+    if (props.sdk.app) {
+      // @ts-ignore Auth doesn't have field 'app'
+      sdkAppName = props.sdk.app.name;
+
+      // @ts-ignore only Auth has field 'name'
+    } else if (props.sdk.name) {
+      // @ts-ignore only Auth has field 'name'
+      sdkAppName = props.sdk.name;
+    }
+
+    if (sdkAppName !== contextualAppName) {
+      throw new Error('sdk was initialized with a different firebase app');
+    }
+
     if (!props.sdk) {
       throw new Error('no sdk provided');
     }
