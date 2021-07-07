@@ -4,14 +4,12 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "parcel --no-cache index.html",
+    "start": "parcel ./index.html --no-cache",
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "display": "^0.1.9",
-    "firebase": "^9.0.0-beta.5",
+    "firebase": "^9.0.0-beta.6",
     "react-app-polyfill": "^1.0.0",
-    "react-firebaseui": "^4.2.0",
     "tailwindcss": "^1.9.1"
   },
   "browserslist": [
