@@ -93,7 +93,7 @@ ___
 
 ### preloadUser
 
-▸ **preloadUser**(`options`): `Promise`<``null`` \| `User`\>
+▸ **preloadUser**(`options`): `Promise`<`undefined` \| ``null`` \| `User`\>
 
 #### Parameters
 
@@ -104,7 +104,7 @@ ___
 
 #### Returns
 
-`Promise`<``null`` \| `User`\>
+`Promise`<`undefined` \| ``null`` \| `User`\>
 
 #### Defined in
 
