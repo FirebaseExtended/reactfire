@@ -69,7 +69,7 @@ export function useFirestoreDocData<T>(ref: DocumentReference, options?: ReactFi
 }
 
 /**
- * Get aFirestore document, unwrap the document into a plain object, and don't subscribe to changes
+ * Get a Firestore document, unwrap the document into a plain object, and don't subscribe to changes
  */
 export function useFirestoreDocDataOnce<T = unknown>(ref: DocumentReference, options?: ReactFireOptions<T>): ObservableStatus<T> {
   const idField = options ? checkIdField(options) : 'NO_ID_FIELD';

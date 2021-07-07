@@ -12,7 +12,6 @@ const signIn = async auth => {
   await signInWithPopup(auth, provider);
 }
 
-
 export const AuthWrapper = ({ children, fallback }: React.PropsWithChildren<{ fallback: JSX.Element }>): JSX.Element => {
   const { status, data: signInCheckResult } = useSigninCheck();
 
