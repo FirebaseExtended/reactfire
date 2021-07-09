@@ -1,56 +1,45 @@
 import { cleanup, render, waitFor } from '@testing-library/react';
 import { renderHook, act as hooksAct, cleanup as hooksCleanup } from '@testing-library/react-hooks';
-import firebase from 'firebase';
 import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
-import { FirebaseAppProvider, AuthCheck, useUser, useSigninCheck, ClaimCheckErrors, ClaimsValidator, preloadAuth } from '..';
+import { FirebaseAppProvider, AuthCheck, AuthProvider, useUser, useSigninCheck, ClaimCheckErrors, ClaimsValidator } from '..';
 import { act } from 'react-dom/test-utils';
 import { baseConfig } from './appConfig';
+import { FirebaseApp, initializeApp } from 'firebase/app';
+
+import { getAuth, GoogleAuthProvider, signInWithCredential, signInWithCustomToken, signOut, useAuthEmulator, UserCredential } from 'firebase/auth';
 
 describe('Authentication', () => {
-  let app: firebase.app.App;
-  let signIn: () => Promise<firebase.auth.UserCredential>;
+  let app: FirebaseApp;
+  let signIn: () => Promise<UserCredential>;
 
-  const Provider = ({ children }: { children: React.ReactNode }) => <FirebaseAppProvider firebaseApp={app}>{children}</FirebaseAppProvider>;
+  const Provider: React.FunctionComponent = ({ children }) => (
+    <FirebaseAppProvider firebaseApp={app}>
+      <AuthProvider sdk={getAuth(app)}>{children}</AuthProvider>
+    </FirebaseAppProvider>
+  );
 
   const AuthCheckWrapper = (props?: { children?: any }) => (
     <FirebaseAppProvider firebaseApp={app} suspense={true}>
-      <React.Suspense fallback={'loading'}>
-        <AuthCheck fallback={<h1 data-testid="signed-out">not signed in</h1>}>{props?.children || <h1 data-testid="signed-in">signed in</h1>}</AuthCheck>
-      </React.Suspense>
+      <AuthProvider sdk={getAuth(app)}>
+        <React.Suspense fallback={'loading'}>
+          <AuthCheck fallback={<h1 data-testid="signed-out">not signed in</h1>}>{props?.children || <h1 data-testid="signed-in">signed in</h1>}</AuthCheck>
+        </React.Suspense>
+      </AuthProvider>
     </FirebaseAppProvider>
   );
 
   beforeAll(() => {
-    app = firebase.initializeApp(baseConfig);
+    app = initializeApp(baseConfig);
 
-    // useEmulator emits a warning, which adds noise to test output. So, we get rid of console.warn for a moment
-    const realConsoleInfo = console.info;
-    jest.spyOn(console, 'info').mockImplementation((...args) => {
-      if (
-        typeof args[0] === 'string' &&
-        args[0].includes('You are using the Auth Emulator, which is intended for local testing only.  Do not use with production credentials.')
-      ) {
-        return;
-      }
-      return realConsoleInfo.call(console, args);
-    });
-    app.auth().useEmulator('http://localhost:9099/');
+    useAuthEmulator(getAuth(app), 'http://localhost:9099/', { disableWarnings: true });
 
     signIn = async () => {
-      return app
-        .auth()
-        .signInWithCredential(firebase.auth.GoogleAuthProvider.credential('{"sub": "abc123", "email": "foo@example.com", "email_verified": true}'));
+      return signInWithCredential(getAuth(app), GoogleAuthProvider.credential('{"sub": "abc123", "email": "foo@example.com", "email_verified": true}'));
     };
   });
 
-  afterAll(() => {
-    // @ts-ignore console.info is mocked in beforeAll
-    console.info.mockRestore();
-
-    // @ts-ignore console.error is mocked in beforeAll
-    console.error.mockRestore();
-  });
+  afterAll(() => {});
 
   test('double check - emulator is running', async () => {
     // IF THIS TEST FAILS, MAKE SURE YOU'RE RUNNING THESE TESTS BY DOING:
@@ -63,14 +52,12 @@ describe('Authentication', () => {
 
   beforeEach(async () => {
     // clear the signed in user
-    await app.auth().signOut();
+    await signOut(getAuth(app));
   });
 
   afterEach(async () => {
     hooksCleanup();
     cleanup();
-    jest.clearAllMocks();
-    await app.auth().signOut();
   });
 
   describe('AuthCheck', () => {
@@ -114,7 +101,7 @@ describe('Authentication', () => {
       await waitFor(() => expect(getByTestId('signed-in')).toBeInTheDocument());
 
       await act(async () => {
-        await app.auth().signOut();
+        await signOut(getAuth(app));
       });
 
       await waitFor(() => expect(getByTestId('signed-out')).toBeInTheDocument());
@@ -125,14 +112,12 @@ describe('Authentication', () => {
 
   describe('useSigninCheck()', () => {
     it('accurately reflects signed-in state', async () => {
-      await preloadAuth({ firebaseApp: app });
-
       const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck(), { wrapper: Provider });
 
       await waitForHookCondition(() => result.current.status === 'success');
 
       // Signed out
-      expect(app.auth().currentUser).toBeNull();
+      expect(getAuth(app).currentUser).toBeNull();
       expect(result.current.data).toEqual({ signedIn: false, hasRequiredClaims: false });
 
       await hooksAct(async () => {
@@ -140,19 +125,19 @@ describe('Authentication', () => {
       });
 
       // Signed in
-      expect(app.auth().currentUser).not.toBeNull();
-      expect(result.current.data).toEqual({ signedIn: true, hasRequiredClaims: true, user: app.auth().currentUser });
+      expect(getAuth(app).currentUser).not.toBeNull();
+      expect(result.current.data).toEqual({ signedIn: true, hasRequiredClaims: true, user: getAuth(app).currentUser });
 
       // Signed out again
       await hooksAct(async () => {
-        await app.auth().signOut();
+        await getAuth(app).signOut();
       });
-      expect(app.auth().currentUser).toBeNull();
+      expect(getAuth(app).currentUser).toBeNull();
       expect(result.current.data).toEqual({ signedIn: false, hasRequiredClaims: false });
     });
 
     it('recognizes valid custom claims', async () => {
-      const requiredClaims = { canModifyPages: true, moderator: true };
+      const requiredClaims = { canModifyPages: 'true', moderator: 'true' };
 
       const withClaimsCustomToken = {
         uid: 'aUserWithCustomClaims',
@@ -164,7 +149,7 @@ describe('Authentication', () => {
       });
 
       await hooksAct(async () => {
-        await app.auth().signInWithCustomToken(JSON.stringify(withClaimsCustomToken));
+        await signInWithCustomToken(getAuth(app), JSON.stringify(withClaimsCustomToken));
       });
 
       await waitForHookCondition(() => result.current.status === 'success');
@@ -174,7 +159,7 @@ describe('Authentication', () => {
     });
 
     it('recognizes invalid custom claims', async () => {
-      const requiredClaims = { canModifyPages: true, moderator: true };
+      const requiredClaims = { canModifyPages: 'true', moderator: 'true' };
 
       const withClaimsCustomToken = {
         uid: 'aUserWithCustomClaims',
@@ -182,12 +167,12 @@ describe('Authentication', () => {
       };
 
       // Extra claim passed to useSignInCheck
-      const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck({ requiredClaims: { ...requiredClaims, anExtraClaim: true } }), {
+      const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck({ requiredClaims: { ...requiredClaims, anExtraClaim: 'true' } }), {
         wrapper: Provider,
       });
 
       await hooksAct(async () => {
-        await app.auth().signInWithCustomToken(JSON.stringify(withClaimsCustomToken));
+        await signInWithCustomToken(getAuth(app), JSON.stringify(withClaimsCustomToken));
       });
 
       await waitForHookCondition(() => result.current.status === 'success');
@@ -208,7 +193,7 @@ describe('Authentication', () => {
         let hasAnyClaim = false;
 
         for (const claim of validClaimsSet) {
-          if (userClaims[claim] === true) {
+          if (userClaims[claim] !== undefined) {
             hasAnyClaim = true;
             break;
           }
@@ -225,7 +210,7 @@ describe('Authentication', () => {
       });
 
       await hooksAct(async () => {
-        await app.auth().signInWithCustomToken(JSON.stringify(withClaimsCustomToken));
+        await signInWithCustomToken(getAuth(app), JSON.stringify(withClaimsCustomToken));
       });
 
       await waitForHookCondition(() => result.current.status === 'success');
@@ -256,20 +241,20 @@ describe('Authentication', () => {
       );
     });
 
-    it('returns the same value as firebase.auth().currentUser', async () => {
+    it('returns the same value as getAuth(app).currentUser', async () => {
       const { result } = renderHook(() => useUser(), { wrapper: Provider });
 
       // Signed out
-      expect(app.auth().currentUser).toBeNull();
-      expect(result.current.data).toEqual(app.auth().currentUser);
+      expect(getAuth(app).currentUser).toBeNull();
+      expect(result.current.data).toEqual(getAuth(app).currentUser);
 
       await hooksAct(async () => {
         await signIn();
       });
 
       // Signed in
-      expect(app.auth().currentUser).not.toBeNull();
-      expect(result.current.data).toEqual(app.auth().currentUser);
+      expect(getAuth(app).currentUser).not.toBeNull();
+      expect(result.current.data).toEqual(getAuth(app).currentUser);
     });
 
     it('synchronously returns a user if one is already signed in', async () => {
@@ -277,13 +262,11 @@ describe('Authentication', () => {
 
       const { result } = renderHook(() => useUser(), { wrapper: Provider });
 
-      expect(app.auth().currentUser).not.toBeNull();
-      expect(result.current.data).toEqual(app.auth().currentUser);
+      expect(getAuth(app).currentUser).not.toBeNull();
+      expect(result.current.data).toEqual(getAuth(app).currentUser);
     });
 
     it('does not show a logged-out user after navigating away', async () => {
-      await preloadAuth({ firebaseApp: app });
-
       await signIn();
 
       // a component that conditionally renders its child based on props
@@ -305,7 +288,7 @@ describe('Authentication', () => {
       expect(placeHolderElement).toHaveTextContent('Filler');
 
       // while no components are actively subscribed, sign out
-      await act(async () => await app.auth().signOut());
+      await act(async () => await getAuth(app).signOut());
 
       // render the child again and make sure it has the new value, not a stale one
       rerender(<ConditionalRenderer renderChildren={true} />);
