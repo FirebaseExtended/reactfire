@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { user } from 'rxfire/auth';
 import { preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus, ReactFireError } from './';
-import { from, lastValueFrom, of } from 'rxjs';
+import { from, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp';
 
@@ -11,7 +11,7 @@ type Claims = IdTokenResult['claims'];
 export async function preloadUser(authResolver: () => Promise<Auth>) {
   const auth = await authResolver();
   const user$ = preloadObservable(user(auth), `auth:user:${auth.name}`);
-  return lastValueFrom(user$);
+  return user$.toPromise();
 }
 
 /**
