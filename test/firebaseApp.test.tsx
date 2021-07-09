@@ -1,6 +1,6 @@
 import { cleanup, render } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
-import {initializeApp, deleteApp, getApps} from 'firebase/app';
+import { initializeApp, deleteApp, getApps } from 'firebase/app';
 import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
 import { useFirebaseApp, FirebaseAppProvider, version } from '..';
@@ -19,14 +19,14 @@ describe('FirebaseAppProvider', () => {
     expect(getApps()).toHaveLength(0);
 
     render(<FirebaseAppProvider firebaseConfig={DEFAULT_APP_CONFIG} />);
-    
+
     expect(getApps()).toHaveLength(1);
   });
 
   it('Does not initialize a new app if the firebaseApp is provided', () => {
     const app = initializeApp(DEFAULT_APP_CONFIG, 'test');
     expect(getApps()).toHaveLength(1);
-    
+
     render(<FirebaseAppProvider firebaseApp={app} />);
 
     expect(getApps()).toHaveLength(1);
@@ -49,7 +49,9 @@ describe('useFirebaseApp', () => {
 
     const wrapper = ({ children }: { children: React.ReactNode }) => (
       <div>
-        <FirebaseAppProvider firebaseConfig={DEFAULT_APP_CONFIG} appName="app-1">{children}</FirebaseAppProvider>
+        <FirebaseAppProvider firebaseConfig={DEFAULT_APP_CONFIG} appName="app-1">
+          {children}
+        </FirebaseAppProvider>
         <FirebaseAppProvider firebaseConfig={config} appName="app-2">
           appA
         </FirebaseAppProvider>
