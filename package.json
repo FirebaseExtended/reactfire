@@ -83,7 +83,7 @@
     "eslint-plugin-no-only-tests": "^2.6.0",
     "firebase": "9.0.0-beta.5",
     "firebase-admin": "^9.7.0",
-    "firebase-tools": "^9.10.0",
+    "firebase-tools": "^9.16.0",
     "globalthis": "^1.0.1",
     "husky": "^4.3.0",
     "jest-environment-jsdom": "^26.6.2",
