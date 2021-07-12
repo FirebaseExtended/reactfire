@@ -49,7 +49,10 @@ export function useFirestoreDoc<T = DocumentData>(ref: DocumentReference, option
 /**
  * Get a firestore document and don't subscribe to changes
  */
-export function useFirestoreDocOnce<T = unknown>(ref: DocumentReference, options?: ReactFireOptions<T>): ObservableStatus<T extends {} ? T : DocumentSnapshot> {
+export function useFirestoreDocOnce<T = DocumentData>(
+  ref: DocumentReference,
+  options?: ReactFireOptions<T>
+): ObservableStatus<T extends {} ? T : DocumentSnapshot> {
   const observableId = `firestore:docOnce:${ref.firestore.app.name}:${ref.path}`;
   const observable$ = doc(ref).pipe(first());
 
