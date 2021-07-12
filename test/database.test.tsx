@@ -5,6 +5,7 @@ import { baseConfig } from './appConfig';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, useDatabaseEmulator, ref, set, push, query, orderByChild, equalTo, get } from 'firebase/database';
 import { QueryChange } from 'rxfire/database';
+import { randomString } from './test-utils';
 
 describe('Realtime Database (RTDB)', () => {
   const app = initializeApp(baseConfig);
@@ -29,22 +30,20 @@ describe('Realtime Database (RTDB)', () => {
     // yarn test
 
     const testData = { a: 'world' };
-    const helloRef = ref(database, 'hello');
-    await set(helloRef, testData);
-    const dataFromEmulator = await get(helloRef);
+    const testRef = ref(database, randomString());
+    await set(testRef, testData);
+    const dataFromEmulator = await get(testRef);
     expect(dataFromEmulator.val()).toEqual(testData);
   });
 
   describe('useDatabaseObject', () => {
     it('can get an object [TEST REQUIRES EMULATOR]', async () => {
       const mockData = { a: 'hello' };
-      const objectRef = ref(database, 'hello');
+      const objectRef = ref(database, randomString());
       await set(objectRef, mockData);
 
       const { result, waitFor } = renderHook(() => useDatabaseObject<QueryChange>(objectRef), { wrapper: Provider });
 
-      await new Promise((res) => setTimeout(res, 500));
-      // expect(result.current).toEqual({});
       await hooksAct(() => waitFor(() => result.current.status === 'success'));
 
       expect(result.current.data.snapshot.val()).toEqual(mockData);
@@ -56,7 +55,7 @@ describe('Realtime Database (RTDB)', () => {
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
-      const listRef = ref(database, 'myList');
+      const listRef = ref(database, randomString());
 
       await hooksAct(() => push(listRef, mockData1).then());
       await hooksAct(() => push(listRef, mockData2).then());
@@ -75,6 +74,7 @@ describe('Realtime Database (RTDB)', () => {
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
+      // have to use this path because because emulator checks for `.indexon`
       const itemsRef = ref(database, 'items');
       const filteredItemsRef = query(itemsRef, orderByChild('a'), equalTo('hello'));
 
