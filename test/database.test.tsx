@@ -1,6 +1,6 @@
 import { renderHook, act as hooksAct, cleanup as hooksCleanup } from '@testing-library/react-hooks';
 import * as React from 'react';
-import { useDatabaseObject, useDatabaseList, FirebaseAppProvider, DatabaseProvider } from '..';
+import { useDatabaseObject, useDatabaseList, FirebaseAppProvider, DatabaseProvider, ObservableStatus } from '..';
 import { baseConfig } from './appConfig';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, useDatabaseEmulator, ref, set, push, query, orderByChild, equalTo, get } from 'firebase/database';
@@ -47,6 +47,32 @@ describe('Realtime Database (RTDB)', () => {
       await hooksAct(() => waitFor(() => result.current.status === 'success'));
 
       expect(result.current.data.snapshot.val()).toEqual(mockData);
+    });
+
+    it('updates with new values as they change', async () => {
+      // set up a ref and give it a value
+      const dataRef = ref(database, randomString());
+      const initialValue = randomString();
+      await set(dataRef, initialValue);
+
+      // warm up the hook
+      const { result, waitFor } = renderHook(() => useDatabaseObject<QueryChange>(dataRef), { wrapper: Provider });
+      await hooksAct(() => waitFor(() => result.current.status === 'success'));
+
+      // update the value a few times
+      const values = [randomString(), randomString(), randomString(), randomString()];
+      const updates = values.map(async (newValue) => {
+        return set(dataRef, newValue);
+      });
+      await hooksAct(async () => {
+        await Promise.all(updates);
+      });
+
+      // make sure every value was emitted
+      const resultValues = result.all
+        .filter((observableStatus) => (observableStatus as ObservableStatus<QueryChange>).status === 'success')
+        .map((observableStatus) => (observableStatus as ObservableStatus<QueryChange>).data.snapshot.val());
+      expect(resultValues).toEqual([initialValue, ...values]);
     });
   });
 
