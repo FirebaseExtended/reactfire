@@ -30,6 +30,18 @@ describe('Authentication', () => {
   );
 
   beforeAll(() => {
+    // Auth Emulator emits a warning, which adds noise to test output. So, we get rid of console.warn for a moment
+    const realConsoleInfo = console.info;
+    jest.spyOn(console, 'info').mockImplementation((...args) => {
+      if (
+        typeof args[0] === 'string' &&
+        args[0].includes('You are using the Auth Emulator, which is intended for local testing only.  Do not use with production credentials.')
+      ) {
+        return;
+      }
+      return realConsoleInfo.call(console, args);
+    });
+
     app = initializeApp(baseConfig);
 
     useAuthEmulator(getAuth(app), 'http://localhost:9099/', { disableWarnings: true });
@@ -39,7 +51,12 @@ describe('Authentication', () => {
     };
   });
 
-  afterAll(() => {});
+  afterAll(() => {
+    afterAll(() => {
+      // @ts-ignore console.info is mocked in beforeAll
+      console.info.mockRestore();
+    });
+  });
 
   test('double check - emulator is running', async () => {
     // IF THIS TEST FAILS, MAKE SURE YOU'RE RUNNING THESE TESTS BY DOING:
