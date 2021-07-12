@@ -29,7 +29,7 @@ Subscribe to a Realtime Database list
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `ref` | `firebase.database.Reference` \| `firebase.database.Query` | Reference to the DB List you want to listen to |
+| `ref` | `Reference` \| `DatabaseQuery` | Reference to the DB List you want to listen to |
 | `options?` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md)<`T`[]\> |  |
 
 #### Returns
@@ -38,7 +38,7 @@ Subscribe to a Realtime Database list
 
 #### Defined in
 
-[src/database.tsx:73](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L73)
+[src/database.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L74)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ref` | `firebase.database.Reference` \| `firebase.database.Query` |
+| `ref` | `Reference` \| `DatabaseQuery` |
 | `options?` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md)<`T`[]\> |
 
 #### Returns
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[src/database.tsx:83](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L83)
+[src/database.tsx:84](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L84)
 
 ___
 
@@ -85,7 +85,7 @@ Subscribe to a Realtime Database object
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `ref` | `firebase.database.Reference` | Reference to the DB object you want to listen to |
+| `ref` | `Reference` | Reference to the DB object you want to listen to |
 | `options?` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md)<`T`\> |  |
 
 #### Returns
@@ -94,7 +94,7 @@ Subscribe to a Realtime Database object
 
 #### Defined in
 
-[src/database.tsx:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L29)
+[src/database.tsx:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L30)
 
 ___
 
@@ -112,7 +112,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ref` | `firebase.database.Reference` |
+| `ref` | `Reference` |
 | `options?` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md)<`T`\> |
 
 #### Returns
@@ -121,4 +121,4 @@ ___
 
 #### Defined in
 
-[src/database.tsx:59](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L59)
+[src/database.tsx:60](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L60)

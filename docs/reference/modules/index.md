@@ -8,33 +8,28 @@
 
 - [AuthCheck](index.md#authcheck)
 - [AuthCheckProps](index.md#authcheckprops)
+- [AuthProvider](index.md#authprovider)
 - [ClaimCheckErrors](index.md#claimcheckerrors)
 - [ClaimsCheck](index.md#claimscheck)
 - [ClaimsCheckProps](index.md#claimscheckprops)
 - [ClaimsValidator](index.md#claimsvalidator)
+- [DatabaseProvider](index.md#databaseprovider)
 - [FirebaseAppProvider](index.md#firebaseappprovider)
+- [FirestoreProvider](index.md#firestoreprovider)
 - [ObservableStatus](index.md#observablestatus)
-- [PreloadOptions](index.md#preloadoptions)
+- [PerformanceProvider](index.md#performanceprovider)
+- [RemoteConfigProvider](index.md#remoteconfigprovider)
 - [SignInCheckOptionsBasic](index.md#signincheckoptionsbasic)
 - [SignInCheckOptionsClaimsObject](index.md#signincheckoptionsclaimsobject)
 - [SignInCheckOptionsClaimsValidator](index.md#signincheckoptionsclaimsvalidator)
 - [SigninCheckResult](index.md#signincheckresult)
 - [StorageImage](index.md#storageimage)
+- [StorageProvider](index.md#storageprovider)
 - [SuspensePerfProps](index.md#suspenseperfprops)
 - [SuspenseWithPerf](index.md#suspensewithperf)
-- [preloadAnalytics](index.md#preloadanalytics)
-- [preloadAuth](index.md#preloadauth)
-- [preloadDatabase](index.md#preloaddatabase)
-- [preloadFirestore](index.md#preloadfirestore)
 - [preloadFirestoreDoc](index.md#preloadfirestoredoc)
-- [preloadFunctions](index.md#preloadfunctions)
-- [preloadMessaging](index.md#preloadmessaging)
 - [preloadObservable](index.md#preloadobservable)
-- [preloadPerformance](index.md#preloadperformance)
-- [preloadRemoteConfig](index.md#preloadremoteconfig)
-- [preloadStorage](index.md#preloadstorage)
 - [preloadUser](index.md#preloaduser)
-- [useAnalytics](index.md#useanalytics)
 - [useAuth](index.md#useauth)
 - [useDatabase](index.md#usedatabase)
 - [useDatabaseList](index.md#usedatabaselist)
@@ -49,10 +44,8 @@
 - [useFirestoreDocData](index.md#usefirestoredocdata)
 - [useFirestoreDocDataOnce](index.md#usefirestoredocdataonce)
 - [useFirestoreDocOnce](index.md#usefirestoredoconce)
-- [useFunctions](index.md#usefunctions)
 - [useIdTokenResult](index.md#useidtokenresult)
 - [useIsSuspenseEnabled](index.md#useissuspenseenabled)
-- [useMessaging](index.md#usemessaging)
 - [useObservable](index.md#useobservable)
 - [usePerformance](index.md#useperformance)
 - [useRemoteConfig](index.md#useremoteconfig)
@@ -101,6 +94,12 @@ Re-exports: [AuthCheckProps](../interfaces/auth.authcheckprops.md)
 
 ___
 
+### AuthProvider
+
+Re-exports: [AuthProvider](sdk.md#authprovider)
+
+___
+
 ### ClaimCheckErrors
 
 Re-exports: [ClaimCheckErrors](../interfaces/auth.claimcheckerrors.md)
@@ -125,9 +124,21 @@ Re-exports: [ClaimsValidator](../interfaces/auth.claimsvalidator.md)
 
 ___
 
+### DatabaseProvider
+
+Re-exports: [DatabaseProvider](sdk.md#databaseprovider)
+
+___
+
 ### FirebaseAppProvider
 
 Re-exports: [FirebaseAppProvider](firebaseapp.md#firebaseappprovider)
+
+___
+
+### FirestoreProvider
+
+Re-exports: [FirestoreProvider](sdk.md#firestoreprovider)
 
 ___
 
@@ -137,9 +148,15 @@ Re-exports: [ObservableStatus](../interfaces/useobservable.observablestatus.md)
 
 ___
 
-### PreloadOptions
+### PerformanceProvider
 
-Re-exports: [PreloadOptions](sdk.md#preloadoptions)
+Re-exports: [PerformanceProvider](sdk.md#performanceprovider)
+
+___
+
+### RemoteConfigProvider
+
+Re-exports: [RemoteConfigProvider](sdk.md#remoteconfigprovider)
 
 ___
 
@@ -173,6 +190,12 @@ Re-exports: [StorageImage](storage.md#storageimage)
 
 ___
 
+### StorageProvider
+
+Re-exports: [StorageProvider](sdk.md#storageprovider)
+
+___
+
 ### SuspensePerfProps
 
 Re-exports: [SuspensePerfProps](../interfaces/performance.suspenseperfprops.md)
@@ -185,45 +208,9 @@ Re-exports: [SuspenseWithPerf](performance.md#suspensewithperf)
 
 ___
 
-### preloadAnalytics
-
-Re-exports: [preloadAnalytics](sdk.md#preloadanalytics)
-
-___
-
-### preloadAuth
-
-Re-exports: [preloadAuth](sdk.md#preloadauth)
-
-___
-
-### preloadDatabase
-
-Re-exports: [preloadDatabase](sdk.md#preloaddatabase)
-
-___
-
-### preloadFirestore
-
-Re-exports: [preloadFirestore](sdk.md#preloadfirestore)
-
-___
-
 ### preloadFirestoreDoc
 
 Re-exports: [preloadFirestoreDoc](firestore.md#preloadfirestoredoc)
-
-___
-
-### preloadFunctions
-
-Re-exports: [preloadFunctions](sdk.md#preloadfunctions)
-
-___
-
-### preloadMessaging
-
-Re-exports: [preloadMessaging](sdk.md#preloadmessaging)
 
 ___
 
@@ -233,33 +220,9 @@ Re-exports: [preloadObservable](useobservable.md#preloadobservable)
 
 ___
 
-### preloadPerformance
-
-Re-exports: [preloadPerformance](sdk.md#preloadperformance)
-
-___
-
-### preloadRemoteConfig
-
-Re-exports: [preloadRemoteConfig](sdk.md#preloadremoteconfig)
-
-___
-
-### preloadStorage
-
-Re-exports: [preloadStorage](sdk.md#preloadstorage)
-
-___
-
 ### preloadUser
 
 Re-exports: [preloadUser](auth.md#preloaduser)
-
-___
-
-### useAnalytics
-
-Re-exports: [useAnalytics](sdk.md#useanalytics)
 
 ___
 
@@ -347,12 +310,6 @@ Re-exports: [useFirestoreDocOnce](firestore.md#usefirestoredoconce)
 
 ___
 
-### useFunctions
-
-Re-exports: [useFunctions](sdk.md#usefunctions)
-
-___
-
 ### useIdTokenResult
 
 Re-exports: [useIdTokenResult](auth.md#useidtokenresult)
@@ -362,12 +319,6 @@ ___
 ### useIsSuspenseEnabled
 
 Re-exports: [useIsSuspenseEnabled](firebaseapp.md#useissuspenseenabled)
-
-___
-
-### useMessaging
-
-Re-exports: [useMessaging](sdk.md#usemessaging)
 
 ___
 
@@ -469,13 +420,13 @@ Re-exports: [version](firebaseapp.md#version)
 
 | Name | Type |
 | :------ | :------ |
-| `_reactFireDatabaseCachedQueries` | `firebase.database.Query`[] |
-| `_reactFireFirestoreQueryCache` | `firebase.firestore.Query`[] |
+| `_reactFireDatabaseCachedQueries` | `DatabaseQuery`[] |
+| `_reactFireFirestoreQueryCache` | `FirestoreQuery`[] |
 | `_reactFirePreloadedObservables` | `Map`<`string`, [`SuspenseSubject`](../classes/suspensesubject.suspensesubject-1.md)<`any`\>\> |
 
 #### Defined in
 
-[src/index.ts:4](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L4)
+[src/index.ts:6](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L6)
 
 ## Functions
 
@@ -495,7 +446,7 @@ Re-exports: [version](firebaseapp.md#version)
 
 #### Defined in
 
-[src/index.ts:45](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L45)
+[src/index.ts:47](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L47)
 
 ___
 
@@ -516,7 +467,7 @@ ___
 
 #### Defined in
 
-[src/index.ts:32](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L32)
+[src/index.ts:34](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L34)
 
 ___
 
@@ -536,4 +487,4 @@ ___
 
 #### Defined in
 
-[src/index.ts:41](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L41)
+[src/index.ts:43](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L43)

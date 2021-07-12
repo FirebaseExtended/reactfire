@@ -30,4 +30,4 @@
 
 #### Defined in
 
-[src/performance.tsx:12](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L12)
+[src/performance.tsx:9](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L9)

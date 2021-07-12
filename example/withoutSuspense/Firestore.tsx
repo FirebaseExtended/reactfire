@@ -5,12 +5,20 @@ import { WideButton } from '../display/Button';
 import { CardSection } from '../display/Card';
 import { LoadingSpinner } from '../display/LoadingSpinner';
 import { AuthWrapper } from './Auth';
-import { initializeFirestore, doc, collection, enableIndexedDbPersistence } from 'firebase/firestore';
-import { onSnapshot, increment, updateDoc, orderBy, query, addDoc } from '@firebase/firestore';
+import { initializeFirestore, doc, collection, enableIndexedDbPersistence, onSnapshot, increment, updateDoc, orderBy, query, addDoc } from 'firebase/firestore';
 import type { FirebaseFirestore } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
 
 const Counter = () => {
   const firestore = useFirestore();
+  const app = useFirebaseApp();
+
+  if(getFirestore(app) !== firestore) {
+    throw new Error('firestore instances do not match')
+  }
+  
+
+  console.log("USEFIRESTORE", firestore.app.name);
 
   const ref = doc(firestore, 'count', 'counter');
 
@@ -20,9 +28,9 @@ const Counter = () => {
     });
   }, []);
 
-  const incrementCounter = amountToIncrement => {
+  const incrementCounter = (amountToIncrement) => {
     updateDoc(ref, {
-      value: increment(amountToIncrement)
+      value: increment(amountToIncrement),
     });
   };
 
@@ -42,6 +50,7 @@ const Counter = () => {
 };
 
 const AnimalsList = () => {
+  debugger;
   const firestore = useFirestore();
   const animalsCollection = collection(firestore, 'animals');
   const [isAscending, setIsAscending] = useState(false);
@@ -102,7 +111,13 @@ export const Firestore = () => {
   const firebaseApp = useFirebaseApp();
   const [firestoreInstance, setFirestoreInstance] = useState<FirebaseFirestore | undefined>();
 
+  // idea: useFirestoreInstance();
+  // this could set up enableIndexedDbPersistence
+  // and emulators!
+  // https://github.com/angular/angularfire/issues/1158
+
   useEffect(() => {
+    console.log(`Initializing Firestore with app name ${firebaseApp.name}`);
     const db = initializeFirestore(firebaseApp, {});
     enableIndexedDbPersistence(db).then(() => {
       setFirestoreInstance(db);
@@ -120,12 +135,12 @@ export const Firestore = () => {
           <CardSection title="Get/Set document value">
             <Counter />
           </CardSection>
-          <CardSection title="Fetch data once">
-          <StaticValue />
-        </CardSection>
-        <CardSection title="Work with lists of data">
-          <AnimalsList />
-        </CardSection>
+          {/* <CardSection title="Fetch data once">
+            <StaticValue />
+          </CardSection>
+          <CardSection title="Work with lists of data">
+            <AnimalsList />
+          </CardSection> */}
         </FirestoreProvider>
       </AuthWrapper>
     </>

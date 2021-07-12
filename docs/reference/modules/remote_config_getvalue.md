@@ -28,7 +28,7 @@
 
 #### Defined in
 
-[src/remote-config/getValue.tsx:6](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L6)
+[src/remote-config/getValue.tsx:13](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L13)
 
 ## Functions
 
@@ -48,7 +48,7 @@
 
 #### Defined in
 
-[src/remote-config/getValue.tsx:47](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L47)
+[src/remote-config/getValue.tsx:54](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L54)
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-[src/remote-config/getValue.tsx:42](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L42)
+[src/remote-config/getValue.tsx:49](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L49)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[src/remote-config/getValue.tsx:37](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L37)
+[src/remote-config/getValue.tsx:44](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L44)
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 #### Defined in
 
-[src/remote-config/getValue.tsx:32](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L32)
+[src/remote-config/getValue.tsx:39](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L39)
 
 ___
 
@@ -132,4 +132,4 @@ ___
 
 #### Defined in
 
-[src/remote-config/getValue.tsx:27](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L27)
+[src/remote-config/getValue.tsx:34](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/getValue.tsx#L34)

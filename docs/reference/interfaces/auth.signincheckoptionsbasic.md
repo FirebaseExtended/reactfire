@@ -32,7 +32,7 @@
 
 #### Defined in
 
-[src/auth.tsx:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L86)
+[src/auth.tsx:81](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L81)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[src/index.ts:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L23)
+[src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L25)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[src/index.ts:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L24)
+[src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L26)
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-[src/index.ts:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L28)
+[src/index.ts:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L30)
 
 ___
 
@@ -90,4 +90,4 @@ ___
 
 #### Defined in
 
-[src/index.ts:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L29)
+[src/index.ts:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L31)
