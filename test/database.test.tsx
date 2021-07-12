@@ -37,7 +37,7 @@ describe('Realtime Database (RTDB)', () => {
   });
 
   describe('useDatabaseObject', () => {
-    it('can get an object [TEST REQUIRES EMULATOR]', async () => {
+    it('can get an object', async () => {
       const mockData = { a: 'hello' };
       const objectRef = ref(database, randomString());
       await set(objectRef, mockData);
@@ -51,7 +51,7 @@ describe('Realtime Database (RTDB)', () => {
   });
 
   describe('useDatabaseList', () => {
-    it('can get a list [TEST REQUIRES EMULATOR]', async () => {
+    it('can get a list', async () => {
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
@@ -70,7 +70,7 @@ describe('Realtime Database (RTDB)', () => {
       expect(values).toEqual([mockData1, mockData2]);
     });
 
-    it('Returns different data for different queries on the same path [TEST REQUIRES EMULATOR]', async () => {
+    it('Returns different data for different queries on the same path', async () => {
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 

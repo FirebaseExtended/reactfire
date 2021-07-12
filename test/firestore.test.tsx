@@ -47,7 +47,7 @@ describe('Firestore', () => {
   });
 
   describe('useFirestoreDoc', () => {
-    it('can get a Firestore document [TEST REQUIRES EMULATOR]', async () => {
+    it('can get a Firestore document', async () => {
       const mockData = { a: 'hello' };
 
       const ref = doc(collection(db, randomString()), randomString());
@@ -68,7 +68,7 @@ describe('Firestore', () => {
   });
 
   describe('useFirestoreDocData', () => {
-    it('can get a Firestore document [TEST REQUIRES EMULATOR]', async () => {
+    it('can get a Firestore document', async () => {
       const mockData = { a: 'hello' };
 
       const ref = doc(collection(db, randomString()), randomString());
@@ -111,7 +111,7 @@ describe('Firestore', () => {
   });
 
   describe('useFirestoreDocDataOnce', () => {
-    it('does not update on database changes [TEST REQUIRES EMULATOR]', async () => {
+    it('does not update on database changes', async () => {
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
@@ -143,7 +143,7 @@ describe('Firestore', () => {
   });
 
   describe('useFirestoreCollection', () => {
-    it('can get a Firestore collection [TEST REQUIRES EMULATOR]', async () => {
+    it('can get a Firestore collection', async () => {
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
@@ -160,7 +160,7 @@ describe('Firestore', () => {
       expect(collectionSnap.docs.length).toEqual(2);
     });
 
-    it('Returns different data for different queries on the same path [TEST REQUIRES EMULATOR]', async () => {
+    it('Returns different data for different queries on the same path', async () => {
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
@@ -188,7 +188,7 @@ describe('Firestore', () => {
   });
 
   describe('useFirestoreCollectionData', () => {
-    it('can get a Firestore collection [TEST REQUIRES EMULATOR]', async () => {
+    it('can get a Firestore collection', async () => {
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
@@ -207,7 +207,7 @@ describe('Firestore', () => {
       expect(result.current.data.length).toEqual(2);
     });
 
-    it('Returns different data for different queries on the same path [TEST REQUIRES EMULATOR]', async () => {
+    it('Returns different data for different queries on the same path', async () => {
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
