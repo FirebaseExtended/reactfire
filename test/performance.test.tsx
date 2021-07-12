@@ -1,4 +1,6 @@
 import { act, cleanup, render, waitFor } from '@testing-library/react';
+import { FirebaseApp } from 'firebase/app';
+import { FirebasePerformance } from 'firebase/performance';
 import * as React from 'react';
 import { Subject } from 'rxjs';
 import { FirebaseAppProvider, useObservable, SuspenseWithPerf } from '..';
@@ -13,9 +15,9 @@ const createTrace = jest.fn(() => ({
 
 const mockPerf = (jest.fn(() => {
   return { trace: createTrace };
-}) as any) as () => firebase.default.performance.Performance;
+}) as any) as () => FirebasePerformance;
 
-const mockFirebase: firebase.default.app.App = {
+const mockFirebase: FirebaseApp = {
   performance: mockPerf,
 } as any;
 
@@ -61,7 +63,7 @@ describe('SuspenseWithPerf', () => {
     const SuspenseWithPerfComp = () => {
       return (
         <Provider>
-          <SuspenseWithPerf fallback={<Fallback />} traceId="test" firePerf={mockPerf()}>
+          <SuspenseWithPerf fallback={<Fallback />} traceId="test">
             <Comp />
           </SuspenseWithPerf>
         </Provider>
@@ -90,7 +92,7 @@ describe('SuspenseWithPerf', () => {
 
     render(
       <Provider>
-        <SuspenseWithPerf traceId={traceName} fallback={'loading'} firePerf={mockPerf()}>
+        <SuspenseWithPerf traceId={traceName} fallback={'loading'}>
           <PromiseThrower />
         </SuspenseWithPerf>
       </Provider>
@@ -123,7 +125,7 @@ describe('SuspenseWithPerf', () => {
 
     const { getByTestId } = render(
       <Provider>
-        <SuspenseWithPerf fallback={<Fallback />} traceId="test lifecycle" firePerf={mockPerf()}>
+        <SuspenseWithPerf fallback={<Fallback />} traceId="test lifecycle">
           <Comp />
         </SuspenseWithPerf>
       </Provider>
@@ -144,19 +146,4 @@ describe('SuspenseWithPerf', () => {
     expect(measure).toHaveBeenCalledTimes(1);
     expect(measure).toHaveBeenCalledWith('test lifecycle', '_test lifecycleStart[0]', '_test lifecycleEnd[0]');
   });
-
-  it.todo('can find fireperf from Context');
-  /*
-  it('can find fireperf from Context', () => {
-    render(
-      <Provider>
-        <SuspenseWithPerf traceId={'hello'} fallback={'loading'}>
-          <PromiseThrower />
-        </SuspenseWithPerf>
-      </Provider>
-    );
-
-    expect(mockPerf).toHaveBeenCalled();
-  });
-*/
 });
