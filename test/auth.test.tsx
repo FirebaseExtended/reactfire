@@ -135,7 +135,7 @@ describe('Authentication', () => {
 
       // Signed out
       expect(getAuth(app).currentUser).toBeNull();
-      expect(result.current.data).toEqual({ signedIn: false, hasRequiredClaims: false });
+      expect(result.current.data).toEqual({ signedIn: false, hasRequiredClaims: false, user: null, errors: {} });
 
       await hooksAct(async () => {
         await signIn();
@@ -143,14 +143,14 @@ describe('Authentication', () => {
 
       // Signed in
       expect(getAuth(app).currentUser).not.toBeNull();
-      expect(result.current.data).toEqual({ signedIn: true, hasRequiredClaims: true, user: getAuth(app).currentUser });
+      expect(result.current.data).toEqual({ signedIn: true, hasRequiredClaims: true, user: getAuth(app).currentUser, errors: {} });
 
       // Signed out again
       await hooksAct(async () => {
         await getAuth(app).signOut();
       });
       expect(getAuth(app).currentUser).toBeNull();
-      expect(result.current.data).toEqual({ signedIn: false, hasRequiredClaims: false });
+      expect(result.current.data).toEqual({ signedIn: false, hasRequiredClaims: false, user: null, errors: {} });
     });
 
     it('recognizes valid custom claims', async () => {
