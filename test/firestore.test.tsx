@@ -75,10 +75,7 @@ describe('Firestore', () => {
 
       await setDoc(ref, mockData);
 
-      const { result, waitFor } = renderHook(
-        () => useFirestoreDocData<any>(ref, { idField: 'id' }),
-        { wrapper: Provider }
-      );
+      const { result, waitFor } = renderHook(() => useFirestoreDocData<any>(ref, { idField: 'id' }), { wrapper: Provider });
 
       await waitFor(() => result.current.status === 'success');
 
@@ -118,14 +115,8 @@ describe('Firestore', () => {
       const ref = doc(collection(db, randomString()), randomString());
 
       await setDoc(ref, mockData1);
-      const { result: subscribeResult, waitFor: waitForSubscribe } = renderHook(
-        () => useFirestoreDocData<any>(ref, { idField: 'id' }),
-        { wrapper: Provider }
-      );
-      const { result: onceResult, waitFor: waitForOnce } = renderHook(
-        () => useFirestoreDocDataOnce<any>(ref, { idField: 'id' }),
-        { wrapper: Provider }
-      );
+      const { result: subscribeResult, waitFor: waitForSubscribe } = renderHook(() => useFirestoreDocData<any>(ref, { idField: 'id' }), { wrapper: Provider });
+      const { result: onceResult, waitFor: waitForOnce } = renderHook(() => useFirestoreDocDataOnce<any>(ref, { idField: 'id' }), { wrapper: Provider });
 
       await waitForSubscribe(() => subscribeResult.current.status === 'success');
       await waitForOnce(() => onceResult.current.status === 'success');
@@ -197,10 +188,7 @@ describe('Firestore', () => {
       await addDoc(ref, mockData1);
       await addDoc(ref, mockData2);
 
-      const { result, waitFor } = renderHook(
-        () => useFirestoreCollectionData<any>(ref, { idField: 'id' }),
-        { wrapper: Provider }
-      );
+      const { result, waitFor } = renderHook(() => useFirestoreCollectionData<any>(ref, { idField: 'id' }), { wrapper: Provider });
 
       await waitFor(() => result.current.status === 'success');
 
@@ -217,10 +205,9 @@ describe('Firestore', () => {
       await addDoc(ref, mockData1);
       await addDoc(ref, mockData2);
 
-      const { result: unfilteredResult, waitFor: waitForFiltered } = renderHook(
-        () => useFirestoreCollectionData<any>(ref, { idField: 'id' }),
-        { wrapper: Provider }
-      );
+      const { result: unfilteredResult, waitFor: waitForFiltered } = renderHook(() => useFirestoreCollectionData<any>(ref, { idField: 'id' }), {
+        wrapper: Provider,
+      });
       const { result: filteredResult, waitFor: waitForUnfiltered } = renderHook(
         () =>
           useFirestoreCollectionData<any>(filteredRef, {

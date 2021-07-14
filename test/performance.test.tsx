@@ -13,9 +13,9 @@ const createTrace = jest.fn(() => ({
   stop: traceEnd,
 }));
 
-const mockPerf = (jest.fn(() => {
+const mockPerf = jest.fn(() => {
   return { trace: createTrace };
-}) as any) as () => FirebasePerformance;
+}) as any as () => FirebasePerformance;
 
 const mockFirebase: FirebaseApp = {
   performance: mockPerf,

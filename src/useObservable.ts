@@ -7,10 +7,10 @@ import { ReactFireGlobals, ReactFireOptions } from './';
 const DEFAULT_TIMEOUT = 30_000;
 
 // Since we're side-effect free, we need to ensure our observable cache is global
-const preloadedObservables: Map<string, SuspenseSubject<any>> = ((globalThis as any) as ReactFireGlobals)._reactFirePreloadedObservables || new Map();
+const preloadedObservables: Map<string, SuspenseSubject<any>> = (globalThis as any as ReactFireGlobals)._reactFirePreloadedObservables || new Map();
 
-if (!((globalThis as any) as ReactFireGlobals)._reactFirePreloadedObservables) {
-  ((globalThis as any) as ReactFireGlobals)._reactFirePreloadedObservables = preloadedObservables;
+if (!(globalThis as any as ReactFireGlobals)._reactFirePreloadedObservables) {
+  (globalThis as any as ReactFireGlobals)._reactFirePreloadedObservables = preloadedObservables;
 }
 
 // Starts listening to an Observable.
