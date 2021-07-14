@@ -7,10 +7,10 @@ import { map } from 'rxjs/operators';
 import type { Query as DatabaseQuery, Reference } from 'firebase/database';
 
 // Since we're side-effect free, we need to ensure our observableId cache is global
-const cachedQueries: Array<DatabaseQuery> = ((globalThis as any) as ReactFireGlobals)._reactFireDatabaseCachedQueries || [];
+const cachedQueries: Array<DatabaseQuery> = (globalThis as any as ReactFireGlobals)._reactFireDatabaseCachedQueries || [];
 
-if (!((globalThis as any) as ReactFireGlobals)._reactFireDatabaseCachedQueries) {
-  ((globalThis as any) as ReactFireGlobals)._reactFireDatabaseCachedQueries = cachedQueries;
+if (!(globalThis as any as ReactFireGlobals)._reactFireDatabaseCachedQueries) {
+  (globalThis as any as ReactFireGlobals)._reactFireDatabaseCachedQueries = cachedQueries;
 }
 
 function getUniqueIdForDatabaseQuery(query: DatabaseQuery) {
@@ -60,7 +60,7 @@ function changeToData(change: QueryChange, keyField?: string): {} {
 export function useDatabaseObjectData<T>(ref: Reference, options?: ReactFireOptions<T>): ObservableStatus<T> {
   const idField = options ? checkIdField(options) : 'NO_ID_FIELD';
   const observableId = `database:objectVal:${ref.toString()}:idField=${idField}`;
-  const observable$ = objectVal(ref, idField);
+  const observable$ = objectVal<T>(ref, idField);
 
   return useObservable(observableId, observable$, options);
 }
@@ -81,9 +81,12 @@ export function useDatabaseList<T = { [key: string]: unknown }>(
   return useObservable(hash, observable$, options);
 }
 
-export function useDatabaseListData<T = { [key: string]: unknown }>(ref: Reference | DatabaseQuery, options?: ReactFireOptions<T[]>): ObservableStatus<T[]> {
+export function useDatabaseListData<T = { [key: string]: unknown }>(
+  ref: Reference | DatabaseQuery,
+  options?: ReactFireOptions<T[]>
+): ObservableStatus<T[] | null> {
   const idField = options ? checkIdField(options) : 'NO_ID_FIELD';
   const observableId = `database:listVal:${getUniqueIdForDatabaseQuery(ref)}:idField=${idField}`;
-  const observable$ = listVal(ref, idField);
+  const observable$ = listVal<T>(ref, idField);
   return useObservable(observableId, observable$, options);
 }

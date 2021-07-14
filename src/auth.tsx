@@ -19,7 +19,7 @@ export async function preloadUser(authResolver: () => Promise<Auth>) {
  *
  * @param options
  */
-export function useUser<T = unknown>(options?: ReactFireOptions<T>): ObservableStatus<User> {
+export function useUser<T = unknown>(options?: ReactFireOptions<T>): ObservableStatus<User | null> {
   const auth = useAuth();
 
   const observableId = `auth:user:${auth.name}`;
@@ -153,7 +153,8 @@ export function useSigninCheck(
   const observable = user(auth).pipe(
     switchMap((user) => {
       if (!user) {
-        return of({ signedIn: false, hasRequiredClaims: false });
+        const result: SigninCheckResult = { signedIn: false, hasRequiredClaims: false, errors: {}, user: null };
+        return of(result);
       } else if (options && (options.hasOwnProperty('requiredClaims') || options.hasOwnProperty('validateClaims'))) {
         return from(user.getIdTokenResult(options?.forceRefresh ?? false)).pipe(
           map((idTokenResult) => {
@@ -166,12 +167,15 @@ export function useSigninCheck(
             }
 
             const { hasRequiredClaims, errors } = validator(idTokenResult.claims);
-            return { signedIn: true, hasRequiredClaims, errors, user: user };
+
+            const result: SigninCheckResult = { signedIn: true, hasRequiredClaims, errors, user: user };
+            return result;
           })
         );
       } else {
         // If no claims are provided to be checked, `hasRequiredClaims` is true
-        return of({ signedIn: true, hasRequiredClaims: true, user: user });
+        const result: SigninCheckResult = { signedIn: true, hasRequiredClaims: true, errors: {}, user: user };
+        return of(result);
       }
     })
   );
