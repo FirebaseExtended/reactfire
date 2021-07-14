@@ -63,7 +63,7 @@ export interface ObservableStatus<T> {
   firstValuePromise: Promise<void>;
 }
 
-export function useObservable<T>(observableId: string, source: Observable<T | any>, config: ReactFireOptions = {}): ObservableStatus<T> {
+export function useObservable<T = unknown>(observableId: string, source: Observable<T>, config: ReactFireOptions = {}): ObservableStatus<T> {
   if (!observableId) {
     throw new Error('cannot call useObservable without an observableId');
   }
