@@ -14,16 +14,16 @@
 
 - **`ReactFireOptions`**
 
-  ↳ [`SignInCheckOptionsBasic`](auth.signincheckoptionsbasic.md)
+  ↳ [`SignInCheckOptionsBasic`](auth.SignInCheckOptionsBasic.md)
 
 ## Table of contents
 
 ### Properties
 
-- [idField](index.reactfireoptions.md#idfield)
-- [initialData](index.reactfireoptions.md#initialdata)
-- [startWithValue](index.reactfireoptions.md#startwithvalue)
-- [suspense](index.reactfireoptions.md#suspense)
+- [idField](index.ReactFireOptions.md#idfield)
+- [initialData](index.ReactFireOptions.md#initialdata)
+- [startWithValue](index.ReactFireOptions.md#startwithvalue)
+- [suspense](index.ReactFireOptions.md#suspense)
 
 ## Properties
 

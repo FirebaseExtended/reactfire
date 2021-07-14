@@ -22,9 +22,9 @@
 
 | Name | Type |
 | :------ | :------ |
-| `errors` | {} \| [`ClaimCheckErrors`](auth.claimcheckerrors.md) |
+| `errors` | {} \| [`ClaimCheckErrors`](auth.ClaimCheckErrors.md) |
 | `hasRequiredClaims` | `boolean` |
 
 #### Defined in
 
-[src/auth.tsx:88](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L88)
+[src/auth.tsx:89](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L89)

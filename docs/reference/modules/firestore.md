@@ -18,7 +18,7 @@
 
 ### preloadFirestoreDoc
 
-▸ **preloadFirestoreDoc**(`refProvider`): `Promise`<[`SuspenseSubject`](../classes/suspensesubject.suspensesubject-1.md)<`DocumentSnapshot`<`DocumentData`\>\>\>
+▸ **preloadFirestoreDoc**(`refProvider`): `Promise`<[`SuspenseSubject`](../classes/SuspenseSubject.SuspenseSubject-1.md)<`DocumentSnapshot`<`DocumentData`\>\>\>
 
 Preload a subscription to a Firestore document reference.
 
@@ -32,7 +32,7 @@ Use this to warm up `useFirestoreDoc` for a specific document
 
 #### Returns
 
-`Promise`<[`SuspenseSubject`](../classes/suspensesubject.suspensesubject-1.md)<`DocumentSnapshot`<`DocumentData`\>\>\>
+`Promise`<[`SuspenseSubject`](../classes/SuspenseSubject.SuspenseSubject-1.md)<`DocumentSnapshot`<`DocumentData`\>\>\>
 
 #### Defined in
 
@@ -42,7 +42,7 @@ ___
 
 ### useFirestoreCollection
 
-▸ **useFirestoreCollection**<`T`\>(`query`, `options?`): [`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`QuerySnapshot`<`T`\>\>
+▸ **useFirestoreCollection**<`T`\>(`query`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`QuerySnapshot`<`T`\>\>
 
 Subscribe to a Firestore collection
 
@@ -56,22 +56,22 @@ Subscribe to a Firestore collection
 
 | Name | Type |
 | :------ | :------ |
-| `query` | `FirestoreQuery` |
-| `options?` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md)<`T`[]\> |
+| `query` | `FirestoreQuery`<`T`\> |
+| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`T`[]\> |
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`QuerySnapshot`<`T`\>\>
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`QuerySnapshot`<`T`\>\>
 
 #### Defined in
 
-[src/firestore.tsx:89](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L89)
+[src/firestore.tsx:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L86)
 
 ___
 
 ### useFirestoreCollectionData
 
-▸ **useFirestoreCollectionData**<`T`\>(`query`, `options?`): [`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`T`[]\>
+▸ **useFirestoreCollectionData**<`T`\>(`query`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`T`[]\>
 
 Subscribe to a Firestore collection and unwrap the snapshot into an array.
 
@@ -79,28 +79,28 @@ Subscribe to a Firestore collection and unwrap the snapshot into an array.
 
 | Name | Type |
 | :------ | :------ |
-| `T` | { [key: string]: `unknown`;  } |
+| `T` | `DocumentData` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `query` | `FirestoreQuery` |
-| `options?` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md)<`T`[]\> |
+| `query` | `FirestoreQuery`<`T`\> |
+| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`T`[]\> |
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`T`[]\>
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`T`[]\>
 
 #### Defined in
 
-[src/firestore.tsx:99](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L99)
+[src/firestore.tsx:96](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L96)
 
 ___
 
 ### useFirestoreDoc
 
-▸ **useFirestoreDoc**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`DocumentSnapshot`<`T`\>\>
+▸ **useFirestoreDoc**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`DocumentSnapshot`<`T`\>\>
 
 Suscribe to Firestore Document changes
 
@@ -116,12 +116,12 @@ You can preload data for this hook by calling `preloadFirestoreDoc`
 
 | Name | Type |
 | :------ | :------ |
-| `ref` | `DocumentReference` |
-| `options?` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md)<`T`\> |
+| `ref` | `DocumentReference`<`T`\> |
+| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`T`\> |
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`DocumentSnapshot`<`T`\>\>
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`DocumentSnapshot`<`T`\>\>
 
 #### Defined in
 
@@ -131,36 +131,36 @@ ___
 
 ### useFirestoreDocData
 
-▸ **useFirestoreDocData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`T`\>
+▸ **useFirestoreDocData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`T`\>
 
 Suscribe to Firestore Document changes and unwrap the document into a plain object
 
 #### Type parameters
 
-| Name |
-| :------ |
-| `T` |
+| Name | Type |
+| :------ | :------ |
+| `T` | `unknown` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `ref` | `DocumentReference` |
-| `options?` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md)<`T`\> |
+| `ref` | `DocumentReference`<`T`\> |
+| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`T`\> |
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`T`\>
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`T`\>
 
 #### Defined in
 
-[src/firestore.tsx:65](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L65)
+[src/firestore.tsx:62](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L62)
 
 ___
 
 ### useFirestoreDocDataOnce
 
-▸ **useFirestoreDocDataOnce**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`T`\>
+▸ **useFirestoreDocDataOnce**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`T`\>
 
 Get a Firestore document, unwrap the document into a plain object, and don't subscribe to changes
 
@@ -174,22 +174,22 @@ Get a Firestore document, unwrap the document into a plain object, and don't sub
 
 | Name | Type |
 | :------ | :------ |
-| `ref` | `DocumentReference` |
-| `options?` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md)<`T`\> |
+| `ref` | `DocumentReference`<`T`\> |
+| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`T`\> |
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`T`\>
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`T`\>
 
 #### Defined in
 
-[src/firestore.tsx:77](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L77)
+[src/firestore.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L74)
 
 ___
 
 ### useFirestoreDocOnce
 
-▸ **useFirestoreDocOnce**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`T` extends {} ? `T` : `DocumentSnapshot`\>
+▸ **useFirestoreDocOnce**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`DocumentSnapshot`<`T`\>\>
 
 Get a firestore document and don't subscribe to changes
 
@@ -203,12 +203,12 @@ Get a firestore document and don't subscribe to changes
 
 | Name | Type |
 | :------ | :------ |
-| `ref` | `DocumentReference` |
-| `options?` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md)<`T`\> |
+| `ref` | `DocumentReference`<`T`\> |
+| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`T`\> |
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`T` extends {} ? `T` : `DocumentSnapshot`\>
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`DocumentSnapshot`<`T`\>\>
 
 #### Defined in
 

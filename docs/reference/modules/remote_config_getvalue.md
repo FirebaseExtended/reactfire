@@ -6,15 +6,15 @@
 
 ### Type aliases
 
-- [AllParameters](remote_config_getvalue.md#allparameters)
+- [AllParameters](remote_config_getValue.md#allparameters)
 
 ### Functions
 
-- [getAll](remote_config_getvalue.md#getall)
-- [getBoolean](remote_config_getvalue.md#getboolean)
-- [getNumber](remote_config_getvalue.md#getnumber)
-- [getString](remote_config_getvalue.md#getstring)
-- [getValue](remote_config_getvalue.md#getvalue)
+- [getAll](remote_config_getValue.md#getall)
+- [getBoolean](remote_config_getValue.md#getboolean)
+- [getNumber](remote_config_getValue.md#getnumber)
+- [getString](remote_config_getValue.md#getstring)
+- [getValue](remote_config_getValue.md#getvalue)
 
 ## Type aliases
 
@@ -34,7 +34,7 @@
 
 ### getAll
 
-▸ **getAll**(`remoteConfig`): `Observable`<[`AllParameters`](remote_config_getvalue.md#allparameters)\>
+▸ **getAll**(`remoteConfig`): `Observable`<[`AllParameters`](remote_config_getValue.md#allparameters)\>
 
 #### Parameters
 
@@ -44,7 +44,7 @@
 
 #### Returns
 
-`Observable`<[`AllParameters`](remote_config_getvalue.md#allparameters)\>
+`Observable`<[`AllParameters`](remote_config_getValue.md#allparameters)\>
 
 #### Defined in
 

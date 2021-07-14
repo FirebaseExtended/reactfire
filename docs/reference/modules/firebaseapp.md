@@ -6,14 +6,14 @@
 
 ### Variables
 
-- [version](firebaseapp.md#version)
+- [version](firebaseApp.md#version)
 
 ### Functions
 
-- [FirebaseAppProvider](firebaseapp.md#firebaseappprovider)
-- [useFirebaseApp](firebaseapp.md#usefirebaseapp)
-- [useIsSuspenseEnabled](firebaseapp.md#useissuspenseenabled)
-- [useSuspenseEnabledFromConfigAndContext](firebaseapp.md#usesuspenseenabledfromconfigandcontext)
+- [FirebaseAppProvider](firebaseApp.md#firebaseappprovider)
+- [useFirebaseApp](firebaseApp.md#usefirebaseapp)
+- [useIsSuspenseEnabled](firebaseApp.md#useissuspenseenabled)
+- [useSuspenseEnabledFromConfigAndContext](firebaseApp.md#usesuspenseenabledfromconfigandcontext)
 
 ## Variables
 

@@ -8,9 +8,9 @@
 
 ### Properties
 
-- [children](performance.suspenseperfprops.md#children)
-- [fallback](performance.suspenseperfprops.md#fallback)
-- [traceId](performance.suspenseperfprops.md#traceid)
+- [children](performance.SuspensePerfProps.md#children)
+- [fallback](performance.SuspensePerfProps.md#fallback)
+- [traceId](performance.SuspensePerfProps.md#traceid)
 
 ## Properties
 

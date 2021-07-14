@@ -6,7 +6,7 @@
 
 ## Hierarchy
 
-- [`SignInCheckOptionsBasic`](auth.signincheckoptionsbasic.md)
+- [`SignInCheckOptionsBasic`](auth.SignInCheckOptionsBasic.md)
 
   ↳ **`SignInCheckOptionsClaimsValidator`**
 
@@ -14,12 +14,12 @@
 
 ### Properties
 
-- [forceRefresh](auth.signincheckoptionsclaimsvalidator.md#forcerefresh)
-- [idField](auth.signincheckoptionsclaimsvalidator.md#idfield)
-- [initialData](auth.signincheckoptionsclaimsvalidator.md#initialdata)
-- [startWithValue](auth.signincheckoptionsclaimsvalidator.md#startwithvalue)
-- [suspense](auth.signincheckoptionsclaimsvalidator.md#suspense)
-- [validateCustomClaims](auth.signincheckoptionsclaimsvalidator.md#validatecustomclaims)
+- [forceRefresh](auth.SignInCheckOptionsClaimsValidator.md#forcerefresh)
+- [idField](auth.SignInCheckOptionsClaimsValidator.md#idfield)
+- [initialData](auth.SignInCheckOptionsClaimsValidator.md#initialdata)
+- [startWithValue](auth.SignInCheckOptionsClaimsValidator.md#startwithvalue)
+- [suspense](auth.SignInCheckOptionsClaimsValidator.md#suspense)
+- [validateCustomClaims](auth.SignInCheckOptionsClaimsValidator.md#validatecustomclaims)
 
 ## Properties
 
@@ -29,7 +29,7 @@
 
 #### Inherited from
 
-[SignInCheckOptionsBasic](auth.signincheckoptionsbasic.md).[forceRefresh](auth.signincheckoptionsbasic.md#forcerefresh)
+[SignInCheckOptionsBasic](auth.SignInCheckOptionsBasic.md).[forceRefresh](auth.SignInCheckOptionsBasic.md#forcerefresh)
 
 #### Defined in
 
@@ -43,7 +43,7 @@ ___
 
 #### Inherited from
 
-[SignInCheckOptionsBasic](auth.signincheckoptionsbasic.md).[idField](auth.signincheckoptionsbasic.md#idfield)
+[SignInCheckOptionsBasic](auth.SignInCheckOptionsBasic.md).[idField](auth.SignInCheckOptionsBasic.md#idfield)
 
 #### Defined in
 
@@ -57,7 +57,7 @@ ___
 
 #### Inherited from
 
-[SignInCheckOptionsBasic](auth.signincheckoptionsbasic.md).[initialData](auth.signincheckoptionsbasic.md#initialdata)
+[SignInCheckOptionsBasic](auth.SignInCheckOptionsBasic.md).[initialData](auth.SignInCheckOptionsBasic.md#initialdata)
 
 #### Defined in
 
@@ -73,7 +73,7 @@ ___
 
 #### Inherited from
 
-[SignInCheckOptionsBasic](auth.signincheckoptionsbasic.md).[startWithValue](auth.signincheckoptionsbasic.md#startwithvalue)
+[SignInCheckOptionsBasic](auth.SignInCheckOptionsBasic.md).[startWithValue](auth.SignInCheckOptionsBasic.md#startwithvalue)
 
 #### Defined in
 
@@ -87,7 +87,7 @@ ___
 
 #### Inherited from
 
-[SignInCheckOptionsBasic](auth.signincheckoptionsbasic.md).[suspense](auth.signincheckoptionsbasic.md#suspense)
+[SignInCheckOptionsBasic](auth.SignInCheckOptionsBasic.md).[suspense](auth.SignInCheckOptionsBasic.md#suspense)
 
 #### Defined in
 
@@ -97,7 +97,7 @@ ___
 
 ### validateCustomClaims
 
-• **validateCustomClaims**: [`ClaimsValidator`](auth.claimsvalidator.md)
+• **validateCustomClaims**: [`ClaimsValidator`](auth.ClaimsValidator.md)
 
 #### Defined in
 
