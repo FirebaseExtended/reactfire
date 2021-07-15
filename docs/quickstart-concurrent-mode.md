@@ -111,10 +111,11 @@ npm install --save firebase reactfire
 
    ```jsx
    //...
-   ReactDOM.createRoot(document.getElementById('root')).render(
+   ReactDOM.render(
      <FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={true}>
        <App />
-     </FirebaseAppProvider>
+     </FirebaseAppProvider>,
+     document.getElementById('root')
    );
    //...
    ```
