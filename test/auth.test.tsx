@@ -199,7 +199,44 @@ describe('Authentication', () => {
       expect(result.current.data.errors as ClaimCheckErrors);
     });
 
-    it('accepts a custom claims validator', async () => {
+    it('accepts a custom claims validator and returns invalid hasRequiredClaims state', async () => {
+      const withClaimsCustomToken = {
+        uid: 'aUserWithCustomClaims',
+        claims: { someClaim: false, someOtherClaim: false },
+      };
+
+      const claimsValidator: ClaimsValidator = (userClaims) => {
+        const validClaimsSet = ['someClaim', 'someOtherClaim'];
+        let hasAnyClaim = false;
+
+        for (const claim of validClaimsSet) {
+          if (userClaims[claim] === true) {
+            hasAnyClaim = true;
+            break;
+          }
+        }
+
+        return {
+          hasRequiredClaims: hasAnyClaim,
+          errors: hasAnyClaim ? {} : validClaimsSet,
+        };
+      };
+
+      const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck({ validateCustomClaims: claimsValidator }), {
+        wrapper: Provider,
+      });
+
+      await hooksAct(async () => {
+        await app.auth().signInWithCustomToken(JSON.stringify(withClaimsCustomToken));
+      });
+
+      await waitForHookCondition(() => result.current.status === 'success');
+
+      expect(result.current.data.signedIn).toEqual(true);
+      expect(result.current.data.hasRequiredClaims).toEqual(false);
+    });
+
+    it('accepts a custom claims validator and returns valid hasRequiredClaims state', async () => {
       const withClaimsCustomToken = {
         uid: 'aUserWithCustomClaims',
         claims: { someClaim: true, someOtherClaim: false },
