@@ -34,7 +34,7 @@ const AnimalsList = () => {
   const database = useDatabase();
   const animalsRef = ref(database, 'animals');
   const animalsQuery = query(animalsRef, orderByChild('commonName'));
-  const { status, data: animals } = useDatabaseListData(animalsQuery, {
+  const { status, data: animals } = useDatabaseListData<{commonName: string, id: string}>(animalsQuery, {
     idField: 'id'
   });
 
@@ -60,6 +60,21 @@ const AnimalsList = () => {
           ))}
         </ul>
       </div>
+      <ul>
+        {Array.from(
+          animals.reduce((animalCountMap, animal) => {
+            const currentCount = animalCountMap.get(animal.commonName) ?? 0;
+            return animalCountMap.set(animal.commonName, currentCount + 1);
+          }, new Map<string, number>())
+        ).map((animalStat: [string, number]) => {
+          const [animalName, animalCount] = animalStat;
+          return (
+            <li key={animalName}>
+              {animalName}: {animalCount}
+            </li>
+          );
+        })}
+      </ul>
       <WideButton
         label="Add Animal"
         onClick={() => {
