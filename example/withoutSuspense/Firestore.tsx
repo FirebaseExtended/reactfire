@@ -5,7 +5,7 @@ import { WideButton } from '../display/Button';
 import { CardSection } from '../display/Card';
 import { LoadingSpinner } from '../display/LoadingSpinner';
 import { AuthWrapper } from './Auth';
-import { initializeFirestore, doc, collection, enableIndexedDbPersistence, onSnapshot, increment, updateDoc, orderBy, query, addDoc } from 'firebase/firestore';
+import { initializeFirestore, doc, collection, enableIndexedDbPersistence, increment, updateDoc, orderBy, query, addDoc } from 'firebase/firestore';
 import type { FirebaseFirestore } from 'firebase/firestore';
 import { getFirestore } from 'firebase/firestore';
 
@@ -16,17 +16,8 @@ const Counter = () => {
   if(getFirestore(app) !== firestore) {
     throw new Error('firestore instances do not match')
   }
-  
-
-  console.log("USEFIRESTORE", firestore.app.name);
 
   const ref = doc(firestore, 'count', 'counter');
-
-  useEffect(() => {
-    onSnapshot(ref, (doc) => {
-      console.log(doc.data());
-    });
-  }, []);
 
   const incrementCounter = (amountToIncrement) => {
     updateDoc(ref, {
@@ -50,7 +41,6 @@ const Counter = () => {
 };
 
 const AnimalsList = () => {
-  debugger;
   const firestore = useFirestore();
   const animalsCollection = collection(firestore, 'animals');
   const [isAscending, setIsAscending] = useState(false);
@@ -132,7 +122,6 @@ export const Firestore = () => {
   // https://github.com/angular/angularfire/issues/1158
 
   useEffect(() => {
-    console.log(`Initializing Firestore with app name ${firebaseApp.name}`);
     const db = initializeFirestore(firebaseApp, {});
     enableIndexedDbPersistence(db).then(() => {
       setFirestoreInstance(db);
@@ -150,12 +139,12 @@ export const Firestore = () => {
           <CardSection title="Get/Set document value">
             <Counter />
           </CardSection>
-          {/* <CardSection title="Fetch data once">
+          <CardSection title="Fetch data once">
             <StaticValue />
           </CardSection>
           <CardSection title="Work with lists of data">
             <AnimalsList />
-          </CardSection> */}
+          </CardSection>
         </FirestoreProvider>
       </AuthWrapper>
     </>
