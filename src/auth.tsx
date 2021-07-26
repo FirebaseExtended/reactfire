@@ -136,9 +136,9 @@ export interface SignInCheckOptionsClaimsValidator extends SignInCheckOptionsBas
 export function useSigninCheck(
   options?: SignInCheckOptionsBasic | SignInCheckOptionsClaimsObject | SignInCheckOptionsClaimsValidator
 ): ObservableStatus<SigninCheckResult> {
-  // If both `requiredClaims` and `validateClaims` are provided, we won't know which one to use
-  if (options?.hasOwnProperty('requiredClaims') && options?.hasOwnProperty('validateClaims')) {
-    throw new Error('Cannot have both "requiredClaims" and "validateClaims". Use one or the other.');
+  // If both `requiredClaims` and `validateCustomClaims` are provided, we won't know which one to use
+  if (options?.hasOwnProperty('requiredClaims') && options?.hasOwnProperty('validateCustomClaims')) {
+    throw new Error('Cannot have both "requiredClaims" and "validateCustomClaims". Use one or the other.');
   }
 
   const auth = useAuth();
@@ -152,14 +152,14 @@ export function useSigninCheck(
     observableId = `${observableId}:requiredClaims:${JSON.stringify((options as SignInCheckOptionsClaimsObject).requiredClaims)}`;
   } else if (options?.hasOwnProperty('validateCustomClaims')) {
     // TODO(jamesdaniels): Check if stringifying this function breaks in IE11
-    observableId = `${observableId}:validateClaims:${JSON.stringify((options as SignInCheckOptionsClaimsValidator).validateCustomClaims)}`;
+    observableId = `${observableId}:validateCustomClaims:${JSON.stringify((options as SignInCheckOptionsClaimsValidator).validateCustomClaims)}`;
   }
 
   const observable = user(auth).pipe(
     switchMap(user => {
       if (!user) {
         return of({ signedIn: false, hasRequiredClaims: false });
-      } else if (options && (options.hasOwnProperty('requiredClaims') || options.hasOwnProperty('validateClaims'))) {
+      } else if (options && (options.hasOwnProperty('requiredClaims') || options.hasOwnProperty('validateCustomClaims'))) {
         return from(user.getIdTokenResult(options?.forceRefresh ?? false)).pipe(
           map(idTokenResult => {
             let validator: ClaimsValidator;
