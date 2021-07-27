@@ -45,7 +45,7 @@ function getSdkProvider<Sdk extends FirebaseSdks>(SdkContext: React.Context<Sdk 
   };
 }
 
-function useSdk<Sdk>(SdkContext: React.Context<Sdk | undefined>): Sdk {
+function useSdk<Sdk extends FirebaseSdks>(SdkContext: React.Context<Sdk | undefined>): Sdk {
   const sdk = React.useContext(SdkContext);
 
   if (!sdk) {
