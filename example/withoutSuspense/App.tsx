@@ -12,15 +12,8 @@ import { Storage } from './Storage';
 import { initializeApp, getApp, setLogLevel } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
-export const App = ({ firebaseConfig }: { firebaseConfig: { [key: string]: unknown } }) => {
-  
-  let firebaseApp;
-  try {
-    firebaseApp = initializeApp(firebaseConfig);
-  } catch {
-    firebaseApp = getApp();
-  }
-  // setLogLevel('debug');
+export const App = () => {
+  const firebaseApp = useFirebaseApp();
   const auth = getAuth(firebaseApp);
   
   return (
