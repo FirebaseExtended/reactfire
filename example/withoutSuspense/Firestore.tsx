@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { FirestoreProvider, useFirebaseApp, useFirestore, useFirestoreCollectionData, useFirestoreDocData, useFirestoreDocDataOnce } from 'reactfire';
+import { useState } from 'react';
+import { FirestoreProvider, useFirebaseApp, useFirestore, useFirestoreCollectionData, useFirestoreDocData, useFirestoreDocDataOnce, useInitFirestore } from 'reactfire';
 import { WideButton } from '../display/Button';
 import { CardSection } from '../display/Card';
 import { LoadingSpinner } from '../display/LoadingSpinner';
 import { AuthWrapper } from './Auth';
 import { initializeFirestore, doc, collection, enableIndexedDbPersistence, increment, updateDoc, orderBy, query, addDoc } from 'firebase/firestore';
-import type { FirebaseFirestore } from 'firebase/firestore';
 import { getFirestore } from 'firebase/firestore';
 
 const Counter = () => {
@@ -113,22 +112,13 @@ const StaticValue = () => {
 };
 
 export const Firestore = () => {
-  const firebaseApp = useFirebaseApp();
-  const [firestoreInstance, setFirestoreInstance] = useState<FirebaseFirestore | undefined>();
-
-  // idea: useFirestoreInstance();
-  // this could set up enableIndexedDbPersistence
-  // and emulators!
-  // https://github.com/angular/angularfire/issues/1158
-
-  useEffect(() => {
+  const {status, data: firestoreInstance} = useInitFirestore(async (firebaseApp) => {
     const db = initializeFirestore(firebaseApp, {});
-    enableIndexedDbPersistence(db).then(() => {
-      setFirestoreInstance(db);
-    });
-  }, [firebaseApp]);
-
-  if (!firestoreInstance) {
+    await enableIndexedDbPersistence(db);
+    return db;
+  });
+  
+  if (status === 'loading') {
     return <LoadingSpinner />;
   }
 
