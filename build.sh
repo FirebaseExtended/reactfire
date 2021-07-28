@@ -11,8 +11,8 @@ if [[ $GITHUB_REF =~ $TAG_TEST ]]; then
         NPM_TAG=latest
     fi;
 else
-    OVERRIDE_VERSION=$(node -e "console.log(require('./package.json').version)")-canary.$SHORT_SHA
-    NPM_TAG=canary
+    OVERRIDE_VERSION=$(node -e "console.log(require('./package.json').version)")-exp.$SHORT_SHA
+    NPM_TAG=exp
 fi;
 
 npm --no-git-tag-version --allow-same-version -f version $OVERRIDE_VERSION
