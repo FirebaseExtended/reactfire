@@ -1,25 +1,8 @@
 # Using ReactFire
 
-> ⚠️ These examples currently rely use ReactFire's concurrent mode features. We'd love PRs that add samples that work with stable builds of React!
+## Access your `FirebaseApp` instance from a component
 
-- [Access your `firebase` app from any component](#access-your-firebase-app-from-any-component)
-- [Access the current user](#access-the-current-user)
-  - [Decide what to render based on a user's auth state](#decide-what-to-render-based-on-a-users-auth-state)
-- [Log Page Views with React Router](#log-page-views-to-google-analytics-for-firebase-with-react-router)
-- [Combine Auth, Firestore, and Cloud Storage to Show a User Profile Card](#combine-auth-firestore-and-cloud-storage-to-show-a-user-profile-card)
-- [Manage Loading States](#manage-loading-states)
-  - [Default: `Suspense`](#default-suspense)
-    - [Bonus: `SuspenseWithPerf`](#bonus-suspensewithperf)
-  - [Provide an initial value](#dont-want-suspense-provide-an-initial-value)
-- [Lazy Load the Firebase SDKs](#lazy-load-the-Firebase-SDKs)
-- [The _render-as-you-fetch_ pattern](#the-render-as-you-fetch-pattern)
-  - [Preload an SDK](#preload-an-sdk)
-  - [Preload Data](#preload-data)
-- [Advanced: Using RxJS observables to combine multiple data sources](#advanced-using-rxjs-observables-to-combine-multiple-data-sources)
-
-## Access your `firebase` app from any component
-
-Since ReactFire uses React's Context API, any component under a `FirebaseAppProvider` can use `useFirebaseApp()` to get your initialized app. Plus, all ReactFire hooks will automatically check context to see if a firebase app is available.
+Since ReactFire uses React's Context API, any child of a `FirebaseAppProvider` can call `useFirebaseApp()` to get your initialized app. Plus, all ReactFire hooks will automatically check context to see if a firebase app is available.
 
 ```jsx
 // ** INDEX.JS **
@@ -29,47 +12,76 @@ const firebaseConfig = {
 
 render(
   <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-    <MyApp />
+    <MyComponent />
   </FirebaseAppProvider>
 );
 
-// ** MYCOMPONENT.JS **
+// ** MyComponent.JS **
 
 function MyComponent(props) {
   // useFirestore will get the firebase app from Context!
-  const documentReference = useFirestore()
-    .collection('burritos')
-    .doc('vegetarian');
-
-  // ...
+  const app = useFirebaseApp();
 }
 ```
 
-## Access the current user
+### Access Firebase product SDKs from a component
 
-The `useUser()` hook returns the currently signed-in [user](https://firebase.google.com/docs/reference/js/firebase.User). Like the other ReactFire Hooks, you need to wrap it in `Suspense` or provide a `initialData`.
+Just as `FirebaseAppProvider` allows child components to access the `FirebaseApp` instance, each Firebase product SDK (like `firebase/auth` or `firebase/database`) has a provider:
+
+```jsx
+import { getAuth } from 'firebase/auth'; // Firebase v9+
+import { getDatabase } from 'firebase/database'; // Firebase v9+
+
+import { FirebaseAppProvider, DatabaseProvider, AuthProvider, useFirebaseApp } from 'reactfire';
+
+function FirebaseComponents({ children }) {
+  const app = useFirebaseApp(); // a parent component contains a `FirebaseAppProvider`
+
+  // initialize Database and Auth with the normal Firebase SDK functions
+  const database = getDatabase(app);
+  const auth = getAuth(app);
+
+  // any children will be able to use `useUser`, `useDatabaseObjectData`, etc
+  return (
+    <AuthProvider sdk={auth}>
+      <DatabaseProvider sdk={database}>
+        <MyCoolAppThatUsesAuthAndRealtimeDatabase />
+      </DatabaseProvider>
+    </AuthProvider>
+  );
+}
+```
+
+## Auth
+
+The following samples assume that `FirebaseAppProvider` and `AuthProvider` components exist higher up the component tree.
+
+### Display the current signed-in user
+
+The `useUser()` hook returns the currently signed-in [user](https://firebase.google.com/docs/reference/js/v9/auth.user).
 
 ```jsx
 function HomePage(props) {
-  // no need to use useFirebaseApp - useUser calls it under the hood
-  const { data: user } = useUser();
+  const { status, data: user } = useUser();
 
-  return <h1>Welcome Back {user.displayName}!</h1>;
+  if (status === 'loading') {
+    return <span>loading...</span>;
+  }
+
+  return <h1>Welcome Back, {user.displayName}!</h1>;
 }
 ```
 
-Note: `useUser` will also automatically lazily import the `firebase/auth` SDK if it has not been imported already.
+### Only render a component if a user is signed in
 
-### Decide what to render based on a user's auth state
-
-The `useSigninCheck` hook makes it easy to decide whether to hide or show UI elements based on a user's auth state, and even their [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims). It will render its children if a user is signed in, but if they are not signed in, it renders its `fallback` prop:
+The `useSigninCheck` hook makes it easy to decide whether to hide or show UI elements based on a user's auth state, and can even check their [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims). It will render its children if a user is signed in, but if they are not signed in, it renders its `fallback` prop:
 
 ```jsx
 function UserFavorites() {
   const { status, data: signInCheckResult } = useSigninCheck();
 
   if (status === 'loading') {
-    return <LoadingSpinner />;
+    return <span>loading...</span>;
   }
 
   if (signInCheckResult.signedIn === true) {
@@ -77,6 +89,57 @@ function UserFavorites() {
   } else {
     return <SignInForm />;
   }
+}
+```
+
+## Firestore
+
+### Show a single document
+
+This example subscribes to the `count/counter` document, and re-renders whenever the document updates.
+
+```jsx
+function Counter() {
+  const firestore = useFirestore();
+  const ref = doc(firestore, 'count', 'counter');
+
+  const { status, data: count } = useFirestoreDocData(ref);
+
+  if (status === 'loading') {
+    return <span>loading...</span>;
+  }
+
+  return <span> {count.value} </span>;
+}
+```
+
+### Show a list of data
+
+This example queries the `animals` collection, sorts by `commonName`, and re-renders whenever the collection updates.
+
+```jsx
+function FavoriteAnimals() {
+  // set up query
+  const firestore = useFirestore();
+  const animalsCollection = collection(firestore, 'animals');
+  const animalsQuery = query(animalsCollection, orderBy('commonName', 'asc'));
+
+  // ReactFire!
+  const { status, data: animals } = useFirestoreCollectionData(animalsQuery, {
+    idField: 'id', // this field will be added to the object created from each document
+  });
+
+  if (status === 'loading') {
+    return <span>loading...</span>;
+  }
+
+  return (
+    <ul>
+      {animals.map((animal) => (
+        <li key={animal.id}>{animal.commonName}</li>
+      ))}
+    </ul>
+  );
 }
 ```
 
@@ -196,9 +259,7 @@ Say we have a component called `Burrito` that uses `useFirestoreDoc`:
 
 ```jsx
 function Burrito() {
-  const burritoRef = useFirestore()
-    .collection('tryreactfire')
-    .doc('burrito');
+  const burritoRef = useFirestore().collection('tryreactfire').doc('burrito');
 
   // subscribe to the doc. just one line!
   // throws a Promise for Suspense to catch,
@@ -244,18 +305,15 @@ What if we don't want to use Suspense, or we're server rendering and we know wha
 ```jsx
 function Burrito() {
   const firebaseApp = useFirebaseApp();
-  const burritoRef = firebaseApp
-    .firestore()
-    .collection('tryreactfire')
-    .doc('burrito');
+  const burritoRef = firebaseApp.firestore().collection('tryreactfire').doc('burrito');
 
   // subscribe to the doc. just one line!
   // returns the `initialData`,
   // and then streams live updates
   const burritoDoc = useFirestoreDocData(burritoRef, {
     initialData: {
-      yummy: true
-    }
+      yummy: true,
+    },
   });
 
   const isYummy = burritoDoc.data().yummy;
@@ -314,7 +372,7 @@ Some Firestore SDKs need to be initialized (`firebase.remoteConfig().fetchAndAct
 
 ```jsx
 preloadFirestore({
-  setup: firestore => firestore().enablePersistence()
+  setup: (firestore) => firestore().enablePersistence(),
 });
 ```
 
