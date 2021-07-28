@@ -192,6 +192,46 @@ function AnimalsList() {
 }
 ```
 
+## Cloud Storage for Firebase
+
+The following samples assume that `FirebaseAppProvider` and `StorageProvider` components exist higher up the component tree.
+
+### Fetch and show an image
+
+```jsx
+function CatImage() {
+  const storage = useStorage();
+  const catRef = ref(storage, 'cats/newspaper');
+
+  const { status, data: imageURL } = useStorageDownloadURL(ref(storage, storagePath));
+
+  if (status === 'loading') {
+    return <span>loading...</span>;
+  }
+
+  return <img src={imageURL} alt="cat reading the newspaper" />;
+}
+```
+
+### Show upload status
+
+```jsx
+function UploadProgress({ uploadTask, storageRef }) {
+  const { status, data: uploadProgress } = useStorageTask < UploadTaskSnapshot > (uploadTask, storageRef);
+
+  let percentComplete;
+
+  if (status === 'loading') {
+    percentComplete = '0%';
+  } else {
+    const { bytesTransferred, totalBytes } = uploadProgress;
+    percentComplete = Math.round(100 * (bytesTransferred / totalBytes)) + '%';
+  }
+
+  return <span>{percentComplete} uploaded</span>;
+}
+```
+
 ## Log Page Views to Google Analytics for Firebase with React Router
 
 ```jsx
