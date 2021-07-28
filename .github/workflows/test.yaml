@@ -100,6 +100,8 @@ jobs:
           key: firebase_emulators
       - name: 'Download Artifacts'
         uses: actions/download-artifact@v2
+      - name: Check available files/dirs
+      - run: ls -a
       - name: Expand Artifact
         run: |
           chmod +x reactfire-${{ github.run_id }}/unpack.sh
