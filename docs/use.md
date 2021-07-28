@@ -94,6 +94,8 @@ function UserFavorites() {
 
 ## Firestore
 
+The following samples assume that `FirebaseAppProvider` and `FirestoreProvider` components exist higher up the component tree.
+
 ### Show a single document
 
 This example subscribes to the `count/counter` document, and re-renders whenever the document updates.
@@ -113,7 +115,7 @@ function Counter() {
 }
 ```
 
-### Show a list of data
+### Show a list of data (collection)
 
 This example queries the `animals` collection, sorts by `commonName`, and re-renders whenever the collection updates.
 
@@ -127,6 +129,53 @@ function FavoriteAnimals() {
   // ReactFire!
   const { status, data: animals } = useFirestoreCollectionData(animalsQuery, {
     idField: 'id', // this field will be added to the object created from each document
+  });
+
+  if (status === 'loading') {
+    return <span>loading...</span>;
+  }
+
+  return (
+    <ul>
+      {animals.map((animal) => (
+        <li key={animal.id}>{animal.commonName}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+## Realtime Database
+
+The following samples assume that `FirebaseAppProvider` and `RealtimeDatabaseProvider` components exist higher up the component tree.
+
+### Show an object
+
+```jsx
+function Counter() {
+  const database = useDatabase();
+  const counterRef = ref(database, 'counter');
+
+  const { status, data: count } = useDatabaseObjectData(counterRef);
+
+  if (status === 'loading') {
+    return <span>loading...</span>;
+  }
+
+  return <span> {count} </span>;
+}
+```
+
+### Show a list of data
+
+```jsx
+function AnimalsList() {
+  const database = useDatabase();
+  const animalsRef = ref(database, 'animals');
+  const animalsQuery = query(animalsRef, orderByChild('commonName'));
+
+  const { status, data: animals } = useDatabaseListData(animalsQuery, {
+    idField: 'id',
   });
 
   if (status === 'loading') {
