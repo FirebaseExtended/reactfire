@@ -1,6 +1,6 @@
 # Using ReactFire
 
-## Access your `FirebaseApp` instance from a component
+## Setup
 
 Since ReactFire uses React's Context API, any child of a `FirebaseAppProvider` can call `useFirebaseApp()` to get your initialized app. Plus, all ReactFire hooks will automatically check context to see if a firebase app is available.
 
@@ -24,7 +24,7 @@ function MyComponent(props) {
 }
 ```
 
-### Access Firebase product SDKs from a component
+### Initialize product SDKs and register them with ReactFire
 
 Just as `FirebaseAppProvider` allows child components to access the `FirebaseApp` instance, each Firebase product SDK (like `firebase/auth` or `firebase/database`) has a provider:
 
