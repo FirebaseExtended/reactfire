@@ -1,5 +1,30 @@
 # Using ReactFire
 
+<!-- toc -->
+
+- [Setup](#setup)
+  * [Initialize product SDKs and register them with ReactFire](#initialize-product-sdks-and-register-them-with-reactfire)
+- [Auth](#auth)
+  * [Display the current signed-in user](#display-the-current-signed-in-user)
+  * [Only render a component if a user is signed in](#only-render-a-component-if-a-user-is-signed-in)
+- [Firestore](#firestore)
+  * [Show a single document](#show-a-single-document)
+  * [Show a list of data (collection)](#show-a-list-of-data-collection)
+- [Realtime Database](#realtime-database)
+  * [Show an object](#show-an-object)
+  * [Show a list of data](#show-a-list-of-data)
+- [Cloud Storage for Firebase](#cloud-storage-for-firebase)
+  * [Fetch and show an image](#fetch-and-show-an-image)
+  * [Show upload status](#show-upload-status)
+- [Remote Config](#remote-config)
+  * [Get a string](#get-a-string)
+- [Log Page Views to Google Analytics for Firebase with React Router](#log-page-views-to-google-analytics-for-firebase-with-react-router)
+- [Advanced: Using RxJS observables to combine multiple data sources](#advanced-using-rxjs-observables-to-combine-multiple-data-sources)
+
+<!-- tocstop -->
+
+---
+
 ## Setup
 
 Since ReactFire uses React's Context API, any child of a `FirebaseAppProvider` can call `useFirebaseApp()` to get your initialized app. Plus, all ReactFire hooks will automatically check context to see if a firebase app is available.
