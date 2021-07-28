@@ -232,6 +232,24 @@ function UploadProgress({ uploadTask, storageRef }) {
 }
 ```
 
+## Remote Config
+
+The following samples assume that `FirebaseAppProvider` and `RemoteConfigProvider` components exist higher up the component tree.
+
+### Get a string
+
+```jsx
+function WelcomeMessage() {
+  const { status, data: messageValue } = useRemoteConfigString('welcome-experiment');
+
+  if (status === 'loading') {
+    return <span>loading...</span>;
+  }
+
+  return <span>{messageValue}</span>;
+}
+```
+
 ## Log Page Views to Google Analytics for Firebase with React Router
 
 ```jsx
@@ -264,210 +282,6 @@ function App() {
   );
 }
 ```
-
-## Combine Auth, Firestore, and Cloud Storage to Show a User Profile Card
-
-```jsx
-import {
-  AuthCheck,
-  StorageImage,
-  useFirestoreDocData,
-  useUser,
-  useAuth,
-  useFirestore
-} from 'reactfire';
-
-const DEFAULT_IMAGE_PATH = 'userPhotos/default.jpg';
-
-function ProfileCard() {
-  // get the current user.
-  // this is safe because we've wrapped this component in an `AuthCheck` component.
-  const { data: user } = useUser();
-
-  // read the user details from Firestore based on the current user's ID
-  const userDetailsRef = useFirestore()
-    .collection('users')
-    .doc(user.uid);
-
-  let { commonName, favoriteAnimal, profileImagePath } = useFirestoreDocData(
-    userDetailsRef
-  );
-
-  // defend against null field(s)
-  profileImagePath = profileImagePath || DEFAULT_IMAGE_PATH;
-
-  if (!commonName || !favoriteAnimal) {
-    throw new Error(MissingProfileInfoError);
-  }
-
-  return (
-    <div>
-      <h1>{commonName}</h1>
-      {/*
-        `StorageImage` converts a Cloud Storage path into a download URL and then renders an image
-       */}
-      <StorageImage style={{ width: '100%' }} storagePath={profileImagePath} />
-      <span>Your favorite animal is the {favoriteAnimal}</span>
-    </div>
-  );
-}
-
-function LogInForm() {
-  const auth = useAuth();
-
-  const signIn = () => {
-    auth.signInWithEmailAndPassword(email, password);
-  };
-
-  return <MySignInForm onSubmit={signIn} />;
-}
-
-function ProfilePage() {
-  return (
-    {/*
-      Render a spinner until components are ready
-    */}
-    <Suspense fallback={<MyLoadingSpinner />}>
-      {/*
-        Render `ProfileCard` only if a user is signed in.
-        Otherwise, render `LoginForm`
-       */}
-      <AuthCheck fallback={<LogInForm />}>{ProfileCard}</AuthCheck>
-    </Suspense>
-  );
-}
-```
-
-## Manage Loading States
-
-ReactFire is designed to integrate with React's Suspense API, but also supports use cases where Suspense isn't needed or wanted.
-
-### Default: `Suspense`
-
-Say we have a component called `Burrito` that uses `useFirestoreDoc`:
-
-```jsx
-function Burrito() {
-  const burritoRef = useFirestore().collection('tryreactfire').doc('burrito');
-
-  // subscribe to the doc. just one line!
-  // throws a Promise for Suspense to catch,
-  // and then streams live updates
-  const burritoDoc = useFirestoreDoc(burritoRef);
-
-  const isYummy = burritoDoc.data().yummy;
-
-  return <p>The burrito is {isYummy ? 'good' : 'bad'}!</p>;
-}
-```
-
-The parent component of `Burrito` can use `Suspense` to render a `fallback` component until `useFirestoreDoc` returns a value:
-
-```jsx
-function FoodRatings() {
-  return (
-    <Suspense fallback={'loading burrito status...'}>
-      <Burrito />
-    </Suspense>
-  );
-}
-```
-
-#### Bonus: `SuspenseWithPerf`
-
-ReactFire provides an a wrapper around `Suspense` called `SuspenseWithPerf` that instruments your `Suspense` loads with a Firebase Performance Monitoring custom trace. It looks like this:
-
-```jsx
-function FoodRatings() {
-  return (
-    <SuspenseWithPerf fallback={'loading burrito status...'} traceId={'load-burrito-status'}>
-      <Burrito />
-    </SuspenseWithPerf>
-  );
-}
-```
-
-### Don't want Suspense? Provide an initial value
-
-What if we don't want to use Suspense, or we're server rendering and we know what the initial value should be? In that case we can provide an initial value to any ReactFire hook:
-
-```jsx
-function Burrito() {
-  const firebaseApp = useFirebaseApp();
-  const burritoRef = firebaseApp.firestore().collection('tryreactfire').doc('burrito');
-
-  // subscribe to the doc. just one line!
-  // returns the `initialData`,
-  // and then streams live updates
-  const burritoDoc = useFirestoreDocData(burritoRef, {
-    initialData: {
-      yummy: true,
-    },
-  });
-
-  const isYummy = burritoDoc.data().yummy;
-
-  return <p>The burrito is {isYummy ? 'good' : 'bad'}!</p>;
-}
-```
-
-The parent component of `Burrito` now doesn't need to use `Suspense`:
-
-```jsx
-function FoodRatings() {
-  return <Burrito />;
-}
-```
-
-### Solve `Warning: App triggered a user-blocking update that suspended.` with useTransition
-
-This warning can be solved with React's `useTransition` hook. Check out the sample code's Firestore example to see how to use this with ReactFire:
-
-https://github.com/FirebaseExtended/reactfire/blob/c67dfa755431c15034f0c713b9df3864fb762c06/sample/src/Firestore.js#L87-L121
-
-## Lazy Load the Firebase SDKs
-
-Including the Firebase SDKs in your main JS bundle (by using `import 'firebase/firestore'`, for example) will increase your bundle size. To get around this, you can lazy load the Firebase SDK with ReactFire. As long as a component has a parent that is a `FirebaseAppProvider`, you can use an SDK hook (`useFirestore`, `useDatabase`, `useAuth`, `useStorage`) like so:
-
-`MyComponent.jsx`
-
-```jsx
-import React from 'react';
-// WE ARE NOT IMPORTING THE FIRESTORE SDK UP HERE
-import { useFirestoreDocData, useFirestore } from 'reactfire';
-
-export function MyComponent(props) {
-  // automatically lazy loads the Cloud Firestore SDK
-  const firestore = useFirestore();
-
-  const ref = firestore().doc('count/counter');
-  const data = useFirestoreDocData(ref);
-
-  return <h1>{data.value}</h1>;
-}
-```
-
-## The _render-as-you-fetch_ pattern
-
-The [React docs](https://reactjs.org/docs/concurrent-mode-suspense.html#approach-3-render-as-you-fetch-using-suspense) recommend kicking off reads as early as possible in order to reduce perceived load times. ReactFire offers a number of `preload` methods to help you do this.
-
-### Preload an SDK
-
-Call `preloadFirestore` (or `preloadAuth`, `preloadRemoteConfig`, etc) to start fetching a Firebase library in the background. Later, when you call `useFirestore` in a component, the `useFirestore` hook may not need to suspend if the preload has already completed.
-
-### Initialize an SDK
-
-Some Firestore SDKs need to be initialized (`firebase.remoteConfig().fetchAndActivate()`), or need to have settings set before any other calls are made (`firebase.firestore().enablePersistence()`). This can be done by passing a function returning a promise to the `setup` option.
-
-```jsx
-preloadFirestore({
-  setup: (firestore) => firestore().enablePersistence(),
-});
-```
-
-### Preload Data
-
-ReactFire's data fetching hooks don't fully support preloading yet. The experimental `preloadFirestoreDoc` function allows you to subscribe to a Firestore document if you know you call `useFirestoreDoc` somewhere farther down the component tree.
 
 ## Advanced: Using RxJS observables to combine multiple data sources
 
