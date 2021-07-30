@@ -23,7 +23,7 @@
     "lint": "tsdx lint src test",
     "size": "size-limit",
     "analyze": "size-limit --why",
-    "docs": "typedoc --options typedoc.json"
+    "docs": "typedoc --options typedoc.json && markdown-toc -i docs/use.md"
   },
   "peerDependencies": {
     "firebase": "9.0.0-beta.7",
@@ -86,6 +86,7 @@
     "globalthis": "^1.0.1",
     "husky": "^4.3.0",
     "jest-environment-jsdom": "^26.6.2",
+    "markdown-toc": "^1.2.0",
     "node-fetch": "^2.6.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FirebaseAppProvider, AuthProvider } from 'reactfire';
+import { FirebaseAppProvider, AuthProvider, useFirebaseApp, useInitPerformance } from 'reactfire';
 import { Card } from '../display/Card';
 import { Auth } from './Auth';
 import { Firestore } from './Firestore';
@@ -9,20 +9,17 @@ import { Storage } from './Storage';
 
 // Import auth directly because most components need it
 // Other Firebase libraries can be lazy-loaded as-needed
-import { initializeApp, getApp, setLogLevel } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
-export const App = ({ firebaseConfig }: { firebaseConfig: { [key: string]: unknown } }) => {
-  
-  let firebaseApp;
-  try {
-    firebaseApp = initializeApp(firebaseConfig);
-  } catch {
-    firebaseApp = getApp();
-  }
-  // setLogLevel('debug');
+export const App = () => {
+  const firebaseApp = useFirebaseApp();
   const auth = getAuth(firebaseApp);
-  
+
+  useInitPerformance(async (firebaseApp) => {
+    const { getPerformance } = await import('firebase/performance');
+    return getPerformance(firebaseApp);
+  });
+
   return (
     <div className="flex flex-wrap justify-around p-4">
       <FirebaseAppProvider firebaseApp={firebaseApp}>

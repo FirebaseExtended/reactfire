@@ -45,6 +45,12 @@
 - [useFirestoreDocDataOnce](index.md#usefirestoredocdataonce)
 - [useFirestoreDocOnce](index.md#usefirestoredoconce)
 - [useIdTokenResult](index.md#useidtokenresult)
+- [useInitAuth](index.md#useinitauth)
+- [useInitDatabase](index.md#useinitdatabase)
+- [useInitFirestore](index.md#useinitfirestore)
+- [useInitPerformance](index.md#useinitperformance)
+- [useInitRemoteConfig](index.md#useinitremoteconfig)
+- [useInitStorage](index.md#useinitstorage)
 - [useIsSuspenseEnabled](index.md#useissuspenseenabled)
 - [useObservable](index.md#useobservable)
 - [usePerformance](index.md#useperformance)
@@ -313,6 +319,42 @@ ___
 ### useIdTokenResult
 
 Re-exports: [useIdTokenResult](auth.md#useidtokenresult)
+
+___
+
+### useInitAuth
+
+Re-exports: [useInitAuth](sdk.md#useinitauth)
+
+___
+
+### useInitDatabase
+
+Re-exports: [useInitDatabase](sdk.md#useinitdatabase)
+
+___
+
+### useInitFirestore
+
+Re-exports: [useInitFirestore](sdk.md#useinitfirestore)
+
+___
+
+### useInitPerformance
+
+Re-exports: [useInitPerformance](sdk.md#useinitperformance)
+
+___
+
+### useInitRemoteConfig
+
+Re-exports: [useInitRemoteConfig](sdk.md#useinitremoteconfig)
+
+___
+
+### useInitStorage
+
+Re-exports: [useInitStorage](sdk.md#useinitstorage)
 
 ___
 
