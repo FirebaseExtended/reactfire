@@ -1,47 +1,46 @@
 import * as React from 'react';
-import { useEffect, useState, unstable_useTransition, unstable_SuspenseList as SuspenseList } from 'react';
+import { useEffect, useState, useTransition, SuspenseList } from 'react';
 import {
-  preloadFirestore,
-  useFirebaseApp,
+  FirestoreProvider,
+  SuspenseWithPerf,
   useFirestore,
   useFirestoreCollectionData,
   useFirestoreDocData,
   useFirestoreDocDataOnce,
-  AuthCheck,
-  SuspenseWithPerf
+  useInitFirestore,
 } from 'reactfire';
 import { WideButton } from '../display/Button';
 import { CardSection } from '../display/Card';
 import { LoadingSpinner } from '../display/LoadingSpinner';
+import { AuthWrapper } from './Auth';
+import { initializeFirestore, doc, collection, enableIndexedDbPersistence, increment, updateDoc, orderBy, query, addDoc, deleteDoc } from 'firebase/firestore';
 
-const Counter = props => {
-  const firestore = useFirestore;
+const Counter = () => {
+  const firestore = useFirestore();
 
-  const serverIncrement = firestore.FieldValue.increment;
+  const ref = doc(firestore, 'count', 'counter');
 
-  const ref = firestore().doc('count/counter');
-
-  const increment = amountToIncrement => {
-    ref.update({
-      value: serverIncrement(amountToIncrement)
+  const incrementCounter = (amountToIncrement) => {
+    updateDoc(ref, {
+      value: increment(amountToIncrement),
     });
   };
 
-  const { data } = useFirestoreDocData(ref);
+  const { data: count } = useFirestoreDocData(ref);
 
   return (
     <>
-      <button onClick={() => increment(-1)}>-</button>
-      <span> {(data as { value: number }).value} </span>
-      <button onClick={() => increment(1)}>+</button>
+      <button onClick={() => incrementCounter(-1)}>-</button>
+      <span> {(count as any).value} </span>
+      <button onClick={() => incrementCounter(1)}>+</button>
     </>
   );
 };
 
-const StaticValue = props => {
+const StaticValue = () => {
   const firestore = useFirestore();
 
-  const ref = firestore.doc('count/counter');
+  const ref = doc(firestore, 'count/counter');
 
   const { data } = useFirestoreDocDataOnce(ref);
 
@@ -51,26 +50,41 @@ const StaticValue = props => {
 const List = ({ query, removeAnimal }) => {
   const { data: animals } = useFirestoreCollectionData(query, { idField: 'id' });
   return (
-    <div className="h-20 overflow-x-scroll shadow-inner m-2 border border-black">
+    <>
+      <div className="h-20 overflow-x-scroll shadow-inner m-2 border border-black">
+        <ul>
+          {(animals as Array<{ id: string; commonName: string }>).map((animal) => (
+            <li key={animal.id}>
+              {animal.commonName} <button onClick={() => removeAnimal(animal.id)}>X</button>
+            </li>
+          ))}
+        </ul>
+      </div>
       <ul>
-        {(animals as Array<{ id: string; commonName: string }>).map(animal => (
-          <li key={animal.id}>
-            {animal.commonName} <button onClick={() => removeAnimal(animal.id)}>X</button>
-          </li>
-        ))}
+        {Array.from(
+          animals.reduce((animalCountMap, animal) => {
+            const currentCount = animalCountMap.get(animal.commonName) ?? 0;
+            return animalCountMap.set(animal.commonName, currentCount + 1);
+          }, new Map<string, number>())
+        ).map((animalStat: [string, number]) => {
+          const [animalName, animalCount] = animalStat;
+          return (
+            <li key={animalName}>
+              {animalName}: {animalCount}
+            </li>
+          );
+        })}
       </ul>
-    </div>
+    </>
   );
 };
 
-const FavoriteAnimals = props => {
+const FavoriteAnimals = (props) => {
   const firestore = useFirestore();
-  const animalsCollection = firestore.collection('animals');
+  const animalsCollection = collection(firestore, 'animals');
   const [isAscending, setIsAscending] = useState(true);
-  const query = animalsCollection.orderBy('commonName', isAscending ? 'asc' : 'desc');
-  const [startTransition, isPending] = unstable_useTransition({
-    timeoutMs: 1000
-  });
+  const animalsQuery = query(animalsCollection, orderBy('commonName', isAscending ? 'asc' : 'desc'));
+  const [isPending, startTransition] = useTransition();
 
   const toggleSort = () => {
     startTransition(() => {
@@ -81,16 +95,16 @@ const FavoriteAnimals = props => {
   const addAnimal = () => {
     const possibleAnimals = ['Dog', 'Cat', 'Iguana', 'Zebra'];
     const selectedAnimal = possibleAnimals[Math.floor(Math.random() * possibleAnimals.length)];
-    animalsCollection.add({ commonName: selectedAnimal });
+    addDoc(animalsCollection, { commonName: selectedAnimal });
   };
 
-  const removeAnimal = id => animalsCollection.doc(id).delete();
+  const removeAnimal = (id) => deleteDoc(doc(animalsCollection, id));
 
   return (
     <>
       <WideButton label="Sort" onClick={toggleSort} />
       <React.Suspense fallback="loading...">
-        <List query={query} removeAnimal={removeAnimal} />
+        <List query={animalsQuery} removeAnimal={removeAnimal} />
       </React.Suspense>
       <WideButton
         label="Add Animal"
@@ -102,28 +116,40 @@ const FavoriteAnimals = props => {
   );
 };
 
-export const Firestore = props => {
+function FirestoreWrapper({ children }) {
+  const { data: firestoreInstance } = useInitFirestore(async (firebaseApp) => {
+    const db = initializeFirestore(firebaseApp, {});
+    await enableIndexedDbPersistence(db);
+    return db;
+  });
+
+  return <FirestoreProvider sdk={firestoreInstance}>{children}</FirestoreProvider>;
+}
+
+export const Firestore = (props) => {
   return (
     <SuspenseWithPerf fallback={<LoadingSpinner />} traceId="firestore-demo-root">
-      <AuthCheck fallback="sign in to use Firestore">
-        <SuspenseList revealOrder="together">
-          <CardSection title="Get/Set document value">
-            <SuspenseWithPerf fallback="connecting to Firestore..." traceId="firestore-demo-doc">
-              <Counter />
-            </SuspenseWithPerf>
-          </CardSection>
-          <CardSection title="Fetch data once">
-            <SuspenseWithPerf fallback="connecting to Firestore..." traceId="firestore-demo-doc">
-              <StaticValue />
-            </SuspenseWithPerf>
-          </CardSection>
-          <CardSection title="Work with lists of data">
-            <SuspenseWithPerf fallback="connecting to Firestore..." traceId="firestore-demo-collection">
-              <FavoriteAnimals />
-            </SuspenseWithPerf>
-          </CardSection>
-        </SuspenseList>
-      </AuthCheck>
+      <FirestoreWrapper>
+        <AuthWrapper fallback={<span>sign in to use Firestore</span>}>
+          <SuspenseList revealOrder="together">
+            <CardSection title="Get/Set document value">
+              <SuspenseWithPerf fallback="connecting to Firestore..." traceId="firestore-demo-doc">
+                <Counter />
+              </SuspenseWithPerf>
+            </CardSection>
+            <CardSection title="Fetch data once">
+              <SuspenseWithPerf fallback="connecting to Firestore..." traceId="firestore-demo-doc">
+                <StaticValue />
+              </SuspenseWithPerf>
+            </CardSection>
+            <CardSection title="Work with lists of data">
+              <SuspenseWithPerf fallback="connecting to Firestore..." traceId="firestore-demo-collection">
+                <FavoriteAnimals />
+              </SuspenseWithPerf>
+            </CardSection>
+          </SuspenseList>
+        </AuthWrapper>
+      </FirestoreWrapper>
     </SuspenseWithPerf>
   );
 };
