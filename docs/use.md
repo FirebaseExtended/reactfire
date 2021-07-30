@@ -7,7 +7,8 @@
 - [Auth](#auth)
   * [Display the current signed-in user](#display-the-current-signed-in-user)
   * [Only render a component if a user is signed in](#only-render-a-component-if-a-user-is-signed-in)
-- [Firestore](#firestore)
+- [Cloud Firestore](#cloud-firestore)
+  * [Access data offline](#access-data-offline)
   * [Show a single document](#show-a-single-document)
   * [Show a list of data (collection)](#show-a-list-of-data-collection)
 - [Realtime Database](#realtime-database)
@@ -17,7 +18,10 @@
   * [Fetch and show an image](#fetch-and-show-an-image)
   * [Show upload status](#show-upload-status)
 - [Remote Config](#remote-config)
+  * [Initialize, fetch, and activate](#initialize-fetch-and-activate)
   * [Get a string](#get-a-string)
+- [Performance Monitoring](#performance-monitoring)
+  * [Load Performance Monitoring asynchronously](#load-performance-monitoring-asynchronously)
 - [Log Page Views to Google Analytics for Firebase with React Router](#log-page-views-to-google-analytics-for-firebase-with-react-router)
 - [Advanced: Using RxJS observables to combine multiple data sources](#advanced-using-rxjs-observables-to-combine-multiple-data-sources)
 
@@ -77,6 +81,8 @@ function FirebaseComponents({ children }) {
 }
 ```
 
+Some products benefit from asynchronous initialization. For that, ReactFire has hooks like `useInitFirestore` and `useInitRemoteConfig`. Learn more about these in the individual product sections below.
+
 ## Auth
 
 The following samples assume that `FirebaseAppProvider` and `AuthProvider` components exist higher up the component tree.
@@ -117,9 +123,42 @@ function UserFavorites() {
 }
 ```
 
-## Firestore
+## Cloud Firestore
 
 The following samples assume that `FirebaseAppProvider` and `FirestoreProvider` components exist higher up the component tree.
+
+### Access data offline
+
+Cloud Firestore [supports offline data persistence](https://firebase.google.com/docs/firestore/manage-data/enable-offline#web-v9). However, it can be a bit tricky to enable, because you must call `enableIndexedDbPersistence` _before any other Firestore functions_. ReactFire's `useInitFirestore` makes this easy to handle:
+
+```jsx
+import { initializeFirestore, enableIndexedDbPersistence } from 'firebase/firestore';
+import { useInitFirestore, FirestoreProvider } from 'reactfire';
+
+function App() {
+  const { status, data: firestoreInstance } = useInitFirestore(async (firebaseApp) => {
+    const db = initializeFirestore(firebaseApp, {});
+    await enableIndexedDbPersistence(db);
+    return db;
+  });
+
+  // firestore init isn't complete yet
+  if (status === 'loading') {
+    return <LoadingSpinner />;
+  }
+
+  // pass the Firestore instance to FirestoreProvider
+  // now we can be sure that any child of FirestoreProvider
+  // has a fully initialized Firestore instance with
+  // indexedDbPersistence enabled
+  return (
+    <FirestoreProvider sdk={firestoreInstance}>
+      <CommentText commentId={commentId} />
+      <LikeCount commentId={commentId} />
+    </FirestoreProvider>
+  );
+}
+```
 
 ### Show a single document
 
@@ -261,6 +300,40 @@ function UploadProgress({ uploadTask, storageRef }) {
 
 The following samples assume that `FirebaseAppProvider` and `RemoteConfigProvider` components exist higher up the component tree.
 
+### Initialize, fetch, and activate
+
+ReactFire's `useInitRemoteConfig` hook makes it easy to set up Remote Config:
+
+```jsx
+import { getRemoteConfig, fetchAndActivate } from 'firebase/remote-config';
+import { useInitRemoteConfig, RemoteConfigProvider } from 'reactfire';
+
+function App() {
+  const { status, data: remoteConfigInstance } = useInitRemoteConfig(async (firebaseApp) => {
+    const remoteConfig = getRemoteConfig(firebaseApp);
+    remoteConfig.settings = {
+      minimumFetchIntervalMillis: 10000,
+      fetchTimeoutMillis: 10000,
+    };
+
+    await fetchAndActivate(remoteConfig);
+    return remoteConfig;
+  });
+
+  if (status === 'loading') {
+    return <span>initializing Remote Config...</span>;
+  }
+
+  // Child components of RemoteConfigProvider can be confident that Remote Config is
+  // fully initialized
+  return (
+    <RemoteConfigProvider sdk={remoteConfigInstance}>
+      <WelcomeMessage />
+    </RemoteConfigProvider>
+  );
+}
+```
+
 ### Get a string
 
 ```jsx
@@ -272,6 +345,24 @@ function WelcomeMessage() {
   }
 
   return <span>{messageValue}</span>;
+}
+```
+
+## Performance Monitoring
+
+### Load Performance Monitoring asynchronously
+
+You can import the `firebase/performance` library asynchronously to make sure it doesn't affect your page load times:
+
+```jsx
+import { useInitPerformance } from 'ReactFire';
+function App() {
+  useInitPerformance(async (firebaseApp) => {
+    const { getPerformance } = await import('firebase/performance');
+    return getPerformance(firebaseApp);
+  });
+
+  //...
 }
 ```
 
