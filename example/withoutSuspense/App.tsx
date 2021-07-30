@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FirebaseAppProvider, AuthProvider, useFirebaseApp, useInitPerformance } from 'reactfire';
+import { AuthProvider, useFirebaseApp, useInitPerformance } from 'reactfire';
 import { Card } from '../display/Card';
 import { Auth } from './Auth';
 import { Firestore } from './Firestore';
@@ -22,8 +22,7 @@ export const App = () => {
 
   return (
     <div className="flex flex-wrap justify-around p-4">
-      <FirebaseAppProvider firebaseApp={firebaseApp}>
-        <AuthProvider sdk={auth}>
+      <AuthProvider sdk={auth}>
         <Card title="Authentication">
           <Auth />
         </Card>
@@ -39,8 +38,7 @@ export const App = () => {
         <Card title="Storage">
           <Storage />
         </Card>
-        </AuthProvider>
-      </FirebaseAppProvider>
+      </AuthProvider>
     </div>
   );
 };
