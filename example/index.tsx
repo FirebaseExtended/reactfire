@@ -7,7 +7,9 @@ import * as ReactDOM from 'react-dom';
  * You'll need to use an experimental build of React to use Concurrent mode
  * https://reactjs.org/docs/concurrent-mode-adoption.html#installation
  */
-// import { AppWrapper as ConcurrentModeApp } from './withSuspense/App';
+// import {} from 'react/experimental'  // make TS aware of experimental features
+// import {} from 'react-dom/experimental' // make TS aware of experimental features
+// import { App as ConcurrentModeApp } from './withSuspense/App';
 import { App as NonConcurrentModeApp } from './withoutSuspense/App';
 import './styles.pcss';
 import { FirebaseAppProvider } from 'reactfire';
@@ -33,3 +35,12 @@ ReactDOM.render(
   </FirebaseAppProvider>,
   rootElement
 );
+
+/**
+ * FOR CONCURRENT MODE
+ */
+// ReactDOM.createRoot(rootElement).render(
+//   <FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={true}>
+//     <ConcurrentModeApp />
+//   </FirebaseAppProvider>
+// );
