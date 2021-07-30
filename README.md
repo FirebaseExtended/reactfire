@@ -50,29 +50,27 @@ Depending on your targeted platforms you may need to install polyfills. The most
 ## Example use
 
 Check out the
-[live version on StackBlitz](https://stackblitz.com/fork/reactfire-sample)!
+[live version on StackBlitz](https://stackblitz.com/fork/reactfire-v4-sample)!
 
 ```jsx
-import React, { Component } from 'react';
+import React from 'react';
 import { render } from 'react-dom';
 
-import 'firebase/firestore';
-import { FirebaseAppProvider, useFirestoreDocData, useFirestore } from 'reactfire';
+import { doc, getFirestore } from 'firebase/firestore';
+import { FirebaseAppProvider, FirestoreProvider, useFirestoreDocData, useFirestore, useFirebaseApp } from 'reactfire';
 
 const firebaseConfig = {
-  /* Add your config from the Firebase Console */
+  /* Add in your config object from the Firebase console */
 };
 
-function Burrito() {
-  // easily access the Firestore library
-  const burritoRef = useFirestore()
-    .collection('tryreactfire')
-    .doc('burrito');
+function BurritoTaste() {
+  // access the Firestore library
+  const burritoRef = doc(useFirestore(), 'tryreactfire', 'burrito');
 
   // subscribe to a document for realtime updates. just one line!
   const { status, data } = useFirestoreDocData(burritoRef);
 
-  // easily check the loading status
+  // check the loading status
   if (status === 'loading') {
     return <p>Fetching burrito flavor...</p>;
   }
@@ -81,15 +79,21 @@ function Burrito() {
 }
 
 function App() {
+  const firestoreInstance = getFirestore(useFirebaseApp());
   return (
-    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+    <FirestoreProvider sdk={firestoreInstance}>
       <h1>🌯</h1>
-      <Burrito />
-    </FirebaseAppProvider>
+      <BurritoTaste />
+    </FirestoreProvider>
   );
 }
 
-render(<App />, document.getElementById('root'));
+render(
+  <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+    <App />
+  </FirebaseAppProvider>,
+  document.getElementById('root')
+);
 ```
 
 ---
