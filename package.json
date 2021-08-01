@@ -26,7 +26,7 @@
     "docs": "typedoc --options typedoc.json && markdown-toc -i docs/use.md"
   },
   "peerDependencies": {
-    "firebase": "9.0.0-beta.7",
+    "firebase": "9.0.0-beta.8",
     "react": ">=16 || experimental"
   },
   "husky": {
@@ -81,7 +81,7 @@
     "babel-jest": "^26.6.3",
     "babel-plugin-minify-replace": "^0.5.0",
     "eslint-plugin-no-only-tests": "^2.6.0",
-    "firebase": "9.0.0-beta.7",
+    "firebase": "9.0.0-beta.8",
     "firebase-tools": "^9.16.0",
     "globalthis": "^1.0.1",
     "husky": "^4.3.0",

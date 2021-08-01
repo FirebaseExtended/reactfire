@@ -4,7 +4,7 @@ import { ReactFireOptions, useObservable, checkIdField, ObservableStatus, ReactF
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import type { Query as DatabaseQuery, Reference } from 'firebase/database';
+import type { Query as DatabaseQuery, DatabaseReference } from 'firebase/database';
 
 // Since we're side-effect free, we need to ensure our observableId cache is global
 const cachedQueries: Array<DatabaseQuery> = (globalThis as any as ReactFireGlobals)._reactFireDatabaseCachedQueries || [];
@@ -27,7 +27,7 @@ function getUniqueIdForDatabaseQuery(query: DatabaseQuery) {
  * @param ref - Reference to the DB object you want to listen to
  * @param options
  */
-export function useDatabaseObject<T = unknown>(ref: Reference, options?: ReactFireOptions<T>): ObservableStatus<QueryChange | T> {
+export function useDatabaseObject<T = unknown>(ref: DatabaseReference, options?: ReactFireOptions<T>): ObservableStatus<QueryChange | T> {
   const observableId = `database:object:${ref.toString()}`;
   const observable$ = object(ref);
 
@@ -57,7 +57,7 @@ function changeToData(change: QueryChange, keyField?: string): {} {
 }
 // ============================================================================
 
-export function useDatabaseObjectData<T>(ref: Reference, options?: ReactFireOptions<T>): ObservableStatus<T> {
+export function useDatabaseObjectData<T>(ref: DatabaseReference, options?: ReactFireOptions<T>): ObservableStatus<T> {
   const idField = options ? checkIdField(options) : 'NO_ID_FIELD';
   const observableId = `database:objectVal:${ref.toString()}:idField=${idField}`;
   const observable$ = objectVal<T>(ref, idField);
@@ -72,7 +72,7 @@ export function useDatabaseObjectData<T>(ref: Reference, options?: ReactFireOpti
  * @param options
  */
 export function useDatabaseList<T = { [key: string]: unknown }>(
-  ref: Reference | DatabaseQuery,
+  ref: DatabaseReference | DatabaseQuery,
   options?: ReactFireOptions<T[]>
 ): ObservableStatus<QueryChange[] | T[]> {
   const hash = `database:list:${getUniqueIdForDatabaseQuery(ref)}`;
@@ -82,7 +82,7 @@ export function useDatabaseList<T = { [key: string]: unknown }>(
 }
 
 export function useDatabaseListData<T = { [key: string]: unknown }>(
-  ref: Reference | DatabaseQuery,
+  ref: DatabaseReference | DatabaseQuery,
   options?: ReactFireOptions<T[]>
 ): ObservableStatus<T[] | null> {
   const idField = options ? checkIdField(options) : 'NO_ID_FIELD';

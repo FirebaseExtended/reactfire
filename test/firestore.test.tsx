@@ -18,12 +18,12 @@ import fetch from 'node-fetch';
 import { baseConfig } from './appConfig';
 import { randomString } from './test-utils';
 
-import { addDoc, collection, doc, getFirestore, query, setDoc, useFirestoreEmulator, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getFirestore, query, setDoc, connectFirestoreEmulator, where } from 'firebase/firestore';
 
 describe('Firestore', () => {
   const app = initializeApp(baseConfig, 'firestore-test-suite');
   const db = getFirestore(app);
-  useFirestoreEmulator(db, 'localhost', 8080);
+  connectFirestoreEmulator(db, 'localhost', 8080);
 
   const Provider = ({ children }: { children: React.ReactNode }) => (
     <FirebaseAppProvider firebaseApp={app} suspense={true}>

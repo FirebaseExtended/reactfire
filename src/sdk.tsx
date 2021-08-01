@@ -1,10 +1,10 @@
 import * as React from 'react';
 
 import type { Auth } from 'firebase/auth';
-import type { FirebaseDatabase } from 'firebase/database';
-import type { FirebaseFirestore } from 'firebase/firestore';
+import type { Database } from 'firebase/database';
+import type { Firestore } from 'firebase/firestore';
 import type { FirebasePerformance } from 'firebase/performance';
-import type { StorageService } from 'firebase/storage';
+import type { FirebaseStorage } from 'firebase/storage';
 import type { RemoteConfig } from 'firebase/remote-config';
 import { useFirebaseApp } from './firebaseApp';
 import { FirebaseApp } from 'firebase/app';
@@ -13,13 +13,13 @@ import { from } from 'rxjs';
 import { ReactFireOptions } from '.';
 
 const AuthSdkContext = React.createContext<Auth | undefined>(undefined);
-const DatabaseSdkContext = React.createContext<FirebaseDatabase | undefined>(undefined);
-const FirestoreSdkContext = React.createContext<FirebaseFirestore | undefined>(undefined);
-const StorageSdkContext = React.createContext<StorageService | undefined>(undefined);
+const DatabaseSdkContext = React.createContext<Database | undefined>(undefined);
+const FirestoreSdkContext = React.createContext<Firestore | undefined>(undefined);
+const StorageSdkContext = React.createContext<FirebaseStorage | undefined>(undefined);
 const PerformanceSdkContext = React.createContext<FirebasePerformance | undefined>(undefined);
 const RemoteConfigSdkContext = React.createContext<RemoteConfig | undefined>(undefined);
 
-type FirebaseSdks = Auth | FirebaseDatabase | FirebaseFirestore | FirebasePerformance | StorageService | RemoteConfig;
+type FirebaseSdks = Auth | Database | Firestore | FirebasePerformance | FirebaseStorage | RemoteConfig;
 
 function getSdkProvider<Sdk extends FirebaseSdks>(SdkContext: React.Context<Sdk | undefined>) {
   return function SdkProvider(props: React.PropsWithChildren<{ sdk: Sdk }>) {
@@ -80,17 +80,17 @@ function useInitSdk<Sdk extends FirebaseSdks>(
 }
 
 export const AuthProvider = getSdkProvider<Auth>(AuthSdkContext);
-export const DatabaseProvider = getSdkProvider<FirebaseDatabase>(DatabaseSdkContext);
-export const FirestoreProvider = getSdkProvider<FirebaseFirestore>(FirestoreSdkContext);
+export const DatabaseProvider = getSdkProvider<Database>(DatabaseSdkContext);
+export const FirestoreProvider = getSdkProvider<Firestore>(FirestoreSdkContext);
 export const PerformanceProvider = getSdkProvider<FirebasePerformance>(PerformanceSdkContext);
-export const StorageProvider = getSdkProvider<StorageService>(StorageSdkContext);
+export const StorageProvider = getSdkProvider<FirebaseStorage>(StorageSdkContext);
 export const RemoteConfigProvider = getSdkProvider<RemoteConfig>(RemoteConfigSdkContext);
 
 export const useAuth = () => useSdk<Auth>(AuthSdkContext);
-export const useDatabase = () => useSdk<FirebaseDatabase>(DatabaseSdkContext);
-export const useFirestore = () => useSdk<FirebaseFirestore>(FirestoreSdkContext);
+export const useDatabase = () => useSdk<Database>(DatabaseSdkContext);
+export const useFirestore = () => useSdk<Firestore>(FirestoreSdkContext);
 export const usePerformance = () => useSdk<FirebasePerformance>(PerformanceSdkContext);
-export const useStorage = () => useSdk<StorageService>(StorageSdkContext);
+export const useStorage = () => useSdk<FirebaseStorage>(StorageSdkContext);
 export const useRemoteConfig = () => useSdk<RemoteConfig>(RemoteConfigSdkContext);
 
 type InitSdkHook<Sdk extends FirebaseSdks> = (
@@ -99,13 +99,11 @@ type InitSdkHook<Sdk extends FirebaseSdks> = (
 ) => ObservableStatus<Sdk>;
 
 export const useInitAuth: InitSdkHook<Auth> = (initializer, options) => useInitSdk<Auth>('auth', AuthSdkContext, initializer, options);
-export const useInitDatabase: InitSdkHook<FirebaseDatabase> = (initializer, options) =>
-  useInitSdk<FirebaseDatabase>('database', DatabaseSdkContext, initializer, options);
-export const useInitFirestore: InitSdkHook<FirebaseFirestore> = (initializer, options) =>
-  useInitSdk<FirebaseFirestore>('firestore', FirestoreSdkContext, initializer, options);
+export const useInitDatabase: InitSdkHook<Database> = (initializer, options) => useInitSdk<Database>('database', DatabaseSdkContext, initializer, options);
+export const useInitFirestore: InitSdkHook<Firestore> = (initializer, options) => useInitSdk<Firestore>('firestore', FirestoreSdkContext, initializer, options);
 export const useInitPerformance: InitSdkHook<FirebasePerformance> = (initializer, options) =>
   useInitSdk<FirebasePerformance>('performance', PerformanceSdkContext, initializer, options);
 export const useInitRemoteConfig: InitSdkHook<RemoteConfig> = (initializer, options) =>
   useInitSdk<RemoteConfig>('remoteconfig', RemoteConfigSdkContext, initializer, options);
-export const useInitStorage: InitSdkHook<StorageService> = (initializer, options) =>
-  useInitSdk<StorageService>('storage', StorageSdkContext, initializer, options);
+export const useInitStorage: InitSdkHook<FirebaseStorage> = (initializer, options) =>
+  useInitSdk<FirebaseStorage>('storage', StorageSdkContext, initializer, options);
