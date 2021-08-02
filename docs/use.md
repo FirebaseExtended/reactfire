@@ -4,6 +4,7 @@
 
 - [Setup](#setup)
   * [Initialize product SDKs and register them with ReactFire](#initialize-product-sdks-and-register-them-with-reactfire)
+  * [Connect to the Firebase Local Emulator Suite](#connect-to-the-firebase-local-emulator-suite)
 - [Auth](#auth)
   * [Display the current signed-in user](#display-the-current-signed-in-user)
   * [Only render a component if a user is signed in](#only-render-a-component-if-a-user-is-signed-in)
@@ -70,7 +71,7 @@ function FirebaseComponents({ children }) {
   const database = getDatabase(app);
   const auth = getAuth(app);
 
-  // any children will be able to use `useUser`, `useDatabaseObjectData`, etc
+  // any child components will be able to use `useUser`, `useDatabaseObjectData`, etc
   return (
     <AuthProvider sdk={auth}>
       <DatabaseProvider sdk={database}>
@@ -82,6 +83,41 @@ function FirebaseComponents({ children }) {
 ```
 
 Some products benefit from asynchronous initialization. For that, ReactFire has hooks like `useInitFirestore` and `useInitRemoteConfig`. Learn more about these in the individual product sections below.
+
+### Connect to the Firebase Local Emulator Suite
+
+Connect a product SDK to the emulator before passing it to a provider. For example, to connect to the Auth and Realtime Database emulators:
+
+```jsx
+import { getAuth, connectAuthEmulator } from 'firebase/auth'; // Firebase v9+
+import { getDatabase, connectDatabaseEmulator } from 'firebase/database'; // Firebase v9+
+
+import { FirebaseAppProvider, DatabaseProvider, AuthProvider, useFirebaseApp } from 'reactfire';
+
+function FirebaseComponents({ children }) {
+  const app = useFirebaseApp();
+  const database = getDatabase(app);
+  const auth = getAuth(app);
+
+  // Check for dev/test mode however your app tracks that.
+  // `process.env.NODE_ENV` is a common React pattern
+  if (process.env.NODE_ENV !== 'production') {
+    // Set up emulators
+    connectDatabaseEmulator(database, 'localhost', 9000);
+    connectAuthEmulator(auth, 'http://localhost:9099');
+  }
+
+  return (
+    <AuthProvider sdk={auth}>
+      <DatabaseProvider sdk={database}>
+        <MyCoolAppThatUsesAuthAndRealtimeDatabase />
+      </DatabaseProvider>
+    </AuthProvider>
+  );
+}
+```
+
+Learn more about the Local Emulator Suite in the [Firebase docs](https://firebase.google.com/docs/emulator-suite/connect_and_prototype).
 
 ## Auth
 
