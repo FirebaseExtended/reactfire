@@ -5,7 +5,7 @@ import { ReactFireOptions, useObservable, ObservableStatus, useStorage } from '.
 import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp';
 import { ref } from 'firebase/storage';
 
-import type { UploadTask, UploadTaskSnapshot, StorageReference, StorageService } from 'firebase/storage';
+import type { UploadTask, UploadTaskSnapshot, StorageReference, FirebaseStorage } from 'firebase/storage';
 
 /**
  * modified version of rxFire's _fromTask
@@ -57,7 +57,7 @@ export function useStorageDownloadURL<T = string>(ref: StorageReference, options
 
 type StorageImageProps = {
   storagePath: string;
-  storage?: StorageService;
+  storage?: FirebaseStorage;
   suspense?: boolean;
   placeHolder?: JSX.Element;
 };

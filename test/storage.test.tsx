@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable, UploadTaskSnapshot, useStorageEmulator } from 'firebase/storage';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable, UploadTaskSnapshot, connectStorageEmulator } from 'firebase/storage';
 import { FunctionComponent } from 'react';
 import { FirebaseAppProvider, ObservableStatus, StorageProvider, useStorageDownloadURL, useStorageTask } from '..';
 import { baseConfig } from './appConfig';
@@ -9,7 +9,7 @@ import * as React from 'react';
 describe('Storage', () => {
   const app = initializeApp(baseConfig);
   const storage = getStorage(app);
-  useStorageEmulator(storage, 'localhost', 9199);
+  connectStorageEmulator(storage, 'localhost', 9199);
 
   const Provider: FunctionComponent = ({ children }) => (
     <FirebaseAppProvider firebaseApp={app}>

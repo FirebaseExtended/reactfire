@@ -18,7 +18,7 @@ import { baseConfig } from './appConfig';
 import { FirebaseApp, initializeApp } from 'firebase/app';
 import { randomString } from './test-utils';
 
-import { getAuth, GoogleAuthProvider, signInWithCredential, signInWithCustomToken, signOut, useAuthEmulator, UserCredential } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithCredential, signInWithCustomToken, signOut, connectAuthEmulator, UserCredential } from 'firebase/auth';
 
 describe('Authentication', () => {
   let app: FirebaseApp;
@@ -55,7 +55,7 @@ describe('Authentication', () => {
 
     app = initializeApp(baseConfig);
 
-    useAuthEmulator(getAuth(app), 'http://localhost:9099/', { disableWarnings: true });
+    connectAuthEmulator(getAuth(app), 'http://localhost:9099/', { disableWarnings: true });
 
     signIn = async () => {
       return signInWithCredential(getAuth(app), GoogleAuthProvider.credential('{"sub": "abc123", "email": "foo@example.com", "email_verified": true}'));

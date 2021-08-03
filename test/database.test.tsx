@@ -3,14 +3,14 @@ import * as React from 'react';
 import { useDatabaseObject, useDatabaseList, FirebaseAppProvider, DatabaseProvider, ObservableStatus } from '..';
 import { baseConfig } from './appConfig';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, useDatabaseEmulator, ref, set, push, query, orderByChild, equalTo, get } from 'firebase/database';
+import { getDatabase, connectDatabaseEmulator, ref, set, push, query, orderByChild, equalTo, get } from 'firebase/database';
 import { QueryChange } from 'rxfire/database';
 import { randomString } from './test-utils';
 
 describe('Realtime Database (RTDB)', () => {
   const app = initializeApp(baseConfig);
   const database = getDatabase(app);
-  useDatabaseEmulator(database, 'localhost', 9000);
+  connectDatabaseEmulator(database, 'localhost', 9000);
 
   const Provider: React.FunctionComponent = ({ children }) => (
     <FirebaseAppProvider firebaseApp={app}>
