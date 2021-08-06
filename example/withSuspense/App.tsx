@@ -40,7 +40,7 @@ const preloadSDKs = firebaseApp => {
     preloadAppCheck({
       firebaseApp,
       setup: async (appCheck) => {
-        // Commented out to ensure example runs with error
+        // Commented out to ensure example runs without error
         // appCheck().activate("/* YOUR RECAPTCHA v3 SITE KEY*/"", true);
         return appCheck()
       },
