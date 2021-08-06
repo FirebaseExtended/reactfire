@@ -32,7 +32,7 @@ Convience method similar to useRemoteConfigValue. Returns allRemote Config param
 
 #### Defined in
 
-[src/remote-config/index.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L78)
+[src/remote-config/index.tsx:78](https://github.com/sujishpatel/reactfire/blob/main/src/remote-config/index.tsx#L78)
 
 ___
 
@@ -54,7 +54,7 @@ Convience method similar to useRemoteConfigValue. Returns a `boolean` from a Rem
 
 #### Defined in
 
-[src/remote-config/index.tsx:69](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L69)
+[src/remote-config/index.tsx:69](https://github.com/sujishpatel/reactfire/blob/main/src/remote-config/index.tsx#L69)
 
 ___
 
@@ -76,7 +76,7 @@ Convience method similar to useRemoteConfigValue. Returns a `number` from a Remo
 
 #### Defined in
 
-[src/remote-config/index.tsx:60](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L60)
+[src/remote-config/index.tsx:60](https://github.com/sujishpatel/reactfire/blob/main/src/remote-config/index.tsx#L60)
 
 ___
 
@@ -98,7 +98,7 @@ Convience method similar to useRemoteConfigValue. Returns a `string` from a Remo
 
 #### Defined in
 
-[src/remote-config/index.tsx:51](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L51)
+[src/remote-config/index.tsx:51](https://github.com/sujishpatel/reactfire/blob/main/src/remote-config/index.tsx#L51)
 
 ___
 
@@ -121,4 +121,4 @@ Remote Config Value.
 
 #### Defined in
 
-[src/remote-config/index.tsx:42](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L42)
+[src/remote-config/index.tsx:42](https://github.com/sujishpatel/reactfire/blob/main/src/remote-config/index.tsx#L42)

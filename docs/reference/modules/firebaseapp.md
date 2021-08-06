@@ -8,6 +8,7 @@
 
 - [PreloadOptions](firebaseapp.md#preloadoptions)
 - [preloadAnalytics](firebaseapp.md#preloadanalytics)
+- [preloadAppCheck](firebaseapp.md#preloadappcheck)
 - [preloadAuth](firebaseapp.md#preloadauth)
 - [preloadDatabase](firebaseapp.md#preloaddatabase)
 - [preloadFirestore](firebaseapp.md#preloadfirestore)
@@ -17,6 +18,7 @@
 - [preloadRemoteConfig](firebaseapp.md#preloadremoteconfig)
 - [preloadStorage](firebaseapp.md#preloadstorage)
 - [useAnalytics](firebaseapp.md#useanalytics)
+- [useAppCheck](firebaseapp.md#useappcheck)
 - [useAuth](firebaseapp.md#useauth)
 - [useDatabase](firebaseapp.md#usedatabase)
 - [useFirestore](firebaseapp.md#usefirestore)
@@ -48,6 +50,12 @@ ___
 ### preloadAnalytics
 
 Re-exports: [preloadAnalytics](sdk.md#preloadanalytics)
+
+___
+
+### preloadAppCheck
+
+Re-exports: [preloadAppCheck](sdk.md#preloadappcheck)
 
 ___
 
@@ -105,6 +113,12 @@ Re-exports: [useAnalytics](sdk.md#useanalytics)
 
 ___
 
+### useAppCheck
+
+Re-exports: [useAppCheck](sdk.md#useappcheck)
+
+___
+
 ### useAuth
 
 Re-exports: [useAuth](sdk.md#useauth)
@@ -159,7 +173,7 @@ Re-exports: [useStorage](sdk.md#usestorage)
 
 #### Defined in
 
-[src/firebaseApp.tsx:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L23)
+[src/firebaseApp.tsx:23](https://github.com/sujishpatel/reactfire/blob/main/src/firebaseApp.tsx#L23)
 
 ## Functions
 
@@ -179,7 +193,7 @@ Re-exports: [useStorage](sdk.md#usestorage)
 
 #### Defined in
 
-[src/firebaseApp.tsx:27](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L27)
+[src/firebaseApp.tsx:27](https://github.com/sujishpatel/reactfire/blob/main/src/firebaseApp.tsx#L27)
 
 ___
 
@@ -193,7 +207,7 @@ ___
 
 #### Defined in
 
-[src/firebaseApp.tsx:82](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L82)
+[src/firebaseApp.tsx:82](https://github.com/sujishpatel/reactfire/blob/main/src/firebaseApp.tsx#L82)
 
 ___
 
@@ -207,7 +221,7 @@ ___
 
 #### Defined in
 
-[src/firebaseApp.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L64)
+[src/firebaseApp.tsx:64](https://github.com/sujishpatel/reactfire/blob/main/src/firebaseApp.tsx#L64)
 
 ___
 
@@ -227,4 +241,4 @@ ___
 
 #### Defined in
 
-[src/firebaseApp.tsx:71](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L71)
+[src/firebaseApp.tsx:71](https://github.com/sujishpatel/reactfire/blob/main/src/firebaseApp.tsx#L71)

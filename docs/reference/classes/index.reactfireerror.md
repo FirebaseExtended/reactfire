@@ -50,7 +50,7 @@ Error.constructor
 
 #### Defined in
 
-[src/index.ts:11](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L11)
+[src/index.ts:11](https://github.com/sujishpatel/reactfire/blob/main/src/index.ts#L11)
 
 ## Properties
 
@@ -90,7 +90,7 @@ Error.name
 
 #### Defined in
 
-[src/index.ts:11](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L11)
+[src/index.ts:11](https://github.com/sujishpatel/reactfire/blob/main/src/index.ts#L11)
 
 ___
 

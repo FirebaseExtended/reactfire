@@ -91,7 +91,7 @@ Subject&lt;T\&gt;.constructor
 
 #### Defined in
 
-[src/SuspenseSubject.ts:16](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L16)
+[src/SuspenseSubject.ts:16](https://github.com/sujishpatel/reactfire/blob/main/src/SuspenseSubject.ts#L16)
 
 ## Properties
 
@@ -101,7 +101,7 @@ Subject&lt;T\&gt;.constructor
 
 #### Defined in
 
-[src/SuspenseSubject.ts:9](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L9)
+[src/SuspenseSubject.ts:9](https://github.com/sujishpatel/reactfire/blob/main/src/SuspenseSubject.ts#L9)
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 #### Defined in
 
-[src/SuspenseSubject.ts:8](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L8)
+[src/SuspenseSubject.ts:8](https://github.com/sujishpatel/reactfire/blob/main/src/SuspenseSubject.ts#L8)
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 #### Defined in
 
-[src/SuspenseSubject.ts:6](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L6)
+[src/SuspenseSubject.ts:6](https://github.com/sujishpatel/reactfire/blob/main/src/SuspenseSubject.ts#L6)
 
 ___
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-[src/SuspenseSubject.ts:10](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L10)
+[src/SuspenseSubject.ts:10](https://github.com/sujishpatel/reactfire/blob/main/src/SuspenseSubject.ts#L10)
 
 ___
 
@@ -141,7 +141,7 @@ ___
 
 #### Defined in
 
-[src/SuspenseSubject.ts:14](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L14)
+[src/SuspenseSubject.ts:14](https://github.com/sujishpatel/reactfire/blob/main/src/SuspenseSubject.ts#L14)
 
 ___
 
@@ -159,7 +159,7 @@ ___
 
 #### Defined in
 
-[src/SuspenseSubject.ts:16](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L16)
+[src/SuspenseSubject.ts:16](https://github.com/sujishpatel/reactfire/blob/main/src/SuspenseSubject.ts#L16)
 
 ___
 
@@ -169,7 +169,7 @@ ___
 
 #### Defined in
 
-[src/SuspenseSubject.ts:7](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L7)
+[src/SuspenseSubject.ts:7](https://github.com/sujishpatel/reactfire/blob/main/src/SuspenseSubject.ts#L7)
 
 ___
 
@@ -179,7 +179,7 @@ ___
 
 #### Defined in
 
-[src/SuspenseSubject.ts:5](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L5)
+[src/SuspenseSubject.ts:5](https://github.com/sujishpatel/reactfire/blob/main/src/SuspenseSubject.ts#L5)
 
 ___
 
@@ -189,7 +189,7 @@ ___
 
 #### Defined in
 
-[src/SuspenseSubject.ts:11](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L11)
+[src/SuspenseSubject.ts:11](https://github.com/sujishpatel/reactfire/blob/main/src/SuspenseSubject.ts#L11)
 
 ___
 
@@ -343,7 +343,7 @@ node_modules/rxjs/dist/types/internal/Subject.d.ts:27
 
 #### Defined in
 
-[src/SuspenseSubject.ts:61](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L61)
+[src/SuspenseSubject.ts:61](https://github.com/sujishpatel/reactfire/blob/main/src/SuspenseSubject.ts#L61)
 
 ___
 
@@ -357,7 +357,7 @@ ___
 
 #### Defined in
 
-[src/SuspenseSubject.ts:44](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L44)
+[src/SuspenseSubject.ts:44](https://github.com/sujishpatel/reactfire/blob/main/src/SuspenseSubject.ts#L44)
 
 ___
 
@@ -385,7 +385,7 @@ ___
 
 #### Defined in
 
-[src/SuspenseSubject.ts:90](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L90)
+[src/SuspenseSubject.ts:90](https://github.com/sujishpatel/reactfire/blob/main/src/SuspenseSubject.ts#L90)
 
 ___
 
@@ -399,7 +399,7 @@ ___
 
 #### Defined in
 
-[src/SuspenseSubject.ts:51](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L51)
+[src/SuspenseSubject.ts:51](https://github.com/sujishpatel/reactfire/blob/main/src/SuspenseSubject.ts#L51)
 
 ## Methods
 
@@ -419,7 +419,7 @@ ___
 
 #### Defined in
 
-[src/SuspenseSubject.ts:65](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L65)
+[src/SuspenseSubject.ts:65](https://github.com/sujishpatel/reactfire/blob/main/src/SuspenseSubject.ts#L65)
 
 ___
 
@@ -433,7 +433,7 @@ ___
 
 #### Defined in
 
-[src/SuspenseSubject.ts:71](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L71)
+[src/SuspenseSubject.ts:71](https://github.com/sujishpatel/reactfire/blob/main/src/SuspenseSubject.ts#L71)
 
 ___
 
@@ -453,7 +453,7 @@ ___
 
 #### Defined in
 
-[src/SuspenseSubject.ts:82](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L82)
+[src/SuspenseSubject.ts:82](https://github.com/sujishpatel/reactfire/blob/main/src/SuspenseSubject.ts#L82)
 
 ___
 

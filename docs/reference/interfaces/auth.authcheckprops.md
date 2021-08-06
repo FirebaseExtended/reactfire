@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/auth.tsx:56](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L56)
+[src/auth.tsx:56](https://github.com/sujishpatel/reactfire/blob/main/src/auth.tsx#L56)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[src/auth.tsx:55](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L55)
+[src/auth.tsx:55](https://github.com/sujishpatel/reactfire/blob/main/src/auth.tsx#L55)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[src/auth.tsx:57](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L57)
+[src/auth.tsx:57](https://github.com/sujishpatel/reactfire/blob/main/src/auth.tsx#L57)
