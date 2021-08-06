@@ -23,6 +23,7 @@
 - [SuspensePerfProps](index.md#suspenseperfprops)
 - [SuspenseWithPerf](index.md#suspensewithperf)
 - [preloadAnalytics](index.md#preloadanalytics)
+- [preloadAppCheck](index.md#preloadappcheck)
 - [preloadAuth](index.md#preloadauth)
 - [preloadDatabase](index.md#preloaddatabase)
 - [preloadFirestore](index.md#preloadfirestore)
@@ -35,6 +36,7 @@
 - [preloadStorage](index.md#preloadstorage)
 - [preloadUser](index.md#preloaduser)
 - [useAnalytics](index.md#useanalytics)
+- [useAppCheck](index.md#useappcheck)
 - [useAuth](index.md#useauth)
 - [useDatabase](index.md#usedatabase)
 - [useDatabaseList](index.md#usedatabaselist)
@@ -191,6 +193,12 @@ Re-exports: [preloadAnalytics](sdk.md#preloadanalytics)
 
 ___
 
+### preloadAppCheck
+
+Re-exports: [preloadAppCheck](sdk.md#preloadappcheck)
+
+___
+
 ### preloadAuth
 
 Re-exports: [preloadAuth](sdk.md#preloadauth)
@@ -260,6 +268,12 @@ ___
 ### useAnalytics
 
 Re-exports: [useAnalytics](sdk.md#useanalytics)
+
+___
+
+### useAppCheck
+
+Re-exports: [useAppCheck](sdk.md#useappcheck)
 
 ___
 
@@ -475,7 +489,7 @@ Re-exports: [version](firebaseapp.md#version)
 
 #### Defined in
 
-[src/index.ts:4](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L4)
+[src/index.ts:4](https://github.com/sujishpatel/reactfire/blob/main/src/index.ts#L4)
 
 ## Functions
 
@@ -495,7 +509,7 @@ Re-exports: [version](firebaseapp.md#version)
 
 #### Defined in
 
-[src/index.ts:45](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L45)
+[src/index.ts:45](https://github.com/sujishpatel/reactfire/blob/main/src/index.ts#L45)
 
 ___
 
@@ -516,7 +530,7 @@ ___
 
 #### Defined in
 
-[src/index.ts:32](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L32)
+[src/index.ts:32](https://github.com/sujishpatel/reactfire/blob/main/src/index.ts#L32)
 
 ___
 
@@ -536,4 +550,4 @@ ___
 
 #### Defined in
 
-[src/index.ts:41](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L41)
+[src/index.ts:41](https://github.com/sujishpatel/reactfire/blob/main/src/index.ts#L41)

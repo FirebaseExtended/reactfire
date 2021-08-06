@@ -38,7 +38,7 @@ Subscribe to a Realtime Database list
 
 #### Defined in
 
-[src/database.tsx:73](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L73)
+[src/database.tsx:73](https://github.com/sujishpatel/reactfire/blob/main/src/database.tsx#L73)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[src/database.tsx:83](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L83)
+[src/database.tsx:83](https://github.com/sujishpatel/reactfire/blob/main/src/database.tsx#L83)
 
 ___
 
@@ -94,7 +94,7 @@ Subscribe to a Realtime Database object
 
 #### Defined in
 
-[src/database.tsx:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L29)
+[src/database.tsx:29](https://github.com/sujishpatel/reactfire/blob/main/src/database.tsx#L29)
 
 ___
 
@@ -121,4 +121,4 @@ ___
 
 #### Defined in
 
-[src/database.tsx:59](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L59)
+[src/database.tsx:59](https://github.com/sujishpatel/reactfire/blob/main/src/database.tsx#L59)

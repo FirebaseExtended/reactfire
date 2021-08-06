@@ -27,4 +27,4 @@
 
 #### Defined in
 
-[src/auth.tsx:93](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L93)
+[src/auth.tsx:93](https://github.com/sujishpatel/reactfire/blob/main/src/auth.tsx#L93)

@@ -34,7 +34,7 @@
 
 #### Defined in
 
-[src/firestore.tsx:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L28)
+[src/firestore.tsx:28](https://github.com/sujishpatel/reactfire/blob/main/src/firestore.tsx#L28)
 
 ___
 
@@ -63,7 +63,7 @@ Subscribe to a Firestore collection
 
 #### Defined in
 
-[src/firestore.tsx:108](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L108)
+[src/firestore.tsx:108](https://github.com/sujishpatel/reactfire/blob/main/src/firestore.tsx#L108)
 
 ___
 
@@ -92,7 +92,7 @@ Subscribe to a Firestore collection and unwrap the snapshot.
 
 #### Defined in
 
-[src/firestore.tsx:124](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L124)
+[src/firestore.tsx:124](https://github.com/sujishpatel/reactfire/blob/main/src/firestore.tsx#L124)
 
 ___
 
@@ -121,7 +121,7 @@ Suscribe to Firestore Document changes
 
 #### Defined in
 
-[src/firestore.tsx:46](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L46)
+[src/firestore.tsx:46](https://github.com/sujishpatel/reactfire/blob/main/src/firestore.tsx#L46)
 
 ___
 
@@ -150,7 +150,7 @@ Suscribe to Firestore Document changes
 
 #### Defined in
 
-[src/firestore.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L78)
+[src/firestore.tsx:78](https://github.com/sujishpatel/reactfire/blob/main/src/firestore.tsx#L78)
 
 ___
 
@@ -179,7 +179,7 @@ Get a firestore document and don't subscribe to changes
 
 #### Defined in
 
-[src/firestore.tsx:93](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L93)
+[src/firestore.tsx:93](https://github.com/sujishpatel/reactfire/blob/main/src/firestore.tsx#L93)
 
 ___
 
@@ -208,4 +208,4 @@ Get a firestore document and don't subscribe to changes
 
 #### Defined in
 
-[src/firestore.tsx:62](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L62)
+[src/firestore.tsx:62](https://github.com/sujishpatel/reactfire/blob/main/src/firestore.tsx#L62)

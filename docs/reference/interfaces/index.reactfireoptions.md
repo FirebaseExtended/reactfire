@@ -33,7 +33,7 @@
 
 #### Defined in
 
-[src/index.ts:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L23)
+[src/index.ts:23](https://github.com/sujishpatel/reactfire/blob/main/src/index.ts#L23)
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-[src/index.ts:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L24)
+[src/index.ts:24](https://github.com/sujishpatel/reactfire/blob/main/src/index.ts#L24)
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[src/index.ts:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L28)
+[src/index.ts:28](https://github.com/sujishpatel/reactfire/blob/main/src/index.ts#L28)
 
 ___
 
@@ -65,4 +65,4 @@ ___
 
 #### Defined in
 
-[src/index.ts:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L29)
+[src/index.ts:29](https://github.com/sujishpatel/reactfire/blob/main/src/index.ts#L29)

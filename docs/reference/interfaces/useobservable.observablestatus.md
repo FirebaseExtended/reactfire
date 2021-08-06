@@ -33,7 +33,7 @@ If `initialData` is passed in, the first value of `data` will be the valuea prov
 
 #### Defined in
 
-[src/useObservable.ts:55](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L55)
+[src/useObservable.ts:55](https://github.com/sujishpatel/reactfire/blob/main/src/useObservable.ts#L55)
 
 ___
 
@@ -45,7 +45,7 @@ Any error that may have occurred in the underlying observable
 
 #### Defined in
 
-[src/useObservable.ts:59](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L59)
+[src/useObservable.ts:59](https://github.com/sujishpatel/reactfire/blob/main/src/useObservable.ts#L59)
 
 ___
 
@@ -57,7 +57,7 @@ Promise that resolves after first emit from observable
 
 #### Defined in
 
-[src/useObservable.ts:63](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L63)
+[src/useObservable.ts:63](https://github.com/sujishpatel/reactfire/blob/main/src/useObservable.ts#L63)
 
 ___
 
@@ -71,7 +71,7 @@ If `initialData` is passed in, this will be `true`.
 
 #### Defined in
 
-[src/useObservable.ts:45](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L45)
+[src/useObservable.ts:45](https://github.com/sujishpatel/reactfire/blob/main/src/useObservable.ts#L45)
 
 ___
 
@@ -83,7 +83,7 @@ If this is `true`, the hook will be emitting no further items.
 
 #### Defined in
 
-[src/useObservable.ts:49](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L49)
+[src/useObservable.ts:49](https://github.com/sujishpatel/reactfire/blob/main/src/useObservable.ts#L49)
 
 ___
 
@@ -101,4 +101,4 @@ If `initialData` is passed in, this will skip `loading` and go straight to `succ
 
 #### Defined in
 
-[src/useObservable.ts:39](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L39)
+[src/useObservable.ts:39](https://github.com/sujishpatel/reactfire/blob/main/src/useObservable.ts#L39)
