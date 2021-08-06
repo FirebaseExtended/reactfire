@@ -2,6 +2,7 @@ import * as React from 'react';
 import {
   FirebaseAppProvider,
   preloadAuth,
+  preloadAppCheck,
   preloadDatabase,
   preloadFirestore,
   preloadFirestoreDoc,
@@ -36,6 +37,12 @@ const preloadSDKs = firebaseApp => {
         return storage().setMaxUploadRetryTime(10000);
       }
     }),
+    preloadAppCheck({
+      firebaseApp, setup: async (appCheck) => {
+        appCheck().activate(""/* YOUR RECAPTCHA v3 KEY */, true);
+        return appCheck()
+      },
+     }),
     preloadAuth({ firebaseApp }),
     preloadRemoteConfig({
       firebaseApp,
