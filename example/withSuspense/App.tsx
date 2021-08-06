@@ -38,8 +38,10 @@ const preloadSDKs = firebaseApp => {
       }
     }),
     preloadAppCheck({
-      firebaseApp, setup: async (appCheck) => {
-        appCheck().activate(""/* YOUR RECAPTCHA v3 KEY */, true);
+      firebaseApp,
+      setup: async (appCheck) => {
+        // Commented out to ensure example runs with error
+        // appCheck().activate("/* YOUR RECAPTCHA v3 SITE KEY*/"", true);
         return appCheck()
       },
      }),
