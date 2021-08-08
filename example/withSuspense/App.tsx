@@ -1,6 +1,8 @@
 import * as React from 'react';
+import type firebase from 'firebase';
 import {
   FirebaseAppProvider,
+  preloadAppCheck,
   preloadAuth,
   preloadDatabase,
   preloadFirestore,
@@ -21,7 +23,7 @@ import { RemoteConfig } from './RemoteConfig';
 import 'firebase/auth';
 import { Storage } from './Storage';
 
-const preloadSDKs = firebaseApp => {
+const preloadSDKs = (firebaseApp:firebase.app.App)  => {
   return Promise.all([
     preloadFirestore({
       firebaseApp,
@@ -46,7 +48,14 @@ const preloadSDKs = firebaseApp => {
         };
         return remoteConfig().fetchAndActivate();
       }
-    })
+    }),
+    preloadAppCheck({
+      firebaseApp,
+      setup(appCheck) {
+        // Depending on the
+        return appCheck().activate("",true);
+      }
+    }),
   ]);
 };
 

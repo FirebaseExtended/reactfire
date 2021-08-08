@@ -2,7 +2,7 @@ import { useFirebaseApp, useSuspenseEnabledFromConfigAndContext, preloadObservab
 import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 
-type ComponentName = 'analytics' | 'auth' | 'database' | 'firestore' | 'functions' | 'messaging' | 'performance' | 'remoteConfig' | 'storage';
+type ComponentName = 'analytics' | 'appCheck' | 'auth' | 'database' | 'firestore' | 'functions' | 'messaging' | 'performance' | 'remoteConfig' | 'storage';
 
 type ValueOf<T> = T[keyof T];
 type App = firebase.app.App;
@@ -13,6 +13,8 @@ function importSDK(sdk: ComponentName) {
   switch (sdk) {
     case 'analytics':
       return import(/* webpackChunkName: "analytics" */ 'firebase/analytics');
+    case 'appCheck':
+      return import(/* webpackChunkName: "appCheck" */ 'firebase/app-check');
     case 'auth':
       return import(/* webpackChunkName: "auth" */ 'firebase/auth');
     case 'database':
@@ -33,6 +35,7 @@ function importSDK(sdk: ComponentName) {
 }
 
 function proxyComponent(componentName: 'auth'): typeof firebase.auth;
+function proxyComponent(componentName: 'appCheck'): typeof firebase.appCheck;
 function proxyComponent(componentName: 'analytics'): typeof firebase.analytics;
 function proxyComponent(componentName: 'database'): typeof firebase.database;
 function proxyComponent(componentName: 'firestore'): typeof firebase.firestore;
@@ -88,6 +91,7 @@ function proxyComponent(componentName: ComponentName): FirebaseNamespaceComponen
 }
 
 export const useAuth = proxyComponent('auth');
+export const useAppCheck = proxyComponent('appCheck');
 export const useAnalytics = proxyComponent('analytics');
 export const useDatabase = proxyComponent('database');
 export const useFirestore = proxyComponent('firestore');
@@ -104,6 +108,7 @@ export type PreloadOptions<T> = {
 };
 
 function preloadFactory(componentName: 'auth'): (options: PreloadOptions<App['auth']>) => Promise<App['auth']>;
+function preloadFactory(componentName: 'appCheck'): (options: PreloadOptions<App['appCheck']>) => Promise<App['appCheck']>;
 function preloadFactory(componentName: 'analytics'): (options: PreloadOptions<App['analytics']>) => Promise<App['analytics']>;
 function preloadFactory(componentName: 'database'): (options: PreloadOptions<App['database']>) => Promise<App['database']>;
 function preloadFactory(componentName: 'firestore'): (options: PreloadOptions<App['firestore']>) => Promise<App['firestore']>;
@@ -141,6 +146,7 @@ function preload(componentName: ComponentName, firebaseApp: App, settingsCallbac
 }
 
 export const preloadAuth = preloadFactory('auth');
+export const preloadAppCheck = preloadFactory('appCheck');
 export const preloadAnalytics = preloadFactory('analytics');
 export const preloadDatabase = preloadFactory('database');
 export const preloadFirestore = preloadFactory('firestore');
