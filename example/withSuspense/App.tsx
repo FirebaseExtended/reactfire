@@ -52,8 +52,7 @@ const preloadSDKs = (firebaseApp:firebase.app.App)  => {
     preloadAppCheck({
       firebaseApp,
       setup(appCheck) {
-        // Depending on the
-        return appCheck().activate("",true);
+        return appCheck().activate("ENTER RECAPTCHA SITE KEY or CUSTOM TOKEN PROVIDER HERE",true);
       }
     }),
   ]);
