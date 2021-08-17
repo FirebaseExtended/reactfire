@@ -6,23 +6,23 @@
 
 ## Hierarchy
 
-- [`ReactFireOptions`](index.reactfireoptions.md)<[`SigninCheckResult`](../modules/auth.md#signincheckresult)\>
+- [`ReactFireOptions`](index.ReactFireOptions.md)<[`SigninCheckResult`](../modules/auth.md#signincheckresult)\>
 
   ↳ **`SignInCheckOptionsBasic`**
 
-  ↳↳ [`SignInCheckOptionsClaimsObject`](auth.signincheckoptionsclaimsobject.md)
+  ↳↳ [`SignInCheckOptionsClaimsObject`](auth.SignInCheckOptionsClaimsObject.md)
 
-  ↳↳ [`SignInCheckOptionsClaimsValidator`](auth.signincheckoptionsclaimsvalidator.md)
+  ↳↳ [`SignInCheckOptionsClaimsValidator`](auth.SignInCheckOptionsClaimsValidator.md)
 
 ## Table of contents
 
 ### Properties
 
-- [forceRefresh](auth.signincheckoptionsbasic.md#forcerefresh)
-- [idField](auth.signincheckoptionsbasic.md#idfield)
-- [initialData](auth.signincheckoptionsbasic.md#initialdata)
-- [startWithValue](auth.signincheckoptionsbasic.md#startwithvalue)
-- [suspense](auth.signincheckoptionsbasic.md#suspense)
+- [forceRefresh](auth.SignInCheckOptionsBasic.md#forcerefresh)
+- [idField](auth.SignInCheckOptionsBasic.md#idfield)
+- [initialData](auth.SignInCheckOptionsBasic.md#initialdata)
+- [startWithValue](auth.SignInCheckOptionsBasic.md#startwithvalue)
+- [suspense](auth.SignInCheckOptionsBasic.md#suspense)
 
 ## Properties
 
@@ -42,7 +42,7 @@ ___
 
 #### Inherited from
 
-[ReactFireOptions](index.reactfireoptions.md).[idField](index.reactfireoptions.md#idfield)
+[ReactFireOptions](index.ReactFireOptions.md).[idField](index.ReactFireOptions.md#idfield)
 
 #### Defined in
 
@@ -56,7 +56,7 @@ ___
 
 #### Inherited from
 
-[ReactFireOptions](index.reactfireoptions.md).[initialData](index.reactfireoptions.md#initialdata)
+[ReactFireOptions](index.ReactFireOptions.md).[initialData](index.ReactFireOptions.md#initialdata)
 
 #### Defined in
 
@@ -72,7 +72,7 @@ ___
 
 #### Inherited from
 
-[ReactFireOptions](index.reactfireoptions.md).[startWithValue](index.reactfireoptions.md#startwithvalue)
+[ReactFireOptions](index.ReactFireOptions.md).[startWithValue](index.ReactFireOptions.md#startwithvalue)
 
 #### Defined in
 
@@ -86,7 +86,7 @@ ___
 
 #### Inherited from
 
-[ReactFireOptions](index.reactfireoptions.md).[suspense](index.reactfireoptions.md#suspense)
+[ReactFireOptions](index.ReactFireOptions.md).[suspense](index.ReactFireOptions.md#suspense)
 
 #### Defined in
 

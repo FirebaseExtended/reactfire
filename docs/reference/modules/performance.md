@@ -6,7 +6,7 @@
 
 ### Interfaces
 
-- [SuspensePerfProps](../interfaces/performance.suspenseperfprops.md)
+- [SuspensePerfProps](../interfaces/performance.SuspensePerfProps.md)
 
 ### Functions
 
@@ -22,7 +22,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `__namedParameters` | [`SuspensePerfProps`](../interfaces/performance.suspenseperfprops.md) |
+| `__namedParameters` | [`SuspensePerfProps`](../interfaces/performance.SuspensePerfProps.md) |
 
 #### Returns
 

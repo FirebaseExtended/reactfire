@@ -8,9 +8,9 @@
 
 ### Properties
 
-- [children](auth.authcheckprops.md#children)
-- [fallback](auth.authcheckprops.md#fallback)
-- [requiredClaims](auth.authcheckprops.md#requiredclaims)
+- [children](auth.AuthCheckProps.md#children)
+- [fallback](auth.AuthCheckProps.md#fallback)
+- [requiredClaims](auth.AuthCheckProps.md#requiredclaims)
 
 ## Properties
 

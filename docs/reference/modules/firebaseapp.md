@@ -6,36 +6,38 @@
 
 ### References
 
-- [PreloadOptions](firebaseapp.md#preloadoptions)
-- [preloadAnalytics](firebaseapp.md#preloadanalytics)
-- [preloadAuth](firebaseapp.md#preloadauth)
-- [preloadDatabase](firebaseapp.md#preloaddatabase)
-- [preloadFirestore](firebaseapp.md#preloadfirestore)
-- [preloadFunctions](firebaseapp.md#preloadfunctions)
-- [preloadMessaging](firebaseapp.md#preloadmessaging)
-- [preloadPerformance](firebaseapp.md#preloadperformance)
-- [preloadRemoteConfig](firebaseapp.md#preloadremoteconfig)
-- [preloadStorage](firebaseapp.md#preloadstorage)
-- [useAnalytics](firebaseapp.md#useanalytics)
-- [useAuth](firebaseapp.md#useauth)
-- [useDatabase](firebaseapp.md#usedatabase)
-- [useFirestore](firebaseapp.md#usefirestore)
-- [useFunctions](firebaseapp.md#usefunctions)
-- [useMessaging](firebaseapp.md#usemessaging)
-- [usePerformance](firebaseapp.md#useperformance)
-- [useRemoteConfig](firebaseapp.md#useremoteconfig)
-- [useStorage](firebaseapp.md#usestorage)
+- [PreloadOptions](firebaseApp.md#preloadoptions)
+- [preloadAnalytics](firebaseApp.md#preloadanalytics)
+- [preloadAppCheck](firebaseApp.md#preloadappcheck)
+- [preloadAuth](firebaseApp.md#preloadauth)
+- [preloadDatabase](firebaseApp.md#preloaddatabase)
+- [preloadFirestore](firebaseApp.md#preloadfirestore)
+- [preloadFunctions](firebaseApp.md#preloadfunctions)
+- [preloadMessaging](firebaseApp.md#preloadmessaging)
+- [preloadPerformance](firebaseApp.md#preloadperformance)
+- [preloadRemoteConfig](firebaseApp.md#preloadremoteconfig)
+- [preloadStorage](firebaseApp.md#preloadstorage)
+- [useAnalytics](firebaseApp.md#useanalytics)
+- [useAppCheck](firebaseApp.md#useappcheck)
+- [useAuth](firebaseApp.md#useauth)
+- [useDatabase](firebaseApp.md#usedatabase)
+- [useFirestore](firebaseApp.md#usefirestore)
+- [useFunctions](firebaseApp.md#usefunctions)
+- [useMessaging](firebaseApp.md#usemessaging)
+- [usePerformance](firebaseApp.md#useperformance)
+- [useRemoteConfig](firebaseApp.md#useremoteconfig)
+- [useStorage](firebaseApp.md#usestorage)
 
 ### Variables
 
-- [version](firebaseapp.md#version)
+- [version](firebaseApp.md#version)
 
 ### Functions
 
-- [FirebaseAppProvider](firebaseapp.md#firebaseappprovider)
-- [useFirebaseApp](firebaseapp.md#usefirebaseapp)
-- [useIsSuspenseEnabled](firebaseapp.md#useissuspenseenabled)
-- [useSuspenseEnabledFromConfigAndContext](firebaseapp.md#usesuspenseenabledfromconfigandcontext)
+- [FirebaseAppProvider](firebaseApp.md#firebaseappprovider)
+- [useFirebaseApp](firebaseApp.md#usefirebaseapp)
+- [useIsSuspenseEnabled](firebaseApp.md#useissuspenseenabled)
+- [useSuspenseEnabledFromConfigAndContext](firebaseApp.md#usesuspenseenabledfromconfigandcontext)
 
 ## References
 
@@ -48,6 +50,12 @@ ___
 ### preloadAnalytics
 
 Re-exports: [preloadAnalytics](sdk.md#preloadanalytics)
+
+___
+
+### preloadAppCheck
+
+Re-exports: [preloadAppCheck](sdk.md#preloadappcheck)
 
 ___
 
@@ -102,6 +110,12 @@ ___
 ### useAnalytics
 
 Re-exports: [useAnalytics](sdk.md#useanalytics)
+
+___
+
+### useAppCheck
+
+Re-exports: [useAppCheck](sdk.md#useappcheck)
 
 ___
 

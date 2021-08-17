@@ -8,10 +8,10 @@
 
 ### Properties
 
-- [children](auth.claimscheckprops.md#children)
-- [fallback](auth.claimscheckprops.md#fallback)
-- [requiredClaims](auth.claimscheckprops.md#requiredclaims)
-- [user](auth.claimscheckprops.md#user)
+- [children](auth.ClaimsCheckProps.md#children)
+- [fallback](auth.ClaimsCheckProps.md#fallback)
+- [requiredClaims](auth.ClaimsCheckProps.md#requiredclaims)
+- [user](auth.ClaimsCheckProps.md#user)
 
 ## Properties
 

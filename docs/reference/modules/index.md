@@ -23,6 +23,7 @@
 - [SuspensePerfProps](index.md#suspenseperfprops)
 - [SuspenseWithPerf](index.md#suspensewithperf)
 - [preloadAnalytics](index.md#preloadanalytics)
+- [preloadAppCheck](index.md#preloadappcheck)
 - [preloadAuth](index.md#preloadauth)
 - [preloadDatabase](index.md#preloaddatabase)
 - [preloadFirestore](index.md#preloadfirestore)
@@ -35,6 +36,7 @@
 - [preloadStorage](index.md#preloadstorage)
 - [preloadUser](index.md#preloaduser)
 - [useAnalytics](index.md#useanalytics)
+- [useAppCheck](index.md#useappcheck)
 - [useAuth](index.md#useauth)
 - [useDatabase](index.md#usedatabase)
 - [useDatabaseList](index.md#usedatabaselist)
@@ -71,11 +73,11 @@
 
 ### Classes
 
-- [ReactFireError](../classes/index.reactfireerror.md)
+- [ReactFireError](../classes/index.ReactFireError.md)
 
 ### Interfaces
 
-- [ReactFireOptions](../interfaces/index.reactfireoptions.md)
+- [ReactFireOptions](../interfaces/index.ReactFireOptions.md)
 
 ### Type aliases
 
@@ -97,13 +99,13 @@ ___
 
 ### AuthCheckProps
 
-Re-exports: [AuthCheckProps](../interfaces/auth.authcheckprops.md)
+Re-exports: [AuthCheckProps](../interfaces/auth.AuthCheckProps.md)
 
 ___
 
 ### ClaimCheckErrors
 
-Re-exports: [ClaimCheckErrors](../interfaces/auth.claimcheckerrors.md)
+Re-exports: [ClaimCheckErrors](../interfaces/auth.ClaimCheckErrors.md)
 
 ___
 
@@ -115,25 +117,25 @@ ___
 
 ### ClaimsCheckProps
 
-Re-exports: [ClaimsCheckProps](../interfaces/auth.claimscheckprops.md)
+Re-exports: [ClaimsCheckProps](../interfaces/auth.ClaimsCheckProps.md)
 
 ___
 
 ### ClaimsValidator
 
-Re-exports: [ClaimsValidator](../interfaces/auth.claimsvalidator.md)
+Re-exports: [ClaimsValidator](../interfaces/auth.ClaimsValidator.md)
 
 ___
 
 ### FirebaseAppProvider
 
-Re-exports: [FirebaseAppProvider](firebaseapp.md#firebaseappprovider)
+Re-exports: [FirebaseAppProvider](firebaseApp.md#firebaseappprovider)
 
 ___
 
 ### ObservableStatus
 
-Re-exports: [ObservableStatus](../interfaces/useobservable.observablestatus.md)
+Re-exports: [ObservableStatus](../interfaces/useObservable.ObservableStatus.md)
 
 ___
 
@@ -145,19 +147,19 @@ ___
 
 ### SignInCheckOptionsBasic
 
-Re-exports: [SignInCheckOptionsBasic](../interfaces/auth.signincheckoptionsbasic.md)
+Re-exports: [SignInCheckOptionsBasic](../interfaces/auth.SignInCheckOptionsBasic.md)
 
 ___
 
 ### SignInCheckOptionsClaimsObject
 
-Re-exports: [SignInCheckOptionsClaimsObject](../interfaces/auth.signincheckoptionsclaimsobject.md)
+Re-exports: [SignInCheckOptionsClaimsObject](../interfaces/auth.SignInCheckOptionsClaimsObject.md)
 
 ___
 
 ### SignInCheckOptionsClaimsValidator
 
-Re-exports: [SignInCheckOptionsClaimsValidator](../interfaces/auth.signincheckoptionsclaimsvalidator.md)
+Re-exports: [SignInCheckOptionsClaimsValidator](../interfaces/auth.SignInCheckOptionsClaimsValidator.md)
 
 ___
 
@@ -175,7 +177,7 @@ ___
 
 ### SuspensePerfProps
 
-Re-exports: [SuspensePerfProps](../interfaces/performance.suspenseperfprops.md)
+Re-exports: [SuspensePerfProps](../interfaces/performance.SuspensePerfProps.md)
 
 ___
 
@@ -188,6 +190,12 @@ ___
 ### preloadAnalytics
 
 Re-exports: [preloadAnalytics](sdk.md#preloadanalytics)
+
+___
+
+### preloadAppCheck
+
+Re-exports: [preloadAppCheck](sdk.md#preloadappcheck)
 
 ___
 
@@ -229,7 +237,7 @@ ___
 
 ### preloadObservable
 
-Re-exports: [preloadObservable](useobservable.md#preloadobservable)
+Re-exports: [preloadObservable](useObservable.md#preloadobservable)
 
 ___
 
@@ -260,6 +268,12 @@ ___
 ### useAnalytics
 
 Re-exports: [useAnalytics](sdk.md#useanalytics)
+
+___
+
+### useAppCheck
+
+Re-exports: [useAppCheck](sdk.md#useappcheck)
 
 ___
 
@@ -301,7 +315,7 @@ ___
 
 ### useFirebaseApp
 
-Re-exports: [useFirebaseApp](firebaseapp.md#usefirebaseapp)
+Re-exports: [useFirebaseApp](firebaseApp.md#usefirebaseapp)
 
 ___
 
@@ -361,7 +375,7 @@ ___
 
 ### useIsSuspenseEnabled
 
-Re-exports: [useIsSuspenseEnabled](firebaseapp.md#useissuspenseenabled)
+Re-exports: [useIsSuspenseEnabled](firebaseApp.md#useissuspenseenabled)
 
 ___
 
@@ -373,7 +387,7 @@ ___
 
 ### useObservable
 
-Re-exports: [useObservable](useobservable.md#useobservable)
+Re-exports: [useObservable](useObservable.md#useobservable)
 
 ___
 
@@ -445,7 +459,7 @@ ___
 
 ### useSuspenseEnabledFromConfigAndContext
 
-Re-exports: [useSuspenseEnabledFromConfigAndContext](firebaseapp.md#usesuspenseenabledfromconfigandcontext)
+Re-exports: [useSuspenseEnabledFromConfigAndContext](firebaseApp.md#usesuspenseenabledfromconfigandcontext)
 
 ___
 
@@ -457,7 +471,7 @@ ___
 
 ### version
 
-Re-exports: [version](firebaseapp.md#version)
+Re-exports: [version](firebaseApp.md#version)
 
 ## Type aliases
 
@@ -471,7 +485,7 @@ Re-exports: [version](firebaseapp.md#version)
 | :------ | :------ |
 | `_reactFireDatabaseCachedQueries` | `firebase.database.Query`[] |
 | `_reactFireFirestoreQueryCache` | `firebase.firestore.Query`[] |
-| `_reactFirePreloadedObservables` | `Map`<`string`, [`SuspenseSubject`](../classes/suspensesubject.suspensesubject-1.md)<`any`\>\> |
+| `_reactFirePreloadedObservables` | `Map`<`string`, [`SuspenseSubject`](../classes/SuspenseSubject.SuspenseSubject-1.md)<`any`\>\> |
 
 #### Defined in
 
@@ -487,7 +501,7 @@ Re-exports: [version](firebaseapp.md#version)
 
 | Name | Type |
 | :------ | :------ |
-| `options` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md) |
+| `options` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md) |
 
 #### Returns
 
@@ -507,7 +521,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `options` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md) |
+| `options` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md) |
 | `field` | `string` |
 
 #### Returns
@@ -528,7 +542,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `options` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md) |
+| `options` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md) |
 
 #### Returns
 

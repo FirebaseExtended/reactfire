@@ -34,7 +34,7 @@ ___
 
 ### useStorageDownloadURL
 
-▸ **useStorageDownloadURL**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`string` \| `T`\>
+▸ **useStorageDownloadURL**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`string` \| `T`\>
 
 Subscribe to a storage ref's download URL
 
@@ -49,11 +49,11 @@ Subscribe to a storage ref's download URL
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `ref` | `firebase.storage.Reference` | reference to the blob you want to download |
-| `options?` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md)<`T`\> |  |
+| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`T`\> |  |
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`string` \| `T`\>
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`string` \| `T`\>
 
 #### Defined in
 
@@ -63,7 +63,7 @@ ___
 
 ### useStorageTask
 
-▸ **useStorageTask**<`T`\>(`task`, `ref`, `options?`): [`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`firebase.storage.UploadTaskSnapshot` \| `T`\>
+▸ **useStorageTask**<`T`\>(`task`, `ref`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`firebase.storage.UploadTaskSnapshot` \| `T`\>
 
 Subscribe to the progress of a storage task
 
@@ -79,11 +79,11 @@ Subscribe to the progress of a storage task
 | :------ | :------ | :------ |
 | `task` | `firebase.storage.UploadTask` | the task you want to listen to |
 | `ref` | `firebase.storage.Reference` | reference to the blob the task is acting on |
-| `options?` | [`ReactFireOptions`](../interfaces/index.reactfireoptions.md)<`T`\> |  |
+| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`T`\> |  |
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useobservable.observablestatus.md)<`firebase.storage.UploadTaskSnapshot` \| `T`\>
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`firebase.storage.UploadTaskSnapshot` \| `T`\>
 
 #### Defined in
 

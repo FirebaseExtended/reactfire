@@ -8,10 +8,10 @@
 
 ### Properties
 
-- [children](performance.suspenseperfprops.md#children)
-- [fallback](performance.suspenseperfprops.md#fallback)
-- [firePerf](performance.suspenseperfprops.md#fireperf)
-- [traceId](performance.suspenseperfprops.md#traceid)
+- [children](performance.SuspensePerfProps.md#children)
+- [fallback](performance.SuspensePerfProps.md#fallback)
+- [firePerf](performance.SuspensePerfProps.md#fireperf)
+- [traceId](performance.SuspensePerfProps.md#traceid)
 
 ## Properties
 
