@@ -1,7 +1,7 @@
+import { fetchAndActivate, getRemoteConfig } from 'firebase/remote-config';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { preloadRemoteConfig, useFirebaseApp, useRemoteConfigString } from 'reactfire';
-import { WideButton } from '../display/Button';
+import { RemoteConfigProvider, useRemoteConfigString, useInitRemoteConfig } from 'reactfire';
 import { CardSection } from '../display/Card';
 import { LoadingSpinner } from '../display/LoadingSpinner';
 
@@ -19,25 +19,23 @@ export const RcString = ({ messageKey }) => {
 };
 
 export const RemoteConfig = () => {
-  const firebaseApp = useFirebaseApp();
-  const [remoteConfigLoaded, setRemoteConfigLoaded] = useState<boolean>(false);
-  useEffect(() => {
-    preloadRemoteConfig({
-      firebaseApp,
-      setup: async remoteConfig => {
-        remoteConfig().settings = {
-          minimumFetchIntervalMillis: 10000,
-          fetchTimeoutMillis: 10000
-        };
-        await remoteConfig().fetchAndActivate();
-        setRemoteConfigLoaded(true);
-      }
-    });
-  }, []);
+  const { status, data: remoteConfigInstance } = useInitRemoteConfig(async (firebaseApp) => {
+    const remoteConfig = getRemoteConfig(firebaseApp);
+    remoteConfig.settings = {
+      minimumFetchIntervalMillis: 10000,
+      fetchTimeoutMillis: 10000,
+    };
+    await fetchAndActivate(remoteConfig);
+    return remoteConfig;
+  });
 
-  if (!remoteConfigLoaded) {
+  if (status === 'loading') {
     return <LoadingSpinner />;
   }
 
-  return <RcString messageKey="message" />;
+  return (
+    <RemoteConfigProvider sdk={remoteConfigInstance}>
+      <RcString messageKey="message" />
+    </RemoteConfigProvider>
+  );
 };

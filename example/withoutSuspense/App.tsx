@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FirebaseAppProvider } from 'reactfire';
+import { AuthProvider, useFirebaseApp, useInitPerformance } from 'reactfire';
 import { Card } from '../display/Card';
 import { Auth } from './Auth';
 import { Firestore } from './Firestore';
@@ -9,12 +9,20 @@ import { Storage } from './Storage';
 
 // Import auth directly because most components need it
 // Other Firebase libraries can be lazy-loaded as-needed
-import 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 
-export const App = ({ firebaseConfig }: { firebaseConfig: { [key: string]: unknown } }) => {
+export const App = () => {
+  const firebaseApp = useFirebaseApp();
+  const auth = getAuth(firebaseApp);
+
+  useInitPerformance(async (firebaseApp) => {
+    const { getPerformance } = await import('firebase/performance');
+    return getPerformance(firebaseApp);
+  });
+
   return (
     <div className="flex flex-wrap justify-around p-4">
-      <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+      <AuthProvider sdk={auth}>
         <Card title="Authentication">
           <Auth />
         </Card>
@@ -30,7 +38,7 @@ export const App = ({ firebaseConfig }: { firebaseConfig: { [key: string]: unkno
         <Card title="Storage">
           <Storage />
         </Card>
-      </FirebaseAppProvider>
+      </AuthProvider>
     </div>
   );
 };

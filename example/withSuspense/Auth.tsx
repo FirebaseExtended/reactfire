@@ -1,28 +1,43 @@
 import * as React from 'react';
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import { useAuth, useUser, SuspenseWithPerf, AuthCheck } from 'reactfire';
+import { useAuth, useUser, SuspenseWithPerf, useSigninCheck } from 'reactfire';
 import { WideButton } from '../display/Button';
 import { CardSection } from '../display/Card';
 import { LoadingSpinner } from '../display/LoadingSpinner';
+import { GoogleAuthProvider, signInWithPopup, User } from "firebase/auth";
 
 const signOut = auth => auth.signOut().then(() => console.log('signed out'));
+const signIn = async auth => {
+  const provider = new GoogleAuthProvider();
+
+  await signInWithPopup(auth, provider);
+}
+
+export const AuthWrapper = ({ children, fallback }: React.PropsWithChildren<{ fallback: JSX.Element }>): JSX.Element => {
+  const { data: signInCheckResult } = useSigninCheck();
+
+  if (!children) {
+    throw new Error('Children must be provided');
+  }
+
+  if (signInCheckResult.signedIn === true) {
+    return children as JSX.Element;
+  } else {
+    return fallback;
+  }
+};
 
 const UserDetails = () => {
   const auth = useAuth();
-  const { data: user } = useUser();
+  const {data: user} = useUser();
 
   return (
     <>
-      <CardSection title="Displayname">{user.displayName}</CardSection>
+      <CardSection title="Displayname">{(user as User).displayName}</CardSection>
       <CardSection title="Providers">
         <ul>
-          {user.providerData.map(profile => {
-            if (profile) {
-              return <li key={profile.providerId}>{profile.providerId}</li>;
-            } else {
-              return 'null profile';
-            }
-          })}
+          {(user as User).providerData?.map(profile => (
+            <li key={profile?.providerId}>{profile?.providerId}</li>
+          ))}
         </ul>
       </CardSection>
       <CardSection title="Sign Out">
@@ -33,30 +48,21 @@ const UserDetails = () => {
 };
 
 const SignInForm = () => {
-  const auth = useAuth;
-
-  const uiConfig = {
-    signInFlow: 'popup',
-    signInOptions: [auth.GoogleAuthProvider.PROVIDER_ID],
-    callbacks: {
-      // Avoid redirects after sign-in.
-      signInSuccessWithAuthResult: () => false
-    }
-  };
+  const auth = useAuth();
 
   return (
     <CardSection title="Sign-in form">
-      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth()} />
+      <WideButton label="Sign in with Google" onClick={() => signIn(auth)} />
     </CardSection>
   );
 };
 
 export const Auth = () => {
   return (
-    <SuspenseWithPerf traceId={'firebase-user-wait'} fallback={<p>loading...</p>}>
-      <AuthCheck fallback={SignInForm}>
+    <SuspenseWithPerf traceId={'firebase-user-wait'} fallback={<LoadingSpinner/>}>
+      <AuthWrapper fallback={<SignInForm />}>
         <UserDetails />
-      </AuthCheck>
+      </AuthWrapper>
     </SuspenseWithPerf>
   );
 };

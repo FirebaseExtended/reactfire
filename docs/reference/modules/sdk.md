@@ -4,73 +4,170 @@
 
 ## Table of contents
 
-### Type aliases
+### Functions
 
-- [PreloadOptions](sdk.md#preloadoptions)
-
-### Variables
-
-- [useAnalytics](sdk.md#useanalytics)
+- [AuthProvider](sdk.md#authprovider)
+- [DatabaseProvider](sdk.md#databaseprovider)
+- [FirestoreProvider](sdk.md#firestoreprovider)
+- [PerformanceProvider](sdk.md#performanceprovider)
+- [RemoteConfigProvider](sdk.md#remoteconfigprovider)
+- [StorageProvider](sdk.md#storageprovider)
 - [useAuth](sdk.md#useauth)
 - [useDatabase](sdk.md#usedatabase)
 - [useFirestore](sdk.md#usefirestore)
-- [useFunctions](sdk.md#usefunctions)
-- [useMessaging](sdk.md#usemessaging)
-- [useStorage](sdk.md#usestorage)
-
-### Functions
-
-- [preloadAnalytics](sdk.md#preloadanalytics)
-- [preloadAuth](sdk.md#preloadauth)
-- [preloadDatabase](sdk.md#preloaddatabase)
-- [preloadFirestore](sdk.md#preloadfirestore)
-- [preloadFunctions](sdk.md#preloadfunctions)
-- [preloadMessaging](sdk.md#preloadmessaging)
-- [preloadPerformance](sdk.md#preloadperformance)
-- [preloadRemoteConfig](sdk.md#preloadremoteconfig)
-- [preloadStorage](sdk.md#preloadstorage)
+- [useInitAuth](sdk.md#useinitauth)
+- [useInitDatabase](sdk.md#useinitdatabase)
+- [useInitFirestore](sdk.md#useinitfirestore)
+- [useInitPerformance](sdk.md#useinitperformance)
+- [useInitRemoteConfig](sdk.md#useinitremoteconfig)
+- [useInitStorage](sdk.md#useinitstorage)
 - [usePerformance](sdk.md#useperformance)
 - [useRemoteConfig](sdk.md#useremoteconfig)
+- [useStorage](sdk.md#usestorage)
 
-## Type aliases
+## Functions
 
-### PreloadOptions
+### AuthProvider
 
-Ƭ **PreloadOptions**<`T`\>: `Object`
+▸ `Const` **AuthProvider**(`props`): `Element`
 
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Type declaration
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `firebaseApp` | `App` |
-| `setup?` | (`instanceFactory`: `T`) => `void` \| `Promise`<`any`\> |
-| `suspense?` | `boolean` |
+| `props` | `PropsWithChildren`<`Object`\> |
+
+#### Returns
+
+`Element`
 
 #### Defined in
 
-[src/sdk.tsx:100](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L100)
+[src/sdk.tsx:82](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L82)
 
-## Variables
+___
 
-### useAnalytics
+### DatabaseProvider
 
-• `Const` **useAnalytics**: typeof `analytics`
+▸ `Const` **DatabaseProvider**(`props`): `Element`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | `PropsWithChildren`<`Object`\> |
+
+#### Returns
+
+`Element`
 
 #### Defined in
 
-[src/sdk.tsx:91](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L91)
+[src/sdk.tsx:83](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L83)
+
+___
+
+### FirestoreProvider
+
+▸ `Const` **FirestoreProvider**(`props`): `Element`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | `PropsWithChildren`<`Object`\> |
+
+#### Returns
+
+`Element`
+
+#### Defined in
+
+[src/sdk.tsx:84](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L84)
+
+___
+
+### PerformanceProvider
+
+▸ `Const` **PerformanceProvider**(`props`): `Element`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | `PropsWithChildren`<`Object`\> |
+
+#### Returns
+
+`Element`
+
+#### Defined in
+
+[src/sdk.tsx:85](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L85)
+
+___
+
+### RemoteConfigProvider
+
+▸ `Const` **RemoteConfigProvider**(`props`): `Element`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | `PropsWithChildren`<`Object`\> |
+
+#### Returns
+
+`Element`
+
+#### Defined in
+
+[src/sdk.tsx:87](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L87)
+
+___
+
+### StorageProvider
+
+▸ `Const` **StorageProvider**(`props`): `Element`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | `PropsWithChildren`<`Object`\> |
+
+#### Returns
+
+`Element`
+
+#### Defined in
+
+[src/sdk.tsx:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L86)
 
 ___
 
 ### useAuth
 
-• `Const` **useAuth**: typeof `auth`
+▸ `Const` **useAuth**(): `Auth`
+
+#### Returns
+
+`Auth`
+
+#### Defined in
+
+[src/sdk.tsx:89](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L89)
+
+___
+
+### useDatabase
+
+▸ `Const` **useDatabase**(): `Database`
+
+#### Returns
+
+`Database`
 
 #### Defined in
 
@@ -78,9 +175,153 @@ ___
 
 ___
 
-### useDatabase
+### useFirestore
 
-• `Const` **useDatabase**: typeof `database`
+▸ `Const` **useFirestore**(): `Firestore`
+
+#### Returns
+
+`Firestore`
+
+#### Defined in
+
+[src/sdk.tsx:91](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L91)
+
+___
+
+### useInitAuth
+
+▸ `Const` **useInitAuth**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Auth`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`Auth`\> |
+| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`Auth`\> |
+
+#### Returns
+
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Auth`\>
+
+#### Defined in
+
+[src/sdk.tsx:101](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L101)
+
+___
+
+### useInitDatabase
+
+▸ `Const` **useInitDatabase**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Database`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`Database`\> |
+| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`Database`\> |
+
+#### Returns
+
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Database`\>
+
+#### Defined in
+
+[src/sdk.tsx:102](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L102)
+
+___
+
+### useInitFirestore
+
+▸ `Const` **useInitFirestore**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Firestore`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`Firestore`\> |
+| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`Firestore`\> |
+
+#### Returns
+
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Firestore`\>
+
+#### Defined in
+
+[src/sdk.tsx:103](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L103)
+
+___
+
+### useInitPerformance
+
+▸ `Const` **useInitPerformance**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`FirebasePerformance`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`FirebasePerformance`\> |
+| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`FirebasePerformance`\> |
+
+#### Returns
+
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`FirebasePerformance`\>
+
+#### Defined in
+
+[src/sdk.tsx:104](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L104)
+
+___
+
+### useInitRemoteConfig
+
+▸ `Const` **useInitRemoteConfig**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`RemoteConfig`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`RemoteConfig`\> |
+| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`RemoteConfig`\> |
+
+#### Returns
+
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`RemoteConfig`\>
+
+#### Defined in
+
+[src/sdk.tsx:106](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L106)
+
+___
+
+### useInitStorage
+
+▸ `Const` **useInitStorage**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`FirebaseStorage`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`FirebaseStorage`\> |
+| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`FirebaseStorage`\> |
+
+#### Returns
+
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`FirebaseStorage`\>
+
+#### Defined in
+
+[src/sdk.tsx:108](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L108)
+
+___
+
+### usePerformance
+
+▸ `Const` **usePerformance**(): `FirebasePerformance`
+
+#### Returns
+
+`FirebasePerformance`
 
 #### Defined in
 
@@ -88,19 +329,13 @@ ___
 
 ___
 
-### useFirestore
+### useRemoteConfig
 
-• `Const` **useFirestore**: typeof `firestore`
+▸ `Const` **useRemoteConfig**(): `RemoteConfig`
 
-#### Defined in
+#### Returns
 
-[src/sdk.tsx:93](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L93)
-
-___
-
-### useFunctions
-
-• `Const` **useFunctions**: typeof `functions`
+`RemoteConfig`
 
 #### Defined in
 
@@ -108,240 +343,14 @@ ___
 
 ___
 
-### useMessaging
-
-• `Const` **useMessaging**: typeof `messaging`
-
-#### Defined in
-
-[src/sdk.tsx:95](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L95)
-
-___
-
 ### useStorage
 
-• `Const` **useStorage**: typeof `storage`
-
-#### Defined in
-
-[src/sdk.tsx:98](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L98)
-
-## Functions
-
-### preloadAnalytics
-
-▸ `Const` **preloadAnalytics**(`options`): `Promise`<`fn`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `options` | [`PreloadOptions`](sdk.md#preloadoptions)<`fn`\> |
+▸ `Const` **useStorage**(): `FirebaseStorage`
 
 #### Returns
 
-`Promise`<`fn`\>
+`FirebaseStorage`
 
 #### Defined in
 
-[src/sdk.tsx:144](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L144)
-
-___
-
-### preloadAuth
-
-▸ `Const` **preloadAuth**(`options`): `Promise`<`fn`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `options` | [`PreloadOptions`](sdk.md#preloadoptions)<`fn`\> |
-
-#### Returns
-
-`Promise`<`fn`\>
-
-#### Defined in
-
-[src/sdk.tsx:143](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L143)
-
-___
-
-### preloadDatabase
-
-▸ `Const` **preloadDatabase**(`options`): `Promise`<`fn`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `options` | [`PreloadOptions`](sdk.md#preloadoptions)<`fn`\> |
-
-#### Returns
-
-`Promise`<`fn`\>
-
-#### Defined in
-
-[src/sdk.tsx:145](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L145)
-
-___
-
-### preloadFirestore
-
-▸ `Const` **preloadFirestore**(`options`): `Promise`<`fn`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `options` | [`PreloadOptions`](sdk.md#preloadoptions)<`fn`\> |
-
-#### Returns
-
-`Promise`<`fn`\>
-
-#### Defined in
-
-[src/sdk.tsx:146](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L146)
-
-___
-
-### preloadFunctions
-
-▸ `Const` **preloadFunctions**(`options`): `Promise`<`fn`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `options` | [`PreloadOptions`](sdk.md#preloadoptions)<`fn`\> |
-
-#### Returns
-
-`Promise`<`fn`\>
-
-#### Defined in
-
-[src/sdk.tsx:147](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L147)
-
-___
-
-### preloadMessaging
-
-▸ `Const` **preloadMessaging**(`options`): `Promise`<`fn`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `options` | [`PreloadOptions`](sdk.md#preloadoptions)<`fn`\> |
-
-#### Returns
-
-`Promise`<`fn`\>
-
-#### Defined in
-
-[src/sdk.tsx:148](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L148)
-
-___
-
-### preloadPerformance
-
-▸ `Const` **preloadPerformance**(`options`): `Promise`<`fn`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `options` | [`PreloadOptions`](sdk.md#preloadoptions)<`fn`\> |
-
-#### Returns
-
-`Promise`<`fn`\>
-
-#### Defined in
-
-[src/sdk.tsx:149](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L149)
-
-___
-
-### preloadRemoteConfig
-
-▸ `Const` **preloadRemoteConfig**(`options`): `Promise`<`fn`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `options` | [`PreloadOptions`](sdk.md#preloadoptions)<`fn`\> |
-
-#### Returns
-
-`Promise`<`fn`\>
-
-#### Defined in
-
-[src/sdk.tsx:150](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L150)
-
-___
-
-### preloadStorage
-
-▸ `Const` **preloadStorage**(`options`): `Promise`<`fn`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `options` | [`PreloadOptions`](sdk.md#preloadoptions)<`fn`\> |
-
-#### Returns
-
-`Promise`<`fn`\>
-
-#### Defined in
-
-[src/sdk.tsx:151](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L151)
-
-___
-
-### usePerformance
-
-▸ `Const` **usePerformance**(`app?`): `firebase.performance.Performance`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `app?` | `firebase.app.App` |
-
-#### Returns
-
-`firebase.performance.Performance`
-
-#### Defined in
-
-[src/sdk.tsx:96](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L96)
-
-___
-
-### useRemoteConfig
-
-▸ `Const` **useRemoteConfig**(`app?`): `firebase.remoteConfig.RemoteConfig`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `app?` | `firebase.app.App` |
-
-#### Returns
-
-`firebase.remoteConfig.RemoteConfig`
-
-#### Defined in
-
-[src/sdk.tsx:97](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L97)
+[src/sdk.tsx:93](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L93)

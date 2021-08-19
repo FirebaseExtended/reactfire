@@ -6,7 +6,7 @@ This quickstart shows you how to connect your React web app to **Cloud Firestore
 
 Let's build a web app that displays, in _real time_, the tastiness of a burrito. Yum!
 
-To see the completed app, check out [this StackBlitz workspace](https://stackblitz.com/fork/reactfire-sample).
+To see the completed app, check out [this StackBlitz workspace](https://stackblitz.com/fork/reactfire-v4-sample).
 
 ## 1. Create a document in Cloud Firestore
 
@@ -79,11 +79,19 @@ npm install --save firebase reactfire
 
 > Open the src directory and add code to index.js as described below.
 
+1. Import from the Firebase SDK
+
+   ```js
+   //...
+   import { doc, getFirestore } from 'firebase/firestore';
+   //...
+   ```
+
 1. Import from ReactFire
 
    ```js
    //...
-   import { FirebaseAppProvider } from 'reactfire';
+   import { FirebaseAppProvider, FirestoreProvider, useFirestoreDocData, useFirestore, useFirebaseApp } from 'reactfire';
    //...
    ```
 
@@ -132,11 +140,9 @@ npm install --save firebase reactfire
 
    ```jsx
    //...
-   function Burrito() {
+   function BurritoTaste() {
      // easily access the Firestore library
-     const burritoRef = useFirestore()
-       .collection('tryreactfire')
-       .doc('burrito');
+     const burritoRef = doc(useFirestore(), 'tryreactfire', 'burrito');
 
      // subscribe to a document for realtime updates. just one line!
      const { status, data } = useFirestoreDocData(burritoRef);
@@ -158,10 +164,12 @@ npm install --save firebase reactfire
    ```jsx
    //...
    function App() {
+     const firestoreInstance = getFirestore(useFirebaseApp());
      return (
-       <div className="App">
-         <Burrito />
-       </div>
+       <FirestoreProvider sdk={firestoreInstance}>
+         <h1>🌯</h1>
+         <BurritoTaste />
+       </FirestoreProvider>
      );
    }
    //...
