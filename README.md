@@ -1,11 +1,5 @@
 # ReactFire
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
-
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
-
 Hooks, Context Providers, and Components that make it easy to interact with
 Firebase.
 
@@ -111,25 +105,3 @@ This repository is maintained by Googlers but is not a supported Firebase produc
   that Suspense can catch. No more `isLoaded ?...` - let React
   [handle it for you](https://reactjs.org/docs/concurrent-mode-suspense.html).
 - **Automatically instrument your `Suspense` load times** - Need to automatically instrument your `Suspense` load times with [RUM](https://firebase.google.com/docs/perf-mon)? Use `<SuspenseWithPerf />`.
-
-## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tr>
-    <td align="center"><a href="http://www.dfweb.no"><img src="https://avatars1.githubusercontent.com/u/45217974?v=4" width="100px;" alt=""/><br /><sub><b>w3bdesign</b></sub></a><br /><a href="https://github.com/FirebaseExtended/reactfire/commits?author=w3bdesign" title="Code">💻</a></td>
-    <td align="center"><a href="http://prue.io"><img src="https://avatars0.githubusercontent.com/u/2992224?v=4" width="100px;" alt=""/><br /><sub><b>Scott Prue</b></sub></a><br /><a href="https://github.com/FirebaseExtended/reactfire/commits?author=prescottprue" title="Code">💻</a></td>
-    <td align="center"><a href="http://git.io/jhuleatt"><img src="https://avatars0.githubusercontent.com/u/3759507?v=4" width="100px;" alt=""/><br /><sub><b>Jeff</b></sub></a><br /><a href="https://github.com/FirebaseExtended/reactfire/commits?author=jhuleatt" title="Code">💻</a></td>
-  </tr>
-</table>
-
-<!-- markdownlint-enable -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
