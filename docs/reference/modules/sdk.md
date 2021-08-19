@@ -163,11 +163,11 @@ ___
 
 ### useDatabase
 
-▸ `Const` **useDatabase**(): `FirebaseDatabase`
+▸ `Const` **useDatabase**(): `Database`
 
 #### Returns
 
-`FirebaseDatabase`
+`Database`
 
 #### Defined in
 
@@ -177,11 +177,11 @@ ___
 
 ### useFirestore
 
-▸ `Const` **useFirestore**(): `FirebaseFirestore`
+▸ `Const` **useFirestore**(): `Firestore`
 
 #### Returns
 
-`FirebaseFirestore`
+`Firestore`
 
 #### Defined in
 
@@ -212,18 +212,18 @@ ___
 
 ### useInitDatabase
 
-▸ `Const` **useInitDatabase**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`FirebaseDatabase`\>
+▸ `Const` **useInitDatabase**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Database`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`FirebaseDatabase`\> |
-| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`FirebaseDatabase`\> |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`Database`\> |
+| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`Database`\> |
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`FirebaseDatabase`\>
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Database`\>
 
 #### Defined in
 
@@ -233,22 +233,22 @@ ___
 
 ### useInitFirestore
 
-▸ `Const` **useInitFirestore**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`FirebaseFirestore`\>
+▸ `Const` **useInitFirestore**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Firestore`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`FirebaseFirestore`\> |
-| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`FirebaseFirestore`\> |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`Firestore`\> |
+| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`Firestore`\> |
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`FirebaseFirestore`\>
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Firestore`\>
 
 #### Defined in
 
-[src/sdk.tsx:104](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L104)
+[src/sdk.tsx:103](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L103)
 
 ___
 
@@ -269,7 +269,7 @@ ___
 
 #### Defined in
 
-[src/sdk.tsx:106](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L106)
+[src/sdk.tsx:104](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L104)
 
 ___
 
@@ -290,28 +290,28 @@ ___
 
 #### Defined in
 
-[src/sdk.tsx:108](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L108)
+[src/sdk.tsx:106](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L106)
 
 ___
 
 ### useInitStorage
 
-▸ `Const` **useInitStorage**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`StorageService`\>
+▸ `Const` **useInitStorage**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`FirebaseStorage`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`StorageService`\> |
-| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`StorageService`\> |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`FirebaseStorage`\> |
+| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`FirebaseStorage`\> |
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`StorageService`\>
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`FirebaseStorage`\>
 
 #### Defined in
 
-[src/sdk.tsx:110](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L110)
+[src/sdk.tsx:108](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L108)
 
 ___
 
@@ -345,11 +345,11 @@ ___
 
 ### useStorage
 
-▸ `Const` **useStorage**(): `StorageService`
+▸ `Const` **useStorage**(): `FirebaseStorage`
 
 #### Returns
 
-`StorageService`
+`FirebaseStorage`
 
 #### Defined in
 

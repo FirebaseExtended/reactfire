@@ -29,7 +29,7 @@ Subscribe to a Realtime Database list
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `ref` | `Reference` \| `DatabaseQuery` | Reference to the DB List you want to listen to |
+| `ref` | `DatabaseReference` \| `DatabaseQuery` | Reference to the DB List you want to listen to |
 | `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`T`[]\> |  |
 
 #### Returns
@@ -56,7 +56,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ref` | `Reference` \| `DatabaseQuery` |
+| `ref` | `DatabaseReference` \| `DatabaseQuery` |
 | `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`T`[]\> |
 
 #### Returns
@@ -85,7 +85,7 @@ Subscribe to a Realtime Database object
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `ref` | `Reference` | Reference to the DB object you want to listen to |
+| `ref` | `DatabaseReference` | Reference to the DB object you want to listen to |
 | `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`T`\> |  |
 
 #### Returns
@@ -112,7 +112,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `ref` | `Reference` |
+| `ref` | `DatabaseReference` |
 | `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`T`\> |
 
 #### Returns
