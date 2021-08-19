@@ -9,6 +9,12 @@
 Hooks, Context Providers, and Components that make it easy to interact with
 Firebase.
 
+---
+
+> **WARNING**: This branch is the work in progress for version 4 of ReactFire. [You can find version 3 here](https://github.com/firebaseextended/reactfire/tree/v3), if you're looking for documentation or to contribute to stable.
+
+---
+
 ## What is ReactFire?
 
 - **Easy realtime updates for your function components** - Hooks
