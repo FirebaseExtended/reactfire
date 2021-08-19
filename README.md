@@ -37,6 +37,7 @@ Depending on your targeted platforms you may need to install polyfills. The most
   - Advanced: If you're using Concurrent Mode, check out the [Concurrent Mode quickstart](./docs/quickstart-concurrent-mode.md)
 - [**Common Use Cases**](./docs/use.md)
 - [**API Reference**](./docs/reference)
+- [**v3 -> v4 Upgrade Guide**](./docs/upgrade-guide.md)
 
 ## Example use
 
