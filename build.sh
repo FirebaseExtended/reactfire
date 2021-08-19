@@ -7,8 +7,7 @@ if [[ $GITHUB_REF =~ $TAG_TEST ]]; then
     if [[ $OVERRIDE_VERSION =~ $LATEST_TEST ]]; then
         NPM_TAG=latest
     else
-        # TODO when we hit 3.0.0 move back to next
-        NPM_TAG=latest
+        NPM_TAG=next
     fi;
 else
     OVERRIDE_VERSION=$(node -e "console.log(require('./package.json').version)")-exp.$SHORT_SHA
