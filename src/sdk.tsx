@@ -7,6 +7,7 @@ import type { Database } from 'firebase/database';
 import type { Firestore } from 'firebase/firestore';
 import type { FirebasePerformance } from 'firebase/performance';
 import type { FirebaseStorage } from 'firebase/storage';
+import type { Functions } from 'firebase/functions';
 import type { RemoteConfig } from 'firebase/remote-config';
 import { useFirebaseApp } from './firebaseApp';
 import { FirebaseApp } from 'firebase/app';
@@ -19,35 +20,25 @@ const AppCheckSdkContext = React.createContext<AppCheck | undefined>(undefined);
 const AuthSdkContext = React.createContext<Auth | undefined>(undefined);
 const DatabaseSdkContext = React.createContext<Database | undefined>(undefined);
 const FirestoreSdkContext = React.createContext<Firestore | undefined>(undefined);
+const FunctionsSdkContext = React.createContext<Functions | undefined>(undefined);
 const StorageSdkContext = React.createContext<FirebaseStorage | undefined>(undefined);
 const PerformanceSdkContext = React.createContext<FirebasePerformance | undefined>(undefined);
 const RemoteConfigSdkContext = React.createContext<RemoteConfig | undefined>(undefined);
 
-type FirebaseSdks = Analytics | AppCheck | Auth | Database | Firestore | FirebasePerformance | FirebaseStorage | RemoteConfig;
+type FirebaseSdks = Analytics | AppCheck | Auth | Database | Firestore | Functions | FirebasePerformance | FirebaseStorage | RemoteConfig;
 
 function getSdkProvider<Sdk extends FirebaseSdks>(SdkContext: React.Context<Sdk | undefined>) {
   return function SdkProvider(props: React.PropsWithChildren<{ sdk: Sdk }>) {
+    if (!props.sdk) throw new Error('no sdk provided');
+
     const contextualAppName = useFirebaseApp().name;
-    let sdkAppName;
+    // Based on public type defs: Auth would trigger in the 'name' case and Performance would trigger else case
+    // Since 'performance' doesn't expose a publically defined way to get the app name, we return ""
+    // However, in practice all of the sdks have 'sdk.app.name' as a hidden implementation detail,
+    // so 'performance' won't actually fail the subsequent equality test
+    const sdkAppName = 'app' in props.sdk && 'name' in props.sdk.app ? props.sdk.app.name : 'name' in props.sdk ? props.sdk.name : '';
 
-    // @ts-ignore Auth doesn't have field 'app'
-    if (props.sdk.app) {
-      // @ts-ignore Auth doesn't have field 'app'
-      sdkAppName = props.sdk.app.name;
-
-      // @ts-ignore only Auth has field 'name'
-    } else if (props.sdk.name) {
-      // @ts-ignore only Auth has field 'name'
-      sdkAppName = props.sdk.name;
-    }
-
-    if (sdkAppName !== contextualAppName) {
-      throw new Error('sdk was initialized with a different firebase app');
-    }
-
-    if (!props.sdk) {
-      throw new Error('no sdk provided');
-    }
+    if (sdkAppName !== contextualAppName) throw new Error('sdk was initialized with a different firebase app');
 
     return <SdkContext.Provider value={props.sdk} {...props} />;
   };
@@ -78,7 +69,7 @@ function useInitSdk<Sdk extends FirebaseSdks>(
     throw new Error(`Cannot initialize SDK ${sdkName} because it already exists in Context`);
   }
 
-  const initializeSdk = React.useMemo(() => sdkInitializer(firebaseApp), [firebaseApp]);
+  const initializeSdk = React.useMemo(() => sdkInitializer(firebaseApp), [firebaseApp, sdkInitializer]);
 
   return useObservable<Sdk>(`firebase-sdk:${sdkName}:${firebaseApp.name}`, from(initializeSdk), options);
 }
@@ -88,6 +79,7 @@ export const AnalyticsProvider = getSdkProvider<Analytics>(AnalyticsSdkContext);
 export const AuthProvider = getSdkProvider<Auth>(AuthSdkContext);
 export const DatabaseProvider = getSdkProvider<Database>(DatabaseSdkContext);
 export const FirestoreProvider = getSdkProvider<Firestore>(FirestoreSdkContext);
+export const FunctionsProvider = getSdkProvider<Functions>(FunctionsSdkContext);
 export const PerformanceProvider = getSdkProvider<FirebasePerformance>(PerformanceSdkContext);
 export const StorageProvider = getSdkProvider<FirebaseStorage>(StorageSdkContext);
 export const RemoteConfigProvider = getSdkProvider<RemoteConfig>(RemoteConfigSdkContext);
@@ -97,6 +89,7 @@ export const useAnalytics = () => useSdk<Analytics>(AnalyticsSdkContext);
 export const useAuth = () => useSdk<Auth>(AuthSdkContext);
 export const useDatabase = () => useSdk<Database>(DatabaseSdkContext);
 export const useFirestore = () => useSdk<Firestore>(FirestoreSdkContext);
+export const useFunctions = () => useSdk<Functions>(FunctionsSdkContext);
 export const usePerformance = () => useSdk<FirebasePerformance>(PerformanceSdkContext);
 export const useStorage = () => useSdk<FirebaseStorage>(StorageSdkContext);
 export const useRemoteConfig = () => useSdk<RemoteConfig>(RemoteConfigSdkContext);
@@ -111,6 +104,7 @@ export const useInitAnalytics: InitSdkHook<Analytics> = (initializer, options) =
 export const useInitAuth: InitSdkHook<Auth> = (initializer, options) => useInitSdk<Auth>('auth', AuthSdkContext, initializer, options);
 export const useInitDatabase: InitSdkHook<Database> = (initializer, options) => useInitSdk<Database>('database', DatabaseSdkContext, initializer, options);
 export const useInitFirestore: InitSdkHook<Firestore> = (initializer, options) => useInitSdk<Firestore>('firestore', FirestoreSdkContext, initializer, options);
+export const useInitFunctions: InitSdkHook<Functions> = (initializer, options) => useInitSdk<Functions>('functions', FunctionsSdkContext, initializer, options);
 export const useInitPerformance: InitSdkHook<FirebasePerformance> = (initializer, options) =>
   useInitSdk<FirebasePerformance>('performance', PerformanceSdkContext, initializer, options);
 export const useInitRemoteConfig: InitSdkHook<RemoteConfig> = (initializer, options) =>
