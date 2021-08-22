@@ -956,7 +956,7 @@ try {
 
 var DEFAULT_APP_NAME = '[DEFAULT]';
 var FirebaseAppContext = /*#__PURE__*/createContext(undefined);
-var SuspenseEnabledContext = /*#__PURE__*/createContext(false); // @ts-ignore: "__REACTFIRE_VERSION__" is replaced with actual ReactFire version (see babel.config.js)
+var SuspenseEnabledContext = /*#__PURE__*/createContext(false); // @ts-expect-error: "__REACTFIRE_VERSION__" is replaced with actual ReactFire version (see babel.config.js)
 
 var version = "4.0.0";
 
@@ -1726,12 +1726,12 @@ function SuspenseWithPerf(_ref) {
  */
 
 function useRemoteConfigValue_INTERNAL(key, getter) {
-  var _remoteConfig$_storag;
+  var _remoteConfig$app;
 
-  var remoteConfig = useRemoteConfig(); // INVESTIGATE need to use a public API to get at the app name, one doesn't appear to exist...
-  // we might need to iterate over the Firebase apps and check for remoteConfig equality? this works for now
+  var remoteConfig = useRemoteConfig(); // Waiting on clarity https://github.com/firebase/firebase-js-sdk/issues/5346
+  // const appName = remoteConfig.app.name
 
-  var appName = (_remoteConfig$_storag = remoteConfig._storage) == null ? void 0 : _remoteConfig$_storag.appName;
+  var appName = (_remoteConfig$app = remoteConfig.app) == null ? void 0 : _remoteConfig$app.name;
   var $value = getter(remoteConfig, key);
   var observableId = "remoteConfig:" + key + ":" + getter.name + ":" + appName;
   return useObservable(observableId, $value);
@@ -1903,11 +1903,11 @@ var RemoteConfigSdkContext = /*#__PURE__*/createContext(undefined);
 function getSdkProvider(SdkContext) {
   return function SdkProvider(props) {
     if (!props.sdk) throw new Error('no sdk provided');
-    var contextualAppName = useFirebaseApp().name; // Following equality check is based on public typings, so Auth would trigger in the 'name' case and Performance would trigger else case
-    // However, in practice all of the sdks do have 'sdk.app.name' as a hidden implementation detail.
-    // Should we just assume assume 'sdk.app.name' and remove this check?
+    var contextualAppName = useFirebaseApp().name; // Waiting on clarity https://github.com/firebase/firebase-js-sdk/issues/5346
+    // In the meantime the following code passes typescript checks.
 
-    var sdkAppName = 'app' in props.sdk && 'name' in props.sdk.app ? props.sdk.app.name : 'name' in props.sdk ? props.sdk.name : '';
+    var sdkAppName = 'app' in props.sdk && 'name' in props.sdk.app ? props.sdk.app.name : 'name' in props.sdk ? props.sdk.name : ''; // props.sdk?.app?.name
+
     if (sdkAppName !== contextualAppName) throw new Error('sdk was initialized with a different firebase app');
     return createElement(SdkContext.Provider, _extends({
       value: props.sdk
