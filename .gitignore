@@ -1,13 +1,11 @@
 .DS_Store
 npm-debug.log
 
-dist/
 node_modules/
 
 .vscode/*
 
 
-dist
 yarn-error.log
 
 example/.cache
