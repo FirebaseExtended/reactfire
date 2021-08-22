@@ -32,10 +32,9 @@ function getSdkProvider<Sdk extends FirebaseSdks>(SdkContext: React.Context<Sdk 
     if (!props.sdk) throw new Error('no sdk provided');
 
     const contextualAppName = useFirebaseApp().name;
-    // Following equality check is based on public typings, so Auth would trigger in the 'name' case and Performance would trigger else case
-    // However, in practice all of the sdks do have 'sdk.app.name' as a hidden implementation detail.
-    // Should we just assume assume 'sdk.app.name' and remove this check?
-    const sdkAppName = 'app' in props.sdk && 'name' in props.sdk.app ? props.sdk.app.name : 'name' in props.sdk ? props.sdk.name : '';
+    // Waiting on clarity https://github.com/firebase/firebase-js-sdk/issues/5346
+    // In the meantime the following code passes typescript checks.
+    const sdkAppName = 'app' in props.sdk && 'name' in props.sdk.app ? props.sdk.app.name : 'name' in props.sdk ? props.sdk.name : ''; // props.sdk?.app?.name
 
     if (sdkAppName !== contextualAppName) throw new Error('sdk was initialized with a different firebase app');
 

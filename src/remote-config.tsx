@@ -8,8 +8,8 @@ import type { RemoteConfig, Value as RemoteConfigValue } from 'firebase/remote-c
 type Getter$<T> = (remoteConfig: RemoteConfig, key: string) => Observable<T>;
 
 interface RemoteConfigWithPrivate extends RemoteConfig {
-  // This is a private API, assume optional
-  _storage?: { appName: string };
+  // This might be private, assume optional
+  app?: { name: string };
 }
 
 /**
@@ -23,9 +23,9 @@ interface RemoteConfigWithPrivate extends RemoteConfig {
 function useRemoteConfigValue_INTERNAL<T>(key: string, getter: Getter$<T>): ObservableStatus<T> {
   const remoteConfig = useRemoteConfig();
 
-  // INVESTIGATE need to use a public API to get at the app name, one doesn't appear to exist...
-  // we might need to iterate over the Firebase apps and check for remoteConfig equality? this works for now
-  const appName = (remoteConfig as RemoteConfigWithPrivate)._storage?.appName;
+  // Waiting on clarity https://github.com/firebase/firebase-js-sdk/issues/5346
+  // const appName = remoteConfig.app.name
+  const appName = (remoteConfig as RemoteConfigWithPrivate).app?.name;
   const $value = getter(remoteConfig, key);
 
   const observableId = `remoteConfig:${key}:${getter.name}:${appName}`;
