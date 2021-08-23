@@ -32,9 +32,8 @@ function getSdkProvider<Sdk extends FirebaseSdks>(SdkContext: React.Context<Sdk 
     if (!props.sdk) throw new Error('no sdk provided');
 
     const contextualAppName = useFirebaseApp().name;
-    // Waiting on clarity https://github.com/firebase/firebase-js-sdk/issues/5346
-    // In the meantime the following code passes typescript checks.
-    const sdkAppName = 'app' in props.sdk && 'name' in props.sdk.app ? props.sdk.app.name : 'name' in props.sdk ? props.sdk.name : ''; // props.sdk?.app?.name
+    //@ts-expect-error Remove this comment once typings are updated. https://github.com/firebase/firebase-js-sdk/pull/5351
+    const sdkAppName = props.sdk?.app?.name;
 
     if (sdkAppName !== contextualAppName) throw new Error('sdk was initialized with a different firebase app');
 
@@ -67,7 +66,7 @@ function useInitSdk<Sdk extends FirebaseSdks>(
     throw new Error(`Cannot initialize SDK ${sdkName} because it already exists in Context`);
   }
 
-  const initializeSdk = React.useMemo(() => sdkInitializer(firebaseApp), [firebaseApp, sdkInitializer]);
+  const initializeSdk = React.useMemo(() => sdkInitializer(firebaseApp), [firebaseApp]);
 
   return useObservable<Sdk>(`firebase-sdk:${sdkName}:${firebaseApp.name}`, from(initializeSdk), options);
 }

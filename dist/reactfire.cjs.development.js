@@ -1732,10 +1732,9 @@ function SuspenseWithPerf(_ref) {
 function useRemoteConfigValue_INTERNAL(key, getter) {
   var _remoteConfig$app;
 
-  var remoteConfig = useRemoteConfig(); // Waiting on clarity https://github.com/firebase/firebase-js-sdk/issues/5346
-  // const appName = remoteConfig.app.name
+  var remoteConfig = useRemoteConfig(); //@ts-expect-error Remove this comment once typings are updated. https://github.com/firebase/firebase-js-sdk/pull/5351
 
-  var appName = (_remoteConfig$app = remoteConfig.app) == null ? void 0 : _remoteConfig$app.name;
+  var appName = remoteConfig == null ? void 0 : (_remoteConfig$app = remoteConfig.app) == null ? void 0 : _remoteConfig$app.name;
   var $value = getter(remoteConfig, key);
   var observableId = "remoteConfig:" + key + ":" + getter.name + ":" + appName;
   return useObservable(observableId, $value);
@@ -1906,12 +1905,12 @@ var RemoteConfigSdkContext = /*#__PURE__*/React.createContext(undefined);
 
 function getSdkProvider(SdkContext) {
   return function SdkProvider(props) {
+    var _props$sdk, _props$sdk$app;
+
     if (!props.sdk) throw new Error('no sdk provided');
-    var contextualAppName = useFirebaseApp().name; // Waiting on clarity https://github.com/firebase/firebase-js-sdk/issues/5346
-    // In the meantime the following code passes typescript checks.
+    var contextualAppName = useFirebaseApp().name; //@ts-expect-error Remove this comment once typings are updated. https://github.com/firebase/firebase-js-sdk/pull/5351
 
-    var sdkAppName = 'app' in props.sdk && 'name' in props.sdk.app ? props.sdk.app.name : 'name' in props.sdk ? props.sdk.name : ''; // props.sdk?.app?.name
-
+    var sdkAppName = (_props$sdk = props.sdk) == null ? void 0 : (_props$sdk$app = _props$sdk.app) == null ? void 0 : _props$sdk$app.name;
     if (sdkAppName !== contextualAppName) throw new Error('sdk was initialized with a different firebase app');
     return React.createElement(SdkContext.Provider, _extends({
       value: props.sdk
@@ -1940,7 +1939,7 @@ function useInitSdk(sdkName, SdkContext, sdkInitializer, options) {
 
   var initializeSdk = React.useMemo(function () {
     return sdkInitializer(firebaseApp);
-  }, [firebaseApp, sdkInitializer]);
+  }, [firebaseApp]);
   return useObservable("firebase-sdk:" + sdkName + ":" + firebaseApp.name, rxjs.from(initializeSdk), options);
 }
 

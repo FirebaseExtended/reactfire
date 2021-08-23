@@ -7,11 +7,6 @@ import type { RemoteConfig, Value as RemoteConfigValue } from 'firebase/remote-c
 
 type Getter$<T> = (remoteConfig: RemoteConfig, key: string) => Observable<T>;
 
-interface RemoteConfigWithPrivate extends RemoteConfig {
-  // This might be private, assume optional
-  app?: { name: string };
-}
-
 /**
  * Helper function to construct type safe functions. Since Remote Config has
  * methods that return different types for values, we need to be extra safe
@@ -23,9 +18,8 @@ interface RemoteConfigWithPrivate extends RemoteConfig {
 function useRemoteConfigValue_INTERNAL<T>(key: string, getter: Getter$<T>): ObservableStatus<T> {
   const remoteConfig = useRemoteConfig();
 
-  // Waiting on clarity https://github.com/firebase/firebase-js-sdk/issues/5346
-  // const appName = remoteConfig.app.name
-  const appName = (remoteConfig as RemoteConfigWithPrivate).app?.name;
+  //@ts-expect-error Remove this comment once typings are updated. https://github.com/firebase/firebase-js-sdk/pull/5351
+  const appName = remoteConfig?.app?.name;
   const $value = getter(remoteConfig, key);
 
   const observableId = `remoteConfig:${key}:${getter.name}:${appName}`;
