@@ -32,8 +32,7 @@ function getSdkProvider<Sdk extends FirebaseSdks>(SdkContext: React.Context<Sdk 
     if (!props.sdk) throw new Error('no sdk provided');
 
     const contextualAppName = useFirebaseApp().name;
-    //@ts-expect-error Remove this comment once typings are updated. https://github.com/firebase/firebase-js-sdk/pull/5351
-    const sdkAppName = props.sdk?.app?.name;
+    const sdkAppName = props.sdk.app.name;
 
     if (sdkAppName !== contextualAppName) throw new Error('sdk was initialized with a different firebase app');
 

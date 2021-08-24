@@ -22,8 +22,7 @@ type Getter$<T> = (remoteConfig: RemoteConfig, key: string) => Observable<T>;
 function useRemoteConfigValue_INTERNAL<T>(key: string, getter: Getter$<T>): ObservableStatus<T> {
   const remoteConfig = useRemoteConfig();
 
-  //@ts-expect-error Remove this comment once typings are updated. https://github.com/firebase/firebase-js-sdk/pull/5351
-  const appName = remoteConfig?.app?.name;
+  const appName = remoteConfig.app.name;
   const $value = getter(remoteConfig, key);
 
   const observableId = `remoteConfig:${key}:${getter.name}:${appName}`;
