@@ -43,9 +43,7 @@ function getSdkProvider<Sdk extends FirebaseSdks>(SdkContext: React.Context<Sdk 
 function useSdk<Sdk extends FirebaseSdks>(SdkContext: React.Context<Sdk | undefined>): Sdk {
   const sdk = React.useContext(SdkContext);
 
-  if (!sdk) {
-    throw new Error('SDK not found. useSdk must be called from within a provider');
-  }
+  if (!sdk) throw new Error('SDK not found. useSdk must be called from within a provider');
 
   return sdk;
 }
@@ -61,9 +59,7 @@ function useInitSdk<Sdk extends FirebaseSdks>(
   // Some initialization functions (like Firestore's `enableIndexedDbPersistence`)
   // can only be called before anything else. So if an sdk is already available in context,
   // it isn't safe to call initialization functions again.
-  if (React.useContext(SdkContext)) {
-    throw new Error(`Cannot initialize SDK ${sdkName} because it already exists in Context`);
-  }
+  if (React.useContext(SdkContext)) throw new Error(`Cannot initialize SDK ${sdkName} because it already exists in Context`);
 
   const initializeSdk = React.useMemo(() => sdkInitializer(firebaseApp), [firebaseApp, sdkInitializer]);
 
