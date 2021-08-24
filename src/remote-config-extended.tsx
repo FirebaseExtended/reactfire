@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 import { ensureInitialized, getString as baseGetString } from 'firebase/remote-config';
 
-type RemoteConfig = import('firebase/remote-config').RemoteConfig;
+import type { RemoteConfig } from 'firebase/remote-config';
 
 interface ParameterSettings<T> {
   remoteConfig: RemoteConfig;
