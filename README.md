@@ -30,12 +30,12 @@ Firebase.
 
 ```bash
 # npm
-npm install --save reactfire firebase
+npm install --save reactfire@3 firebase@8
 
 # or
 
 # yarn
-yarn add reactfire firebase
+yarn add reactfire@3 firebase@8
 ```
 
 Depending on your targeted platforms you may need to install polyfills. The most commonly needed will be [globalThis](https://caniuse.com/#search=globalThis) and [Proxy](https://caniuse.com/#search=Proxy).

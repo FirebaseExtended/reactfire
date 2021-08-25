@@ -56,7 +56,7 @@ cd myapp
 > Ignore npm warnings.
 
 ```bash
-npm install --save firebase reactfire
+npm install --save firebase@8 reactfire@3
 ```
 
 ## 4. Register your app with Firebase
