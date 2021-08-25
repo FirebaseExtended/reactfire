@@ -1,8 +1,5 @@
-import { list, object, QueryChange, listVal } from 'rxfire/database';
+import { list, object, QueryChange, listVal, objectVal } from 'rxfire/database';
 import { ReactFireOptions, useObservable, checkIdField, ObservableStatus, ReactFireGlobals } from './';
-
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import type { Query as DatabaseQuery, DatabaseReference } from 'firebase/database';
 
@@ -33,29 +30,6 @@ export function useDatabaseObject<T = unknown>(ref: DatabaseReference, options?:
 
   return useObservable(observableId, observable$, options);
 }
-
-// ============================================================================
-// TODO: switch to rxfire's objectVal once this PR is merged:
-// https://github.com/firebase/firebase-js-sdk/pull/2352
-
-function objectVal<T>(query: DatabaseQuery, keyField?: string): Observable<T> {
-  return object(query).pipe(map((change) => changeToData(change, keyField) as T));
-}
-
-function changeToData(change: QueryChange, keyField?: string): {} {
-  const val = change.snapshot.val();
-
-  // don't worry about setting IDs if the value is a primitive type
-  if (typeof val !== 'object') {
-    return val;
-  }
-
-  return {
-    ...change.snapshot.val(),
-    ...(keyField ? { [keyField]: change.snapshot.key } : null),
-  };
-}
-// ============================================================================
 
 export function useDatabaseObjectData<T>(ref: DatabaseReference, options?: ReactFireOptions<T>): ObservableStatus<T> {
   const idField = options ? checkIdField(options) : 'NO_ID_FIELD';
