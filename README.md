@@ -5,7 +5,7 @@ Firebase.
 
 ---
 
-> **WARNING**: This branch is for version 3 of ReactFire. [You can find the work-in-progress branch for version 4 here](https://github.com/firebaseextended/reactfire/tree/main), if you want to try the next version of ReactFire.
+> **WARNING**: This branch is for version 3 of ReactFire. [You can find the branch for version 4 here](https://github.com/firebaseextended/reactfire/tree/main), if you want to try the next version of ReactFire.
 
 ---
 
