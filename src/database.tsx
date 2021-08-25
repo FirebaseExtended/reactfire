@@ -60,7 +60,7 @@ function changeToData(change: QueryChange, keyField?: string): {} {
 export function useDatabaseObjectData<T>(ref: DatabaseReference, options?: ReactFireOptions<T>): ObservableStatus<T> {
   const idField = options ? checkIdField(options) : 'NO_ID_FIELD';
   const observableId = `database:objectVal:${ref.toString()}:idField=${idField}`;
-  const observable$ = objectVal<T>(ref, idField);
+  const observable$ = objectVal<T>(ref, { keyField: idField });
 
   return useObservable(observableId, observable$, options);
 }
@@ -87,6 +87,6 @@ export function useDatabaseListData<T = { [key: string]: unknown }>(
 ): ObservableStatus<T[] | null> {
   const idField = options ? checkIdField(options) : 'NO_ID_FIELD';
   const observableId = `database:listVal:${getUniqueIdForDatabaseQuery(ref)}:idField=${idField}`;
-  const observable$ = listVal<T>(ref, idField);
+  const observable$ = listVal<T>(ref, { keyField: idField });
   return useObservable(observableId, observable$, options);
 }
