@@ -28,7 +28,6 @@ Depending on your targeted platforms you may need to install polyfills. The most
 ## Docs
 
 - [**Quickstart**](./docs/quickstart.md)
-  - Advanced: If you're using Concurrent Mode, check out the [Concurrent Mode quickstart](./docs/quickstart-concurrent-mode.md)
 - [**Common Use Cases**](./docs/use.md)
 - [**API Reference**](./docs/reference)
 - [**v3 -> v4 Upgrade Guide**](./docs/upgrade-guide.md)
@@ -96,3 +95,11 @@ This repository is maintained by Googlers but is not a supported Firebase produc
   that Suspense can catch. No more `isLoaded ?...` - let React
   [handle it for you](https://reactjs.org/docs/concurrent-mode-suspense.html).
 - **Automatically instrument your `Suspense` load times** - Need to automatically instrument your `Suspense` load times with [RUM](https://firebase.google.com/docs/perf-mon)? Use `<SuspenseWithPerf />`.
+
+Enable concurrent mode features by setting the `suspense` prop in `FirebaseAppProvider`:
+
+```jsx
+<FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={true}>
+```
+
+See concurrent mode code samples in [example/withSuspense](https://github.com/FirebaseExtended/reactfire/tree/main/example/withSuspense)
