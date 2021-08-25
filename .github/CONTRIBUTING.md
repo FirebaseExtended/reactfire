@@ -15,7 +15,7 @@ which just ask about usage will be closed. Here are some resources to get help:
 
 - Start with the [quickstart](../docs/quickstart.md)
 - Go through the [guide](../docs/use.md)
-- Read the full [API reference](../docs/reference.md)
+- Read the full [API reference](../docs/reference)
 
 If the official documentation doesn't help, try asking a question through our
 [official support channels](https://firebase.google.com/support/).
