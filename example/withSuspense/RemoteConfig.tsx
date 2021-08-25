@@ -1,6 +1,6 @@
 import { fetchAndActivate, getRemoteConfig } from 'firebase/remote-config';
 import * as React from 'react';
-import { RemoteConfigProvider, useRemoteConfigString, useInitRemoteConfig, SuspenseWithPerf } from 'reactfire';
+import { RemoteConfigProvider, useRemoteConfigString, useInitRemoteConfig, SuspenseWithPerf, useFirebaseApp } from 'reactfire';
 import { CardSection } from '../display/Card';
 import { LoadingSpinner } from '../display/LoadingSpinner';
 
@@ -15,20 +15,22 @@ export const RcString = ({ messageKey }) => {
 };
 
 const RemoteConfigWrapper = ({ children }) => {
-  const { data: remoteConfigInstance } = useInitRemoteConfig(async (firebaseApp) => {
+  const app = useFirebaseApp();
+  return <RemoteConfigProvider sdk={getRemoteConfig(app)}>{children}</RemoteConfigProvider>;
+};
+
+export const RemoteConfig = () => {
+  useInitRemoteConfig(async (firebaseApp) => {
     const remoteConfig = getRemoteConfig(firebaseApp);
     remoteConfig.settings = {
       minimumFetchIntervalMillis: 10000,
       fetchTimeoutMillis: 10000,
     };
-    await fetchAndActivate(remoteConfig);
+
+    const result = await fetchAndActivate(remoteConfig);
+    console.debug(performance.now(), `Fetch and Active result: ${result}`);
     return remoteConfig;
-  });
-
-  return <RemoteConfigProvider sdk={remoteConfigInstance}>{children}</RemoteConfigProvider>;
-};
-
-export const RemoteConfig = () => {
+  }, {suspense: false});
   return (
     <SuspenseWithPerf traceId={'remote-config-message'} fallback={<LoadingSpinner />}>
       <RemoteConfigWrapper>

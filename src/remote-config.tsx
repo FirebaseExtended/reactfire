@@ -69,9 +69,10 @@ export function useRemoteConfigAll(key: string): ObservableStatus<AllParameters>
   return useRemoteConfigValue_INTERNAL<AllParameters>(key, getAll);
 }
 
+// ============================================================================
+// TODO: Remove if https://github.com/FirebaseExtended/rxfire/pull/27/ gets integrated. Replace getJSON with getJSON from rxfire
 /**
  * Pulled from rxfire
- * TODO: Remove if https://github.com/FirebaseExtended/rxfire/pull/27/ get integrated
  * **/
 interface ParameterSettings<T> {
   remoteConfig: RemoteConfig;
@@ -80,7 +81,6 @@ interface ParameterSettings<T> {
 }
 /**
  * Pulled from rxfire
- * TODO: Remove if https://github.com/FirebaseExtended/rxfire/pull/27/ get integrated
  * **/
 function parameter$<T>({ remoteConfig, key, getter }: ParameterSettings<T>): Observable<T> {
   return new Observable((subscriber) => {
@@ -94,12 +94,12 @@ function parameter$<T>({ remoteConfig, key, getter }: ParameterSettings<T>): Obs
 }
 /**
  * Modified version of rxfire getter
- * TODO: Remove if https://github.com/FirebaseExtended/rxfire/pull/27/ get integrated
  * **/
 function getJSON<T>(remoteConfig: RemoteConfig, key: string) {
   const getter = (remoteConfig: RemoteConfig, key: string) => JSON.parse(baseGetString(remoteConfig, key)) as T;
   return parameter$<T>({ remoteConfig, key, getter });
 }
+// ============================================================================
 
 /**
  * Convience method that runs the retrieves remote config value through JSON.parse.

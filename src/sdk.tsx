@@ -61,7 +61,7 @@ function useInitSdk<Sdk extends FirebaseSdks>(
   // it isn't safe to call initialization functions again.
   if (React.useContext(SdkContext)) throw new Error(`Cannot initialize SDK ${sdkName} because it already exists in Context`);
 
-  const initializeSdk = React.useMemo(() => sdkInitializer(firebaseApp), [firebaseApp, sdkInitializer]);
+  const initializeSdk = React.useMemo(() => sdkInitializer(firebaseApp), [firebaseApp]);
 
   return useObservable<Sdk>(`firebase-sdk:${sdkName}:${firebaseApp.name}`, from(initializeSdk), options);
 }

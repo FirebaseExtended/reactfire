@@ -10,8 +10,8 @@ var app = require('firebase/app');
 var database = require('rxfire/database');
 var firestore = require('rxfire/firestore');
 var firestore$1 = require('firebase/firestore');
-var remoteConfig = require('firebase/remote-config');
-var remoteConfig$1 = require('rxfire/remote-config');
+var remoteConfig = require('rxfire/remote-config');
+var remoteConfig$1 = require('firebase/remote-config');
 var storage = require('rxfire/storage');
 var storage$1 = require('firebase/storage');
 
@@ -1318,33 +1318,11 @@ function useDatabaseObject(ref, options) {
   var observableId = "database:object:" + ref.toString();
   var observable$ = database.object(ref);
   return useObservable(observableId, observable$, options);
-} // ============================================================================
-// TODO: switch to rxfire's objectVal once this PR is merged:
-// https://github.com/firebase/firebase-js-sdk/pull/2352
-
-function objectVal(query, keyField) {
-  return database.object(query).pipe(operators.map(function (change) {
-    return changeToData(change, keyField);
-  }));
 }
-
-function changeToData(change, keyField) {
-  var _ref;
-
-  var val = change.snapshot.val(); // don't worry about setting IDs if the value is a primitive type
-
-  if (typeof val !== 'object') {
-    return val;
-  }
-
-  return _extends({}, change.snapshot.val(), keyField ? (_ref = {}, _ref[keyField] = change.snapshot.key, _ref) : null);
-} // ============================================================================
-
-
 function useDatabaseObjectData(ref, options) {
   var idField = options ? checkIdField(options) : 'NO_ID_FIELD';
   var observableId = "database:objectVal:" + ref.toString() + ":idField=" + idField;
-  var observable$ = objectVal(ref, idField);
+  var observable$ = database.objectVal(ref, idField);
   return useObservable(observableId, observable$, options);
 }
 /**
@@ -1721,34 +1699,6 @@ function SuspenseWithPerf(_ref) {
   }, children);
 }
 
-// @TODO Delete file if https://github.com/FirebaseExtended/rxfire/pull/27/ goes through.
-
-function parameter$(_ref) {
-  var remoteConfig$1 = _ref.remoteConfig,
-      key = _ref.key,
-      getter = _ref.getter;
-  return new rxjs.Observable(function (subscriber) {
-    remoteConfig.ensureInitialized(remoteConfig$1).then(function () {
-      // 'this' for the getter loses context in the next()
-      // call, so it needs to be bound.
-      var boundGetter = getter.bind(remoteConfig$1);
-      subscriber.next(boundGetter(remoteConfig$1, key));
-    });
-  });
-}
-
-function getJSON(remoteConfig$1, key) {
-  var getter = function getter(remoteConfig$1, key) {
-    return JSON.parse(remoteConfig.getString(remoteConfig$1, key));
-  };
-
-  return parameter$({
-    remoteConfig: remoteConfig$1,
-    key: key,
-    getter: getter
-  });
-}
-
 /**
  * Helper function to construct type safe functions. Since Remote Config has
  * methods that return different types for values, we need to be extra safe
@@ -1774,7 +1724,7 @@ function useRemoteConfigValue_INTERNAL(key, getter) {
 
 
 function useRemoteConfigValue(key) {
-  return useRemoteConfigValue_INTERNAL(key, remoteConfig$1.getValue);
+  return useRemoteConfigValue_INTERNAL(key, remoteConfig.getValue);
 }
 /**
  * Convience method similar to useRemoteConfigValue. Returns a `string` from a Remote Config parameter.
@@ -1782,7 +1732,7 @@ function useRemoteConfigValue(key) {
  */
 
 function useRemoteConfigString(key) {
-  return useRemoteConfigValue_INTERNAL(key, remoteConfig$1.getString);
+  return useRemoteConfigValue_INTERNAL(key, remoteConfig.getString);
 }
 /**
  * Convience method similar to useRemoteConfigValue. Returns a `number` from a Remote Config parameter.
@@ -1790,7 +1740,7 @@ function useRemoteConfigString(key) {
  */
 
 function useRemoteConfigNumber(key) {
-  return useRemoteConfigValue_INTERNAL(key, remoteConfig$1.getNumber);
+  return useRemoteConfigValue_INTERNAL(key, remoteConfig.getNumber);
 }
 /**
  * Convience method similar to useRemoteConfigValue. Returns a `boolean` from a Remote Config parameter.
@@ -1798,7 +1748,7 @@ function useRemoteConfigNumber(key) {
  */
 
 function useRemoteConfigBoolean(key) {
-  return useRemoteConfigValue_INTERNAL(key, remoteConfig$1.getBoolean);
+  return useRemoteConfigValue_INTERNAL(key, remoteConfig.getBoolean);
 }
 /**
  * Convience method similar to useRemoteConfigValue. Returns allRemote Config parameters.
@@ -1806,13 +1756,48 @@ function useRemoteConfigBoolean(key) {
  */
 
 function useRemoteConfigAll(key) {
-  return useRemoteConfigValue_INTERNAL(key, remoteConfig$1.getAll);
+  return useRemoteConfigValue_INTERNAL(key, remoteConfig.getAll);
 }
+/**
+ * Pulled from rxfire
+ * **/
+
+function parameter$(_ref) {
+  var remoteConfig = _ref.remoteConfig,
+      key = _ref.key,
+      getter = _ref.getter;
+  return new rxjs.Observable(function (subscriber) {
+    remoteConfig$1.ensureInitialized(remoteConfig).then(function () {
+      // 'this' for the getter loses context in the next()
+      // call, so it needs to be bound.
+      var boundGetter = getter.bind(remoteConfig);
+      subscriber.next(boundGetter(remoteConfig, key));
+    });
+  });
+}
+/**
+ * Modified version of rxfire getter
+ * **/
+
+
+function getJSON(remoteConfig, key) {
+  var getter = function getter(remoteConfig, key) {
+    return JSON.parse(remoteConfig$1.getString(remoteConfig, key));
+  };
+
+  return parameter$({
+    remoteConfig: remoteConfig,
+    key: key,
+    getter: getter
+  });
+} // ============================================================================
+
 /**
  * Convience method that runs the retrieves remote config value through JSON.parse.
  * Provides no typing checking assurances.
  * @param key The parameter key in Remote Config
  */
+
 
 function useRemoteConfigJSON(key) {
   return useRemoteConfigValue_INTERNAL(key, getJSON);
@@ -1959,7 +1944,7 @@ function useInitSdk(sdkName, SdkContext, sdkInitializer, options) {
   if (React.useContext(SdkContext)) throw new Error("Cannot initialize SDK " + sdkName + " because it already exists in Context");
   var initializeSdk = React.useMemo(function () {
     return sdkInitializer(firebaseApp);
-  }, [firebaseApp, sdkInitializer]);
+  }, [firebaseApp]);
   return useObservable("firebase-sdk:" + sdkName + ":" + firebaseApp.name, rxjs.from(initializeSdk), options);
 }
 

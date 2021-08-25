@@ -3,11 +3,11 @@ import { user } from 'rxfire/auth';
 import { from, of, empty, Subject, Observable } from 'rxjs';
 import { switchMap, map, tap, catchError, shareReplay, first } from 'rxjs/operators';
 import { getApps, registerVersion, initializeApp } from 'firebase/app';
-import { object, list, listVal } from 'rxfire/database';
+import { object, objectVal, list, listVal } from 'rxfire/database';
 import { doc, docData, fromRef, collectionData } from 'rxfire/firestore';
 import { queryEqual } from 'firebase/firestore';
-import { ensureInitialized, getString } from 'firebase/remote-config';
-import { getValue, getString as getString$1, getNumber, getBoolean, getAll } from 'rxfire/remote-config';
+import { getValue, getString, getNumber, getBoolean, getAll } from 'rxfire/remote-config';
+import { ensureInitialized, getString as getString$1 } from 'firebase/remote-config';
 import { getDownloadURL } from 'rxfire/storage';
 import { ref } from 'firebase/storage';
 
@@ -1314,29 +1314,7 @@ function useDatabaseObject(ref, options) {
   var observableId = "database:object:" + ref.toString();
   var observable$ = object(ref);
   return useObservable(observableId, observable$, options);
-} // ============================================================================
-// TODO: switch to rxfire's objectVal once this PR is merged:
-// https://github.com/firebase/firebase-js-sdk/pull/2352
-
-function objectVal(query, keyField) {
-  return object(query).pipe(map(function (change) {
-    return changeToData(change, keyField);
-  }));
 }
-
-function changeToData(change, keyField) {
-  var _ref;
-
-  var val = change.snapshot.val(); // don't worry about setting IDs if the value is a primitive type
-
-  if (typeof val !== 'object') {
-    return val;
-  }
-
-  return _extends({}, change.snapshot.val(), keyField ? (_ref = {}, _ref[keyField] = change.snapshot.key, _ref) : null);
-} // ============================================================================
-
-
 function useDatabaseObjectData(ref, options) {
   var idField = options ? checkIdField(options) : 'NO_ID_FIELD';
   var observableId = "database:objectVal:" + ref.toString() + ":idField=" + idField;
@@ -1717,34 +1695,6 @@ function SuspenseWithPerf(_ref) {
   }, children);
 }
 
-// @TODO Delete file if https://github.com/FirebaseExtended/rxfire/pull/27/ goes through.
-
-function parameter$(_ref) {
-  var remoteConfig = _ref.remoteConfig,
-      key = _ref.key,
-      getter = _ref.getter;
-  return new Observable(function (subscriber) {
-    ensureInitialized(remoteConfig).then(function () {
-      // 'this' for the getter loses context in the next()
-      // call, so it needs to be bound.
-      var boundGetter = getter.bind(remoteConfig);
-      subscriber.next(boundGetter(remoteConfig, key));
-    });
-  });
-}
-
-function getJSON(remoteConfig, key) {
-  var getter = function getter(remoteConfig, key) {
-    return JSON.parse(getString(remoteConfig, key));
-  };
-
-  return parameter$({
-    remoteConfig: remoteConfig,
-    key: key,
-    getter: getter
-  });
-}
-
 /**
  * Helper function to construct type safe functions. Since Remote Config has
  * methods that return different types for values, we need to be extra safe
@@ -1778,7 +1728,7 @@ function useRemoteConfigValue(key) {
  */
 
 function useRemoteConfigString(key) {
-  return useRemoteConfigValue_INTERNAL(key, getString$1);
+  return useRemoteConfigValue_INTERNAL(key, getString);
 }
 /**
  * Convience method similar to useRemoteConfigValue. Returns a `number` from a Remote Config parameter.
@@ -1805,10 +1755,45 @@ function useRemoteConfigAll(key) {
   return useRemoteConfigValue_INTERNAL(key, getAll);
 }
 /**
+ * Pulled from rxfire
+ * **/
+
+function parameter$(_ref) {
+  var remoteConfig = _ref.remoteConfig,
+      key = _ref.key,
+      getter = _ref.getter;
+  return new Observable(function (subscriber) {
+    ensureInitialized(remoteConfig).then(function () {
+      // 'this' for the getter loses context in the next()
+      // call, so it needs to be bound.
+      var boundGetter = getter.bind(remoteConfig);
+      subscriber.next(boundGetter(remoteConfig, key));
+    });
+  });
+}
+/**
+ * Modified version of rxfire getter
+ * **/
+
+
+function getJSON(remoteConfig, key) {
+  var getter = function getter(remoteConfig, key) {
+    return JSON.parse(getString$1(remoteConfig, key));
+  };
+
+  return parameter$({
+    remoteConfig: remoteConfig,
+    key: key,
+    getter: getter
+  });
+} // ============================================================================
+
+/**
  * Convience method that runs the retrieves remote config value through JSON.parse.
  * Provides no typing checking assurances.
  * @param key The parameter key in Remote Config
  */
+
 
 function useRemoteConfigJSON(key) {
   return useRemoteConfigValue_INTERNAL(key, getJSON);
@@ -1955,7 +1940,7 @@ function useInitSdk(sdkName, SdkContext, sdkInitializer, options) {
   if (useContext(SdkContext)) throw new Error("Cannot initialize SDK " + sdkName + " because it already exists in Context");
   var initializeSdk = useMemo(function () {
     return sdkInitializer(firebaseApp);
-  }, [firebaseApp, sdkInitializer]);
+  }, [firebaseApp]);
   return useObservable("firebase-sdk:" + sdkName + ":" + firebaseApp.name, from(initializeSdk), options);
 }
 

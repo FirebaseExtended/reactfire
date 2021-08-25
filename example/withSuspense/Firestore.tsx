@@ -3,6 +3,7 @@ import { useEffect, useState, useTransition, SuspenseList } from 'react';
 import {
   FirestoreProvider,
   SuspenseWithPerf,
+  useFirebaseApp,
   useFirestore,
   useFirestoreCollectionData,
   useFirestoreDocData,
@@ -13,7 +14,7 @@ import { WideButton } from '../display/Button';
 import { CardSection } from '../display/Card';
 import { LoadingSpinner } from '../display/LoadingSpinner';
 import { AuthWrapper } from './Auth';
-import { initializeFirestore, doc, collection, enableIndexedDbPersistence, increment, updateDoc, orderBy, query, addDoc, deleteDoc } from 'firebase/firestore';
+import { initializeFirestore, doc, collection, enableIndexedDbPersistence, increment, updateDoc, orderBy, query, addDoc, deleteDoc, getFirestore } from 'firebase/firestore';
 
 const Counter = () => {
   const firestore = useFirestore();
@@ -116,17 +117,21 @@ const FavoriteAnimals = (props) => {
   );
 };
 
+
 function FirestoreWrapper({ children }) {
-  const { data: firestoreInstance } = useInitFirestore(async (firebaseApp) => {
+  const app = useFirebaseApp()
+  console.debug(performance.now(), "Wrapper called")
+  return <FirestoreProvider sdk={getFirestore(app)}>{children}</FirestoreProvider>;
+}
+export const Firestore = (props) => {
+  // Ensure this is called outside of the firestore wrapper.
+  // Otherwise children will recall wrapper and spitout errors
+  useInitFirestore(async (firebaseApp) => {
     const db = initializeFirestore(firebaseApp, {});
+    console.debug(performance.now(), "Initialized Firestore")
     await enableIndexedDbPersistence(db);
     return db;
-  });
-
-  return <FirestoreProvider sdk={firestoreInstance}>{children}</FirestoreProvider>;
-}
-
-export const Firestore = (props) => {
+  }, { suspense: false });
   return (
     <SuspenseWithPerf fallback={<LoadingSpinner />} traceId="firestore-demo-root">
       <FirestoreWrapper>
