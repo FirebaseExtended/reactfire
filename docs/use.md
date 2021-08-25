@@ -141,7 +141,7 @@ function HomePage(props) {
 
 ### Only render a component if a user is signed in
 
-The `useSigninCheck` hook makes it easy to decide whether to hide or show UI elements based on a user's auth state, and can even check their [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims). It will render its children if a user is signed in, but if they are not signed in, it renders its `fallback` prop:
+The `useSigninCheck` hook makes it easy to decide whether to hide or show UI elements based on a user's auth state:
 
 ```jsx
 function UserFavorites() {
@@ -157,6 +157,25 @@ function UserFavorites() {
     return <SignInForm />;
   }
 }
+```
+
+To check [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims), pass in a `requiredClaims` object or a `validateCustomClaims` function.
+
+```jsx
+// pass in an object describing the custom claims a user must have
+const { status, data: signInCheckResult } = useSignInCheck({ requiredClaims: { superUser: true } });
+
+// OR
+
+// pass in a custom claims validator function
+const { status, data: signInCheckResult } = useSignInCheck({
+  validateCustomClaims: (userClaims) => {
+    // custom validation logic...
+    return {
+      hasRequiredClaims: !!userClaims.superUser,
+    };
+  },
+});
 ```
 
 ## Cloud Firestore
