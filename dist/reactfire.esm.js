@@ -6,7 +6,8 @@ import { getApps, registerVersion, initializeApp } from 'firebase/app';
 import { object, list, listVal } from 'rxfire/database';
 import { doc, docData, fromRef, collectionData } from 'rxfire/firestore';
 import { queryEqual } from 'firebase/firestore';
-import { getValue, getString, getNumber, getBoolean, getAll } from 'rxfire/remote-config';
+import { ensureInitialized, getString } from 'firebase/remote-config';
+import { getValue, getString as getString$1, getNumber, getBoolean, getAll } from 'rxfire/remote-config';
 import { getDownloadURL } from 'rxfire/storage';
 import { ref } from 'firebase/storage';
 
@@ -1716,6 +1717,34 @@ function SuspenseWithPerf(_ref) {
   }, children);
 }
 
+// @TODO Delete file if https://github.com/FirebaseExtended/rxfire/pull/27/ goes through.
+
+function parameter$(_ref) {
+  var remoteConfig = _ref.remoteConfig,
+      key = _ref.key,
+      getter = _ref.getter;
+  return new Observable(function (subscriber) {
+    ensureInitialized(remoteConfig).then(function () {
+      // 'this' for the getter loses context in the next()
+      // call, so it needs to be bound.
+      var boundGetter = getter.bind(remoteConfig);
+      subscriber.next(boundGetter(remoteConfig, key));
+    });
+  });
+}
+
+function getJSON(remoteConfig, key) {
+  var getter = function getter(remoteConfig, key) {
+    return JSON.parse(getString(remoteConfig, key));
+  };
+
+  return parameter$({
+    remoteConfig: remoteConfig,
+    key: key,
+    getter: getter
+  });
+}
+
 /**
  * Helper function to construct type safe functions. Since Remote Config has
  * methods that return different types for values, we need to be extra safe
@@ -1726,11 +1755,8 @@ function SuspenseWithPerf(_ref) {
  */
 
 function useRemoteConfigValue_INTERNAL(key, getter) {
-  var _remoteConfig$app;
-
-  var remoteConfig = useRemoteConfig(); //@ts-expect-error Remove this comment once typings are updated. https://github.com/firebase/firebase-js-sdk/pull/5351
-
-  var appName = remoteConfig == null ? void 0 : (_remoteConfig$app = remoteConfig.app) == null ? void 0 : _remoteConfig$app.name;
+  var remoteConfig = useRemoteConfig();
+  var appName = remoteConfig.app.name;
   var $value = getter(remoteConfig, key);
   var observableId = "remoteConfig:" + key + ":" + getter.name + ":" + appName;
   return useObservable(observableId, $value);
@@ -1740,7 +1766,6 @@ function useRemoteConfigValue_INTERNAL(key, getter) {
  * Remote Config Value.
  *
  * @param key The parameter key in Remote Config
- * @param remoteConfig Optional instance. If not provided ReactFire will either grab the default instance or lazy load.
  */
 
 
@@ -1750,16 +1775,14 @@ function useRemoteConfigValue(key) {
 /**
  * Convience method similar to useRemoteConfigValue. Returns a `string` from a Remote Config parameter.
  * @param key The parameter key in Remote Config
- * @param remoteConfig Optional instance. If not provided ReactFire will either grab the default instance or lazy load.
  */
 
 function useRemoteConfigString(key) {
-  return useRemoteConfigValue_INTERNAL(key, getString);
+  return useRemoteConfigValue_INTERNAL(key, getString$1);
 }
 /**
  * Convience method similar to useRemoteConfigValue. Returns a `number` from a Remote Config parameter.
  * @param key The parameter key in Remote Config
- * @param remoteConfig Optional instance. If not provided ReactFire will either grab the default instance or lazy load.
  */
 
 function useRemoteConfigNumber(key) {
@@ -1768,7 +1791,6 @@ function useRemoteConfigNumber(key) {
 /**
  * Convience method similar to useRemoteConfigValue. Returns a `boolean` from a Remote Config parameter.
  * @param key The parameter key in Remote Config
- * @param remoteConfig Optional instance. If not provided ReactFire will either grab the default instance or lazy load.
  */
 
 function useRemoteConfigBoolean(key) {
@@ -1777,11 +1799,19 @@ function useRemoteConfigBoolean(key) {
 /**
  * Convience method similar to useRemoteConfigValue. Returns allRemote Config parameters.
  * @param key The parameter key in Remote Config
- * @param remoteConfig Optional instance. If not provided ReactFire will either grab the default instance or lazy load.
  */
 
 function useRemoteConfigAll(key) {
   return useRemoteConfigValue_INTERNAL(key, getAll);
+}
+/**
+ * Convience method that runs the retrieves remote config value through JSON.parse.
+ * Provides no typing checking assurances.
+ * @param key The parameter key in Remote Config
+ */
+
+function useRemoteConfigJSON(key) {
+  return useRemoteConfigValue_INTERNAL(key, getJSON);
 }
 
 var _excluded = ["storage", "storagePath", "suspense", "placeHolder"];
@@ -1901,12 +1931,9 @@ var RemoteConfigSdkContext = /*#__PURE__*/createContext(undefined);
 
 function getSdkProvider(SdkContext) {
   return function SdkProvider(props) {
-    var _props$sdk, _props$sdk$app;
-
     if (!props.sdk) throw new Error('no sdk provided');
-    var contextualAppName = useFirebaseApp().name; //@ts-expect-error Remove this comment once typings are updated. https://github.com/firebase/firebase-js-sdk/pull/5351
-
-    var sdkAppName = (_props$sdk = props.sdk) == null ? void 0 : (_props$sdk$app = _props$sdk.app) == null ? void 0 : _props$sdk$app.name;
+    var contextualAppName = useFirebaseApp().name;
+    var sdkAppName = props.sdk.app.name;
     if (sdkAppName !== contextualAppName) throw new Error('sdk was initialized with a different firebase app');
     return createElement(SdkContext.Provider, _extends({
       value: props.sdk
@@ -1916,11 +1943,7 @@ function getSdkProvider(SdkContext) {
 
 function useSdk(SdkContext) {
   var sdk = useContext(SdkContext);
-
-  if (!sdk) {
-    throw new Error('SDK not found. useSdk must be called from within a provider');
-  }
-
+  if (!sdk) throw new Error('SDK not found. useSdk must be called from within a provider');
   return sdk;
 }
 
@@ -1929,13 +1952,10 @@ function useInitSdk(sdkName, SdkContext, sdkInitializer, options) {
   // can only be called before anything else. So if an sdk is already available in context,
   // it isn't safe to call initialization functions again.
 
-  if (useContext(SdkContext)) {
-    throw new Error("Cannot initialize SDK " + sdkName + " because it already exists in Context");
-  }
-
+  if (useContext(SdkContext)) throw new Error("Cannot initialize SDK " + sdkName + " because it already exists in Context");
   var initializeSdk = useMemo(function () {
     return sdkInitializer(firebaseApp);
-  }, [firebaseApp]);
+  }, [firebaseApp, sdkInitializer]);
   return useObservable("firebase-sdk:" + sdkName + ":" + firebaseApp.name, from(initializeSdk), options);
 }
 
@@ -2038,5 +2058,5 @@ function checkIdField(options) {
   return checkOptions(options, 'idField');
 }
 
-export { AnalyticsProvider, AppCheckProvider, AuthCheck, AuthProvider, ClaimsCheck, DatabaseProvider, FirebaseAppProvider, FirestoreProvider, FunctionsProvider, PerformanceProvider, ReactFireError, RemoteConfigProvider, StorageImage, StorageProvider, SuspenseWithPerf, checkIdField, checkOptions, checkinitialData, preloadFirestoreDoc, preloadObservable, preloadUser, useAnalytics, useAppCheck, useAuth, useDatabase, useDatabaseList, useDatabaseListData, useDatabaseObject, useDatabaseObjectData, useFirebaseApp, useFirestore, useFirestoreCollection, useFirestoreCollectionData, useFirestoreDoc, useFirestoreDocData, useFirestoreDocDataOnce, useFirestoreDocOnce, useFunctions, useIdTokenResult, useInitAnalytics, useInitAppCheck, useInitAuth, useInitDatabase, useInitFirestore, useInitFunctions, useInitPerformance, useInitRemoteConfig, useInitStorage, useIsSuspenseEnabled, useObservable, usePerformance, useRemoteConfig, useRemoteConfigAll, useRemoteConfigBoolean, useRemoteConfigNumber, useRemoteConfigString, useRemoteConfigValue, useSigninCheck, useStorage, useStorageDownloadURL, useStorageTask, useSuspenseEnabledFromConfigAndContext, useUser, version };
+export { AnalyticsProvider, AppCheckProvider, AuthCheck, AuthProvider, ClaimsCheck, DatabaseProvider, FirebaseAppProvider, FirestoreProvider, FunctionsProvider, PerformanceProvider, ReactFireError, RemoteConfigProvider, StorageImage, StorageProvider, SuspenseWithPerf, checkIdField, checkOptions, checkinitialData, preloadFirestoreDoc, preloadObservable, preloadUser, useAnalytics, useAppCheck, useAuth, useDatabase, useDatabaseList, useDatabaseListData, useDatabaseObject, useDatabaseObjectData, useFirebaseApp, useFirestore, useFirestoreCollection, useFirestoreCollectionData, useFirestoreDoc, useFirestoreDocData, useFirestoreDocDataOnce, useFirestoreDocOnce, useFunctions, useIdTokenResult, useInitAnalytics, useInitAppCheck, useInitAuth, useInitDatabase, useInitFirestore, useInitFunctions, useInitPerformance, useInitRemoteConfig, useInitStorage, useIsSuspenseEnabled, useObservable, usePerformance, useRemoteConfig, useRemoteConfigAll, useRemoteConfigBoolean, useRemoteConfigJSON, useRemoteConfigNumber, useRemoteConfigString, useRemoteConfigValue, useSigninCheck, useStorage, useStorageDownloadURL, useStorageTask, useSuspenseEnabledFromConfigAndContext, useUser, version };
 //# sourceMappingURL=reactfire.esm.js.map
