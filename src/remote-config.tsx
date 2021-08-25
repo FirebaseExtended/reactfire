@@ -1,13 +1,11 @@
 import { useRemoteConfig } from './';
 import { useObservable, ObservableStatus } from './useObservable';
-// @TODO Replace getJSON from rxfire if https://github.com/FirebaseExtended/rxfire/pull/27/ goes through.
-import { getJSON } from './remote-config-extended';
-
 import { getValue, getString, getBoolean, getNumber, getAll, AllParameters } from 'rxfire/remote-config';
-
 import { Observable } from 'rxjs';
-
 import type { RemoteConfig, Value as RemoteConfigValue } from 'firebase/remote-config';
+
+//TODO: Remove if https://github.com/FirebaseExtended/rxfire/pull/27/ get integrated
+import { ensureInitialized, getString as baseGetString } from 'firebase/remote-config';
 
 type Getter$<T> = (remoteConfig: RemoteConfig, key: string) => Observable<T>;
 
@@ -69,6 +67,38 @@ export function useRemoteConfigBoolean(key: string): ObservableStatus<boolean> {
  */
 export function useRemoteConfigAll(key: string): ObservableStatus<AllParameters> {
   return useRemoteConfigValue_INTERNAL<AllParameters>(key, getAll);
+}
+
+/**
+ * Pulled from rxfire
+ * TODO: Remove if https://github.com/FirebaseExtended/rxfire/pull/27/ get integrated
+ * **/
+interface ParameterSettings<T> {
+  remoteConfig: RemoteConfig;
+  key: string;
+  getter: (remoteConfig: RemoteConfig, key: string) => T;
+}
+/**
+ * Pulled from rxfire
+ * TODO: Remove if https://github.com/FirebaseExtended/rxfire/pull/27/ get integrated
+ * **/
+function parameter$<T>({ remoteConfig, key, getter }: ParameterSettings<T>): Observable<T> {
+  return new Observable((subscriber) => {
+    ensureInitialized(remoteConfig).then(() => {
+      // 'this' for the getter loses context in the next()
+      // call, so it needs to be bound.
+      const boundGetter = getter.bind(remoteConfig);
+      subscriber.next(boundGetter(remoteConfig, key));
+    });
+  });
+}
+/**
+ * Modified version of rxfire getter
+ * TODO: Remove if https://github.com/FirebaseExtended/rxfire/pull/27/ get integrated
+ * **/
+function getJSON<T>(remoteConfig: RemoteConfig, key: string) {
+  const getter = (remoteConfig: RemoteConfig, key: string) => JSON.parse(baseGetString(remoteConfig, key)) as T;
+  return parameter$<T>({ remoteConfig, key, getter });
 }
 
 /**
