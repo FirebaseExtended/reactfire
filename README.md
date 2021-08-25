@@ -3,12 +3,6 @@
 Hooks, Context Providers, and Components that make it easy to interact with
 Firebase.
 
----
-
-> **WARNING**: This branch is the work in progress for version 4 of ReactFire. [You can find version 3 here](https://github.com/firebaseextended/reactfire/tree/v3), if you're looking for documentation or to contribute to stable.
-
----
-
 ## What is ReactFire?
 
 - **Easy realtime updates for your function components** - Hooks
@@ -21,12 +15,12 @@ Firebase.
 
 ```bash
 # npm
-npm install --save reactfire@exp firebase@exp
+npm install --save firebase reactfire
 
 # or
 
 # yarn
-yarn add reactfire@exp firebase@exp
+yarn add firebase reactfire
 ```
 
 Depending on your targeted platforms you may need to install polyfills. The most commonly needed will be [globalThis](https://caniuse.com/#search=globalThis) and [Proxy](https://caniuse.com/#search=Proxy).
@@ -89,10 +83,6 @@ render(
 ```
 
 ---
-
-> If you're looking for docs for the _deprecated_ ReactFire v1 (the one that
-> uses mixins), click
-> [here](https://github.com/FirebaseExtended/reactfire/tree/v1.0.0)
 
 ## Status
 
