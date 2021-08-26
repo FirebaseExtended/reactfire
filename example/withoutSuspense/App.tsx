@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { AuthProvider, useFirebaseApp, useInitPerformance } from 'reactfire';
 import { Card } from '../display/Card';
+import { Analytics } from './Analytics'
 import { Auth } from './Auth';
 import { Firestore } from './Firestore';
 import { RealtimeDatabase } from './RealtimeDatabase';
@@ -39,6 +40,7 @@ export const App = () => {
           <Storage />
         </Card>
       </AuthProvider>
+      <Analytics />
     </div>
   );
 };
