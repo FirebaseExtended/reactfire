@@ -6,6 +6,7 @@
 
 ### References
 
+- [AnalyticsProvider](index.md#analyticsprovider)
 - [AuthCheck](index.md#authcheck)
 - [AuthCheckProps](index.md#authcheckprops)
 - [AuthProvider](index.md#authprovider)
@@ -30,6 +31,7 @@
 - [preloadFirestoreDoc](index.md#preloadfirestoredoc)
 - [preloadObservable](index.md#preloadobservable)
 - [preloadUser](index.md#preloaduser)
+- [useAnalytics](index.md#useanalytics)
 - [useAuth](index.md#useauth)
 - [useDatabase](index.md#usedatabase)
 - [useDatabaseList](index.md#usedatabaselist)
@@ -45,6 +47,7 @@
 - [useFirestoreDocDataOnce](index.md#usefirestoredocdataonce)
 - [useFirestoreDocOnce](index.md#usefirestoredoconce)
 - [useIdTokenResult](index.md#useidtokenresult)
+- [useInitAnalytics](index.md#useinitanalytics)
 - [useInitAuth](index.md#useinitauth)
 - [useInitDatabase](index.md#useinitdatabase)
 - [useInitFirestore](index.md#useinitfirestore)
@@ -87,6 +90,12 @@
 - [checkinitialData](index.md#checkinitialdata)
 
 ## References
+
+### AnalyticsProvider
+
+Re-exports: [AnalyticsProvider](sdk.md#analyticsprovider)
+
+___
 
 ### AuthCheck
 
@@ -232,6 +241,12 @@ Re-exports: [preloadUser](auth.md#preloaduser)
 
 ___
 
+### useAnalytics
+
+Re-exports: [useAnalytics](sdk.md#useanalytics)
+
+___
+
 ### useAuth
 
 Re-exports: [useAuth](sdk.md#useauth)
@@ -319,6 +334,12 @@ ___
 ### useIdTokenResult
 
 Re-exports: [useIdTokenResult](auth.md#useidtokenresult)
+
+___
+
+### useInitAnalytics
+
+Re-exports: [useInitAnalytics](sdk.md#useinitanalytics)
 
 ___
 
