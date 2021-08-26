@@ -434,7 +434,7 @@ function MyPageViewLogger({ location }) {
   // By passing `location.pathname` to the second argument of `useEffect`,
   // we only log on first render and when the `pathname` changes
   useEffect(() => {
-    logEvent(analytics, 'page_view');
+    logEvent(analytics, 'page_view', { page_location: location.href });
   }, [location.pathname]);
 
   return null;
