@@ -1,4 +1,3 @@
-import 'firebase/storage';
 import * as React from 'react';
 import { useState } from 'react';
 import { StorageProvider, useFirebaseApp, useStorage, useStorageDownloadURL, useStorageTask, SuspenseWithPerf } from 'reactfire';
