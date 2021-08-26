@@ -7,8 +7,8 @@ function MyPageViewLogger() {
   const analytics = useAnalytics()
 
   React.useEffect(() => {
-      logEvent(analytics, 'page_view')
-    }, [location.pathname])
+      logEvent(analytics, 'page_view', { page_location: location.href });
+    }, [location.href])
 
   return null
 }
