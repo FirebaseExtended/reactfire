@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import type { AppCheck } from 'firebase/app-check';
 import type { Auth } from 'firebase/auth';
 import type { Database } from 'firebase/database';
 import type { Firestore } from 'firebase/firestore';
@@ -12,6 +13,7 @@ import { ObservableStatus, useObservable } from './useObservable';
 import { from } from 'rxjs';
 import { ReactFireOptions } from '.';
 
+const AppCheckSdkContext = React.createContext<AppCheck | undefined>(undefined);
 const AuthSdkContext = React.createContext<Auth | undefined>(undefined);
 const DatabaseSdkContext = React.createContext<Database | undefined>(undefined);
 const FirestoreSdkContext = React.createContext<Firestore | undefined>(undefined);
@@ -19,7 +21,7 @@ const StorageSdkContext = React.createContext<FirebaseStorage | undefined>(undef
 const PerformanceSdkContext = React.createContext<FirebasePerformance | undefined>(undefined);
 const RemoteConfigSdkContext = React.createContext<RemoteConfig | undefined>(undefined);
 
-type FirebaseSdks = Auth | Database | Firestore | FirebasePerformance | FirebaseStorage | RemoteConfig;
+type FirebaseSdks = AppCheck | Auth | Database | Firestore | FirebasePerformance | FirebaseStorage | RemoteConfig;
 
 function getSdkProvider<Sdk extends FirebaseSdks>(SdkContext: React.Context<Sdk | undefined>) {
   return function SdkProvider(props: React.PropsWithChildren<{ sdk: Sdk }>) {
@@ -79,6 +81,7 @@ function useInitSdk<Sdk extends FirebaseSdks>(
   return useObservable<Sdk>(`firebase-sdk:${sdkName}:${firebaseApp.name}`, from(initializeSdk), options);
 }
 
+export const AppCheckProvider = getSdkProvider<AppCheck>(AppCheckSdkContext);
 export const AuthProvider = getSdkProvider<Auth>(AuthSdkContext);
 export const DatabaseProvider = getSdkProvider<Database>(DatabaseSdkContext);
 export const FirestoreProvider = getSdkProvider<Firestore>(FirestoreSdkContext);
@@ -86,6 +89,7 @@ export const PerformanceProvider = getSdkProvider<FirebasePerformance>(Performan
 export const StorageProvider = getSdkProvider<FirebaseStorage>(StorageSdkContext);
 export const RemoteConfigProvider = getSdkProvider<RemoteConfig>(RemoteConfigSdkContext);
 
+export const useAppCheck = () => useSdk<AppCheck>(AppCheckSdkContext);
 export const useAuth = () => useSdk<Auth>(AuthSdkContext);
 export const useDatabase = () => useSdk<Database>(DatabaseSdkContext);
 export const useFirestore = () => useSdk<Firestore>(FirestoreSdkContext);
