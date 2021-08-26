@@ -424,8 +424,9 @@ function App() {
 ## Log Page Views to Google Analytics for Firebase with React Router
 
 ```jsx
-import { useAnalytics } from 'reactfire';
+import { AnalyticsProvider, useAnalytics } from 'reactfire';
 import { Router, Route, Switch } from 'react-router';
+import { getAnalytics, logEvent } from 'firebase/analytics'
 
 function MyPageViewLogger({ location }) {
   const analytics = useAnalytics();
@@ -433,23 +434,25 @@ function MyPageViewLogger({ location }) {
   // By passing `location.pathname` to the second argument of `useEffect`,
   // we only log on first render and when the `pathname` changes
   useEffect(() => {
-    analytics.logEvent('page-view', { path_name: location.pathname });
+    logEvent(analytics, 'page_view');
   }, [location.pathname]);
 
   return null;
 }
 
 function App() {
-  const analytics = useAnalytics();
+  const app = useFirebaseApp()
 
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/about" component={<AboutPage />} />
-        <Route component={<NotFoundPage />} />
-      </Switch>
-      <MyPageViewLogger />
-    </Router>
+    <AnalyticsProvider sdk={getAnalytics(app)}>
+      <Router>
+        <Switch>
+          <Route exact path="/about" component={<AboutPage />} />
+          <Route component={<NotFoundPage />} />
+        </Switch>
+        <MyPageViewLogger />
+      </Router>
+    </AnalyticsProvider>
   );
 }
 ```
