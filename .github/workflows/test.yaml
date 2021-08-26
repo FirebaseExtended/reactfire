@@ -100,8 +100,6 @@ jobs:
           key: firebase_emulators
       - name: 'Download Artifacts'
         uses: actions/download-artifact@v2
-      - name: Check available files/dirs
-        run: ls -a
       - name: Expand Artifact
         run: |
           chmod +x reactfire-${{ github.run_id }}/unpack.sh
@@ -111,8 +109,8 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     name: Publish (NPM)
-    needs: build
-    if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/modular-firebase' || github.event_name == 'release' }}
+    needs: test
+    if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'release' }}
     steps:
       - name: Setup node
         uses: actions/setup-node@v2-beta
