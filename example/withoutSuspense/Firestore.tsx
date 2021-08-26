@@ -10,21 +10,14 @@ import { getFirestore } from 'firebase/firestore';
 
 const Counter = () => {
   const firestore = useFirestore();
-  const app = useFirebaseApp();
-
-  if(getFirestore(app) !== firestore) {
-    throw new Error('firestore instances do not match')
-  }
-
   const ref = doc(firestore, 'count', 'counter');
+  const { status, data: count } = useFirestoreDocData(ref);
 
   const incrementCounter = (amountToIncrement) => {
     updateDoc(ref, {
       value: increment(amountToIncrement),
     });
   };
-
-  const { status, data: count } = useFirestoreDocData(ref);
 
   if (status === 'loading') {
     return <LoadingSpinner />;

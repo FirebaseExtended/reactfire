@@ -10637,10 +10637,10 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   dependencies:
     aproba "^1.1.1"
 
-rxfire@6.0.0-rc.1:
-  version "6.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/rxfire/-/rxfire-6.0.0-rc.1.tgz#a3c95cdcecf5bd26823377d9836ecb5005156ea1"
-  integrity sha512-2wGzy/iMkYcBnTCwk1JNnX0tL0h/MXh9dki1bR+/rsxzr4S6T6uhLYAknp7lsPvbxSpvpis4io3k1yWXnUMjsQ==
+rxfire@6.0.0-rc.2:
+  version "6.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/rxfire/-/rxfire-6.0.0-rc.2.tgz#fde8f18341ec0362a07c2bc99499b5d01f5f0abf"
+  integrity sha512-iiDOSTwY9j1v0CKedkReOLywbEzOutP+Xc9Vl5kFp+wHBCEWStlbCk1VulQQwyOdPb/lAiQYRMKM5gQrs0ipTQ==
   dependencies:
     tslib "^1.9.0 || ~2.1.0"
 
