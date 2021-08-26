@@ -4,9 +4,6 @@ import { getValue, getString, getBoolean, getNumber, getAll, AllParameters } fro
 import { Observable } from 'rxjs';
 import type { RemoteConfig, Value as RemoteConfigValue } from 'firebase/remote-config';
 
-//TODO: Remove if https://github.com/FirebaseExtended/rxfire/pull/27/ get integrated
-import { ensureInitialized, getString as baseGetString } from 'firebase/remote-config';
-
 type Getter$<T> = (remoteConfig: RemoteConfig, key: string) => Observable<T>;
 
 /**
@@ -67,45 +64,4 @@ export function useRemoteConfigBoolean(key: string): ObservableStatus<boolean> {
  */
 export function useRemoteConfigAll(key: string): ObservableStatus<AllParameters> {
   return useRemoteConfigValue_INTERNAL<AllParameters>(key, getAll);
-}
-
-// ============================================================================
-// TODO: Remove if https://github.com/FirebaseExtended/rxfire/pull/27/ gets integrated. Replace getJSON with getJSON from rxfire
-/**
- * Pulled from rxfire
- * **/
-interface ParameterSettings<T> {
-  remoteConfig: RemoteConfig;
-  key: string;
-  getter: (remoteConfig: RemoteConfig, key: string) => T;
-}
-/**
- * Pulled from rxfire
- * **/
-function parameter$<T>({ remoteConfig, key, getter }: ParameterSettings<T>): Observable<T> {
-  return new Observable((subscriber) => {
-    ensureInitialized(remoteConfig).then(() => {
-      // 'this' for the getter loses context in the next()
-      // call, so it needs to be bound.
-      const boundGetter = getter.bind(remoteConfig);
-      subscriber.next(boundGetter(remoteConfig, key));
-    });
-  });
-}
-/**
- * Modified version of rxfire getter
- * **/
-function getJSON<T>(remoteConfig: RemoteConfig, key: string) {
-  const getter = (remoteConfig: RemoteConfig, key: string) => JSON.parse(baseGetString(remoteConfig, key)) as T;
-  return parameter$<T>({ remoteConfig, key, getter });
-}
-// ============================================================================
-
-/**
- * Convience method that runs the retrieves remote config value through JSON.parse.
- * Provides no typing checking assurances.
- * @param key The parameter key in Remote Config
- */
-export function useRemoteConfigJSON<T>(key: string): ObservableStatus<T> {
-  return useRemoteConfigValue_INTERNAL<T>(key, getJSON);
 }

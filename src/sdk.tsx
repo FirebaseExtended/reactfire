@@ -29,10 +29,10 @@ type FirebaseSdks = Analytics | AppCheck | Auth | Database | Firestore | Functio
 
 function getSdkProvider<Sdk extends FirebaseSdks>(SdkContext: React.Context<Sdk | undefined>) {
   return function SdkProvider(props: React.PropsWithChildren<{ sdk: Sdk }>) {
-    if (!props.sdk) throw new Error('no sdk provided');
+    if (!props?.sdk) throw new Error('no sdk provided');
 
     const contextualAppName = useFirebaseApp().name;
-    const sdkAppName = props.sdk.app.name;
+    const sdkAppName = props?.sdk?.app?.name;
 
     if (sdkAppName !== contextualAppName) throw new Error('sdk was initialized with a different firebase app');
 
