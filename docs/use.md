@@ -5,6 +5,7 @@
 - [Setup](#setup)
   * [Initialize product SDKs and register them with ReactFire](#initialize-product-sdks-and-register-them-with-reactfire)
   * [Connect to the Firebase Local Emulator Suite](#connect-to-the-firebase-local-emulator-suite)
+  * [Set up App Check](#set-up-app-check)
 - [Auth](#auth)
   * [Display the current signed-in user](#display-the-current-signed-in-user)
   * [Only render a component if a user is signed in](#only-render-a-component-if-a-user-is-signed-in)

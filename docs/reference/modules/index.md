@@ -7,6 +7,7 @@
 ### References
 
 - [AnalyticsProvider](index.md#analyticsprovider)
+- [AppCheckProvider](index.md#appcheckprovider)
 - [AuthCheck](index.md#authcheck)
 - [AuthCheckProps](index.md#authcheckprops)
 - [AuthProvider](index.md#authprovider)
@@ -32,6 +33,7 @@
 - [preloadObservable](index.md#preloadobservable)
 - [preloadUser](index.md#preloaduser)
 - [useAnalytics](index.md#useanalytics)
+- [useAppCheck](index.md#useappcheck)
 - [useAuth](index.md#useauth)
 - [useDatabase](index.md#usedatabase)
 - [useDatabaseList](index.md#usedatabaselist)
@@ -94,6 +96,12 @@
 ### AnalyticsProvider
 
 Re-exports: [AnalyticsProvider](sdk.md#analyticsprovider)
+
+___
+
+### AppCheckProvider
+
+Re-exports: [AppCheckProvider](sdk.md#appcheckprovider)
 
 ___
 
@@ -244,6 +252,12 @@ ___
 ### useAnalytics
 
 Re-exports: [useAnalytics](sdk.md#useanalytics)
+
+___
+
+### useAppCheck
+
+Re-exports: [useAppCheck](sdk.md#useappcheck)
 
 ___
 
