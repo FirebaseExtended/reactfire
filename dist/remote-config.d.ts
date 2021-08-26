@@ -28,9 +28,3 @@ export declare function useRemoteConfigBoolean(key: string): ObservableStatus<bo
  * @param key The parameter key in Remote Config
  */
 export declare function useRemoteConfigAll(key: string): ObservableStatus<AllParameters>;
-/**
- * Convience method that runs the retrieves remote config value through JSON.parse.
- * Provides no typing checking assurances.
- * @param key The parameter key in Remote Config
- */
-export declare function useRemoteConfigJSON<T>(key: string): ObservableStatus<T>;

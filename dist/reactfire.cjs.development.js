@@ -11,7 +11,6 @@ var database = require('rxfire/database');
 var firestore = require('rxfire/firestore');
 var firestore$1 = require('firebase/firestore');
 var remoteConfig = require('rxfire/remote-config');
-var remoteConfig$1 = require('firebase/remote-config');
 var storage = require('rxfire/storage');
 var storage$1 = require('firebase/storage');
 
@@ -1322,7 +1321,9 @@ function useDatabaseObject(ref, options) {
 function useDatabaseObjectData(ref, options) {
   var idField = options ? checkIdField(options) : 'NO_ID_FIELD';
   var observableId = "database:objectVal:" + ref.toString() + ":idField=" + idField;
-  var observable$ = database.objectVal(ref, idField);
+  var observable$ = database.objectVal(ref, {
+    keyField: idField
+  });
   return useObservable(observableId, observable$, options);
 }
 /**
@@ -1340,7 +1341,9 @@ function useDatabaseList(ref, options) {
 function useDatabaseListData(ref, options) {
   var idField = options ? checkIdField(options) : 'NO_ID_FIELD';
   var observableId = "database:listVal:" + getUniqueIdForDatabaseQuery(ref) + ":idField=" + idField;
-  var observable$ = database.listVal(ref, idField);
+  var observable$ = database.listVal(ref, {
+    keyField: idField
+  });
   return useObservable(observableId, observable$, options);
 }
 
@@ -1635,7 +1638,9 @@ function useFirestoreDocOnce(ref, options) {
 function useFirestoreDocData(ref, options) {
   var idField = options ? checkIdField(options) : 'NO_ID_FIELD';
   var observableId = "firestore:docData:" + ref.firestore.app.name + ":" + ref.path + ":idField=" + idField;
-  var observable = firestore.docData(ref, idField);
+  var observable = firestore.docData(ref, {
+    idField: idField
+  });
   return useObservable(observableId, observable, options);
 }
 /**
@@ -1645,7 +1650,9 @@ function useFirestoreDocData(ref, options) {
 function useFirestoreDocDataOnce(ref, options) {
   var idField = options ? checkIdField(options) : 'NO_ID_FIELD';
   var observableId = "firestore:docDataOnce:" + ref.firestore.app.name + ":" + ref.path + ":idField=" + idField;
-  var observable$ = firestore.docData(ref, idField).pipe(operators.first());
+  var observable$ = firestore.docData(ref, {
+    idField: idField
+  }).pipe(operators.first());
   return useObservable(observableId, observable$, options);
 }
 /**
@@ -1664,7 +1671,9 @@ function useFirestoreCollection(query, options) {
 function useFirestoreCollectionData(query, options) {
   var idField = options ? checkIdField(options) : 'NO_ID_FIELD';
   var observableId = "firestore:collectionData:" + getUniqueIdForFirestoreQuery(query) + ":idField=" + idField;
-  var observable$ = firestore.collectionData(query, idField);
+  var observable$ = firestore.collectionData(query, {
+    idField: idField
+  });
   return useObservable(observableId, observable$, options);
 }
 
@@ -1757,50 +1766,6 @@ function useRemoteConfigBoolean(key) {
 
 function useRemoteConfigAll(key) {
   return useRemoteConfigValue_INTERNAL(key, remoteConfig.getAll);
-}
-/**
- * Pulled from rxfire
- * **/
-
-function parameter$(_ref) {
-  var remoteConfig = _ref.remoteConfig,
-      key = _ref.key,
-      getter = _ref.getter;
-  return new rxjs.Observable(function (subscriber) {
-    remoteConfig$1.ensureInitialized(remoteConfig).then(function () {
-      // 'this' for the getter loses context in the next()
-      // call, so it needs to be bound.
-      var boundGetter = getter.bind(remoteConfig);
-      subscriber.next(boundGetter(remoteConfig, key));
-    });
-  });
-}
-/**
- * Modified version of rxfire getter
- * **/
-
-
-function getJSON(remoteConfig, key) {
-  var getter = function getter(remoteConfig, key) {
-    return JSON.parse(remoteConfig$1.getString(remoteConfig, key));
-  };
-
-  return parameter$({
-    remoteConfig: remoteConfig,
-    key: key,
-    getter: getter
-  });
-} // ============================================================================
-
-/**
- * Convience method that runs the retrieves remote config value through JSON.parse.
- * Provides no typing checking assurances.
- * @param key The parameter key in Remote Config
- */
-
-
-function useRemoteConfigJSON(key) {
-  return useRemoteConfigValue_INTERNAL(key, getJSON);
 }
 
 var _excluded = ["storage", "storagePath", "suspense", "placeHolder"];
@@ -1920,9 +1885,11 @@ var RemoteConfigSdkContext = /*#__PURE__*/React.createContext(undefined);
 
 function getSdkProvider(SdkContext) {
   return function SdkProvider(props) {
-    if (!props.sdk) throw new Error('no sdk provided');
+    var _props$sdk, _props$sdk$app;
+
+    if (!(props != null && props.sdk)) throw new Error('no sdk provided');
     var contextualAppName = useFirebaseApp().name;
-    var sdkAppName = props.sdk.app.name;
+    var sdkAppName = props == null ? void 0 : (_props$sdk = props.sdk) == null ? void 0 : (_props$sdk$app = _props$sdk.app) == null ? void 0 : _props$sdk$app.name;
     if (sdkAppName !== contextualAppName) throw new Error('sdk was initialized with a different firebase app');
     return React.createElement(SdkContext.Provider, _extends({
       value: props.sdk
@@ -2101,7 +2068,6 @@ exports.usePerformance = usePerformance;
 exports.useRemoteConfig = useRemoteConfig;
 exports.useRemoteConfigAll = useRemoteConfigAll;
 exports.useRemoteConfigBoolean = useRemoteConfigBoolean;
-exports.useRemoteConfigJSON = useRemoteConfigJSON;
 exports.useRemoteConfigNumber = useRemoteConfigNumber;
 exports.useRemoteConfigString = useRemoteConfigString;
 exports.useRemoteConfigValue = useRemoteConfigValue;
