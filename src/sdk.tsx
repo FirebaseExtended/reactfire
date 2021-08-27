@@ -25,27 +25,11 @@ type FirebaseSdks = Auth | Analytics | Database | Firestore | FirebasePerformanc
 
 function getSdkProvider<Sdk extends FirebaseSdks>(SdkContext: React.Context<Sdk | undefined>) {
   return function SdkProvider(props: React.PropsWithChildren<{ sdk: Sdk }>) {
+    if (!props.sdk) throw new Error('no sdk provided');
+
     const contextualAppName = useFirebaseApp().name;
-    let sdkAppName;
-
-    // @ts-ignore Auth doesn't have field 'app'
-    if (props.sdk.app) {
-      // @ts-ignore Auth doesn't have field 'app'
-      sdkAppName = props.sdk.app.name;
-
-      // @ts-ignore only Auth has field 'name'
-    } else if (props.sdk.name) {
-      // @ts-ignore only Auth has field 'name'
-      sdkAppName = props.sdk.name;
-    }
-
-    if (sdkAppName !== contextualAppName) {
-      throw new Error('sdk was initialized with a different firebase app');
-    }
-
-    if (!props.sdk) {
-      throw new Error('no sdk provided');
-    }
+    const sdkAppName = props?.sdk?.app?.name;
+    if (sdkAppName !== contextualAppName) throw new Error('sdk was initialized with a different firebase app');
 
     return <SdkContext.Provider value={props.sdk} {...props} />;
   };

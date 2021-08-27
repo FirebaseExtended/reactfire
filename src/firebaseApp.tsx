@@ -16,7 +16,7 @@ interface FirebaseAppProviderProps {
   suspense?: boolean;
 }
 
-// @ts-ignore: "__REACTFIRE_VERSION__" is replaced with actual ReactFire version (see babel.config.js)
+// @ts-expect-error: "__REACTFIRE_VERSION__" is replaced with actual ReactFire version (see babel.config.js)
 export const version = __REACTFIRE_VERSION__;
 
 const shallowEq = (a: { [key: string]: any }, b: { [key: string]: any }) => a === b || [...Object.keys(a), ...Object.keys(b)].every((key) => a[key] === b[key]);
