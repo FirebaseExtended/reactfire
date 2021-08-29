@@ -17,8 +17,7 @@ which just ask about usage will be closed. Here are some resources to get help:
 - Go through the [guide](../docs/use.md)
 - Read the full [API reference](../docs/reference)
 
-If the official documentation doesn't help, try asking a question through our
-[official support channels](https://firebase.google.com/support/).
+If the official documentation doesn't help, try starting a [discussion](https://github.com/FirebaseExtended/reactfire/discussions).
 
 **Please avoid double posting across multiple channels!**
 
@@ -73,20 +72,15 @@ set up.
    this repository (or a
    [fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo#propose-changes-to-someone-elses-project))
 1. At the project root, install all modules by running `yarn install`.
-1. `cd` into the _reactfire_ directory. Run `yarn` and `yarn watch`.
-1. In a new terminal, `cd` into the _reactfire/sample_ directory. run `yarn` and
-   `yarn start`.
-1. Head over to https://localhost:3000 to see the running sample! If you edit
-   the reactfire source, the sample will reload.
+1. Start a dev build of reactfire by running `yarn start`. ReactFire will recompile on every file change.
 
 ### Testing
 
-1. `cd` into the _reactfire/reactfire_ directory
-1. run `yarn test`
+1. run `yarn test` from the repository root. Make sure you've rebuilt your changes (usually by keeping `yarn start` running in a separate tab).
 
-### Bulding
+### Before submitting a PR
 
-1. `cd` into the _reactfire/reactfire_ directory
-1. run `yarn build`
-
-The output files - `reactfire.js` and `reactfire.min.js` - are written to the `/dist/` directory.
+1. run `yarn build` to confirm that the source builds
+2. run `yarn test` to confirm that tests pass
+3. run `yarn lint` to confirm that code meets our style guide
+4. run `yarn docs` to rebuild the reference docs
