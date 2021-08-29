@@ -83,4 +83,5 @@ set up.
 1. run `yarn build` to confirm that the source builds
 2. run `yarn test` to confirm that tests pass
 3. run `yarn lint` to confirm that code meets our style guide
-4. run `yarn docs` to rebuild the reference docs
+    > If the lint check fails, run `yarn lint --fix` to automatically fix any issues. 
+5. run `yarn docs` to rebuild the reference docs
