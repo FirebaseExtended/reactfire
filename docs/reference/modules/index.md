@@ -50,6 +50,7 @@
 - [useFirestoreDocOnce](index.md#usefirestoredoconce)
 - [useIdTokenResult](index.md#useidtokenresult)
 - [useInitAnalytics](index.md#useinitanalytics)
+- [useInitAppCheck](index.md#useinitappcheck)
 - [useInitAuth](index.md#useinitauth)
 - [useInitDatabase](index.md#useinitdatabase)
 - [useInitFirestore](index.md#useinitfirestore)
@@ -354,6 +355,12 @@ ___
 ### useInitAnalytics
 
 Re-exports: [useInitAnalytics](sdk.md#useinitanalytics)
+
+___
+
+### useInitAppCheck
+
+Re-exports: [useInitAppCheck](sdk.md#useinitappcheck)
 
 ___
 

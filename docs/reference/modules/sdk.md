@@ -20,6 +20,7 @@
 - [useDatabase](sdk.md#usedatabase)
 - [useFirestore](sdk.md#usefirestore)
 - [useInitAnalytics](sdk.md#useinitanalytics)
+- [useInitAppCheck](sdk.md#useinitappcheck)
 - [useInitAuth](sdk.md#useinitauth)
 - [useInitDatabase](sdk.md#useinitdatabase)
 - [useInitFirestore](sdk.md#useinitfirestore)
@@ -279,7 +280,28 @@ ___
 
 #### Defined in
 
-[src/sdk.tsx:94](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L94)
+[src/sdk.tsx:95](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L95)
+
+___
+
+### useInitAppCheck
+
+▸ `Const` **useInitAppCheck**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`AppCheck`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`AppCheck`\> |
+| `options?` | [`ReactFireOptions`](../interfaces/index.ReactFireOptions.md)<`AppCheck`\> |
+
+#### Returns
+
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`AppCheck`\>
+
+#### Defined in
+
+[src/sdk.tsx:93](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L93)
 
 ___
 
@@ -300,7 +322,7 @@ ___
 
 #### Defined in
 
-[src/sdk.tsx:93](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L93)
+[src/sdk.tsx:94](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L94)
 
 ___
 
@@ -321,7 +343,7 @@ ___
 
 #### Defined in
 
-[src/sdk.tsx:95](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L95)
+[src/sdk.tsx:96](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L96)
 
 ___
 
@@ -342,7 +364,7 @@ ___
 
 #### Defined in
 
-[src/sdk.tsx:96](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L96)
+[src/sdk.tsx:97](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L97)
 
 ___
 
@@ -363,7 +385,7 @@ ___
 
 #### Defined in
 
-[src/sdk.tsx:97](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L97)
+[src/sdk.tsx:98](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L98)
 
 ___
 
@@ -384,7 +406,7 @@ ___
 
 #### Defined in
 
-[src/sdk.tsx:99](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L99)
+[src/sdk.tsx:100](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L100)
 
 ___
 
@@ -405,7 +427,7 @@ ___
 
 #### Defined in
 
-[src/sdk.tsx:101](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L101)
+[src/sdk.tsx:102](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L102)
 
 ___
 
