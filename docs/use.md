@@ -5,6 +5,7 @@
 - [Setup](#setup)
   * [Initialize product SDKs and register them with ReactFire](#initialize-product-sdks-and-register-them-with-reactfire)
   * [Connect to the Firebase Local Emulator Suite](#connect-to-the-firebase-local-emulator-suite)
+  * [Set up App Check](#set-up-app-check)
 - [Auth](#auth)
   * [Display the current signed-in user](#display-the-current-signed-in-user)
   * [Only render a component if a user is signed in](#only-render-a-component-if-a-user-is-signed-in)
@@ -118,6 +119,39 @@ function FirebaseComponents({ children }) {
 ```
 
 Learn more about the Local Emulator Suite in the [Firebase docs](https://firebase.google.com/docs/emulator-suite/connect_and_prototype).
+
+### Set up App Check
+
+[App Check](https://firebase.google.com/docs/app-check) helps protect your backend resources from abuse, such as billing fraud and phishing.
+
+```jsx
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
+import { useFirebaseApp, AppCheckProvider } from 'reactfire';
+
+// Create your reCAPTCHA v3 site key in the 
+// "Project Settings > App Check" section of the Firebase console
+const APP_CHECK_TOKEN = 'abcdefghijklmnopqrstuvwxy-1234567890abcd';
+
+function FirebaseComponents({ children }) {
+  const app = useFirebaseApp(); // a parent component contains a `FirebaseAppProvider`
+
+  const appCheck = initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider(APP_CHECK_TOKEN),
+    isTokenAutoRefreshEnabled: true
+  });
+
+  // Activate App Check at the top level before any component talks to an App-Check-compatible Firebase service
+  return (
+    <AppCheckProvider sdk={appCheck}>
+      <DatabaseProvider sdk={database}>
+        <MyCoolApp/>
+      </DatabaseProvider>
+    </AppCheckProvider>
+  );
+}
+```
+
+See the [App Check setup guide in the Firebase docs](https://firebase.google.com/docs/app-check/web/recaptcha-provider#project-setup) for more detailed instructions.
 
 ## Auth
 
