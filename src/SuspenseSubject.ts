@@ -10,9 +10,9 @@ export class SuspenseSubject<T> extends Subject<T> {
   private _innerObservable: Observable<T>;
   private _warmupSubscription: Subscription;
 
-  // @ts-ignore: TODO: double check to see if this is an RXJS thing or if we should listen to TS
+  // @ts-expect-error: TODO: double check to see if this is an RXJS thing or if we should listen to TS
   private _innerSubscriber: Subscription;
-  // @ts-ignore: TODO: double check to see if this is an RXJS thing or if we should listen to TS
+  // @ts-expect-error: TODO: double check to see if this is an RXJS thing or if we should listen to TS
   private _resolveFirstEmission: () => void;
 
   constructor(innerObservable: Observable<T>, private _timeoutWindow: number) {
