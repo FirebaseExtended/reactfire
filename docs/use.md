@@ -142,7 +142,7 @@ function FirebaseComponents({ children }) {
 
   // Activate App Check at the top level before any component talks to an App-Check-compatible Firebase service
   return (
-    <AppCheckProvider>
+    <AppCheckProvider sdk={appCheck}>
       <DatabaseProvider sdk={database}>
         <MyCoolApp/>
       </DatabaseProvider>
