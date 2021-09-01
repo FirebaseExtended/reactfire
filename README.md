@@ -91,12 +91,14 @@ This repository is maintained by Googlers but is not a supported Firebase produc
 
 ### Extra Experimental [concurrent mode](https://reactjs.org/docs/concurrent-mode-suspense.html) features
 
+These features are marked as *extra experimental* because they use experimental React features that [will not be stable until sometime after React 18 is released](https://github.com/reactwg/react-18/discussions/47#:~:text=Likely%20after%20React%2018.0%3A%20Suspense%20for%20Data%20Fetching).
+
 - **Loading states handled by `<Suspense>`** - ReactFire's hooks throw promises
-  that Suspense can catch. No more `isLoaded ?...` - let React
-  [handle it for you](https://reactjs.org/docs/concurrent-mode-suspense.html).
+  that Suspense can catch. Let React
+  [handle loading states for you](https://reactjs.org/docs/concurrent-mode-suspense.html).
 - **Automatically instrument your `Suspense` load times** - Need to automatically instrument your `Suspense` load times with [RUM](https://firebase.google.com/docs/perf-mon)? Use `<SuspenseWithPerf />`.
 
-Enable concurrent mode features by setting the `suspense` prop in `FirebaseAppProvider`:
+Enable concurrent mode features by following the [concurrent mode setup guide](https://reactjs.org/docs/concurrent-mode-adoption.html#installation) and then setting the `suspense` prop in `FirebaseAppProvider`:
 
 ```jsx
 <FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={true}>
