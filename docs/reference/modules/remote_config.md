@@ -16,7 +16,7 @@
 
 ### useRemoteConfigAll
 
-▸ **useRemoteConfigAll**(`key`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<[`AllParameters`](remote_config_getValue.md#allparameters)\>
+▸ **useRemoteConfigAll**(`key`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`AllParameters`\>
 
 Convience method similar to useRemoteConfigValue. Returns allRemote Config parameters.
 
@@ -28,11 +28,11 @@ Convience method similar to useRemoteConfigValue. Returns allRemote Config param
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<[`AllParameters`](remote_config_getValue.md#allparameters)\>
+[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`AllParameters`\>
 
 #### Defined in
 
-[src/remote-config/index.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L78)
+[src/remote-config.tsx:66](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config.tsx#L66)
 
 ___
 
@@ -54,7 +54,7 @@ Convience method similar to useRemoteConfigValue. Returns a `boolean` from a Rem
 
 #### Defined in
 
-[src/remote-config/index.tsx:69](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L69)
+[src/remote-config.tsx:58](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config.tsx#L58)
 
 ___
 
@@ -76,7 +76,7 @@ Convience method similar to useRemoteConfigValue. Returns a `number` from a Remo
 
 #### Defined in
 
-[src/remote-config/index.tsx:60](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L60)
+[src/remote-config.tsx:50](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config.tsx#L50)
 
 ___
 
@@ -98,7 +98,7 @@ Convience method similar to useRemoteConfigValue. Returns a `string` from a Remo
 
 #### Defined in
 
-[src/remote-config/index.tsx:51](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L51)
+[src/remote-config.tsx:42](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config.tsx#L42)
 
 ___
 
@@ -121,4 +121,4 @@ Remote Config Value.
 
 #### Defined in
 
-[src/remote-config/index.tsx:42](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config/index.tsx#L42)
+[src/remote-config.tsx:34](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config.tsx#L34)
