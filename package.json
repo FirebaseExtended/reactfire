@@ -23,7 +23,8 @@
     "lint": "tsdx lint src test",
     "size": "size-limit",
     "analyze": "size-limit --why",
-    "docs": "typedoc --options typedoc.json && markdown-toc -i docs/use.md"
+    "docs": "typedoc --options typedoc.json && markdown-toc -i docs/use.md",
+    "docs:fork": "typedoc --options typedoc.json --gitRemote upstream && markdown-toc -i docs/use.md"
   },
   "peerDependencies": {
     "firebase": "^9.0.0",

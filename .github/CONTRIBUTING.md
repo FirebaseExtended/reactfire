@@ -85,3 +85,4 @@ set up.
 3. run `yarn lint` to confirm that code meets our style guide
     > If the lint check fails, run `yarn lint --fix` to automatically fix any issues. 
 5. run `yarn docs` to rebuild the reference docs
+    > If you've forked the repo, run `yarn docs:fork` instead. This will ensure the reference docs link to the firebaseextended/reactfire repository.
