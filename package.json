@@ -18,6 +18,7 @@
     "test:firestore": "firebase emulators:exec --only firestore --project=rxfire-525a3 \"tsdx test firestore --verbose\"",
     "test:database": "firebase emulators:exec --only database --project=rxfire-525a3 \"tsdx test database --verbose\"",
     "test:auth": "firebase emulators:exec --only auth --project=rxfire-525a3 \"tsdx test auth --verbose\"",
+    "test:functions": "firebase emulators:exec --only functions --project=rxfire-525a3 \"tsdx test functions --verbose\"",
     "test:storage": "firebase emulators:exec --only storage --project=rxfire-525a3 \"tsdx test storage --verbose\"",
     "test:useObservable": "tsdx test useObservable --verbose",
     "lint": "tsdx lint src test",
