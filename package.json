@@ -14,7 +14,7 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test:tsdx": "tsdx test",
-    "test": "firebase emulators:exec --only firestore,database,auth,storage --project=rxfire-525a3 \"tsdx test\"",
+    "test": "firebase emulators:exec --project=rxfire-525a3 \"tsdx test\"",
     "test:firestore": "firebase emulators:exec --only firestore --project=rxfire-525a3 \"tsdx test firestore --verbose\"",
     "test:database": "firebase emulators:exec --only database --project=rxfire-525a3 \"tsdx test database --verbose\"",
     "test:auth": "firebase emulators:exec --only auth --project=rxfire-525a3 \"tsdx test auth --verbose\"",
