@@ -26,7 +26,7 @@ describe('Firestore', () => {
   connectFirestoreEmulator(db, 'localhost', 8080);
 
   const Provider = ({ children }: { children: React.ReactNode }) => (
-    <FirebaseAppProvider firebaseApp={app} suspense={true}>
+    <FirebaseAppProvider firebaseApp={app}>
       <FirestoreProvider sdk={db}>{children}</FirestoreProvider>
     </FirebaseAppProvider>
   );
