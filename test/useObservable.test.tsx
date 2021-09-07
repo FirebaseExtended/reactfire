@@ -63,6 +63,16 @@ describe('useObservable', () => {
       expect(result.current.data).toEqual(startVal);
     });
 
+    it('emits even if data is undefined', async () => {
+      const startVal = undefined;
+      const observable$ = new BehaviorSubject(startVal);
+
+      const { result } = renderHook(() => useObservable('test-undefined', observable$, { suspense: false }));
+
+      expect(result.current.status).toEqual('success');
+      expect(result.current.data).toEqual(startVal);
+    });
+
     it('does not show stale data after navigating away', async () => {
       const startVal = 'start';
       const newVal = 'anotherValue';
