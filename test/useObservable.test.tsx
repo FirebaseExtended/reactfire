@@ -72,8 +72,6 @@ describe('useObservable', () => {
 
       actOnHook(() => observable$.next(undefined));
 
-      console.log(result.all);
-
       expect(result.current.status).toEqual('success');
       expect(result.current.data).toBeUndefined();
     });
