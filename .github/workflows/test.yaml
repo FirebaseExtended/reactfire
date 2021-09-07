@@ -94,7 +94,7 @@ jobs:
           yarn config set yarn-offline-mirror ~/.npm-packages-offline-cache
           yarn install --frozen-lockfile --prefer-offline
       - name: Install deps for functions
-        run: /
+        run: |
           cd functions ; npm install ; cd ..
       - name: Firebase emulator cache
         uses: actions/cache@v2
