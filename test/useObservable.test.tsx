@@ -64,13 +64,18 @@ describe('useObservable', () => {
     });
 
     it('emits even if data is undefined', async () => {
-      const startVal = undefined;
-      const observable$ = new BehaviorSubject(startVal);
+      const observable$: Subject<any> = new Subject();
 
       const { result } = renderHook(() => useObservable('test-undefined', observable$, { suspense: false }));
 
+      expect(result.current.status).toEqual('loading');
+
+      actOnHook(() => observable$.next(undefined));
+
+      console.log(result.all);
+
       expect(result.current.status).toEqual('success');
-      expect(result.current.data).toEqual(startVal);
+      expect(result.current.data).toBeUndefined();
     });
 
     it('does not show stale data after navigating away', async () => {
