@@ -85,6 +85,23 @@ describe('Firestore', () => {
       expect(data.a).toEqual(mockData.a);
       expect(data.id).toBeDefined();
     });
+
+    it('returns undefined if document does not exist', async () => {
+      const collectionRef = collection(db, randomString());
+      const docIdThatExists = randomString();
+      const docIdThatDoesNotExist = randomString();
+      await setDoc(doc(collectionRef, docIdThatExists), { a: randomString() });
+
+      // reference a doc that doesn't exist
+      const ref = doc(collectionRef, docIdThatDoesNotExist);
+
+      const { result, waitFor } = renderHook(() => useFirestoreDocData<any>(ref, { idField: 'id' }), { wrapper: Provider });
+
+      await waitFor(() => result.current.status === 'success');
+
+      expect(result.current.status).toEqual('success');
+      expect(result.current.data).toBeUndefined();
+    });
   });
 
   describe('useFirestoreDocOnce', () => {
