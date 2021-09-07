@@ -5,6 +5,7 @@ import { FirebaseAppProvider, ObservableStatus, StorageProvider, useStorageDownl
 import { baseConfig } from './appConfig';
 import { renderHook, act as actOnHooks } from '@testing-library/react-hooks';
 import * as React from 'react';
+import { randomString } from './test-utils';
 
 describe('Storage', () => {
   const app = initializeApp(baseConfig);
@@ -19,8 +20,9 @@ describe('Storage', () => {
 
   describe('useStorageTask', () => {
     it('returns the same value as uploadTask', async () => {
-      const someBytes = Uint8Array.from(Buffer.from(new ArrayBuffer(1_000_000)));
-      const testFileRef = ref(storage, 'test-useStorageTask/testfile.txt');
+      const someBytes = Uint8Array.from(Buffer.from(new ArrayBuffer(500_000)));
+
+      const testFileRef = ref(storage, `${randomString()}/${randomString()}.txt`);
 
       const uploadTask = uploadBytesResumable(testFileRef, someBytes);
 
@@ -68,8 +70,8 @@ describe('Storage', () => {
 
   describe('useStorageDownloadURL', () => {
     it('returns the same value as getDownloadURL', async () => {
-      const someBytes = Uint8Array.from(Buffer.from(new ArrayBuffer(1_000_000)));
-      const testFileRef = ref(storage, 'test-useStorageDownloadURL/testfile.txt');
+      const someBytes = Uint8Array.from(Buffer.from(new ArrayBuffer(500_000)));
+      const testFileRef = ref(storage, `${randomString()}/${randomString()}.txt`);
 
       await uploadBytesResumable(testFileRef, someBytes);
 
