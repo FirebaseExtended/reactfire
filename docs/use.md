@@ -13,6 +13,8 @@
   * [Access data offline](#access-data-offline)
   * [Show a single document](#show-a-single-document)
   * [Show a list of data (collection)](#show-a-list-of-data-collection)
+- [Cloud Functions](#cloud-functions)
+  * [Call a function](#call-a-function)
 - [Realtime Database](#realtime-database)
   * [Show an object](#show-an-object)
   * [Show a list of data](#show-a-list-of-data)
@@ -125,10 +127,10 @@ Learn more about the Local Emulator Suite in the [Firebase docs](https://firebas
 [App Check](https://firebase.google.com/docs/app-check) helps protect your backend resources from abuse, such as billing fraud and phishing.
 
 ```jsx
-import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 import { useFirebaseApp, AppCheckProvider } from 'reactfire';
 
-// Create your reCAPTCHA v3 site key in the 
+// Create your reCAPTCHA v3 site key in the
 // "Project Settings > App Check" section of the Firebase console
 const APP_CHECK_TOKEN = 'abcdefghijklmnopqrstuvwxy-1234567890abcd';
 
@@ -137,14 +139,14 @@ function FirebaseComponents({ children }) {
 
   const appCheck = initializeAppCheck(app, {
     provider: new ReCaptchaV3Provider(APP_CHECK_TOKEN),
-    isTokenAutoRefreshEnabled: true
+    isTokenAutoRefreshEnabled: true,
   });
 
   // Activate App Check at the top level before any component talks to an App-Check-compatible Firebase service
   return (
     <AppCheckProvider sdk={appCheck}>
       <DatabaseProvider sdk={database}>
-        <MyCoolApp/>
+        <MyCoolApp />
       </DatabaseProvider>
     </AppCheckProvider>
   );
@@ -295,6 +297,33 @@ function FavoriteAnimals() {
       ))}
     </ul>
   );
+}
+```
+
+## Cloud Functions
+
+The following samples assume that `FirebaseAppProvider` and `FunctionsProvider` components exist higher up the component tree.
+
+### Call a function
+
+```jsx
+function Calculator() {
+  const functions = useFunctions();
+  const remoteCalculator = httpsCallable(functions, 'calculate');
+
+  const [calculationResult, setResult] = useState(null);
+
+  async function handleButtonClick(firstNumber, secondNumber, operator) {
+    const remoteCalculatorResponse = await remoteCalculator({ firstNumber, secondNumber, operator });
+
+    setResult(remoteCalculatorResponse.data);
+  }
+
+  if (!calculationResult) {
+    return <button onClick={() => handleButtonClick(1, 2, '+')}>Click me to add 1 + 2</button>;
+  } else {
+    return <pre>{calculationResult}</pre>;
+  }
 }
 ```
 
@@ -460,7 +489,7 @@ function App() {
 ```jsx
 import { AnalyticsProvider, useAnalytics } from 'reactfire';
 import { Router, Route, Switch } from 'react-router';
-import { getAnalytics, logEvent } from 'firebase/analytics'
+import { getAnalytics, logEvent } from 'firebase/analytics';
 
 function MyPageViewLogger({ location }) {
   const analytics = useAnalytics();
@@ -475,7 +504,7 @@ function MyPageViewLogger({ location }) {
 }
 
 function App() {
-  const app = useFirebaseApp()
+  const app = useFirebaseApp();
 
   return (
     <AnalyticsProvider sdk={getAnalytics(app)}>
