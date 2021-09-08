@@ -4,27 +4,32 @@ import { useState } from 'react';
 import { useFirebaseApp, FunctionsProvider, useFunctions } from 'reactfire';
 import { CardSection } from '../display/Card';
 import { LoadingSpinner } from '../display/LoadingSpinner';
-import { AuthWrapper } from './Auth';
-import {getFunctions, httpsCallable} from 'firebase/functions';
+import { WideButton } from '../display/Button';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 
-
-function Calculator() {
+function UpperCaser() {
   const functions = useFunctions();
-  const remoteCalculator = httpsCallable<{firstNumber: number, secondNumber: number, operator: '+'}, number>(functions 'calculate');
+  const capitalizeTextRemoteFunction = httpsCallable<{ text: string }, string>(functions, 'capitalizeText');
+  const [uppercasedText, setText] = useState<string>('');
+  const [isUppercasing, setIsUppercasing] = useState<boolean>(false);
 
-  const [calculationResult, setResult] = useState<null | number>(null);
+  async function handleButtonClick() {
+    setIsUppercasing(true);
 
-  async function handleButtonClick(firstNumber, secondNumber, operator) {
-    const remoteCalculatorResponse = await remoteCalculator({ firstNumber, secondNumber, operator });
+    const greetings = ['Hello World', 'yo', `what's up?`];
+    const textToUppercase = greetings[Math.floor(Math.random() * greetings.length)];
+    const { data: capitalizedText } = await capitalizeTextRemoteFunction({ text: textToUppercase });
+    setText(capitalizedText);
 
-    setResult(remoteCalculatorResponse.data);
+    setIsUppercasing(false);
   }
 
-  if (!calculationResult) {
-    return <button onClick={() => handleButtonClick(1, 2, '+')}>Click me to add 1 + 2</button>;
-  } else {
-    return <pre>{calculationResult}</pre>;
-  }
+  return (
+    <>
+      <WideButton label="Uppercase some text" onClick={handleButtonClick} />
+      {isUppercasing ? <LoadingSpinner /> : <span>{uppercasedText}</span>}
+    </>
+  );
 }
 
 export function Functions() {
@@ -33,7 +38,7 @@ export function Functions() {
   return (
     <FunctionsProvider sdk={getFunctions(app)}>
       <CardSection title="Call a cloud function">
-        <Calculator />
+        <UpperCaser />
       </CardSection>
     </FunctionsProvider>
   );
