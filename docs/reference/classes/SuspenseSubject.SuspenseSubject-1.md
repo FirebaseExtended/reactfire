@@ -353,7 +353,7 @@ node_modules/rxjs/dist/types/internal/Subject.d.ts:27
 
 #### Defined in
 
-[src/SuspenseSubject.ts:61](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L61)
+[src/SuspenseSubject.ts:63](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L63)
 
 ___
 
@@ -395,17 +395,17 @@ ___
 
 #### Defined in
 
-[src/SuspenseSubject.ts:90](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L90)
+[src/SuspenseSubject.ts:92](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L92)
 
 ___
 
 ### value
 
-• `get` **value**(): `undefined` \| `T`
+• `get` **value**(): `T`
 
 #### Returns
 
-`undefined` \| `T`
+`T`
 
 #### Defined in
 
@@ -429,7 +429,7 @@ ___
 
 #### Defined in
 
-[src/SuspenseSubject.ts:65](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L65)
+[src/SuspenseSubject.ts:67](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L67)
 
 ___
 
@@ -443,7 +443,7 @@ ___
 
 #### Defined in
 
-[src/SuspenseSubject.ts:71](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L71)
+[src/SuspenseSubject.ts:73](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L73)
 
 ___
 
@@ -463,7 +463,7 @@ ___
 
 #### Defined in
 
-[src/SuspenseSubject.ts:82](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L82)
+[src/SuspenseSubject.ts:84](https://github.com/FirebaseExtended/reactfire/blob/main/src/SuspenseSubject.ts#L84)
 
 ___
 

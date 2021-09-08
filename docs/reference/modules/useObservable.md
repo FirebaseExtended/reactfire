@@ -66,4 +66,4 @@ ___
 
 #### Defined in
 
-[src/useObservable.ts:66](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L66)
+[src/useObservable.ts:95](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L95)

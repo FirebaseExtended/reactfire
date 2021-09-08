@@ -48,14 +48,16 @@ export class SuspenseSubject<T> extends Subject<T> {
     return this._hasValue || !!this._error;
   }
 
-  get value(): T | undefined {
+  get value(): T {
     // TODO figure out how to reset the cache here, if I _reset() here before throwing
     // it doesn't seem to work.
     // As it is now, this will burn the cache entry until the timeout fires.
     if (this._error) {
       throw this._error;
+    } else if (!this.hasValue) {
+      throw Error('Can only get value if SuspenseSubject has a value');
     }
-    return this._value;
+    return this._value as T;
   }
 
   get firstEmission(): Promise<void> {

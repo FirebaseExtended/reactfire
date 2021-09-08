@@ -63,55 +63,75 @@ export interface ObservableStatus<T> {
   firstValuePromise: Promise<void>;
 }
 
+function reducerFactory<T>(observable: SuspenseSubject<T>) {
+  return function reducer(state: ObservableStatus<T>, action: 'value' | 'error' | 'complete'): ObservableStatus<T> {
+    // always make sure these values are in sync with the observable
+    const newState = {
+      ...state,
+      hasEmitted: state.hasEmitted || observable.hasValue,
+      error: observable.ourError,
+      firstValuePromise: observable.firstEmission,
+    };
+    if (observable.hasValue) {
+      newState.data = observable.value;
+    }
+
+    switch (action) {
+      case 'value':
+        newState.status = 'success';
+        return newState;
+      case 'error':
+        newState.status = 'error';
+        return newState;
+      case 'complete':
+        newState.isComplete = true;
+        return newState;
+      default:
+        throw new Error(`invalid action "${action}"`);
+    }
+  };
+}
+
 export function useObservable<T = unknown>(observableId: string, source: Observable<T>, config: ReactFireOptions = {}): ObservableStatus<T> {
+  // Register the observable with the cache
   if (!observableId) {
     throw new Error('cannot call useObservable without an observableId');
   }
   const observable = preloadObservable(source, observableId);
 
+  // Suspend if suspense is enabled and no initial data exists
   const hasInitialData = config.hasOwnProperty('initialData') || config.hasOwnProperty('startWithValue');
-
+  const hasData = observable.hasValue || hasInitialData;
   const suspenseEnabled = useSuspenseEnabledFromConfigAndContext(config.suspense);
-
-  if (suspenseEnabled === true && !observable.hasValue && (!config?.initialData ?? !config?.startWithValue)) {
+  if (suspenseEnabled === true && !hasData) {
     throw observable.firstEmission;
   }
 
-  const [latest, setValue] = React.useState(() => (observable.hasValue ? observable.value : config.initialData ?? config.startWithValue));
-  const [isComplete, setIsComplete] = React.useState(false);
-  const [hasError, setHasError] = React.useState(false);
+  const initialState: ObservableStatus<T> = {
+    status: hasData ? 'success' : 'loading',
+    hasEmitted: hasData,
+    isComplete: false,
+    data: observable.hasValue ? observable.value : config?.initialData ?? config?.startWithValue,
+    error: observable.ourError,
+    firstValuePromise: observable.firstEmission,
+  };
+  const [status, dispatch] = React.useReducer<React.Reducer<ObservableStatus<T>, 'value' | 'error' | 'complete'>>(reducerFactory<T>(observable), initialState);
+
   React.useEffect(() => {
     const subscription = observable.subscribe({
-      next: (v) => {
-        setValue(() => v);
+      next: () => {
+        dispatch('value');
       },
       error: (e) => {
-        setHasError(true);
+        dispatch('error');
         throw e;
       },
       complete: () => {
-        setIsComplete(true);
+        dispatch('complete');
       },
     });
     return () => subscription.unsubscribe();
   }, [observable]);
 
-  let status: ObservableStatus<T>['status'];
-
-  if (hasError) {
-    status = 'error';
-  } else if (observable.hasValue || hasInitialData) {
-    status = 'success';
-  } else {
-    status = 'loading';
-  }
-
-  return {
-    status,
-    hasEmitted: observable.hasValue || hasInitialData,
-    isComplete: isComplete,
-    data: latest,
-    error: observable.ourError,
-    firstValuePromise: observable.firstEmission,
-  };
+  return status;
 }
