@@ -26,7 +26,7 @@ describe('Storage', () => {
 
       const uploadTask = uploadBytesResumable(testFileRef, someBytes);
 
-      const { result } = renderHook(() => useStorageTask<UploadTaskSnapshot>(uploadTask, testFileRef), { wrapper: Provider });
+      const { result, waitFor } = renderHook(() => useStorageTask<UploadTaskSnapshot>(uploadTask, testFileRef), { wrapper: Provider });
 
       const uploadTaskSnapshots: Array<UploadTaskSnapshot> = [];
       let hasUploadTaskCompleted = false;
@@ -44,8 +44,8 @@ describe('Storage', () => {
         }
       );
 
-      await actOnHooks(async () => {
-        await uploadTask.then();
+      await waitFor(() => {
+        return hasUploadTaskCompleted && result.current.isComplete;
       });
 
       expect(result.error).toEqual(uploadTaskError);
