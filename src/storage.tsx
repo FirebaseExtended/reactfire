@@ -1,32 +1,10 @@
 import * as React from 'react';
-import { getDownloadURL } from 'rxfire/storage';
-import { Observable } from 'rxjs';
+import { getDownloadURL, fromTask } from 'rxfire/storage';
 import { ReactFireOptions, useObservable, ObservableStatus, useStorage } from './';
 import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp';
 import { ref } from 'firebase/storage';
 
 import type { UploadTask, UploadTaskSnapshot, StorageReference, FirebaseStorage } from 'firebase/storage';
-
-/**
- * modified version of rxFire's _fromTask
- *
- * @param task
- */
-function _fromTask(task: UploadTask) {
-  return new Observable<UploadTaskSnapshot>((subscriber) => {
-    const progress = (snap: UploadTaskSnapshot) => {
-      return subscriber.next(snap);
-    };
-    const error = (e: any) => subscriber.error(e);
-    const complete = () => {
-      return subscriber.complete();
-    };
-    task.on('state_changed', progress, error, complete);
-
-    // I REMOVED THE UNSUBSCRIBE RETURN BECAUSE IT CANCELS THE UPLOAD
-    // https://github.com/firebase/firebase-js-sdk/issues/1659
-  });
-}
 
 /**
  * Subscribe to the progress of a storage task
@@ -37,7 +15,7 @@ function _fromTask(task: UploadTask) {
  */
 export function useStorageTask<T = unknown>(task: UploadTask, ref: StorageReference, options?: ReactFireOptions<T>): ObservableStatus<UploadTaskSnapshot | T> {
   const observableId = `storage:task:${ref.toString()}`;
-  const observable$ = _fromTask(task);
+  const observable$ = fromTask(task);
 
   return useObservable(observableId, observable$, options);
 }

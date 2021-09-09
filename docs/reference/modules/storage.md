@@ -28,7 +28,7 @@
 
 #### Defined in
 
-[src/storage.tsx:100](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L100)
+[src/storage.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L78)
 
 ___
 
@@ -57,7 +57,7 @@ Subscribe to a storage ref's download URL
 
 #### Defined in
 
-[src/storage.tsx:51](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L51)
+[src/storage.tsx:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L29)
 
 ___
 
@@ -87,4 +87,4 @@ Subscribe to the progress of a storage task
 
 #### Defined in
 
-[src/storage.tsx:38](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L38)
+[src/storage.tsx:16](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L16)
