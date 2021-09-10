@@ -336,7 +336,7 @@ If you want to call a function when a component renders, instead of in response 
 function LikeCount({ videoId }) {
   const { status, data: likeCount } = useCallableFunctionResponse('countVideoLikes', { data: { videoId: videoId } });
 
-  return <span>This video has {status === 'loading' ? '...' : likeCount} views</span>;
+  return <span>This video has {status === 'loading' ? '...' : likeCount} likes</span>;
 }
 ```
 
