@@ -334,7 +334,7 @@ If you want to call a function when a component renders, instead of in response 
 
 ```jsx
 function LikeCount({ videoId }) {
-  const { status, data: likeCount } = useCallableFunctionResponse('capitalizeText', { data: { videoId: videoId } });
+  const { status, data: likeCount } = useCallableFunctionResponse('countVideoLikes', { data: { videoId: videoId } });
 
   return <span>This video has {status === 'loading' ? '...' : likeCount} views</span>;
 }
