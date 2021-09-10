@@ -36,4 +36,4 @@ Calls a callable function.
 
 #### Defined in
 
-src/functions.tsx:13
+[src/functions.tsx:13](https://github.com/FirebaseExtended/reactfire/blob/main/src/functions.tsx#L13)
