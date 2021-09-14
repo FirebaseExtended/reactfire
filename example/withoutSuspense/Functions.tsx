@@ -1,7 +1,7 @@
 import 'firebase/storage';
 import * as React from 'react';
 import { useState } from 'react';
-import { useFirebaseApp, FunctionsProvider, useFunctions } from 'reactfire';
+import { useFirebaseApp, FunctionsProvider, useFunctions, useCallableFunctionResponse } from 'reactfire';
 import { CardSection } from '../display/Card';
 import { LoadingSpinner } from '../display/LoadingSpinner';
 import { WideButton } from '../display/Button';
@@ -13,11 +13,12 @@ function UpperCaser() {
   const [uppercasedText, setText] = useState<string>('');
   const [isUppercasing, setIsUppercasing] = useState<boolean>(false);
 
+  const greetings = ['Hello World', 'yo', `what's up?`];
+  const textToUppercase = greetings[Math.floor(Math.random() * greetings.length)];
+
   async function handleButtonClick() {
     setIsUppercasing(true);
 
-    const greetings = ['Hello World', 'yo', `what's up?`];
-    const textToUppercase = greetings[Math.floor(Math.random() * greetings.length)];
     const { data: capitalizedText } = await capitalizeTextRemoteFunction({ text: textToUppercase });
     setText(capitalizedText);
 
@@ -27,9 +28,21 @@ function UpperCaser() {
   return (
     <>
       <WideButton label="Uppercase some text" onClick={handleButtonClick} />
-      {isUppercasing ? <LoadingSpinner /> : <span>{uppercasedText}</span>}
+      {isUppercasing ? <LoadingSpinner /> : <span>{uppercasedText || `click the button to capitalize "${textToUppercase}"`}</span>}
     </>
   );
+}
+
+function UpperCaserOnRender() {
+  const greetings = ['Hello World', 'yo', `what's up?`];
+  const textToUppercase = greetings[Math.floor(Math.random() * greetings.length)];
+  const { status, data: uppercasedText } = useCallableFunctionResponse<{ text: string }, string>('capitalizeText', { data: { text: textToUppercase } });
+
+  if (status === 'loading') {
+    return <LoadingSpinner />;
+  }
+
+  return <span>{uppercasedText}</span>;
 }
 
 export function Functions() {
@@ -39,6 +52,9 @@ export function Functions() {
     <FunctionsProvider sdk={getFunctions(app)}>
       <CardSection title="Call a cloud function">
         <UpperCaser />
+      </CardSection>
+      <CardSection title="Call a function on render">
+        <UpperCaserOnRender />
       </CardSection>
     </FunctionsProvider>
   );

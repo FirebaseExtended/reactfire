@@ -36,6 +36,7 @@
 - [useAnalytics](index.md#useanalytics)
 - [useAppCheck](index.md#useappcheck)
 - [useAuth](index.md#useauth)
+- [useCallableFunctionResponse](index.md#usecallablefunctionresponse)
 - [useDatabase](index.md#usedatabase)
 - [useDatabaseList](index.md#usedatabaselist)
 - [useDatabaseListData](index.md#usedatabaselistdata)
@@ -274,6 +275,12 @@ ___
 ### useAuth
 
 Re-exports: [useAuth](sdk.md#useauth)
+
+___
+
+### useCallableFunctionResponse
+
+Re-exports: [useCallableFunctionResponse](functions.md#usecallablefunctionresponse)
 
 ___
 

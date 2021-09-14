@@ -14,7 +14,8 @@
   * [Show a single document](#show-a-single-document)
   * [Show a list of data (collection)](#show-a-list-of-data-collection)
 - [Cloud Functions](#cloud-functions)
-  * [Call a function](#call-a-function)
+  * [Call a function based on user interaction](#call-a-function-based-on-user-interaction)
+  * [Call a function on render](#call-a-function-on-render)
 - [Realtime Database](#realtime-database)
   * [Show an object](#show-an-object)
   * [Show a list of data](#show-a-list-of-data)
@@ -304,7 +305,7 @@ function FavoriteAnimals() {
 
 The following samples assume that `FirebaseAppProvider` and `FunctionsProvider` components exist higher up the component tree.
 
-### Call a function
+### Call a function based on user interaction
 
 ```jsx
 function Calculator() {
@@ -324,6 +325,18 @@ function Calculator() {
   } else {
     return <pre>{calculationResult}</pre>;
   }
+}
+```
+
+### Call a function on render
+
+If you want to call a function when a component renders, instead of in response to user interaction, you can use the `useCallableFunctionResponse` hook.
+
+```jsx
+function LikeCount({ videoId }) {
+  const { status, data: likeCount } = useCallableFunctionResponse('countVideoLikes', { data: { videoId: videoId } });
+
+  return <span>This video has {status === 'loading' ? '...' : likeCount} likes</span>;
 }
 ```
 

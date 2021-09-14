@@ -11,6 +11,7 @@ ReactFire reference docs
 - [database](modules/database.md)
 - [firebaseApp](modules/firebaseApp.md)
 - [firestore](modules/firestore.md)
+- [functions](modules/functions.md)
 - [index](modules/index.md)
 - [performance](modules/performance.md)
 - [remote-config](modules/remote_config.md)
