@@ -20,8 +20,6 @@ export function useCallableFunctionResponse<RequestData, ResponseData>(
   const functions = useFunctions();
   const observableId = `functions:callableResponse:${functionName}:${JSON.stringify(options?.data)}:${JSON.stringify(options?.httpsCallableOptions)}`;
   const obsFactory = rxHttpsCallable<RequestData, ResponseData>(functions, functionName, options?.httpsCallableOptions);
-
-  //@ts-expect-error because RxFire doesn't make data optional. Remove when https://github.com/FirebaseExtended/rxfire/pull/34 is released.
   const observable$ = obsFactory(options?.data);
 
   return useObservable(observableId, observable$, options);
