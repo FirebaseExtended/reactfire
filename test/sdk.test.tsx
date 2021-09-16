@@ -1,8 +1,9 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { deleteApp, getApps, initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 import * as React from 'react';
-import { AuthProvider, FirebaseAppProvider, useAuth } from '../dist';
+import { AuthProvider, FirebaseAppProvider, useAuth, useInitAuth, useInitFirestore } from '../dist';
 import { baseConfig } from './appConfig';
 import { randomString } from './test-utils';
 
@@ -52,4 +53,34 @@ describe('Sdk management', () => {
       expect(result.current).toEqual(authInstance);
     });
   });
+
+  describe('useInitSdk', () => {
+    it('calls each initializer exactly once', async () => {
+      const authInitializer = jest.fn((firebaseApp) => Promise.resolve(getAuth(firebaseApp)));
+      const firestoreInitializer = jest.fn((firebaseApp) => Promise.resolve(getFirestore(firebaseApp)));
+
+      const { rerender, result, waitFor } = renderHook(() => {
+        const {status: firestoreStatus} = useInitFirestore(firestoreInitializer);
+        const {status: authStatus} = useInitAuth(authInitializer);
+
+        return firestoreStatus === 'success' && authStatus === 'success';
+      }, {
+        wrapper: ({ children }) => (
+          <FirebaseAppProvider firebaseConfig={baseConfig}>
+            {children}
+          </FirebaseAppProvider>
+        ),
+      });
+
+      await waitFor(() => result.current === true);
+
+      expect(authInitializer).toBeCalledTimes(1);
+      expect(firestoreInitializer).toBeCalledTimes(1);
+
+      // make sure they aren't called again on rerender
+      rerender();
+      expect(authInitializer).toBeCalledTimes(1);
+      expect(firestoreInitializer).toBeCalledTimes(1);
+    });
+  })
 });

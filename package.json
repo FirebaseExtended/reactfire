@@ -21,6 +21,7 @@
     "test:functions": "firebase emulators:exec --only functions --project=rxfire-525a3 \"tsdx test functions --verbose\"",
     "test:storage": "firebase emulators:exec --only storage --project=rxfire-525a3 \"tsdx test storage --verbose\"",
     "test:useObservable": "tsdx test useObservable --verbose",
+    "test:sdk": "firebase emulators:exec --project=rxfire-525a3 \"tsdx test sdk --verbose\"",
     "lint": "tsdx lint src test",
     "size": "size-limit",
     "analyze": "size-limit --why",
