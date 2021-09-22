@@ -11,8 +11,9 @@ import {
   useFirestoreDocOnce,
   useFirestoreDocDataOnce,
   FirestoreProvider,
+  useFirebaseApp,
+  useFirestore,
 } from '..';
-import { initializeApp } from 'firebase/app';
 import 'firebase/firestore';
 import fetch from 'node-fetch';
 import { baseConfig } from './appConfig';
@@ -21,15 +22,19 @@ import { randomString } from './test-utils';
 import { addDoc, collection, doc, getFirestore, query, setDoc, connectFirestoreEmulator, where } from 'firebase/firestore';
 
 describe('Firestore', () => {
-  const app = initializeApp(baseConfig, 'firestore-test-suite');
-  const db = getFirestore(app);
-  connectFirestoreEmulator(db, 'localhost', 8080);
+  const Provider: React.FunctionComponent = ({ children }) => {
+    const SDKProvider: React.FunctionComponent = ({children}) => {
+      const firebaseApp = useFirebaseApp();
 
-  const Provider = ({ children }: { children: React.ReactNode }) => (
-    <FirebaseAppProvider firebaseApp={app}>
-      <FirestoreProvider sdk={db}>{children}</FirestoreProvider>
-    </FirebaseAppProvider>
-  );
+      const firestore = getFirestore(firebaseApp);
+      connectFirestoreEmulator(firestore, 'localhost', 8080);
+
+      return <FirestoreProvider sdk={firestore}>{children}</FirestoreProvider>
+    }
+    return (<FirebaseAppProvider firebaseConfig={baseConfig} appName="test-emulator-connect">
+      <SDKProvider>{children}</SDKProvider>
+    </FirebaseAppProvider>)
+  };
 
   afterEach(async () => {
     hooksCleanup();
@@ -43,11 +48,19 @@ describe('Firestore', () => {
     // IF THIS TEST FAILS, MAKE SURE YOU'RE RUNNING THESE TESTS BY DOING:
     // yarn test
 
+    // get Firestore instance
+    const {result: useFirestoreResult} = renderHook(() => useFirestore(), {wrapper: Provider});
+    const db = useFirestoreResult.current;
+
     await addDoc(collection(db, randomString()), { a: 'hello' });
   });
 
   describe('useFirestoreDoc', () => {
     it('can get a Firestore document', async () => {
+      // get Firestore instance
+      const {result: useFirestoreResult} = renderHook(() => useFirestore(), {wrapper: Provider});
+      const db = useFirestoreResult.current;
+
       const mockData = { a: 'hello' };
 
       const ref = doc(collection(db, randomString()), randomString());
@@ -69,6 +82,10 @@ describe('Firestore', () => {
 
   describe('useFirestoreDocData', () => {
     it('can get a Firestore document', async () => {
+      // get Firestore instance
+      const {result: useFirestoreResult} = renderHook(() => useFirestore(), {wrapper: Provider});
+      const db = useFirestoreResult.current;
+
       const mockData = { a: 'hello' };
 
       const ref = doc(collection(db, randomString()), randomString());
@@ -87,6 +104,10 @@ describe('Firestore', () => {
     });
 
     it('returns undefined if document does not exist', async () => {
+      // get Firestore instance
+      const {result: useFirestoreResult} = renderHook(() => useFirestore(), {wrapper: Provider});
+      const db = useFirestoreResult.current;
+
       const collectionRef = collection(db, randomString());
       const docIdThatExists = randomString();
       const docIdThatDoesNotExist = randomString();
@@ -106,6 +127,10 @@ describe('Firestore', () => {
 
   describe('useFirestoreDocOnce', () => {
     it('works when the document does not exist, and does not update when it is created', async () => {
+      // get Firestore instance
+      const {result: useFirestoreResult} = renderHook(() => useFirestore(), {wrapper: Provider});
+      const db = useFirestoreResult.current;
+      
       const ref = doc(collection(db, randomString()), randomString());
 
       const { result: subscribeResult, waitFor: waitForSubscribe } = renderHook(() => useFirestoreDoc(ref), { wrapper: Provider });
@@ -126,6 +151,10 @@ describe('Firestore', () => {
 
   describe('useFirestoreDocDataOnce', () => {
     it('does not update on database changes', async () => {
+      // get Firestore instance
+      const {result: useFirestoreResult} = renderHook(() => useFirestore(), {wrapper: Provider});
+      const db = useFirestoreResult.current;
+
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
@@ -152,6 +181,10 @@ describe('Firestore', () => {
 
   describe('useFirestoreCollection', () => {
     it('can get a Firestore collection', async () => {
+      // get Firestore instance
+      const {result: useFirestoreResult} = renderHook(() => useFirestore(), {wrapper: Provider});
+      const db = useFirestoreResult.current;
+
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
@@ -169,6 +202,10 @@ describe('Firestore', () => {
     });
 
     it('Returns different data for different queries on the same path', async () => {
+      // get Firestore instance
+      const {result: useFirestoreResult} = renderHook(() => useFirestore(), {wrapper: Provider});
+      const db = useFirestoreResult.current;
+      
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
@@ -197,6 +234,10 @@ describe('Firestore', () => {
 
   describe('useFirestoreCollectionData', () => {
     it('can get a Firestore collection', async () => {
+      // get Firestore instance
+      const {result: useFirestoreResult} = renderHook(() => useFirestore(), {wrapper: Provider});
+      const db = useFirestoreResult.current;
+
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
@@ -213,6 +254,10 @@ describe('Firestore', () => {
     });
 
     it('Returns different data for different queries on the same path', async () => {
+      // get Firestore instance
+      const {result: useFirestoreResult} = renderHook(() => useFirestore(), {wrapper: Provider});
+      const db = useFirestoreResult.current;
+      
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
