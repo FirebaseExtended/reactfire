@@ -88,6 +88,12 @@ function FirebaseComponents({ children }) {
 
 Some products benefit from asynchronous initialization. For that, ReactFire has hooks like `useInitFirestore` and `useInitRemoteConfig`. Learn more about these in the individual product sections below.
 
+If you _don't_ set up a provider for a Firebase product SDK, you'll receive the following error:
+
+```
+SDK not found. useSdk must be called from within a provider
+```
+
 ### Connect to the Firebase Local Emulator Suite
 
 Connect a product SDK to the emulator before passing it to a provider. For example, to connect to the Auth and Realtime Database emulators:
@@ -158,7 +164,7 @@ See the [App Check setup guide in the Firebase docs](https://firebase.google.com
 
 ## Auth
 
-The following samples assume that `FirebaseAppProvider` and `AuthProvider` components exist higher up the component tree.
+The following samples assume that `FirebaseAppProvider` and `AuthProvider` components exist higher up the component tree (see [setup instructions](#setup) for more detail).
 
 ### Display the current signed-in user
 
@@ -217,7 +223,7 @@ const { status, data: signInCheckResult } = useSignInCheck({
 
 ## Cloud Firestore
 
-The following samples assume that `FirebaseAppProvider` and `FirestoreProvider` components exist higher up the component tree.
+The following samples assume that `FirebaseAppProvider` and `FirestoreProvider` components exist higher up the component tree (see [setup instructions](#setup) for more detail).
 
 ### Access data offline
 
@@ -303,7 +309,7 @@ function FavoriteAnimals() {
 
 ## Cloud Functions
 
-The following samples assume that `FirebaseAppProvider` and `FunctionsProvider` components exist higher up the component tree.
+The following samples assume that `FirebaseAppProvider` and `FunctionsProvider` components exist higher up the component tree (see [setup instructions](#setup) for more detail).
 
 ### Call a function based on user interaction
 
@@ -342,7 +348,7 @@ function LikeCount({ videoId }) {
 
 ## Realtime Database
 
-The following samples assume that `FirebaseAppProvider` and `RealtimeDatabaseProvider` components exist higher up the component tree.
+The following samples assume that `FirebaseAppProvider` and `RealtimeDatabaseProvider` components exist higher up the component tree (see [setup instructions](#setup) for more detail).
 
 ### Show an object
 
@@ -389,7 +395,7 @@ function AnimalsList() {
 
 ## Cloud Storage for Firebase
 
-The following samples assume that `FirebaseAppProvider` and `StorageProvider` components exist higher up the component tree.
+The following samples assume that `FirebaseAppProvider` and `StorageProvider` components exist higher up the component tree (see [setup instructions](#setup) for more detail).
 
 ### Fetch and show an image
 
@@ -429,7 +435,7 @@ function UploadProgress({ uploadTask, storageRef }) {
 
 ## Remote Config
 
-The following samples assume that `FirebaseAppProvider` and `RemoteConfigProvider` components exist higher up the component tree.
+The following samples assume that `FirebaseAppProvider` and `RemoteConfigProvider` components exist higher up the component tree (see [setup instructions](#setup) for more detail).
 
 ### Initialize, fetch, and activate
 
