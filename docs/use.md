@@ -2,33 +2,34 @@
 
 <!-- toc -->
 
-- [Setup](#setup)
-  * [Initialize product SDKs and register them with ReactFire](#initialize-product-sdks-and-register-them-with-reactfire)
-  * [Connect to the Firebase Local Emulator Suite](#connect-to-the-firebase-local-emulator-suite)
-  * [Set up App Check](#set-up-app-check)
-- [Auth](#auth)
-  * [Display the current signed-in user](#display-the-current-signed-in-user)
-  * [Only render a component if a user is signed in](#only-render-a-component-if-a-user-is-signed-in)
-- [Cloud Firestore](#cloud-firestore)
-  * [Access data offline](#access-data-offline)
-  * [Show a single document](#show-a-single-document)
-  * [Show a list of data (collection)](#show-a-list-of-data-collection)
-- [Cloud Functions](#cloud-functions)
-  * [Call a function based on user interaction](#call-a-function-based-on-user-interaction)
-  * [Call a function on render](#call-a-function-on-render)
-- [Realtime Database](#realtime-database)
-  * [Show an object](#show-an-object)
-  * [Show a list of data](#show-a-list-of-data)
-- [Cloud Storage for Firebase](#cloud-storage-for-firebase)
-  * [Fetch and show an image](#fetch-and-show-an-image)
-  * [Show upload status](#show-upload-status)
-- [Remote Config](#remote-config)
-  * [Initialize, fetch, and activate](#initialize-fetch-and-activate)
-  * [Get a string](#get-a-string)
-- [Performance Monitoring](#performance-monitoring)
-  * [Load Performance Monitoring asynchronously](#load-performance-monitoring-asynchronously)
-- [Log Page Views to Google Analytics for Firebase with React Router](#log-page-views-to-google-analytics-for-firebase-with-react-router)
-- [Advanced: Using RxJS observables to combine multiple data sources](#advanced-using-rxjs-observables-to-combine-multiple-data-sources)
+- [Using ReactFire](#using-reactfire)
+  - [Setup](#setup)
+    - [Initialize product SDKs and register them with ReactFire](#initialize-product-sdks-and-register-them-with-reactfire)
+    - [Connect to the Firebase Local Emulator Suite](#connect-to-the-firebase-local-emulator-suite)
+    - [Set up App Check](#set-up-app-check)
+  - [Auth](#auth)
+    - [Display the current signed-in user](#display-the-current-signed-in-user)
+    - [Only render a component if a user is signed in](#only-render-a-component-if-a-user-is-signed-in)
+  - [Cloud Firestore](#cloud-firestore)
+    - [Access data offline](#access-data-offline)
+    - [Show a single document](#show-a-single-document)
+    - [Show a list of data (collection)](#show-a-list-of-data-collection)
+  - [Cloud Functions](#cloud-functions)
+    - [Call a function based on user interaction](#call-a-function-based-on-user-interaction)
+    - [Call a function on render](#call-a-function-on-render)
+  - [Realtime Database](#realtime-database)
+    - [Show an object](#show-an-object)
+    - [Show a list of data](#show-a-list-of-data)
+  - [Cloud Storage for Firebase](#cloud-storage-for-firebase)
+    - [Fetch and show an image](#fetch-and-show-an-image)
+    - [Show upload status](#show-upload-status)
+  - [Remote Config](#remote-config)
+    - [Initialize, fetch, and activate](#initialize-fetch-and-activate)
+    - [Get a string](#get-a-string)
+  - [Performance Monitoring](#performance-monitoring)
+    - [Load Performance Monitoring asynchronously](#load-performance-monitoring-asynchronously)
+  - [Log Page Views to Google Analytics for Firebase with React Router](#log-page-views-to-google-analytics-for-firebase-with-react-router)
+  - [Advanced: Using RxJS observables to combine multiple data sources](#advanced-using-rxjs-observables-to-combine-multiple-data-sources)
 
 <!-- tocstop -->
 
@@ -541,4 +542,4 @@ function App() {
 
 ## Advanced: Using RxJS observables to combine multiple data sources
 
-All ReactFire hooks are powered by [`useObservable`](./reference.md#useObservable). By calling `useObservable` directly, you can subscribe to any observable in the same manner as the built-in ReactFire hooks. If you use [RxFire](https://github.com/firebase/firebase-js-sdk/tree/master/packages/rxfire#rxfire) and `useObservable` together, you can accomplish more advanced read patterns (like [OR queries in Firestore](https://stackoverflow.com/a/53497072/4816918)!).
+All ReactFire hooks are powered by [`useObservable`](./reference/modules/useObservable.md). By calling `useObservable` directly, you can subscribe to any observable in the same manner as the built-in ReactFire hooks. If you use [RxFire](https://github.com/firebase/firebase-js-sdk/tree/master/packages/rxfire#rxfire) and `useObservable` together, you can accomplish more advanced read patterns (like [OR queries in Firestore](https://stackoverflow.com/a/53497072/4816918)!).
