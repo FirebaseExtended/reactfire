@@ -15,15 +15,15 @@ import { ObservableStatus, useObservable } from './useObservable';
 import { from } from 'rxjs';
 import { ReactFireOptions } from '.';
 
-const AppCheckSdkContext = React.createContext<AppCheck | undefined>(undefined);
-const AuthSdkContext = React.createContext<Auth | undefined>(undefined);
-const AnalyticsSdkContext = React.createContext<Analytics | undefined>(undefined);
-const DatabaseSdkContext = React.createContext<Database | undefined>(undefined);
-const FirestoreSdkContext = React.createContext<Firestore | undefined>(undefined);
-const FunctionsSdkContext = React.createContext<Functions | undefined>(undefined);
-const StorageSdkContext = React.createContext<FirebaseStorage | undefined>(undefined);
-const PerformanceSdkContext = React.createContext<FirebasePerformance | undefined>(undefined);
-const RemoteConfigSdkContext = React.createContext<RemoteConfig | undefined>(undefined);
+export const AppCheckSdkContext = React.createContext<AppCheck | undefined>(undefined);
+export const AuthSdkContext = React.createContext<Auth | undefined>(undefined);
+export const AnalyticsSdkContext = React.createContext<Analytics | undefined>(undefined);
+export const DatabaseSdkContext = React.createContext<Database | undefined>(undefined);
+export const FirestoreSdkContext = React.createContext<Firestore | undefined>(undefined);
+export const FunctionsSdkContext = React.createContext<Functions | undefined>(undefined);
+export const StorageSdkContext = React.createContext<FirebaseStorage | undefined>(undefined);
+export const PerformanceSdkContext = React.createContext<FirebasePerformance | undefined>(undefined);
+export const RemoteConfigSdkContext = React.createContext<RemoteConfig | undefined>(undefined);
 
 type FirebaseSdks = Analytics | AppCheck | Auth | Database | Firestore | FirebasePerformance | FirebaseStorage | Functions | RemoteConfig;
 
