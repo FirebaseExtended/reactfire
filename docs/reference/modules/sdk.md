@@ -4,6 +4,18 @@
 
 ## Table of contents
 
+### Variables
+
+- [AnalyticsSdkContext](sdk.md#analyticssdkcontext)
+- [AppCheckSdkContext](sdk.md#appchecksdkcontext)
+- [AuthSdkContext](sdk.md#authsdkcontext)
+- [DatabaseSdkContext](sdk.md#databasesdkcontext)
+- [FirestoreSdkContext](sdk.md#firestoresdkcontext)
+- [FunctionsSdkContext](sdk.md#functionssdkcontext)
+- [PerformanceSdkContext](sdk.md#performancesdkcontext)
+- [RemoteConfigSdkContext](sdk.md#remoteconfigsdkcontext)
+- [StorageSdkContext](sdk.md#storagesdkcontext)
+
 ### Functions
 
 - [AnalyticsProvider](sdk.md#analyticsprovider)
@@ -33,6 +45,96 @@
 - [usePerformance](sdk.md#useperformance)
 - [useRemoteConfig](sdk.md#useremoteconfig)
 - [useStorage](sdk.md#usestorage)
+
+## Variables
+
+### AnalyticsSdkContext
+
+• `Const` **AnalyticsSdkContext**: `Context`<`undefined` \| `Analytics`\>
+
+#### Defined in
+
+[src/sdk.tsx:20](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L20)
+
+___
+
+### AppCheckSdkContext
+
+• `Const` **AppCheckSdkContext**: `Context`<`undefined` \| `AppCheck`\>
+
+#### Defined in
+
+[src/sdk.tsx:18](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L18)
+
+___
+
+### AuthSdkContext
+
+• `Const` **AuthSdkContext**: `Context`<`undefined` \| `Auth`\>
+
+#### Defined in
+
+[src/sdk.tsx:19](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L19)
+
+___
+
+### DatabaseSdkContext
+
+• `Const` **DatabaseSdkContext**: `Context`<`undefined` \| `Database`\>
+
+#### Defined in
+
+[src/sdk.tsx:21](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L21)
+
+___
+
+### FirestoreSdkContext
+
+• `Const` **FirestoreSdkContext**: `Context`<`undefined` \| `Firestore`\>
+
+#### Defined in
+
+[src/sdk.tsx:22](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L22)
+
+___
+
+### FunctionsSdkContext
+
+• `Const` **FunctionsSdkContext**: `Context`<`undefined` \| `Functions`\>
+
+#### Defined in
+
+[src/sdk.tsx:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L23)
+
+___
+
+### PerformanceSdkContext
+
+• `Const` **PerformanceSdkContext**: `Context`<`undefined` \| `FirebasePerformance`\>
+
+#### Defined in
+
+[src/sdk.tsx:25](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L25)
+
+___
+
+### RemoteConfigSdkContext
+
+• `Const` **RemoteConfigSdkContext**: `Context`<`undefined` \| `RemoteConfig`\>
+
+#### Defined in
+
+[src/sdk.tsx:26](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L26)
+
+___
+
+### StorageSdkContext
+
+• `Const` **StorageSdkContext**: `Context`<`undefined` \| `FirebaseStorage`\>
+
+#### Defined in
+
+[src/sdk.tsx:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L24)
 
 ## Functions
 
