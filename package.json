@@ -29,7 +29,7 @@
   },
   "peerDependencies": {
     "firebase": "^9.0.0",
-    "react": ">=16 || experimental"
+    "react": ">=16 || beta"
   },
   "husky": {
     "hooks": {
@@ -90,9 +90,9 @@
     "jest-environment-jsdom": "^26.6.2",
     "markdown-toc": "^1.2.0",
     "node-fetch": "^2.6.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-test-renderer": "^17.0.2",
+    "react": "beta",
+    "react-dom": "beta",
+    "react-test-renderer": "beta",
     "size-limit": "^4.6.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.2.0",
