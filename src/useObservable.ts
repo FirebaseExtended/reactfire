@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useSyncExternalStore} from 'use-sync-external-store/shim';
 import { Observable } from 'rxjs';
 import { SuspenseSubject } from './SuspenseSubject';
 import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp';
@@ -63,36 +63,8 @@ export interface ObservableStatus<T> {
   firstValuePromise: Promise<void>;
 }
 
-function reducerFactory<T>(observable: SuspenseSubject<T>) {
-  return function reducer(state: ObservableStatus<T>, action: 'value' | 'error' | 'complete'): ObservableStatus<T> {
-    // always make sure these values are in sync with the observable
-    const newState = {
-      ...state,
-      hasEmitted: state.hasEmitted || observable.hasValue,
-      error: observable.ourError,
-      firstValuePromise: observable.firstEmission,
-    };
-    if (observable.hasValue) {
-      newState.data = observable.value;
-    }
-
-    switch (action) {
-      case 'value':
-        newState.status = 'success';
-        return newState;
-      case 'error':
-        newState.status = 'error';
-        return newState;
-      case 'complete':
-        newState.isComplete = true;
-        return newState;
-      default:
-        throw new Error(`invalid action "${action}"`);
-    }
-  };
-}
-
 export function useObservable<T = unknown>(observableId: string, source: Observable<T>, config: ReactFireOptions = {}): ObservableStatus<T> {
+  
   // Register the observable with the cache
   if (!observableId) {
     throw new Error('cannot call useObservable without an observableId');
@@ -107,31 +79,17 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
     throw observable.firstEmission;
   }
 
-  const initialState: ObservableStatus<T> = {
-    status: hasData ? 'success' : 'loading',
-    hasEmitted: hasData,
-    isComplete: false,
-    data: observable.hasValue ? observable.value : config?.initialData ?? config?.startWithValue,
-    error: observable.ourError,
-    firstValuePromise: observable.firstEmission,
-  };
-  const [status, dispatch] = React.useReducer<React.Reducer<ObservableStatus<T>, 'value' | 'error' | 'complete'>>(reducerFactory<T>(observable), initialState);
-
-  React.useEffect(() => {
-    const subscription = observable.subscribe({
-      next: () => {
-        dispatch('value');
-      },
-      error: (e) => {
-        dispatch('error');
-        throw e;
-      },
-      complete: () => {
-        dispatch('complete');
-      },
-    });
+  return useSyncExternalStore<ObservableStatus<T>>(() => {
+    const subscription = observable.subscribe();
     return () => subscription.unsubscribe();
-  }, [observable]);
-
-  return status;
+  }, () => {
+    return {
+      status: hasData ? 'success' : 'loading',
+      hasEmitted: hasData,
+      isComplete: false,
+      data: observable.hasValue ? observable.value : config?.initialData ?? config?.startWithValue,
+      error: observable.ourError,
+      firstValuePromise: observable.firstEmission,
+    }
+  });
 }

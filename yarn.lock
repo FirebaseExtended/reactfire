@@ -2087,6 +2087,11 @@
   dependencies:
     "@types/jest" "*"
 
+"@types/use-sync-external-store@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@types/use-sync-external-store/-/use-sync-external-store-0.0.3.tgz#b6725d5f4af24ace33b36fafd295136e75509f43"
+  integrity sha512-EwmlvuaxPNej9+T4v5AuBPJa2x2UOJVdjCtDHgcDqitUeOtjnJKJ+apYjVcAoBEMjKW1VVFGZLUb5+qqa09XFA==
+
 "@types/yargs-parser@*":
   version "20.2.1"
   resolved "https://registry.yarnpkg.com/@types/yargs-parser/-/yargs-parser-20.2.1.tgz#3b9ce2489919d9e4fea439b76916abc34b2df129"
@@ -10132,13 +10137,13 @@ re2@^1.15.8:
     node-gyp "^8.0.0"
 
 react-dom@beta:
-  version "18.0.0-beta-f320ef88f-20211116"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.0.0-beta-f320ef88f-20211116.tgz#4466158f7ca1d441ca58a63350d8a62ebf0e2e2c"
-  integrity sha512-OfrNMNIJStu7VZVapIgCjco7wnG6PsKy6yGn66EDZfJvP2QVYDUkx15+z5Gh52vuyuINUSDsDMP1LGDGq5GTXQ==
+  version "18.0.0-beta-24dd07bd2-20211208"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.0.0-beta-24dd07bd2-20211208.tgz#d2fbcc9a080f9983945b4e53db33bba7f7a560f6"
+  integrity sha512-B6pxB3+lI+Tct6WKs+Db5JKSfQUqcfAXz706EMdRlx4qs+PcMpftgicRNO7j6F6zqMMn8bqV1tjHQaqw00UcGg==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
-    scheduler "0.21.0-beta-f320ef88f-20211116"
+    scheduler "0.21.0-beta-24dd07bd2-20211208"
 
 react-error-boundary@^3.1.0:
   version "3.1.3"
@@ -10181,9 +10186,9 @@ react-test-renderer@beta:
     scheduler "0.21.0-beta-f320ef88f-20211116"
 
 react@beta:
-  version "18.0.0-beta-f320ef88f-20211116"
-  resolved "https://registry.yarnpkg.com/react/-/react-18.0.0-beta-f320ef88f-20211116.tgz#64dd9c4842fb143f1fb196511202ba612d1f515b"
-  integrity sha512-7OF1CmJpRp+OuEdNtNE8K7+hrFL2X31eD9SN7UOumLIyoBEBbugC8Ul4747kk2VOBB3AkqRAnBXCnbTPnbyQLQ==
+  version "18.0.0-beta-24dd07bd2-20211208"
+  resolved "https://registry.yarnpkg.com/react/-/react-18.0.0-beta-24dd07bd2-20211208.tgz#6bfe825f1253390136f1723c03dfea5bae5c5eec"
+  integrity sha512-XyDoCS4UisFJGfiBDnVeOUbJoyAyxwM/YET8hExf9gFLMJX2bRR+v2OvO7k5jhoUamEQ9xCuvoqs9Kf1QfA3Jg==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
@@ -10744,6 +10749,14 @@ saxes@^5.0.1:
   integrity sha512-5LBh1Tls8c9xgGjw3QrMwETmTMVk0oFgvrFSvWx62llR2hcEInrKNZ2GZCCuuy2lvWrdl5jhbpeqc5hRYKFOcw==
   dependencies:
     xmlchars "^2.2.0"
+
+scheduler@0.21.0-beta-24dd07bd2-20211208:
+  version "0.21.0-beta-24dd07bd2-20211208"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.21.0-beta-24dd07bd2-20211208.tgz#c2564d3f3b6cef16a58f340435f32f70a03998ed"
+  integrity sha512-h2+U1Cg6w2k3mrURC2769U3L116ZaeMSVRYJdm6R4n99z1XJq5Hus7+JeM5fO0djBKPO3kykilTw/16tp+cOjA==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
 
 scheduler@0.21.0-beta-f320ef88f-20211116:
   version "0.21.0-beta-f320ef88f-20211116"
@@ -12296,6 +12309,11 @@ url@^0.11.0:
   dependencies:
     punycode "1.3.2"
     querystring "0.2.0"
+
+use-sync-external-store@beta:
+  version "1.0.0-beta-24dd07bd2-20211208"
+  resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.0.0-beta-24dd07bd2-20211208.tgz#5c772042ed6890354e164783b955c8a6b05a3bc5"
+  integrity sha512-zsUliTCfuJYm5eUMfVhbU+MarwyBKlftNUrC7rAJH+OiwZi5n3/8VEqirRHup1EkVtNPjIIlXss/fbKCYGLTrA==
 
 use@^3.1.0:
   version "3.1.1"
