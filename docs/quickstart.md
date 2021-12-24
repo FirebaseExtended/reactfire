@@ -79,19 +79,11 @@ npm install --save firebase reactfire
 
 > Open the src directory and add code to index.js as described below.
 
-1. Import from the Firebase SDK
-
-   ```js
-   //...
-   import { doc, getFirestore } from 'firebase/firestore';
-   //...
-   ```
-
 1. Import from ReactFire
 
    ```js
    //...
-   import { FirebaseAppProvider, FirestoreProvider, useFirestoreDocData, useFirestore, useFirebaseApp } from 'reactfire';
+   import { FirebaseAppProvider } from 'reactfire';
    //...
    ```
 
@@ -131,8 +123,8 @@ npm install --save firebase reactfire
 
    ```js
    //...
-   import 'firebase/firestore';
-   import { useFirestoreDocData, useFirestore } from 'reactfire';
+   import { doc, getFirestore } from 'firebase/firestore';
+   import { FirestoreProvider, useFirestoreDocData, useFirestore, useFirebaseApp } from 'reactfire';
    //...
    ```
 
