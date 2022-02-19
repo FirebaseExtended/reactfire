@@ -100,7 +100,9 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
   const observable = preloadObservable(source, observableId);
 
   // Suspend if suspense is enabled and no initial data exists
-  const hasInitialData = config.hasOwnProperty('initialData') || config.hasOwnProperty('startWithValue');
+  // Changed from using Object.hasOwnProperty() to evaluating
+  // the falsy of the properties as a boolean.
+  const hasInitialData = !!(config.initialData || config.startWithValue);
   const hasData = observable.hasValue || hasInitialData;
   const suspenseEnabled = useSuspenseEnabledFromConfigAndContext(config.suspense);
   if (suspenseEnabled === true && !hasData) {
