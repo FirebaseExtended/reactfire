@@ -84,7 +84,7 @@
     "babel-plugin-minify-replace": "^0.5.0",
     "eslint-plugin-no-only-tests": "^2.6.0",
     "firebase": "^9.0.1",
-    "firebase-tools": "^9.16.0",
+    "firebase-tools": "^10.9.2",
     "globalthis": "^1.0.1",
     "husky": "^4.3.0",
     "jest-environment-jsdom": "^26.6.2",
