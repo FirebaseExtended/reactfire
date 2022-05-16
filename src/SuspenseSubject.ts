@@ -1,8 +1,9 @@
 import { empty, Observable, Subject, Subscriber, Subscription } from 'rxjs';
 import { catchError, shareReplay, tap } from 'rxjs/operators';
+import { ObservableStatus } from './useObservable';
 
 export class SuspenseSubject<T> extends Subject<T> {
-  private _value: T | undefined;
+  private _fullStatus: ObservableStatus<T>;
   private _hasValue = false;
   private _timeoutHandler: NodeJS.Timeout;
   private _firstEmission: Promise<void>;
@@ -17,7 +18,17 @@ export class SuspenseSubject<T> extends Subject<T> {
 
   constructor(innerObservable: Observable<T>, private _timeoutWindow: number) {
     super();
+
     this._firstEmission = new Promise<void>((resolve) => (this._resolveFirstEmission = resolve));
+    this._fullStatus = {
+      status: 'loading',
+      hasEmitted: false,
+      isComplete: false,
+      data: undefined,
+      error: undefined,
+      firstValuePromise: this._firstEmission,
+    }
+
     this._innerObservable = innerObservable.pipe(
       tap({
         next: (v) => {
@@ -28,6 +39,9 @@ export class SuspenseSubject<T> extends Subject<T> {
           // resolve the promise, so suspense tries again
           this._error = e;
           this._resolveFirstEmission();
+        },
+        complete: () => {
+          this._complete();
         },
       }),
       catchError(() => empty()),
@@ -41,6 +55,20 @@ export class SuspenseSubject<T> extends Subject<T> {
     this._timeoutHandler = setTimeout(this._reset.bind(this), this._timeoutWindow);
   }
 
+  set initialData(data: T) {
+    // ignore  initialData if we already have data
+    if (this._hasValue === true){
+      return;
+    }
+
+    this._hasValue = true;
+    this._fullStatus = {...this._fullStatus,
+      data: data,
+      hasEmitted: true,
+      status: 'success'
+    }
+  }
+
   get hasValue(): boolean {
     // hasValue returns true if there's an error too
     // so that after we resolve the promise & useObservable is called again
@@ -48,16 +76,12 @@ export class SuspenseSubject<T> extends Subject<T> {
     return this._hasValue || !!this._error;
   }
 
-  get value(): T {
-    // TODO figure out how to reset the cache here, if I _reset() here before throwing
-    // it doesn't seem to work.
-    // As it is now, this will burn the cache entry until the timeout fires.
+  get status(): ObservableStatus<T> {
     if (this._error) {
       throw this._error;
-    } else if (!this.hasValue) {
-      throw Error('Can only get value if SuspenseSubject has a value');
     }
-    return this._value as T;
+
+    return this._fullStatus;
   }
 
   get firstEmission(): Promise<void> {
@@ -65,9 +89,14 @@ export class SuspenseSubject<T> extends Subject<T> {
   }
 
   private _next(value: T) {
-    this._hasValue = true;
-    this._value = value;
     this._resolveFirstEmission();
+    this._hasValue = true;
+
+    this._fullStatus = {...this._fullStatus,
+      data: value,
+      hasEmitted: true,
+      status: 'success'
+    }
   }
 
   private _reset() {
@@ -75,10 +104,21 @@ export class SuspenseSubject<T> extends Subject<T> {
     if (this._warmupSubscription) {
       this._warmupSubscription.unsubscribe();
     }
-    this._hasValue = false;
-    this._value = undefined;
-    this._error = undefined;
+
     this._firstEmission = new Promise<void>((resolve) => (this._resolveFirstEmission = resolve));
+
+    this._fullStatus = {
+      status: 'loading',
+      hasEmitted: false,
+      isComplete: false,
+      data: undefined,
+      error: undefined,
+      firstValuePromise: this._firstEmission,
+    }
+  }
+
+  private _complete() {
+    this._fullStatus = {...this._fullStatus, isComplete: true};
   }
 
   _subscribe(subscriber: Subscriber<T>): Subscription {

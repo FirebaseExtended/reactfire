@@ -26,7 +26,7 @@ export function preloadObservable<T>(source: Observable<T>, id: string) {
   }
 }
 
-export interface ObservableStatus<T> {
+interface BaseObservableStatus<T> {
   /**
    * The loading status.
    *
@@ -52,7 +52,7 @@ export interface ObservableStatus<T> {
    *
    * If `initialData` is passed in, the first value of `data` will be the valuea provided in `initialData` **UNLESS** the underlying observable is ready, in which case it will skip `initialData`.
    */
-  data: T;
+  data: T | undefined;
   /**
    * Any error that may have occurred in the underlying observable
    */
@@ -63,8 +63,19 @@ export interface ObservableStatus<T> {
   firstValuePromise: Promise<void>;
 }
 
+interface ObservableStatusLoading<T> extends BaseObservableStatus<T> {
+  status: 'loading' | 'error';
+  data: undefined;
+}
+
+interface ObservableStatusWithData<T> extends BaseObservableStatus<T> {
+  status: 'success';
+  data: T;
+}
+
+export type ObservableStatus<T> = ObservableStatusLoading<T> | ObservableStatusWithData<T>;
+
 export function useObservable<T = unknown>(observableId: string, source: Observable<T>, config: ReactFireOptions = {}): ObservableStatus<T> {
-  
   // Register the observable with the cache
   if (!observableId) {
     throw new Error('cannot call useObservable without an observableId');
@@ -73,23 +84,23 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
 
   // Suspend if suspense is enabled and no initial data exists
   const hasInitialData = config.hasOwnProperty('initialData') || config.hasOwnProperty('startWithValue');
-  const hasData = observable.hasValue || hasInitialData;
+  if (hasInitialData) {
+    observable.initialData = config.initialData ?? config.startWithValue;
+  }
+  
   const suspenseEnabled = useSuspenseEnabledFromConfigAndContext(config.suspense);
-  if (suspenseEnabled === true && !hasData) {
+  if (suspenseEnabled === true && !observable.hasValue) {
     throw observable.firstEmission;
   }
 
-  return useSyncExternalStore<ObservableStatus<T>>(() => {
-    const subscription = observable.subscribe();
+  return useSyncExternalStore<ObservableStatus<T>>((onStoreChange: () => void) => {
+    const subscription = observable.subscribe({
+      next: onStoreChange,
+      error: onStoreChange,
+      complete: onStoreChange
+    });
     return () => subscription.unsubscribe();
   }, () => {
-    return {
-      status: hasData ? 'success' : 'loading',
-      hasEmitted: hasData,
-      isComplete: false,
-      data: observable.hasValue ? observable.value : config?.initialData ?? config?.startWithValue,
-      error: observable.ourError,
-      firstValuePromise: observable.firstEmission,
-    }
+    return observable.status
   });
 }
