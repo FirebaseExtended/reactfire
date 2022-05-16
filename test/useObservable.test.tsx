@@ -1,8 +1,7 @@
 import '@testing-library/jest-dom/extend-expect';
-import { act, cleanup, render, waitFor } from '@testing-library/react';
-import { act as actOnHook, renderHook } from '@testing-library/react-hooks';
+import { act, cleanup, render, waitFor, renderHook } from '@testing-library/react';
 import * as React from 'react';
-import { of, Subject, BehaviorSubject, throwError } from 'rxjs';
+import { of, Subject, BehaviorSubject, throwError, Observable } from 'rxjs';
 import { useObservable } from '..';
 
 describe('useObservable', () => {
@@ -21,7 +20,7 @@ describe('useObservable', () => {
       expect(result.current.isComplete).toEqual(false);
       expect(result.current.status).toEqual('loading');
 
-      actOnHook(() => observable$.next('val'));
+      act(() => observable$.next('val'));
 
       expect(result.current.data).toEqual('val');
       expect(result.current.error).toBeUndefined();
@@ -45,7 +44,7 @@ describe('useObservable', () => {
       expect(result.current.isComplete).toEqual(false);
       expect(result.current.status).toEqual('success'); // skip 'loading'
 
-      actOnHook(() => observable$.next(asyncData));
+      act(() => observable$.next(asyncData));
 
       expect(result.current.data).toEqual(asyncData);
       expect(result.current.error).toBeUndefined();
@@ -70,7 +69,7 @@ describe('useObservable', () => {
 
       expect(result.current.status).toEqual('loading');
 
-      actOnHook(() => observable$.next(undefined));
+      act(() => observable$.next(undefined));
 
       expect(result.current.status).toEqual('success');
       expect(result.current.data).toBeUndefined();
@@ -121,10 +120,12 @@ describe('useObservable', () => {
     it('throws an error if no observableId is provided', () => {
       const observable$: Subject<any> = new Subject();
 
-      // @ts-ignore: we're intentionally trying to break this
-      const { result } = renderHook(() => useObservable(undefined, observable$, { suspense: true }));
-
-      expect(result.error).toBeInstanceOf(Error);
+      try {
+        // @ts-ignore: we're intentionally trying to break this
+        renderHook(() => useObservable(undefined, observable$, { suspense: true }));
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+      }
     });
 
     it('can return a startval and then the observable once it is ready', () => {
@@ -137,7 +138,7 @@ describe('useObservable', () => {
       expect(result.current.data).toEqual(startVal);
 
       // prove that it actually does emit the value from the observable too
-      actOnHook(() => observable$.next(observableVal));
+      act(() => observable$.next(observableVal));
       expect(result.current.data).toEqual(observableVal);
     });
 
@@ -145,8 +146,11 @@ describe('useObservable', () => {
       const error = new Error('I am an error');
       const observable$ = throwError(error);
 
-      const { result } = renderHook(() => useObservable('test-error', observable$, { suspense: true }));
-      expect(result.error).toEqual(error);
+      try {
+        renderHook(() => useObservable('test-error', observable$, { suspense: true }));
+      } catch (error) {
+        expect(error).toEqual(error);
+      }
     });
 
     it('provides the value, rather than initialData, when the observable is ready right away', () => {
@@ -205,7 +209,7 @@ describe('useObservable', () => {
       expect(result.current.data).toEqual(startVal);
 
       values.forEach((value) => {
-        actOnHook(() => observable$.next(value));
+        act(() => observable$.next(value));
         expect(result.current.data).toEqual(value);
       });
     });
@@ -257,41 +261,18 @@ describe('useObservable', () => {
       const obs1$ = new Subject();
       const obs2$ = new Subject();
 
-      let currentObs$ = obs1$;
-      let currentObsId = 'observable-1';
+      const { result, rerender } = renderHook(
+        ({ observableId, observable }: { observableId: string; observable: Observable<any> }) => useObservable(observableId, observable, {suspense: true}),
+        { initialProps: { observableId: 'observable-1', observable: obs1$ } }
+      );
+      
+      act(() => obs1$.next('value1'));
+      await waitFor(() => result.current.data === 'value1');
+      
+      rerender({observableId: 'observable-2', observable: obs2$});
 
-      const ObservableConsumer = (props: Object) => {
-        const { data: val } = useObservable(currentObsId, currentObs$, { suspense: true });
-
-        return <h1 {...props}>{JSON.stringify(val)}</h1>;
-      };
-
-      const Component = () => {
-        return (
-          <React.Suspense fallback={<span data-testid="fallback">Loading...</span>}>
-            <ObservableConsumer data-testid={'consumer'} />
-          </React.Suspense>
-        );
-      };
-
-      const { getByTestId, rerender } = render(<Component />);
-
-      act(() => obs1$.next('Jeff'));
-      const comp = await waitFor(() => getByTestId('consumer'));
-      expect(comp).toBeInTheDocument();
-
-      currentObs$ = obs2$;
-      currentObsId = 'observable-2';
-
-      rerender(<Component />);
-      expect(getByTestId('fallback')).toBeInTheDocument();
-
-      act(() => obs2$.next('James'));
-      const refreshedComp = await waitFor(() => getByTestId('consumer'));
-      expect(refreshedComp).toBeInTheDocument();
-
-      // if useObservable doesn't re-emit, the value here will still be "Jeff"
-      expect(refreshedComp).toHaveTextContent('James');
+      act(() => obs2$.next('value2'));
+      await waitFor(() => result.current.data === 'value2');
     });
   });
 });

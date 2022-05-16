@@ -23,7 +23,7 @@ import { addDoc, collection, doc, getFirestore, query, setDoc, connectFirestoreE
 describe('Firestore', () => {
   const app = initializeApp(baseConfig, 'firestore-test-suite');
   const db = getFirestore(app);
-  connectFirestoreEmulator(db, 'localhost', 8080);
+  connectFirestoreEmulator(db, 'localhost', 8085);
 
   const Provider = ({ children }: { children: React.ReactNode }) => (
     <FirebaseAppProvider firebaseApp={app}>
@@ -36,7 +36,7 @@ describe('Firestore', () => {
 
     // clear all Firestore emulator data
     // do this AFTER cleaning up hooks, otherwise they'll re-emit values
-    await fetch(`http://localhost:8080/emulator/v1/projects/rxfire-525a3/databases/(default)/documents`, { method: 'DELETE' });
+    await fetch(`http://localhost:8085/emulator/v1/projects/rxfire-525a3/databases/(default)/documents`, { method: 'DELETE' });
   });
 
   test('double check - emulator is running', async () => {
