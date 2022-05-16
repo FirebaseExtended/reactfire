@@ -74,9 +74,10 @@
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@size-limit/preset-small-lib": "^4.6.0",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.2.6",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.2.0",
     "@testing-library/react-hooks": "^5.1.1",
+    "@testing-library/user-event": "^14.2.0",
     "@types/node-fetch": "^2.5.7",
     "@types/react": "^17.0.15",
     "@types/react-dom": "^17.0.9",
@@ -91,16 +92,16 @@
     "jest-environment-jsdom": "^26.6.2",
     "markdown-toc": "^1.2.0",
     "node-fetch": "^2.6.1",
-    "react": "beta",
-    "react-dom": "beta",
-    "react-test-renderer": "beta",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-test-renderer": "^18.1.0",
     "size-limit": "^4.6.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.2.0",
     "typedoc": "^0.21.2",
     "typedoc-plugin-markdown": "^3.6.1",
     "typescript": "^4.2.4",
-    "use-sync-external-store": "beta"
+    "use-sync-external-store": "^1.1.0"
   },
   "dependencies": {
     "rxfire": "^6.0.2",
@@ -110,6 +111,8 @@
     "tsdx/**/jest": "^26.6.3",
     "tsdx/**/ts-jest": "^26.5.5",
     "tsdx/**/prettier": "^2.2.1",
-    "tsdx/**/typescript": "^4.2.4"
+    "tsdx/**/typescript": "^4.2.4",
+    "tsdx/**/eslint": "^8.15.0",
+    "tsdx/**/eslint-plugin-prettier": "^4.0.0"
   }
 }
