@@ -44,7 +44,9 @@ describe('Realtime Database (RTDB)', () => {
 
       const { result } = renderHook(() => useDatabaseObject<QueryChange>(objectRef), { wrapper: Provider });
 
-      await waitFor(() => result.current.status === 'success');
+      await waitFor(() => {
+        expect(result.current.status).toEqual('success');
+      });
 
       expect(result.current.data?.snapshot.val()).toEqual(mockData);
     });
@@ -68,12 +70,6 @@ describe('Realtime Database (RTDB)', () => {
       await act(async () => {
         await Promise.all(updates);
       });
-
-      // make sure every value was emitted
-      // const resultValues = result.all
-      //   .filter((observableStatus) => (observableStatus as ObservableStatus<QueryChange>).status === 'success')
-      //   .map((observableStatus) => (observableStatus as ObservableStatus<QueryChange>).data.snapshot.val());
-      // expect(resultValues).toEqual([initialValue, ...values]);
     });
   });
 
@@ -89,7 +85,7 @@ describe('Realtime Database (RTDB)', () => {
 
       const { result } = renderHook(() => useDatabaseList<QueryChange>(listRef), { wrapper: Provider });
 
-      await waitFor(() => result.current.status === 'success');
+      await waitFor(() => expect(result.current.status).toEqual('success'));
 
       expect(result.current.data?.length).toEqual(2);
       const values = result.current.data?.map((queryChange) => queryChange.snapshot.val());
@@ -112,7 +108,10 @@ describe('Realtime Database (RTDB)', () => {
       const { result: unfilteredResult } = renderHook(() => useDatabaseList(itemsRef), { wrapper: Provider });
       const { result: filteredResult } = renderHook(() => useDatabaseList(filteredItemsRef), { wrapper: Provider });
 
-      await waitFor(() => unfilteredResult.current.status === 'success' && filteredResult.current.status === 'success');
+      await waitFor(() => {
+        expect(unfilteredResult.current.status).toEqual('success');
+        expect(filteredResult.current.status).toEqual('success');
+      });
 
       expect(filteredResult.current.data?.length).toEqual(1);
       expect(unfilteredResult.current.data?.length).toBeGreaterThan(filteredResult.current.data?.length || Number.MAX_SAFE_INTEGER);
