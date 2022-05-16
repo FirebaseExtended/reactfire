@@ -267,12 +267,12 @@ describe('useObservable', () => {
       );
       
       act(() => obs1$.next('value1'));
-      await waitFor(() => result.current.data === 'value1');
+      await waitFor(() => expect(result.current.data).toEqual('value1'));
       
       rerender({observableId: 'observable-2', observable: obs2$});
 
       act(() => obs2$.next('value2'));
-      await waitFor(() => result.current.data === 'value2');
+      await waitFor(() => expect(result.current.data).toEqual('value2'));
     });
   });
 });
