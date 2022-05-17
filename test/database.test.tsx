@@ -93,7 +93,7 @@ describe('Realtime Database (RTDB)', () => {
       expect(values).toEqual([mockData1, mockData2]);
     });
 
-    // TODO(jhuleatt): Figure out why this test only passes if `firebase login` is run
+    // https://github.com/firebase/firebase-tools/issues/4368
     it.skip('Returns different data for different queries on the same path', async () => {
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
