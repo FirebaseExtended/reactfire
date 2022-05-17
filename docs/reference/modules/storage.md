@@ -34,7 +34,7 @@ ___
 
 ### useStorageDownloadURL
 
-▸ **useStorageDownloadURL**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`string` \| `T`\>
+▸ **useStorageDownloadURL**<`T`\>(`ref`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`string` \| `T`\>
 
 Subscribe to a storage ref's download URL
 
@@ -53,7 +53,7 @@ Subscribe to a storage ref's download URL
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`string` \| `T`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`string` \| `T`\>
 
 #### Defined in
 
@@ -63,7 +63,7 @@ ___
 
 ### useStorageTask
 
-▸ **useStorageTask**<`T`\>(`task`, `ref`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`UploadTaskSnapshot` \| `T`\>
+▸ **useStorageTask**<`T`\>(`task`, `ref`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`UploadTaskSnapshot` \| `T`\>
 
 Subscribe to the progress of a storage task
 
@@ -83,7 +83,7 @@ Subscribe to the progress of a storage task
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`UploadTaskSnapshot` \| `T`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`UploadTaskSnapshot` \| `T`\>
 
 #### Defined in
 

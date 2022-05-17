@@ -42,7 +42,7 @@ ___
 
 ### useFirestoreCollection
 
-▸ **useFirestoreCollection**<`T`\>(`query`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`QuerySnapshot`<`T`\>\>
+▸ **useFirestoreCollection**<`T`\>(`query`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`QuerySnapshot`<`T`\>\>
 
 Subscribe to a Firestore collection
 
@@ -61,7 +61,7 @@ Subscribe to a Firestore collection
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`QuerySnapshot`<`T`\>\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`QuerySnapshot`<`T`\>\>
 
 #### Defined in
 
@@ -71,7 +71,7 @@ ___
 
 ### useFirestoreCollectionData
 
-▸ **useFirestoreCollectionData**<`T`\>(`query`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`T`[]\>
+▸ **useFirestoreCollectionData**<`T`\>(`query`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`T`[]\>
 
 Subscribe to a Firestore collection and unwrap the snapshot into an array.
 
@@ -90,7 +90,7 @@ Subscribe to a Firestore collection and unwrap the snapshot into an array.
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`T`[]\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`T`[]\>
 
 #### Defined in
 
@@ -100,7 +100,7 @@ ___
 
 ### useFirestoreDoc
 
-▸ **useFirestoreDoc**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`DocumentSnapshot`<`T`\>\>
+▸ **useFirestoreDoc**<`T`\>(`ref`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`DocumentSnapshot`<`T`\>\>
 
 Suscribe to Firestore Document changes
 
@@ -121,7 +121,7 @@ You can preload data for this hook by calling `preloadFirestoreDoc`
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`DocumentSnapshot`<`T`\>\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`DocumentSnapshot`<`T`\>\>
 
 #### Defined in
 
@@ -131,7 +131,7 @@ ___
 
 ### useFirestoreDocData
 
-▸ **useFirestoreDocData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`T`\>
+▸ **useFirestoreDocData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`T`\>
 
 Suscribe to Firestore Document changes and unwrap the document into a plain object
 
@@ -150,7 +150,7 @@ Suscribe to Firestore Document changes and unwrap the document into a plain obje
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`T`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`T`\>
 
 #### Defined in
 
@@ -160,7 +160,7 @@ ___
 
 ### useFirestoreDocDataOnce
 
-▸ **useFirestoreDocDataOnce**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`T`\>
+▸ **useFirestoreDocDataOnce**<`T`\>(`ref`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`T`\>
 
 Get a Firestore document, unwrap the document into a plain object, and don't subscribe to changes
 
@@ -179,7 +179,7 @@ Get a Firestore document, unwrap the document into a plain object, and don't sub
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`T`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`T`\>
 
 #### Defined in
 
@@ -189,7 +189,7 @@ ___
 
 ### useFirestoreDocOnce
 
-▸ **useFirestoreDocOnce**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`DocumentSnapshot`<`T`\>\>
+▸ **useFirestoreDocOnce**<`T`\>(`ref`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`DocumentSnapshot`<`T`\>\>
 
 Get a firestore document and don't subscribe to changes
 
@@ -208,7 +208,7 @@ Get a firestore document and don't subscribe to changes
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`DocumentSnapshot`<`T`\>\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`DocumentSnapshot`<`T`\>\>
 
 #### Defined in
 

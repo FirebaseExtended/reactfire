@@ -4,14 +4,30 @@
 
 ## Table of contents
 
-### Interfaces
+### Type aliases
 
-- [ObservableStatus](../interfaces/useObservable.ObservableStatus.md)
+- [ObservableStatus](useObservable.md#observablestatus)
 
 ### Functions
 
 - [preloadObservable](useObservable.md#preloadobservable)
 - [useObservable](useObservable.md#useobservable)
+
+## Type aliases
+
+### ObservableStatus
+
+Ƭ **ObservableStatus**<`T`\>: `ObservableStatusLoading`<`T`\> \| `ObservableStatusWithData`<`T`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Defined in
+
+[src/useObservable.ts:76](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L76)
 
 ## Functions
 
@@ -44,7 +60,7 @@ ___
 
 ### useObservable
 
-▸ **useObservable**<`T`\>(`observableId`, `source`, `config?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`T`\>
+▸ **useObservable**<`T`\>(`observableId`, `source`, `config?`): [`ObservableStatus`](useObservable.md#observablestatus)<`T`\>
 
 #### Type parameters
 
@@ -62,8 +78,8 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`T`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`T`\>
 
 #### Defined in
 
-[src/useObservable.ts:95](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L95)
+[src/useObservable.ts:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L78)

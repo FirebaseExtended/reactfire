@@ -61,7 +61,7 @@ Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More 
 
 #### Defined in
 
-[src/auth.tsx:247](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L247)
+[src/auth.tsx:251](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L251)
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 ### useIdTokenResult
 
-▸ **useIdTokenResult**(`user`, `forceRefresh?`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`IdTokenResult`\>
+▸ **useIdTokenResult**(`user`, `forceRefresh?`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`IdTokenResult`\>
 
 #### Parameters
 
@@ -125,7 +125,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`IdTokenResult`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`IdTokenResult`\>
 
 #### Defined in
 
@@ -135,7 +135,7 @@ ___
 
 ### useSigninCheck
 
-▸ **useSigninCheck**(`options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<[`SigninCheckResult`](auth.md#signincheckresult)\>
+▸ **useSigninCheck**(`options?`): [`ObservableStatus`](useObservable.md#observablestatus)<[`SigninCheckResult`](auth.md#signincheckresult)\>
 
 Subscribe to the signed-in status of a user.
 
@@ -175,7 +175,7 @@ const {status, data: signInCheckResult} = useSignInCheck({forceRefresh: true, re
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<[`SigninCheckResult`](auth.md#signincheckresult)\>
+[`ObservableStatus`](useObservable.md#observablestatus)<[`SigninCheckResult`](auth.md#signincheckresult)\>
 
 #### Defined in
 
@@ -185,7 +185,7 @@ ___
 
 ### useUser
 
-▸ **useUser**<`T`\>(`options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`User` \| ``null``\>
+▸ **useUser**<`T`\>(`options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`User` \| ``null``\>
 
 Subscribe to Firebase auth state changes, including token refresh
 
@@ -203,7 +203,7 @@ Subscribe to Firebase auth state changes, including token refresh
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`User` \| ``null``\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`User` \| ``null``\>
 
 #### Defined in
 

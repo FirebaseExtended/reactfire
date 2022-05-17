@@ -404,7 +404,7 @@ ___
 
 ### useInitAnalytics
 
-▸ `Const` **useInitAnalytics**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Analytics`\>
+▸ `Const` **useInitAnalytics**(`initializer`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`Analytics`\>
 
 #### Parameters
 
@@ -415,7 +415,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Analytics`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`Analytics`\>
 
 #### Defined in
 
@@ -425,7 +425,7 @@ ___
 
 ### useInitAppCheck
 
-▸ `Const` **useInitAppCheck**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`AppCheck`\>
+▸ `Const` **useInitAppCheck**(`initializer`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`AppCheck`\>
 
 #### Parameters
 
@@ -436,7 +436,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`AppCheck`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`AppCheck`\>
 
 #### Defined in
 
@@ -446,7 +446,7 @@ ___
 
 ### useInitAuth
 
-▸ `Const` **useInitAuth**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Auth`\>
+▸ `Const` **useInitAuth**(`initializer`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`Auth`\>
 
 #### Parameters
 
@@ -457,7 +457,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Auth`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`Auth`\>
 
 #### Defined in
 
@@ -467,7 +467,7 @@ ___
 
 ### useInitDatabase
 
-▸ `Const` **useInitDatabase**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Database`\>
+▸ `Const` **useInitDatabase**(`initializer`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`Database`\>
 
 #### Parameters
 
@@ -478,7 +478,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Database`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`Database`\>
 
 #### Defined in
 
@@ -488,7 +488,7 @@ ___
 
 ### useInitFirestore
 
-▸ `Const` **useInitFirestore**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Firestore`\>
+▸ `Const` **useInitFirestore**(`initializer`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`Firestore`\>
 
 #### Parameters
 
@@ -499,7 +499,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Firestore`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`Firestore`\>
 
 #### Defined in
 
@@ -509,7 +509,7 @@ ___
 
 ### useInitFunctions
 
-▸ `Const` **useInitFunctions**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Functions`\>
+▸ `Const` **useInitFunctions**(`initializer`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`Functions`\>
 
 #### Parameters
 
@@ -520,7 +520,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`Functions`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`Functions`\>
 
 #### Defined in
 
@@ -530,7 +530,7 @@ ___
 
 ### useInitPerformance
 
-▸ `Const` **useInitPerformance**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`FirebasePerformance`\>
+▸ `Const` **useInitPerformance**(`initializer`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`FirebasePerformance`\>
 
 #### Parameters
 
@@ -541,7 +541,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`FirebasePerformance`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`FirebasePerformance`\>
 
 #### Defined in
 
@@ -551,7 +551,7 @@ ___
 
 ### useInitRemoteConfig
 
-▸ `Const` **useInitRemoteConfig**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`RemoteConfig`\>
+▸ `Const` **useInitRemoteConfig**(`initializer`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`RemoteConfig`\>
 
 #### Parameters
 
@@ -562,7 +562,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`RemoteConfig`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`RemoteConfig`\>
 
 #### Defined in
 
@@ -572,7 +572,7 @@ ___
 
 ### useInitStorage
 
-▸ `Const` **useInitStorage**(`initializer`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`FirebaseStorage`\>
+▸ `Const` **useInitStorage**(`initializer`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`FirebaseStorage`\>
 
 #### Parameters
 
@@ -583,7 +583,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`FirebaseStorage`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`FirebaseStorage`\>
 
 #### Defined in
 

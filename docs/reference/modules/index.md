@@ -223,7 +223,7 @@ ___
 
 ### ObservableStatus
 
-Re-exports: [ObservableStatus](../interfaces/useObservable.ObservableStatus.md)
+Re-exports: [ObservableStatus](useObservable.md#observablestatus)
 
 ___
 

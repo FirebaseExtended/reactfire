@@ -15,7 +15,7 @@
 
 ### useDatabaseList
 
-▸ **useDatabaseList**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`QueryChange`[] \| `T`[]\>
+▸ **useDatabaseList**<`T`\>(`ref`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`QueryChange`[] \| `T`[]\>
 
 Subscribe to a Realtime Database list
 
@@ -34,7 +34,7 @@ Subscribe to a Realtime Database list
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`QueryChange`[] \| `T`[]\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`QueryChange`[] \| `T`[]\>
 
 #### Defined in
 
@@ -44,7 +44,7 @@ ___
 
 ### useDatabaseListData
 
-▸ **useDatabaseListData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`T`[] \| ``null``\>
+▸ **useDatabaseListData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`T`[] \| ``null``\>
 
 #### Type parameters
 
@@ -61,7 +61,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`T`[] \| ``null``\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`T`[] \| ``null``\>
 
 #### Defined in
 
@@ -71,7 +71,7 @@ ___
 
 ### useDatabaseObject
 
-▸ **useDatabaseObject**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`QueryChange` \| `T`\>
+▸ **useDatabaseObject**<`T`\>(`ref`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`QueryChange` \| `T`\>
 
 Subscribe to a Realtime Database object
 
@@ -90,7 +90,7 @@ Subscribe to a Realtime Database object
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`QueryChange` \| `T`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`QueryChange` \| `T`\>
 
 #### Defined in
 
@@ -100,7 +100,7 @@ ___
 
 ### useDatabaseObjectData
 
-▸ **useDatabaseObjectData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`T`\>
+▸ **useDatabaseObjectData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`T`\>
 
 #### Type parameters
 
@@ -117,7 +117,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`T`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`T`\>
 
 #### Defined in
 

@@ -12,7 +12,7 @@
 
 ### useCallableFunctionResponse
 
-▸ **useCallableFunctionResponse**<`RequestData`, `ResponseData`\>(`functionName`, `options?`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`ResponseData`\>
+▸ **useCallableFunctionResponse**<`RequestData`, `ResponseData`\>(`functionName`, `options?`): [`ObservableStatus`](useObservable.md#observablestatus)<`ResponseData`\>
 
 Calls a callable function.
 
@@ -32,7 +32,7 @@ Calls a callable function.
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`ResponseData`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`ResponseData`\>
 
 #### Defined in
 

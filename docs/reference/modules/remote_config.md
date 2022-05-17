@@ -16,7 +16,7 @@
 
 ### useRemoteConfigAll
 
-▸ **useRemoteConfigAll**(`key`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`AllParameters`\>
+▸ **useRemoteConfigAll**(`key`): [`ObservableStatus`](useObservable.md#observablestatus)<`AllParameters`\>
 
 Convience method similar to useRemoteConfigValue. Returns allRemote Config parameters.
 
@@ -28,7 +28,7 @@ Convience method similar to useRemoteConfigValue. Returns allRemote Config param
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`AllParameters`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`AllParameters`\>
 
 #### Defined in
 
@@ -38,7 +38,7 @@ ___
 
 ### useRemoteConfigBoolean
 
-▸ **useRemoteConfigBoolean**(`key`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`boolean`\>
+▸ **useRemoteConfigBoolean**(`key`): [`ObservableStatus`](useObservable.md#observablestatus)<`boolean`\>
 
 Convience method similar to useRemoteConfigValue. Returns a `boolean` from a Remote Config parameter.
 
@@ -50,7 +50,7 @@ Convience method similar to useRemoteConfigValue. Returns a `boolean` from a Rem
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`boolean`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`boolean`\>
 
 #### Defined in
 
@@ -60,7 +60,7 @@ ___
 
 ### useRemoteConfigNumber
 
-▸ **useRemoteConfigNumber**(`key`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`number`\>
+▸ **useRemoteConfigNumber**(`key`): [`ObservableStatus`](useObservable.md#observablestatus)<`number`\>
 
 Convience method similar to useRemoteConfigValue. Returns a `number` from a Remote Config parameter.
 
@@ -72,7 +72,7 @@ Convience method similar to useRemoteConfigValue. Returns a `number` from a Remo
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`number`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`number`\>
 
 #### Defined in
 
@@ -82,7 +82,7 @@ ___
 
 ### useRemoteConfigString
 
-▸ **useRemoteConfigString**(`key`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`string`\>
+▸ **useRemoteConfigString**(`key`): [`ObservableStatus`](useObservable.md#observablestatus)<`string`\>
 
 Convience method similar to useRemoteConfigValue. Returns a `string` from a Remote Config parameter.
 
@@ -94,7 +94,7 @@ Convience method similar to useRemoteConfigValue. Returns a `string` from a Remo
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`string`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`string`\>
 
 #### Defined in
 
@@ -104,7 +104,7 @@ ___
 
 ### useRemoteConfigValue
 
-▸ **useRemoteConfigValue**(`key`): [`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`RemoteConfigValue`\>
+▸ **useRemoteConfigValue**(`key`): [`ObservableStatus`](useObservable.md#observablestatus)<`RemoteConfigValue`\>
 
 Accepts a key and optionally a Remote Config instance. Returns a
 Remote Config Value.
@@ -117,7 +117,7 @@ Remote Config Value.
 
 #### Returns
 
-[`ObservableStatus`](../interfaces/useObservable.ObservableStatus.md)<`RemoteConfigValue`\>
+[`ObservableStatus`](useObservable.md#observablestatus)<`RemoteConfigValue`\>
 
 #### Defined in
 
