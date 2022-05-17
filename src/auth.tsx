@@ -208,15 +208,19 @@ function getClaimsObjectValidator(requiredClaims: Claims): ClaimsValidator {
  * Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
  */
 export function ClaimsCheck({ user, fallback, children, requiredClaims }: ClaimsCheckProps) {
+  const DEPRECATION_MESSAGE =
+    'ClaimsCheck is deprecated and only works when ReactFire is in experimental Suspense Mode. Use useSigninCheck or set suspense={true} in FirebaseAppProvider if you want to use this component.';
+
   const { data } = useIdTokenResult(user, false);
+  if (data === undefined) {
+    throw new Error(DEPRECATION_MESSAGE);
+  }
   const { claims } = data;
   const missingClaims: { [key: string]: { expected: string; actual: string | undefined } } = {};
 
   const suspenseMode = useSuspenseEnabledFromConfigAndContext();
   if (!suspenseMode) {
-    console.warn(
-      'ClaimsCheck is deprecated and only works when ReactFire is in experimental Suspense Mode. Use useSigninCheck or set suspense={true} in FirebaseAppProvider if you want to use this component.'
-    );
+    console.warn(DEPRECATION_MESSAGE);
   }
 
   if (requiredClaims) {
