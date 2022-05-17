@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import * as ReactDOM from 'react-dom/client';
 
 /**
  * Use this instead of NonConcurrentModeApp to see a ReactFire demo with Suspense/Concurrent mode enabled
@@ -9,8 +9,8 @@ import * as ReactDOM from 'react-dom';
  */
 // import {} from 'react/experimental'  // make TS aware of experimental features
 // import {} from 'react-dom/experimental' // make TS aware of experimental features
-// import { App as ConcurrentModeApp } from './withSuspense/App';
-import { App as NonConcurrentModeApp } from './withoutSuspense/App';
+import { App as ConcurrentModeApp } from './withSuspense/App';
+// import { App as NonConcurrentModeApp } from './withoutSuspense/App';
 import './styles.pcss';
 import { FirebaseAppProvider } from 'reactfire';
 
@@ -29,18 +29,18 @@ if (!rootElement) {
   throw new Error('Could not find root element');
 }
 
-ReactDOM.render(
-  <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-    <NonConcurrentModeApp />
-  </FirebaseAppProvider>,
-  rootElement
-);
+// ReactDOM.render(
+//   <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+//     <NonConcurrentModeApp />
+//   </FirebaseAppProvider>,
+//   rootElement
+// );
 
 /**
  * FOR CONCURRENT MODE
  */
-// ReactDOM.createRoot(rootElement).render(
-//   <FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={true}>
-//     <ConcurrentModeApp />
-//   </FirebaseAppProvider>
-// );
+ReactDOM.createRoot(rootElement).render(
+  <FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={true}>
+    <ConcurrentModeApp />
+  </FirebaseAppProvider>
+);
