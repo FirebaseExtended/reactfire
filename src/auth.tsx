@@ -24,7 +24,7 @@ export function useUser<T = unknown>(options?: ReactFireOptions<T>): ObservableS
 
   const observableId = `auth:user:${auth.name}`;
   const observable$ = user(auth);
-  const _options: ReactFireOptions<T> = {...options} ?? {};
+  const _options: ReactFireOptions<T> = { ...options } ?? {};
 
   // only set/override initialData if auth has finished loading
   if (auth.currentUser !== undefined) {
