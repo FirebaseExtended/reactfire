@@ -55,7 +55,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           check-latest: true
-          cache: true
+          cache: 'npm'
       - name: Install deps
         run: npm ci
       - name: Install deps for functions
@@ -81,7 +81,7 @@ jobs:
     if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'release' }}
     steps:
       - name: Setup node
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: '14'
           registry-url: 'https://registry.npmjs.org'
