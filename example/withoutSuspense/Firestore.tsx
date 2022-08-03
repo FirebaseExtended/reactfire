@@ -5,7 +5,7 @@ import { WideButton } from '../display/Button';
 import { CardSection } from '../display/Card';
 import { LoadingSpinner } from '../display/LoadingSpinner';
 import { AuthWrapper } from './Auth';
-import { initializeFirestore, doc, collection, enableIndexedDbPersistence, increment, updateDoc, orderBy, query, addDoc } from 'firebase/firestore';
+import { initializeFirestore, doc, collection, enableIndexedDbPersistence, increment, updateDoc, orderBy, query, addDoc, DocumentData } from 'firebase/firestore';
 import { getFirestore } from 'firebase/firestore';
 
 const Counter = () => {
@@ -68,12 +68,12 @@ const AnimalsList = () => {
       </div>
       <ul>
         {Array.from(
-          animals.reduce((animalCountMap, animal) => {
+          (animals as any[]).reduce((animalCountMap, animal) => {
             const currentCount = animalCountMap.get(animal.commonName) ?? 0;
             return animalCountMap.set(animal.commonName, currentCount + 1);
           }, new Map<string, number>())
-        ).map((animalStat: [string, number]) => {
-          const [animalName, animalCount] = animalStat;
+        ).map((animalStat) => {
+          const [animalName, animalCount] = (animalStat as [string, number]);
           return (
             <li key={animalName}>
               {animalName}: {animalCount}
