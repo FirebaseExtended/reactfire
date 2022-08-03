@@ -1,8 +1,6 @@
-[ReactFire reference docs](../README.md) / [index](../modules/index.md) / ReactFireOptions
+[ReactFire reference docs](../README.md) / ReactFireOptions
 
 # Interface: ReactFireOptions<T\>
-
-[index](../modules/index.md).ReactFireOptions
 
 ## Type parameters
 
@@ -14,16 +12,16 @@
 
 - **`ReactFireOptions`**
 
-  ↳ [`SignInCheckOptionsBasic`](auth.SignInCheckOptionsBasic.md)
+  ↳ [`SignInCheckOptionsBasic`](SignInCheckOptionsBasic.md)
 
 ## Table of contents
 
 ### Properties
 
-- [idField](index.ReactFireOptions.md#idfield)
-- [initialData](index.ReactFireOptions.md#initialdata)
-- [startWithValue](index.ReactFireOptions.md#startwithvalue)
-- [suspense](index.ReactFireOptions.md#suspense)
+- [idField](ReactFireOptions.md#idfield)
+- [initialData](ReactFireOptions.md#initialdata)
+- [startWithValue](ReactFireOptions.md#startwithvalue)
+- [suspense](ReactFireOptions.md#suspense)
 
 ## Properties
 
@@ -51,7 +49,9 @@ ___
 
 • `Optional` **startWithValue**: `any`
 
-**`deprecated`** use initialData instead
+**`Deprecated`**
+
+use initialData instead
 
 #### Defined in
 
