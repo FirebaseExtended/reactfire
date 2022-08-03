@@ -1,6 +1,6 @@
 import { renderHook, act as hooksAct, cleanup as hooksCleanup } from '@testing-library/react-hooks';
 import * as React from 'react';
-import { useDatabaseObject, useDatabaseList, FirebaseAppProvider, DatabaseProvider, ObservableStatus } from '..';
+import { useDatabaseObject, useDatabaseList, FirebaseAppProvider, DatabaseProvider, ObservableStatus } from '../src/index';
 import { baseConfig } from './appConfig';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, connectDatabaseEmulator, ref, set, push, query, orderByChild, equalTo, get } from 'firebase/database';
@@ -26,8 +26,7 @@ describe('Realtime Database (RTDB)', () => {
   });
 
   test('double check - emulator is running', async () => {
-    // IF THIS TEST FAILS, MAKE SURE YOU'RE RUNNING THESE TESTS BY DOING:
-    // yarn test
+    // IF THIS TEST FAILS, MAKE SURE YOU'RE RUNNING THE EMULATOR SUITE
 
     const testData = { a: 'world' };
     const testRef = ref(database, randomString());
@@ -97,7 +96,7 @@ describe('Realtime Database (RTDB)', () => {
     });
 
     // https://github.com/firebase/firebase-tools/issues/4368
-    it.skip('Returns different data for different queries on the same path', async () => {
+    it('Returns different data for different queries on the same path', async () => {
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 

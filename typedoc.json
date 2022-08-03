@@ -4,5 +4,6 @@
   "gitRevision": "main",
   "readme": "none",
   "plugin": "typedoc-plugin-markdown",
-  "name": "ReactFire reference docs"
+  "name": "ReactFire reference docs",
+  "githubPages": false
 }

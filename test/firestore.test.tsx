@@ -11,14 +11,12 @@ import {
   useFirestoreDocOnce,
   useFirestoreDocDataOnce,
   FirestoreProvider,
-} from '..';
+} from '../src/index';
 import { initializeApp } from 'firebase/app';
-import 'firebase/firestore';
-import fetch from 'node-fetch';
 import { baseConfig } from './appConfig';
 import { randomString } from './test-utils';
 
-import { addDoc, collection, doc, getFirestore, query, setDoc, connectFirestoreEmulator, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getFirestore, query, setDoc, connectFirestoreEmulator, where, getDoc } from 'firebase/firestore';
 
 describe('Firestore', () => {
   const app = initializeApp(baseConfig, 'firestore-test-suite');
@@ -40,8 +38,7 @@ describe('Firestore', () => {
   });
 
   test('double check - emulator is running', async () => {
-    // IF THIS TEST FAILS, MAKE SURE YOU'RE RUNNING THESE TESTS BY DOING:
-    // yarn test
+    // IF THIS TEST FAILS, MAKE SURE YOU'RE RUNNING THE EMULATOR SUITE
 
     await addDoc(collection(db, randomString()), { a: 'hello' });
   });

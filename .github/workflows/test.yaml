@@ -21,32 +21,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup node
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: '14'
-      - name: node_modules cache
-        id: node_modules_cache
-        uses: actions/cache@v2
-        with:
-          path: ./node_modules
-          key: ${{ runner.os }}-14-node_modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-14-node_modules-
-      - name: Yarn offline cache
-        if: steps.node_modules_cache.outputs.cache-hit != 'true'
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm-packages-offline-cache
-          key: yarn-offline-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: yarn-offline
+          cache: 'npm'
       - name: Install deps
-        if: steps.node_modules_cache.outputs.cache-hit != 'true'
-        run: |
-          yarn config set yarn-offline-mirror ~/.npm-packages-offline-cache
-          yarn config set yarn-offline-mirror-pruning true
-          yarn install --frozen-lockfile --prefer-offline
+        run: npm ci
       - name: Build
-        id: yarn-pack-dir
+        id: pack-dir
         run: ./build.sh
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v2
@@ -69,30 +51,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup node
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
           check-latest: true
-      - name: node_modules cache
-        id: node_modules_cache
-        uses: actions/cache@v2
-        with:
-          path: ./node_modules
-          key: ${{ runner.os }}-${{ matrix.node }}-node_modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ matrix.node }}-node_modules-
-      - name: Yarn offline cache
-        if: steps.node_modules_cache.outputs.cache-hit != 'true'
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm-packages-offline-cache
-          key: yarn-offline-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: yarn-offline
+          cache: true
       - name: Install deps
-        if: steps.node_modules_cache.outputs.cache-hit != 'true'
-        run: |
-          yarn config set yarn-offline-mirror ~/.npm-packages-offline-cache
-          yarn install --frozen-lockfile --prefer-offline
+        run: npm ci
       - name: Install deps for functions
         run: npm install
         working-directory: ./functions
@@ -108,7 +73,7 @@ jobs:
           chmod +x reactfire-${{ github.run_id }}/unpack.sh
           ./reactfire-${{ github.run_id }}/unpack.sh
       - name: Run tests
-        run: yarn test
+        run: npm run test
   publish:
     runs-on: ubuntu-latest
     name: Publish (NPM)

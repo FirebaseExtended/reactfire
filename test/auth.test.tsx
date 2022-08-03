@@ -12,7 +12,7 @@ import {
   ClaimsValidator,
   ObservableStatus,
   SigninCheckResult,
-} from '..';
+} from '../src/index';
 import { act } from 'react-dom/test-utils';
 import { baseConfig } from './appConfig';
 import { FirebaseApp, initializeApp } from 'firebase/app';
@@ -43,7 +43,7 @@ describe('Authentication', () => {
   beforeAll(() => {
     // Auth Emulator emits a warning, which adds noise to test output. So, we get rid of console.warn for a moment
     const realConsoleInfo = console.info;
-    jest.spyOn(console, 'info').mockImplementation((...args) => {
+    vi.spyOn(console, 'info').mockImplementation((...args) => {
       if (
         typeof args[0] === 'string' &&
         args[0].includes('You are using the Auth Emulator, which is intended for local testing only.  Do not use with production credentials.')
@@ -64,14 +64,13 @@ describe('Authentication', () => {
 
   afterAll(() => {
     afterAll(() => {
-      // @ts-ignore console.info is mocked in beforeAll
+      // @ts-expect-error console.info is mocked in beforeAll
       console.info.mockRestore();
     });
   });
 
   test('double check - emulator is running', async () => {
-    // IF THIS TEST FAILS, MAKE SURE YOU'RE RUNNING THESE TESTS BY DOING:
-    // yarn test
+    // IF THIS TEST FAILS, MAKE SURE YOU'RE RUNNING THE EMULATOR SUITE
 
     const user = await signIn();
 
