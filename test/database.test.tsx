@@ -96,7 +96,7 @@ describe('Realtime Database (RTDB)', () => {
     });
 
     // https://github.com/firebase/firebase-tools/issues/4368
-    it('Returns different data for different queries on the same path', async () => {
+    it.skip('Returns different data for different queries on the same path', async () => {
       const mockData1 = { a: 'hello' };
       const mockData2 = { a: 'goodbye' };
 
