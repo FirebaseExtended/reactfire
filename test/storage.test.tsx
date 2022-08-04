@@ -70,7 +70,7 @@ describe('Storage', () => {
 
   describe('useStorageDownloadURL', () => {
     it('returns the same value as getDownloadURL', async () => {
-      const someBytes = Uint8Array.from(Buffer.from(new ArrayBuffer(50_000)));
+      const someBytes = Uint8Array.from(Buffer.from(new ArrayBuffer(500_000)));
       const testFileRef = ref(storage, `${randomString()}/${randomString()}.txt`);
 
       await uploadBytesResumable(testFileRef, someBytes);
