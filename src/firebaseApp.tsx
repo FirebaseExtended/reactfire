@@ -16,8 +16,8 @@ interface FirebaseAppProviderProps {
   suspense?: boolean;
 }
 
-// @ts-expect-error: "__REACTFIRE_VERSION__" is replaced with actual ReactFire version (see babel.config.js)
-export const version = __REACTFIRE_VERSION__;
+// REACTFIRE_VERSION is automatically pulled in from `package.json` by Vite
+export const version = process.env.REACTFIRE_VERSION as string;
 
 const shallowEq = (a: { [key: string]: any }, b: { [key: string]: any }) => a === b || [...Object.keys(a), ...Object.keys(b)].every((key) => a[key] === b[key]);
 

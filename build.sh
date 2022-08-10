@@ -15,7 +15,7 @@ else
 fi;
 
 npm --no-git-tag-version --allow-same-version -f version $OVERRIDE_VERSION
-yarn build
+npm run build
 TARBALL=$(npm pack . | tail -n 1)
 mv $TARBALL reactfire.tgz
 

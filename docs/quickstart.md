@@ -172,11 +172,11 @@ npm install --save firebase reactfire
 1. Run your app.
 
    ```bash
-   yarn start
+   npm run start
 
    # or
 
-    npm run start
+   yarn start
    ```
 
 1. Edit the value of `yummy` in the _Database_ tab in the [Firebase console](https://console.firebase.google.com) and watch it update in real time in your app! 🔥🔥🔥

@@ -1,8 +1,6 @@
-[ReactFire reference docs](../README.md) / [auth](../modules/auth.md) / ClaimsValidator
+[ReactFire reference docs](../README.md) / ClaimsValidator
 
 # Interface: ClaimsValidator
-
-[auth](../modules/auth.md).ClaimsValidator
 
 ## Callable
 
@@ -22,7 +20,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `errors` | {} \| [`ClaimCheckErrors`](auth.ClaimCheckErrors.md) |
+| `errors` | {} \| [`ClaimCheckErrors`](ClaimCheckErrors.md) |
 | `hasRequiredClaims` | `boolean` |
 
 #### Defined in

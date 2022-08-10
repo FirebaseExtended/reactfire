@@ -1,17 +1,15 @@
-[ReactFire reference docs](../README.md) / [auth](../modules/auth.md) / ClaimsCheckProps
+[ReactFire reference docs](../README.md) / ClaimsCheckProps
 
 # Interface: ClaimsCheckProps
-
-[auth](../modules/auth.md).ClaimsCheckProps
 
 ## Table of contents
 
 ### Properties
 
-- [children](auth.ClaimsCheckProps.md#children)
-- [fallback](auth.ClaimsCheckProps.md#fallback)
-- [requiredClaims](auth.ClaimsCheckProps.md#requiredclaims)
-- [user](auth.ClaimsCheckProps.md#user)
+- [children](ClaimsCheckProps.md#children)
+- [fallback](ClaimsCheckProps.md#fallback)
+- [requiredClaims](ClaimsCheckProps.md#requiredclaims)
+- [user](ClaimsCheckProps.md#user)
 
 ## Properties
 

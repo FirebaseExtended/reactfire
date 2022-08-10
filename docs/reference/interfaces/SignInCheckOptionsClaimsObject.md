@@ -1,12 +1,10 @@
-[ReactFire reference docs](../README.md) / [auth](../modules/auth.md) / SignInCheckOptionsClaimsObject
+[ReactFire reference docs](../README.md) / SignInCheckOptionsClaimsObject
 
 # Interface: SignInCheckOptionsClaimsObject
 
-[auth](../modules/auth.md).SignInCheckOptionsClaimsObject
-
 ## Hierarchy
 
-- [`SignInCheckOptionsBasic`](auth.SignInCheckOptionsBasic.md)
+- [`SignInCheckOptionsBasic`](SignInCheckOptionsBasic.md)
 
   ↳ **`SignInCheckOptionsClaimsObject`**
 
@@ -14,12 +12,12 @@
 
 ### Properties
 
-- [forceRefresh](auth.SignInCheckOptionsClaimsObject.md#forcerefresh)
-- [idField](auth.SignInCheckOptionsClaimsObject.md#idfield)
-- [initialData](auth.SignInCheckOptionsClaimsObject.md#initialdata)
-- [requiredClaims](auth.SignInCheckOptionsClaimsObject.md#requiredclaims)
-- [startWithValue](auth.SignInCheckOptionsClaimsObject.md#startwithvalue)
-- [suspense](auth.SignInCheckOptionsClaimsObject.md#suspense)
+- [forceRefresh](SignInCheckOptionsClaimsObject.md#forcerefresh)
+- [idField](SignInCheckOptionsClaimsObject.md#idfield)
+- [initialData](SignInCheckOptionsClaimsObject.md#initialdata)
+- [requiredClaims](SignInCheckOptionsClaimsObject.md#requiredclaims)
+- [startWithValue](SignInCheckOptionsClaimsObject.md#startwithvalue)
+- [suspense](SignInCheckOptionsClaimsObject.md#suspense)
 
 ## Properties
 
@@ -29,7 +27,7 @@
 
 #### Inherited from
 
-[SignInCheckOptionsBasic](auth.SignInCheckOptionsBasic.md).[forceRefresh](auth.SignInCheckOptionsBasic.md#forcerefresh)
+[SignInCheckOptionsBasic](SignInCheckOptionsBasic.md).[forceRefresh](SignInCheckOptionsBasic.md#forcerefresh)
 
 #### Defined in
 
@@ -43,7 +41,7 @@ ___
 
 #### Inherited from
 
-[SignInCheckOptionsBasic](auth.SignInCheckOptionsBasic.md).[idField](auth.SignInCheckOptionsBasic.md#idfield)
+[SignInCheckOptionsBasic](SignInCheckOptionsBasic.md).[idField](SignInCheckOptionsBasic.md#idfield)
 
 #### Defined in
 
@@ -57,7 +55,7 @@ ___
 
 #### Inherited from
 
-[SignInCheckOptionsBasic](auth.SignInCheckOptionsBasic.md).[initialData](auth.SignInCheckOptionsBasic.md#initialdata)
+[SignInCheckOptionsBasic](SignInCheckOptionsBasic.md).[initialData](SignInCheckOptionsBasic.md#initialdata)
 
 #### Defined in
 
@@ -79,11 +77,13 @@ ___
 
 • `Optional` **startWithValue**: `any`
 
-**`deprecated`** use initialData instead
+**`Deprecated`**
+
+use initialData instead
 
 #### Inherited from
 
-[SignInCheckOptionsBasic](auth.SignInCheckOptionsBasic.md).[startWithValue](auth.SignInCheckOptionsBasic.md#startwithvalue)
+[SignInCheckOptionsBasic](SignInCheckOptionsBasic.md).[startWithValue](SignInCheckOptionsBasic.md#startwithvalue)
 
 #### Defined in
 
@@ -97,7 +97,7 @@ ___
 
 #### Inherited from
 
-[SignInCheckOptionsBasic](auth.SignInCheckOptionsBasic.md).[suspense](auth.SignInCheckOptionsBasic.md#suspense)
+[SignInCheckOptionsBasic](SignInCheckOptionsBasic.md).[suspense](SignInCheckOptionsBasic.md#suspense)
 
 #### Defined in
 

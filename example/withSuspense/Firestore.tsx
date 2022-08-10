@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState, useTransition, SuspenseList } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import {
   FirestoreProvider,
   SuspenseWithPerf,
@@ -13,7 +13,7 @@ import { WideButton } from '../display/Button';
 import { CardSection } from '../display/Card';
 import { LoadingSpinner } from '../display/LoadingSpinner';
 import { AuthWrapper } from './Auth';
-import { initializeFirestore, doc, collection, enableIndexedDbPersistence, increment, updateDoc, orderBy, query, addDoc, deleteDoc } from 'firebase/firestore';
+import { initializeFirestore, doc, collection, enableIndexedDbPersistence, increment, updateDoc, orderBy, query, addDoc, deleteDoc, DocumentData } from 'firebase/firestore';
 
 const Counter = () => {
   const firestore = useFirestore();
@@ -62,12 +62,12 @@ const List = ({ query, removeAnimal }) => {
       </div>
       <ul>
         {Array.from(
-          animals.reduce((animalCountMap, animal) => {
+          (animals as any[]).reduce((animalCountMap, animal) => {
             const currentCount = animalCountMap.get(animal.commonName) ?? 0;
             return animalCountMap.set(animal.commonName, currentCount + 1);
           }, new Map<string, number>())
-        ).map((animalStat: [string, number]) => {
-          const [animalName, animalCount] = animalStat;
+        ).map((animalStat) => {
+          const [animalName, animalCount] = (animalStat as [string, number]);
           return (
             <li key={animalName}>
               {animalName}: {animalCount}
@@ -131,7 +131,6 @@ export const Firestore = (props) => {
     <SuspenseWithPerf fallback={<LoadingSpinner />} traceId="firestore-demo-root">
       <FirestoreWrapper>
         <AuthWrapper fallback={<span>sign in to use Firestore</span>}>
-          <SuspenseList revealOrder="together">
             <CardSection title="Get/Set document value">
               <SuspenseWithPerf fallback="connecting to Firestore..." traceId="firestore-demo-doc">
                 <Counter />
@@ -147,7 +146,6 @@ export const Firestore = (props) => {
                 <FavoriteAnimals />
               </SuspenseWithPerf>
             </CardSection>
-          </SuspenseList>
         </AuthWrapper>
       </FirestoreWrapper>
     </SuspenseWithPerf>

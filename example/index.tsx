@@ -11,7 +11,7 @@ import * as ReactDOM from 'react-dom';
 // import {} from 'react-dom/experimental' // make TS aware of experimental features
 // import { App as ConcurrentModeApp } from './withSuspense/App';
 import { App as NonConcurrentModeApp } from './withoutSuspense/App';
-import './styles.pcss';
+import './index.css';
 import { FirebaseAppProvider } from 'reactfire';
 
 const firebaseConfig = {

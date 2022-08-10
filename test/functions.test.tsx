@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFunctions, connectFunctionsEmulator, httpsCallable } from 'firebase/functions';
 import { FunctionComponent } from 'react';
-import { FirebaseAppProvider, FunctionsProvider, useFunctions, useCallableFunctionResponse } from '..';
+import { FirebaseAppProvider, FunctionsProvider, useFunctions, useCallableFunctionResponse } from '../src/index';
 import { baseConfig } from './appConfig';
 import { renderHook } from '@testing-library/react-hooks';
 import { randomString } from './test-utils';
@@ -24,6 +24,7 @@ describe('Functions', () => {
       const functionsInstance = result.current;
 
       expect(functionsInstance).toBeDefined();
+      expect(functionsInstance).toEqual(functions);
 
       // `capitalizeText` function is in `functions/index.js`
       const capitalizeTextRemoteFunction = httpsCallable<{ text: string }, string>(functionsInstance, 'capitalizeText');

@@ -3,7 +3,7 @@ import { act, cleanup, render, waitFor } from '@testing-library/react';
 import { act as actOnHook, renderHook } from '@testing-library/react-hooks';
 import * as React from 'react';
 import { of, Subject, BehaviorSubject, throwError } from 'rxjs';
-import { useObservable } from '..';
+import { useObservable } from '../src/index';
 
 describe('useObservable', () => {
   afterEach(cleanup);
@@ -121,7 +121,7 @@ describe('useObservable', () => {
     it('throws an error if no observableId is provided', () => {
       const observable$: Subject<any> = new Subject();
 
-      // @ts-ignore: we're intentionally trying to break this
+      // @ts-expect-error: we're intentionally trying to break this
       const { result } = renderHook(() => useObservable(undefined, observable$, { suspense: true }));
 
       expect(result.error).toBeInstanceOf(Error);
