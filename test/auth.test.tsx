@@ -193,7 +193,7 @@ describe('Authentication', () => {
         claims: requiredClaims,
       };
 
-      // Extra claim passed to useSignInCheck
+      // Extra claim passed to useSigninCheck
       const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck({ requiredClaims: { ...requiredClaims, anExtraClaim: 'true' } }), {
         wrapper: Provider,
       });

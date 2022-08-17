@@ -117,15 +117,15 @@ export interface SignInCheckOptionsClaimsValidator extends SignInCheckOptionsBas
  *
  * ```ts
  * // pass in an object describing the custom claims a user must have
- * const {status, data: signInCheckResult} = useSignInCheck({requiredClaims: {admin: true}});
+ * const {status, data: signInCheckResult} = useSigninCheck({requiredClaims: {admin: true}});
  *
  * // pass in a custom claims validator function
- * const {status, data: signInCheckResult} = useSignInCheck({validateCustomClaims: (userClaims) => {
+ * const {status, data: signInCheckResult} = useSigninCheck({validateCustomClaims: (userClaims) => {
  *   // custom validation logic...
  * }});
  *
  * // You can optionally force-refresh the token
- * const {status, data: signInCheckResult} = useSignInCheck({forceRefresh: true, requiredClaims: {admin: true}});
+ * const {status, data: signInCheckResult} = useSigninCheck({forceRefresh: true, requiredClaims: {admin: true}});
  * ```
  */
 export function useSigninCheck(
@@ -201,7 +201,7 @@ function getClaimsObjectValidator(requiredClaims: Claims): ClaimsValidator {
 }
 
 /**
- * @deprecated Use `useSignInCheck` instead
+ * @deprecated Use `useSigninCheck` instead
  *
  * Conditionally render children based on [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims).
  *
@@ -238,7 +238,7 @@ export function ClaimsCheck({ user, fallback, children, requiredClaims }: Claims
 }
 
 /**
- * @deprecated Use `useSignInCheck` instead
+ * @deprecated Use `useSigninCheck` instead
  *
  * Conditionally render children based on signed-in status and [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims).
  *

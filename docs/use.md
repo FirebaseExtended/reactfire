@@ -206,12 +206,12 @@ To check [custom claims](https://firebase.google.com/docs/auth/admin/custom-clai
 
 ```jsx
 // pass in an object describing the custom claims a user must have
-const { status, data: signInCheckResult } = useSignInCheck({ requiredClaims: { superUser: true } });
+const { status, data: signInCheckResult } = useSigninCheck({ requiredClaims: { superUser: true } });
 
 // OR
 
 // pass in a custom claims validator function
-const { status, data: signInCheckResult } = useSignInCheck({
+const { status, data: signInCheckResult } = useSigninCheck({
   validateCustomClaims: (userClaims) => {
     // custom validation logic...
     return {
