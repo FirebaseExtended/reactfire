@@ -24,15 +24,8 @@ export function useUser<T = unknown>(options?: ReactFireOptions<T>): ObservableS
 
   const observableId = `auth:user:${auth.name}`;
   const observable$ = user(auth);
-  const _options: ReactFireOptions<T> = { ...options } ?? {};
 
-  // only set/override initialData if auth has finished loading
-  if (auth.currentUser !== undefined) {
-    _options.initialData = auth.currentUser;
-    _options.startWithValue = auth.currentUser;
-  }
-
-  return useObservable(observableId, observable$, _options);
+  return useObservable(observableId, observable$, options);
 }
 
 export function useIdTokenResult(user: User, forceRefresh: boolean = false, options?: ReactFireOptions<IdTokenResult>): ObservableStatus<IdTokenResult> {
