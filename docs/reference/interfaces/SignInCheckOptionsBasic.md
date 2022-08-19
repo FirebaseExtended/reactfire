@@ -30,7 +30,7 @@
 
 #### Defined in
 
-[src/auth.tsx:81](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L81)
+[src/auth.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L74)
 
 ___
 

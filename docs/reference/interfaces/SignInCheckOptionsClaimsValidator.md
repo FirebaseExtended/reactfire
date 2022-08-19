@@ -31,7 +31,7 @@
 
 #### Defined in
 
-[src/auth.tsx:81](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L81)
+[src/auth.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L74)
 
 ___
 
@@ -101,4 +101,4 @@ ___
 
 #### Defined in
 
-[src/auth.tsx:96](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L96)
+[src/auth.tsx:89](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L89)

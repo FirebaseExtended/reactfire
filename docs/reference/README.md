@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-[src/auth.tsx:66](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L66)
+[src/auth.tsx:59](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L59)
 
 ## Variables
 
@@ -299,7 +299,7 @@ Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More 
 
 #### Defined in
 
-[src/auth.tsx:247](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L247)
+[src/auth.tsx:240](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L240)
 
 ___
 
@@ -347,7 +347,7 @@ Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More 
 
 #### Defined in
 
-[src/auth.tsx:210](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L210)
+[src/auth.tsx:203](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L203)
 
 ___
 
@@ -1097,7 +1097,7 @@ ___
 
 #### Defined in
 
-[src/auth.tsx:38](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L38)
+[src/auth.tsx:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L31)
 
 ___
 
@@ -1517,7 +1517,7 @@ const {status, data: signInCheckResult} = useSigninCheck({forceRefresh: true, re
 
 #### Defined in
 
-[src/auth.tsx:131](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L131)
+[src/auth.tsx:124](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L124)
 
 ___
 
