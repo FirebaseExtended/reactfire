@@ -35,7 +35,7 @@ function getDocObservableId(ref: DocumentReference) {
 }
 
 /**
- * Suscribe to Firestore Document changes
+ * Subscribe to Firestore Document changes
  *
  * You can preload data for this hook by calling `preloadFirestoreDoc`
  */
@@ -57,7 +57,7 @@ export function useFirestoreDocOnce<T = DocumentData>(ref: DocumentReference<T>,
 }
 
 /**
- * Suscribe to Firestore Document changes and unwrap the document into a plain object
+ * Subscribe to Firestore Document changes and unwrap the document into a plain object
  */
 export function useFirestoreDocData<T = unknown>(ref: DocumentReference<T>, options?: ReactFireOptions<T>): ObservableStatus<T> {
   const idField = options ? checkIdField(options) : 'NO_ID_FIELD';
