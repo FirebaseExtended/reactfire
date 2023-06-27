@@ -951,7 +951,7 @@ ___
 
 ▸ **useFirestoreDoc**<`T`\>(`ref`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`DocumentSnapshot`<`T`\>\>
 
-Suscribe to Firestore Document changes
+Subscribe to Firestore Document changes
 
 You can preload data for this hook by calling `preloadFirestoreDoc`
 
@@ -982,7 +982,7 @@ ___
 
 ▸ **useFirestoreDocData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`T`\>
 
-Suscribe to Firestore Document changes and unwrap the document into a plain object
+Subscribe to Firestore Document changes and unwrap the document into a plain object
 
 #### Type parameters
 
