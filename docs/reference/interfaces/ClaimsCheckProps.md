@@ -1,16 +1,15 @@
-[ReactFire reference docs](../README.md) / [auth](../modules/auth.md) / AuthCheckProps
+[ReactFire reference docs](../README.md) / ClaimsCheckProps
 
-# Interface: AuthCheckProps
-
-[auth](../modules/auth.md).AuthCheckProps
+# Interface: ClaimsCheckProps
 
 ## Table of contents
 
 ### Properties
 
-- [children](auth.AuthCheckProps.md#children)
-- [fallback](auth.AuthCheckProps.md#fallback)
-- [requiredClaims](auth.AuthCheckProps.md#requiredclaims)
+- [children](ClaimsCheckProps.md#children)
+- [fallback](ClaimsCheckProps.md#fallback)
+- [requiredClaims](ClaimsCheckProps.md#requiredclaims)
+- [user](ClaimsCheckProps.md#user)
 
 ## Properties
 
@@ -36,8 +35,22 @@ ___
 
 ### requiredClaims
 
-• `Optional` **requiredClaims**: `Object`
+• **requiredClaims**: `Object`
+
+#### Index signature
+
+▪ [key: `string`]: `any`
 
 #### Defined in
 
 [src/auth.tsx:52](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L52)
+
+___
+
+### user
+
+• **user**: `User`
+
+#### Defined in
+
+[src/auth.tsx:49](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L49)

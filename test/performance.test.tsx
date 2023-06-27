@@ -3,17 +3,17 @@ import { FirebaseApp } from 'firebase/app';
 import { FirebasePerformance } from 'firebase/performance';
 import * as React from 'react';
 import { Subject } from 'rxjs';
-import { FirebaseAppProvider, useObservable, SuspenseWithPerf } from '..';
+import { FirebaseAppProvider, useObservable, SuspenseWithPerf } from '../src/index';
 
-const traceStart = jest.fn();
-const traceEnd = jest.fn();
+const traceStart = vi.fn();
+const traceEnd = vi.fn();
 
-const createTrace = jest.fn(() => ({
+const createTrace = vi.fn(() => ({
   start: traceStart,
   stop: traceEnd,
 }));
 
-const mockPerf = jest.fn(() => {
+const mockPerf = vi.fn(() => {
   return { trace: createTrace };
 }) as any as () => FirebasePerformance;
 
@@ -21,13 +21,13 @@ const mockFirebase: FirebaseApp = {
   performance: mockPerf,
 } as any;
 
-const mark = jest.fn();
-const measure = jest.fn();
-const getEntriesByName = jest.fn(() => []);
+const mark = vi.fn();
+const measure = vi.fn();
+const getEntriesByName = vi.fn(() => []);
 
-window.performance.mark = mark;
-window.performance.measure = measure;
-window.performance.getEntriesByName = getEntriesByName;
+Object.defineProperty(window, 'performance', {
+  value: { mark, measure, getEntriesByName },
+});
 
 const PromiseThrower = () => {
   throw new Promise(() => {});
@@ -38,7 +38,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => <FirebaseAppPr
 describe('SuspenseWithPerf', () => {
   afterEach(() => {
     cleanup();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('behaves the same as Suspense (render fallback until thrown promise resolves)', async () => {

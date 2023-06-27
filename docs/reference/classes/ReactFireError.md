@@ -1,8 +1,6 @@
-[ReactFire reference docs](../README.md) / [index](../modules/index.md) / ReactFireError
+[ReactFire reference docs](../README.md) / ReactFireError
 
 # Class: ReactFireError
-
-[index](../modules/index.md).ReactFireError
 
 ## Hierarchy
 
@@ -14,21 +12,22 @@
 
 ### Constructors
 
-- [constructor](index.ReactFireError.md#constructor)
+- [constructor](ReactFireError.md#constructor)
 
 ### Properties
 
-- [code](index.ReactFireError.md#code)
-- [customData](index.ReactFireError.md#customdata)
-- [message](index.ReactFireError.md#message)
-- [name](index.ReactFireError.md#name)
-- [stack](index.ReactFireError.md#stack)
-- [prepareStackTrace](index.ReactFireError.md#preparestacktrace)
-- [stackTraceLimit](index.ReactFireError.md#stacktracelimit)
+- [cause](ReactFireError.md#cause)
+- [code](ReactFireError.md#code)
+- [customData](ReactFireError.md#customdata)
+- [message](ReactFireError.md#message)
+- [name](ReactFireError.md#name)
+- [stack](ReactFireError.md#stack)
+- [prepareStackTrace](ReactFireError.md#preparestacktrace)
+- [stackTraceLimit](ReactFireError.md#stacktracelimit)
 
 ### Methods
 
-- [captureStackTrace](index.ReactFireError.md#capturestacktrace)
+- [captureStackTrace](ReactFireError.md#capturestacktrace)
 
 ## Constructors
 
@@ -54,15 +53,37 @@ Error.constructor
 
 ## Properties
 
+### cause
+
+• `Optional` **cause**: `Error`
+
+#### Inherited from
+
+Error.cause
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es2022.error.d.ts:26
+
+___
+
 ### code
 
 • `Readonly` **code**: `string`
+
+#### Defined in
+
+[src/index.ts:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L15)
 
 ___
 
 ### customData
 
 • `Optional` **customData**: `Record`<`string`, `unknown`\>
+
+#### Defined in
+
+[src/index.ts:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L15)
 
 ___
 
@@ -76,7 +97,7 @@ Error.message
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:974
+node_modules/typescript/lib/lib.es5.d.ts:1029
 
 ___
 
@@ -104,7 +125,7 @@ Error.stack
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:975
+node_modules/typescript/lib/lib.es5.d.ts:1030
 
 ___
 
@@ -117,6 +138,10 @@ ___
 ▸ (`err`, `stackTraces`): `any`
 
 Optional override for formatting stack traces
+
+**`See`**
+
+https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 
 ##### Parameters
 

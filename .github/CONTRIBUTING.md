@@ -71,18 +71,18 @@ set up.
 1. [Clone](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository)
    this repository (or a
    [fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo#propose-changes-to-someone-elses-project))
-1. At the project root, install all modules by running `yarn install`.
-1. Start a dev build of reactfire by running `yarn start`. ReactFire will recompile on every file change.
+1. At the project root, install all modules by running `npm install`.
+1. Start a dev build of reactfire by running `npm run start`. ReactFire will recompile on every file change.
 
 ### Testing
 
-1. run `yarn test` from the repository root. Make sure you've rebuilt your changes (usually by keeping `yarn start` running in a separate tab).
+1. run `npm run test` from the repository root. Make sure you've rebuilt your changes (usually by keeping `npm run start` running in a separate tab).
 
 ### Before submitting a PR
 
-1. run `yarn build` to confirm that the source builds
-2. run `yarn test` to confirm that tests pass
-3. run `yarn lint` to confirm that code meets our style guide
-    > If the lint check fails, run `yarn lint --fix` to automatically fix any issues. 
-5. run `yarn docs` to rebuild the reference docs
-    > If you've forked the repo, run `yarn docs:fork` instead. This will ensure the reference docs link to the firebaseextended/reactfire repository.
+1. run `npm run build` to confirm that the source builds
+2. run `npm run test` to confirm that tests pass
+3. run `npm run lint` to confirm that code meets our style guide
+    > If the lint check fails, run `npm run lint --fix` to automatically fix any issues. 
+5. run `npm run docs` to rebuild the reference docs
+    > If you've forked the repo, run `npm run docs:fork` instead. This will ensure the reference docs link to the firebaseextended/reactfire repository.

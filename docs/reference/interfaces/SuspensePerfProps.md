@@ -1,16 +1,14 @@
-[ReactFire reference docs](../README.md) / [performance](../modules/performance.md) / SuspensePerfProps
+[ReactFire reference docs](../README.md) / SuspensePerfProps
 
 # Interface: SuspensePerfProps
-
-[performance](../modules/performance.md).SuspensePerfProps
 
 ## Table of contents
 
 ### Properties
 
-- [children](performance.SuspensePerfProps.md#children)
-- [fallback](performance.SuspensePerfProps.md#fallback)
-- [traceId](performance.SuspensePerfProps.md#traceid)
+- [children](SuspensePerfProps.md#children)
+- [fallback](SuspensePerfProps.md#fallback)
+- [traceId](SuspensePerfProps.md#traceid)
 
 ## Properties
 

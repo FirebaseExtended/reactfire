@@ -1,24 +1,22 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": false,
-    "target": "ES2017",
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
-    "jsx": "react",
-    "moduleResolution": "node",
-    "noImplicitAny": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "removeComments": true,
-    "strictNullChecks": true,
-    "preserveConstEnums": true,
-    "sourceMap": true,
-    "lib": ["es2015", "es2016", "dom"],
-    "types": ["node"],
-    "baseUrl": ".",
-    "paths": {
-      "react": ["../node_modules/react"],
-      "react-dom": ["../node_modules/react-dom/profiling"],
-      "reactfire": ["../."],
-    }
-  }
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "noImplicitAny": false
+  },
+  "include": ["index.tsx", "display", "withSuspense", "withoutSuspense"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

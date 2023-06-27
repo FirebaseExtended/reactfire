@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react-hooks';
 import { deleteApp, getApps, initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import * as React from 'react';
-import { AuthProvider, FirebaseAppProvider, useAuth } from '../dist';
+import { AuthProvider, FirebaseAppProvider, useAuth } from '../src/index';
 import { baseConfig } from './appConfig';
 import { randomString } from './test-utils';
 
@@ -21,7 +21,7 @@ describe('Sdk management', () => {
 
       // stop a nasty-looking console error
       // https://github.com/facebook/react/issues/11098#issuecomment-523977830
-      const errorLog = jest.spyOn(console, 'error');
+      const errorLog = vi.spyOn(console, 'error');
       errorLog.mockImplementation(() => {});
 
       const { result } = renderHook(() => useAuth(), {

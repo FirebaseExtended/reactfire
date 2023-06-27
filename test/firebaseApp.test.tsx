@@ -1,10 +1,10 @@
-import { cleanup, render } from '@testing-library/react';
+import { cleanup, render, waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import { initializeApp, deleteApp, getApps } from 'firebase/app';
 import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
-import { useFirebaseApp, FirebaseAppProvider, version } from '..';
-const pkg = require('../package.json');
+import { useFirebaseApp, FirebaseAppProvider, version } from '../src/index';
+import pkg from '../package.json';
 
 afterEach(() => {
   cleanup();
@@ -20,7 +20,7 @@ describe('FirebaseAppProvider', () => {
 
     render(<FirebaseAppProvider firebaseConfig={DEFAULT_APP_CONFIG} />);
 
-    expect(getApps()).toHaveLength(1);
+    waitFor(() => getApps().length === 1);
   });
 
   it('Does not initialize a new app if the firebaseApp is provided', () => {
@@ -61,7 +61,7 @@ describe('useFirebaseApp', () => {
     const { result } = renderHook(() => useFirebaseApp(), { wrapper });
     expect(result.current.name).toEqual('app-1');
 
-    expect(getApps()).toHaveLength(2);
+    waitFor(() => getApps().length === 2);
   });
 
   it('will throw if configs dont match, and same name', () => {
@@ -69,7 +69,7 @@ describe('useFirebaseApp', () => {
 
     // stop a nasty-looking console error
     // https://github.com/facebook/react/issues/11098#issuecomment-523977830
-    const errorLog = jest.spyOn(console, 'error');
+    const errorLog = vi.spyOn(console, 'error');
     errorLog.mockImplementation(() => {});
 
     const wrapper = ({ children }: { children: React.ReactNode }) => (
@@ -85,7 +85,7 @@ describe('useFirebaseApp', () => {
       'Does not match the options already provided to the default firebase app instance, give this new instance a different appName.'
     );
 
-    expect(getApps()).toHaveLength(1);
+    waitFor(() => getApps().length === 1);
 
     errorLog.mockRestore();
   });
@@ -93,7 +93,7 @@ describe('useFirebaseApp', () => {
   it('throws an error if Firebase is not in context', () => {
     // stop a nasty-looking console error
     // https://github.com/facebook/react/issues/11098#issuecomment-523977830
-    const spy = jest.spyOn(console, 'error');
+    const spy = vi.spyOn(console, 'error');
     spy.mockImplementation(() => {});
 
     const { result } = renderHook(() => useFirebaseApp());
