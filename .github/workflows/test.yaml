@@ -23,7 +23,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '18'
           cache: 'npm'
       - name: Install deps
         run: npm ci
@@ -44,7 +44,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        node: ["14", "16"]
+        node: ["18", "20"]
       fail-fast: false
     name: Test Node.js ${{ matrix.node }} (Ubuntu)
     steps:
@@ -83,7 +83,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '18'
           registry-url: 'https://registry.npmjs.org'
       - name: 'Download Artifacts'
         uses: actions/download-artifact@v2
