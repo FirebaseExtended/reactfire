@@ -55,7 +55,7 @@ Error.constructor
 
 ### cause
 
-• `Optional` **cause**: `Error`
+• `Optional` **cause**: `unknown`
 
 #### Inherited from
 
@@ -63,7 +63,7 @@ Error.cause
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es2022.error.d.ts:26
+node_modules/typescript/lib/lib.es2022.error.d.ts:24
 
 ___
 
@@ -97,7 +97,7 @@ Error.message
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1029
+node_modules/typescript/lib/lib.es5.d.ts:1068
 
 ___
 
@@ -125,7 +125,7 @@ Error.stack
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1030
+node_modules/typescript/lib/lib.es5.d.ts:1069
 
 ___
 

@@ -9,7 +9,7 @@
 - [Auth](#auth)
   * [Display the current signed-in user](#display-the-current-signed-in-user)
   * [Only render a component if a user is signed in](#only-render-a-component-if-a-user-is-signed-in)
-  * [Initialize Auth with custom Dependencies](#initialize-auth-with-custom-dependencies)
+  * [Initialize Auth with custom dependencies](#initialize-auth-with-custom-dependencies)
 - [Cloud Firestore](#cloud-firestore)
   * [Access data offline](#access-data-offline)
   * [Show a single document](#show-a-single-document)
