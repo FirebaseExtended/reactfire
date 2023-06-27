@@ -40,7 +40,6 @@ export class SuspenseSubject<T> extends Subject<T> {
     // and reschedule again on unsubscribe
     if (this._suspenseEnabled) {
       // Noop if suspense is enabled
-      console.log('SuspenseSubject: Suspense is enabled');
       this._timeoutHandler = setTimeout(() => {}, this._timeoutWindow);
     } else {
       this._timeoutHandler = setTimeout(this._reset.bind(this), this._timeoutWindow);
