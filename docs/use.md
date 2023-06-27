@@ -9,6 +9,7 @@
 - [Auth](#auth)
   * [Display the current signed-in user](#display-the-current-signed-in-user)
   * [Only render a component if a user is signed in](#only-render-a-component-if-a-user-is-signed-in)
+  * [Initialize Auth with custom Dependencies](#initialize-auth-with-custom-dependencies)
 - [Cloud Firestore](#cloud-firestore)
   * [Access data offline](#access-data-offline)
   * [Show a single document](#show-a-single-document)
@@ -220,6 +221,23 @@ const { status, data: signInCheckResult } = useSigninCheck({
   },
 });
 ```
+
+### Initialize Auth with custom dependencies
+
+You may often find that you need to only initialize Firebase Auth with specific dependencies such as local persistence. In order to do this `reactfire` provides a hook called `useInitAuth`. This allows you to initialize the authApp correctly by passing in the required configuration.
+
+In the below example you will see that we only pass persistance and no providers. You can add providers later as to avoid loading [large iFrame on mobile](https://github.com/firebase/firebase-js-sdk/issues/4946) issue.
+
+```
+const { status, data: auth } = useInitAuth(async (authApp) => {
+  const auth = initializeAuth(authApp, {
+    persistence: [indexedDBLocalPersistence, browserLocalPersistence],
+  });
+  return auth;
+});
+```
+
+> You can find out more from the [Firebase Docs - Custom Dependencies](https://firebase.google.com/docs/auth/web/custom-dependencies). 
 
 ## Cloud Firestore
 
