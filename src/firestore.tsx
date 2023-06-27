@@ -6,13 +6,13 @@ import { first } from 'rxjs/operators';
 import { Query as FirestoreQuery, QuerySnapshot, DocumentReference, queryEqual, DocumentData, DocumentSnapshot } from 'firebase/firestore';
 
 // Since we're side-effect free, we need to ensure our observableId cache is global
-const cachedQueries: Array<FirestoreQuery> = (globalThis as any as ReactFireGlobals)._reactFireFirestoreQueryCache || [];
+const cachedQueries: Array<FirestoreQuery<any>> = (globalThis as any as ReactFireGlobals)._reactFireFirestoreQueryCache || [];
 
 if (!(globalThis as any as ReactFireGlobals)._reactFireFirestoreQueryCache) {
   (globalThis as any as ReactFireGlobals)._reactFireFirestoreQueryCache = cachedQueries;
 }
 
-function getUniqueIdForFirestoreQuery(query: FirestoreQuery) {
+function getUniqueIdForFirestoreQuery<T = DocumentData>(query: FirestoreQuery<T>) {
   const index = cachedQueries.findIndex((cachedQuery) => queryEqual(cachedQuery, query));
   if (index > -1) {
     return index;
@@ -30,7 +30,7 @@ export async function preloadFirestoreDoc(refProvider: () => Promise<DocumentRef
   return preloadObservable(doc(ref), getDocObservableId(ref));
 }
 
-function getDocObservableId(ref: DocumentReference) {
+function getDocObservableId<T = DocumentData>(ref: DocumentReference<T>) {
   return `firestore:doc:${ref.firestore.app.name}:${ref.path}`;
 }
 
