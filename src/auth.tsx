@@ -173,7 +173,7 @@ export function useSigninCheck(
     })
   );
 
-  return useObservable(observableId, observable);
+  return useObservable(observableId, observable, options);
 }
 
 function getClaimsObjectValidator(requiredClaims: Claims): ClaimsValidator {
