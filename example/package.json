@@ -11,7 +11,8 @@
     "firebase": "^9.0.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
-    "reactfire": "file:../reactfire-4.0.1.tgz"
+    "reactfire": "file:../reactfire-4.0.1.tgz",
+    "rollup-plugin-visualizer": "^5.7.1"
   },
   "browserslist": [
     "last 1 Chrome version"
