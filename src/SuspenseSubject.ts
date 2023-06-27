@@ -15,7 +15,7 @@ export class SuspenseSubject<T> extends Subject<T> {
   // @ts-expect-error: TODO: double check to see if this is an RXJS thing or if we should listen to TS
   private _resolveFirstEmission: () => void;
 
-  constructor(innerObservable: Observable<T>, private _timeoutWindow: number) {
+  constructor(innerObservable: Observable<T>, private _timeoutWindow: number, private _suspenseEnabled: boolean) {
     super();
     this._firstEmission = new Promise<void>((resolve) => (this._resolveFirstEmission = resolve));
     this._innerObservable = innerObservable.pipe(
@@ -38,7 +38,13 @@ export class SuspenseSubject<T> extends Subject<T> {
 
     // set a timeout for resetting the cache, subscriptions will cancel the timeout
     // and reschedule again on unsubscribe
-    this._timeoutHandler = setTimeout(this._reset.bind(this), this._timeoutWindow);
+    if (this._suspenseEnabled) {
+      // Noop if suspense is enabled
+      console.log('SuspenseSubject: Suspense is enabled');
+      this._timeoutHandler = setTimeout(() => {}, this._timeoutWindow);
+    } else {
+      this._timeoutHandler = setTimeout(this._reset.bind(this), this._timeoutWindow);
+    }
   }
 
   get hasValue(): boolean {
