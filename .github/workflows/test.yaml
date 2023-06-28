@@ -19,7 +19,7 @@ jobs:
     name: Build
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup node
         uses: actions/setup-node@v3
         with:
@@ -31,7 +31,7 @@ jobs:
         id: pack-dir
         run: ./build.sh
       - name: 'Upload Artifact'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: reactfire-${{ github.run_id }}
           path: |
@@ -49,7 +49,7 @@ jobs:
     name: Test Node.js ${{ matrix.node }} (Ubuntu)
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup node
         uses: actions/setup-node@v3
         with:
@@ -62,12 +62,12 @@ jobs:
         run: npm install
         working-directory: ./functions
       - name: Firebase emulator cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.cache/firebase/emulators
           key: firebase_emulators
       - name: 'Download Artifacts'
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
       - name: Expand Artifact
         run: |
           chmod +x reactfire-${{ github.run_id }}/unpack.sh
@@ -86,7 +86,7 @@ jobs:
           node-version: '18'
           registry-url: 'https://registry.npmjs.org'
       - name: 'Download Artifacts'
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
       - name: Publish
         run: |
           cd ./reactfire-${{ github.run_id }}/
