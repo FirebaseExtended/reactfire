@@ -1,5 +1,4 @@
-import { cleanup, render, waitFor } from '@testing-library/react';
-import { renderHook, act as hooksAct, cleanup as hooksCleanup } from '@testing-library/react-hooks';
+import { cleanup, render, waitFor, renderHook, act } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
 import {
@@ -13,7 +12,6 @@ import {
   ObservableStatus,
   SigninCheckResult,
 } from '../src/index';
-import { act } from 'react-dom/test-utils';
 import { baseConfig } from './appConfig';
 import { FirebaseApp, initializeApp } from 'firebase/app';
 import { randomString } from './test-utils';
@@ -83,7 +81,6 @@ describe('Authentication', () => {
   });
 
   afterEach(async () => {
-    hooksCleanup();
     cleanup();
   });
 
@@ -139,15 +136,15 @@ describe('Authentication', () => {
 
   describe('useSigninCheck()', () => {
     it('accurately reflects signed-in state', async () => {
-      const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck(), { wrapper: Provider });
+      const { result } = renderHook(() => useSigninCheck(), { wrapper: Provider });
 
-      await waitForHookCondition(() => result.current.status === 'success');
+      await waitFor(() => expect(result.current.status).toEqual('success'));
 
       // Signed out
       expect(getAuth(app).currentUser).toBeNull();
       expect(result.current.data).toEqual({ signedIn: false, hasRequiredClaims: false, user: null, errors: {} });
 
-      await hooksAct(async () => {
+      await act(async () => {
         await signIn();
       });
 
@@ -156,7 +153,7 @@ describe('Authentication', () => {
       expect(result.current.data).toEqual({ signedIn: true, hasRequiredClaims: true, user: getAuth(app).currentUser, errors: {} });
 
       // Signed out again
-      await hooksAct(async () => {
+      await act(async () => {
         await getAuth(app).signOut();
       });
       expect(getAuth(app).currentUser).toBeNull();
@@ -171,15 +168,15 @@ describe('Authentication', () => {
         claims: requiredClaims,
       };
 
-      const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck({ requiredClaims: requiredClaims }), {
+      const { result } = renderHook(() => useSigninCheck({ requiredClaims: requiredClaims }), {
         wrapper: Provider,
       });
 
-      await hooksAct(async () => {
+      await act(async () => {
         await signInWithCustomToken(getAuth(app), JSON.stringify(withClaimsCustomToken));
       });
 
-      await waitForHookCondition(() => result.current.status === 'success');
+      await waitFor(() => expect(result.current.status).toEqual('success'));
 
       expect(result.current.data.signedIn).toEqual(true);
       expect(result.current.data.hasRequiredClaims).toEqual(true);
@@ -194,15 +191,15 @@ describe('Authentication', () => {
       };
 
       // Extra claim passed to useSigninCheck
-      const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck({ requiredClaims: { ...requiredClaims, anExtraClaim: 'true' } }), {
+      const { result } = renderHook(() => useSigninCheck({ requiredClaims: { ...requiredClaims, anExtraClaim: 'true' } }), {
         wrapper: Provider,
       });
 
-      await hooksAct(async () => {
+      await act(async () => {
         await signInWithCustomToken(getAuth(app), JSON.stringify(withClaimsCustomToken));
       });
 
-      await waitForHookCondition(() => result.current.status === 'success');
+      await waitFor(() => expect(result.current.status).toEqual('success'));
 
       expect(result.current.data.signedIn).toEqual(true);
       expect(result.current.data.hasRequiredClaims).toEqual(false);
@@ -232,15 +229,15 @@ describe('Authentication', () => {
         };
       };
 
-      const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck({ validateCustomClaims: claimsValidator }), {
+      const { result } = renderHook(() => useSigninCheck({ validateCustomClaims: claimsValidator }), {
         wrapper: Provider,
       });
 
-      await hooksAct(async () => {
+      await act(async () => {
         await signInWithCustomToken(getAuth(app), JSON.stringify(withClaimsCustomToken));
       });
 
-      await waitForHookCondition(() => result.current.status === 'success');
+      await waitFor(() => expect(result.current.status).toEqual('success'));
 
       expect(result.current.data.signedIn).toEqual(true);
       expect(result.current.data.hasRequiredClaims).toEqual(false);
@@ -269,19 +266,17 @@ describe('Authentication', () => {
         };
       };
 
-      const { result, waitFor: waitForHookCondition } = renderHook(() => useSigninCheck({ validateCustomClaims: claimsValidator }), {
+      const { result } = renderHook(() => useSigninCheck({ validateCustomClaims: claimsValidator }), {
         wrapper: Provider,
       });
 
-      await hooksAct(async () => {
+      await act(async () => {
         await signInWithCustomToken(getAuth(app), JSON.stringify(withClaimsCustomToken));
       });
 
-      await waitForHookCondition(() => result.current.status === 'success');
+      await waitFor(() => expect(result.current.status).toEqual('success'));
 
       expect(result.current.data.signedIn).toEqual(true);
-      // TODO(jhuleatt): Why does the result change so many times?
-      expect(result.all.filter((r) => (r as ObservableStatus<SigninCheckResult>).data.signedIn === true).length).toBeGreaterThan(0);
     });
   });
 
@@ -313,7 +308,7 @@ describe('Authentication', () => {
       expect(getAuth(app).currentUser).toBeNull();
       expect(result.current.data).toEqual(getAuth(app).currentUser);
 
-      await hooksAct(async () => {
+      await act(async () => {
         await signIn();
       });
 

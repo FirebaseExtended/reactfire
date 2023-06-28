@@ -3,7 +3,7 @@ import { getFunctions, connectFunctionsEmulator, httpsCallable } from 'firebase/
 import { FunctionComponent } from 'react';
 import { FirebaseAppProvider, FunctionsProvider, useFunctions, useCallableFunctionResponse } from '../src/index';
 import { baseConfig } from './appConfig';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
 import { randomString } from './test-utils';
 import * as React from 'react';
 
@@ -12,7 +12,7 @@ describe('Functions', () => {
   const functions = getFunctions(app);
   connectFunctionsEmulator(functions, 'localhost', 5001);
 
-  const Provider: FunctionComponent = ({ children }) => (
+  const Provider: FunctionComponent<{children: React.ReactNode}> = ({ children }) => (
     <FirebaseAppProvider firebaseApp={app}>
       <FunctionsProvider sdk={functions}>{children}</FunctionsProvider>
     </FirebaseAppProvider>
@@ -39,12 +39,11 @@ describe('Functions', () => {
   describe('useCallableFunctionResponse', () => {
     it('calls a function on render', async () => {
       const testText = randomString();
-      const { result, waitFor } = renderHook(() => useCallableFunctionResponse<{ text: string }, string>('capitalizeText', { data: { text: testText } }), {
+      const { result } = renderHook(() => useCallableFunctionResponse<{ text: string }, string>('capitalizeText', { data: { text: testText } }), {
         wrapper: Provider,
       });
 
-      await waitFor(() => result.current.status === 'success');
-
+      await waitFor(() => expect(result.current.status).toEqual('success'));
       expect(result.current.data).toEqual(testText.toUpperCase());
     });
   });

@@ -1,4 +1,4 @@
-import { renderHook, act as actOnHook, cleanup as hooksCleanup } from '@testing-library/react-hooks';
+import { renderHook, act, cleanup, waitFor } from '@testing-library/react';
 
 import * as React from 'react';
 import '@testing-library/jest-dom/extend-expect';
@@ -30,7 +30,7 @@ describe('Firestore', () => {
   );
 
   afterEach(async () => {
-    hooksCleanup();
+    cleanup();
 
     // clear all Firestore emulator data
     // do this AFTER cleaning up hooks, otherwise they'll re-emit values
@@ -51,9 +51,9 @@ describe('Firestore', () => {
 
       await setDoc(ref, mockData);
 
-      const { result, waitFor } = renderHook(() => useFirestoreDoc(ref), { wrapper: Provider });
+      const { result } = renderHook(() => useFirestoreDoc(ref), { wrapper: Provider });
 
-      await waitFor(() => result.current.status === 'success');
+      await waitFor(() => expect(result.current.status).toEqual('success'));
 
       const dataFromFirestore = result.current.data;
 
@@ -72,9 +72,9 @@ describe('Firestore', () => {
 
       await setDoc(ref, mockData);
 
-      const { result, waitFor } = renderHook(() => useFirestoreDocData<any>(ref, { idField: 'id' }), { wrapper: Provider });
+      const { result } = renderHook(() => useFirestoreDocData<any>(ref, { idField: 'id' }), { wrapper: Provider });
 
-      await waitFor(() => result.current.status === 'success');
+      await waitFor(() => expect(result.current.status).toEqual('success'));
 
       const data = result.current.data;
 
@@ -92,9 +92,9 @@ describe('Firestore', () => {
       // reference a doc that doesn't exist
       const ref = doc(collectionRef, docIdThatDoesNotExist);
 
-      const { result, waitFor } = renderHook(() => useFirestoreDocData<any>(ref, { idField: 'id' }), { wrapper: Provider });
+      const { result } = renderHook(() => useFirestoreDocData<any>(ref, { idField: 'id' }), { wrapper: Provider });
 
-      await waitFor(() => result.current.status === 'success');
+      await waitFor(() => expect(result.current.status).toEqual('success'));
 
       expect(result.current.status).toEqual('success');
       expect(result.current.data).toBeUndefined();
@@ -105,17 +105,17 @@ describe('Firestore', () => {
     it('works when the document does not exist, and does not update when it is created', async () => {
       const ref = doc(collection(db, randomString()), randomString());
 
-      const { result: subscribeResult, waitFor: waitForSubscribe } = renderHook(() => useFirestoreDoc(ref), { wrapper: Provider });
-      const { result: onceResult, waitFor: waitForOnce } = renderHook(() => useFirestoreDocOnce(ref), { wrapper: Provider });
+      const { result: subscribeResult } = renderHook(() => useFirestoreDoc(ref), { wrapper: Provider });
+      const { result: onceResult } = renderHook(() => useFirestoreDocOnce(ref), { wrapper: Provider });
 
-      await waitForSubscribe(() => subscribeResult.current.status === 'success');
-      await waitForOnce(() => onceResult.current.status === 'success');
+      await waitFor(() => expect(subscribeResult.current.status).toEqual('success'));
+      await waitFor(() => expect(onceResult.current.status).toEqual('success'));
 
       expect(onceResult.current.data.exists()).toEqual(false);
 
-      await actOnHook(() => setDoc(ref, { a: 'test' }));
+      await act(() => setDoc(ref, { a: 'test' }));
 
-      await waitForSubscribe(() => subscribeResult.current.data.exists() === true);
+      await waitFor(() => expect(subscribeResult.current.data.exists()).toEqual(true));
 
       expect(onceResult.current.data.exists()).toEqual(false);
     });
@@ -129,18 +129,18 @@ describe('Firestore', () => {
       const ref = doc(collection(db, randomString()), randomString());
 
       await setDoc(ref, mockData1);
-      const { result: subscribeResult, waitFor: waitForSubscribe } = renderHook(() => useFirestoreDocData<any>(ref, { idField: 'id' }), { wrapper: Provider });
-      const { result: onceResult, waitFor: waitForOnce } = renderHook(() => useFirestoreDocDataOnce<any>(ref, { idField: 'id' }), { wrapper: Provider });
+      const { result: subscribeResult } = renderHook(() => useFirestoreDocData<any>(ref, { idField: 'id' }), { wrapper: Provider });
+      const { result: onceResult } = renderHook(() => useFirestoreDocDataOnce<any>(ref, { idField: 'id' }), { wrapper: Provider });
 
-      await waitForSubscribe(() => subscribeResult.current.status === 'success');
-      await waitForOnce(() => onceResult.current.status === 'success');
+      await waitFor(() => expect(subscribeResult.current.status).toEqual('success'));
+      await waitFor(() => expect(onceResult.current.status).toEqual('success'));
 
       expect(onceResult.current.data.a).toEqual(mockData1.a);
       expect(onceResult.current.data).toEqual(subscribeResult.current.data);
 
-      await actOnHook(() => setDoc(ref, mockData2));
+      await act(() => setDoc(ref, mockData2));
 
-      await waitForSubscribe(() => subscribeResult.current.data.a === mockData2.a);
+      await waitFor(() => expect(subscribeResult.current.data.a).toEqual(mockData2.a));
 
       expect(onceResult.current.data.a).toEqual(mockData1.a);
       expect(subscribeResult.current.data).not.toEqual(onceResult.current.data);
@@ -157,9 +157,9 @@ describe('Firestore', () => {
       await addDoc(ref, mockData1);
       await addDoc(ref, mockData2);
 
-      const { result, waitFor } = renderHook(() => useFirestoreCollection(ref), { wrapper: Provider });
+      const { result } = renderHook(() => useFirestoreCollection(ref), { wrapper: Provider });
 
-      await waitFor(() => result.current.status === 'success');
+      await waitFor(() => expect(result.current.status).toEqual('success'));
 
       const collectionSnap = result.current.data;
       expect(collectionSnap.docs.length).toEqual(2);
@@ -175,11 +175,11 @@ describe('Firestore', () => {
       await addDoc(ref, mockData1);
       await addDoc(ref, mockData2);
 
-      const { result: unfilteredResult, waitFor: waitForUnfiltered } = renderHook(() => useFirestoreCollection(ref), { wrapper: Provider });
-      const { result: filteredResult, waitFor: waitForFiltered } = renderHook(() => useFirestoreCollection(filteredRef), { wrapper: Provider });
+      const { result: unfilteredResult } = renderHook(() => useFirestoreCollection(ref), { wrapper: Provider });
+      const { result: filteredResult } = renderHook(() => useFirestoreCollection(filteredRef), { wrapper: Provider });
 
-      await waitForUnfiltered(() => unfilteredResult.current.status === 'success');
-      await waitForFiltered(() => filteredResult.current.status === 'success');
+      await waitFor(() => expect(unfilteredResult.current.status).toEqual('success'));
+      await waitFor(() => expect(filteredResult.current.status).toEqual('success'));
 
       const filteredSnap = filteredResult.current.data;
       const unfilteredSnap = unfilteredResult.current.data;
@@ -202,9 +202,9 @@ describe('Firestore', () => {
       await addDoc(ref, mockData1);
       await addDoc(ref, mockData2);
 
-      const { result, waitFor } = renderHook(() => useFirestoreCollectionData<any>(ref, { idField: 'id' }), { wrapper: Provider });
+      const { result } = renderHook(() => useFirestoreCollectionData<any>(ref, { idField: 'id' }), { wrapper: Provider });
 
-      await waitFor(() => result.current.status === 'success');
+      await waitFor(() => expect(result.current.status).toEqual('success'));
 
       expect(result.current.data.length).toEqual(2);
     });
@@ -219,10 +219,10 @@ describe('Firestore', () => {
       await addDoc(ref, mockData1);
       await addDoc(ref, mockData2);
 
-      const { result: unfilteredResult, waitFor: waitForFiltered } = renderHook(() => useFirestoreCollectionData<any>(ref, { idField: 'id' }), {
+      const { result: unfilteredResult } = renderHook(() => useFirestoreCollectionData<any>(ref, { idField: 'id' }), {
         wrapper: Provider,
       });
-      const { result: filteredResult, waitFor: waitForUnfiltered } = renderHook(
+      const { result: filteredResult } = renderHook(
         () =>
           useFirestoreCollectionData<any>(filteredRef, {
             idField: 'id',
@@ -230,8 +230,8 @@ describe('Firestore', () => {
         { wrapper: Provider }
       );
 
-      await waitForUnfiltered(() => unfilteredResult.current.status === 'success');
-      await waitForFiltered(() => filteredResult.current.status === 'success');
+      await waitFor(() => expect(unfilteredResult.current.status).toEqual('success'));
+      await waitFor(() => expect(filteredResult.current.status).toEqual('success'));
 
       const filteredList = filteredResult.current.data;
       const list = unfilteredResult.current.data;

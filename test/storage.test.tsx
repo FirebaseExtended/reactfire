@@ -3,7 +3,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable, UploadTaskSnapsh
 import { FunctionComponent } from 'react';
 import { FirebaseAppProvider, ObservableStatus, StorageProvider, useStorageDownloadURL, useStorageTask } from '../src/index';
 import { baseConfig } from './appConfig';
-import { renderHook, act as actOnHooks } from '@testing-library/react-hooks';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import * as React from 'react';
 import { randomString } from './test-utils';
 
@@ -12,7 +12,7 @@ describe('Storage', () => {
   const storage = getStorage(app);
   connectStorageEmulator(storage, 'localhost', 9199);
 
-  const Provider: FunctionComponent = ({ children }) => (
+  const Provider: FunctionComponent<{children: React.ReactNode}> = ({ children }) => (
     <FirebaseAppProvider firebaseApp={app}>
       <StorageProvider sdk={storage}>{children}</StorageProvider>
     </FirebaseAppProvider>
@@ -26,45 +26,34 @@ describe('Storage', () => {
 
       const uploadTask = uploadBytesResumable(testFileRef, someBytes);
 
-      const { result, waitFor } = renderHook(() => useStorageTask<UploadTaskSnapshot>(uploadTask, testFileRef), { wrapper: Provider });
+      const { result } = renderHook(() => useStorageTask<UploadTaskSnapshot>(uploadTask, testFileRef), { wrapper: Provider });
 
       const uploadTaskSnapshots: Array<UploadTaskSnapshot> = [];
       let hasUploadTaskCompleted = false;
-      let uploadTaskError;
       uploadTask.on(
         'state_changed',
         (snap: UploadTaskSnapshot) => {
           uploadTaskSnapshots.push(snap);
         },
         (e) => {
-          uploadTaskError = e;
+          throw e
         },
         () => {
           hasUploadTaskCompleted = true;
         }
       );
 
-      await waitFor(() => {
-        return hasUploadTaskCompleted && result.current.isComplete;
-      });
-
-      expect(result.error).toEqual(uploadTaskError);
-      expect(result.all.length).toBeGreaterThanOrEqual(1);
-
-      // filter out the "loading" updates
-      const uploadUpdates = result.all.filter((update) => {
-        return (update as ObservableStatus<UploadTaskSnapshot>).status === 'success';
-      });
-
       // check that the first update  matches
-      expect((uploadUpdates[0] as ObservableStatus<UploadTaskSnapshot>).data).toEqual(uploadTaskSnapshots[0]);
+      await waitFor(() => {
+        expect(result.current.data).toEqual(uploadTaskSnapshots[0])
+      })
 
-      // check that all bytes are accounted for
-      const lastUpdate = result.current as ObservableStatus<UploadTaskSnapshot>;
-      expect(lastUpdate.data.bytesTransferred).toEqual(lastUpdate.data.totalBytes);
-
-      // check that the upload is marked as complete
-      expect(result.current.isComplete).toEqual(hasUploadTaskCompleted);
+      // check that all bytes are accounted for when upload is marked as complete
+      await waitFor(() => {
+        expect(hasUploadTaskCompleted).toEqual(true);
+        expect(result.current.isComplete).toEqual(true);
+        expect(result.current.data.bytesTransferred).toEqual(result.current.data.totalBytes)
+      })      
     });
   });
 
@@ -75,13 +64,9 @@ describe('Storage', () => {
 
       await uploadBytesResumable(testFileRef, someBytes);
 
-      const { result, waitFor } = renderHook(() => useStorageDownloadURL(testFileRef), { wrapper: Provider });
+      const { result } = renderHook(() => useStorageDownloadURL(testFileRef), { wrapper: Provider });
 
-      await actOnHooks(() =>
-        waitFor(() => {
-          return result.current.status === 'success';
-        })
-      );
+      await waitFor(() => expect(result.current.status).toEqual('success'));
 
       const downloadUrl = await getDownloadURL(testFileRef);
 

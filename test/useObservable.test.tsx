@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom/extend-expect';
-import { act, cleanup, render, waitFor } from '@testing-library/react';
-import { act as actOnHook, renderHook } from '@testing-library/react-hooks';
+import { act, cleanup, render, renderHook, waitFor } from '@testing-library/react';
 import * as React from 'react';
 import { of, Subject, BehaviorSubject, throwError } from 'rxjs';
 import { useObservable } from '../src/index';
@@ -21,7 +20,7 @@ describe('useObservable', () => {
       expect(result.current.isComplete).toEqual(false);
       expect(result.current.status).toEqual('loading');
 
-      actOnHook(() => observable$.next('val'));
+      act(() => observable$.next('val'));
 
       expect(result.current.data).toEqual('val');
       expect(result.current.error).toBeUndefined();
@@ -45,7 +44,7 @@ describe('useObservable', () => {
       expect(result.current.isComplete).toEqual(false);
       expect(result.current.status).toEqual('success'); // skip 'loading'
 
-      actOnHook(() => observable$.next(asyncData));
+      act(() => observable$.next(asyncData));
 
       expect(result.current.data).toEqual(asyncData);
       expect(result.current.error).toBeUndefined();
@@ -70,7 +69,7 @@ describe('useObservable', () => {
 
       expect(result.current.status).toEqual('loading');
 
-      actOnHook(() => observable$.next(undefined));
+      act(() => observable$.next(undefined));
 
       expect(result.current.status).toEqual('success');
       expect(result.current.data).toBeUndefined();
@@ -119,12 +118,19 @@ describe('useObservable', () => {
 
   describe('Suspense Mode', () => {
     it('throws an error if no observableId is provided', () => {
+      // stop a nasty-looking console error
+      // https://github.com/facebook/react/issues/11098#issuecomment-523977830
+      const spy = vi.spyOn(console, 'error');
+      spy.mockImplementation(() => {});
+
       const observable$: Subject<any> = new Subject();
 
-      // @ts-expect-error: we're intentionally trying to break this
-      const { result } = renderHook(() => useObservable(undefined, observable$, { suspense: true }));
+      // @ts-expect-error we're trying to break useObservable
+      expect(() => renderHook(() => useObservable(undefined, observable$, { suspense: true }))).toThrow(
+        Error('cannot call useObservable without an observableId')
+      );
 
-      expect(result.error).toBeInstanceOf(Error);
+      spy.mockRestore();
     });
 
     it('can return a startval and then the observable once it is ready', () => {
@@ -137,16 +143,22 @@ describe('useObservable', () => {
       expect(result.current.data).toEqual(startVal);
 
       // prove that it actually does emit the value from the observable too
-      actOnHook(() => observable$.next(observableVal));
+      act(() => observable$.next(observableVal));
       expect(result.current.data).toEqual(observableVal);
     });
 
     it('throws an error if there is an error on initial fetch', async () => {
+      // stop a nasty-looking console error
+      // https://github.com/facebook/react/issues/11098#issuecomment-523977830
+      const spy = vi.spyOn(console, 'error');
+      spy.mockImplementation(() => {});
+
       const error = new Error('I am an error');
       const observable$ = throwError(error);
 
-      const { result } = renderHook(() => useObservable('test-error', observable$, { suspense: true }));
-      expect(result.error).toEqual(error);
+      expect(() => renderHook(() => useObservable('test-error', observable$, { suspense: true }))).toThrow(error);
+
+      spy.mockRestore();
     });
 
     it('provides the value, rather than initialData, when the observable is ready right away', () => {
@@ -205,7 +217,7 @@ describe('useObservable', () => {
       expect(result.current.data).toEqual(startVal);
 
       values.forEach((value) => {
-        actOnHook(() => observable$.next(value));
+        act(() => observable$.next(value));
         expect(result.current.data).toEqual(value);
       });
     });
