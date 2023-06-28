@@ -13,7 +13,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '18'
           cache: 'npm'
       - name: Install deps
         run: npm ci

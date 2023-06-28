@@ -65,7 +65,7 @@ export function useIsSuspenseEnabled(): boolean {
 }
 
 export function useSuspenseEnabledFromConfigAndContext(suspenseFromConfig?: boolean): boolean {
-  let suspenseFromContext = React.useContext(SuspenseEnabledContext);
+  const suspenseFromContext = React.useContext(SuspenseEnabledContext);
 
   // prioritize config over context
   if (suspenseFromConfig !== undefined) {

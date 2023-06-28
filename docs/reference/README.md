@@ -277,7 +277,7 @@ ___
 
 ### AuthCheck
 
-▸ **AuthCheck**(`__namedParameters`): `JSX.Element`
+▸ **AuthCheck**(`«destructured»`): `JSX.Element`
 
 **`Deprecated`**
 
@@ -291,7 +291,7 @@ Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More 
 
 | Name | Type |
 | :------ | :------ |
-| `__namedParameters` | [`AuthCheckProps`](interfaces/AuthCheckProps.md) |
+| `«destructured»` | [`AuthCheckProps`](interfaces/AuthCheckProps.md) |
 
 #### Returns
 
@@ -325,7 +325,7 @@ ___
 
 ### ClaimsCheck
 
-▸ **ClaimsCheck**(`__namedParameters`): `Element`
+▸ **ClaimsCheck**(`«destructured»`): `Element`
 
 **`Deprecated`**
 
@@ -339,7 +339,7 @@ Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More 
 
 | Name | Type |
 | :------ | :------ |
-| `__namedParameters` | [`ClaimsCheckProps`](interfaces/ClaimsCheckProps.md) |
+| `«destructured»` | [`ClaimsCheckProps`](interfaces/ClaimsCheckProps.md) |
 
 #### Returns
 
@@ -513,13 +513,13 @@ ___
 
 ### SuspenseWithPerf
 
-▸ **SuspenseWithPerf**(`__namedParameters`): `JSX.Element`
+▸ **SuspenseWithPerf**(`«destructured»`): `JSX.Element`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `__namedParameters` | [`SuspensePerfProps`](interfaces/SuspensePerfProps.md) |
+| `«destructured»` | [`SuspensePerfProps`](interfaces/SuspensePerfProps.md) |
 
 #### Returns
 
@@ -618,7 +618,7 @@ ___
 
 ### preloadObservable
 
-▸ **preloadObservable**<`T`\>(`source`, `id`): `SuspenseSubject`<`T`\>
+▸ **preloadObservable**<`T`\>(`source`, `id`, `suspenseEnabled?`): `SuspenseSubject`<`T`\>
 
 #### Type parameters
 
@@ -628,10 +628,11 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `source` | `Observable`<`T`\> |
-| `id` | `string` |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `source` | `Observable`<`T`\> | `undefined` |
+| `id` | `string` | `undefined` |
+| `suspenseEnabled` | `boolean` | `false` |
 
 #### Returns
 

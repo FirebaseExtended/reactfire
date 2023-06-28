@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 import { deleteApp, getApps, initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import * as React from 'react';
@@ -24,15 +24,13 @@ describe('Sdk management', () => {
       const errorLog = vi.spyOn(console, 'error');
       errorLog.mockImplementation(() => {});
 
-      const { result } = renderHook(() => useAuth(), {
+      expect(() => renderHook(() => useAuth(), {
         wrapper: ({ children }) => (
           <FirebaseAppProvider firebaseApp={app2}>
             <AuthProvider sdk={authInstance}>{children}</AuthProvider>
           </FirebaseAppProvider>
         ),
-      });
-      expect(result.error).toBeDefined();
-      expect(result.error?.message).toEqual('sdk was initialized with a different firebase app');
+      })).toThrow(Error('sdk was initialized with a different firebase app'));
 
       errorLog.mockRestore();
     });

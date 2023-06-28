@@ -1,4 +1,4 @@
-import { renderHook, act as hooksAct, cleanup as hooksCleanup } from '@testing-library/react-hooks';
+import { renderHook, act, cleanup, waitFor } from '@testing-library/react';
 import * as React from 'react';
 import { useDatabaseObject, useDatabaseList, FirebaseAppProvider, DatabaseProvider, ObservableStatus } from '../src/index';
 import { baseConfig } from './appConfig';
@@ -12,14 +12,14 @@ describe('Realtime Database (RTDB)', () => {
   const database = getDatabase(app);
   connectDatabaseEmulator(database, 'localhost', 9000);
 
-  const Provider: React.FunctionComponent = ({ children }) => (
+  const Provider: React.FunctionComponent<{ children: React.ReactElement }> = ({ children }) => (
     <FirebaseAppProvider firebaseApp={app}>
       <DatabaseProvider sdk={database}>{children}</DatabaseProvider>
     </FirebaseAppProvider>
   );
 
   afterEach(async () => {
-    hooksCleanup();
+    cleanup();
 
     // clear out the database
     await set(ref(database), null);
@@ -41,9 +41,9 @@ describe('Realtime Database (RTDB)', () => {
       const objectRef = ref(database, randomString());
       await set(objectRef, mockData);
 
-      const { result, waitFor } = renderHook(() => useDatabaseObject<QueryChange>(objectRef), { wrapper: Provider });
+      const { result } = renderHook(() => useDatabaseObject<QueryChange>(objectRef), { wrapper: Provider });
 
-      await hooksAct(() => waitFor(() => result.current.status === 'success'));
+      await waitFor(() => expect(result.current.status).toEqual('success'));
 
       expect(result.current.data.snapshot.val()).toEqual(mockData);
     });
@@ -54,24 +54,21 @@ describe('Realtime Database (RTDB)', () => {
       const initialValue = randomString();
       await set(dataRef, initialValue);
 
-      // warm up the hook
-      const { result, waitFor } = renderHook(() => useDatabaseObject<QueryChange>(dataRef), { wrapper: Provider });
-      await hooksAct(() => waitFor(() => result.current.status === 'success'));
+      const { result } = renderHook(() => useDatabaseObject<QueryChange>(dataRef), { wrapper: Provider });
+      await waitFor(() => expect(result.current.status).toEqual('success'));
 
       // update the value a few times
       const values = [randomString(), randomString(), randomString(), randomString()];
-      const updates = values.map(async (newValue) => {
-        return set(dataRef, newValue);
-      });
-      await hooksAct(async () => {
-        await Promise.all(updates);
-      });
 
-      // make sure every value was emitted
-      const resultValues = result.all
-        .filter((observableStatus) => (observableStatus as ObservableStatus<QueryChange>).status === 'success')
-        .map((observableStatus) => (observableStatus as ObservableStatus<QueryChange>).data.snapshot.val());
-      expect(resultValues).toEqual([initialValue, ...values]);
+      // update each new value and check that the hook emits the same value
+      for (const value of values) {
+        await act(async () => {
+          await set(dataRef, value);
+        });
+        await waitFor(() => {
+          expect(result.current.data?.snapshot.val()).toEqual(value);
+        });
+      }
     });
   });
 
@@ -82,12 +79,12 @@ describe('Realtime Database (RTDB)', () => {
 
       const listRef = ref(database, randomString());
 
-      await hooksAct(() => push(listRef, mockData1).then());
-      await hooksAct(() => push(listRef, mockData2).then());
+      await act(() => push(listRef, mockData1).then());
+      await act(() => push(listRef, mockData2).then());
 
-      const { result, waitFor } = renderHook(() => useDatabaseList<QueryChange>(listRef), { wrapper: Provider });
+      const { result } = renderHook(() => useDatabaseList<QueryChange>(listRef), { wrapper: Provider });
 
-      await hooksAct(() => waitFor(() => result.current.status === 'success'));
+      await waitFor(() => expect(result.current.status).toEqual('success'));
 
       expect(result.current.data.length).toEqual(2);
       const values = result.current.data.map((queryChange) => queryChange.snapshot.val());
@@ -104,13 +101,16 @@ describe('Realtime Database (RTDB)', () => {
       const itemsRef = ref(database, 'items');
       const filteredItemsRef = query(itemsRef, orderByChild('a'), equalTo('hello'));
 
-      await hooksAct(() => push(itemsRef, mockData1).then());
-      await hooksAct(() => push(itemsRef, mockData2).then());
+      await act(() => push(itemsRef, mockData1).then());
+      await act(() => push(itemsRef, mockData2).then());
 
-      const { result: unfilteredResult, waitFor } = renderHook(() => useDatabaseList(itemsRef), { wrapper: Provider });
+      const { result: unfilteredResult } = renderHook(() => useDatabaseList(itemsRef), { wrapper: Provider });
       const { result: filteredResult } = renderHook(() => useDatabaseList(filteredItemsRef), { wrapper: Provider });
 
-      await hooksAct(() => waitFor(() => unfilteredResult.current.status === 'success' && filteredResult.current.status === 'success'));
+      await waitFor(() => {
+        expect(unfilteredResult.current.status).toEqual('success');
+        expect(filteredResult.current.status).toEqual('success');
+      });
 
       expect(filteredResult.current.data.length).toEqual(1);
       expect(unfilteredResult.current.data.length).toBeGreaterThan(filteredResult.current.data.length);

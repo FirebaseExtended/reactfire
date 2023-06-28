@@ -49,7 +49,7 @@ function StorageFromContext(props: StorageImageProps & React.DetailedHTMLProps<R
 }
 
 function INTERNALStorageImage(props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>): JSX.Element {
-  let { storage, storagePath, suspense, placeHolder, ...imgProps } = props;
+  const { storage, storagePath, suspense, placeHolder, ...imgProps } = props;
 
   const reactfireOptions: ReactFireOptions<string> = {
     suspense: useSuspenseEnabledFromConfigAndContext(suspense),
@@ -76,7 +76,7 @@ function INTERNALStorageImage(props: StorageImageProps & React.DetailedHTMLProps
 }
 
 export function StorageImage(props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>) {
-  let { storage } = props;
+  const { storage } = props;
 
   if (storage) {
     return <INTERNALStorageImage {...props} />;
