@@ -28,7 +28,7 @@ export function useUser<T = unknown>(options?: ReactFireOptions<T>): ObservableS
   return useObservable(observableId, observable$, options);
 }
 
-export function useIdTokenResult(user: User, forceRefresh: boolean = false, options?: ReactFireOptions<IdTokenResult>): ObservableStatus<IdTokenResult> {
+export function useIdTokenResult(user: User, forceRefresh = false, options?: ReactFireOptions<IdTokenResult>): ObservableStatus<IdTokenResult> {
   if (!user) {
     throw new Error('you must provide a user');
   }
