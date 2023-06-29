@@ -180,7 +180,6 @@ describe('Authentication', () => {
 
       expect(result.current.data.signedIn).toEqual(true);
       expect(result.current.data.hasRequiredClaims).toEqual(true);
-      
     });
 
     it('recognizes invalid custom claims', async () => {
