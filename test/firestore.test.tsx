@@ -101,7 +101,7 @@ describe('Firestore', () => {
       expect(result.current.data).toBeUndefined();
     });
 
-    it.only('goes back into a loading state if you swap the query', async () => {
+    it('goes back into a loading state if you swap the query', async () => {
       const mockData = { a: 'hello' };
       const otherMockData = { a: 'goodbye' };
 
