@@ -17,6 +17,7 @@ import { baseConfig } from './appConfig';
 import { randomString } from './test-utils';
 
 import { addDoc, collection, doc, getFirestore, query, setDoc, connectFirestoreEmulator, where, getDoc } from 'firebase/firestore';
+import type { DocumentReference } from 'firebase/firestore';
 
 describe('Firestore', () => {
   const app = initializeApp(baseConfig, 'firestore-test-suite');
@@ -98,6 +99,50 @@ describe('Firestore', () => {
 
       expect(result.current.status).toEqual('success');
       expect(result.current.data).toBeUndefined();
+    });
+
+    it.only('goes back into a loading state if you swap the query', async () => {
+      const mockData = { a: 'hello' };
+      const otherMockData = { a: 'goodbye' };
+
+      const collectionRef = collection(db, randomString());
+      const firstRef = doc(collectionRef, randomString());
+      const secondRef = doc(collectionRef, randomString());
+
+      await setDoc(firstRef, mockData);
+      await setDoc(secondRef, otherMockData);
+
+      const { result, rerender } = renderHook(
+        (props: { docRef: DocumentReference }) => {
+          const update = useFirestoreDocData<any>(props.docRef, { idField: 'id' });
+
+          // important!! check that the hook doesn't show stale data
+          // for example, if props.docRef.id is a new ref but update.data.id is data for the old ref
+          if (update.status === 'success') {
+            expect(update.data.id).toEqual(props.docRef.id);
+          }
+
+          return update;
+        },
+        {
+          wrapper: Provider,
+          initialProps: { docRef: firstRef },
+        }
+      );
+
+      // ensure first ref's data is loaded
+      await waitFor(() => expect(result.current.status).toEqual('success'));
+      expect(result.current.data).toBeDefined();
+      expect(result.current.data.a).toEqual(mockData.a);
+
+      // re-render the hook with the second reference
+      rerender({ docRef: secondRef });
+
+      // ensure second ref's data is loaded
+      await waitFor(() => {
+        expect(result.current.data).toBeDefined();
+        expect(result.current.data.a).toEqual(otherMockData.a);
+      });
     });
   });
 

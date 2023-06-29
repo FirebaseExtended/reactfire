@@ -33,7 +33,7 @@ export function useStorageDownloadURL<T = string>(ref: StorageReference, options
   return useObservable(observableId, observable$, options);
 }
 
-type StorageImageProps = {
+export type StorageImageProps = {
   storagePath: string;
   storage?: FirebaseStorage;
   suspense?: boolean;
