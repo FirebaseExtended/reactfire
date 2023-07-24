@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useSyncExternalStore } from 'use-sync-external-store/shim';
 import { Observable } from 'rxjs';
 import { SuspenseSubject } from './SuspenseSubject';
 import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp';
@@ -26,7 +27,7 @@ export function preloadObservable<T>(source: Observable<T>, id: string, suspense
   }
 }
 
-export interface ObservableStatus<T> {
+interface ObservableStatusBase<T> {
   /**
    * The loading status.
    *
@@ -52,7 +53,7 @@ export interface ObservableStatus<T> {
    *
    * If `initialData` is passed in, the first value of `data` will be the valuea provided in `initialData` **UNLESS** the underlying observable is ready, in which case it will skip `initialData`.
    */
-  data: T;
+  data: T | undefined;
   /**
    * Any error that may have occurred in the underlying observable
    */
@@ -63,42 +64,33 @@ export interface ObservableStatus<T> {
   firstValuePromise: Promise<void>;
 }
 
-function reducerFactory<T>(observable: SuspenseSubject<T>) {
-  return function reducer(state: ObservableStatus<T>, action: 'value' | 'error' | 'complete'): ObservableStatus<T> {
-    // always make sure these values are in sync with the observable
-    const newState = {
-      ...state,
-      hasEmitted: state.hasEmitted || observable.hasValue,
-      error: observable.ourError,
-      firstValuePromise: observable.firstEmission,
-    };
-    if (observable.hasValue) {
-      newState.data = observable.value;
-    }
-
-    switch (action) {
-      case 'value':
-        newState.status = 'success';
-        return newState;
-      case 'error':
-        newState.status = 'error';
-        return newState;
-      case 'complete':
-        newState.isComplete = true;
-        return newState;
-      default:
-        throw new Error(`invalid action "${action}"`);
-    }
-  };
+export interface ObservableStatusSuccess<T> extends ObservableStatusBase<T> {
+  status: 'success';
+  data: T;
 }
 
+export interface ObservableStatusError<T> extends ObservableStatusBase<T> {
+  status: 'error';
+  isComplete: true;
+  error: Error;
+}
+
+export interface ObservableStatusLoading<T> extends ObservableStatusBase<T> {
+  status: 'loading';
+  data: undefined;
+  hasEmitted: false;
+}
+
+export type ObservableStatus<T> = ObservableStatusLoading<T> | ObservableStatusError<T> | ObservableStatusSuccess<T>;
+
 export function useObservable<T = unknown>(observableId: string, source: Observable<T>, config: ReactFireOptions = {}): ObservableStatus<T> {
-  // Register the observable with the cache
   if (!observableId) {
     throw new Error('cannot call useObservable without an observableId');
   }
+
   const suspenseEnabled = useSuspenseEnabledFromConfigAndContext(config.suspense);
 
+  // Register the observable with the cache
   const observable = preloadObservable(source, observableId, suspenseEnabled);
 
   // Suspend if suspense is enabled and no initial data exists
@@ -108,31 +100,43 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
     throw observable.firstEmission;
   }
 
-  const initialState: ObservableStatus<T> = {
-    status: hasData ? 'success' : 'loading',
-    hasEmitted: hasData,
-    isComplete: false,
-    data: observable.hasValue ? observable.value : config?.initialData ?? config?.startWithValue,
-    error: observable.ourError,
-    firstValuePromise: observable.firstEmission,
-  };
-  const [status, dispatch] = React.useReducer<React.Reducer<ObservableStatus<T>, 'value' | 'error' | 'complete'>>(reducerFactory<T>(observable), initialState);
+  const subscribe = React.useCallback((onStoreChange: () => void) => {
+      const subscription = observable.subscribe({
+        next: () => {
+          onStoreChange();
+        },
+        error: (e) => {
+          onStoreChange();
+          throw e;
+        },
+        complete: () => {
+          onStoreChange();
+        },
+      });
 
-  React.useEffect(() => {
-    const subscription = observable.subscribe({
-      next: () => {
-        dispatch('value');
-      },
-      error: (e) => {
-        dispatch('error');
-        throw e;
-      },
-      complete: () => {
-        dispatch('complete');
-      },
-    });
-    return () => subscription.unsubscribe();
+      return () => {
+        subscription.unsubscribe();
+      }
+  }, [observable])
+
+  const getSnapshot = React.useCallback<() => ObservableStatus<T>>(() => {
+    return observable.immutableStatus;
   }, [observable]);
 
-  return status;
+  const update = useSyncExternalStore(subscribe, getSnapshot);
+
+  // modify the value if initialData exists
+  if (!observable.hasValue && hasData) {
+    update.data = config?.initialData ?? config?.startWithValue;
+    update.status = 'success';
+    update.hasEmitted = true;
+  }
+
+  // throw an error if there is an error
+  // TODO(jhuleatt) this is the current, tested-for, behavior. But do we actually want it?
+  if (update.error) {
+    throw update.error;
+  }
+
+  return update;
 }

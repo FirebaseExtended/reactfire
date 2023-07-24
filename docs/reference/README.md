@@ -14,7 +14,10 @@ ReactFire reference docs
 - [ClaimCheckErrors](interfaces/ClaimCheckErrors.md)
 - [ClaimsCheckProps](interfaces/ClaimsCheckProps.md)
 - [ClaimsValidator](interfaces/ClaimsValidator.md)
-- [ObservableStatus](interfaces/ObservableStatus.md)
+- [FirebaseAppProviderProps](interfaces/FirebaseAppProviderProps.md)
+- [ObservableStatusError](interfaces/ObservableStatusError.md)
+- [ObservableStatusLoading](interfaces/ObservableStatusLoading.md)
+- [ObservableStatusSuccess](interfaces/ObservableStatusSuccess.md)
 - [ReactFireOptions](interfaces/ReactFireOptions.md)
 - [SignInCheckOptionsBasic](interfaces/SignInCheckOptionsBasic.md)
 - [SignInCheckOptionsClaimsObject](interfaces/SignInCheckOptionsClaimsObject.md)
@@ -23,8 +26,10 @@ ReactFire reference docs
 
 ### Type Aliases
 
+- [ObservableStatus](README.md#observablestatus)
 - [ReactFireGlobals](README.md#reactfireglobals)
 - [SigninCheckResult](README.md#signincheckresult)
+- [StorageImageProps](README.md#storageimageprops)
 
 ### Variables
 
@@ -107,6 +112,22 @@ ReactFire reference docs
 
 ## Type Aliases
 
+### ObservableStatus
+
+Ƭ **ObservableStatus**<`T`\>: [`ObservableStatusLoading`](interfaces/ObservableStatusLoading.md)<`T`\> \| [`ObservableStatusError`](interfaces/ObservableStatusError.md)<`T`\> \| [`ObservableStatusSuccess`](interfaces/ObservableStatusSuccess.md)<`T`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Defined in
+
+[src/useObservable.ts:84](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L84)
+
+___
+
 ### ReactFireGlobals
 
 Ƭ **ReactFireGlobals**: `Object`
@@ -132,6 +153,25 @@ ___
 #### Defined in
 
 [src/auth.tsx:59](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L59)
+
+___
+
+### StorageImageProps
+
+Ƭ **StorageImageProps**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `placeHolder?` | `JSX.Element` |
+| `storage?` | `FirebaseStorage` |
+| `storagePath` | `string` |
+| `suspense?` | `boolean` |
+
+#### Defined in
+
+[src/storage.tsx:36](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L36)
 
 ## Variables
 
@@ -299,7 +339,7 @@ Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More 
 
 #### Defined in
 
-[src/auth.tsx:240](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L240)
+[src/auth.tsx:247](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L247)
 
 ___
 
@@ -379,7 +419,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `props` | `PropsWithChildren`<`FirebaseAppProviderProps`\> |
+| `props` | `PropsWithChildren`<[`FirebaseAppProviderProps`](interfaces/FirebaseAppProviderProps.md)\> |
 
 #### Returns
 
@@ -479,7 +519,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `props` | `StorageImageProps` & `ClassAttributes`<`HTMLImageElement`\> & `ImgHTMLAttributes`<`HTMLImageElement`\> |
+| `props` | [`StorageImageProps`](README.md#storageimageprops) & `ClassAttributes`<`HTMLImageElement`\> & `ImgHTMLAttributes`<`HTMLImageElement`\> |
 
 #### Returns
 
@@ -640,7 +680,7 @@ ___
 
 #### Defined in
 
-[src/useObservable.ts:19](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L19)
+[src/useObservable.ts:20](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L20)
 
 ___
 
@@ -708,7 +748,7 @@ ___
 
 ### useCallableFunctionResponse
 
-▸ **useCallableFunctionResponse**<`RequestData`, `ResponseData`\>(`functionName`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`ResponseData`\>
+▸ **useCallableFunctionResponse**<`RequestData`, `ResponseData`\>(`functionName`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`ResponseData`\>
 
 Calls a callable function.
 
@@ -728,7 +768,7 @@ Calls a callable function.
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`ResponseData`\>
+[`ObservableStatus`](README.md#observablestatus)<`ResponseData`\>
 
 #### Defined in
 
@@ -752,7 +792,7 @@ ___
 
 ### useDatabaseList
 
-▸ **useDatabaseList**<`T`\>(`ref`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`QueryChange`[] \| `T`[]\>
+▸ **useDatabaseList**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`QueryChange`[] \| `T`[]\>
 
 Subscribe to a Realtime Database list
 
@@ -771,7 +811,7 @@ Subscribe to a Realtime Database list
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`QueryChange`[] \| `T`[]\>
+[`ObservableStatus`](README.md#observablestatus)<`QueryChange`[] \| `T`[]\>
 
 #### Defined in
 
@@ -781,7 +821,7 @@ ___
 
 ### useDatabaseListData
 
-▸ **useDatabaseListData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`T`[] \| ``null``\>
+▸ **useDatabaseListData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`T`[] \| ``null``\>
 
 #### Type parameters
 
@@ -798,7 +838,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`T`[] \| ``null``\>
+[`ObservableStatus`](README.md#observablestatus)<`T`[] \| ``null``\>
 
 #### Defined in
 
@@ -808,7 +848,7 @@ ___
 
 ### useDatabaseObject
 
-▸ **useDatabaseObject**<`T`\>(`ref`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`QueryChange` \| `T`\>
+▸ **useDatabaseObject**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`QueryChange` \| `T`\>
 
 Subscribe to a Realtime Database object
 
@@ -827,7 +867,7 @@ Subscribe to a Realtime Database object
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`QueryChange` \| `T`\>
+[`ObservableStatus`](README.md#observablestatus)<`QueryChange` \| `T`\>
 
 #### Defined in
 
@@ -837,7 +877,7 @@ ___
 
 ### useDatabaseObjectData
 
-▸ **useDatabaseObjectData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`T`\>
+▸ **useDatabaseObjectData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`T`\>
 
 #### Type parameters
 
@@ -854,7 +894,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`T`\>
+[`ObservableStatus`](README.md#observablestatus)<`T`\>
 
 #### Defined in
 
@@ -892,7 +932,7 @@ ___
 
 ### useFirestoreCollection
 
-▸ **useFirestoreCollection**<`T`\>(`query`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`QuerySnapshot`<`T`\>\>
+▸ **useFirestoreCollection**<`T`\>(`query`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`QuerySnapshot`<`T`\>\>
 
 Subscribe to a Firestore collection
 
@@ -911,7 +951,7 @@ Subscribe to a Firestore collection
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`QuerySnapshot`<`T`\>\>
+[`ObservableStatus`](README.md#observablestatus)<`QuerySnapshot`<`T`\>\>
 
 #### Defined in
 
@@ -921,7 +961,7 @@ ___
 
 ### useFirestoreCollectionData
 
-▸ **useFirestoreCollectionData**<`T`\>(`query`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`T`[]\>
+▸ **useFirestoreCollectionData**<`T`\>(`query`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`T`[]\>
 
 Subscribe to a Firestore collection and unwrap the snapshot into an array.
 
@@ -940,7 +980,7 @@ Subscribe to a Firestore collection and unwrap the snapshot into an array.
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`T`[]\>
+[`ObservableStatus`](README.md#observablestatus)<`T`[]\>
 
 #### Defined in
 
@@ -950,7 +990,7 @@ ___
 
 ### useFirestoreDoc
 
-▸ **useFirestoreDoc**<`T`\>(`ref`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`DocumentSnapshot`<`T`\>\>
+▸ **useFirestoreDoc**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`DocumentSnapshot`<`T`\>\>
 
 Subscribe to Firestore Document changes
 
@@ -971,7 +1011,7 @@ You can preload data for this hook by calling `preloadFirestoreDoc`
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`DocumentSnapshot`<`T`\>\>
+[`ObservableStatus`](README.md#observablestatus)<`DocumentSnapshot`<`T`\>\>
 
 #### Defined in
 
@@ -981,7 +1021,7 @@ ___
 
 ### useFirestoreDocData
 
-▸ **useFirestoreDocData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`T`\>
+▸ **useFirestoreDocData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`T`\>
 
 Subscribe to Firestore Document changes and unwrap the document into a plain object
 
@@ -1000,7 +1040,7 @@ Subscribe to Firestore Document changes and unwrap the document into a plain obj
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`T`\>
+[`ObservableStatus`](README.md#observablestatus)<`T`\>
 
 #### Defined in
 
@@ -1010,7 +1050,7 @@ ___
 
 ### useFirestoreDocDataOnce
 
-▸ **useFirestoreDocDataOnce**<`T`\>(`ref`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`T`\>
+▸ **useFirestoreDocDataOnce**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`T`\>
 
 Get a Firestore document, unwrap the document into a plain object, and don't subscribe to changes
 
@@ -1029,7 +1069,7 @@ Get a Firestore document, unwrap the document into a plain object, and don't sub
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`T`\>
+[`ObservableStatus`](README.md#observablestatus)<`T`\>
 
 #### Defined in
 
@@ -1039,7 +1079,7 @@ ___
 
 ### useFirestoreDocOnce
 
-▸ **useFirestoreDocOnce**<`T`\>(`ref`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`DocumentSnapshot`<`T`\>\>
+▸ **useFirestoreDocOnce**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`DocumentSnapshot`<`T`\>\>
 
 Get a firestore document and don't subscribe to changes
 
@@ -1058,7 +1098,7 @@ Get a firestore document and don't subscribe to changes
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`DocumentSnapshot`<`T`\>\>
+[`ObservableStatus`](README.md#observablestatus)<`DocumentSnapshot`<`T`\>\>
 
 #### Defined in
 
@@ -1082,7 +1122,7 @@ ___
 
 ### useIdTokenResult
 
-▸ **useIdTokenResult**(`user`, `forceRefresh?`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`IdTokenResult`\>
+▸ **useIdTokenResult**(`user`, `forceRefresh?`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`IdTokenResult`\>
 
 #### Parameters
 
@@ -1094,7 +1134,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`IdTokenResult`\>
+[`ObservableStatus`](README.md#observablestatus)<`IdTokenResult`\>
 
 #### Defined in
 
@@ -1104,7 +1144,7 @@ ___
 
 ### useInitAnalytics
 
-▸ **useInitAnalytics**(`initializer`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`Analytics`\>
+▸ **useInitAnalytics**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`Analytics`\>
 
 #### Parameters
 
@@ -1115,7 +1155,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`Analytics`\>
+[`ObservableStatus`](README.md#observablestatus)<`Analytics`\>
 
 #### Defined in
 
@@ -1125,7 +1165,7 @@ ___
 
 ### useInitAppCheck
 
-▸ **useInitAppCheck**(`initializer`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`AppCheck`\>
+▸ **useInitAppCheck**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`AppCheck`\>
 
 #### Parameters
 
@@ -1136,7 +1176,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`AppCheck`\>
+[`ObservableStatus`](README.md#observablestatus)<`AppCheck`\>
 
 #### Defined in
 
@@ -1146,7 +1186,7 @@ ___
 
 ### useInitAuth
 
-▸ **useInitAuth**(`initializer`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`Auth`\>
+▸ **useInitAuth**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`Auth`\>
 
 #### Parameters
 
@@ -1157,7 +1197,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`Auth`\>
+[`ObservableStatus`](README.md#observablestatus)<`Auth`\>
 
 #### Defined in
 
@@ -1167,7 +1207,7 @@ ___
 
 ### useInitDatabase
 
-▸ **useInitDatabase**(`initializer`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`Database`\>
+▸ **useInitDatabase**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`Database`\>
 
 #### Parameters
 
@@ -1178,7 +1218,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`Database`\>
+[`ObservableStatus`](README.md#observablestatus)<`Database`\>
 
 #### Defined in
 
@@ -1188,7 +1228,7 @@ ___
 
 ### useInitFirestore
 
-▸ **useInitFirestore**(`initializer`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`Firestore`\>
+▸ **useInitFirestore**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`Firestore`\>
 
 #### Parameters
 
@@ -1199,7 +1239,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`Firestore`\>
+[`ObservableStatus`](README.md#observablestatus)<`Firestore`\>
 
 #### Defined in
 
@@ -1209,7 +1249,7 @@ ___
 
 ### useInitFunctions
 
-▸ **useInitFunctions**(`initializer`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`Functions`\>
+▸ **useInitFunctions**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`Functions`\>
 
 #### Parameters
 
@@ -1220,7 +1260,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`Functions`\>
+[`ObservableStatus`](README.md#observablestatus)<`Functions`\>
 
 #### Defined in
 
@@ -1230,7 +1270,7 @@ ___
 
 ### useInitPerformance
 
-▸ **useInitPerformance**(`initializer`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`FirebasePerformance`\>
+▸ **useInitPerformance**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`FirebasePerformance`\>
 
 #### Parameters
 
@@ -1241,7 +1281,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`FirebasePerformance`\>
+[`ObservableStatus`](README.md#observablestatus)<`FirebasePerformance`\>
 
 #### Defined in
 
@@ -1251,7 +1291,7 @@ ___
 
 ### useInitRemoteConfig
 
-▸ **useInitRemoteConfig**(`initializer`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`RemoteConfig`\>
+▸ **useInitRemoteConfig**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`RemoteConfig`\>
 
 #### Parameters
 
@@ -1262,7 +1302,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`RemoteConfig`\>
+[`ObservableStatus`](README.md#observablestatus)<`RemoteConfig`\>
 
 #### Defined in
 
@@ -1272,7 +1312,7 @@ ___
 
 ### useInitStorage
 
-▸ **useInitStorage**(`initializer`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`FirebaseStorage`\>
+▸ **useInitStorage**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`FirebaseStorage`\>
 
 #### Parameters
 
@@ -1283,7 +1323,7 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`FirebaseStorage`\>
+[`ObservableStatus`](README.md#observablestatus)<`FirebaseStorage`\>
 
 #### Defined in
 
@@ -1307,7 +1347,7 @@ ___
 
 ### useObservable
 
-▸ **useObservable**<`T`\>(`observableId`, `source`, `config?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`T`\>
+▸ **useObservable**<`T`\>(`observableId`, `source`, `config?`): [`ObservableStatus`](README.md#observablestatus)<`T`\>
 
 #### Type parameters
 
@@ -1325,11 +1365,11 @@ ___
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`T`\>
+[`ObservableStatus`](README.md#observablestatus)<`T`\>
 
 #### Defined in
 
-[src/useObservable.ts:95](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L95)
+[src/useObservable.ts:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L86)
 
 ___
 
@@ -1363,7 +1403,7 @@ ___
 
 ### useRemoteConfigAll
 
-▸ **useRemoteConfigAll**(`key`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`AllParameters`\>
+▸ **useRemoteConfigAll**(`key`): [`ObservableStatus`](README.md#observablestatus)<`AllParameters`\>
 
 Convience method similar to useRemoteConfigValue. Returns allRemote Config parameters.
 
@@ -1375,7 +1415,7 @@ Convience method similar to useRemoteConfigValue. Returns allRemote Config param
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`AllParameters`\>
+[`ObservableStatus`](README.md#observablestatus)<`AllParameters`\>
 
 #### Defined in
 
@@ -1385,7 +1425,7 @@ ___
 
 ### useRemoteConfigBoolean
 
-▸ **useRemoteConfigBoolean**(`key`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`boolean`\>
+▸ **useRemoteConfigBoolean**(`key`): [`ObservableStatus`](README.md#observablestatus)<`boolean`\>
 
 Convience method similar to useRemoteConfigValue. Returns a `boolean` from a Remote Config parameter.
 
@@ -1397,7 +1437,7 @@ Convience method similar to useRemoteConfigValue. Returns a `boolean` from a Rem
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`boolean`\>
+[`ObservableStatus`](README.md#observablestatus)<`boolean`\>
 
 #### Defined in
 
@@ -1407,7 +1447,7 @@ ___
 
 ### useRemoteConfigNumber
 
-▸ **useRemoteConfigNumber**(`key`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`number`\>
+▸ **useRemoteConfigNumber**(`key`): [`ObservableStatus`](README.md#observablestatus)<`number`\>
 
 Convience method similar to useRemoteConfigValue. Returns a `number` from a Remote Config parameter.
 
@@ -1419,7 +1459,7 @@ Convience method similar to useRemoteConfigValue. Returns a `number` from a Remo
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`number`\>
+[`ObservableStatus`](README.md#observablestatus)<`number`\>
 
 #### Defined in
 
@@ -1429,7 +1469,7 @@ ___
 
 ### useRemoteConfigString
 
-▸ **useRemoteConfigString**(`key`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`string`\>
+▸ **useRemoteConfigString**(`key`): [`ObservableStatus`](README.md#observablestatus)<`string`\>
 
 Convience method similar to useRemoteConfigValue. Returns a `string` from a Remote Config parameter.
 
@@ -1441,7 +1481,7 @@ Convience method similar to useRemoteConfigValue. Returns a `string` from a Remo
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`string`\>
+[`ObservableStatus`](README.md#observablestatus)<`string`\>
 
 #### Defined in
 
@@ -1451,7 +1491,7 @@ ___
 
 ### useRemoteConfigValue
 
-▸ **useRemoteConfigValue**(`key`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`RemoteConfigValue`\>
+▸ **useRemoteConfigValue**(`key`): [`ObservableStatus`](README.md#observablestatus)<`RemoteConfigValue`\>
 
 Accepts a key and optionally a Remote Config instance. Returns a
 Remote Config Value.
@@ -1464,7 +1504,7 @@ Remote Config Value.
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`RemoteConfigValue`\>
+[`ObservableStatus`](README.md#observablestatus)<`RemoteConfigValue`\>
 
 #### Defined in
 
@@ -1474,7 +1514,7 @@ ___
 
 ### useSigninCheck
 
-▸ **useSigninCheck**(`options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<[`SigninCheckResult`](README.md#signincheckresult)\>
+▸ **useSigninCheck**(`options?`): [`ObservableStatus`](README.md#observablestatus)<[`SigninCheckResult`](README.md#signincheckresult)\>
 
 Subscribe to the signed-in status of a user.
 
@@ -1514,7 +1554,7 @@ const {status, data: signInCheckResult} = useSigninCheck({forceRefresh: true, re
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<[`SigninCheckResult`](README.md#signincheckresult)\>
+[`ObservableStatus`](README.md#observablestatus)<[`SigninCheckResult`](README.md#signincheckresult)\>
 
 #### Defined in
 
@@ -1538,7 +1578,7 @@ ___
 
 ### useStorageDownloadURL
 
-▸ **useStorageDownloadURL**<`T`\>(`ref`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`string` \| `T`\>
+▸ **useStorageDownloadURL**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`string` \| `T`\>
 
 Subscribe to a storage ref's download URL
 
@@ -1557,7 +1597,7 @@ Subscribe to a storage ref's download URL
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`string` \| `T`\>
+[`ObservableStatus`](README.md#observablestatus)<`string` \| `T`\>
 
 #### Defined in
 
@@ -1567,7 +1607,7 @@ ___
 
 ### useStorageTask
 
-▸ **useStorageTask**<`T`\>(`task`, `ref`, `options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`UploadTaskSnapshot` \| `T`\>
+▸ **useStorageTask**<`T`\>(`task`, `ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`UploadTaskSnapshot` \| `T`\>
 
 Subscribe to the progress of a storage task
 
@@ -1587,7 +1627,7 @@ Subscribe to the progress of a storage task
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`UploadTaskSnapshot` \| `T`\>
+[`ObservableStatus`](README.md#observablestatus)<`UploadTaskSnapshot` \| `T`\>
 
 #### Defined in
 
@@ -1617,7 +1657,7 @@ ___
 
 ### useUser
 
-▸ **useUser**<`T`\>(`options?`): [`ObservableStatus`](interfaces/ObservableStatus.md)<`User` \| ``null``\>
+▸ **useUser**<`T`\>(`options?`): [`ObservableStatus`](README.md#observablestatus)<`User` \| ``null``\>
 
 Subscribe to Firebase auth state changes, including token refresh
 
@@ -1635,7 +1675,7 @@ Subscribe to Firebase auth state changes, including token refresh
 
 #### Returns
 
-[`ObservableStatus`](interfaces/ObservableStatus.md)<`User` \| ``null``\>
+[`ObservableStatus`](README.md#observablestatus)<`User` \| ``null``\>
 
 #### Defined in
 
