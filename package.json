@@ -77,6 +77,7 @@
     "@testing-library/react": "^14.0.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
+    "@types/use-sync-external-store": "^0.0.3",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
     "@vitejs/plugin-react": "^4.0.1",
@@ -107,6 +108,7 @@
   },
   "dependencies": {
     "rxfire": "^6.0.3",
-    "rxjs": "^6.6.3 || ^7.0.1"
+    "rxjs": "^6.6.3 || ^7.0.1",
+    "use-sync-external-store": "^1.2.0"
   }
 }

@@ -9,7 +9,7 @@ const DEFAULT_APP_NAME = '[DEFAULT]';
 const FirebaseAppContext = React.createContext<FirebaseApp | undefined>(undefined);
 const SuspenseEnabledContext = React.createContext<boolean>(false);
 
-interface FirebaseAppProviderProps {
+export interface FirebaseAppProviderProps {
   firebaseApp?: FirebaseApp;
   firebaseConfig?: FirebaseOptions;
   appName?: string;

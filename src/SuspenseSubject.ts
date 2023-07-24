@@ -1,5 +1,6 @@
 import { empty, Observable, Subject, Subscriber, Subscription } from 'rxjs';
 import { catchError, shareReplay, tap } from 'rxjs/operators';
+import { ObservableStatus } from './useObservable';
 
 export class SuspenseSubject<T> extends Subject<T> {
   private _value: T | undefined;
@@ -9,6 +10,8 @@ export class SuspenseSubject<T> extends Subject<T> {
   private _error: any = undefined;
   private _innerObservable: Observable<T>;
   private _warmupSubscription: Subscription;
+  private _immutableStatus: ObservableStatus<T>;
+  private _isComplete = false;
 
   // @ts-expect-error: TODO: double check to see if this is an RXJS thing or if we should listen to TS
   private _innerSubscriber: Subscription;
@@ -18,6 +21,16 @@ export class SuspenseSubject<T> extends Subject<T> {
   constructor(innerObservable: Observable<T>, private _timeoutWindow: number, private _suspenseEnabled: boolean) {
     super();
     this._firstEmission = new Promise<void>((resolve) => (this._resolveFirstEmission = resolve));
+
+    this._immutableStatus = {
+      status: 'loading',
+      hasEmitted: false,
+      isComplete: false,
+      data: undefined,
+      error: undefined,
+      firstValuePromise: this._firstEmission
+    };
+
     this._innerObservable = innerObservable.pipe(
       tap({
         next: (v) => {
@@ -28,7 +41,12 @@ export class SuspenseSubject<T> extends Subject<T> {
           // resolve the promise, so suspense tries again
           this._error = e;
           this._resolveFirstEmission();
+          this._updateImmutableStatus();
         },
+        complete: () => {
+          this._isComplete = true;
+          this._updateImmutableStatus();
+        }
       }),
       catchError(() => empty()),
       shareReplay(1)
@@ -69,10 +87,27 @@ export class SuspenseSubject<T> extends Subject<T> {
     return this._firstEmission;
   }
 
+  private _updateImmutableStatus() {
+    // @ts-expect-error
+    // TS fails here because ObservableStatus defines specific
+    // relationships between the fields. This is difficult to
+    // code for here, so the relationships between the ObservableStatus fields
+    // are mostly checked in tests instead
+    this._immutableStatus = {
+      status: this._error ? 'error' : (this._hasValue ? 'success' : 'loading'),
+      hasEmitted: this._hasValue,
+      isComplete: this._isComplete,
+      data: this._value,
+      error: this._error,
+      firstValuePromise: this._firstEmission
+    };
+  }
+
   private _next(value: T) {
     this._hasValue = true;
     this._value = value;
     this._resolveFirstEmission();
+    this._updateImmutableStatus();
   }
 
   private _reset() {
@@ -84,6 +119,7 @@ export class SuspenseSubject<T> extends Subject<T> {
     this._value = undefined;
     this._error = undefined;
     this._firstEmission = new Promise<void>((resolve) => (this._resolveFirstEmission = resolve));
+    this._updateImmutableStatus();
   }
 
   _subscribe(subscriber: Subscriber<T>): Subscription {
@@ -96,5 +132,9 @@ export class SuspenseSubject<T> extends Subject<T> {
 
   get ourError() {
     return this._error;
+  }
+
+  get immutableStatus() {
+    return this._immutableStatus;
   }
 }

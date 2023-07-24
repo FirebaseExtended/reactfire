@@ -201,7 +201,14 @@ function getClaimsObjectValidator(requiredClaims: Claims): ClaimsValidator {
  * Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
  */
 export function ClaimsCheck({ user, fallback, children, requiredClaims }: ClaimsCheckProps) {
-  const { data } = useIdTokenResult(user, false);
+  const { data, status, error } = useIdTokenResult(user, false);
+  
+  if (status === 'loading') {
+    throw new Error('ClaimsCheck must be run in Suspense mode');
+  } else if (status === 'error') {
+    throw error
+  }
+
   const { claims } = data;
   const missingClaims: { [key: string]: { expected: string; actual: string | undefined } } = {};
 

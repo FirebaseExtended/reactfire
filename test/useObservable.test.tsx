@@ -114,6 +114,20 @@ describe('useObservable', () => {
       await findByTestId('comp');
       expect(element).toHaveTextContent(startVal);
     });
+
+    it('sets isComplete', async () => {
+      const observable$: Subject<any> = new Subject();
+
+      const { result } = renderHook(() => useObservable('isComplete test', observable$, { suspense: false }));
+
+      expect(result.current.isComplete).toEqual(false);
+
+      act(() => observable$.next('val'));
+      expect(result.current.isComplete).toEqual(false);
+      
+      act(() => observable$.complete());
+      await waitFor(() => expect(result.current.isComplete).toEqual(true));
+    });
   });
 
   describe('Suspense Mode', () => {
