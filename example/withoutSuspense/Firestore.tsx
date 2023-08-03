@@ -1,12 +1,10 @@
-import * as React from 'react';
 import { useState } from 'react';
-import { FirestoreProvider, useFirebaseApp, useFirestore, useFirestoreCollectionData, useFirestoreDocData, useFirestoreDocDataOnce, useInitFirestore } from 'reactfire';
+import { FirestoreProvider, useFirestore, useFirestoreCollectionData, useFirestoreDocData, useFirestoreDocDataOnce, useInitFirestore } from 'reactfire';
 import { WideButton } from '../display/Button';
 import { CardSection } from '../display/Card';
 import { LoadingSpinner } from '../display/LoadingSpinner';
 import { AuthWrapper } from './Auth';
-import { initializeFirestore, doc, collection, enableIndexedDbPersistence, increment, updateDoc, orderBy, query, addDoc, DocumentData } from 'firebase/firestore';
-import { getFirestore } from 'firebase/firestore';
+import { initializeFirestore, doc, collection, enableIndexedDbPersistence, increment, updateDoc, orderBy, query, addDoc } from 'firebase/firestore';
 
 const Counter = () => {
   const firestore = useFirestore();

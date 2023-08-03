@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import {
   FirestoreProvider,
   SuspenseWithPerf,
@@ -13,7 +13,7 @@ import { WideButton } from '../display/Button';
 import { CardSection } from '../display/Card';
 import { LoadingSpinner } from '../display/LoadingSpinner';
 import { AuthWrapper } from './Auth';
-import { initializeFirestore, doc, collection, enableIndexedDbPersistence, increment, updateDoc, orderBy, query, addDoc, deleteDoc, DocumentData } from 'firebase/firestore';
+import { initializeFirestore, doc, collection, enableIndexedDbPersistence, increment, updateDoc, orderBy, query, addDoc, deleteDoc } from 'firebase/firestore';
 
 const Counter = () => {
   const firestore = useFirestore();
