@@ -634,7 +634,7 @@ ___
 
 ### preloadFirestoreDoc
 
-▸ **preloadFirestoreDoc**(`refProvider`): `Promise`<`SuspenseSubject`<`DocumentSnapshot`<`DocumentData`\>\>\>
+▸ **preloadFirestoreDoc**(`refProvider`): `Promise`<`SuspenseSubject`<`DocumentSnapshot`<`DocumentData`, `DocumentData`\>\>\>
 
 Preload a subscription to a Firestore document reference.
 
@@ -644,11 +644,11 @@ Use this to warm up `useFirestoreDoc` for a specific document
 
 | Name | Type |
 | :------ | :------ |
-| `refProvider` | () => `Promise`<`DocumentReference`<`DocumentData`\>\> |
+| `refProvider` | () => `Promise`<`DocumentReference`<`DocumentData`, `DocumentData`\>\> |
 
 #### Returns
 
-`Promise`<`SuspenseSubject`<`DocumentSnapshot`<`DocumentData`\>\>\>
+`Promise`<`SuspenseSubject`<`DocumentSnapshot`<`DocumentData`, `DocumentData`\>\>\>
 
 #### Defined in
 
@@ -946,7 +946,7 @@ Subscribe to a Firestore collection
 
 | Name | Type |
 | :------ | :------ |
-| `query` | `Query`<`T`\> |
+| `query` | `Query`<`T`, `DocumentData`\> |
 | `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`[]\> |
 
 #### Returns
@@ -975,7 +975,7 @@ Subscribe to a Firestore collection and unwrap the snapshot into an array.
 
 | Name | Type |
 | :------ | :------ |
-| `query` | `Query`<`T`\> |
+| `query` | `Query`<`T`, `DocumentData`\> |
 | `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`[]\> |
 
 #### Returns
@@ -1006,7 +1006,7 @@ You can preload data for this hook by calling `preloadFirestoreDoc`
 
 | Name | Type |
 | :------ | :------ |
-| `ref` | `DocumentReference`<`T`\> |
+| `ref` | `DocumentReference`<`T`, `DocumentData`\> |
 | `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`\> |
 
 #### Returns
@@ -1021,7 +1021,7 @@ ___
 
 ### useFirestoreDocData
 
-▸ **useFirestoreDocData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`T`\>
+▸ **useFirestoreDocData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`T` \| `undefined`\>
 
 Subscribe to Firestore Document changes and unwrap the document into a plain object
 
@@ -1035,12 +1035,12 @@ Subscribe to Firestore Document changes and unwrap the document into a plain obj
 
 | Name | Type |
 | :------ | :------ |
-| `ref` | `DocumentReference`<`T`\> |
+| `ref` | `DocumentReference`<`T`, `DocumentData`\> |
 | `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`T`\>
+[`ObservableStatus`](README.md#observablestatus)<`T` \| `undefined`\>
 
 #### Defined in
 
@@ -1050,7 +1050,7 @@ ___
 
 ### useFirestoreDocDataOnce
 
-▸ **useFirestoreDocDataOnce**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`T`\>
+▸ **useFirestoreDocDataOnce**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`T` \| `undefined`\>
 
 Get a Firestore document, unwrap the document into a plain object, and don't subscribe to changes
 
@@ -1064,12 +1064,12 @@ Get a Firestore document, unwrap the document into a plain object, and don't sub
 
 | Name | Type |
 | :------ | :------ |
-| `ref` | `DocumentReference`<`T`\> |
+| `ref` | `DocumentReference`<`T`, `DocumentData`\> |
 | `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`T`\>
+[`ObservableStatus`](README.md#observablestatus)<`T` \| `undefined`\>
 
 #### Defined in
 
@@ -1093,7 +1093,7 @@ Get a firestore document and don't subscribe to changes
 
 | Name | Type |
 | :------ | :------ |
-| `ref` | `DocumentReference`<`T`\> |
+| `ref` | `DocumentReference`<`T`, `DocumentData`\> |
 | `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`\> |
 
 #### Returns
