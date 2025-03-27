@@ -15,12 +15,16 @@ async function runMiddleware(options: RunMiddlewareOptions, request: NextRequest
         return [NextResponse.rewrite(newURL)];
     }
 
-    // TODO safari doesn't like "secure: true" if insecure, even when localhost, need to check emulators
-    //      replace tenant id, we should probably use different cookies for emulated and not
-    //      need to test in firefox
-    const ID_TOKEN_COOKIE_NAME = `firebase:authUser:${options.apiKey}:[DEFAULT]`;
-    const REFRESH_TOKEN_COOKIE_NAME = `${ID_TOKEN_COOKIE_NAME}:refreshToken`;
-    const ID_TOKEN_COOKIE = { path: "/", secure: true, sameSite: "strict", partitioned: true, name: ID_TOKEN_COOKIE_NAME, maxAge: 34560000 } as const;
+    const isDevMode = process.env.NODE_ENV === 'development';
+    const userAgent = request.headers.get('User-Agent');
+    const isSafari = userAgent?.includes('Safari') && !userAgent?.includes("Chrome");
+    const secureCookies = isSafari ? !isDevMode : true; // Safari can't do secure cookies on localhost
+    // Need two different cookie names as Chrome doesn't allow __HOST- on localhost
+    const ID_TOKEN_COOKIE_NAME = isDevMode ? `__dev_FIREBASE_[DEFAULT]` : `__HOST-FIREBASE_[DEFAULT]`;
+    const REFRESH_TOKEN_COOKIE_NAME = isDevMode ? '__dev_FIREBASEID_[DEFAULT]' : `__HOST-FIREBASEID_[DEFAULT]`;
+    console.log({ isDevMode, isSafari, secureCookies, ID_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_NAME });
+    // TODO max-age should be ttl
+    const ID_TOKEN_COOKIE = { path: "/", secure: secureCookies, sameSite: "strict", partitioned: true, name: ID_TOKEN_COOKIE_NAME, maxAge: 34560000, priority: 'high' } as const;
     const REFRESH_TOKEN_COOKIE = { ...ID_TOKEN_COOKIE, httpOnly: true, name: REFRESH_TOKEN_COOKIE_NAME } as const;
 
     if (request.nextUrl.pathname === '/__cookies__') {
@@ -50,6 +54,7 @@ async function runMiddleware(options: RunMiddlewareOptions, request: NextRequest
         
         let body: ReadableStream<any>|string|null = request.body;
 
+        // TODO error if emulated and not hitting emulators
         const isTokenRequest = !!url.pathname.match(/^(\/securetoken\.googleapis\.com)?\/v1\/token/);
         const isSignInRequest = !!url.pathname.match(/^(\/identitytoolkit\.googleapis\.com)?\/v1\/accounts:signInWith/);
         
@@ -78,71 +83,109 @@ async function runMiddleware(options: RunMiddlewareOptions, request: NextRequest
         }
         let refreshToken;
         let idToken;
+        let maxAge;
         if (isSignInRequest) {
             refreshToken = json.refreshToken;
             idToken = json.idToken;
+            maxAge = json.expiresIn;
             json.refreshToken = "REDACTED";
         } else {
             refreshToken = json.refresh_token;
             idToken = json.id_token;
+            maxAge = json.expires_in;
             json.refresh_token = "REDACTED";
         }
 
         const currentIdToken = request.cookies.get({ ...ID_TOKEN_COOKIE, value: "" })?.value;
         const nextResponse = NextResponse.json(json, { status, statusText });
-        if (idToken && currentIdToken !== idToken) nextResponse.cookies.set({...ID_TOKEN_COOKIE, value: idToken });
+        if (idToken && currentIdToken !== idToken) nextResponse.cookies.set({...ID_TOKEN_COOKIE, maxAge, value: idToken });
         if (refreshToken) nextResponse.cookies.set({...REFRESH_TOKEN_COOKIE, value: refreshToken });
         return [nextResponse];
     }
 
     const logout = (): RunMiddlewareResponse => {
         const decorateNextResponse = (response: NextResponse) => {
-            if (request.cookies.get({...ID_TOKEN_COOKIE, value: "" })) response.cookies.delete({...ID_TOKEN_COOKIE, maxAge: 0});
-            if (request.cookies.get({...REFRESH_TOKEN_COOKIE, value: "" })) response.cookies.delete({...REFRESH_TOKEN_COOKIE, maxAge: 0});
+            if (request.cookies.get(ID_TOKEN_COOKIE_NAME)) response.cookies.delete({...ID_TOKEN_COOKIE, maxAge: 0});
+            if (request.cookies.get(REFRESH_TOKEN_COOKIE_NAME)) response.cookies.delete({...REFRESH_TOKEN_COOKIE, maxAge: 0});
             return response;
         }
         return [undefined, decorateNextResponse, undefined];
     }
 
-    let authIdToken = request.cookies.get({ ...ID_TOKEN_COOKIE, value: "" })?.value;
-    if (!authIdToken) return logout();
+    const authIdToken = request.cookies.get({ ...ID_TOKEN_COOKIE, value: "" })?.value;
+    const refresh_token = request.cookies.get({...REFRESH_TOKEN_COOKIE, value: "" })?.value;
 
-    let isEmulatedCredential = false;
-    let [jwtHeader, jwtPayload] = authIdToken.split(".").slice(0,2).map(it => JSON.parse(atob(it))) as [JWTHeaderParameters, FirebaseJWTPayload];
-    // TODO check the tenantId
-    if (jwtHeader?.typ !== 'JWT' || jwtPayload?.iss !== `https://securetoken.google.com/${options.projectId}` || jwtPayload.aud !== options.projectId || jwtPayload.firebase?.tenant !== options.tenantId) {
-        console.error("I hates the claims.", jwtHeader, jwtPayload);
-        return logout();
+    if (authIdToken === undefined && !refresh_token) {
+        console.error("no authIdToken && no refresh token");
+        return [undefined, it => it, undefined];
     }
-    if (jwtHeader?.alg === 'none') {
-        isEmulatedCredential = true;
-    } else if (jwtHeader?.alg !== 'RS256') {
-        console.error("I hates the alg.", jwtHeader?.alg);
+
+    if (authIdToken === "") {
+        console.error("logout sentinel detected");
         return logout();
     }
 
-    if (isEmulatedCredential && !options.emulatorHost) throw new Error("could not detirmine emulator hostname.");
+    if (!refresh_token) {
+        console.log("missing refresh token.");
+        return logout();
+    }
 
-    const muchEpochWow = Math.floor(+new Date() / 1000);
-    if (jwtPayload.exp && jwtPayload.exp > muchEpochWow) {
-        if (!isEmulatedCredential) {
-            try {
-                const jwks = createRemoteJWKSet(new URL('https://www.googleapis.com/robot/v1/metadata/jwk/securetoken@system.gserviceaccount.com'));
-                await jwtVerify(authIdToken, jwks);
-            } catch(e) {
-                console.error("Jose hates the JWT", e);
-                return logout();
+    let isEmulatedCredential;
+    let jwtPayload;
+    
+    if (authIdToken) {
+
+        let jwtHeader;
+        try {
+            [jwtHeader, jwtPayload] = authIdToken.split(".").slice(0,2).map(it => JSON.parse(atob(it))) as [JWTHeaderParameters, FirebaseJWTPayload];
+        } catch(e) {
+            console.error("Unable to parse JWT.");
+        }
+
+        if (jwtHeader?.typ !== 'JWT' || jwtPayload?.iss !== `https://securetoken.google.com/${options.projectId}` || jwtPayload.aud !== options.projectId || jwtPayload.firebase?.tenant !== options.tenantId) {
+            console.error("I hates the claims.");
+            jwtPayload = undefined;
+        }
+        if (jwtHeader?.alg === 'none') {
+            isEmulatedCredential = true;
+        } else if (jwtHeader?.alg !== 'RS256') {
+            console.error("I hates the alg.");
+            jwtPayload = undefined;
+        }
+
+        if (isEmulatedCredential && !options.emulatorHost) throw new Error("could not determine emulator hostname.");
+
+        if (jwtPayload) {
+            const muchEpochWow = Math.floor(+new Date() / 1000);
+            if (jwtPayload.exp && jwtPayload.exp > muchEpochWow) {
+                if (isEmulatedCredential) {
+                    console.log("We good, its emulated.");
+                    return [undefined, it => it, jwtPayload];
+                } else {
+                    try {
+                        const jwks = createRemoteJWKSet(new URL('https://www.googleapis.com/robot/v1/metadata/jwk/securetoken@system.gserviceaccount.com'));
+                        await jwtVerify(authIdToken, jwks);
+                        console.log("JOSE is happy.");
+                        return [undefined, it => it, jwtPayload];
+                    } catch(e) {
+                        console.error("JOSE is a hater.");
+                    }
+                }
+            } else {
+                console.error("So exp, wow.");
             }
         }
-        const decorateNextResponse = (response: NextResponse) => response;
-        return [undefined, decorateNextResponse, jwtPayload];
     }
 
-    const refresh_token = request.cookies.get({...REFRESH_TOKEN_COOKIE, value: "" })?.value;
-    if (!refresh_token) {
-        console.error("Where's the refresh token bro?");
-        return logout();
+    try {
+        isEmulatedCredential ??= !!JSON.parse(Buffer.from(decodeURIComponent(refresh_token), 'base64').toString())["_AuthEmulatorRefreshToken"];
+    } catch(e) {
+
     }
+
+    if (isEmulatedCredential && !options.emulatorHost) throw new Error("could not determine emulator hostname.");
+
+    console.log("attempting a refresh with", { isEmulatedCredential });
 
     const refreshUrl = new URL(isEmulatedCredential ? `http://${options.emulatorHost}` : `https://securetoken.googleapis.com`);
     refreshUrl.pathname = [isEmulatedCredential && 'securetoken.googleapis.com', 'v1/token'].filter(Boolean).join('/');
@@ -162,6 +205,8 @@ async function runMiddleware(options: RunMiddlewareOptions, request: NextRequest
     const json = await refreshResponse.json() as any;
     const newRefreshToken = json.refresh_token;
     const newIdToken = json.id_token;
+    jwtPayload = JSON.parse(atob(newIdToken.split(".")[1]));
+    console.log(jwtPayload);
     const decorateNextResponse = (response: NextResponse) => {
         if (newIdToken) response.cookies.set({ ...ID_TOKEN_COOKIE, value: newIdToken });
         if (newRefreshToken)  response.cookies.set({ ...REFRESH_TOKEN_COOKIE, value: newRefreshToken });
