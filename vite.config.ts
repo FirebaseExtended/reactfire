@@ -43,11 +43,6 @@ export default defineConfig({
     // Helps make sure we aren't pulling in extra deps
     visualizer({ template: 'treemap' }),
   ],
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: './test/setupTests.ts',
-  },
   define: {
     // replace `process.env.REACTFIRE_VERSION` in the source
     // for usage stats
