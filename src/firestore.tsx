@@ -65,6 +65,7 @@ export function useFirestoreDocData<T = unknown>(ref: DocumentReference<T>, opti
   const observableId = `firestore:docData:${ref.firestore.app.name}:${ref.path}:idField=${idField}`;
   const observable = docData(ref, { idField });
 
+  // @ts-expect-error TODO investigate if undefined warning is relevant
   return useObservable(observableId, observable, options);
 }
 
@@ -77,6 +78,7 @@ export function useFirestoreDocDataOnce<T = unknown>(ref: DocumentReference<T>, 
   const observableId = `firestore:docDataOnce:${ref.firestore.app.name}:${ref.path}:idField=${idField}`;
   const observable$ = docData(ref, { idField }).pipe(first());
 
+  // @ts-expect-error TODO investigate if undefined warning is relevant
   return useObservable(observableId, observable$, options);
 }
 
