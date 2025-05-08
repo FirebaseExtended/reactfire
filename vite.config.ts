@@ -43,11 +43,6 @@ export default defineConfig({
     // Helps make sure we aren't pulling in extra deps
     visualizer({ template: 'treemap' }),
   ],
-  define: {
-    // replace `process.env.REACTFIRE_VERSION` in the source
-    // for usage stats
-    'process.env.REACTFIRE_VERSION': JSON.stringify(version),
-  },
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),

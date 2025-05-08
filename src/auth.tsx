@@ -244,7 +244,7 @@ export function ClaimsCheck({ user, fallback, children, requiredClaims }: Claims
  *
  * Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
  */
-export function AuthCheck({ fallback, children, requiredClaims }: AuthCheckProps): JSX.Element {
+export function AuthCheck({ fallback, children, requiredClaims }: AuthCheckProps): React.JSX.Element {
   const { data: user } = useUser<User>();
 
   const suspenseMode = useSuspenseEnabledFromConfigAndContext();

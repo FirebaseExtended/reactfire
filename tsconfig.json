@@ -3,6 +3,7 @@
   "include": ["src", "types"],
   "compilerOptions": {
     "target": "es2015",
+    "resolveJsonModule": true,
     "module": "esnext",
     "lib": ["dom", "esnext"],
     "types": ["vitest/globals"],

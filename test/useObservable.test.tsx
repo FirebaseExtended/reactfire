@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import { act, cleanup, render, renderHook, waitFor } from '@testing-library/react';
 import * as React from 'react';
 import { of, Subject, BehaviorSubject, throwError } from 'rxjs';
@@ -317,7 +317,7 @@ describe('useObservable', () => {
       expect(refreshedComp).toBeInTheDocument();
 
       // if useObservable doesn't re-emit, the value here will still be "Jeff"
-      expect(refreshedComp).toHaveTextContent('James');
+      await waitFor(() => expect(refreshedComp).toHaveTextContent('James'));
     });
   });
 });

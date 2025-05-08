@@ -3,6 +3,8 @@ import { getApps, initializeApp, registerVersion } from 'firebase/app';
 
 import type { FirebaseApp, FirebaseOptions } from 'firebase/app';
 
+import {version as pkgVersion} from '../package.json';
+
 // INVESTIGATE I don't like magic strings, can we have export this in js-sdk?
 const DEFAULT_APP_NAME = '[DEFAULT]';
 
@@ -16,8 +18,7 @@ export interface FirebaseAppProviderProps {
   suspense?: boolean;
 }
 
-// REACTFIRE_VERSION is automatically pulled in from `package.json` by Vite
-export const version = process.env.REACTFIRE_VERSION as string;
+export const version = pkgVersion;
 
 const shallowEq = (a: { [key: string]: any }, b: { [key: string]: any }) => a === b || [...Object.keys(a), ...Object.keys(b)].every((key) => a[key] === b[key]);
 

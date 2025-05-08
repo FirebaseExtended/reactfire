@@ -1,6 +1,6 @@
 import { cleanup, render, waitFor, renderHook } from '@testing-library/react';
 import { initializeApp, deleteApp, getApps } from 'firebase/app';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import * as React from 'react';
 import { useFirebaseApp, FirebaseAppProvider, version } from '../src/index';
 import pkg from '../package.json';

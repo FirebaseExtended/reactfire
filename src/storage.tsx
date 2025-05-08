@@ -37,7 +37,7 @@ export type StorageImageProps = {
   storagePath: string;
   storage?: FirebaseStorage;
   suspense?: boolean;
-  placeHolder?: JSX.Element;
+  placeHolder?: React.JSX.Element;
 };
 
 function StorageFromContext(props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>) {
@@ -48,7 +48,7 @@ function StorageFromContext(props: StorageImageProps & React.DetailedHTMLProps<R
   return <INTERNALStorageImage {...props} />;
 }
 
-function INTERNALStorageImage(props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>): JSX.Element {
+function INTERNALStorageImage(props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>): React.JSX.Element {
   const { storage, storagePath, suspense, placeHolder, ...imgProps } = props;
 
   const reactfireOptions: ReactFireOptions<string> = {
