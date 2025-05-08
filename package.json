@@ -100,8 +100,8 @@
     "react-test-renderer": "^19.1.0",
     "rollup-plugin-visualizer": "^5.14.0",
     "size-limit": "^11.2.0",
-    "typedoc": "^0.24.8",
-    "typedoc-plugin-markdown": "^3.15.3",
+    "typedoc": "^0.28.4",
+    "typedoc-plugin-markdown": "^4.6.3",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
     "vitest": "^3.1.3"
