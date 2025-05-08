@@ -1,6 +1,6 @@
 [ReactFire reference docs](../README.md) / ReactFireOptions
 
-# Interface: ReactFireOptions<T\>
+# Interface: ReactFireOptions\<T\>
 
 ## Type parameters
 

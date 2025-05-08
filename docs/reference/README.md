@@ -33,32 +33,32 @@ ReactFire reference docs
 
 ### Variables
 
-- [AnalyticsSdkContext](README.md#analyticssdkcontext)
-- [AppCheckSdkContext](README.md#appchecksdkcontext)
-- [AuthSdkContext](README.md#authsdkcontext)
-- [DatabaseSdkContext](README.md#databasesdkcontext)
-- [FirestoreSdkContext](README.md#firestoresdkcontext)
-- [FunctionsSdkContext](README.md#functionssdkcontext)
-- [PerformanceSdkContext](README.md#performancesdkcontext)
-- [RemoteConfigSdkContext](README.md#remoteconfigsdkcontext)
-- [StorageSdkContext](README.md#storagesdkcontext)
 - [version](README.md#version)
 
 ### Functions
 
 - [AnalyticsProvider](README.md#analyticsprovider)
+- [AnalyticsSdkContext](README.md#analyticssdkcontext)
 - [AppCheckProvider](README.md#appcheckprovider)
+- [AppCheckSdkContext](README.md#appchecksdkcontext)
 - [AuthCheck](README.md#authcheck)
 - [AuthProvider](README.md#authprovider)
+- [AuthSdkContext](README.md#authsdkcontext)
 - [ClaimsCheck](README.md#claimscheck)
 - [DatabaseProvider](README.md#databaseprovider)
+- [DatabaseSdkContext](README.md#databasesdkcontext)
 - [FirebaseAppProvider](README.md#firebaseappprovider)
 - [FirestoreProvider](README.md#firestoreprovider)
+- [FirestoreSdkContext](README.md#firestoresdkcontext)
 - [FunctionsProvider](README.md#functionsprovider)
+- [FunctionsSdkContext](README.md#functionssdkcontext)
 - [PerformanceProvider](README.md#performanceprovider)
+- [PerformanceSdkContext](README.md#performancesdkcontext)
 - [RemoteConfigProvider](README.md#remoteconfigprovider)
+- [RemoteConfigSdkContext](README.md#remoteconfigsdkcontext)
 - [StorageImage](README.md#storageimage)
 - [StorageProvider](README.md#storageprovider)
+- [StorageSdkContext](README.md#storagesdkcontext)
 - [SuspenseWithPerf](README.md#suspensewithperf)
 - [checkIdField](README.md#checkidfield)
 - [checkOptions](README.md#checkoptions)
@@ -114,7 +114,7 @@ ReactFire reference docs
 
 ### ObservableStatus
 
-Ƭ **ObservableStatus**<`T`\>: [`ObservableStatusLoading`](interfaces/ObservableStatusLoading.md)<`T`\> \| [`ObservableStatusError`](interfaces/ObservableStatusError.md)<`T`\> \| [`ObservableStatusSuccess`](interfaces/ObservableStatusSuccess.md)<`T`\>
+Ƭ **ObservableStatus**\<`T`\>: [`ObservableStatusLoading`](interfaces/ObservableStatusLoading.md)\<`T`\> \| [`ObservableStatusError`](interfaces/ObservableStatusError.md)\<`T`\> \| [`ObservableStatusSuccess`](interfaces/ObservableStatusSuccess.md)\<`T`\>
 
 #### Type parameters
 
@@ -138,7 +138,7 @@ ___
 | :------ | :------ |
 | `_reactFireDatabaseCachedQueries` | `DatabaseQuery`[] |
 | `_reactFireFirestoreQueryCache` | `FirestoreQuery`[] |
-| `_reactFirePreloadedObservables` | `Map`<`string`, `SuspenseSubject`<`any`\>\> |
+| `_reactFirePreloadedObservables` | `Map`\<`string`, `SuspenseSubject`\<`any`\>\> |
 
 #### Defined in
 
@@ -148,7 +148,7 @@ ___
 
 ### SigninCheckResult
 
-Ƭ **SigninCheckResult**: { `errors`: {} ; `hasRequiredClaims`: ``false`` ; `signedIn`: ``false`` ; `user`: ``null``  } \| { `errors`: [`ClaimCheckErrors`](interfaces/ClaimCheckErrors.md) ; `hasRequiredClaims`: `boolean` ; `signedIn`: ``true`` ; `user`: `User`  }
+Ƭ **SigninCheckResult**: \{ `errors`: {} ; `hasRequiredClaims`: ``false`` ; `signedIn`: ``false`` ; `user`: ``null``  } \| \{ `errors`: [`ClaimCheckErrors`](interfaces/ClaimCheckErrors.md) ; `hasRequiredClaims`: `boolean` ; `signedIn`: ``true`` ; `user`: `User`  }
 
 #### Defined in
 
@@ -164,7 +164,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `placeHolder?` | `JSX.Element` |
+| `placeHolder?` | `React.JSX.Element` |
 | `storage?` | `FirebaseStorage` |
 | `storagePath` | `string` |
 | `suspense?` | `boolean` |
@@ -175,103 +175,13 @@ ___
 
 ## Variables
 
-### AnalyticsSdkContext
-
-• `Const` **AnalyticsSdkContext**: `Context`<`undefined` \| `Analytics`\>
-
-#### Defined in
-
-[src/sdk.tsx:20](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L20)
-
-___
-
-### AppCheckSdkContext
-
-• `Const` **AppCheckSdkContext**: `Context`<`undefined` \| `AppCheck`\>
-
-#### Defined in
-
-[src/sdk.tsx:18](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L18)
-
-___
-
-### AuthSdkContext
-
-• `Const` **AuthSdkContext**: `Context`<`undefined` \| `Auth`\>
-
-#### Defined in
-
-[src/sdk.tsx:19](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L19)
-
-___
-
-### DatabaseSdkContext
-
-• `Const` **DatabaseSdkContext**: `Context`<`undefined` \| `Database`\>
-
-#### Defined in
-
-[src/sdk.tsx:21](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L21)
-
-___
-
-### FirestoreSdkContext
-
-• `Const` **FirestoreSdkContext**: `Context`<`undefined` \| `Firestore`\>
-
-#### Defined in
-
-[src/sdk.tsx:22](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L22)
-
-___
-
-### FunctionsSdkContext
-
-• `Const` **FunctionsSdkContext**: `Context`<`undefined` \| `Functions`\>
-
-#### Defined in
-
-[src/sdk.tsx:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L23)
-
-___
-
-### PerformanceSdkContext
-
-• `Const` **PerformanceSdkContext**: `Context`<`undefined` \| `FirebasePerformance`\>
-
-#### Defined in
-
-[src/sdk.tsx:25](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L25)
-
-___
-
-### RemoteConfigSdkContext
-
-• `Const` **RemoteConfigSdkContext**: `Context`<`undefined` \| `RemoteConfig`\>
-
-#### Defined in
-
-[src/sdk.tsx:26](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L26)
-
-___
-
-### StorageSdkContext
-
-• `Const` **StorageSdkContext**: `Context`<`undefined` \| `FirebaseStorage`\>
-
-#### Defined in
-
-[src/sdk.tsx:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L24)
-
-___
-
 ### version
 
-• `Const` **version**: `string`
+• `Const` **version**: `string` = `pkgVersion`
 
 #### Defined in
 
-[src/firebaseApp.tsx:20](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L20)
+[src/firebaseApp.tsx:21](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L21)
 
 ## Functions
 
@@ -283,7 +193,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `props` | `PropsWithChildren`<{ `sdk`: `Analytics`  }\> |
+| `props` | `PropsWithChildren`\<\{ `sdk`: `Analytics`  }\> |
 
 #### Returns
 
@@ -292,6 +202,26 @@ ___
 #### Defined in
 
 [src/sdk.tsx:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L31)
+
+___
+
+### AnalyticsSdkContext
+
+▸ **AnalyticsSdkContext**(`props`): `ReactNode`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | `ProviderProps`\<`undefined` \| `Analytics`\> |
+
+#### Returns
+
+`ReactNode`
+
+#### Defined in
+
+node_modules/@types/react/index.d.ts:561
 
 ___
 
@@ -303,7 +233,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `props` | `PropsWithChildren`<{ `sdk`: `AppCheck`  }\> |
+| `props` | `PropsWithChildren`\<\{ `sdk`: `AppCheck`  }\> |
 
 #### Returns
 
@@ -315,17 +245,29 @@ ___
 
 ___
 
+### AppCheckSdkContext
+
+▸ **AppCheckSdkContext**(`props`): `ReactNode`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | `ProviderProps`\<`undefined` \| `AppCheck`\> |
+
+#### Returns
+
+`ReactNode`
+
+#### Defined in
+
+node_modules/@types/react/index.d.ts:561
+
+___
+
 ### AuthCheck
 
-▸ **AuthCheck**(`«destructured»`): `JSX.Element`
-
-**`Deprecated`**
-
-Use `useSigninCheck` instead
-
-Conditionally render children based on signed-in status and [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims).
-
-Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
+▸ **AuthCheck**(`«destructured»`): `React.JSX.Element`
 
 #### Parameters
 
@@ -335,7 +277,15 @@ Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More 
 
 #### Returns
 
-`JSX.Element`
+`React.JSX.Element`
+
+**`Deprecated`**
+
+Use `useSigninCheck` instead
+
+Conditionally render children based on signed-in status and [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims).
+
+Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
 
 #### Defined in
 
@@ -351,7 +301,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `props` | `PropsWithChildren`<{ `sdk`: `Auth`  }\> |
+| `props` | `PropsWithChildren`\<\{ `sdk`: `Auth`  }\> |
 
 #### Returns
 
@@ -363,17 +313,29 @@ ___
 
 ___
 
+### AuthSdkContext
+
+▸ **AuthSdkContext**(`props`): `ReactNode`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | `ProviderProps`\<`undefined` \| `Auth`\> |
+
+#### Returns
+
+`ReactNode`
+
+#### Defined in
+
+node_modules/@types/react/index.d.ts:561
+
+___
+
 ### ClaimsCheck
 
 ▸ **ClaimsCheck**(`«destructured»`): `Element`
-
-**`Deprecated`**
-
-Use `useSigninCheck` instead
-
-Conditionally render children based on [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims).
-
-Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
 
 #### Parameters
 
@@ -384,6 +346,14 @@ Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More 
 #### Returns
 
 `Element`
+
+**`Deprecated`**
+
+Use `useSigninCheck` instead
+
+Conditionally render children based on [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims).
+
+Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
 
 #### Defined in
 
@@ -399,7 +369,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `props` | `PropsWithChildren`<{ `sdk`: `Database`  }\> |
+| `props` | `PropsWithChildren`\<\{ `sdk`: `Database`  }\> |
 
 #### Returns
 
@@ -408,6 +378,26 @@ ___
 #### Defined in
 
 [src/sdk.tsx:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L31)
+
+___
+
+### DatabaseSdkContext
+
+▸ **DatabaseSdkContext**(`props`): `ReactNode`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | `ProviderProps`\<`undefined` \| `Database`\> |
+
+#### Returns
+
+`ReactNode`
+
+#### Defined in
+
+node_modules/@types/react/index.d.ts:561
 
 ___
 
@@ -419,7 +409,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `props` | `PropsWithChildren`<[`FirebaseAppProviderProps`](interfaces/FirebaseAppProviderProps.md)\> |
+| `props` | `PropsWithChildren`\<[`FirebaseAppProviderProps`](interfaces/FirebaseAppProviderProps.md)\> |
 
 #### Returns
 
@@ -427,7 +417,7 @@ ___
 
 #### Defined in
 
-[src/firebaseApp.tsx:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L24)
+[src/firebaseApp.tsx:25](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L25)
 
 ___
 
@@ -439,7 +429,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `props` | `PropsWithChildren`<{ `sdk`: `Firestore`  }\> |
+| `props` | `PropsWithChildren`\<\{ `sdk`: `Firestore`  }\> |
 
 #### Returns
 
@@ -448,6 +438,26 @@ ___
 #### Defined in
 
 [src/sdk.tsx:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L31)
+
+___
+
+### FirestoreSdkContext
+
+▸ **FirestoreSdkContext**(`props`): `ReactNode`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | `ProviderProps`\<`undefined` \| `Firestore`\> |
+
+#### Returns
+
+`ReactNode`
+
+#### Defined in
+
+node_modules/@types/react/index.d.ts:561
 
 ___
 
@@ -459,7 +469,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `props` | `PropsWithChildren`<{ `sdk`: `Functions`  }\> |
+| `props` | `PropsWithChildren`\<\{ `sdk`: `Functions`  }\> |
 
 #### Returns
 
@@ -468,6 +478,26 @@ ___
 #### Defined in
 
 [src/sdk.tsx:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L31)
+
+___
+
+### FunctionsSdkContext
+
+▸ **FunctionsSdkContext**(`props`): `ReactNode`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | `ProviderProps`\<`undefined` \| `Functions`\> |
+
+#### Returns
+
+`ReactNode`
+
+#### Defined in
+
+node_modules/@types/react/index.d.ts:561
 
 ___
 
@@ -479,7 +509,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `props` | `PropsWithChildren`<{ `sdk`: `FirebasePerformance`  }\> |
+| `props` | `PropsWithChildren`\<\{ `sdk`: `FirebasePerformance`  }\> |
 
 #### Returns
 
@@ -488,6 +518,26 @@ ___
 #### Defined in
 
 [src/sdk.tsx:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L31)
+
+___
+
+### PerformanceSdkContext
+
+▸ **PerformanceSdkContext**(`props`): `ReactNode`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | `ProviderProps`\<`undefined` \| `FirebasePerformance`\> |
+
+#### Returns
+
+`ReactNode`
+
+#### Defined in
+
+node_modules/@types/react/index.d.ts:561
 
 ___
 
@@ -499,7 +549,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `props` | `PropsWithChildren`<{ `sdk`: `RemoteConfig`  }\> |
+| `props` | `PropsWithChildren`\<\{ `sdk`: `RemoteConfig`  }\> |
 
 #### Returns
 
@@ -511,6 +561,26 @@ ___
 
 ___
 
+### RemoteConfigSdkContext
+
+▸ **RemoteConfigSdkContext**(`props`): `ReactNode`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | `ProviderProps`\<`undefined` \| `RemoteConfig`\> |
+
+#### Returns
+
+`ReactNode`
+
+#### Defined in
+
+node_modules/@types/react/index.d.ts:561
+
+___
+
 ### StorageImage
 
 ▸ **StorageImage**(`props`): `Element`
@@ -519,7 +589,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `props` | [`StorageImageProps`](README.md#storageimageprops) & `ClassAttributes`<`HTMLImageElement`\> & `ImgHTMLAttributes`<`HTMLImageElement`\> |
+| `props` | [`StorageImageProps`](README.md#storageimageprops) & `ClassAttributes`\<`HTMLImageElement`\> & `ImgHTMLAttributes`\<`HTMLImageElement`\> |
 
 #### Returns
 
@@ -539,7 +609,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `props` | `PropsWithChildren`<{ `sdk`: `FirebaseStorage`  }\> |
+| `props` | `PropsWithChildren`\<\{ `sdk`: `FirebaseStorage`  }\> |
 
 #### Returns
 
@@ -551,9 +621,29 @@ ___
 
 ___
 
+### StorageSdkContext
+
+▸ **StorageSdkContext**(`props`): `ReactNode`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | `ProviderProps`\<`undefined` \| `FirebaseStorage`\> |
+
+#### Returns
+
+`ReactNode`
+
+#### Defined in
+
+node_modules/@types/react/index.d.ts:561
+
+___
+
 ### SuspenseWithPerf
 
-▸ **SuspenseWithPerf**(`«destructured»`): `JSX.Element`
+▸ **SuspenseWithPerf**(`«destructured»`): `React.JSX.Element`
 
 #### Parameters
 
@@ -563,7 +653,7 @@ ___
 
 #### Returns
 
-`JSX.Element`
+`React.JSX.Element`
 
 #### Defined in
 
@@ -579,7 +669,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `options` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`unknown`\> |
+| `options` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`unknown`\> |
 
 #### Returns
 
@@ -599,7 +689,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `options` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`unknown`\> |
+| `options` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`unknown`\> |
 | `field` | `string` |
 
 #### Returns
@@ -620,7 +710,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `options` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`unknown`\> |
+| `options` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`unknown`\> |
 
 #### Returns
 
@@ -634,7 +724,7 @@ ___
 
 ### preloadFirestoreDoc
 
-▸ **preloadFirestoreDoc**(`refProvider`): `Promise`<`SuspenseSubject`<`DocumentSnapshot`<`DocumentData`\>\>\>
+▸ **preloadFirestoreDoc**(`refProvider`): `Promise`\<`SuspenseSubject`\<`DocumentSnapshot`\<`DocumentData`, `DocumentData`\>\>\>
 
 Preload a subscription to a Firestore document reference.
 
@@ -644,11 +734,11 @@ Use this to warm up `useFirestoreDoc` for a specific document
 
 | Name | Type |
 | :------ | :------ |
-| `refProvider` | () => `Promise`<`DocumentReference`<`DocumentData`\>\> |
+| `refProvider` | () => `Promise`\<`DocumentReference`\<`DocumentData`, `DocumentData`\>\> |
 
 #### Returns
 
-`Promise`<`SuspenseSubject`<`DocumentSnapshot`<`DocumentData`\>\>\>
+`Promise`\<`SuspenseSubject`\<`DocumentSnapshot`\<`DocumentData`, `DocumentData`\>\>\>
 
 #### Defined in
 
@@ -658,7 +748,7 @@ ___
 
 ### preloadObservable
 
-▸ **preloadObservable**<`T`\>(`source`, `id`, `suspenseEnabled?`): `SuspenseSubject`<`T`\>
+▸ **preloadObservable**\<`T`\>(`source`, `id`, `suspenseEnabled?`): `SuspenseSubject`\<`T`\>
 
 #### Type parameters
 
@@ -670,13 +760,13 @@ ___
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
-| `source` | `Observable`<`T`\> | `undefined` |
+| `source` | `Observable`\<`T`\> | `undefined` |
 | `id` | `string` | `undefined` |
 | `suspenseEnabled` | `boolean` | `false` |
 
 #### Returns
 
-`SuspenseSubject`<`T`\>
+`SuspenseSubject`\<`T`\>
 
 #### Defined in
 
@@ -686,17 +776,17 @@ ___
 
 ### preloadUser
 
-▸ **preloadUser**(`authResolver`): `Promise`<`undefined` \| ``null`` \| `User`\>
+▸ **preloadUser**(`authResolver`): `Promise`\<`undefined` \| ``null`` \| `User`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `authResolver` | () => `Promise`<`Auth`\> |
+| `authResolver` | () => `Promise`\<`Auth`\> |
 
 #### Returns
 
-`Promise`<`undefined` \| ``null`` \| `User`\>
+`Promise`\<`undefined` \| ``null`` \| `User`\>
 
 #### Defined in
 
@@ -748,7 +838,7 @@ ___
 
 ### useCallableFunctionResponse
 
-▸ **useCallableFunctionResponse**<`RequestData`, `ResponseData`\>(`functionName`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`ResponseData`\>
+▸ **useCallableFunctionResponse**\<`RequestData`, `ResponseData`\>(`functionName`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`ResponseData`\>
 
 Calls a callable function.
 
@@ -764,11 +854,11 @@ Calls a callable function.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `functionName` | `string` | The name of the function to call |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`ResponseData`\> & { `data?`: `RequestData` ; `httpsCallableOptions?`: `HttpsCallableOptions`  } |  |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`ResponseData`\> & \{ `data?`: `RequestData` ; `httpsCallableOptions?`: `HttpsCallableOptions`  } |  |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`ResponseData`\>
+[`ObservableStatus`](README.md#observablestatus)\<`ResponseData`\>
 
 #### Defined in
 
@@ -792,7 +882,7 @@ ___
 
 ### useDatabaseList
 
-▸ **useDatabaseList**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`QueryChange`[] \| `T`[]\>
+▸ **useDatabaseList**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`QueryChange`[] \| `T`[]\>
 
 Subscribe to a Realtime Database list
 
@@ -800,18 +890,18 @@ Subscribe to a Realtime Database list
 
 | Name | Type |
 | :------ | :------ |
-| `T` | { `[key: string]`: `unknown`;  } |
+| `T` | \{ `[key: string]`: `unknown`;  } |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `ref` | `Query` \| `DatabaseReference` | Reference to the DB List you want to listen to |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`[]\> |  |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`T`[]\> |  |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`QueryChange`[] \| `T`[]\>
+[`ObservableStatus`](README.md#observablestatus)\<`QueryChange`[] \| `T`[]\>
 
 #### Defined in
 
@@ -821,24 +911,24 @@ ___
 
 ### useDatabaseListData
 
-▸ **useDatabaseListData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`T`[] \| ``null``\>
+▸ **useDatabaseListData**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`T`[] \| ``null``\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `T` | { `[key: string]`: `unknown`;  } |
+| `T` | \{ `[key: string]`: `unknown`;  } |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `ref` | `Query` \| `DatabaseReference` |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`[]\> |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`T`[]\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`T`[] \| ``null``\>
+[`ObservableStatus`](README.md#observablestatus)\<`T`[] \| ``null``\>
 
 #### Defined in
 
@@ -848,7 +938,7 @@ ___
 
 ### useDatabaseObject
 
-▸ **useDatabaseObject**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`QueryChange` \| `T`\>
+▸ **useDatabaseObject**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`QueryChange` \| `T`\>
 
 Subscribe to a Realtime Database object
 
@@ -863,11 +953,11 @@ Subscribe to a Realtime Database object
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `ref` | `DatabaseReference` | Reference to the DB object you want to listen to |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`\> |  |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`T`\> |  |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`QueryChange` \| `T`\>
+[`ObservableStatus`](README.md#observablestatus)\<`QueryChange` \| `T`\>
 
 #### Defined in
 
@@ -877,7 +967,7 @@ ___
 
 ### useDatabaseObjectData
 
-▸ **useDatabaseObjectData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`T`\>
+▸ **useDatabaseObjectData**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`T`\>
 
 #### Type parameters
 
@@ -890,11 +980,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `ref` | `DatabaseReference` |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`\> |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`T`\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`T`\>
+[`ObservableStatus`](README.md#observablestatus)\<`T`\>
 
 #### Defined in
 
@@ -912,7 +1002,7 @@ ___
 
 #### Defined in
 
-[src/firebaseApp.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L78)
+[src/firebaseApp.tsx:79](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L79)
 
 ___
 
@@ -932,7 +1022,7 @@ ___
 
 ### useFirestoreCollection
 
-▸ **useFirestoreCollection**<`T`\>(`query`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`QuerySnapshot`<`T`\>\>
+▸ **useFirestoreCollection**\<`T`\>(`query`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`QuerySnapshot`\<`T`\>\>
 
 Subscribe to a Firestore collection
 
@@ -946,22 +1036,22 @@ Subscribe to a Firestore collection
 
 | Name | Type |
 | :------ | :------ |
-| `query` | `Query`<`T`\> |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`[]\> |
+| `query` | `Query`\<`T`, `DocumentData`\> |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`T`[]\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`QuerySnapshot`<`T`\>\>
+[`ObservableStatus`](README.md#observablestatus)\<`QuerySnapshot`\<`T`\>\>
 
 #### Defined in
 
-[src/firestore.tsx:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L86)
+[src/firestore.tsx:88](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L88)
 
 ___
 
 ### useFirestoreCollectionData
 
-▸ **useFirestoreCollectionData**<`T`\>(`query`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`T`[]\>
+▸ **useFirestoreCollectionData**\<`T`\>(`query`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`T`[]\>
 
 Subscribe to a Firestore collection and unwrap the snapshot into an array.
 
@@ -975,22 +1065,22 @@ Subscribe to a Firestore collection and unwrap the snapshot into an array.
 
 | Name | Type |
 | :------ | :------ |
-| `query` | `Query`<`T`\> |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`[]\> |
+| `query` | `Query`\<`T`, `DocumentData`\> |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`T`[]\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`T`[]\>
+[`ObservableStatus`](README.md#observablestatus)\<`T`[]\>
 
 #### Defined in
 
-[src/firestore.tsx:96](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L96)
+[src/firestore.tsx:98](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L98)
 
 ___
 
 ### useFirestoreDoc
 
-▸ **useFirestoreDoc**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`DocumentSnapshot`<`T`\>\>
+▸ **useFirestoreDoc**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`DocumentSnapshot`\<`T`\>\>
 
 Subscribe to Firestore Document changes
 
@@ -1006,12 +1096,12 @@ You can preload data for this hook by calling `preloadFirestoreDoc`
 
 | Name | Type |
 | :------ | :------ |
-| `ref` | `DocumentReference`<`T`\> |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`\> |
+| `ref` | `DocumentReference`\<`T`, `DocumentData`\> |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`T`\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`DocumentSnapshot`<`T`\>\>
+[`ObservableStatus`](README.md#observablestatus)\<`DocumentSnapshot`\<`T`\>\>
 
 #### Defined in
 
@@ -1021,7 +1111,7 @@ ___
 
 ### useFirestoreDocData
 
-▸ **useFirestoreDocData**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`T`\>
+▸ **useFirestoreDocData**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`T`\>
 
 Subscribe to Firestore Document changes and unwrap the document into a plain object
 
@@ -1035,12 +1125,12 @@ Subscribe to Firestore Document changes and unwrap the document into a plain obj
 
 | Name | Type |
 | :------ | :------ |
-| `ref` | `DocumentReference`<`T`\> |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`\> |
+| `ref` | `DocumentReference`\<`T`, `DocumentData`\> |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`T`\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`T`\>
+[`ObservableStatus`](README.md#observablestatus)\<`T`\>
 
 #### Defined in
 
@@ -1050,7 +1140,7 @@ ___
 
 ### useFirestoreDocDataOnce
 
-▸ **useFirestoreDocDataOnce**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`T`\>
+▸ **useFirestoreDocDataOnce**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`T`\>
 
 Get a Firestore document, unwrap the document into a plain object, and don't subscribe to changes
 
@@ -1064,22 +1154,22 @@ Get a Firestore document, unwrap the document into a plain object, and don't sub
 
 | Name | Type |
 | :------ | :------ |
-| `ref` | `DocumentReference`<`T`\> |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`\> |
+| `ref` | `DocumentReference`\<`T`, `DocumentData`\> |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`T`\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`T`\>
+[`ObservableStatus`](README.md#observablestatus)\<`T`\>
 
 #### Defined in
 
-[src/firestore.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L74)
+[src/firestore.tsx:75](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L75)
 
 ___
 
 ### useFirestoreDocOnce
 
-▸ **useFirestoreDocOnce**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`DocumentSnapshot`<`T`\>\>
+▸ **useFirestoreDocOnce**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`DocumentSnapshot`\<`T`\>\>
 
 Get a firestore document and don't subscribe to changes
 
@@ -1093,12 +1183,12 @@ Get a firestore document and don't subscribe to changes
 
 | Name | Type |
 | :------ | :------ |
-| `ref` | `DocumentReference`<`T`\> |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`\> |
+| `ref` | `DocumentReference`\<`T`, `DocumentData`\> |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`T`\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`DocumentSnapshot`<`T`\>\>
+[`ObservableStatus`](README.md#observablestatus)\<`DocumentSnapshot`\<`T`\>\>
 
 #### Defined in
 
@@ -1122,7 +1212,7 @@ ___
 
 ### useIdTokenResult
 
-▸ **useIdTokenResult**(`user`, `forceRefresh?`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`IdTokenResult`\>
+▸ **useIdTokenResult**(`user`, `forceRefresh?`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`IdTokenResult`\>
 
 #### Parameters
 
@@ -1130,11 +1220,11 @@ ___
 | :------ | :------ | :------ |
 | `user` | `User` | `undefined` |
 | `forceRefresh` | `boolean` | `false` |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`IdTokenResult`\> | `undefined` |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`IdTokenResult`\> | `undefined` |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`IdTokenResult`\>
+[`ObservableStatus`](README.md#observablestatus)\<`IdTokenResult`\>
 
 #### Defined in
 
@@ -1144,18 +1234,18 @@ ___
 
 ### useInitAnalytics
 
-▸ **useInitAnalytics**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`Analytics`\>
+▸ **useInitAnalytics**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`Analytics`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`Analytics`\> |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`Analytics`\> |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`\<`Analytics`\> |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`Analytics`\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`Analytics`\>
+[`ObservableStatus`](README.md#observablestatus)\<`Analytics`\>
 
 #### Defined in
 
@@ -1165,18 +1255,18 @@ ___
 
 ### useInitAppCheck
 
-▸ **useInitAppCheck**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`AppCheck`\>
+▸ **useInitAppCheck**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`AppCheck`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`AppCheck`\> |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`AppCheck`\> |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`\<`AppCheck`\> |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`AppCheck`\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`AppCheck`\>
+[`ObservableStatus`](README.md#observablestatus)\<`AppCheck`\>
 
 #### Defined in
 
@@ -1186,18 +1276,18 @@ ___
 
 ### useInitAuth
 
-▸ **useInitAuth**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`Auth`\>
+▸ **useInitAuth**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`Auth`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`Auth`\> |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`Auth`\> |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`\<`Auth`\> |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`Auth`\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`Auth`\>
+[`ObservableStatus`](README.md#observablestatus)\<`Auth`\>
 
 #### Defined in
 
@@ -1207,18 +1297,18 @@ ___
 
 ### useInitDatabase
 
-▸ **useInitDatabase**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`Database`\>
+▸ **useInitDatabase**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`Database`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`Database`\> |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`Database`\> |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`\<`Database`\> |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`Database`\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`Database`\>
+[`ObservableStatus`](README.md#observablestatus)\<`Database`\>
 
 #### Defined in
 
@@ -1228,18 +1318,18 @@ ___
 
 ### useInitFirestore
 
-▸ **useInitFirestore**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`Firestore`\>
+▸ **useInitFirestore**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`Firestore`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`Firestore`\> |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`Firestore`\> |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`\<`Firestore`\> |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`Firestore`\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`Firestore`\>
+[`ObservableStatus`](README.md#observablestatus)\<`Firestore`\>
 
 #### Defined in
 
@@ -1249,18 +1339,18 @@ ___
 
 ### useInitFunctions
 
-▸ **useInitFunctions**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`Functions`\>
+▸ **useInitFunctions**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`Functions`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`Functions`\> |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`Functions`\> |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`\<`Functions`\> |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`Functions`\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`Functions`\>
+[`ObservableStatus`](README.md#observablestatus)\<`Functions`\>
 
 #### Defined in
 
@@ -1270,18 +1360,18 @@ ___
 
 ### useInitPerformance
 
-▸ **useInitPerformance**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`FirebasePerformance`\>
+▸ **useInitPerformance**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`FirebasePerformance`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`FirebasePerformance`\> |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`FirebasePerformance`\> |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`\<`FirebasePerformance`\> |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`FirebasePerformance`\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`FirebasePerformance`\>
+[`ObservableStatus`](README.md#observablestatus)\<`FirebasePerformance`\>
 
 #### Defined in
 
@@ -1291,18 +1381,18 @@ ___
 
 ### useInitRemoteConfig
 
-▸ **useInitRemoteConfig**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`RemoteConfig`\>
+▸ **useInitRemoteConfig**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`RemoteConfig`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`RemoteConfig`\> |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`RemoteConfig`\> |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`\<`RemoteConfig`\> |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`RemoteConfig`\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`RemoteConfig`\>
+[`ObservableStatus`](README.md#observablestatus)\<`RemoteConfig`\>
 
 #### Defined in
 
@@ -1312,18 +1402,18 @@ ___
 
 ### useInitStorage
 
-▸ **useInitStorage**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`FirebaseStorage`\>
+▸ **useInitStorage**(`initializer`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`FirebaseStorage`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`<`FirebaseStorage`\> |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`FirebaseStorage`\> |
+| `initializer` | (`firebaseApp`: `FirebaseApp`) => `Promise`\<`FirebaseStorage`\> |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`FirebaseStorage`\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`FirebaseStorage`\>
+[`ObservableStatus`](README.md#observablestatus)\<`FirebaseStorage`\>
 
 #### Defined in
 
@@ -1341,13 +1431,13 @@ ___
 
 #### Defined in
 
-[src/firebaseApp.tsx:60](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L60)
+[src/firebaseApp.tsx:61](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L61)
 
 ___
 
 ### useObservable
 
-▸ **useObservable**<`T`\>(`observableId`, `source`, `config?`): [`ObservableStatus`](README.md#observablestatus)<`T`\>
+▸ **useObservable**\<`T`\>(`observableId`, `source`, `config?`): [`ObservableStatus`](README.md#observablestatus)\<`T`\>
 
 #### Type parameters
 
@@ -1360,12 +1450,12 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `observableId` | `string` |
-| `source` | `Observable`<`T`\> |
-| `config` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`unknown`\> |
+| `source` | `Observable`\<`T`\> |
+| `config` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`unknown`\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`T`\>
+[`ObservableStatus`](README.md#observablestatus)\<`T`\>
 
 #### Defined in
 
@@ -1403,7 +1493,7 @@ ___
 
 ### useRemoteConfigAll
 
-▸ **useRemoteConfigAll**(`key`): [`ObservableStatus`](README.md#observablestatus)<`AllParameters`\>
+▸ **useRemoteConfigAll**(`key`): [`ObservableStatus`](README.md#observablestatus)\<`AllParameters`\>
 
 Convience method similar to useRemoteConfigValue. Returns allRemote Config parameters.
 
@@ -1415,7 +1505,7 @@ Convience method similar to useRemoteConfigValue. Returns allRemote Config param
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`AllParameters`\>
+[`ObservableStatus`](README.md#observablestatus)\<`AllParameters`\>
 
 #### Defined in
 
@@ -1425,7 +1515,7 @@ ___
 
 ### useRemoteConfigBoolean
 
-▸ **useRemoteConfigBoolean**(`key`): [`ObservableStatus`](README.md#observablestatus)<`boolean`\>
+▸ **useRemoteConfigBoolean**(`key`): [`ObservableStatus`](README.md#observablestatus)\<`boolean`\>
 
 Convience method similar to useRemoteConfigValue. Returns a `boolean` from a Remote Config parameter.
 
@@ -1437,7 +1527,7 @@ Convience method similar to useRemoteConfigValue. Returns a `boolean` from a Rem
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`boolean`\>
+[`ObservableStatus`](README.md#observablestatus)\<`boolean`\>
 
 #### Defined in
 
@@ -1447,7 +1537,7 @@ ___
 
 ### useRemoteConfigNumber
 
-▸ **useRemoteConfigNumber**(`key`): [`ObservableStatus`](README.md#observablestatus)<`number`\>
+▸ **useRemoteConfigNumber**(`key`): [`ObservableStatus`](README.md#observablestatus)\<`number`\>
 
 Convience method similar to useRemoteConfigValue. Returns a `number` from a Remote Config parameter.
 
@@ -1459,7 +1549,7 @@ Convience method similar to useRemoteConfigValue. Returns a `number` from a Remo
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`number`\>
+[`ObservableStatus`](README.md#observablestatus)\<`number`\>
 
 #### Defined in
 
@@ -1469,7 +1559,7 @@ ___
 
 ### useRemoteConfigString
 
-▸ **useRemoteConfigString**(`key`): [`ObservableStatus`](README.md#observablestatus)<`string`\>
+▸ **useRemoteConfigString**(`key`): [`ObservableStatus`](README.md#observablestatus)\<`string`\>
 
 Convience method similar to useRemoteConfigValue. Returns a `string` from a Remote Config parameter.
 
@@ -1481,7 +1571,7 @@ Convience method similar to useRemoteConfigValue. Returns a `string` from a Remo
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`string`\>
+[`ObservableStatus`](README.md#observablestatus)\<`string`\>
 
 #### Defined in
 
@@ -1491,7 +1581,7 @@ ___
 
 ### useRemoteConfigValue
 
-▸ **useRemoteConfigValue**(`key`): [`ObservableStatus`](README.md#observablestatus)<`RemoteConfigValue`\>
+▸ **useRemoteConfigValue**(`key`): [`ObservableStatus`](README.md#observablestatus)\<`RemoteConfigValue`\>
 
 Accepts a key and optionally a Remote Config instance. Returns a
 Remote Config Value.
@@ -1504,7 +1594,7 @@ Remote Config Value.
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`RemoteConfigValue`\>
+[`ObservableStatus`](README.md#observablestatus)\<`RemoteConfigValue`\>
 
 #### Defined in
 
@@ -1514,7 +1604,7 @@ ___
 
 ### useSigninCheck
 
-▸ **useSigninCheck**(`options?`): [`ObservableStatus`](README.md#observablestatus)<[`SigninCheckResult`](README.md#signincheckresult)\>
+▸ **useSigninCheck**(`options?`): [`ObservableStatus`](README.md#observablestatus)\<[`SigninCheckResult`](README.md#signincheckresult)\>
 
 Subscribe to the signed-in status of a user.
 
@@ -1554,7 +1644,7 @@ const {status, data: signInCheckResult} = useSigninCheck({forceRefresh: true, re
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<[`SigninCheckResult`](README.md#signincheckresult)\>
+[`ObservableStatus`](README.md#observablestatus)\<[`SigninCheckResult`](README.md#signincheckresult)\>
 
 #### Defined in
 
@@ -1578,7 +1668,7 @@ ___
 
 ### useStorageDownloadURL
 
-▸ **useStorageDownloadURL**<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`string` \| `T`\>
+▸ **useStorageDownloadURL**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`string` \| `T`\>
 
 Subscribe to a storage ref's download URL
 
@@ -1593,11 +1683,11 @@ Subscribe to a storage ref's download URL
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `ref` | `StorageReference` | reference to the blob you want to download |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`\> |  |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`T`\> |  |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`string` \| `T`\>
+[`ObservableStatus`](README.md#observablestatus)\<`string` \| `T`\>
 
 #### Defined in
 
@@ -1607,7 +1697,7 @@ ___
 
 ### useStorageTask
 
-▸ **useStorageTask**<`T`\>(`task`, `ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)<`UploadTaskSnapshot` \| `T`\>
+▸ **useStorageTask**\<`T`\>(`task`, `ref`, `options?`): [`ObservableStatus`](README.md#observablestatus)\<`UploadTaskSnapshot` \| `T`\>
 
 Subscribe to the progress of a storage task
 
@@ -1623,11 +1713,11 @@ Subscribe to the progress of a storage task
 | :------ | :------ | :------ |
 | `task` | `UploadTask` | the task you want to listen to |
 | `ref` | `StorageReference` | reference to the blob the task is acting on |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`\> |  |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`T`\> |  |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`UploadTaskSnapshot` \| `T`\>
+[`ObservableStatus`](README.md#observablestatus)\<`UploadTaskSnapshot` \| `T`\>
 
 #### Defined in
 
@@ -1651,13 +1741,13 @@ ___
 
 #### Defined in
 
-[src/firebaseApp.tsx:67](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L67)
+[src/firebaseApp.tsx:68](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L68)
 
 ___
 
 ### useUser
 
-▸ **useUser**<`T`\>(`options?`): [`ObservableStatus`](README.md#observablestatus)<`User` \| ``null``\>
+▸ **useUser**\<`T`\>(`options?`): [`ObservableStatus`](README.md#observablestatus)\<`User` \| ``null``\>
 
 Subscribe to Firebase auth state changes, including token refresh
 
@@ -1671,11 +1761,11 @@ Subscribe to Firebase auth state changes, including token refresh
 
 | Name | Type |
 | :------ | :------ |
-| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)<`T`\> |
+| `options?` | [`ReactFireOptions`](interfaces/ReactFireOptions.md)\<`T`\> |
 
 #### Returns
 
-[`ObservableStatus`](README.md#observablestatus)<`User` \| ``null``\>
+[`ObservableStatus`](README.md#observablestatus)\<`User` \| ``null``\>
 
 #### Defined in
 

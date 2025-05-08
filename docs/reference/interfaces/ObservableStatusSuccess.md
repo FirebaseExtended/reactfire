@@ -1,6 +1,6 @@
 [ReactFire reference docs](../README.md) / ObservableStatusSuccess
 
-# Interface: ObservableStatusSuccess<T\>
+# Interface: ObservableStatusSuccess\<T\>
 
 ## Type parameters
 
@@ -10,7 +10,7 @@
 
 ## Hierarchy
 
-- `ObservableStatusBase`<`T`\>
+- `ObservableStatusBase`\<`T`\>
 
   ↳ **`ObservableStatusSuccess`**
 
@@ -59,7 +59,7 @@ ___
 
 ### firstValuePromise
 
-• **firstValuePromise**: `Promise`<`void`\>
+• **firstValuePromise**: `Promise`\<`void`\>
 
 Promise that resolves after first emit from observable
 

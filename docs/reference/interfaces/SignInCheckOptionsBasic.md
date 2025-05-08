@@ -4,7 +4,7 @@
 
 ## Hierarchy
 
-- [`ReactFireOptions`](ReactFireOptions.md)<[`SigninCheckResult`](../README.md#signincheckresult)\>
+- [`ReactFireOptions`](ReactFireOptions.md)\<[`SigninCheckResult`](../README.md#signincheckresult)\>
 
   ↳ **`SignInCheckOptionsBasic`**
 

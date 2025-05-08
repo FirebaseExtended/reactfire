@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[src/firebaseApp.tsx:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L15)
+[src/firebaseApp.tsx:17](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L17)
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 #### Defined in
 
-[src/firebaseApp.tsx:13](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L13)
+[src/firebaseApp.tsx:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L15)
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 #### Defined in
 
-[src/firebaseApp.tsx:14](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L14)
+[src/firebaseApp.tsx:16](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L16)
 
 ___
 
@@ -49,4 +49,4 @@ ___
 
 #### Defined in
 
-[src/firebaseApp.tsx:16](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L16)
+[src/firebaseApp.tsx:18](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L18)

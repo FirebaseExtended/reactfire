@@ -1,6 +1,6 @@
 [ReactFire reference docs](../README.md) / ObservableStatusError
 
-# Interface: ObservableStatusError<T\>
+# Interface: ObservableStatusError\<T\>
 
 ## Type parameters
 
@@ -10,7 +10,7 @@
 
 ## Hierarchy
 
-- `ObservableStatusBase`<`T`\>
+- `ObservableStatusBase`\<`T`\>
 
   ↳ **`ObservableStatusError`**
 
@@ -61,7 +61,7 @@ ___
 
 ### firstValuePromise
 
-• **firstValuePromise**: `Promise`<`void`\>
+• **firstValuePromise**: `Promise`\<`void`\>
 
 Promise that resolves after first emit from observable
 
