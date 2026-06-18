@@ -137,14 +137,23 @@ describe('useObservable', () => {
       const spy = vi.spyOn(console, 'error');
       spy.mockImplementation(() => {});
 
+      // React 18 dispatches a window error event when a component throws during render
+      // even when caught by expect().toThrow(). Prevent it from surfacing as an uncaught
+      // error in environments where Vitest treats those as test failures.
+      // Note: e.preventDefault() causes React to set _suppressLogging:true on the error,
+      // so we match on message only via expect.objectContaining.
+      const onError = (e: ErrorEvent) => e.preventDefault();
+      window.addEventListener('error', onError);
+
       const observable$: Subject<any> = new Subject();
 
       // @ts-expect-error we're trying to break useObservable
       expect(() => renderHook(() => useObservable(undefined, observable$, { suspense: true }))).toThrow(
-        Error('cannot call useObservable without an observableId')
+        expect.objectContaining({ message: 'cannot call useObservable without an observableId' })
       );
 
       spy.mockRestore();
+      window.removeEventListener('error', onError);
     });
 
     it('can return a startval and then the observable once it is ready', () => {
