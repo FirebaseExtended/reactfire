@@ -1,93 +1,78 @@
+[**ReactFire reference docs**](../README.md)
+
+***
+
 [ReactFire reference docs](../README.md) / SignInCheckOptionsBasic
 
 # Interface: SignInCheckOptionsBasic
 
-## Hierarchy
+Defined in: [src/auth.tsx:73](https://github.com/tyler-reitz/reactfire/blob/main/src/auth.tsx#L73)
 
-- [`ReactFireOptions`](ReactFireOptions.md)<[`SigninCheckResult`](../README.md#signincheckresult)\>
+## Extends
 
-  ↳ **`SignInCheckOptionsBasic`**
+- [`ReactFireOptions`](ReactFireOptions.md)\<[`SigninCheckResult`](../type-aliases/SigninCheckResult.md)\>
 
-  ↳↳ [`SignInCheckOptionsClaimsObject`](SignInCheckOptionsClaimsObject.md)
+## Extended by
 
-  ↳↳ [`SignInCheckOptionsClaimsValidator`](SignInCheckOptionsClaimsValidator.md)
-
-## Table of contents
-
-### Properties
-
-- [forceRefresh](SignInCheckOptionsBasic.md#forcerefresh)
-- [idField](SignInCheckOptionsBasic.md#idfield)
-- [initialData](SignInCheckOptionsBasic.md#initialdata)
-- [startWithValue](SignInCheckOptionsBasic.md#startwithvalue)
-- [suspense](SignInCheckOptionsBasic.md#suspense)
+- [`SignInCheckOptionsClaimsObject`](SignInCheckOptionsClaimsObject.md)
+- [`SignInCheckOptionsClaimsValidator`](SignInCheckOptionsClaimsValidator.md)
 
 ## Properties
 
-### forceRefresh
+### forceRefresh?
 
-• `Optional` **forceRefresh**: `boolean`
+> `optional` **forceRefresh?**: `boolean`
 
-#### Defined in
+Defined in: [src/auth.tsx:74](https://github.com/tyler-reitz/reactfire/blob/main/src/auth.tsx#L74)
 
-[src/auth.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L74)
+***
 
-___
+### idField?
 
-### idField
+> `optional` **idField?**: `string`
 
-• `Optional` **idField**: `string`
-
-#### Inherited from
-
-[ReactFireOptions](ReactFireOptions.md).[idField](ReactFireOptions.md#idfield)
-
-#### Defined in
-
-[src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L25)
-
-___
-
-### initialData
-
-• `Optional` **initialData**: `any`
+Defined in: [src/index.ts:25](https://github.com/tyler-reitz/reactfire/blob/main/src/index.ts#L25)
 
 #### Inherited from
 
-[ReactFireOptions](ReactFireOptions.md).[initialData](ReactFireOptions.md#initialdata)
+[`ReactFireOptions`](ReactFireOptions.md).[`idField`](ReactFireOptions.md#idfield)
 
-#### Defined in
+***
 
-[src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L26)
+### initialData?
 
-___
+> `optional` **initialData?**: `any`
 
-### startWithValue
+Defined in: [src/index.ts:26](https://github.com/tyler-reitz/reactfire/blob/main/src/index.ts#L26)
 
-• `Optional` **startWithValue**: `any`
+#### Inherited from
 
-**`Deprecated`**
+[`ReactFireOptions`](ReactFireOptions.md).[`initialData`](ReactFireOptions.md#initialdata)
+
+***
+
+### ~~startWithValue?~~
+
+> `optional` **startWithValue?**: `any`
+
+Defined in: [src/index.ts:30](https://github.com/tyler-reitz/reactfire/blob/main/src/index.ts#L30)
+
+#### Deprecated
 
 use initialData instead
 
 #### Inherited from
 
-[ReactFireOptions](ReactFireOptions.md).[startWithValue](ReactFireOptions.md#startwithvalue)
+[`ReactFireOptions`](ReactFireOptions.md).[`startWithValue`](ReactFireOptions.md#startwithvalue)
 
-#### Defined in
+***
 
-[src/index.ts:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L30)
+### suspense?
 
-___
+> `optional` **suspense?**: `boolean`
 
-### suspense
-
-• `Optional` **suspense**: `boolean`
+Defined in: [src/index.ts:31](https://github.com/tyler-reitz/reactfire/blob/main/src/index.ts#L31)
 
 #### Inherited from
 
-[ReactFireOptions](ReactFireOptions.md).[suspense](ReactFireOptions.md#suspense)
-
-#### Defined in
-
-[src/index.ts:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L31)
+[`ReactFireOptions`](ReactFireOptions.md).[`suspense`](ReactFireOptions.md#suspense)
