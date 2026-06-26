@@ -58,6 +58,11 @@ jobs:
           cache: 'npm'
       - name: Install deps
         run: npm ci
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
       - name: Install deps for functions
         run: npm install
         working-directory: ./functions
