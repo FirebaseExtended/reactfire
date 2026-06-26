@@ -6,7 +6,7 @@
 
 # Function: useFirestoreDocOnce()
 
-> **useFirestoreDocOnce**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`DocumentSnapshot`\<`T`\>\>
+> **useFirestoreDocOnce**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`DocumentSnapshot`\<`T`, `DocumentData`\>\>
 
 Defined in: [src/firestore.tsx:52](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L52)
 
@@ -30,4 +30,4 @@ Get a firestore document and don't subscribe to changes
 
 ## Returns
 
-[`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`DocumentSnapshot`\<`T`\>\>
+[`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`DocumentSnapshot`\<`T`, `DocumentData`\>\>

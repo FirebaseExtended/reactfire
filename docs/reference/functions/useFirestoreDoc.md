@@ -6,7 +6,7 @@
 
 # Function: useFirestoreDoc()
 
-> **useFirestoreDoc**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`DocumentSnapshot`\<`T`\>\>
+> **useFirestoreDoc**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`DocumentSnapshot`\<`T`, `DocumentData`\>\>
 
 Defined in: [src/firestore.tsx:42](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L42)
 
@@ -32,4 +32,4 @@ You can preload data for this hook by calling `preloadFirestoreDoc`
 
 ## Returns
 
-[`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`DocumentSnapshot`\<`T`\>\>
+[`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`DocumentSnapshot`\<`T`, `DocumentData`\>\>

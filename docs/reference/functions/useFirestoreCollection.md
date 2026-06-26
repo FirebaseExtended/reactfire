@@ -6,7 +6,7 @@
 
 # Function: useFirestoreCollection()
 
-> **useFirestoreCollection**\<`T`\>(`query`, `options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`QuerySnapshot`\<`T`\>\>
+> **useFirestoreCollection**\<`T`\>(`query`, `options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`QuerySnapshot`\<`T`, `DocumentData`\>\>
 
 Defined in: [src/firestore.tsx:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L86)
 
@@ -30,4 +30,4 @@ Subscribe to a Firestore collection
 
 ## Returns
 
-[`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`QuerySnapshot`\<`T`\>\>
+[`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`QuerySnapshot`\<`T`, `DocumentData`\>\>

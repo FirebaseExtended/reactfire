@@ -5,7 +5,7 @@ import { ObservableStatus } from './useObservable';
 export class SuspenseSubject<T> extends Subject<T> {
   private _value: T | undefined;
   private _hasValue = false;
-  private _timeoutHandler: NodeJS.Timeout;
+  private _timeoutHandler: ReturnType<typeof setTimeout>;
   private _firstEmission: Promise<void>;
   private _error: any = undefined;
   private _innerObservable: Observable<T>;

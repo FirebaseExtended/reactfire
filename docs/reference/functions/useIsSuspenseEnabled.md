@@ -8,7 +8,7 @@
 
 > **useIsSuspenseEnabled**(): `boolean`
 
-Defined in: [src/firebaseApp.tsx:60](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L60)
+Defined in: [src/firebaseApp.tsx:62](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L62)
 
 ## Returns
 

@@ -6,7 +6,7 @@
 
 # Function: preloadFirestoreDoc()
 
-> **preloadFirestoreDoc**(`refProvider`): `Promise`\<`SuspenseSubject`\<`DocumentSnapshot`\<`DocumentData`\>\>\>
+> **preloadFirestoreDoc**(`refProvider`): `Promise`\<`SuspenseSubject`\<`DocumentSnapshot`\<`DocumentData`, `DocumentData`\>\>\>
 
 Defined in: [src/firestore.tsx:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L28)
 
@@ -18,8 +18,8 @@ Use this to warm up `useFirestoreDoc` for a specific document
 
 ### refProvider
 
-() => `Promise`\<`DocumentReference`\<`DocumentData`\>\>
+() => `Promise`\<`DocumentReference`\<`DocumentData`, `DocumentData`\>\>
 
 ## Returns
 
-`Promise`\<`SuspenseSubject`\<`DocumentSnapshot`\<`DocumentData`\>\>\>
+`Promise`\<`SuspenseSubject`\<`DocumentSnapshot`\<`DocumentData`, `DocumentData`\>\>\>
