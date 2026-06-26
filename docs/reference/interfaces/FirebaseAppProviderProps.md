@@ -6,7 +6,7 @@
 
 # Interface: FirebaseAppProviderProps
 
-Defined in: [src/firebaseApp.tsx:12](https://github.com/tyler-reitz/reactfire/blob/main/src/firebaseApp.tsx#L12)
+Defined in: [src/firebaseApp.tsx:12](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L12)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/firebaseApp.tsx:12](https://github.com/tyler-reitz/reactfire/bl
 
 > `optional` **appName?**: `string`
 
-Defined in: [src/firebaseApp.tsx:15](https://github.com/tyler-reitz/reactfire/blob/main/src/firebaseApp.tsx#L15)
+Defined in: [src/firebaseApp.tsx:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L15)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/firebaseApp.tsx:15](https://github.com/tyler-reitz/reactfire/bl
 
 > `optional` **firebaseApp?**: `FirebaseApp`
 
-Defined in: [src/firebaseApp.tsx:13](https://github.com/tyler-reitz/reactfire/blob/main/src/firebaseApp.tsx#L13)
+Defined in: [src/firebaseApp.tsx:13](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L13)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/firebaseApp.tsx:13](https://github.com/tyler-reitz/reactfire/bl
 
 > `optional` **firebaseConfig?**: `FirebaseOptions`
 
-Defined in: [src/firebaseApp.tsx:14](https://github.com/tyler-reitz/reactfire/blob/main/src/firebaseApp.tsx#L14)
+Defined in: [src/firebaseApp.tsx:14](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L14)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/firebaseApp.tsx:14](https://github.com/tyler-reitz/reactfire/bl
 
 > `optional` **suspense?**: `boolean`
 
-Defined in: [src/firebaseApp.tsx:16](https://github.com/tyler-reitz/reactfire/blob/main/src/firebaseApp.tsx#L16)
+Defined in: [src/firebaseApp.tsx:16](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L16)

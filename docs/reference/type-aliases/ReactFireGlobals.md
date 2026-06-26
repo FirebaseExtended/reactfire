@@ -8,7 +8,7 @@
 
 > **ReactFireGlobals** = `object`
 
-Defined in: [src/index.ts:6](https://github.com/tyler-reitz/reactfire/blob/main/src/index.ts#L6)
+Defined in: [src/index.ts:6](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L6)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [src/index.ts:6](https://github.com/tyler-reitz/reactfire/blob/main/
 
 > **\_reactFireDatabaseCachedQueries**: `DatabaseQuery`[]
 
-Defined in: [src/index.ts:7](https://github.com/tyler-reitz/reactfire/blob/main/src/index.ts#L7)
+Defined in: [src/index.ts:7](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L7)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/index.ts:7](https://github.com/tyler-reitz/reactfire/blob/main/
 
 > **\_reactFireFirestoreQueryCache**: `FirestoreQuery`[]
 
-Defined in: [src/index.ts:8](https://github.com/tyler-reitz/reactfire/blob/main/src/index.ts#L8)
+Defined in: [src/index.ts:8](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L8)
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: [src/index.ts:8](https://github.com/tyler-reitz/reactfire/blob/main/
 
 > **\_reactFirePreloadedObservables**: `Map`\<`string`, `SuspenseSubject`\<`any`\>\>
 
-Defined in: [src/index.ts:9](https://github.com/tyler-reitz/reactfire/blob/main/src/index.ts#L9)
+Defined in: [src/index.ts:9](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L9)

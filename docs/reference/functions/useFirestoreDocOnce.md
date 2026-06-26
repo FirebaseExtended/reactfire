@@ -8,7 +8,7 @@
 
 > **useFirestoreDocOnce**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`DocumentSnapshot`\<`T`\>\>
 
-Defined in: [src/firestore.tsx:52](https://github.com/tyler-reitz/reactfire/blob/main/src/firestore.tsx#L52)
+Defined in: [src/firestore.tsx:52](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L52)
 
 Get a firestore document and don't subscribe to changes
 

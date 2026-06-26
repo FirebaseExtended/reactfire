@@ -8,7 +8,7 @@
 
 > **useIdTokenResult**(`user`, `forceRefresh?`, `options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`IdTokenResult`\>
 
-Defined in: [src/auth.tsx:31](https://github.com/tyler-reitz/reactfire/blob/main/src/auth.tsx#L31)
+Defined in: [src/auth.tsx:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L31)
 
 ## Parameters
 

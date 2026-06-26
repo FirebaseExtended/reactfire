@@ -8,7 +8,7 @@
 
 > `const` **FirestoreProvider**: (`props`) => `Element`
 
-Defined in: [src/sdk.tsx:76](https://github.com/tyler-reitz/reactfire/blob/main/src/sdk.tsx#L76)
+Defined in: [src/sdk.tsx:76](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L76)
 
 ## Parameters
 

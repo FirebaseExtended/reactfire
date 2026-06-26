@@ -6,7 +6,7 @@
 
 # Interface: AuthCheckProps
 
-Defined in: [src/auth.tsx:42](https://github.com/tyler-reitz/reactfire/blob/main/src/auth.tsx#L42)
+Defined in: [src/auth.tsx:42](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L42)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/auth.tsx:42](https://github.com/tyler-reitz/reactfire/blob/main
 
 > **children**: `ReactNode`
 
-Defined in: [src/auth.tsx:44](https://github.com/tyler-reitz/reactfire/blob/main/src/auth.tsx#L44)
+Defined in: [src/auth.tsx:44](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L44)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/auth.tsx:44](https://github.com/tyler-reitz/reactfire/blob/main
 
 > **fallback**: `ReactNode`
 
-Defined in: [src/auth.tsx:43](https://github.com/tyler-reitz/reactfire/blob/main/src/auth.tsx#L43)
+Defined in: [src/auth.tsx:43](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L43)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/auth.tsx:43](https://github.com/tyler-reitz/reactfire/blob/main
 
 > `optional` **requiredClaims?**: `Object`
 
-Defined in: [src/auth.tsx:45](https://github.com/tyler-reitz/reactfire/blob/main/src/auth.tsx#L45)
+Defined in: [src/auth.tsx:45](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L45)

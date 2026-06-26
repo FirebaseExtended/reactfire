@@ -8,7 +8,7 @@
 
 > **AuthCheck**(`__namedParameters`): `Element`
 
-Defined in: [src/auth.tsx:247](https://github.com/tyler-reitz/reactfire/blob/main/src/auth.tsx#L247)
+Defined in: [src/auth.tsx:247](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L247)
 
 ## Parameters
 

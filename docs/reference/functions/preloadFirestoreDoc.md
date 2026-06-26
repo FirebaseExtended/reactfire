@@ -8,7 +8,7 @@
 
 > **preloadFirestoreDoc**(`refProvider`): `Promise`\<`SuspenseSubject`\<`DocumentSnapshot`\<`DocumentData`\>\>\>
 
-Defined in: [src/firestore.tsx:28](https://github.com/tyler-reitz/reactfire/blob/main/src/firestore.tsx#L28)
+Defined in: [src/firestore.tsx:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L28)
 
 Preload a subscription to a Firestore document reference.
 

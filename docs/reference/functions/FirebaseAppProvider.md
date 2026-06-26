@@ -8,7 +8,7 @@
 
 > **FirebaseAppProvider**(`props`): `Element`
 
-Defined in: [src/firebaseApp.tsx:24](https://github.com/tyler-reitz/reactfire/blob/main/src/firebaseApp.tsx#L24)
+Defined in: [src/firebaseApp.tsx:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L24)
 
 ## Parameters
 

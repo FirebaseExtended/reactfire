@@ -8,7 +8,7 @@
 
 > **useDatabase**(): `Database`
 
-Defined in: [src/sdk.tsx:85](https://github.com/tyler-reitz/reactfire/blob/main/src/sdk.tsx#L85)
+Defined in: [src/sdk.tsx:85](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L85)
 
 ## Returns
 
