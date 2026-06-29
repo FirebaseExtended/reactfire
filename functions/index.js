@@ -1,5 +1,5 @@
-const functions = require("firebase-functions");
+const { onCall } = require("firebase-functions/v2/https");
 
-exports.capitalizeText = functions.https.onCall((data) => {
-  return data.text.toUpperCase();
+exports.capitalizeText = onCall((request) => {
+  return request.data.text.toUpperCase();
 });

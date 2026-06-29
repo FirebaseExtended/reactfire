@@ -65,7 +65,7 @@ export function useFirestoreDocData<T = unknown>(ref: DocumentReference<T>, opti
   const observableId = `firestore:docData:${ref.firestore.app.name}:${ref.path}:idField=${idField}`;
   const observable = docData(ref, { idField });
 
-  return useObservable(observableId, observable, options);
+  return useObservable(observableId, observable, options) as ObservableStatus<T>;
 }
 
 /**
@@ -77,7 +77,7 @@ export function useFirestoreDocDataOnce<T = unknown>(ref: DocumentReference<T>, 
   const observableId = `firestore:docDataOnce:${ref.firestore.app.name}:${ref.path}:idField=${idField}`;
   const observable$ = docData(ref, { idField }).pipe(first());
 
-  return useObservable(observableId, observable$, options);
+  return useObservable(observableId, observable$, options) as ObservableStatus<T>;
 }
 
 /**

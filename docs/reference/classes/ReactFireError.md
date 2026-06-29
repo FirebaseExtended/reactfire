@@ -1,204 +1,131 @@
+[**ReactFire reference docs**](../README.md)
+
+***
+
 [ReactFire reference docs](../README.md) / ReactFireError
 
 # Class: ReactFireError
 
-## Hierarchy
+Defined in: [src/index.ts:12](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L12)
+
+## Extends
 
 - `Error`
 
-  ↳ **`ReactFireError`**
-
-## Table of contents
-
-### Constructors
-
-- [constructor](ReactFireError.md#constructor)
-
-### Properties
-
-- [cause](ReactFireError.md#cause)
-- [code](ReactFireError.md#code)
-- [customData](ReactFireError.md#customdata)
-- [message](ReactFireError.md#message)
-- [name](ReactFireError.md#name)
-- [stack](ReactFireError.md#stack)
-- [prepareStackTrace](ReactFireError.md#preparestacktrace)
-- [stackTraceLimit](ReactFireError.md#stacktracelimit)
-
-### Methods
-
-- [captureStackTrace](ReactFireError.md#capturestacktrace)
-
 ## Constructors
 
-### constructor
+### Constructor
 
-• **new ReactFireError**(`code`, `message`, `customData?`)
+> **new ReactFireError**(`code`, `message`, `customData?`): `ReactFireError`
+
+Defined in: [src/index.ts:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L15)
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `code` | `string` |
-| `message` | `string` |
-| `customData?` | `Record`<`string`, `unknown`\> |
+##### code
 
-#### Overrides
+`string`
 
-Error.constructor
+##### message
 
-#### Defined in
+`string`
 
-[src/index.ts:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L15)
+##### customData?
 
-## Properties
-
-### cause
-
-• `Optional` **cause**: `unknown`
-
-#### Inherited from
-
-Error.cause
-
-#### Defined in
-
-node_modules/typescript/lib/lib.es2022.error.d.ts:24
-
-___
-
-### code
-
-• `Readonly` **code**: `string`
-
-#### Defined in
-
-[src/index.ts:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L15)
-
-___
-
-### customData
-
-• `Optional` **customData**: `Record`<`string`, `unknown`\>
-
-#### Defined in
-
-[src/index.ts:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L15)
-
-___
-
-### message
-
-• **message**: `string`
-
-#### Inherited from
-
-Error.message
-
-#### Defined in
-
-node_modules/typescript/lib/lib.es5.d.ts:1068
-
-___
-
-### name
-
-• `Readonly` **name**: ``"ReactFireError"``
-
-#### Overrides
-
-Error.name
-
-#### Defined in
-
-[src/index.ts:13](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L13)
-
-___
-
-### stack
-
-• `Optional` **stack**: `string`
-
-#### Inherited from
-
-Error.stack
-
-#### Defined in
-
-node_modules/typescript/lib/lib.es5.d.ts:1069
-
-___
-
-### prepareStackTrace
-
-▪ `Static` `Optional` **prepareStackTrace**: (`err`: `Error`, `stackTraces`: `CallSite`[]) => `any`
-
-#### Type declaration
-
-▸ (`err`, `stackTraces`): `any`
-
-Optional override for formatting stack traces
-
-**`See`**
-
-https://v8.dev/docs/stack-trace-api#customizing-stack-traces
-
-##### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `err` | `Error` |
-| `stackTraces` | `CallSite`[] |
-
-##### Returns
-
-`any`
-
-#### Inherited from
-
-Error.prepareStackTrace
-
-#### Defined in
-
-node_modules/@types/node/globals.d.ts:11
-
-___
-
-### stackTraceLimit
-
-▪ `Static` **stackTraceLimit**: `number`
-
-#### Inherited from
-
-Error.stackTraceLimit
-
-#### Defined in
-
-node_modules/@types/node/globals.d.ts:13
-
-## Methods
-
-### captureStackTrace
-
-▸ `Static` **captureStackTrace**(`targetObject`, `constructorOpt?`): `void`
-
-Create .stack property on a target object
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `targetObject` | `object` |
-| `constructorOpt?` | `Function` |
+`Record`\<`string`, `unknown`\>
 
 #### Returns
 
-`void`
+`ReactFireError`
+
+#### Overrides
+
+`Error.constructor`
+
+## Properties
+
+### cause?
+
+> `optional` **cause?**: `unknown`
+
+Defined in: node\_modules/typescript/lib/lib.es2022.error.d.ts:24
 
 #### Inherited from
 
-Error.captureStackTrace
+`Error.cause`
 
-#### Defined in
+***
 
-node_modules/@types/node/globals.d.ts:4
+### code
+
+> `readonly` **code**: `string`
+
+Defined in: [src/index.ts:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L15)
+
+***
+
+### customData?
+
+> `optional` **customData?**: `Record`\<`string`, `unknown`\>
+
+Defined in: [src/index.ts:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L15)
+
+***
+
+### message
+
+> **message**: `string`
+
+Defined in: node\_modules/typescript/lib/lib.es5.d.ts:1075
+
+#### Inherited from
+
+`Error.message`
+
+***
+
+### name
+
+> `readonly` **name**: `"ReactFireError"` = `'ReactFireError'`
+
+Defined in: [src/index.ts:13](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L13)
+
+#### Overrides
+
+`Error.name`
+
+***
+
+### stack?
+
+> `optional` **stack?**: `string`
+
+Defined in: node\_modules/typescript/lib/lib.es5.d.ts:1076
+
+#### Inherited from
+
+`Error.stack`
+
+## Methods
+
+### isError()
+
+> `static` **isError**(`error`): `error is Error`
+
+Defined in: node\_modules/typescript/lib/lib.esnext.error.d.ts:21
+
+Indicates whether the argument provided is a built-in Error instance or not.
+
+#### Parameters
+
+##### error
+
+`unknown`
+
+#### Returns
+
+`error is Error`
+
+#### Inherited from
+
+`Error.isError`

@@ -1,52 +1,41 @@
+[**ReactFire reference docs**](../README.md)
+
+***
+
 [ReactFire reference docs](../README.md) / FirebaseAppProviderProps
 
 # Interface: FirebaseAppProviderProps
 
-## Table of contents
-
-### Properties
-
-- [appName](FirebaseAppProviderProps.md#appname)
-- [firebaseApp](FirebaseAppProviderProps.md#firebaseapp)
-- [firebaseConfig](FirebaseAppProviderProps.md#firebaseconfig)
-- [suspense](FirebaseAppProviderProps.md#suspense)
+Defined in: [src/firebaseApp.tsx:14](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L14)
 
 ## Properties
 
-### appName
+### appName?
 
-• `Optional` **appName**: `string`
+> `optional` **appName?**: `string`
 
-#### Defined in
+Defined in: [src/firebaseApp.tsx:17](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L17)
 
-[src/firebaseApp.tsx:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L15)
+***
 
-___
+### firebaseApp?
 
-### firebaseApp
+> `optional` **firebaseApp?**: `FirebaseApp`
 
-• `Optional` **firebaseApp**: `FirebaseApp`
+Defined in: [src/firebaseApp.tsx:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L15)
 
-#### Defined in
+***
 
-[src/firebaseApp.tsx:13](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L13)
+### firebaseConfig?
 
-___
+> `optional` **firebaseConfig?**: `FirebaseOptions`
 
-### firebaseConfig
+Defined in: [src/firebaseApp.tsx:16](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L16)
 
-• `Optional` **firebaseConfig**: `FirebaseOptions`
+***
 
-#### Defined in
+### suspense?
 
-[src/firebaseApp.tsx:14](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L14)
+> `optional` **suspense?**: `boolean`
 
-___
-
-### suspense
-
-• `Optional` **suspense**: `boolean`
-
-#### Defined in
-
-[src/firebaseApp.tsx:16](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L16)
+Defined in: [src/firebaseApp.tsx:18](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L18)

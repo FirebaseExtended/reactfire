@@ -1,35 +1,30 @@
+[**ReactFire reference docs**](../README.md)
+
+***
+
 [ReactFire reference docs](../README.md) / ObservableStatusError
 
-# Interface: ObservableStatusError<T\>
+# Interface: ObservableStatusError\<T\>
 
-## Type parameters
+Defined in: [src/useObservable.ts:72](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L72)
 
-| Name |
-| :------ |
-| `T` |
+## Extends
 
-## Hierarchy
+- `ObservableStatusBase`\<`T`\>
 
-- `ObservableStatusBase`<`T`\>
+## Type Parameters
 
-  ↳ **`ObservableStatusError`**
+### T
 
-## Table of contents
-
-### Properties
-
-- [data](ObservableStatusError.md#data)
-- [error](ObservableStatusError.md#error)
-- [firstValuePromise](ObservableStatusError.md#firstvaluepromise)
-- [hasEmitted](ObservableStatusError.md#hasemitted)
-- [isComplete](ObservableStatusError.md#iscomplete)
-- [status](ObservableStatusError.md#status)
+`T`
 
 ## Properties
 
 ### data
 
-• **data**: `undefined` \| `T`
+> **data**: `T` \| `undefined`
+
+Defined in: [src/useObservable.ts:56](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L56)
 
 The most recent value.
 
@@ -37,47 +32,43 @@ If `initialData` is passed in, the first value of `data` will be the valuea prov
 
 #### Inherited from
 
-ObservableStatusBase.data
+`ObservableStatusBase.data`
 
-#### Defined in
-
-[src/useObservable.ts:56](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L56)
-
-___
+***
 
 ### error
 
-• **error**: `Error`
+> **error**: `Error`
+
+Defined in: [src/useObservable.ts:75](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L75)
+
+Any error that may have occurred in the underlying observable
 
 #### Overrides
 
-ObservableStatusBase.error
+`ObservableStatusBase.error`
 
-#### Defined in
-
-[src/useObservable.ts:75](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L75)
-
-___
+***
 
 ### firstValuePromise
 
-• **firstValuePromise**: `Promise`<`void`\>
+> **firstValuePromise**: `Promise`\<`void`\>
+
+Defined in: [src/useObservable.ts:64](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L64)
 
 Promise that resolves after first emit from observable
 
 #### Inherited from
 
-ObservableStatusBase.firstValuePromise
+`ObservableStatusBase.firstValuePromise`
 
-#### Defined in
-
-[src/useObservable.ts:64](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L64)
-
-___
+***
 
 ### hasEmitted
 
-• **hasEmitted**: `boolean`
+> **hasEmitted**: `boolean`
+
+Defined in: [src/useObservable.ts:46](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L46)
 
 Indicates whether the hook has emitted a value at some point
 
@@ -85,36 +76,38 @@ If `initialData` is passed in, this will be `true`.
 
 #### Inherited from
 
-ObservableStatusBase.hasEmitted
+`ObservableStatusBase.hasEmitted`
 
-#### Defined in
-
-[src/useObservable.ts:46](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L46)
-
-___
+***
 
 ### isComplete
 
-• **isComplete**: ``true``
+> **isComplete**: `true`
+
+Defined in: [src/useObservable.ts:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L74)
+
+If this is `true`, the hook will be emitting no further items.
 
 #### Overrides
 
-ObservableStatusBase.isComplete
+`ObservableStatusBase.isComplete`
 
-#### Defined in
-
-[src/useObservable.ts:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L74)
-
-___
+***
 
 ### status
 
-• **status**: ``"error"``
+> **status**: `"error"`
+
+Defined in: [src/useObservable.ts:73](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L73)
+
+The loading status.
+
+- `loading`: Waiting for the first value from an observable
+- `error`: Something went wrong. Check `ObservableStatus.error` for more details
+- `success`: The hook has emitted at least one value
+
+If `initialData` is passed in, this will skip `loading` and go straight to `success`.
 
 #### Overrides
 
-ObservableStatusBase.status
-
-#### Defined in
-
-[src/useObservable.ts:73](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L73)
+`ObservableStatusBase.status`

@@ -1,28 +1,31 @@
+[**ReactFire reference docs**](../README.md)
+
+***
+
 [ReactFire reference docs](../README.md) / ClaimsValidator
 
-# Interface: ClaimsValidator
+# Interface: ClaimsValidator()
 
-## Callable
+Defined in: [src/auth.tsx:81](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L81)
 
-### ClaimsValidator
+> **ClaimsValidator**(`claims`): `object`
 
-▸ **ClaimsValidator**(`claims`): `Object`
+Defined in: [src/auth.tsx:82](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L82)
 
-#### Parameters
+## Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `claims` | `ParsedToken` |
+### claims
 
-#### Returns
+`ParsedToken`
 
-`Object`
+## Returns
 
-| Name | Type |
-| :------ | :------ |
-| `errors` | {} \| [`ClaimCheckErrors`](ClaimCheckErrors.md) |
-| `hasRequiredClaims` | `boolean` |
+`object`
 
-#### Defined in
+### errors
 
-[src/auth.tsx:82](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L82)
+> **errors**: \{ \} \| [`ClaimCheckErrors`](ClaimCheckErrors.md)
+
+### hasRequiredClaims
+
+> **hasRequiredClaims**: `boolean`

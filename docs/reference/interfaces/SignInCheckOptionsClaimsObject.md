@@ -1,104 +1,85 @@
+[**ReactFire reference docs**](../README.md)
+
+***
+
 [ReactFire reference docs](../README.md) / SignInCheckOptionsClaimsObject
 
 # Interface: SignInCheckOptionsClaimsObject
 
-## Hierarchy
+Defined in: [src/auth.tsx:77](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L77)
+
+## Extends
 
 - [`SignInCheckOptionsBasic`](SignInCheckOptionsBasic.md)
 
-  ↳ **`SignInCheckOptionsClaimsObject`**
-
-## Table of contents
-
-### Properties
-
-- [forceRefresh](SignInCheckOptionsClaimsObject.md#forcerefresh)
-- [idField](SignInCheckOptionsClaimsObject.md#idfield)
-- [initialData](SignInCheckOptionsClaimsObject.md#initialdata)
-- [requiredClaims](SignInCheckOptionsClaimsObject.md#requiredclaims)
-- [startWithValue](SignInCheckOptionsClaimsObject.md#startwithvalue)
-- [suspense](SignInCheckOptionsClaimsObject.md#suspense)
-
 ## Properties
 
-### forceRefresh
+### forceRefresh?
 
-• `Optional` **forceRefresh**: `boolean`
+> `optional` **forceRefresh?**: `boolean`
 
-#### Inherited from
-
-[SignInCheckOptionsBasic](SignInCheckOptionsBasic.md).[forceRefresh](SignInCheckOptionsBasic.md#forcerefresh)
-
-#### Defined in
-
-[src/auth.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L74)
-
-___
-
-### idField
-
-• `Optional` **idField**: `string`
+Defined in: [src/auth.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L74)
 
 #### Inherited from
 
-[SignInCheckOptionsBasic](SignInCheckOptionsBasic.md).[idField](SignInCheckOptionsBasic.md#idfield)
+[`SignInCheckOptionsBasic`](SignInCheckOptionsBasic.md).[`forceRefresh`](SignInCheckOptionsBasic.md#forcerefresh)
 
-#### Defined in
+***
 
-[src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L25)
+### idField?
 
-___
+> `optional` **idField?**: `string`
 
-### initialData
-
-• `Optional` **initialData**: `any`
+Defined in: [src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L25)
 
 #### Inherited from
 
-[SignInCheckOptionsBasic](SignInCheckOptionsBasic.md).[initialData](SignInCheckOptionsBasic.md#initialdata)
+[`SignInCheckOptionsBasic`](SignInCheckOptionsBasic.md).[`idField`](SignInCheckOptionsBasic.md#idfield)
 
-#### Defined in
+***
 
-[src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L26)
+### initialData?
 
-___
+> `optional` **initialData?**: `any`
+
+Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L26)
+
+#### Inherited from
+
+[`SignInCheckOptionsBasic`](SignInCheckOptionsBasic.md).[`initialData`](SignInCheckOptionsBasic.md#initialdata)
+
+***
 
 ### requiredClaims
 
-• **requiredClaims**: `ParsedToken`
+> **requiredClaims**: `ParsedToken`
 
-#### Defined in
+Defined in: [src/auth.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L78)
 
-[src/auth.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L78)
+***
 
-___
+### ~~startWithValue?~~
 
-### startWithValue
+> `optional` **startWithValue?**: `any`
 
-• `Optional` **startWithValue**: `any`
+Defined in: [src/index.ts:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L30)
 
-**`Deprecated`**
+#### Deprecated
 
 use initialData instead
 
 #### Inherited from
 
-[SignInCheckOptionsBasic](SignInCheckOptionsBasic.md).[startWithValue](SignInCheckOptionsBasic.md#startwithvalue)
+[`SignInCheckOptionsBasic`](SignInCheckOptionsBasic.md).[`startWithValue`](SignInCheckOptionsBasic.md#startwithvalue)
 
-#### Defined in
+***
 
-[src/index.ts:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L30)
+### suspense?
 
-___
+> `optional` **suspense?**: `boolean`
 
-### suspense
-
-• `Optional` **suspense**: `boolean`
+Defined in: [src/index.ts:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L31)
 
 #### Inherited from
 
-[SignInCheckOptionsBasic](SignInCheckOptionsBasic.md).[suspense](SignInCheckOptionsBasic.md#suspense)
-
-#### Defined in
-
-[src/index.ts:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L31)
+[`SignInCheckOptionsBasic`](SignInCheckOptionsBasic.md).[`suspense`](SignInCheckOptionsBasic.md#suspense)

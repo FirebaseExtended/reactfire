@@ -3,6 +3,8 @@ import { getApps, initializeApp, registerVersion } from 'firebase/app';
 
 import type { FirebaseApp, FirebaseOptions } from 'firebase/app';
 
+declare const process: { env: Record<string, string | undefined> };
+
 // INVESTIGATE I don't like magic strings, can we have export this in js-sdk?
 const DEFAULT_APP_NAME = '[DEFAULT]';
 

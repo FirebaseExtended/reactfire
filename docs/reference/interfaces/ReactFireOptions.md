@@ -1,68 +1,55 @@
+[**ReactFire reference docs**](../README.md)
+
+***
+
 [ReactFire reference docs](../README.md) / ReactFireOptions
 
-# Interface: ReactFireOptions<T\>
+# Interface: ReactFireOptions\<T\>
 
-## Type parameters
+Defined in: [src/index.ts:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L24)
 
-| Name | Type |
-| :------ | :------ |
-| `T` | `unknown` |
+## Extended by
 
-## Hierarchy
+- [`SignInCheckOptionsBasic`](SignInCheckOptionsBasic.md)
 
-- **`ReactFireOptions`**
+## Type Parameters
 
-  ↳ [`SignInCheckOptionsBasic`](SignInCheckOptionsBasic.md)
+### T
 
-## Table of contents
-
-### Properties
-
-- [idField](ReactFireOptions.md#idfield)
-- [initialData](ReactFireOptions.md#initialdata)
-- [startWithValue](ReactFireOptions.md#startwithvalue)
-- [suspense](ReactFireOptions.md#suspense)
+`T` = `unknown`
 
 ## Properties
 
-### idField
+### idField?
 
-• `Optional` **idField**: `string`
+> `optional` **idField?**: `string`
 
-#### Defined in
+Defined in: [src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L25)
 
-[src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L25)
+***
 
-___
+### initialData?
 
-### initialData
+> `optional` **initialData?**: `any`
 
-• `Optional` **initialData**: `any`
+Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L26)
 
-#### Defined in
+***
 
-[src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L26)
+### ~~startWithValue?~~
 
-___
+> `optional` **startWithValue?**: `any`
 
-### startWithValue
+Defined in: [src/index.ts:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L30)
 
-• `Optional` **startWithValue**: `any`
-
-**`Deprecated`**
+#### Deprecated
 
 use initialData instead
 
-#### Defined in
+***
 
-[src/index.ts:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L30)
+### suspense?
 
-___
+> `optional` **suspense?**: `boolean`
 
-### suspense
-
-• `Optional` **suspense**: `boolean`
-
-#### Defined in
-
-[src/index.ts:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L31)
+Defined in: [src/index.ts:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L31)

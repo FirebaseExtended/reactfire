@@ -1,56 +1,45 @@
+[**ReactFire reference docs**](../README.md)
+
+***
+
 [ReactFire reference docs](../README.md) / ClaimsCheckProps
 
 # Interface: ClaimsCheckProps
 
-## Table of contents
-
-### Properties
-
-- [children](ClaimsCheckProps.md#children)
-- [fallback](ClaimsCheckProps.md#fallback)
-- [requiredClaims](ClaimsCheckProps.md#requiredclaims)
-- [user](ClaimsCheckProps.md#user)
+Defined in: [src/auth.tsx:48](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L48)
 
 ## Properties
 
 ### children
 
-• **children**: `ReactNode`
+> **children**: `ReactNode`
 
-#### Defined in
+Defined in: [src/auth.tsx:51](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L51)
 
-[src/auth.tsx:51](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L51)
-
-___
+***
 
 ### fallback
 
-• **fallback**: `ReactNode`
+> **fallback**: `ReactNode`
 
-#### Defined in
+Defined in: [src/auth.tsx:50](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L50)
 
-[src/auth.tsx:50](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L50)
-
-___
+***
 
 ### requiredClaims
 
-• **requiredClaims**: `Object`
+> **requiredClaims**: `object`
 
-#### Index signature
+Defined in: [src/auth.tsx:52](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L52)
 
-▪ [key: `string`]: `any`
+#### Index Signature
 
-#### Defined in
+\[`key`: `string`\]: `any`
 
-[src/auth.tsx:52](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L52)
-
-___
+***
 
 ### user
 
-• **user**: `User`
+> **user**: `User`
 
-#### Defined in
-
-[src/auth.tsx:49](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L49)
+Defined in: [src/auth.tsx:49](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L49)
