@@ -26,7 +26,7 @@ describe("runMiddleware", () => {
     fetchMock.mockResolvedValue(mockResponse);
 
     const request = new NextRequest(
-      "http://localhost:3000/__cookies__?finalTarget=https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword",
+      "http://localhost:3000/__cookies__?finalTarget=https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword&appName=app",
       {
         method: "POST",
         body: JSON.stringify({ returnSecureToken: true }),
@@ -73,7 +73,7 @@ describe("runMiddleware", () => {
     fetchMock.mockResolvedValue(mockResponse);
 
     const request = new NextRequest(
-      "http://localhost:3000/__cookies__?finalTarget=https://securetoken.googleapis.com/v1/token",
+      "http://localhost:3000/__cookies__?finalTarget=https://securetoken.googleapis.com/v1/token&appName=app",
       {
         method: "POST",
         body: "grant_type=refresh_token",
@@ -115,7 +115,7 @@ describe("runMiddleware", () => {
     });
 
     const request = new NextRequest(
-      "http://localhost:3000/__cookies__?finalTarget=https://securetoken.googleapis.com/v1/token",
+      "http://localhost:3000/__cookies__?finalTarget=https://securetoken.googleapis.com/v1/token&appName=app",
       {
         method: "POST",
         body: "grant_type=refresh_token&refresh_token=REDACTED",
@@ -140,7 +140,7 @@ describe("runMiddleware", () => {
 
   it("throws an error when request type to proxy cannot be determined", async () => {
     const request = new NextRequest(
-      "http://localhost:3000/__cookies__?finalTarget=https://example.com/unknown",
+      "http://localhost:3000/__cookies__?finalTarget=https://securetoken.googleapis.com/unknown&appName=app",
       { method: "POST" },
     );
     const options = {
@@ -156,6 +156,38 @@ describe("runMiddleware", () => {
     );
   });
 
+  it("throws an error when proxy target host is unauthorized in production", async () => {
+    const request = new NextRequest(
+      "http://localhost:3000/__cookies__?finalTarget=https://evil-attacker.com/v1/token&appName=app",
+      { method: "POST" },
+    );
+    const options = {
+      apiKey: "key",
+      projectId: "proj",
+      emulatorHost: undefined,
+      tenantId: undefined,
+      authDomain: "auth.domain",
+    };
+
+    await expect(runMiddleware("app", options, request)).rejects.toThrow(
+      "Unauthorized proxy target host: evil-attacker.com",
+    );
+  });
+
+  it("returns 400 when finalTarget parameter is missing", async () => {
+    const request = new NextRequest("http://localhost:3000/__cookies__?appName=app", { method: "POST" });
+    const options = {
+      apiKey: "key",
+      projectId: "proj",
+      emulatorHost: undefined,
+      tenantId: undefined,
+      authDomain: "auth.domain",
+    };
+
+    const [response] = await runMiddleware("app", options, request);
+    expect(response?.status).toBe(400);
+  });
+
   it("returns proxy response directly without setting cookies if fetch response is not ok", async () => {
     fetchMock.mockResolvedValue({
       ok: false,
@@ -165,7 +197,7 @@ describe("runMiddleware", () => {
     });
 
     const request = new NextRequest(
-      "http://localhost:3000/__cookies__?finalTarget=https://securetoken.googleapis.com/v1/token",
+      "http://localhost:3000/__cookies__?finalTarget=https://securetoken.googleapis.com/v1/token&appName=app",
       { method: "POST", body: "grant_type=refresh_token" },
     );
     const options = {
@@ -178,5 +210,54 @@ describe("runMiddleware", () => {
 
     const [response] = await runMiddleware("app", options, request);
     expect(response?.status).toBe(401);
+  });
+
+  it("skips /__cookies__ proxy handling if appName parameter does not match", async () => {
+    const request = new NextRequest(
+      "http://localhost:3000/__cookies__?finalTarget=https://securetoken.googleapis.com/v1/token&appName=adminApp",
+      { method: "POST", body: "grant_type=refresh_token" },
+    );
+    const options = {
+      apiKey: "key",
+      projectId: "proj",
+      emulatorHost: undefined,
+      tenantId: undefined,
+      authDomain: "auth.domain",
+    };
+
+    // Running runMiddleware for "[DEFAULT]" when target appName is "adminApp"
+    const [response] = await runMiddleware("[DEFAULT]", options, request);
+    expect(response).toBeUndefined(); // Should skip proxying
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("handles v2/accounts endpoints (e.g. MFA finalize) correctly", async () => {
+    fetchMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      statusText: "OK",
+      json: async () => ({
+        idToken: "mfa-id-token",
+        refreshToken: "mfa-refresh-token",
+      }),
+    });
+
+    const request = new NextRequest(
+      "http://localhost:3000/__cookies__?finalTarget=https://identitytoolkit.googleapis.com/v2/accounts:mfaSignIn:finalize&appName=[DEFAULT]",
+      { method: "POST", body: JSON.stringify({}) },
+    );
+    const options = {
+      apiKey: "key",
+      projectId: "proj",
+      emulatorHost: undefined,
+      tenantId: undefined,
+      authDomain: "auth.domain",
+    };
+
+    const [response] = await runMiddleware("[DEFAULT]", options, request);
+    expect(response).toBeDefined();
+    const cookies = response!.cookies.getAll();
+    const idCookie = cookies.find((c) => c.name.includes("FIREBASE_[DEFAULT]"));
+    expect(idCookie?.value).toBe("mfa-id-token");
   });
 });

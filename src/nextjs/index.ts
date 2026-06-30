@@ -311,8 +311,12 @@ export async function runMiddleware(
     name: REFRESH_TOKEN_COOKIE_NAME,
   } as const;
 
-  // TODO match appName to parameter
   if (request.nextUrl.pathname === "/__cookies__") {
+    const targetAppName = request.nextUrl.searchParams.get("appName") || "[DEFAULT]";
+    if (targetAppName !== appName) {
+      return [undefined, (res: NextResponse) => res, undefined];
+    }
+
     const method = request.method;
     if (method === "DELETE") {
       const response = new NextResponse("");
@@ -336,17 +340,30 @@ export async function runMiddleware(
         .map((header) => [header, request.headers.get(header)!]),
     );
 
-    const url = new URL(request.nextUrl.searchParams.get("finalTarget")!);
+    const finalTargetParam = request.nextUrl.searchParams.get("finalTarget");
+    if (!finalTargetParam) {
+      return [new NextResponse("Missing finalTarget parameter", { status: 400 })];
+    }
+    const url = new URL(finalTargetParam);
 
     let body: ReadableStream<any> | string | null = request.body;
 
-    if (options.emulatorHost && url.host !== options.emulatorHost) {
-      throw new Error(`Emulator mismatch: ${url.host} vs ${options.emulatorHost}`);
+    if (options.emulatorHost) {
+      if (url.host !== options.emulatorHost) {
+        throw new Error(`Emulator mismatch: ${url.host} vs ${options.emulatorHost}`);
+      }
+    } else {
+      if (
+        url.host !== "securetoken.googleapis.com" &&
+        url.host !== "identitytoolkit.googleapis.com"
+      ) {
+        throw new Error(`Unauthorized proxy target host: ${url.host}`);
+      }
     }
 
     const isTokenRequest = !!url.pathname.match(/^(\/securetoken\.googleapis\.com)?\/v1\/token/);
     const isSignInRequest = !!url.pathname.match(
-      /^(\/identitytoolkit\.googleapis\.com)?\/v1\/accounts:/,
+      /^(\/identitytoolkit\.googleapis\.com)?\/(v1|v2)\/accounts:/,
     );
 
     if (!isTokenRequest && !isSignInRequest)
@@ -374,21 +391,17 @@ export async function runMiddleware(
       const nextResponse = NextResponse.json(json, { status, statusText });
       return [nextResponse];
     }
-    let refreshToken;
-    let idToken;
     // The Firebase JS SDK freaks out if the idToken disappears on it, e.g, the cookie expired
     // it manually calls logout... which nukes everything before we have a chance to refresh!
     // So set the maxAge to the default (chrome max) of 400 days
-    if (isSignInRequest) {
-      const resp = json as SignInResponse;
-      refreshToken = resp.refreshToken;
-      idToken = resp.idToken;
-      resp.refreshToken = "REDACTED";
-    } else {
-      const resp = json as TokenResponse;
-      refreshToken = resp.refresh_token;
-      idToken = resp.id_token;
-      resp.refresh_token = "REDACTED";
+    const idToken = json.idToken || json.id_token;
+    const refreshToken = json.refreshToken || json.refresh_token;
+
+    if ("refreshToken" in json && json.refreshToken) {
+      json.refreshToken = "REDACTED";
+    }
+    if ("refresh_token" in json && json.refresh_token) {
+      json.refresh_token = "REDACTED";
     }
 
     const currentIdToken = request.cookies.get({ ...ID_TOKEN_COOKIE, value: "" })?.value;
