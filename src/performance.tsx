@@ -15,7 +15,7 @@ export function SuspenseWithPerf({ children, traceId, fallback }: SuspensePerfPr
   const endMarkName = `_${traceId}End[${entries.length}]`;
 
   const Fallback = () => {
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
       perf?.mark?.(startMarkName);
 
       return () => {
