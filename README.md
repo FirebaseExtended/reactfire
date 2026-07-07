@@ -11,6 +11,10 @@ Firebase.
 - **Access Firebase libraries from any component** - Need the Firestore SDK? `useFirestore`. Remote Config? `useRemoteConfig`.
 - **Safely configure Firebase libraries** - Libraries like Firestore and Remote Config require settings like `enablePersistence` to be set before any data fetches are made. This can be tough to support in React's world of re-renders. ReactFire gives you `useInitFirestore` and `useInitRemoteConfig` hooks that guarantee they're set before anything else.
 
+## Platform support
+
+ReactFire is designed for **web React apps** and wraps the [Firebase Web SDK](https://firebase.google.com/docs/web/setup). It is not compatible with React Native or Expo. For React Native projects, use [react-native-firebase](https://rnfirebase.io/) instead.
+
 ## Install
 
 ```bash
