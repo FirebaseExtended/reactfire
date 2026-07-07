@@ -9,17 +9,18 @@ export interface SuspensePerfProps {
 export function SuspenseWithPerf({ children, traceId, fallback }: SuspensePerfProps): JSX.Element {
   // TODO: Should this import firebase/performance?
 
-  const entries = performance?.getEntriesByName?.(traceId, 'measure') || [];
+  const perf = typeof globalThis !== 'undefined' ? globalThis.performance : undefined;
+  const entries = perf?.getEntriesByName?.(traceId, 'measure') || [];
   const startMarkName = `_${traceId}Start[${entries.length}]`;
   const endMarkName = `_${traceId}End[${entries.length}]`;
 
   const Fallback = () => {
     React.useLayoutEffect(() => {
-      performance?.mark?.(startMarkName);
+      perf?.mark?.(startMarkName);
 
       return () => {
-        performance?.mark?.(endMarkName);
-        performance?.measure?.(traceId, startMarkName, endMarkName);
+        perf?.mark?.(endMarkName);
+        perf?.measure?.(traceId, startMarkName, endMarkName);
       };
     }, []);
 
