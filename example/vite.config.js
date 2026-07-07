@@ -11,6 +11,6 @@ export default defineConfig({
     visualizer({ template: 'treemap' }),
   ],
   server: {
-    allowedHosts: ['all'],
+    allowedHosts: true,
   },
 });
