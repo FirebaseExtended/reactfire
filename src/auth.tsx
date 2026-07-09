@@ -31,7 +31,7 @@ export function useUser<T = unknown>(options?: ReactFireOptions<T>): ObservableS
   // synchronously on the first render without waiting for the async observable.
   // We only do this when currentUser is truthy to avoid masking the uninitialized
   // (null before auth has loaded from storage) case as "signed out".
-  if (auth.currentUser) {
+  if (auth.currentUser && !('initialData' in _options) && !('startWithValue' in _options)) {
     _options.initialData = auth.currentUser as unknown as T;
   }
 
