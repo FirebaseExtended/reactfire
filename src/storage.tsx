@@ -37,7 +37,7 @@ export type StorageImageProps = {
   storagePath: string;
   storage?: FirebaseStorage;
   suspense?: boolean;
-  placeHolder?: React.ReactElement;
+  placeHolder?: React.ReactNode;
 };
 
 function StorageFromContext(props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>) {
