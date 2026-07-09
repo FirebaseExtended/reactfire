@@ -8,7 +8,7 @@
 
 > **preloadObservable**\<`T`\>(`source`, `id`, `suspenseEnabled?`): `SuspenseSubject`\<`T`\>
 
-Defined in: [src/useObservable.ts:20](https://github.com/tyler-reitz/reactfire/blob/main/src/useObservable.ts#L20)
+Defined in: [src/useObservable.ts:20](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L20)
 
 ## Type Parameters
 
