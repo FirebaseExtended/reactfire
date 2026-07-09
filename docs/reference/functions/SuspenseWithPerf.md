@@ -8,7 +8,7 @@
 
 > **SuspenseWithPerf**(`__namedParameters`): `Element`
 
-Defined in: [src/performance.tsx:9](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L9)
+Defined in: [src/performance.tsx:9](https://github.com/tyler-reitz/reactfire/blob/main/src/performance.tsx#L9)
 
 ## Parameters
 

@@ -8,7 +8,7 @@
 
 > **useDatabaseList**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`T`[] \| `QueryChange`[]\>
 
-Defined in: [src/database.tsx:48](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L48)
+Defined in: [src/database.tsx:48](https://github.com/tyler-reitz/reactfire/blob/main/src/database.tsx#L48)
 
 Subscribe to a Realtime Database list
 

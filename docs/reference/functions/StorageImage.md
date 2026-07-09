@@ -8,7 +8,7 @@
 
 > **StorageImage**(`props`): `Element`
 
-Defined in: [src/storage.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L78)
+Defined in: [src/storage.tsx:78](https://github.com/tyler-reitz/reactfire/blob/main/src/storage.tsx#L78)
 
 ## Parameters
 

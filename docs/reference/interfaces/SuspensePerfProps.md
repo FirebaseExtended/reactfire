@@ -6,7 +6,7 @@
 
 # Interface: SuspensePerfProps
 
-Defined in: [src/performance.tsx:3](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L3)
+Defined in: [src/performance.tsx:3](https://github.com/tyler-reitz/reactfire/blob/main/src/performance.tsx#L3)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/performance.tsx:3](https://github.com/FirebaseExtended/reactfir
 
 > **children**: `ReactNode`
 
-Defined in: [src/performance.tsx:4](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L4)
+Defined in: [src/performance.tsx:4](https://github.com/tyler-reitz/reactfire/blob/main/src/performance.tsx#L4)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/performance.tsx:4](https://github.com/FirebaseExtended/reactfir
 
 > **fallback**: `ReactNode`
 
-Defined in: [src/performance.tsx:6](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L6)
+Defined in: [src/performance.tsx:6](https://github.com/tyler-reitz/reactfire/blob/main/src/performance.tsx#L6)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/performance.tsx:6](https://github.com/FirebaseExtended/reactfir
 
 > **traceId**: `string`
 
-Defined in: [src/performance.tsx:5](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L5)
+Defined in: [src/performance.tsx:5](https://github.com/tyler-reitz/reactfire/blob/main/src/performance.tsx#L5)

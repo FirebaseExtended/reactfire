@@ -6,7 +6,7 @@
 
 # Interface: SignInCheckOptionsBasic
 
-Defined in: [src/auth.tsx:73](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L73)
+Defined in: [src/auth.tsx:83](https://github.com/tyler-reitz/reactfire/blob/main/src/auth.tsx#L83)
 
 ## Extends
 
@@ -23,7 +23,7 @@ Defined in: [src/auth.tsx:73](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **forceRefresh?**: `boolean`
 
-Defined in: [src/auth.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L74)
+Defined in: [src/auth.tsx:84](https://github.com/tyler-reitz/reactfire/blob/main/src/auth.tsx#L84)
 
 ***
 
@@ -31,7 +31,7 @@ Defined in: [src/auth.tsx:74](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **idField?**: `string`
 
-Defined in: [src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L25)
+Defined in: [src/index.ts:25](https://github.com/tyler-reitz/reactfire/blob/main/src/index.ts#L25)
 
 #### Inherited from
 
@@ -43,7 +43,7 @@ Defined in: [src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **initialData?**: `any`
 
-Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L26)
+Defined in: [src/index.ts:26](https://github.com/tyler-reitz/reactfire/blob/main/src/index.ts#L26)
 
 #### Inherited from
 
@@ -55,7 +55,7 @@ Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **startWithValue?**: `any`
 
-Defined in: [src/index.ts:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L30)
+Defined in: [src/index.ts:30](https://github.com/tyler-reitz/reactfire/blob/main/src/index.ts#L30)
 
 #### Deprecated
 
@@ -71,7 +71,7 @@ use initialData instead
 
 > `optional` **suspense?**: `boolean`
 
-Defined in: [src/index.ts:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L31)
+Defined in: [src/index.ts:31](https://github.com/tyler-reitz/reactfire/blob/main/src/index.ts#L31)
 
 #### Inherited from
 
