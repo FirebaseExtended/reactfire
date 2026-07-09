@@ -48,7 +48,7 @@ function StorageFromContext(props: StorageImageProps & React.DetailedHTMLProps<R
   return <INTERNALStorageImage {...props} />;
 }
 
-function INTERNALStorageImage(props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>): React.ReactElement {
+function INTERNALStorageImage(props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>): React.ReactNode {
   const { storage, storagePath, suspense, placeHolder, ...imgProps } = props;
 
   const reactfireOptions: ReactFireOptions<string> = {
