@@ -46,7 +46,7 @@ Any error that may have occurred in the underlying observable
 
 #### Inherited from
 
-`ObservableStatusBase.error`
+[`ObservableStatusLoading`](ObservableStatusLoading.md).[`error`](ObservableStatusLoading.md#error)
 
 ***
 
@@ -60,7 +60,7 @@ Promise that resolves after first emit from observable
 
 #### Inherited from
 
-`ObservableStatusBase.firstValuePromise`
+[`ObservableStatusError`](ObservableStatusError.md).[`firstValuePromise`](ObservableStatusError.md#firstvaluepromise)
 
 ***
 
@@ -76,7 +76,7 @@ If `initialData` is passed in, this will be `true`.
 
 #### Inherited from
 
-`ObservableStatusBase.hasEmitted`
+[`ObservableStatusError`](ObservableStatusError.md).[`hasEmitted`](ObservableStatusError.md#hasemitted)
 
 ***
 
@@ -90,7 +90,7 @@ If this is `true`, the hook will be emitting no further items.
 
 #### Inherited from
 
-`ObservableStatusBase.isComplete`
+[`ObservableStatusLoading`](ObservableStatusLoading.md).[`isComplete`](ObservableStatusLoading.md#iscomplete)
 
 ***
 
