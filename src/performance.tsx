@@ -6,7 +6,7 @@ export interface SuspensePerfProps {
   fallback: React.ReactNode;
 }
 
-export function SuspenseWithPerf({ children, traceId, fallback }: SuspensePerfProps): JSX.Element {
+export function SuspenseWithPerf({ children, traceId, fallback }: SuspensePerfProps): React.ReactElement {
   // TODO: Should this import firebase/performance?
 
   const perf = typeof globalThis !== 'undefined' ? globalThis.performance : undefined;

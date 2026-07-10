@@ -14,7 +14,7 @@ Defined in: [src/storage.tsx:36](https://github.com/FirebaseExtended/reactfire/b
 
 ### placeHolder?
 
-> `optional` **placeHolder?**: `JSX.Element`
+> `optional` **placeHolder?**: `React.ReactNode`
 
 Defined in: [src/storage.tsx:40](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L40)
 

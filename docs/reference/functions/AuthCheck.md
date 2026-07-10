@@ -6,7 +6,7 @@
 
 # ~~Function: AuthCheck()~~
 
-> **AuthCheck**(`__namedParameters`): `Element`
+> **AuthCheck**(`__namedParameters`): `ReactElement`
 
 Defined in: [src/auth.tsx:247](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L247)
 
@@ -18,7 +18,7 @@ Defined in: [src/auth.tsx:247](https://github.com/FirebaseExtended/reactfire/blo
 
 ## Returns
 
-`Element`
+`ReactElement`
 
 ## Deprecated
 

@@ -79,6 +79,27 @@ jobs:
           ./reactfire-${{ github.run_id }}/unpack.sh
       - name: Run tests
         run: npm run test
+  type-check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        react: ["18", "19"]
+      fail-fast: false
+    name: Type check (React ${{ matrix.react }})
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci
+      - name: Install React ${{ matrix.react }} types
+        run: npm install --no-save react@${{ matrix.react }} react-dom@${{ matrix.react }} @types/react@${{ matrix.react }} @types/react-dom@${{ matrix.react }}
+      - name: Type check
+        run: npx tsc --noEmit
   publish:
     runs-on: ubuntu-latest
     name: Publish (NPM)
