@@ -105,9 +105,8 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
         next: () => {
           onStoreChange();
         },
-        error: (e) => {
+        error: () => {
           onStoreChange();
-          throw e;
         },
         complete: () => {
           onStoreChange();
@@ -143,12 +142,6 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
       status: 'success',
       hasEmitted: true,
     } as ObservableStatus<T>;
-  }
-
-  // throw an error if there is an error
-  // TODO(jhuleatt) this is the current, tested-for, behavior. But do we actually want it?
-  if (update.error) {
-    throw update.error;
   }
 
   return update;

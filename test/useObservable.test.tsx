@@ -170,18 +170,14 @@ describe('useObservable', () => {
       expect(result.current.data).toEqual(observableVal);
     });
 
-    it('throws an error if there is an error on initial fetch', async () => {
-      // stop a nasty-looking console error
-      // https://github.com/facebook/react/issues/11098#issuecomment-523977830
-      const spy = vi.spyOn(console, 'error');
-      spy.mockImplementation(() => {});
-
+    it('surfaces errors via status instead of throwing', async () => {
       const error = new Error('I am an error');
       const observable$ = throwError(error);
 
-      expect(() => renderHook(() => useObservable('test-error', observable$, { suspense: true }))).toThrow(error);
+      const { result } = renderHook(() => useObservable('test-error', observable$, { suspense: true }));
 
-      spy.mockRestore();
+      await waitFor(() => expect(result.current.status).toEqual('error'));
+      expect(result.current.error).toEqual(error);
     });
 
     it('provides the value, rather than initialData, when the observable is ready right away', () => {
