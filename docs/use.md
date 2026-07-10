@@ -97,32 +97,67 @@ SDK not found. useSdk must be called from within a provider
 
 ### Connect to the Firebase Local Emulator Suite
 
-Connect a product SDK to the emulator before passing it to a provider. For example, to connect to the Auth and Realtime Database emulators:
+Connect emulators to the SDK instances **before** passing them to providers, and ensure the connect calls only run once. Calling `connect*Emulator()` inside a React component body without a guard will throw on re-renders (`Firestore has already been started and its settings can no longer be changed`).
+
+The safest pattern is to initialize outside of React entirely:
 
 ```jsx
-import { getAuth, connectAuthEmulator } from 'firebase/auth'; // Firebase v9+
-import { getDatabase, connectDatabaseEmulator } from 'firebase/database'; // Firebase v9+
+import { initializeApp } from 'firebase/app';
+import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 
-import { FirebaseAppProvider, DatabaseProvider, AuthProvider, useFirebaseApp } from 'reactfire';
+import { FirebaseAppProvider, FirestoreProvider, AuthProvider } from 'reactfire';
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const firestore = getFirestore(app);
+
+// Check for dev/test mode however your app tracks that.
+// `process.env.NODE_ENV` is a common React pattern
+if (process.env.NODE_ENV !== 'production') {
+  connectAuthEmulator(auth, 'http://localhost:9099');
+  connectFirestoreEmulator(firestore, 'localhost', 8080);
+}
+
+function App() {
+  return (
+    <FirebaseAppProvider firebaseApp={app}>
+      <AuthProvider sdk={auth}>
+        <FirestoreProvider sdk={firestore}>
+          <MyCoolApp />
+        </FirestoreProvider>
+      </AuthProvider>
+    </FirebaseAppProvider>
+  );
+}
+```
+
+If you need to initialize inside a component (e.g. to access `useFirebaseApp()`), use a ref to ensure the connect calls only happen once:
+
+```jsx
+import { useRef } from 'react';
+import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
+
+import { FirebaseAppProvider, FirestoreProvider, AuthProvider, useFirebaseApp } from 'reactfire';
 
 function FirebaseComponents({ children }) {
   const app = useFirebaseApp();
-  const database = getDatabase(app);
   const auth = getAuth(app);
+  const firestore = getFirestore(app);
 
-  // Check for dev/test mode however your app tracks that.
-  // `process.env.NODE_ENV` is a common React pattern
-  if (process.env.NODE_ENV !== 'production') {
-    // Set up emulators
-    connectDatabaseEmulator(database, 'localhost', 9000);
+  const connected = useRef(false);
+  if (!connected.current && process.env.NODE_ENV !== 'production') {
+    connected.current = true;
     connectAuthEmulator(auth, 'http://localhost:9099');
+    connectFirestoreEmulator(firestore, 'localhost', 8080);
   }
 
   return (
     <AuthProvider sdk={auth}>
-      <DatabaseProvider sdk={database}>
-        <MyCoolAppThatUsesAuthAndRealtimeDatabase />
-      </DatabaseProvider>
+      <FirestoreProvider sdk={firestore}>
+        {children}
+      </FirestoreProvider>
     </AuthProvider>
   );
 }
