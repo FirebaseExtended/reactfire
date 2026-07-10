@@ -170,11 +170,25 @@ describe('useObservable', () => {
       expect(result.current.data).toEqual(observableVal);
     });
 
-    it('surfaces errors via status instead of throwing', async () => {
+    it('throws an error if there is an error on initial fetch', async () => {
+      // stop a nasty-looking console error
+      // https://github.com/facebook/react/issues/11098#issuecomment-523977830
+      const spy = vi.spyOn(console, 'error');
+      spy.mockImplementation(() => {});
+
       const error = new Error('I am an error');
       const observable$ = throwError(error);
 
-      const { result } = renderHook(() => useObservable('test-error', observable$, { suspense: true }));
+      expect(() => renderHook(() => useObservable('test-error', observable$, { suspense: true }))).toThrow(error);
+
+      spy.mockRestore();
+    });
+
+    it('surfaces errors via status in non-suspense mode', async () => {
+      const error = new Error('I am an error');
+      const observable$ = throwError(error);
+
+      const { result } = renderHook(() => useObservable('test-error-non-suspense', observable$, { suspense: false }));
 
       await waitFor(() => expect(result.current.status).toEqual('error'));
       expect(result.current.error).toEqual(error);
