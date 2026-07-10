@@ -10,4 +10,7 @@ export default defineConfig({
     // Helps make sure we aren't pulling in extra deps
     visualizer({ template: 'treemap' }),
   ],
+  server: {
+    allowedHosts: true,
+  },
 });

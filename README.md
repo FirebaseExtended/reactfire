@@ -39,7 +39,7 @@ Depending on your targeted platforms you may need to install polyfills. The most
 ## Example use
 
 Check out the
-[live version on StackBlitz](https://stackblitz.com/fork/reactfire-v4-sample)!
+[live version on CodeSandbox](https://codesandbox.io/s/github/FirebaseExtended/reactfire/tree/main/example)!
 
 ```jsx
 import React from 'react';
