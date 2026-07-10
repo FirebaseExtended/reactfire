@@ -131,5 +131,11 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
     update.hasEmitted = true;
   }
 
+  // In suspense mode, throw errors so React Error Boundaries can catch them.
+  // In non-suspense mode, surface errors via status so consumers can handle them locally.
+  if (suspenseEnabled && update.error) {
+    throw update.error;
+  }
+
   return update;
 }
