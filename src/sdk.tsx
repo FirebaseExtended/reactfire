@@ -28,7 +28,7 @@ export const RemoteConfigSdkContext = React.createContext<RemoteConfig | undefin
 type FirebaseSdks = Analytics | AppCheck | Auth | Database | Firestore | FirebasePerformance | FirebaseStorage | Functions | RemoteConfig;
 
 function getSdkProvider<Sdk extends FirebaseSdks>(SdkContext: React.Context<Sdk | undefined>) {
-  return function SdkProvider(props: React.PropsWithChildren<{ sdk: Sdk }>) {
+  return function SdkProvider(props: React.PropsWithChildren<{ sdk: Sdk }>): React.ReactElement {
     if (!props.sdk) throw new Error('no sdk provided');
 
     const contextualAppName = useFirebaseApp().name;

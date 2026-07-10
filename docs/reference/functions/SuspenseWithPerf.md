@@ -6,7 +6,7 @@
 
 # Function: SuspenseWithPerf()
 
-> **SuspenseWithPerf**(`__namedParameters`): `Element`
+> **SuspenseWithPerf**(`__namedParameters`): `ReactElement`
 
 Defined in: [src/performance.tsx:9](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L9)
 
@@ -18,4 +18,4 @@ Defined in: [src/performance.tsx:9](https://github.com/FirebaseExtended/reactfir
 
 ## Returns
 
-`Element`
+`ReactElement`

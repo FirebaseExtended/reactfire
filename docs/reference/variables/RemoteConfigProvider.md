@@ -6,7 +6,7 @@
 
 # Variable: RemoteConfigProvider
 
-> `const` **RemoteConfigProvider**: (`props`) => `Element`
+> `const` **RemoteConfigProvider**: (`props`) => `ReactElement`
 
 Defined in: [src/sdk.tsx:80](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L80)
 
@@ -18,4 +18,4 @@ Defined in: [src/sdk.tsx:80](https://github.com/FirebaseExtended/reactfire/blob/
 
 ## Returns
 
-`Element`
+`ReactElement`

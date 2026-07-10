@@ -6,7 +6,7 @@
 
 # Variable: PerformanceProvider
 
-> `const` **PerformanceProvider**: (`props`) => `Element`
+> `const` **PerformanceProvider**: (`props`) => `ReactElement`
 
 Defined in: [src/sdk.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L78)
 
@@ -18,4 +18,4 @@ Defined in: [src/sdk.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/
 
 ## Returns
 
-`Element`
+`ReactElement`

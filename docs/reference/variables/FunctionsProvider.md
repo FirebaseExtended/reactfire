@@ -6,7 +6,7 @@
 
 # Variable: FunctionsProvider
 
-> `const` **FunctionsProvider**: (`props`) => `Element`
+> `const` **FunctionsProvider**: (`props`) => `ReactElement`
 
 Defined in: [src/sdk.tsx:77](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L77)
 
@@ -18,4 +18,4 @@ Defined in: [src/sdk.tsx:77](https://github.com/FirebaseExtended/reactfire/blob/
 
 ## Returns
 
-`Element`
+`ReactElement`

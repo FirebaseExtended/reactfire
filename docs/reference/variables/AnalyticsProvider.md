@@ -6,7 +6,7 @@
 
 # Variable: AnalyticsProvider
 
-> `const` **AnalyticsProvider**: (`props`) => `Element`
+> `const` **AnalyticsProvider**: (`props`) => `ReactElement`
 
 Defined in: [src/sdk.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L74)
 
@@ -18,4 +18,4 @@ Defined in: [src/sdk.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/
 
 ## Returns
 
-`Element`
+`ReactElement`
