@@ -19,7 +19,7 @@ npm run build
 TARBALL=$(npm pack . | tail -n 1)
 mv $TARBALL reactfire.tgz
 
-echo "npm publish \$(dirname \"\$0\")/reactfire.tgz --tag $NPM_TAG" > ./publish.sh
+echo "npm publish \$(dirname \"\$0\")/reactfire.tgz --registry https://wombat-dressing-room.appspot.com --tag $NPM_TAG" > ./publish.sh
 chmod +x ./publish.sh
 
 echo "tar -xzvf \$(dirname \"\$0\")/reactfire.tgz && rsync -a package/ ./" > ./unpack.sh
