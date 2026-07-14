@@ -97,9 +97,7 @@ SDK not found. useSdk must be called from within a provider
 
 ### Connect to the Firebase Local Emulator Suite
 
-Connect emulators to the SDK instances **before** passing them to providers, and ensure the connect calls only run once. Calling `connect*Emulator()` inside a React component body without a guard will throw on re-renders (`Firestore has already been started and its settings can no longer be changed`).
-
-The safest pattern is to initialize outside of React entirely:
+Connect emulators to the SDK instances **before** passing them to providers. The safest pattern is to initialize outside of React entirely, which guarantees `connect*Emulator()` only runs once, regardless of re-renders or remounts:
 
 ```jsx
 import { initializeApp } from 'firebase/app';
@@ -128,37 +126,6 @@ function App() {
         </FirestoreProvider>
       </AuthProvider>
     </FirebaseAppProvider>
-  );
-}
-```
-
-If you need to initialize inside a component (e.g. to access `useFirebaseApp()`), use a ref to ensure the connect calls only happen once:
-
-```jsx
-import { useRef } from 'react';
-import { getAuth, connectAuthEmulator } from 'firebase/auth';
-import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
-
-import { FirebaseAppProvider, FirestoreProvider, AuthProvider, useFirebaseApp } from 'reactfire';
-
-function FirebaseComponents({ children }) {
-  const app = useFirebaseApp();
-  const auth = getAuth(app);
-  const firestore = getFirestore(app);
-
-  const connected = useRef(false);
-  if (!connected.current && process.env.NODE_ENV !== 'production') {
-    connected.current = true;
-    connectAuthEmulator(auth, 'http://localhost:9099');
-    connectFirestoreEmulator(firestore, 'localhost', 8080);
-  }
-
-  return (
-    <AuthProvider sdk={auth}>
-      <FirestoreProvider sdk={firestore}>
-        {children}
-      </FirestoreProvider>
-    </AuthProvider>
   );
 }
 ```
