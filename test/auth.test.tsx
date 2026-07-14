@@ -326,6 +326,41 @@ describe('Authentication', () => {
       expect(result.current.data).toEqual(getAuth(app).currentUser);
     });
 
+    it('synchronously returns a user when mounted as a child of a useSigninCheck guard', async () => {
+      await act(async () => {
+        await signIn();
+      });
+
+      // Capture the very first render of the child — before any re-renders
+      let capturedFirstRender: { user: any; status: string } | undefined;
+
+      const UserChild = () => {
+        const { data: user, status } = useUser();
+        if (capturedFirstRender === undefined) {
+          capturedFirstRender = { user, status };
+        }
+        return <span data-testid="child-user">{user?.email ?? 'no user'}</span>;
+      };
+
+      const Guard = () => {
+        const { data: signinResult, status } = useSigninCheck();
+        if (status !== 'success' || !signinResult?.signedIn) {
+          return <span data-testid="guard-loading">loading</span>;
+        }
+        return <UserChild />;
+      };
+
+      const { findByTestId } = render(<Guard />, { wrapper: Provider });
+
+      await findByTestId('child-user');
+
+      // On main (without the fix), useUser mounts with a fresh SuspenseSubject
+      // (different observableId from useSigninCheck) and returns status:'loading', data:undefined.
+      // With the fix, currentUser seeds initialData so the first render is already success.
+      expect(capturedFirstRender!.status).toBe('success');
+      expect(capturedFirstRender!.user).toEqual(getAuth(app).currentUser);
+    });
+
     it('does not show a logged-out user after navigating away', async () => {
       await signIn();
 
