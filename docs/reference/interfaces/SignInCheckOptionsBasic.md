@@ -6,7 +6,7 @@
 
 # Interface: SignInCheckOptionsBasic
 
-Defined in: [src/auth.tsx:73](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L73)
+Defined in: [src/auth.tsx:83](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L83)
 
 ## Extends
 
@@ -23,7 +23,7 @@ Defined in: [src/auth.tsx:73](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **forceRefresh?**: `boolean`
 
-Defined in: [src/auth.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L74)
+Defined in: [src/auth.tsx:84](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L84)
 
 ***
 
