@@ -130,6 +130,8 @@ function App() {
 }
 ```
 
+This pattern requires passing `firebaseApp={app}` to `FirebaseAppProvider` so you own the app instance at module level. If you are currently using `firebaseConfig={...}` on `FirebaseAppProvider`, switch to initializing the app yourself with `initializeApp()` and passing it via `firebaseApp=`. The `firebaseConfig=` prop is a convenience shortcut, but it gives reactfire ownership of the app instance, which makes emulator setup (and anything else that needs the app before React renders) unnecessarily difficult.
+
 Learn more about the Local Emulator Suite in the [Firebase docs](https://firebase.google.com/docs/emulator-suite/connect_and_prototype).
 
 ### Set up App Check
