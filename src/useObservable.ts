@@ -125,11 +125,24 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
 
   const update = useSyncExternalStore(subscribe, getSnapshot);
 
-  // modify the value if initialData exists
+  // Return a new object with initialData overlaid rather than mutating the shared
+  // _immutableStatus reference, which is the same object across all components
+  // using the same observableId.
   if (!observable.hasValue && hasData) {
-    update.data = config?.initialData ?? config?.startWithValue;
-    update.status = 'success';
-    update.hasEmitted = true;
+    const initialDataValue = config?.initialData ?? config?.startWithValue;
+
+    // In suspense mode, throw errors so React Error Boundaries can catch them.
+    // In non-suspense mode, surface errors via status so consumers can handle them locally.
+    if (suspenseEnabled && update.error) {
+      throw update.error;
+    }
+
+    return {
+      ...update,
+      data: initialDataValue,
+      status: 'success',
+      hasEmitted: true,
+    } as ObservableStatus<T>;
   }
 
   // throw an error if there is an error
