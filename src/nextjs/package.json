@@ -23,12 +23,12 @@
     "@vitest/coverage-v8": "^4.1.9",
     "esbuild": "^0.25.1",
     "firebase": "^11.5.0",
-    "jose": "^6.0.10",
     "next": "^15.2.4",
     "typescript": "^5.8.2",
     "vitest": "^4.1.9"
   },
   "dependencies": {
+    "jose": "^6.0.10",
     "lru-cache": "^11.5.1"
   }
 }

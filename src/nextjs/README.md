@@ -122,7 +122,7 @@ Creates a composable Next.js middleware handler that verifies cookies and manage
 | :--- | :--- | :--- |
 | **`options`** | `FirebaseOptions` | Standard Firebase configuration object (`apiKey`, `projectId`, `authDomain`). |
 | **`appName`** | `string` | Name of the Firebase app instance. Defaults to `"[DEFAULT]"`. |
-| **`tenantId`** | `string \| ((req: NextRequest) => string \| Promise<string>)` | Google Cloud Identity Platform tenant ID, or a function resolving the tenant dynamically per request. |
+| **`tenantId`** | `string` | Google Cloud Identity Platform tenant ID. |
 | **`emulator`** | `boolean \| string` | Whether to use the Firebase Auth Emulator. If `true`, reads host from `FIREBASE_AUTH_EMULATOR_HOST`. |
 | **`cache`** | `CacheProvider` | Optional custom caching store (e.g. Memorystore, Redis, Vercel KV, Cloudflare KV) for token validation and JWKS caching. Defaults to an in-memory `LRUCache`. |
 

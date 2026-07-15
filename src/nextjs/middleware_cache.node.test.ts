@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { verifyFirebaseIdToken, runMiddleware, CacheProvider } from "./index";
 import { NextRequest } from "next/server";
 import * as jose from "jose";
+import { createToken } from "./middleware_test_utils";
 
 vi.mock("jose", async (importOriginal) => {
   const actual = await importOriginal<typeof jose>();
@@ -28,12 +29,6 @@ describe("CacheProvider plugin paths", () => {
     sub: "user123",
   };
 
-  const createToken = (header: any, payload: any) => {
-    const h = Buffer.from(JSON.stringify(header)).toString("base64");
-    const p = Buffer.from(JSON.stringify(payload)).toString("base64");
-    return `${h}.${p}.signature`;
-  };
-
   let mockCacheGet: ReturnType<typeof vi.fn>;
   let mockCacheSet: ReturnType<typeof vi.fn>;
   let mockCacheSetex: ReturnType<typeof vi.fn>;
@@ -57,7 +52,7 @@ describe("CacheProvider plugin paths", () => {
       return null;
     });
 
-    const token = createToken(validHeader, validPayload);
+    const token = createToken(validPayload);
     const [payload, isEmulated] = await verifyFirebaseIdToken(
       token,
       mockProjectId,
@@ -81,7 +76,7 @@ describe("CacheProvider plugin paths", () => {
       protectedHeader: validHeader,
     } as any);
 
-    const token = createToken(validHeader, validPayload);
+    const token = createToken(validPayload);
     await verifyFirebaseIdToken(token, mockProjectId, mockTenantId, mockCache);
 
     expect(jose.createLocalJWKSet).toHaveBeenCalledWith({ keys: ["mock-key"] });
@@ -102,7 +97,7 @@ describe("CacheProvider plugin paths", () => {
       protectedHeader: validHeader,
     } as any);
 
-    const token = createToken(validHeader, validPayload);
+    const token = createToken(validPayload);
     await verifyFirebaseIdToken(token, mockProjectId, mockTenantId, mockCache);
 
     expect(mockCacheSetex).toHaveBeenCalledWith("firebase:jwks", 7200, { keys: ["fetched-key"] });
@@ -125,7 +120,7 @@ describe("CacheProvider plugin paths", () => {
       .mockRejectedValueOnce(err)
       .mockResolvedValueOnce({ payload: validPayload, protectedHeader: validHeader } as any);
 
-    const token = createToken(validHeader, validPayload);
+    const token = createToken(validPayload);
     const [payload] = await verifyFirebaseIdToken(token, mockProjectId, mockTenantId, mockCache);
 
     expect(mockCacheSet).toHaveBeenCalledWith("firebase:jwks_eviction_lock", "1", {
@@ -139,12 +134,12 @@ describe("CacheProvider plugin paths", () => {
     mockCacheGet.mockResolvedValue(null);
 
     const expiredPayload = { ...validPayload, exp: Math.floor(Date.now() / 1000) - 3600 };
-    const idToken = createToken(validHeader, expiredPayload);
+    const idToken = createToken(expiredPayload);
     const req = new NextRequest("https://localhost:3000/dashboard");
     req.cookies.set("__HOST-FIREBASE_app", idToken);
     req.cookies.set("__HOST-FIREBASEID_app", "valid-refresh");
 
-    const newIdToken = createToken(validHeader, validPayload);
+    const newIdToken = createToken(validPayload);
     fetchMock.mockResolvedValue({
       ok: true,
       json: async () => ({

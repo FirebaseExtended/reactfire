@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { runMiddleware } from "./index";
 import { NextRequest, NextResponse } from "next/server";
 import * as jose from "jose";
+import { createToken } from "./middleware_test_utils";
 
 // Mock jose
 vi.mock("jose", async (importOriginal) => {
@@ -29,14 +30,6 @@ describe("runMiddleware Token Refresh", () => {
     emulatorHost: undefined as string | undefined,
     tenantId: mockTenantId,
     authDomain: "test.firebaseapp.com",
-  };
-
-  // Helper to create a dummy JWT
-  const createToken = (payload: any) => {
-    const header = { alg: "RS256", typ: "JWT" };
-    const h = Buffer.from(JSON.stringify(header)).toString("base64");
-    const p = Buffer.from(JSON.stringify(payload)).toString("base64");
-    return `${h}.${p}.signature`;
   };
 
   const validPayload = {

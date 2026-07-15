@@ -10,11 +10,10 @@ import {
   decodeProtectedHeader,
   JSONWebKeySet,
 } from "jose";
+// getDefaultAppConfig is an internal @firebase/util export with no public stability guarantee.
 import { getDefaultAppConfig } from "@firebase/util";
 import type { FirebaseOptions } from "firebase/app";
 
-// FYI this code is supposed to be part of the Firebase SDKs soon
-// https://github.com/FirebaseExtended/reactfire/pull/640
 
 export type FirebaseJWTPayload = JWTPayload & {
   email?: string;
@@ -34,6 +33,7 @@ export interface CacheProvider {
     options?: { ex?: number; ttl?: number; nx?: boolean },
   ): Promise<any> | any;
   setex?(key: string, seconds: number, value: any): Promise<any> | any;
+  del?(key: string): Promise<any> | any;
 }
 
 export class MemoryCacheProvider implements CacheProvider {
@@ -53,6 +53,10 @@ export class MemoryCacheProvider implements CacheProvider {
 
   setex(key: string, seconds: number, value: any): any {
     return this.set(key, value, { ex: seconds });
+  }
+
+  del(key: string): any {
+    this.cache.delete(key);
   }
 }
 
@@ -97,6 +101,16 @@ async function cacheSetNx(
   } catch (e) {
     console.error(`Cache setnx failed for key "${key}":`, e);
     return false;
+  }
+}
+
+async function cacheDelete(cache: CacheProvider, key: string): Promise<void> {
+  try {
+    if (typeof cache.del === "function") {
+      await cache.del(key);
+    }
+  } catch (e) {
+    console.error(`Cache delete failed for key "${key}":`, e);
   }
 }
 
@@ -149,6 +163,8 @@ async function getFirebaseAuthJwks(
   }
 }
 
+// `_AuthEmulatorRefreshToken` is an undocumented internal Firebase emulator property.
+// It could break if the emulator changes its refresh token format.
 export function isEmulatorRefreshToken(refreshToken: string): boolean {
   try {
     const decoded = decodeURIComponent(refreshToken);
@@ -197,7 +213,7 @@ export async function verifyFirebaseIdToken(
 
   if (jwtPayload) {
     const muchEpochWow = Math.floor(+new Date() / 1000);
-    if (jwtPayload.exp && jwtPayload.exp > muchEpochWow) {
+    if (jwtPayload.exp !== undefined && jwtPayload.exp > muchEpochWow) {
       if (isEmulatedCredential) {
         return [jwtPayload, isEmulatedCredential, true];
       } else {
@@ -217,9 +233,14 @@ export async function verifyFirebaseIdToken(
             if (verifyErr?.code === "ERR_JWKS_NO_MATCHING_KEY") {
               const acquired = await cacheSetNx(cache, "firebase:jwks_eviction_lock", 30, "1");
               if (acquired) {
-                // Fetch fresh keys directly, skipping cache read
-                jwks = await getFirebaseAuthJwks(cache, true);
-                await jwtVerify(idToken, jwks);
+                try {
+                  // Fetch fresh keys directly, skipping cache read
+                  jwks = await getFirebaseAuthJwks(cache, true);
+                  await jwtVerify(idToken, jwks);
+                } catch (fetchErr) {
+                  await cacheDelete(cache, "firebase:jwks_eviction_lock");
+                  throw fetchErr;
+                }
               } else {
                 throw verifyErr;
               }
@@ -344,7 +365,12 @@ export async function runMiddleware(
     if (!finalTargetParam) {
       return [new NextResponse("Missing finalTarget parameter", { status: 400 })];
     }
-    const url = new URL(finalTargetParam);
+    let url: URL;
+    try {
+      url = new URL(finalTargetParam);
+    } catch {
+      return [new NextResponse("Invalid finalTarget parameter", { status: 400 })];
+    }
 
     let body: ReadableStream<any> | string | null = request.body;
 
@@ -478,7 +504,7 @@ export async function runMiddleware(
     return logout();
   }
   if (!refreshResponse.ok) {
-    console.error(refreshUrl.toString(), refreshResponse.status, refreshResponse.statusText);
+    console.error(refreshUrl.origin + refreshUrl.pathname, refreshResponse.status, refreshResponse.statusText);
     return logout();
   }
   const json = (await refreshResponse.json()) as TokenResponse;
@@ -539,7 +565,6 @@ export const normalizeConfig = (
     tenantId: config.tenantId,
     cache: config.cache || defaultMemoryCache,
   };
-  // TODO don't override string value
   if (typeof config.emulator === "string") {
     normalizedConfig.emulatorHost = config.emulator;
   } else if (config.emulator !== false) {
@@ -577,7 +602,7 @@ export const composeMiddleware =
         cache: defaultMemoryCache,
       });
     }
-    if (!normalizedConfigurations.length) throw new Error("");
+    if (!normalizedConfigurations.length) throw new Error("composeMiddleware requires at least one configuration. Pass a Config object or array of Config objects.");
 
     let defaultUser: FirebaseJWTPayload | undefined = undefined;
     const allUsers: Record<string, FirebaseJWTPayload> = {};
