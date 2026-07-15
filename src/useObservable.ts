@@ -71,7 +71,7 @@ export interface ObservableStatusSuccess<T> extends ObservableStatusBase<T> {
 
 export interface ObservableStatusError<T> extends ObservableStatusBase<T> {
   status: 'error';
-  isComplete: true;
+  isComplete: boolean;
   error: Error;
 }
 
@@ -83,6 +83,17 @@ export interface ObservableStatusLoading<T> extends ObservableStatusBase<T> {
 
 export type ObservableStatus<T> = ObservableStatusLoading<T> | ObservableStatusError<T> | ObservableStatusSuccess<T>;
 
+/**
+ * Subscribe to an Observable and return its current status.
+ *
+ * Error handling depends on the suspense mode:
+ * - Non-suspense mode (default): errors are returned as `{ status: 'error', error }` so the
+ *   component can handle them locally without needing a React Error Boundary.
+ * - Suspense mode (`suspense: true`): errors are re-thrown so a React Error Boundary can catch them.
+ *
+ * If the observable emits a value and then errors, `data` retains the last emitted value and
+ * `status` changes to `'error'`. There is no automatic retry path once an error occurs.
+ */
 export function useObservable<T = unknown>(observableId: string, source: Observable<T>, config: ReactFireOptions = {}): ObservableStatus<T> {
   if (!observableId) {
     throw new Error('cannot call useObservable without an observableId');

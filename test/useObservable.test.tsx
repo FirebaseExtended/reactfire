@@ -124,9 +124,45 @@ describe('useObservable', () => {
 
       act(() => observable$.next('val'));
       expect(result.current.isComplete).toEqual(false);
-      
+
       act(() => observable$.complete());
       await waitFor(() => expect(result.current.isComplete).toEqual(true));
+    });
+
+    it('surfaces errors via status in non-suspense mode', async () => {
+      const error = new Error('I am an error');
+      const observable$ = throwError(error);
+
+      const { result } = renderHook(() => useObservable('test-error-non-suspense', observable$, { suspense: false }));
+
+      await waitFor(() => expect(result.current.status).toEqual('error'));
+      expect(result.current.error).toEqual(error);
+    });
+
+    it('surfaces errors via status when no suspense option is provided', async () => {
+      const error = new Error('default mode error');
+      const observable$ = throwError(error);
+
+      const { result } = renderHook(() => useObservable('test-error-default-mode', observable$));
+
+      await waitFor(() => expect(result.current.status).toEqual('error'));
+      expect(result.current.error).toEqual(error);
+    });
+
+    it('retains last emitted data when observable errors after emitting', async () => {
+      const subject$ = new Subject<string>();
+      const error = new Error('late error');
+
+      const { result } = renderHook(() => useObservable('test-late-error', subject$, { suspense: false }));
+
+      act(() => subject$.next('good value'));
+      await waitFor(() => expect(result.current.status).toEqual('success'));
+      expect(result.current.data).toEqual('good value');
+
+      act(() => subject$.error(error));
+      await waitFor(() => expect(result.current.status).toEqual('error'));
+      expect(result.current.error).toEqual(error);
+      expect(result.current.data).toEqual('good value');
     });
   });
 
@@ -182,16 +218,6 @@ describe('useObservable', () => {
       expect(() => renderHook(() => useObservable('test-error', observable$, { suspense: true }))).toThrow(error);
 
       spy.mockRestore();
-    });
-
-    it('surfaces errors via status in non-suspense mode', async () => {
-      const error = new Error('I am an error');
-      const observable$ = throwError(error);
-
-      const { result } = renderHook(() => useObservable('test-error-non-suspense', observable$, { suspense: false }));
-
-      await waitFor(() => expect(result.current.status).toEqual('error'));
-      expect(result.current.error).toEqual(error);
     });
 
     it('provides the value, rather than initialData, when the observable is ready right away', () => {

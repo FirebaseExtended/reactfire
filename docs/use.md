@@ -426,10 +426,14 @@ function CatImage() {
   const storage = useStorage();
   const catRef = ref(storage, 'cats/newspaper');
 
-  const { status, data: imageURL } = useStorageDownloadURL(catRef);
+  const { status, data: imageURL, error } = useStorageDownloadURL(catRef);
 
   if (status === 'loading') {
     return <span>loading...</span>;
+  }
+
+  if (status === 'error') {
+    return <span>Error: {error.message}</span>;
   }
 
   return <img src={imageURL} alt="cat reading the newspaper" />;
