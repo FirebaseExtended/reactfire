@@ -8,7 +8,7 @@
 
 > **ObservableStatus**\<`T`\> = [`ObservableStatusLoading`](../interfaces/ObservableStatusLoading.md)\<`T`\> \| [`ObservableStatusError`](../interfaces/ObservableStatusError.md)\<`T`\> \| [`ObservableStatusSuccess`](../interfaces/ObservableStatusSuccess.md)\<`T`\>
 
-Defined in: [src/useObservable.ts:84](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L84)
+Defined in: [src/useObservable.ts:84](https://github.com/tyler-reitz/reactfire/blob/main/src/useObservable.ts#L84)
 
 ## Type Parameters
 

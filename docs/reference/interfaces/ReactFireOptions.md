@@ -6,7 +6,7 @@
 
 # Interface: ReactFireOptions\<T\>
 
-Defined in: [src/index.ts:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L24)
+Defined in: [src/index.ts:24](https://github.com/tyler-reitz/reactfire/blob/main/src/index.ts#L24)
 
 ## Extended by
 
@@ -24,7 +24,7 @@ Defined in: [src/index.ts:24](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **idField?**: `string`
 
-Defined in: [src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L25)
+Defined in: [src/index.ts:25](https://github.com/tyler-reitz/reactfire/blob/main/src/index.ts#L25)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **initialData?**: `any`
 
-Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L26)
+Defined in: [src/index.ts:26](https://github.com/tyler-reitz/reactfire/blob/main/src/index.ts#L26)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **startWithValue?**: `any`
 
-Defined in: [src/index.ts:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L30)
+Defined in: [src/index.ts:30](https://github.com/tyler-reitz/reactfire/blob/main/src/index.ts#L30)
 
 #### Deprecated
 
@@ -52,4 +52,4 @@ use initialData instead
 
 > `optional` **suspense?**: `boolean`
 
-Defined in: [src/index.ts:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L31)
+Defined in: [src/index.ts:31](https://github.com/tyler-reitz/reactfire/blob/main/src/index.ts#L31)

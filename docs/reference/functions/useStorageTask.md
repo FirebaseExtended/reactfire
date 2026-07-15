@@ -8,7 +8,7 @@
 
 > **useStorageTask**\<`T`\>(`task`, `ref`, `options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`T` \| `UploadTaskSnapshot`\>
 
-Defined in: [src/storage.tsx:16](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L16)
+Defined in: [src/storage.tsx:16](https://github.com/tyler-reitz/reactfire/blob/main/src/storage.tsx#L16)
 
 Subscribe to the progress of a storage task
 

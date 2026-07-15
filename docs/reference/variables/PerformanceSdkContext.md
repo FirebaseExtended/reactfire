@@ -8,4 +8,4 @@
 
 > `const` **PerformanceSdkContext**: `Context`\<`FirebasePerformance` \| `undefined`\>
 
-Defined in: [src/sdk.tsx:25](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L25)
+Defined in: [src/sdk.tsx:25](https://github.com/tyler-reitz/reactfire/blob/main/src/sdk.tsx#L25)

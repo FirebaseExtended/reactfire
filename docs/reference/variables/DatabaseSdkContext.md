@@ -8,4 +8,4 @@
 
 > `const` **DatabaseSdkContext**: `Context`\<`Database` \| `undefined`\>
 
-Defined in: [src/sdk.tsx:21](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L21)
+Defined in: [src/sdk.tsx:21](https://github.com/tyler-reitz/reactfire/blob/main/src/sdk.tsx#L21)

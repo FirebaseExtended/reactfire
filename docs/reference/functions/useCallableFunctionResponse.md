@@ -8,7 +8,7 @@
 
 > **useCallableFunctionResponse**\<`RequestData`, `ResponseData`\>(`functionName`, `options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`ResponseData`\>
 
-Defined in: [src/functions.tsx:13](https://github.com/FirebaseExtended/reactfire/blob/main/src/functions.tsx#L13)
+Defined in: [src/functions.tsx:13](https://github.com/tyler-reitz/reactfire/blob/main/src/functions.tsx#L13)
 
 Calls a callable function.
 
