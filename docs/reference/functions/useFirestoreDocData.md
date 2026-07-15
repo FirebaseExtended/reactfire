@@ -8,7 +8,7 @@
 
 > **useFirestoreDocData**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`T` \| `undefined`\>
 
-Defined in: [src/firestore.tsx:62](https://github.com/tyler-reitz/reactfire/blob/main/src/firestore.tsx#L62)
+Defined in: [src/firestore.tsx:62](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L62)
 
 Subscribe to Firestore Document changes and unwrap the document into a plain object
 

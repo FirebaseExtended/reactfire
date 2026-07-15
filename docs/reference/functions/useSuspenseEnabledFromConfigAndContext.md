@@ -8,7 +8,7 @@
 
 > **useSuspenseEnabledFromConfigAndContext**(`suspenseFromConfig?`): `boolean`
 
-Defined in: [src/firebaseApp.tsx:69](https://github.com/tyler-reitz/reactfire/blob/main/src/firebaseApp.tsx#L69)
+Defined in: [src/firebaseApp.tsx:69](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L69)
 
 ## Parameters
 

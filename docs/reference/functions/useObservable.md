@@ -8,7 +8,7 @@
 
 > **useObservable**\<`T`\>(`observableId`, `source`, `config?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`T`\>
 
-Defined in: [src/useObservable.ts:97](https://github.com/tyler-reitz/reactfire/blob/main/src/useObservable.ts#L97)
+Defined in: [src/useObservable.ts:97](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L97)
 
 Subscribe to an Observable and return its current status.
 

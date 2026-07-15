@@ -8,4 +8,4 @@
 
 > `const` **AppCheckSdkContext**: `Context`\<`AppCheck` \| `undefined`\>
 
-Defined in: [src/sdk.tsx:18](https://github.com/tyler-reitz/reactfire/blob/main/src/sdk.tsx#L18)
+Defined in: [src/sdk.tsx:18](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L18)
