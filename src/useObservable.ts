@@ -71,7 +71,6 @@ export interface ObservableStatusSuccess<T> extends ObservableStatusBase<T> {
 
 export interface ObservableStatusError<T> extends ObservableStatusBase<T> {
   status: 'error';
-  isComplete: boolean;
   error: Error;
 }
 
