@@ -2,7 +2,9 @@ import '@testing-library/jest-dom/extend-expect';
 import { act, cleanup, render, renderHook, waitFor } from '@testing-library/react';
 import * as React from 'react';
 import { of, Subject, BehaviorSubject, throwError } from 'rxjs';
-import { useObservable } from '../src/index';
+import { useObservable, FirebaseAppProvider } from '../src/index';
+import { initializeApp } from 'firebase/app';
+import { baseConfig } from './appConfig';
 
 describe('useObservable', () => {
   afterEach(cleanup);
@@ -363,6 +365,24 @@ describe('useObservable', () => {
 
       // if useObservable doesn't re-emit, the value here will still be "Jeff"
       expect(refreshedComp).toHaveTextContent('James');
+    });
+    it('throws an error via FirebaseAppProvider suspense context path', () => {
+      const spy = vi.spyOn(console, 'error');
+      spy.mockImplementation(() => {});
+
+      const app = initializeApp(baseConfig, 'suspense-context-test');
+      const error = new Error('context-path error');
+      const observable$ = throwError(error);
+
+      const wrapper = ({ children }: { children: React.ReactNode }) => (
+        <FirebaseAppProvider firebaseApp={app} suspense={true}>
+          {children}
+        </FirebaseAppProvider>
+      );
+
+      expect(() => renderHook(() => useObservable('test-context-suspense-error', observable$), { wrapper })).toThrow(error);
+
+      spy.mockRestore();
     });
   });
 });
