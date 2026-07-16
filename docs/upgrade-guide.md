@@ -18,7 +18,7 @@ if (status === 'error') throw error; // re-throw to reach your Error Boundary
 
 **If you already check `status` before using `data`**, no change is needed.
 
-Note: once an observable errors there is no automatic retry. If you need retry behavior, unmount and remount the component.
+Note: once an observable errors there is no automatic retry. The errored observable remains in the global cache under its `observableId`, so unmounting and remounting the same component rejoins the same errored state. Today the only workaround is to change the `observableId`. A proper retry mechanism is tracked as a follow-up issue.
 
 ---
 
