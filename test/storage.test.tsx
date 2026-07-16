@@ -58,7 +58,7 @@ describe('Storage', () => {
   });
 
   describe('useStorageDownloadURL', () => {
-    it('returns the same value as getDownloadURL', async () => {
+it('returns the same value as getDownloadURL', async () => {
       const someBytes = Uint8Array.from(Buffer.from(new ArrayBuffer(500_000)));
       const testFileRef = ref(storage, `${randomString()}/${randomString()}.txt`);
 
