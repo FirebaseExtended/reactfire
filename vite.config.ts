@@ -47,6 +47,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './test/setupTests.ts',
+    exclude: ['src/nextjs/**', 'node_modules/**'],
   },
   define: {
     // replace `process.env.REACTFIRE_VERSION` in the source
