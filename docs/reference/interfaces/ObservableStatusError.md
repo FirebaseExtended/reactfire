@@ -40,7 +40,7 @@ If `initialData` is passed in, the first value of `data` will be the valuea prov
 
 > **error**: `Error`
 
-Defined in: [src/useObservable.ts:75](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L75)
+Defined in: [src/useObservable.ts:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L74)
 
 Any error that may have occurred in the underlying observable
 
@@ -84,11 +84,11 @@ If `initialData` is passed in, this will be `true`.
 
 > **isComplete**: `boolean`
 
-Defined in: [src/useObservable.ts:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L74)
+Defined in: [src/useObservable.ts:50](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L50)
 
 If this is `true`, the hook will be emitting no further items.
 
-#### Overrides
+#### Inherited from
 
 `ObservableStatusBase.isComplete`
 

@@ -6,7 +6,7 @@
 
 # Interface: ObservableStatusLoading\<T\>
 
-Defined in: [src/useObservable.ts:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L78)
+Defined in: [src/useObservable.ts:77](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L77)
 
 ## Extends
 
@@ -24,7 +24,7 @@ Defined in: [src/useObservable.ts:78](https://github.com/FirebaseExtended/reactf
 
 > **data**: `undefined`
 
-Defined in: [src/useObservable.ts:80](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L80)
+Defined in: [src/useObservable.ts:79](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L79)
 
 The most recent value.
 
@@ -68,7 +68,7 @@ Promise that resolves after first emit from observable
 
 > **hasEmitted**: `false`
 
-Defined in: [src/useObservable.ts:81](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L81)
+Defined in: [src/useObservable.ts:80](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L80)
 
 Indicates whether the hook has emitted a value at some point
 
@@ -98,7 +98,7 @@ If this is `true`, the hook will be emitting no further items.
 
 > **status**: `"loading"`
 
-Defined in: [src/useObservable.ts:79](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L79)
+Defined in: [src/useObservable.ts:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L78)
 
 The loading status.
 
