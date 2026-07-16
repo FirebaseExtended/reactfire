@@ -58,7 +58,14 @@ describe('Storage', () => {
   });
 
   describe('useStorageDownloadURL', () => {
-it('returns the same value as getDownloadURL', async () => {
+    it('surfaces storage/object-not-found as status: error for a nonexistent file', async () => {
+      const missingRef = ref(storage, `nonexistent/${randomString()}.txt`);
+      const { result } = renderHook(() => useStorageDownloadURL(missingRef), { wrapper: Provider });
+      await waitFor(() => expect(result.current.status).toEqual('error'));
+      expect((result.current.error as any)?.code).toEqual('storage/object-not-found');
+    });
+
+    it('returns the same value as getDownloadURL', async () => {
       const someBytes = Uint8Array.from(Buffer.from(new ArrayBuffer(500_000)));
       const testFileRef = ref(storage, `${randomString()}/${randomString()}.txt`);
 

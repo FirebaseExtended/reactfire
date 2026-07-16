@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { getDownloadURL, fromTask } from 'rxfire/storage';
+import { defer } from 'rxjs';
 import { ReactFireOptions, useObservable, ObservableStatus, useStorage } from './';
 import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp';
 import { ref } from 'firebase/storage';
@@ -28,7 +29,7 @@ export function useStorageTask<T = unknown>(task: UploadTask, ref: StorageRefere
  */
 export function useStorageDownloadURL<T = string>(ref: StorageReference, options?: ReactFireOptions<T>): ObservableStatus<string | T> {
   const observableId = `storage:downloadUrl:${ref.toString()}`;
-  const observable$ = getDownloadURL(ref);
+  const observable$ = defer(() => getDownloadURL(ref));
 
   return useObservable(observableId, observable$, options);
 }
