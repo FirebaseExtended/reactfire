@@ -25,6 +25,19 @@ export type FirebaseJWTPayload = JWTPayload & {
   [key: string]: unknown;
 };
 
+/**
+ * Cache abstraction used by this middleware.
+ *
+ * If you want to use a Redis client (ioredis, node-redis, Upstash, etc.) you
+ * must wrap it in an adapter that maps this interface to the client's own API.
+ * The options object uses lowercase `ex` / `nx` keys which do NOT match the
+ * native signatures of ioredis or node-redis v4 — pass them through with the
+ * appropriate translation in your adapter's `set()` implementation.
+ *
+ * The options object uses lowercase `ex` / `nx` keys, which do NOT match the
+ * native signatures of ioredis or node-redis v4; pass them through with the
+ * appropriate translation in your adapter's `set()` implementation.
+ */
 export interface CacheProvider {
   get<T = unknown>(key: string): Promise<T | null | undefined> | T | null | undefined;
   set(
@@ -46,7 +59,8 @@ export class MemoryCacheProvider implements CacheProvider {
   set(key: string, value: any, options?: { ex?: number; ttl?: number; nx?: boolean }): any {
     if (options?.nx && this.cache.has(key)) return null;
     const ttlSeconds = options?.ex ?? (options?.ttl ? Math.floor(options.ttl / 1000) : undefined);
-    const ttlMs = ttlSeconds ? ttlSeconds * 1000 : undefined;
+    // Treat 0 as "do not cache" (e.g. a max-age=0 from a server response).
+    const ttlMs = ttlSeconds !== undefined && ttlSeconds > 0 ? ttlSeconds * 1000 : undefined;
     this.cache.set(key, value, { ttl: ttlMs });
     return "OK";
   }
@@ -154,7 +168,9 @@ async function getFirebaseAuthJwks(
     }
 
     const jwks = (await response.json()) as JSONWebKeySet;
-    await cacheSetEx(cache, "firebase:jwks", maxAge, jwks);
+    if (maxAge > 0) {
+      await cacheSetEx(cache, "firebase:jwks", maxAge, jwks);
+    }
     return createLocalJWKSet(jwks);
   } catch (e) {
     console.error("Failed to fetch Firebase JWKS:", e);
@@ -197,7 +213,7 @@ export async function verifyFirebaseIdToken(
   if (
     jwtHeader?.typ !== "JWT" ||
     jwtPayload?.iss !== `https://securetoken.google.com/${projectId}` ||
-    jwtPayload.aud !== projectId ||
+    jwtPayload?.aud !== projectId ||
     jwtPayload?.firebase?.tenant !== tenantId
   ) {
     console.error("JWT Validation Mismatch", { jwtHeader, jwtPayload, projectId, tenantId });
@@ -237,9 +253,8 @@ export async function verifyFirebaseIdToken(
                   // Fetch fresh keys directly, skipping cache read
                   jwks = await getFirebaseAuthJwks(cache, true);
                   await jwtVerify(idToken, jwks);
-                } catch (fetchErr) {
+                } finally {
                   await cacheDelete(cache, "firebase:jwks_eviction_lock");
-                  throw fetchErr;
                 }
               } else {
                 throw verifyErr;
@@ -256,6 +271,7 @@ export async function verifyFirebaseIdToken(
           return [jwtPayload, isEmulatedCredential, true];
         } catch (e) {
           console.error("JWT Verification failed:", e);
+          refreshable = false;
         }
       }
     }
@@ -316,16 +332,19 @@ export async function runMiddleware(
   const REFRESH_TOKEN_COOKIE_NAME = isDevMode
     ? `__dev_FIREBASEID_${appName}`
     : `__HOST-FIREBASEID_${appName}`;
+  // CHIPS (Partitioned cookies) requires SameSite=None; Secure. When running
+  // on localhost with insecure cookies we fall back to SameSite=Lax (no partitioning).
+  const sameSite = useInsecureCookies ? ("lax" as const) : ("none" as const);
   const ID_TOKEN_COOKIE = {
-    path: "/",
+    path: "/" as const,
     secure: !useInsecureCookies,
-    httpOnly: false,
-    sameSite: "lax",
+    httpOnly: false as const,
+    sameSite,
     partitioned: !useInsecureCookies,
     name: ID_TOKEN_COOKIE_NAME,
     maxAge: MAX_MAX_AGE,
-    priority: "high",
-  } as const;
+    priority: "high" as const,
+  };
   const REFRESH_TOKEN_COOKIE = {
     ...ID_TOKEN_COOKIE,
     httpOnly: true,
@@ -339,6 +358,18 @@ export async function runMiddleware(
     }
 
     const method = request.method;
+
+    // CSRF guard: reject cross-origin state-changing requests.
+    // Browsers send the Origin header on cross-origin requests; same-origin
+    // requests from the Firebase JS SDK either omit Origin (safe) or send the
+    // correct same-site value.
+    if (method === "POST" || method === "DELETE") {
+      const origin = request.headers.get("origin");
+      if (origin && origin !== request.nextUrl.origin) {
+        return [new NextResponse("Cross-origin request denied", { status: 403 })];
+      }
+    }
+
     if (method === "DELETE") {
       const response = new NextResponse("");
       response.cookies.delete({ ...ID_TOKEN_COOKIE, maxAge: 0 });
@@ -376,14 +407,14 @@ export async function runMiddleware(
 
     if (options.emulatorHost) {
       if (url.host !== options.emulatorHost) {
-        throw new Error(`Emulator mismatch: ${url.host} vs ${options.emulatorHost}`);
+        return [new NextResponse("Proxy target does not match configured emulator host", { status: 400 })];
       }
     } else {
       if (
         url.host !== "securetoken.googleapis.com" &&
         url.host !== "identitytoolkit.googleapis.com"
       ) {
-        throw new Error(`Unauthorized proxy target host: ${url.host}`);
+        return [new NextResponse("Unauthorized proxy target host", { status: 400 })];
       }
     }
 
@@ -393,7 +424,7 @@ export async function runMiddleware(
     );
 
     if (!isTokenRequest && !isSignInRequest)
-      throw new Error("Could not determine the request type to proxy");
+      return [new NextResponse("Unsupported request type", { status: 400 })];
 
     if (isTokenRequest) {
       body = await request.text();
@@ -405,10 +436,13 @@ export async function runMiddleware(
           body = bodyParams.toString();
         }
       }
+    } else if (isSignInRequest) {
+      // Materialize body to a string so we never pass a ReadableStream to fetch,
+      // which is rejected by Vercel Edge and stricter undici configurations.
+      body = await request.text();
     }
 
-    // Duplex half, isn't NextJS fun?
-    const response = await fetch(url, { method, body, headers, duplex: "half" } as RequestInit);
+    const response = await fetch(url, { method, body, headers });
 
     const json = (await response.json()) as TokenResponse | SignInResponse;
     const status = response.status;
@@ -482,6 +516,14 @@ export async function runMiddleware(
     return logout();
   }
 
+  if (isEmulatedCredential && options.emulatorHost) {
+    const emulatorHostname = options.emulatorHost.split(":")[0];
+    if (emulatorHostname !== "localhost" && emulatorHostname !== "127.0.0.1" && emulatorHostname !== "::1") {
+      console.error("Emulator host must be localhost or loopback:", emulatorHostname);
+      return logout();
+    }
+  }
+
   const refreshUrl = new URL(
     isEmulatedCredential ? `http://${options.emulatorHost}` : `https://securetoken.googleapis.com`,
   );
@@ -511,14 +553,19 @@ export async function runMiddleware(
   const newRefreshToken = json.refresh_token;
   const newIdToken = json.id_token;
   if (!newIdToken) throw new Error("Missing id_token in refresh response");
-  // FIXED: Use jose decodeJwt for robust Edge support instead of Buffer/base64
-  const decodedPayload = decodeJwt(newIdToken) as FirebaseJWTPayload;
-  jwtPayload = decodedPayload;
-  const ttlMs = jwtPayload.exp! * 1000 - Date.now();
-  const ttlSeconds = Math.floor(ttlMs / 1000);
-  if (ttlSeconds > 0) {
-    await cacheSetEx(cache, `jwt:${newIdToken}`, ttlSeconds, jwtPayload);
+  // Full signature + claims verification on the refreshed token. Caching is
+  // handled inside verifyFirebaseIdToken, so no separate cacheSetEx needed.
+  const [verifiedNewPayload] = await verifyFirebaseIdToken(
+    newIdToken,
+    options.projectId,
+    options.tenantId,
+    cache,
+  );
+  if (!verifiedNewPayload) {
+    console.error("Refreshed token failed verification");
+    return logout();
   }
+  jwtPayload = verifiedNewPayload;
   const decorateNextResponse = (response: NextResponse) => {
     if (newIdToken) response.cookies.set({ ...ID_TOKEN_COOKIE, value: newIdToken });
     if (newRefreshToken) response.cookies.set({ ...REFRESH_TOKEN_COOKIE, value: newRefreshToken });
@@ -567,9 +614,11 @@ export const normalizeConfig = (
   };
   if (typeof config.emulator === "string") {
     normalizedConfig.emulatorHost = config.emulator;
-  } else if (config.emulator !== false) {
-    const emulatorHost = process.env.FIREBASE_AUTH_EMULATOR_HOST;
-    normalizedConfig.emulatorHost = emulatorHost;
+  } else if (config.emulator === true) {
+    // Explicit opt-in only: reading FIREBASE_AUTH_EMULATOR_HOST when emulator
+    // is not explicitly requested would accept alg:none tokens if that env var
+    // ever leaked into a production environment.
+    normalizedConfig.emulatorHost = process.env.FIREBASE_AUTH_EMULATOR_HOST;
   }
   return normalizedConfig;
 };
@@ -598,7 +647,6 @@ export const composeMiddleware =
       normalizedConfigurations.push({
         appName: "[DEFAULT]",
         firebaseOptions: defaultAppOptions,
-        emulatorHost: process.env.FIREBASE_AUTH_EMULATOR_HOST,
         cache: defaultMemoryCache,
       });
     }
@@ -625,7 +673,15 @@ export const composeMiddleware =
       const [response, decorateResponse, idTokenPayload] = result;
       if (idTokenPayload) allUsers[appName] = idTokenPayload;
       if (idTokenPayload && appName === defaultAppName) defaultUser = idTokenPayload;
-      if (response) finalResponse ||= response;
+      if (response) {
+        if (finalResponse) {
+          console.warn(
+            `firebase-cookie-middleware: app "${appName}" returned a direct response but an earlier app already claimed the response. The earlier response takes precedence.`,
+          );
+        } else {
+          finalResponse = response;
+        }
+      }
       if (decorateResponse) decorators.push(decorateResponse);
     }
     if (!finalResponse)
@@ -636,4 +692,23 @@ export const composeMiddleware =
     );
   };
 
-export const middleware = composeMiddleware(() => {});
+// Zero-config convenience export. Works only when a Firebase app has been
+// initialized before the middleware runs (e.g. via getApps() in firebase.ts).
+// If no Firebase config is discoverable the request passes through with a
+// console warning rather than throwing a 500.
+const _safeDefaultMiddleware = async (request: NextRequest): Promise<NextResponse> => {
+  const defaultAppOptions = getDefaultAppConfig() as FirebaseOptions | undefined;
+  if (!defaultAppOptions) {
+    console.warn(
+      "firebase-cookie-middleware: no Firebase config found; pass a Config to composeMiddleware.",
+    );
+    return NextResponse.next();
+  }
+  return composeMiddleware(() => {})(request);
+};
+
+// Next.js 16+: proxy.ts expects a named `proxy` export.
+export const proxy = _safeDefaultMiddleware;
+// Next.js 15 and earlier: middleware.ts expects a named `middleware` export.
+// @deprecated Use proxy in Next.js 16+.
+export const middleware = _safeDefaultMiddleware;

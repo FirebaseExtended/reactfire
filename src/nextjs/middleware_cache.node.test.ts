@@ -43,7 +43,7 @@ describe("CacheProvider plugin paths", () => {
       get: mockCacheGet,
       set: mockCacheSet,
       setex: mockCacheSetex,
-    };
+    } as unknown as CacheProvider;
   });
 
   it("should return cached payload from CacheProvider during verifyFirebaseIdToken", async () => {

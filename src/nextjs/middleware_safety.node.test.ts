@@ -20,7 +20,7 @@ describe("middleware", () => {
     emulator: true,
   };
 
-  const innie = vi.fn((req) => NextResponse.next());
+  const innie = vi.fn((_req) => NextResponse.next());
 
   const originalEnv = process.env;
 
@@ -52,7 +52,8 @@ describe("middleware", () => {
       statusText: "OK",
     });
 
-    await expect(middleware(req)).rejects.toThrow("Emulator mismatch");
+    const response = await middleware(req);
+    expect(response.status).toBe(400);
   });
 
   it("should pass when emulated and target is emulator", async () => {

@@ -89,9 +89,16 @@ describe("normalizeConfig", () => {
     expect(normalized.tenantId).toBe("acme");
   });
 
-  it("should read emulator from env when emulator is undefined (not false)", () => {
+  it("should NOT read emulator from env when emulator is undefined (explicit opt-in required)", () => {
     process.env.FIREBASE_AUTH_EMULATOR_HOST = "localhost:9099";
     const config: Config = { options: mockFirebaseOptions };
+    const normalized = normalizeConfig(config, undefined);
+    expect(normalized.emulatorHost).toBeUndefined();
+  });
+
+  it("should read emulator from env when emulator is explicitly true", () => {
+    process.env.FIREBASE_AUTH_EMULATOR_HOST = "localhost:9099";
+    const config: Config = { options: mockFirebaseOptions, emulator: true };
     const normalized = normalizeConfig(config, undefined);
     expect(normalized.emulatorHost).toBe("localhost:9099");
   });

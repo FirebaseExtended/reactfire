@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { runMiddleware } from "./index";
 import { NextRequest, NextResponse } from "next/server";
 import * as jose from "jose";
@@ -59,7 +59,7 @@ describe("runMiddleware Token Refresh", () => {
     const req = new NextRequest("https://localhost:3000/dashboard");
     req.cookies.set("__HOST-FIREBASE_app", idToken);
 
-    const [response, decorate, payload] = await runMiddleware("app", options, req);
+    const [response, _decorate, payload] = await runMiddleware("app", options, req);
 
     expect(payload).toBeDefined();
     expect(payload?.sub).toBe("user123");
@@ -89,7 +89,7 @@ describe("runMiddleware Token Refresh", () => {
       }),
     });
 
-    const [response, decorate, payload] = await runMiddleware("app", options, req);
+    const [_response, decorate, payload] = await runMiddleware("app", options, req);
 
     expect(payload).toBeDefined();
     expect(payload?.jti).toBe("new-token");
@@ -191,7 +191,7 @@ describe("runMiddleware Token Refresh", () => {
       statusText: "Bad Request",
     });
 
-    const [response, decorate, payload] = await runMiddleware("app", options, req);
+    const [_response, decorate, payload] = await runMiddleware("app", options, req);
 
     expect(payload).toBeUndefined();
 
@@ -223,7 +223,7 @@ describe("runMiddleware Token Refresh", () => {
       }),
     });
 
-    const [response, decorate, payload] = await runMiddleware("app", prodOptions, req);
+    const [_response, decorate, payload] = await runMiddleware("app", prodOptions, req);
 
     expect(payload).toBeUndefined();
 
@@ -278,7 +278,7 @@ describe("runMiddleware Token Refresh", () => {
       }),
     });
 
-    const [response, decorate, payload] = await runMiddleware("app", options, req);
+    const [_response, _decorate, payload] = await runMiddleware("app", options, req);
 
     expect(payload).toBeDefined();
     expect(payload?.jti).toBe("restored-token");
@@ -289,7 +289,7 @@ describe("runMiddleware Token Refresh", () => {
     const req = new NextRequest("https://localhost:3000/dashboard");
     req.cookies.set("__HOST-FIREBASE_app", "");
 
-    const [response, decorate, payload] = await runMiddleware("app", options, req);
+    const [_response, decorate, payload] = await runMiddleware("app", options, req);
 
     expect(payload).toBeUndefined();
     const nextRes = NextResponse.next();
@@ -310,7 +310,7 @@ describe("runMiddleware Token Refresh", () => {
     req.cookies.set("__HOST-FIREBASE_app", emuToken);
 
     const prodOptions = { ...options, emulatorHost: undefined };
-    const [response, decorate, payload] = await runMiddleware("app", prodOptions, req);
+    const [_response, decorate, payload] = await runMiddleware("app", prodOptions, req);
 
     expect(payload).toBeUndefined();
     const nextRes = NextResponse.next();
@@ -329,7 +329,7 @@ describe("runMiddleware Token Refresh", () => {
 
     fetchMock.mockRejectedValue(new Error("Network disconnect"));
 
-    const [response, decorate, payload] = await runMiddleware("app", options, req);
+    const [_response, decorate, payload] = await runMiddleware("app", options, req);
 
     expect(payload).toBeUndefined();
     const nextRes = NextResponse.next();

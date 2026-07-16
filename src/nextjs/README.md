@@ -8,7 +8,7 @@ Enables **hybrid & Server-Side Rendered (SSR)** authentication in Next.js applic
 
 ## Why this exists
 
-Standard Single Page Applications (SPAs) store Firebase ID and refresh tokens inside browser `indexedDB` or `localStorage`. Because these storage mechanisms are inaccessible during HTTP requests, Next.js Server Components, API routes, Server Actions, and Middleware cannot read the user's authentication state on the first request—causing layout shifts, client-side redirect flashes, or insecure server routes.
+Standard Single Page Applications (SPAs) store Firebase ID and refresh tokens inside browser `indexedDB` or `localStorage`. Because these storage mechanisms are inaccessible during HTTP requests, Next.js Server Components, API routes, Server Actions, and Middleware cannot read the user's authentication state on the first request, causing layout shifts, client-side redirect flashes, or insecure server routes.
 
 `firebase-cookie-middleware` acts as the server-side companion to [`browserCookiePersistence`](https://firebase.google.com/docs/reference/js/auth#browsercookiepersistence). It proxies Firebase Auth token requests through `/_\_cookies_\_` on your app's domain, intercepts authentication exchanges, securely stores ID tokens and `httpOnly` refresh tokens in standard HTTP cookies, and strips sensitive refresh credentials from browser-facing payloads.
 
@@ -16,7 +16,7 @@ Standard Single Page Applications (SPAs) store Firebase ID and refresh tokens in
 
 ## Features
 
-- **⚡ 100% Edge Runtime Compatible**: Engineered specifically for Next.js 14 & 15 Edge Runtimes (Vercel Edge, Cloudflare Workers). Built on `jose` and Web APIs (`atob`, `fetch`) with zero reliance on Node.js `Buffer`.
+- **⚡ Next.js 14, 15, and 16 Compatible**: Built on `jose` and Web APIs (`atob`, `fetch`). Runs in the Edge Runtime via `middleware.ts` (Next.js 14/15, and Next.js 16 users keeping the deprecated Edge path) and the Node.js runtime via `proxy.ts` (Next.js 16 recommended).
 - **🛡️ Seamless Route Protection & Role Checking**: Intercept and verify Firebase ID tokens at the Edge before rendering pages or API routes. Access standard claims (`email`, `sub`) and arbitrary custom claims directly in your middleware.
 - **🚀 Distributed Caching (Memorystore / Redis)**: Optional distributed caching for Google's public JWKS signing keys and verified token payloads (`jwt:<idToken>`). Prevents unnecessary CPU verification and network requests on every navigation.
 - **🔒 Anti-DDoS Rotation Protection**: Distributed Redis locking (`firebase:jwks_eviction_lock`) ensures that during signing key rotations, only one Edge worker re-fetches Google's JWKS endpoints, preventing rate-limiting cascades.
@@ -33,11 +33,29 @@ npm install firebase-cookie-middleware jose lru-cache
 
 ---
 
+## Next.js 16 Migration
+
+Next.js 16 deprecates `middleware.ts` in favor of `proxy.ts`. The named export also changes from `middleware` to `proxy`.
+
+**Next.js 15 and earlier** (`src/middleware.ts`, Edge Runtime):
+```typescript
+export { middleware } from "firebase-cookie-middleware";
+```
+
+**Next.js 16+** (`src/proxy.ts`, Node.js runtime):
+```typescript
+export { proxy } from "firebase-cookie-middleware";
+```
+
+`proxy.ts` runs on the Node.js runtime only; the `runtime` config option is not available and will throw if set. If you need the Edge Runtime in Next.js 16, you can keep using `middleware.ts` with the `middleware` export (deprecated by Next.js but still functional). All middleware logic is identical between the two exports; only the file name and export name change.
+
+---
+
 ## Quickstart
 
-### 1. Create your Middleware (`src/middleware.ts`)
+### 1. Create your Middleware (`src/middleware.ts` for Next.js 15, `src/proxy.ts` for Next.js 16)
 
-Create or update your `middleware.ts` file in the root of your Next.js application:
+Create or update the file in the root of your Next.js application:
 
 ```typescript
 import { NextResponse, type NextRequest } from "next/server";
@@ -210,10 +228,23 @@ The middleware maintains two distinct cookies per app configuration (`appName`):
 
 When testing locally on `http://localhost`, Chrome and Safari reject secure host-prefixed cookies (`__HOST-`). The middleware automatically detects insecure local protocols and falls back to prefixed development cookies (`__dev_FIREBASE_[DEFAULT]`) with appropriate security flags.
 
-To connect with the Firebase Auth Emulator, export your emulator environment variable:
+To connect with the Firebase Auth Emulator, set `emulator: true` in your config and export the emulator host:
 
 ```bash
 export FIREBASE_AUTH_EMULATOR_HOST="localhost:9099"
 ```
 
-The middleware automatically accepts unsigned emulator tokens (`alg: "none"`) and proxies token refresh attempts directly to your local emulator instance.
+```typescript
+export const middleware = composeMiddleware(callback, {
+  options: firebaseConfig,
+  emulator: true, // reads FIREBASE_AUTH_EMULATOR_HOST; required to accept unsigned tokens
+});
+```
+
+You can also pass the host directly as a string instead of relying on the env var:
+
+```typescript
+emulator: "localhost:9099"
+```
+
+Emulator mode accepts unsigned tokens (`alg: "none"`) and proxies token refresh requests to your local emulator. The explicit opt-in is required: the env var alone does not activate emulator mode, preventing accidental acceptance of unsigned tokens if the variable leaks into a production environment.

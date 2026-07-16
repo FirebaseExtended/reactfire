@@ -151,9 +151,8 @@ describe("runMiddleware", () => {
       authDomain: "auth.domain",
     };
 
-    await expect(runMiddleware("app", options, request)).rejects.toThrow(
-      "Could not determine the request type to proxy",
-    );
+    const [response] = await runMiddleware("app", options, request);
+    expect(response?.status).toBe(400);
   });
 
   it("throws an error when proxy target host is unauthorized in production", async () => {
@@ -169,9 +168,8 @@ describe("runMiddleware", () => {
       authDomain: "auth.domain",
     };
 
-    await expect(runMiddleware("app", options, request)).rejects.toThrow(
-      "Unauthorized proxy target host: evil-attacker.com",
-    );
+    const [response] = await runMiddleware("app", options, request);
+    expect(response?.status).toBe(400);
   });
 
   it("returns 400 when finalTarget parameter is missing", async () => {
