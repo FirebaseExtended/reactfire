@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "exports": {
     ".": {
+      "import": "./dist/index.mjs",
       "module": "./dist/index.mjs",
       "types": "./dist/index.d.ts"
     }
