@@ -127,7 +127,7 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
 
   // modify the value if initialData exists
   if (!observable.hasValue && hasData) {
-    update.data = config?.initialData ?? config?.startWithValue;
+    update.data = (config?.initialData ?? config?.startWithValue) as T | undefined;
     update.status = 'success';
     update.hasEmitted = true;
   }

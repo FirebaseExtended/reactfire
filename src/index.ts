@@ -23,11 +23,11 @@ export class ReactFireError extends Error {
 
 export interface ReactFireOptions<T = unknown> {
   idField?: string;
-  initialData?: T | any;
+  initialData?: T;
   /**
    * @deprecated use initialData instead
    */
-  startWithValue?: T | any;
+  startWithValue?: T;
   suspense?: boolean;
 }
 
@@ -40,12 +40,12 @@ export function checkOptions(options: ReactFireOptions, field: string) {
   throw new Error(`Field "${field}" is not a valid key in ReactFireOptions`);
 }
 
-export function checkinitialData(options: ReactFireOptions) {
-  return checkOptions(options, 'initialData');
+export function checkinitialData<T>(options: ReactFireOptions<T>): T | undefined {
+  return checkOptions(options, 'initialData') as T | undefined;
 }
 
-export function checkIdField(options: ReactFireOptions) {
-  return checkOptions(options, 'idField');
+export function checkIdField(options: ReactFireOptions): string | undefined {
+  return checkOptions(options, 'idField') as string | undefined;
 }
 
 export * from './auth';
