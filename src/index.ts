@@ -40,12 +40,8 @@ export function checkOptions(options: ReactFireOptions, field: string) {
   throw new Error(`Field "${field}" is not a valid key in ReactFireOptions`);
 }
 
-export function checkinitialData<T>(options: ReactFireOptions<T>): T | undefined {
-  return checkOptions(options, 'initialData') as T | undefined;
-}
-
 export function checkIdField(options: ReactFireOptions): string | undefined {
-  return checkOptions(options, 'idField') as string | undefined;
+  return options?.idField;
 }
 
 export * from './auth';
