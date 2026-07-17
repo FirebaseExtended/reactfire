@@ -219,7 +219,7 @@ describe("verifyFirebaseIdToken", () => {
       await verifyFirebaseIdToken(token, mockProjectId, mockTenantId);
       const verifyCallsAfterFirst = vi.mocked(jose.jwtVerify).mock.calls.length;
 
-      // Second call: served from cache — claim must still be present
+      // Second call: served from cache; claim must still be present
       const [result] = await verifyFirebaseIdToken(token, mockProjectId, mockTenantId);
       expect(vi.mocked(jose.jwtVerify).mock.calls.length).toBe(verifyCallsAfterFirst);
       expect(result?.customRole).toBe(true);

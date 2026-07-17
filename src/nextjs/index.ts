@@ -30,10 +30,6 @@ export type FirebaseJWTPayload = JWTPayload & {
  *
  * If you want to use a Redis client (ioredis, node-redis, Upstash, etc.) you
  * must wrap it in an adapter that maps this interface to the client's own API.
- * The options object uses lowercase `ex` / `nx` keys which do NOT match the
- * native signatures of ioredis or node-redis v4 — pass them through with the
- * appropriate translation in your adapter's `set()` implementation.
- *
  * The options object uses lowercase `ex` / `nx` keys, which do NOT match the
  * native signatures of ioredis or node-redis v4; pass them through with the
  * appropriate translation in your adapter's `set()` implementation.
@@ -444,7 +440,13 @@ export async function runMiddleware(
 
     const response = await fetch(url, { method, body, headers });
 
-    const json = (await response.json()) as TokenResponse | SignInResponse;
+    let json: TokenResponse | SignInResponse;
+    try {
+      json = (await response.json()) as TokenResponse | SignInResponse;
+    } catch {
+      console.error("Proxy response was not JSON:", response.status, response.statusText);
+      return [new NextResponse("Bad gateway: non-JSON response from Firebase", { status: 502 })];
+    }
     const status = response.status;
     const statusText = response.statusText;
     if (!response.ok) {
@@ -549,10 +551,19 @@ export async function runMiddleware(
     console.error(refreshUrl.origin + refreshUrl.pathname, refreshResponse.status, refreshResponse.statusText);
     return logout();
   }
-  const json = (await refreshResponse.json()) as TokenResponse;
+  let json: TokenResponse;
+  try {
+    json = (await refreshResponse.json()) as TokenResponse;
+  } catch {
+    console.error("Refresh response was not JSON:", refreshResponse.status, refreshResponse.statusText);
+    return logout();
+  }
   const newRefreshToken = json.refresh_token;
   const newIdToken = json.id_token;
-  if (!newIdToken) throw new Error("Missing id_token in refresh response");
+  if (!newIdToken) {
+    console.error("Missing id_token in refresh response");
+    return logout();
+  }
   // Full signature + claims verification on the refreshed token. Caching is
   // handled inside verifyFirebaseIdToken, so no separate cacheSetEx needed.
   const [verifiedNewPayload] = await verifyFirebaseIdToken(
