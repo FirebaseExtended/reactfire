@@ -215,8 +215,9 @@ The middleware maintains two distinct cookies per app configuration (`appName`):
 
 1. **ID Token Cookie (`__HOST-FIREBASE_<appName>`)**:
    - Contains the active, short-lived JWT ID token.
-   - Configured with `SameSite=Lax`, `Secure` (in production), and `Partitioned`.
+   - Configured with `SameSite=None`, `Secure` (in production), and `Partitioned`. `SameSite=Lax` is used only as a Safari-localhost fallback during local development, since `Partitioned` cookies require `SameSite=None`.
    - Readable by both client scripts and server requests.
+   - Because `SameSite=None` sends this cookie on cross-site requests, CSRF protection for the `/__cookies__` endpoint comes from the `Origin` check on state-changing requests, not from `SameSite`.
 2. **Refresh Token Cookie (`__HOST-FIREBASEID_<appName>`)**:
    - Contains the long-lived refresh credential.
    - Marked **`HttpOnly`** and `Secure`.
