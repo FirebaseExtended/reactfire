@@ -103,6 +103,26 @@ describe("CacheProvider plugin paths", () => {
     expect(mockCacheSetex).toHaveBeenCalledWith("firebase:jwks", 7200, { keys: ["fetched-key"] });
   });
 
+  it("should clamp an oversized Cache-Control max-age when caching JWKS", async () => {
+    mockCacheGet.mockResolvedValue(null);
+
+    fetchMock.mockResolvedValue({
+      ok: true,
+      headers: new Headers({ "cache-control": "max-age=999999999" }),
+      json: async () => ({ keys: ["fetched-key"] }),
+    });
+
+    vi.mocked(jose.jwtVerify).mockResolvedValue({
+      payload: validPayload,
+      protectedHeader: validHeader,
+    } as any);
+
+    const token = createToken(validPayload);
+    await verifyFirebaseIdToken(token, mockProjectId, mockTenantId, mockCache);
+
+    expect(mockCacheSetex).toHaveBeenCalledWith("firebase:jwks", 86400, { keys: ["fetched-key"] });
+  });
+
   it("should handle JWKS rotation lock when ERR_JWKS_NO_MATCHING_KEY occurs", async () => {
     mockCacheGet.mockResolvedValue(null);
     mockCacheSet.mockResolvedValue("1"); // Lock acquired

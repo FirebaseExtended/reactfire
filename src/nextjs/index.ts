@@ -125,6 +125,7 @@ async function cacheDelete(cache: CacheProvider, key: string): Promise<void> {
 }
 
 const MAX_MAX_AGE = 34560000; // 400 days, https://developer.chrome.com/blog/cookie-max-age-expires
+const MAX_JWKS_MAX_AGE = 86400; // 1 day; caps a server-supplied Cache-Control max-age so JWKS caching can't outlive key rotation
 
 const FIREBASE_AUTH_JWKS_URL =
   "https://www.googleapis.com/robot/v1/metadata/jwk/securetoken@system.gserviceaccount.com";
@@ -160,7 +161,7 @@ async function getFirebaseAuthJwks(
     let maxAge = 21600; // default 6 hours
     if (cacheControl) {
       const match = cacheControl.match(/max-age=(\d+)/);
-      if (match) maxAge = parseInt(match[1], 10);
+      if (match) maxAge = Math.min(parseInt(match[1], 10), MAX_JWKS_MAX_AGE);
     }
 
     const jwks = (await response.json()) as JSONWebKeySet;
