@@ -370,6 +370,9 @@ describe('useObservable', () => {
       const spy = vi.spyOn(console, 'error');
       spy.mockImplementation(() => {});
 
+      const onError = (e: ErrorEvent) => e.preventDefault();
+      window.addEventListener('error', onError);
+
       const app = initializeApp(baseConfig, 'suspense-context-test');
       const error = new Error('context-path error');
       const observable$ = throwError(error);
@@ -380,9 +383,12 @@ describe('useObservable', () => {
         </FirebaseAppProvider>
       );
 
-      expect(() => renderHook(() => useObservable('test-context-suspense-error', observable$), { wrapper })).toThrow(error);
+      expect(() => renderHook(() => useObservable('test-context-suspense-error', observable$), { wrapper })).toThrow(
+        expect.objectContaining({ message: 'context-path error' })
+      );
 
       spy.mockRestore();
+      window.removeEventListener('error', onError);
     });
   });
 });
