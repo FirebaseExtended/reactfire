@@ -318,6 +318,41 @@ describe("runMiddleware Token Refresh", () => {
     expect(nextRes.headers.get("set-cookie")).toContain("Max-Age=0");
   });
 
+  it("should logout when refreshed ID token is an unsigned emulator credential outside of emulator mode", async () => {
+    const emuHeader = { alg: "none", typ: "JWT" };
+    const emuPayload = { ...validPayload, jti: "refreshed-emulated-no-host" };
+    const token = createToken(emuPayload);
+    const tokenParts = token.split(".");
+    const h = Buffer.from(JSON.stringify(emuHeader)).toString("base64");
+    const emuIdToken = `${h}.${tokenParts[1]}.signature`;
+
+    const expiredPayload = { ...validPayload, exp: Math.floor(Date.now() / 1000) - 3600 };
+    const idToken = createToken(expiredPayload);
+    const refreshToken = "valid-refresh-token";
+
+    const req = new NextRequest("https://localhost:3000/dashboard");
+    req.cookies.set("__HOST-FIREBASE_app", idToken);
+    req.cookies.set("__HOST-FIREBASEID_app", refreshToken);
+
+    fetchMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        id_token: emuIdToken,
+        refresh_token: "new-refresh",
+        expires_in: "3600",
+      }),
+    });
+
+    const prodOptions = { ...options, emulatorHost: undefined };
+    const [_response, decorate, payload] = await runMiddleware("app", prodOptions, req);
+
+    expect(payload).toBeUndefined();
+    const nextRes = NextResponse.next();
+    decorate!(nextRes);
+    expect(nextRes.headers.get("set-cookie")).toContain("Max-Age=0");
+  });
+
   it("should logout when refresh fetch throws a network exception", async () => {
     const expiredPayload = { ...validPayload, exp: Math.floor(Date.now() / 1000) - 3600 };
     const idToken = createToken(expiredPayload);

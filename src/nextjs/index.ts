@@ -566,7 +566,7 @@ export async function runMiddleware(
   }
   // Full signature + claims verification on the refreshed token. Caching is
   // handled inside verifyFirebaseIdToken, so no separate cacheSetEx needed.
-  const [verifiedNewPayload] = await verifyFirebaseIdToken(
+  const [verifiedNewPayload, newIsEmulatedCredential] = await verifyFirebaseIdToken(
     newIdToken,
     options.projectId,
     options.tenantId,
@@ -574,6 +574,10 @@ export async function runMiddleware(
   );
   if (!verifiedNewPayload) {
     console.error("Refreshed token failed verification");
+    return logout();
+  }
+  if (newIsEmulatedCredential && !options.emulatorHost) {
+    console.error("Refreshed token is an unsigned emulator credential outside of emulator mode");
     return logout();
   }
   jwtPayload = verifiedNewPayload;
