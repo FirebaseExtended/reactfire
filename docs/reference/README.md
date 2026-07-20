@@ -66,8 +66,6 @@
 
 - [~~AuthCheck~~](functions/AuthCheck.md)
 - [checkIdField](functions/checkIdField.md)
-- [checkinitialData](functions/checkinitialData.md)
-- [checkOptions](functions/checkOptions.md)
 - [~~ClaimsCheck~~](functions/ClaimsCheck.md)
 - [FirebaseAppProvider](functions/FirebaseAppProvider.md)
 - [preloadFirestoreDoc](functions/preloadFirestoreDoc.md)
