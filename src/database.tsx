@@ -33,7 +33,7 @@ export function useDatabaseObject<T = unknown>(ref: DatabaseReference, options?:
 
 export function useDatabaseObjectData<T>(ref: DatabaseReference, options?: ReactFireOptions<T>): ObservableStatus<T> {
   const idField = options ? checkIdField(options) : undefined;
-  const observableId = `database:objectVal:${ref.toString()}:idField=${idField ?? 'none'}`;
+  const observableId = `database:objectVal:${ref.toString()}:idField=${JSON.stringify(idField)}`;
   const observable$ = objectVal<T>(ref, { keyField: idField });
 
   return useObservable(observableId, observable$, options);
@@ -60,7 +60,7 @@ export function useDatabaseListData<T = { [key: string]: unknown }>(
   options?: ReactFireOptions<T[]>
 ): ObservableStatus<T[] | null> {
   const idField = options ? checkIdField(options) : undefined;
-  const observableId = `database:listVal:${getUniqueIdForDatabaseQuery(ref)}:idField=${idField ?? 'none'}`;
+  const observableId = `database:listVal:${getUniqueIdForDatabaseQuery(ref)}:idField=${JSON.stringify(idField)}`;
   const observable$ = listVal<T>(ref, { keyField: idField });
   return useObservable(observableId, observable$, options);
 }

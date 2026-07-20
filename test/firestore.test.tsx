@@ -144,6 +144,17 @@ describe('Firestore', () => {
         expect(result.current.data.a).toEqual(otherMockData.a);
       });
     });
+
+    it('returns exactly the stored data when no options are provided', async () => {
+      const mockData = { a: 'hello' };
+      const ref = doc(collection(db, randomString()), randomString());
+      await setDoc(ref, mockData);
+
+      const { result } = renderHook(() => useFirestoreDocData(ref), { wrapper: Provider });
+      await waitFor(() => expect(result.current.status).toEqual('success'));
+
+      expect(result.current.data).toEqual(mockData);
+    });
   });
 
   describe('useFirestoreDocOnce', () => {
@@ -189,6 +200,17 @@ describe('Firestore', () => {
 
       expect(onceResult.current.data.a).toEqual(mockData1.a);
       expect(subscribeResult.current.data).not.toEqual(onceResult.current.data);
+    });
+
+    it('returns exactly the stored data when no options are provided', async () => {
+      const mockData = { a: 'hello' };
+      const ref = doc(collection(db, randomString()), randomString());
+      await setDoc(ref, mockData);
+
+      const { result } = renderHook(() => useFirestoreDocDataOnce(ref), { wrapper: Provider });
+      await waitFor(() => expect(result.current.status).toEqual('success'));
+
+      expect(result.current.data).toEqual(mockData);
     });
   });
 
@@ -286,6 +308,17 @@ describe('Firestore', () => {
 
       // the full list should be bigger than the filtered list
       expect(list.length).toBeGreaterThan(filteredList.length);
+    });
+
+    it('returns exactly the stored data when no options are provided', async () => {
+      const mockData = { a: 'hello' };
+      const ref = collection(db, randomString());
+      await addDoc(ref, mockData);
+
+      const { result } = renderHook(() => useFirestoreCollectionData(ref), { wrapper: Provider });
+      await waitFor(() => expect(result.current.status).toEqual('success'));
+
+      expect(result.current.data).toEqual([mockData]);
     });
   });
 });
