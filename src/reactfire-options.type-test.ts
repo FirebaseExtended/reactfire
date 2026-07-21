@@ -11,6 +11,8 @@ void ((): ReactFireOptions<number> => ({ initialData: 42 }))();
 
 // @ts-expect-error initialData must be T, not a different type
 const _wrongInitialData: ReactFireOptions<string> = { initialData: 123 };
+void _wrongInitialData;
 
 // @ts-expect-error startWithValue must be T, not a different type
 const _wrongStartWithValue: ReactFireOptions<string> = { startWithValue: 123 };
+void _wrongStartWithValue;
