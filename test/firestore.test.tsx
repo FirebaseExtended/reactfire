@@ -16,7 +16,7 @@ import { initializeApp } from 'firebase/app';
 import { baseConfig } from './appConfig';
 import { randomString } from './test-utils';
 
-import { addDoc, collection, doc, getFirestore, query, setDoc, connectFirestoreEmulator, where, getDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getFirestore, query, setDoc, connectFirestoreEmulator, where } from 'firebase/firestore';
 import type { DocumentReference } from 'firebase/firestore';
 
 describe('Firestore', () => {

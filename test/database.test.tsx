@@ -1,6 +1,6 @@
 import { renderHook, act, cleanup, waitFor } from '@testing-library/react';
 import * as React from 'react';
-import { useDatabaseObject, useDatabaseList, FirebaseAppProvider, DatabaseProvider, ObservableStatus } from '../src/index';
+import { useDatabaseObject, useDatabaseList, FirebaseAppProvider, DatabaseProvider } from '../src/index';
 import { baseConfig } from './appConfig';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, connectDatabaseEmulator, ref, set, push, query, orderByChild, equalTo, get } from 'firebase/database';

@@ -1,9 +1,9 @@
 import { initializeApp } from 'firebase/app';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable, UploadTaskSnapshot, connectStorageEmulator } from 'firebase/storage';
 import { FunctionComponent } from 'react';
-import { FirebaseAppProvider, ObservableStatus, StorageProvider, useStorageDownloadURL, useStorageTask } from '../src/index';
+import { FirebaseAppProvider, StorageProvider, useStorageDownloadURL, useStorageTask } from '../src/index';
 import { baseConfig } from './appConfig';
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, waitFor } from '@testing-library/react';
 import * as React from 'react';
 import { randomString } from './test-utils';
 
