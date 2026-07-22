@@ -6,7 +6,7 @@
 
 # Function: useDatabaseListData()
 
-> **useDatabaseListData**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`T`[] \| `null`\>
+> **useDatabaseListData**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T`[] \| `null`\>
 
 Defined in: [src/database.tsx:58](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L58)
 
@@ -28,4 +28,4 @@ Defined in: [src/database.tsx:58](https://github.com/FirebaseExtended/reactfire/
 
 ## Returns
 
-[`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`T`[] \| `null`\>
+[`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T`[] \| `null`\>

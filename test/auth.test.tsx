@@ -11,8 +11,6 @@ import {
   useSigninCheck,
   ClaimCheckErrors,
   ClaimsValidator,
-  ObservableStatus,
-  SigninCheckResult,
 } from '../src/index';
 import { baseConfig } from './appConfig';
 import { FirebaseApp, initializeApp } from 'firebase/app';
@@ -24,7 +22,7 @@ describe('Authentication', () => {
   let app: FirebaseApp;
   let signIn: () => Promise<UserCredential>;
 
-  const Provider: React.FunctionComponent = ({ children }) => (
+  const Provider: React.FunctionComponent<React.PropsWithChildren> = ({ children }) => (
     <FirebaseAppProvider firebaseApp={app}>
       <AuthProvider sdk={getAuth(app)}>{children}</AuthProvider>
     </FirebaseAppProvider>

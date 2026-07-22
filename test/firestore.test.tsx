@@ -16,7 +16,7 @@ import { initializeApp } from 'firebase/app';
 import { baseConfig } from './appConfig';
 import { randomString } from './test-utils';
 
-import { addDoc, collection, doc, getFirestore, query, setDoc, connectFirestoreEmulator, where, getDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getFirestore, query, setDoc, connectFirestoreEmulator, where } from 'firebase/firestore';
 import type { DocumentReference } from 'firebase/firestore';
 
 describe('Firestore', () => {
@@ -82,6 +82,19 @@ describe('Firestore', () => {
       expect(data).toBeDefined();
       expect(data.a).toEqual(mockData.a);
       expect(data.id).toBeDefined();
+    });
+
+    it('reads concretely-typed document data', async () => {
+      const mockData = { a: 'hello' };
+      const ref = doc(collection(db, randomString()), randomString()) as DocumentReference<{ a: string }>;
+      await setDoc(ref, mockData);
+
+      const { result } = renderHook(() => useFirestoreDocData<{ a: string }>(ref), { wrapper: Provider });
+      await waitFor(() => expect(result.current.status).toEqual('success'));
+
+      // Concretely-typed read (not `<any>`): `data` is `{ a: string } | undefined`, so a
+      // regression of ObservableStatus back to a union would be caught here at compile time.
+      expect(result.current.data?.a).toEqual(mockData.a);
     });
 
     it('returns undefined if document does not exist', async () => {

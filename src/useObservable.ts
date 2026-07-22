@@ -27,7 +27,7 @@ export function preloadObservable<T>(source: Observable<T>, id: string, suspense
   }
 }
 
-interface ObservableStatusBase<T> {
+export interface ObservableStatus<T> {
   /**
    * The loading status.
    *
@@ -53,7 +53,7 @@ interface ObservableStatusBase<T> {
    *
    * If `initialData` is passed in, the first value of `data` will be the valuea provided in `initialData` **UNLESS** the underlying observable is ready, in which case it will skip `initialData`.
    */
-  data: T | undefined;
+  data: T;
   /**
    * Any error that may have occurred in the underlying observable
    */
@@ -63,25 +63,6 @@ interface ObservableStatusBase<T> {
    */
   firstValuePromise: Promise<void>;
 }
-
-export interface ObservableStatusSuccess<T> extends ObservableStatusBase<T> {
-  status: 'success';
-  data: T;
-}
-
-export interface ObservableStatusError<T> extends ObservableStatusBase<T> {
-  status: 'error';
-  isComplete: true;
-  error: Error;
-}
-
-export interface ObservableStatusLoading<T> extends ObservableStatusBase<T> {
-  status: 'loading';
-  data: undefined;
-  hasEmitted: false;
-}
-
-export type ObservableStatus<T> = ObservableStatusLoading<T> | ObservableStatusError<T> | ObservableStatusSuccess<T>;
 
 export function useObservable<T = unknown>(observableId: string, source: Observable<T>, config: ReactFireOptions = {}): ObservableStatus<T> {
   if (!observableId) {

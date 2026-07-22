@@ -6,7 +6,7 @@
 
 # Function: useStorageTask()
 
-> **useStorageTask**\<`T`\>(`task`, `ref`, `options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`T` \| `UploadTaskSnapshot`\>
+> **useStorageTask**\<`T`\>(`task`, `ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T` \| `UploadTaskSnapshot`\>
 
 Defined in: [src/storage.tsx:16](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L16)
 
@@ -38,4 +38,4 @@ reference to the blob the task is acting on
 
 ## Returns
 
-[`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`T` \| `UploadTaskSnapshot`\>
+[`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T` \| `UploadTaskSnapshot`\>
