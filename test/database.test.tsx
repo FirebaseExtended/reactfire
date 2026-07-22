@@ -1,6 +1,6 @@
 import { renderHook, act, cleanup, waitFor } from '@testing-library/react';
 import * as React from 'react';
-import { useDatabaseObject, useDatabaseList, FirebaseAppProvider, DatabaseProvider } from '../src/index';
+import { useDatabaseObject, useDatabaseObjectData, useDatabaseList, FirebaseAppProvider, DatabaseProvider } from '../src/index';
 import { baseConfig } from './appConfig';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, connectDatabaseEmulator, ref, set, push, query, orderByChild, equalTo, get } from 'firebase/database';
@@ -69,6 +69,22 @@ describe('Realtime Database (RTDB)', () => {
           expect(result.current.data?.snapshot.val()).toEqual(value);
         });
       }
+    });
+  });
+
+  describe('useDatabaseObjectData', () => {
+    it('unwraps an object to a concretely-typed value', async () => {
+      const mockData = { a: 'hello' };
+      const objectRef = ref(database, randomString());
+      await set(objectRef, mockData);
+
+      const { result } = renderHook(() => useDatabaseObjectData<{ a: string }>(objectRef), { wrapper: Provider });
+
+      await waitFor(() => expect(result.current.status).toEqual('success'));
+
+      // `data` is `{ a: string }` (not a union), so this both exercises the hook and
+      // guards against ObservableStatus regressing to a `data: T | undefined` union.
+      expect(result.current.data.a).toEqual(mockData.a);
     });
   });
 
