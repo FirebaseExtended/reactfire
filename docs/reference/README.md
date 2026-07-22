@@ -15,9 +15,7 @@
 - [ClaimsCheckProps](interfaces/ClaimsCheckProps.md)
 - [ClaimsValidator](interfaces/ClaimsValidator.md)
 - [FirebaseAppProviderProps](interfaces/FirebaseAppProviderProps.md)
-- [ObservableStatusError](interfaces/ObservableStatusError.md)
-- [ObservableStatusLoading](interfaces/ObservableStatusLoading.md)
-- [ObservableStatusSuccess](interfaces/ObservableStatusSuccess.md)
+- [ObservableStatus](interfaces/ObservableStatus.md)
 - [ReactFireOptions](interfaces/ReactFireOptions.md)
 - [SignInCheckOptionsBasic](interfaces/SignInCheckOptionsBasic.md)
 - [SignInCheckOptionsClaimsObject](interfaces/SignInCheckOptionsClaimsObject.md)
@@ -26,7 +24,6 @@
 
 ## Type Aliases
 
-- [ObservableStatus](type-aliases/ObservableStatus.md)
 - [ReactFireGlobals](type-aliases/ReactFireGlobals.md)
 - [SigninCheckResult](type-aliases/SigninCheckResult.md)
 - [StorageImageProps](type-aliases/StorageImageProps.md)

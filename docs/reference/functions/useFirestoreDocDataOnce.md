@@ -6,7 +6,7 @@
 
 # Function: useFirestoreDocDataOnce()
 
-> **useFirestoreDocDataOnce**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`T` \| `undefined`\>
+> **useFirestoreDocDataOnce**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T` \| `undefined`\>
 
 Defined in: [src/firestore.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L74)
 
@@ -30,4 +30,4 @@ Get a Firestore document, unwrap the document into a plain object, and don't sub
 
 ## Returns
 
-[`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`T` \| `undefined`\>
+[`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T` \| `undefined`\>
