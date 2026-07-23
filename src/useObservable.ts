@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useSyncExternalStore } from 'use-sync-external-store/shim';
+import { useSyncExternalStore } from 'react';
 import { Observable } from 'rxjs';
 import { SuspenseSubject } from './SuspenseSubject';
 import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp';

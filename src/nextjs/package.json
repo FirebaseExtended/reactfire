@@ -1,0 +1,35 @@
+{
+  "name": "firebase-cookie-middleware",
+  "version": "0.0.1",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "module": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "test": "vitest run",
+    "build": "npx esbuild ./index.ts --format=esm --target=esnext --platform=neutral --outfile=./dist/index.mjs --bundle --external:next --external:@firebase/util --external:firebase && npx tsc"
+  },
+  "author": "",
+  "license": "MIT",
+  "description": "",
+  "peerDependencies": {
+    "firebase": "*",
+    "next": "*"
+  },
+  "devDependencies": {
+    "@upstash/redis": "^1.38.0",
+    "@vitest/coverage-v8": "^4.1.9",
+    "esbuild": "^0.25.1",
+    "firebase": "^11.5.0",
+    "next": "^16.0.0",
+    "typescript": "^5.8.2",
+    "vitest": "^4.1.9"
+  },
+  "dependencies": {
+    "jose": "^6.0.10",
+    "lru-cache": "^11.5.1"
+  }
+}
