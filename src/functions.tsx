@@ -1,4 +1,5 @@
 import { httpsCallable as rxHttpsCallable } from 'rxfire/functions';
+import { defer } from 'rxjs';
 import { ReactFireOptions, useObservable, ObservableStatus } from './';
 import { useFunctions } from '.';
 
@@ -20,7 +21,9 @@ export function useCallableFunctionResponse<RequestData, ResponseData>(
   const functions = useFunctions();
   const observableId = `functions:callableResponse:${functionName}:${JSON.stringify(options?.data)}:${JSON.stringify(options?.httpsCallableOptions)}`;
   const obsFactory = rxHttpsCallable<RequestData, ResponseData>(functions, functionName, options?.httpsCallableOptions);
-  const observable$ = obsFactory(options?.data);
+  // Wrap in `defer` so the function is invoked lazily on subscription rather than
+  // on every render (each render otherwise calls the cloud function and discards it).
+  const observable$ = defer(() => obsFactory(options?.data));
 
   return useObservable(observableId, observable$, options);
 }

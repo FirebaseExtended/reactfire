@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { user } from 'rxfire/auth';
 import { preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus, ReactFireError } from './';
-import { from, of } from 'rxjs';
+import { from, of, defer } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp';
 
@@ -44,7 +44,9 @@ export function useIdTokenResult(user: User, forceRefresh = false, options?: Rea
   }
 
   const observableId = `auth:idTokenResult:${user.uid}:forceRefresh=${forceRefresh}`;
-  const observable$ = from(user.getIdTokenResult(forceRefresh));
+  // Wrap in `defer` so the token fetch runs lazily on subscription rather than
+  // eagerly on every render.
+  const observable$ = defer(() => from(user.getIdTokenResult(forceRefresh)));
 
   return useObservable(observableId, observable$, options);
 }
