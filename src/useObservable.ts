@@ -126,9 +126,12 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
     } as ObservableStatus<T>;
   }
 
-  // throw an error if there is an error
-  // TODO(jhuleatt) this is the current, tested-for, behavior. But do we actually want it?
-  if (update.error) {
+  // In suspense mode, throw errors so a React Error Boundary can catch them.
+  // In non-suspense mode (the default), surface the error via `status: 'error'` so
+  // the consumer can handle it locally. `update` already carries the error, so once
+  // an observable errors `data` retains its last emitted value. There is no automatic
+  // retry path once an error occurs (see #742).
+  if (suspenseEnabled && update.error) {
     throw update.error;
   }
 

@@ -6,6 +6,10 @@
   * [Initialize product SDKs and register them with ReactFire](#initialize-product-sdks-and-register-them-with-reactfire)
   * [Connect to the Firebase Local Emulator Suite](#connect-to-the-firebase-local-emulator-suite)
   * [Set up App Check](#set-up-app-check)
+- [Error Handling](#error-handling)
+  * [Non-suspense mode (default)](#non-suspense-mode-default)
+  * [Suspense mode](#suspense-mode)
+  * [No automatic retry](#no-automatic-retry)
 - [Auth](#auth)
   * [Display the current signed-in user](#display-the-current-signed-in-user)
   * [Only render a component if a user is signed in](#only-render-a-component-if-a-user-is-signed-in)
@@ -166,6 +170,51 @@ function FirebaseComponents({ children }) {
 ```
 
 See the [App Check setup guide in the Firebase docs](https://firebase.google.com/docs/app-check/web/recaptcha-provider#project-setup) for more detailed instructions.
+
+## Error Handling
+
+ReactFire hooks report errors from the underlying Firebase observable, and how an error surfaces depends on whether suspense mode is enabled.
+
+### Non-suspense mode (default)
+
+By default (or with `suspense: false`), an error is returned through the hook's `status` so you can handle it where the data is used:
+
+```tsx
+function CatImage() {
+  const storage = useStorage();
+  const catRef = ref(storage, 'cats/newspaper');
+
+  const { status, data: imageURL, error } = useStorageDownloadURL(catRef);
+
+  if (status === 'loading') {
+    return <span>loading...</span>;
+  }
+
+  if (status === 'error') {
+    return <span>Error: {error.message}</span>;
+  }
+
+  return <img src={imageURL} alt="cat reading the newspaper" />;
+}
+```
+
+If a hook emits a value and then errors, `status` becomes `'error'` while `data` keeps its last emitted value.
+
+### Suspense mode
+
+When suspense is enabled (`<FirebaseAppProvider suspense={true}>`, or `suspense: true` on the hook), errors are thrown instead so the nearest React [Error Boundary](https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary) can catch them. In this mode the hook never returns `status: 'error'`:
+
+```tsx
+<ErrorBoundary fallback={<span>Something went wrong</span>}>
+  <React.Suspense fallback={<span>loading...</span>}>
+    <CatImage />
+  </React.Suspense>
+</ErrorBoundary>
+```
+
+### No automatic retry
+
+Once an observable errors, there is no automatic retry. The errored observable stays in ReactFire's global cache under its `observableId`, so unmounting and remounting the same component rejoins the same errored state. The only workaround today is to use a different `observableId`. A retry mechanism is tracked in [#742](https://github.com/FirebaseExtended/reactfire/issues/742).
 
 ## Auth
 
@@ -426,10 +475,14 @@ function CatImage() {
   const storage = useStorage();
   const catRef = ref(storage, 'cats/newspaper');
 
-  const { status, data: imageURL } = useStorageDownloadURL(catRef);
+  const { status, data: imageURL, error } = useStorageDownloadURL(catRef);
 
   if (status === 'loading') {
     return <span>loading...</span>;
+  }
+
+  if (status === 'error') {
+    return <span>Error: {error.message}</span>;
   }
 
   return <img src={imageURL} alt="cat reading the newspaper" />;
