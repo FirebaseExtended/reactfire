@@ -100,6 +100,8 @@ jobs:
         run: npm install --no-save react@${{ matrix.react }} react-dom@${{ matrix.react }} @types/react@${{ matrix.react }} @types/react-dom@${{ matrix.react }}
       - name: Type check
         run: npx tsc --noEmit
+      - name: Type check tests
+        run: npx tsc --noEmit -p tsconfig.test.json
   publish:
     runs-on: ubuntu-latest
     name: Publish (NPM)

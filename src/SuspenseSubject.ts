@@ -29,7 +29,7 @@ export class SuspenseSubject<T> extends Subject<T> {
       data: undefined,
       error: undefined,
       firstValuePromise: this._firstEmission
-    };
+    } as ObservableStatus<T>;
 
     this._innerObservable = innerObservable.pipe(
       tap({
@@ -88,11 +88,9 @@ export class SuspenseSubject<T> extends Subject<T> {
   }
 
   private _updateImmutableStatus() {
-    // @ts-expect-error
-    // TS fails here because ObservableStatus defines specific
-    // relationships between the fields. This is difficult to
-    // code for here, so the relationships between the ObservableStatus fields
-    // are mostly checked in tests instead
+    // Cast required because `data` is internally `T | undefined` while a value is
+    // still in flight, whereas ObservableStatus exposes `data: T` to consumers.
+    // The relationships between the status fields are verified in tests instead.
     this._immutableStatus = {
       status: this._error ? 'error' : (this._hasValue ? 'success' : 'loading'),
       hasEmitted: this._hasValue,
@@ -100,7 +98,7 @@ export class SuspenseSubject<T> extends Subject<T> {
       data: this._value,
       error: this._error,
       firstValuePromise: this._firstEmission
-    };
+    } as ObservableStatus<T>;
   }
 
   private _next(value: T) {

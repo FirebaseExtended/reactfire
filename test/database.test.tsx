@@ -72,6 +72,22 @@ describe('Realtime Database (RTDB)', () => {
     });
   });
 
+  describe('useDatabaseObjectData', () => {
+    it('unwraps an object to a concretely-typed value', async () => {
+      const mockData = { a: 'hello' };
+      const objectRef = ref(database, randomString());
+      await set(objectRef, mockData);
+
+      const { result } = renderHook(() => useDatabaseObjectData<{ a: string }>(objectRef), { wrapper: Provider });
+
+      await waitFor(() => expect(result.current.status).toEqual('success'));
+
+      // `data` is `{ a: string }` (not a union), so this both exercises the hook and
+      // guards against ObservableStatus regressing to a `data: T | undefined` union.
+      expect(result.current.data.a).toEqual(mockData.a);
+    });
+  });
+
   describe('useDatabaseList', () => {
     it('can get a list', async () => {
       const mockData1 = { a: 'hello' };
