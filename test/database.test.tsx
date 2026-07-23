@@ -1,6 +1,6 @@
 import { renderHook, act, cleanup, waitFor } from '@testing-library/react';
 import * as React from 'react';
-import { useDatabaseObject, useDatabaseObjectData, useDatabaseList, FirebaseAppProvider, DatabaseProvider } from '../src/index';
+import { useDatabaseObject, useDatabaseList, useDatabaseObjectData, useDatabaseListData, FirebaseAppProvider, DatabaseProvider } from '../src/index';
 import { baseConfig } from './appConfig';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, connectDatabaseEmulator, ref, set, push, query, orderByChild, equalTo, get } from 'firebase/database';
@@ -130,6 +130,32 @@ describe('Realtime Database (RTDB)', () => {
 
       expect(filteredResult.current.data.length).toEqual(1);
       expect(unfilteredResult.current.data.length).toBeGreaterThan(filteredResult.current.data.length);
+    });
+  });
+
+  describe('useDatabaseObjectData', () => {
+    it('returns exactly the stored data when no options are provided', async () => {
+      const mockData = { a: 'hello' };
+      const objectRef = ref(database, randomString());
+      await set(objectRef, mockData);
+
+      const { result } = renderHook(() => useDatabaseObjectData(objectRef), { wrapper: Provider });
+      await waitFor(() => expect(result.current.status).toEqual('success'));
+
+      expect(result.current.data).toEqual(mockData);
+    });
+  });
+
+  describe('useDatabaseListData', () => {
+    it('returns exactly the stored data when no options are provided', async () => {
+      const mockData = { b: 'world' };
+      const listRef = ref(database, randomString());
+      await push(listRef, mockData);
+
+      const { result } = renderHook(() => useDatabaseListData(listRef), { wrapper: Provider });
+      await waitFor(() => expect(result.current.status).toEqual('success'));
+
+      expect(result.current.data).toEqual([mockData]);
     });
   });
 });
