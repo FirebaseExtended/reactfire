@@ -6,7 +6,7 @@
 
 # Interface: SignInCheckOptionsClaimsValidator
 
-Defined in: [src/auth.tsx:88](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L88)
+Defined in: [src/auth.tsx:98](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L98)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [src/auth.tsx:88](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **forceRefresh?**: `boolean`
 
-Defined in: [src/auth.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L74)
+Defined in: [src/auth.tsx:84](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L84)
 
 #### Inherited from
 
@@ -82,4 +82,4 @@ Defined in: [src/index.ts:31](https://github.com/FirebaseExtended/reactfire/blob
 
 > **validateCustomClaims**: [`ClaimsValidator`](ClaimsValidator.md)
 
-Defined in: [src/auth.tsx:89](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L89)
+Defined in: [src/auth.tsx:99](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L99)

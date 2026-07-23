@@ -27,7 +27,7 @@ export function preloadObservable<T>(source: Observable<T>, id: string, suspense
   }
 }
 
-interface ObservableStatusBase<T> {
+export interface ObservableStatus<T> {
   /**
    * The loading status.
    *
@@ -53,7 +53,7 @@ interface ObservableStatusBase<T> {
    *
    * If `initialData` is passed in, the first value of `data` will be the valuea provided in `initialData` **UNLESS** the underlying observable is ready, in which case it will skip `initialData`.
    */
-  data: T | undefined;
+  data: T;
   /**
    * Any error that may have occurred in the underlying observable
    */
@@ -63,25 +63,6 @@ interface ObservableStatusBase<T> {
    */
   firstValuePromise: Promise<void>;
 }
-
-export interface ObservableStatusSuccess<T> extends ObservableStatusBase<T> {
-  status: 'success';
-  data: T;
-}
-
-export interface ObservableStatusError<T> extends ObservableStatusBase<T> {
-  status: 'error';
-  isComplete: true;
-  error: Error;
-}
-
-export interface ObservableStatusLoading<T> extends ObservableStatusBase<T> {
-  status: 'loading';
-  data: undefined;
-  hasEmitted: false;
-}
-
-export type ObservableStatus<T> = ObservableStatusLoading<T> | ObservableStatusError<T> | ObservableStatusSuccess<T>;
 
 export function useObservable<T = unknown>(observableId: string, source: Observable<T>, config: ReactFireOptions = {}): ObservableStatus<T> {
   if (!observableId) {
@@ -125,11 +106,24 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
 
   const update = useSyncExternalStore(subscribe, getSnapshot);
 
-  // modify the value if initialData exists
+  // Return a new object with initialData overlaid rather than mutating the shared
+  // _immutableStatus reference, which is the same object across all components
+  // using the same observableId.
   if (!observable.hasValue && hasData) {
-    update.data = (config?.initialData ?? config?.startWithValue) as T | undefined;
-    update.status = 'success';
-    update.hasEmitted = true;
+    const initialDataValue = config?.initialData ?? config?.startWithValue;
+
+    // In suspense mode, throw errors so React Error Boundaries can catch them.
+    // In non-suspense mode, surface errors via status so consumers can handle them locally.
+    if (suspenseEnabled && update.error) {
+      throw update.error;
+    }
+
+    return {
+      ...update,
+      data: initialDataValue,
+      status: 'success',
+      hasEmitted: true,
+    } as ObservableStatus<T>;
   }
 
   // throw an error if there is an error

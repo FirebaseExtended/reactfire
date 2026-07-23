@@ -1,6 +1,8 @@
 import { cleanup, render, waitFor, renderHook, act } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
+import { NEVER } from 'rxjs';
+import { preloadObservable } from '../src/useObservable';
 import {
   FirebaseAppProvider,
   AuthCheck,
@@ -9,8 +11,6 @@ import {
   useSigninCheck,
   ClaimCheckErrors,
   ClaimsValidator,
-  ObservableStatus,
-  SigninCheckResult,
 } from '../src/index';
 import { baseConfig } from './appConfig';
 import { FirebaseApp, initializeApp } from 'firebase/app';
@@ -22,7 +22,7 @@ describe('Authentication', () => {
   let app: FirebaseApp;
   let signIn: () => Promise<UserCredential>;
 
-  const Provider: React.FunctionComponent = ({ children }) => (
+  const Provider: React.FunctionComponent<React.PropsWithChildren> = ({ children }) => (
     <FirebaseAppProvider firebaseApp={app}>
       <AuthProvider sdk={getAuth(app)}>{children}</AuthProvider>
     </FirebaseAppProvider>
@@ -324,6 +324,39 @@ describe('Authentication', () => {
 
       expect(getAuth(app).currentUser).not.toBeNull();
       expect(result.current.data).toEqual(getAuth(app).currentUser);
+    });
+
+    it('synchronously returns the current user without waiting for the observable', async () => {
+      await act(async () => {
+        await signIn();
+      });
+
+      // Replace the auth:user observable with NEVER so it never emits.
+      // Without the fix (no initialData seeding), status is 'loading' on first render.
+      // With the fix (initialData = auth.currentUser), status is 'success' synchronously.
+      const cache = (globalThis as any)._reactFirePreloadedObservables as Map<string, any>;
+      const authUserKey = `auth:user:${getAuth(app).name}`;
+      cache?.delete(authUserKey);
+      preloadObservable(NEVER, authUserKey);
+
+      let capturedFirstRender: { user: any; status: string } | undefined;
+
+      const UserComponent = () => {
+        const { data: user, status } = useUser();
+        if (capturedFirstRender === undefined) {
+          capturedFirstRender = { user, status };
+        }
+        return <span data-testid="user-output">{String(status)}</span>;
+      };
+
+      try {
+        render(<UserComponent />, { wrapper: Provider });
+
+        expect(capturedFirstRender!.status).toBe('success');
+        expect(capturedFirstRender!.user).toEqual(getAuth(app).currentUser);
+      } finally {
+        cache?.delete(authUserKey);
+      }
     });
 
     it('does not show a logged-out user after navigating away', async () => {

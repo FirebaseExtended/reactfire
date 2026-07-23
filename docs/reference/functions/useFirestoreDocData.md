@@ -6,7 +6,7 @@
 
 # Function: useFirestoreDocData()
 
-> **useFirestoreDocData**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`T` \| `undefined`\>
+> **useFirestoreDocData**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T` \| `undefined`\>
 
 Defined in: [src/firestore.tsx:62](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L62)
 
@@ -30,4 +30,4 @@ Subscribe to Firestore Document changes and unwrap the document into a plain obj
 
 ## Returns
 
-[`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`T` \| `undefined`\>
+[`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T` \| `undefined`\>

@@ -60,9 +60,9 @@ export function useFirestoreDocOnce<T = DocumentData>(ref: DocumentReference<T>,
  * Subscribe to Firestore Document changes and unwrap the document into a plain object
  */
 export function useFirestoreDocData<T = unknown>(ref: DocumentReference<T>, options?: ReactFireOptions<T>): ObservableStatus<T | undefined> {
-  const idField = options ? checkIdField(options) : 'NO_ID_FIELD';
+  const idField = options ? checkIdField(options) : undefined;
 
-  const observableId = `firestore:docData:${ref.firestore.app.name}:${ref.path}:idField=${idField}`;
+  const observableId = `firestore:docData:${ref.firestore.app.name}:${ref.path}:idField=${JSON.stringify(idField)}`;
   const observable = docData(ref, { idField: idField as keyof T });
 
   return useObservable(observableId, observable, options) as ObservableStatus<T>;
@@ -72,9 +72,9 @@ export function useFirestoreDocData<T = unknown>(ref: DocumentReference<T>, opti
  * Get a Firestore document, unwrap the document into a plain object, and don't subscribe to changes
  */
 export function useFirestoreDocDataOnce<T = unknown>(ref: DocumentReference<T>, options?: ReactFireOptions<T>): ObservableStatus<T | undefined> {
-  const idField = options ? checkIdField(options) : 'NO_ID_FIELD';
+  const idField = options ? checkIdField(options) : undefined;
 
-  const observableId = `firestore:docDataOnce:${ref.firestore.app.name}:${ref.path}:idField=${idField}`;
+  const observableId = `firestore:docDataOnce:${ref.firestore.app.name}:${ref.path}:idField=${JSON.stringify(idField)}`;
   const observable$ = docData(ref, { idField: idField as keyof T }).pipe(first());
 
   return useObservable(observableId, observable$, options) as ObservableStatus<T>;
@@ -94,8 +94,8 @@ export function useFirestoreCollection<T = DocumentData>(query: FirestoreQuery<T
  * Subscribe to a Firestore collection and unwrap the snapshot into an array.
  */
 export function useFirestoreCollectionData<T = DocumentData>(query: FirestoreQuery<T>, options?: ReactFireOptions<T[]>): ObservableStatus<T[]> {
-  const idField = options ? checkIdField(options) : 'NO_ID_FIELD';
-  const observableId = `firestore:collectionData:${getUniqueIdForFirestoreQuery(query)}:idField=${idField}`;
+  const idField = options ? checkIdField(options) : undefined;
+  const observableId = `firestore:collectionData:${getUniqueIdForFirestoreQuery(query)}:idField=${JSON.stringify(idField)}`;
   const observable$ = collectionData(query, { idField: idField as (string & keyof T) });
 
   return useObservable(observableId, observable$, options);

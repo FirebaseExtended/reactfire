@@ -6,7 +6,7 @@
 
 # Function: useRemoteConfigString()
 
-> **useRemoteConfigString**(`key`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`string`\>
+> **useRemoteConfigString**(`key`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`string`\>
 
 Defined in: [src/remote-config.tsx:42](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config.tsx#L42)
 
@@ -22,4 +22,4 @@ The parameter key in Remote Config
 
 ## Returns
 
-[`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`string`\>
+[`ObservableStatus`](../interfaces/ObservableStatus.md)\<`string`\>

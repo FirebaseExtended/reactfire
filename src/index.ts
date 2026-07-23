@@ -31,6 +31,21 @@ export interface ReactFireOptions<T = unknown> {
   suspense?: boolean;
 }
 
+// Deprecated: unused internally as of the ReactFireOptions generic tightening.
+// Kept as exports to avoid a breaking removal; slated for removal in v5.
+export function checkOptions(options: ReactFireOptions, field: string) {
+  // make sure the field passed in is a valid key of ReactFire Options
+  if (field === 'idField' || field === 'initialData' || field === 'suspense') {
+    return options ? (options[field] as ReactFireOptions['idField'] | ReactFireOptions['initialData'] | ReactFireOptions['suspense']) : undefined;
+  }
+
+  throw new Error(`Field "${field}" is not a valid key in ReactFireOptions`);
+}
+
+export function checkinitialData(options: ReactFireOptions) {
+  return checkOptions(options, 'initialData');
+}
+
 export function checkIdField(options: ReactFireOptions): string | undefined {
   return options?.idField;
 }

@@ -25,7 +25,17 @@ export function useUser<T = unknown>(options?: ReactFireOptions<T>): ObservableS
   const observableId = `auth:user:${auth.name}`;
   const observable$ = user(auth);
 
-  return useObservable(observableId, observable$, options);
+  const _options: ReactFireOptions<T> = { ...options };
+
+  // If a user is already signed in, seed initialData so consumers see the user
+  // synchronously on the first render without waiting for the async observable.
+  // We only do this when currentUser is truthy to avoid masking the uninitialized
+  // (null before auth has loaded from storage) case as "signed out".
+  if (auth.currentUser && !('initialData' in _options) && !('startWithValue' in _options)) {
+    _options.initialData = auth.currentUser as unknown as T;
+  }
+
+  return useObservable(observableId, observable$, _options);
 }
 
 export function useIdTokenResult(user: User, forceRefresh = false, options?: ReactFireOptions<IdTokenResult>): ObservableStatus<IdTokenResult> {

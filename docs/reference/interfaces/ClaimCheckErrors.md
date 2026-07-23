@@ -6,7 +6,7 @@
 
 # Interface: ClaimCheckErrors
 
-Defined in: [src/auth.tsx:55](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L55)
+Defined in: [src/auth.tsx:65](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L65)
 
 ## Indexable
 

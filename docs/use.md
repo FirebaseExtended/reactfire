@@ -97,36 +97,40 @@ SDK not found. useSdk must be called from within a provider
 
 ### Connect to the Firebase Local Emulator Suite
 
-Connect a product SDK to the emulator before passing it to a provider. For example, to connect to the Auth and Realtime Database emulators:
+Connect emulators to the SDK instances **before** passing them to providers. The safest pattern is to initialize outside of React entirely, which guarantees `connect*Emulator()` only runs once, regardless of re-renders or remounts:
 
 ```jsx
-import { getAuth, connectAuthEmulator } from 'firebase/auth'; // Firebase v9+
-import { getDatabase, connectDatabaseEmulator } from 'firebase/database'; // Firebase v9+
+import { initializeApp } from 'firebase/app';
+import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 
-import { FirebaseAppProvider, DatabaseProvider, AuthProvider, useFirebaseApp } from 'reactfire';
+import { FirebaseAppProvider, FirestoreProvider, AuthProvider } from 'reactfire';
 
-function FirebaseComponents({ children }) {
-  const app = useFirebaseApp();
-  const database = getDatabase(app);
-  const auth = getAuth(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const firestore = getFirestore(app);
 
-  // Check for dev/test mode however your app tracks that.
-  // `process.env.NODE_ENV` is a common React pattern
-  if (process.env.NODE_ENV !== 'production') {
-    // Set up emulators
-    connectDatabaseEmulator(database, 'localhost', 9000);
-    connectAuthEmulator(auth, 'http://localhost:9099');
-  }
+// Check for dev/test mode however your app tracks that.
+// `process.env.NODE_ENV` is a common React pattern
+if (process.env.NODE_ENV !== 'production') {
+  connectAuthEmulator(auth, 'http://localhost:9099');
+  connectFirestoreEmulator(firestore, 'localhost', 8080);
+}
 
+function App() {
   return (
-    <AuthProvider sdk={auth}>
-      <DatabaseProvider sdk={database}>
-        <MyCoolAppThatUsesAuthAndRealtimeDatabase />
-      </DatabaseProvider>
-    </AuthProvider>
+    <FirebaseAppProvider firebaseApp={app}>
+      <AuthProvider sdk={auth}>
+        <FirestoreProvider sdk={firestore}>
+          <MyCoolApp />
+        </FirestoreProvider>
+      </AuthProvider>
+    </FirebaseAppProvider>
   );
 }
 ```
+
+This pattern requires passing `firebaseApp={app}` to `FirebaseAppProvider` so you own the app instance at module level. If you are currently using `firebaseConfig={...}` on `FirebaseAppProvider`, switch to initializing the app yourself with `initializeApp()` and passing it via `firebaseApp=`. The `firebaseConfig=` prop is a convenience shortcut, but it gives reactfire ownership of the app instance, which makes emulator setup (and anything else that needs the app before React renders) unnecessarily difficult.
 
 Learn more about the Local Emulator Suite in the [Firebase docs](https://firebase.google.com/docs/emulator-suite/connect_and_prototype).
 

@@ -1,0 +1,14 @@
+{
+  // Type-check the test suite against the library's public types.
+  // This is intentionally separate from tsconfig.json (which emits dist/) so that
+  // consumer-facing usage in tests (e.g. reading `.data` off a hook result) is
+  // type-checked and would fail CI on a breaking type regression.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "declaration": false,
+    "noEmit": true,
+    "types": ["vitest/globals", "node"]
+  },
+  "include": ["src", "types", "test"]
+}

@@ -2,15 +2,11 @@
 
 ***
 
-[ReactFire reference docs](../README.md) / ObservableStatusSuccess
+[ReactFire reference docs](../README.md) / ObservableStatus
 
-# Interface: ObservableStatusSuccess\<T\>
+# Interface: ObservableStatus\<T\>
 
-Defined in: [src/useObservable.ts:67](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L67)
-
-## Extends
-
-- `ObservableStatusBase`\<`T`\>
+Defined in: [src/useObservable.ts:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L30)
 
 ## Type Parameters
 
@@ -24,15 +20,11 @@ Defined in: [src/useObservable.ts:67](https://github.com/FirebaseExtended/reactf
 
 > **data**: `T`
 
-Defined in: [src/useObservable.ts:69](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L69)
+Defined in: [src/useObservable.ts:56](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L56)
 
 The most recent value.
 
 If `initialData` is passed in, the first value of `data` will be the valuea provided in `initialData` **UNLESS** the underlying observable is ready, in which case it will skip `initialData`.
-
-#### Overrides
-
-`ObservableStatusBase.data`
 
 ***
 
@@ -44,10 +36,6 @@ Defined in: [src/useObservable.ts:60](https://github.com/FirebaseExtended/reactf
 
 Any error that may have occurred in the underlying observable
 
-#### Inherited from
-
-`ObservableStatusBase.error`
-
 ***
 
 ### firstValuePromise
@@ -57,10 +45,6 @@ Any error that may have occurred in the underlying observable
 Defined in: [src/useObservable.ts:64](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L64)
 
 Promise that resolves after first emit from observable
-
-#### Inherited from
-
-`ObservableStatusBase.firstValuePromise`
 
 ***
 
@@ -74,10 +58,6 @@ Indicates whether the hook has emitted a value at some point
 
 If `initialData` is passed in, this will be `true`.
 
-#### Inherited from
-
-`ObservableStatusBase.hasEmitted`
-
 ***
 
 ### isComplete
@@ -88,17 +68,13 @@ Defined in: [src/useObservable.ts:50](https://github.com/FirebaseExtended/reactf
 
 If this is `true`, the hook will be emitting no further items.
 
-#### Inherited from
-
-`ObservableStatusBase.isComplete`
-
 ***
 
 ### status
 
-> **status**: `"success"`
+> **status**: `"error"` \| `"loading"` \| `"success"`
 
-Defined in: [src/useObservable.ts:68](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L68)
+Defined in: [src/useObservable.ts:40](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L40)
 
 The loading status.
 
@@ -107,7 +83,3 @@ The loading status.
 - `success`: The hook has emitted at least one value
 
 If `initialData` is passed in, this will skip `loading` and go straight to `success`.
-
-#### Overrides
-
-`ObservableStatusBase.status`
