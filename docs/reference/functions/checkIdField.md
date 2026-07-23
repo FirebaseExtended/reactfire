@@ -6,9 +6,9 @@
 
 # Function: checkIdField()
 
-> **checkIdField**(`options`): `any`
+> **checkIdField**(`options`): `string` \| `undefined`
 
-Defined in: [src/index.ts:47](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L47)
+Defined in: [src/index.ts:49](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L49)
 
 ## Parameters
 
@@ -18,4 +18,4 @@ Defined in: [src/index.ts:47](https://github.com/FirebaseExtended/reactfire/blob
 
 ## Returns
 
-`any`
+`string` \| `undefined`

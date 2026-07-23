@@ -6,9 +6,9 @@
 
 # Function: checkinitialData()
 
-> **checkinitialData**(`options`): `any`
+> **checkinitialData**(`options`): `unknown`
 
-Defined in: [src/index.ts:43](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L43)
+Defined in: [src/index.ts:45](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L45)
 
 ## Parameters
 
@@ -18,4 +18,4 @@ Defined in: [src/index.ts:43](https://github.com/FirebaseExtended/reactfire/blob
 
 ## Returns
 
-`any`
+`unknown`

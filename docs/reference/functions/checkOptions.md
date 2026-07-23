@@ -6,9 +6,9 @@
 
 # Function: checkOptions()
 
-> **checkOptions**(`options`, `field`): `any`
+> **checkOptions**(`options`, `field`): `unknown`
 
-Defined in: [src/index.ts:34](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L34)
+Defined in: [src/index.ts:36](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L36)
 
 ## Parameters
 
@@ -22,4 +22,4 @@ Defined in: [src/index.ts:34](https://github.com/FirebaseExtended/reactfire/blob
 
 ## Returns
 
-`any`
+`unknown`

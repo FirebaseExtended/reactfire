@@ -63,7 +63,7 @@ export function useFirestoreDocData<T = unknown>(ref: DocumentReference<T>, opti
   const idField = options ? checkIdField(options) : undefined;
 
   const observableId = `firestore:docData:${ref.firestore.app.name}:${ref.path}:idField=${JSON.stringify(idField)}`;
-  const observable = docData(ref, { idField });
+  const observable = docData(ref, { idField: idField as keyof T });
 
   return useObservable(observableId, observable, options) as ObservableStatus<T>;
 }
@@ -75,7 +75,7 @@ export function useFirestoreDocDataOnce<T = unknown>(ref: DocumentReference<T>, 
   const idField = options ? checkIdField(options) : undefined;
 
   const observableId = `firestore:docDataOnce:${ref.firestore.app.name}:${ref.path}:idField=${JSON.stringify(idField)}`;
-  const observable$ = docData(ref, { idField }).pipe(first());
+  const observable$ = docData(ref, { idField: idField as keyof T }).pipe(first());
 
   return useObservable(observableId, observable$, options) as ObservableStatus<T>;
 }
@@ -96,7 +96,7 @@ export function useFirestoreCollection<T = DocumentData>(query: FirestoreQuery<T
 export function useFirestoreCollectionData<T = DocumentData>(query: FirestoreQuery<T>, options?: ReactFireOptions<T[]>): ObservableStatus<T[]> {
   const idField = options ? checkIdField(options) : undefined;
   const observableId = `firestore:collectionData:${getUniqueIdForFirestoreQuery(query)}:idField=${JSON.stringify(idField)}`;
-  const observable$ = collectionData(query, { idField });
+  const observable$ = collectionData(query, { idField: idField as (string & keyof T) });
 
   return useObservable(observableId, observable$, options);
 }

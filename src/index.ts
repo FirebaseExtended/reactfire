@@ -23,14 +23,16 @@ export class ReactFireError extends Error {
 
 export interface ReactFireOptions<T = unknown> {
   idField?: string;
-  initialData?: T | any;
+  initialData?: T;
   /**
    * @deprecated use initialData instead
    */
-  startWithValue?: T | any;
+  startWithValue?: T;
   suspense?: boolean;
 }
 
+// Deprecated: unused internally as of the ReactFireOptions generic tightening.
+// Kept as exports to avoid a breaking removal; slated for removal in v5.
 export function checkOptions(options: ReactFireOptions, field: string) {
   // make sure the field passed in is a valid key of ReactFire Options
   if (field === 'idField' || field === 'initialData' || field === 'suspense') {
@@ -44,8 +46,8 @@ export function checkinitialData(options: ReactFireOptions) {
   return checkOptions(options, 'initialData');
 }
 
-export function checkIdField(options: ReactFireOptions) {
-  return checkOptions(options, 'idField');
+export function checkIdField(options: ReactFireOptions): string | undefined {
+  return options?.idField;
 }
 
 export * from './auth';
