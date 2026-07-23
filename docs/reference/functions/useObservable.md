@@ -6,19 +6,9 @@
 
 # Function: useObservable()
 
-> **useObservable**\<`T`\>(`observableId`, `source`, `config?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`T`\>
+> **useObservable**\<`T`\>(`observableId`, `source`, `config?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T`\>
 
-Defined in: [src/useObservable.ts:96](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L96)
-
-Subscribe to an Observable and return its current status.
-
-Error handling depends on the suspense mode:
-- Non-suspense mode (default): errors are returned as `{ status: 'error', error }` so the
-  component can handle them locally without needing a React Error Boundary.
-- Suspense mode (`suspense: true`): errors are re-thrown so a React Error Boundary can catch them.
-
-If the observable emits a value and then errors, `data` retains the last emitted value and
-`status` changes to `'error'`. There is no automatic retry path once an error occurs.
+Defined in: [src/useObservable.ts:67](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L67)
 
 ## Type Parameters
 
@@ -42,4 +32,4 @@ If the observable emits a value and then errors, `data` retains the last emitted
 
 ## Returns
 
-[`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`T`\>
+[`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T`\>

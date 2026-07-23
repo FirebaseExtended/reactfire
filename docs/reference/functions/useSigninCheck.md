@@ -6,7 +6,7 @@
 
 # Function: useSigninCheck()
 
-> **useSigninCheck**(`options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<[`SigninCheckResult`](../type-aliases/SigninCheckResult.md)\>
+> **useSigninCheck**(`options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<[`SigninCheckResult`](../type-aliases/SigninCheckResult.md)\>
 
 Defined in: [src/auth.tsx:134](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L134)
 
@@ -48,4 +48,4 @@ const {status, data: signInCheckResult} = useSigninCheck({forceRefresh: true, re
 
 ## Returns
 
-[`ObservableStatus`](../type-aliases/ObservableStatus.md)\<[`SigninCheckResult`](../type-aliases/SigninCheckResult.md)\>
+[`ObservableStatus`](../interfaces/ObservableStatus.md)\<[`SigninCheckResult`](../type-aliases/SigninCheckResult.md)\>

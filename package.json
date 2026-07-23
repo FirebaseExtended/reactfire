@@ -1,5 +1,5 @@
 {
-  "version": "4.3.0",
+  "version": "4.2.5",
   "license": "MIT",
   "type": "module",
   "main": "dist/index.umd.cjs",
@@ -110,5 +110,11 @@
     "rxfire": "^6.1.0",
     "rxjs": "^6.6.3 || ^7.0.1",
     "use-sync-external-store": "^1.2.0"
+  },
+  "allowScripts": {
+    "@firebase/util@1.12.1": true,
+    "esbuild@0.18.20": true,
+    "protobufjs@7.6.4": true,
+    "re2@1.25.0": true
   }
 }

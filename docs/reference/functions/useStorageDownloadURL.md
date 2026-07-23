@@ -6,7 +6,7 @@
 
 # Function: useStorageDownloadURL()
 
-> **useStorageDownloadURL**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`string` \| `T`\>
+> **useStorageDownloadURL**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`string` \| `T`\>
 
 Defined in: [src/storage.tsx:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L30)
 
@@ -32,4 +32,4 @@ reference to the blob you want to download
 
 ## Returns
 
-[`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`string` \| `T`\>
+[`ObservableStatus`](../interfaces/ObservableStatus.md)\<`string` \| `T`\>

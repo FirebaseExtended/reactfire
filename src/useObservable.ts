@@ -27,7 +27,7 @@ export function preloadObservable<T>(source: Observable<T>, id: string, suspense
   }
 }
 
-interface ObservableStatusBase<T> {
+export interface ObservableStatus<T> {
   /**
    * The loading status.
    *
@@ -53,7 +53,7 @@ interface ObservableStatusBase<T> {
    *
    * If `initialData` is passed in, the first value of `data` will be the valuea provided in `initialData` **UNLESS** the underlying observable is ready, in which case it will skip `initialData`.
    */
-  data: T | undefined;
+  data: T;
   /**
    * Any error that may have occurred in the underlying observable
    */
@@ -64,35 +64,6 @@ interface ObservableStatusBase<T> {
   firstValuePromise: Promise<void>;
 }
 
-export interface ObservableStatusSuccess<T> extends ObservableStatusBase<T> {
-  status: 'success';
-  data: T;
-}
-
-export interface ObservableStatusError<T> extends ObservableStatusBase<T> {
-  status: 'error';
-  error: Error;
-}
-
-export interface ObservableStatusLoading<T> extends ObservableStatusBase<T> {
-  status: 'loading';
-  data: undefined;
-  hasEmitted: false;
-}
-
-export type ObservableStatus<T> = ObservableStatusLoading<T> | ObservableStatusError<T> | ObservableStatusSuccess<T>;
-
-/**
- * Subscribe to an Observable and return its current status.
- *
- * Error handling depends on the suspense mode:
- * - Non-suspense mode (default): errors are returned as `{ status: 'error', error }` so the
- *   component can handle them locally without needing a React Error Boundary.
- * - Suspense mode (`suspense: true`): errors are re-thrown so a React Error Boundary can catch them.
- *
- * If the observable emits a value and then errors, `data` retains the last emitted value and
- * `status` changes to `'error'`. There is no automatic retry path once an error occurs.
- */
 export function useObservable<T = unknown>(observableId: string, source: Observable<T>, config: ReactFireOptions = {}): ObservableStatus<T> {
   if (!observableId) {
     throw new Error('cannot call useObservable without an observableId');
@@ -115,8 +86,9 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
         next: () => {
           onStoreChange();
         },
-        error: () => {
+        error: (e) => {
           onStoreChange();
+          throw e;
         },
         complete: () => {
           onStoreChange();
@@ -154,8 +126,11 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
     } as ObservableStatus<T>;
   }
 
-  // In suspense mode, throw errors so React Error Boundaries can catch them.
-  // In non-suspense mode, surface errors via status so consumers can handle them locally.
+  // In suspense mode, throw errors so a React Error Boundary can catch them.
+  // In non-suspense mode (the default), surface the error via `status: 'error'` so
+  // the consumer can handle it locally. `update` already carries the error, so once
+  // an observable errors `data` retains its last emitted value. There is no automatic
+  // retry path once an error occurs (see #742).
   if (suspenseEnabled && update.error) {
     throw update.error;
   }

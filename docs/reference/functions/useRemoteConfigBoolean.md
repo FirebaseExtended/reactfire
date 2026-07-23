@@ -6,7 +6,7 @@
 
 # Function: useRemoteConfigBoolean()
 
-> **useRemoteConfigBoolean**(`key`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`boolean`\>
+> **useRemoteConfigBoolean**(`key`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`boolean`\>
 
 Defined in: [src/remote-config.tsx:58](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config.tsx#L58)
 
@@ -22,4 +22,4 @@ The parameter key in Remote Config
 
 ## Returns
 
-[`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`boolean`\>
+[`ObservableStatus`](../interfaces/ObservableStatus.md)\<`boolean`\>

@@ -1,27 +1,3 @@
-# Upgrade from ReactFire v4.2 to v4.3
-
-ReactFire v4.3.0 changes how errors are surfaced in non-suspense mode (the default).
-
-## Error handling behavior change
-
-Previously, errors from any reactfire hook were thrown unconditionally, making `status: 'error'` unreachable in practice. In v4.3.0, error handling depends on the mode:
-
-- **Non-suspense mode** (default, or `suspense: false`): errors are returned via `status: 'error'` so components can handle them locally.
-- **Suspense mode** (`suspense: true`): errors are re-thrown so a React Error Boundary can catch them. No change from prior behavior.
-
-**If you rely on a React Error Boundary to catch Firebase errors in non-suspense mode**, you must add an explicit re-throw in your component:
-
-```tsx
-const { status, error } = useStorageDownloadURL(ref);
-if (status === 'error') throw error; // re-throw to reach your Error Boundary
-```
-
-**If you already check `status` before using `data`**, no change is needed.
-
-Note: once an observable errors there is no automatic retry. The errored observable remains in the global cache under its `observableId`, so unmounting and remounting the same component rejoins the same errored state. Today the only workaround is to change the `observableId`. A proper retry mechanism is tracked in [#742](https://github.com/FirebaseExtended/reactfire/issues/742).
-
----
-
 # Upgrade from ReactFire v3 to v4
 
 As announced in [Discussion 402](https://github.com/FirebaseExtended/reactfire/discussions/402), ReactFire v4 contains breaking changes. This guide details how to upgrade from v3 to v4.

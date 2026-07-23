@@ -6,7 +6,7 @@
 
 # Function: useCallableFunctionResponse()
 
-> **useCallableFunctionResponse**\<`RequestData`, `ResponseData`\>(`functionName`, `options?`): [`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`ResponseData`\>
+> **useCallableFunctionResponse**\<`RequestData`, `ResponseData`\>(`functionName`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`ResponseData`\>
 
 Defined in: [src/functions.tsx:13](https://github.com/FirebaseExtended/reactfire/blob/main/src/functions.tsx#L13)
 
@@ -36,4 +36,4 @@ The name of the function to call
 
 ## Returns
 
-[`ObservableStatus`](../type-aliases/ObservableStatus.md)\<`ResponseData`\>
+[`ObservableStatus`](../interfaces/ObservableStatus.md)\<`ResponseData`\>
