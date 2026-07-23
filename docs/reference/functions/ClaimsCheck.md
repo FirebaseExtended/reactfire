@@ -8,7 +8,7 @@
 
 > **ClaimsCheck**(`__namedParameters`): `Element`
 
-Defined in: [src/auth.tsx:213](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L213)
+Defined in: [src/auth.tsx:215](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L215)
 
 ## Parameters
 
