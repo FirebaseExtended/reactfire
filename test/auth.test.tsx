@@ -9,6 +9,7 @@ import {
   AuthProvider,
   useUser,
   useSigninCheck,
+  useIdTokenResult,
   ClaimCheckErrors,
   ClaimsValidator,
 } from '../src/index';
@@ -16,7 +17,7 @@ import { baseConfig } from './appConfig';
 import { FirebaseApp, initializeApp } from 'firebase/app';
 import { randomString } from './test-utils';
 
-import { getAuth, GoogleAuthProvider, signInWithCredential, signInWithCustomToken, signOut, connectAuthEmulator, UserCredential } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithCredential, signInWithCustomToken, signOut, connectAuthEmulator, UserCredential, User } from 'firebase/auth';
 
 describe('Authentication', () => {
   let app: FirebaseApp;
@@ -386,6 +387,24 @@ describe('Authentication', () => {
       // render the child again and make sure it has the new value, not a stale one
       rerender(<ConditionalRenderer renderChildren={true} />);
       await findByTestId('signed-out');
+    });
+  });
+
+  describe('useIdTokenResult', () => {
+    it('defers the token fetch so it does not re-run on every render', async () => {
+      const getIdTokenResult = vi.fn().mockResolvedValue({ claims: {} });
+      const fakeUser = { uid: randomString(), getIdTokenResult } as unknown as User;
+
+      const { result, rerender } = renderHook(() => useIdTokenResult(fakeUser, false));
+
+      await waitFor(() => expect(result.current.status).toEqual('success'));
+
+      // The request is created lazily inside `defer` and useObservable subscribes
+      // once, so re-rendering must not trigger additional token fetches.
+      rerender();
+      rerender();
+
+      expect(getIdTokenResult).toHaveBeenCalledTimes(1);
     });
   });
 });
