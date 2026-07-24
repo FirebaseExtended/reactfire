@@ -61,7 +61,7 @@ describe('Functions', () => {
     it('defers the function call so it does not re-invoke on every render', async () => {
       const testText = randomString();
       const mockedHttpsCallable = vi.mocked(httpsCallable);
-      const originalImpl = mockedHttpsCallable.getMockImplementation()!;
+      const originalImpl = mockedHttpsCallable.getMockImplementation()! as typeof httpsCallable;
 
       // Wrap the real callable so we can count invocations of the cloud function
       // itself, not just how many times `httpsCallable` is called to create it.
