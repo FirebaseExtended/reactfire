@@ -8,7 +8,7 @@
 
 > **useStorageDownloadURL**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`string` \| `T`\>
 
-Defined in: [src/storage.tsx:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L29)
+Defined in: [src/storage.tsx:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L30)
 
 Subscribe to a storage ref's download URL
 
