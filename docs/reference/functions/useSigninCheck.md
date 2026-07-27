@@ -8,7 +8,7 @@
 
 > **useSigninCheck**(`options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<[`SigninCheckResult`](../type-aliases/SigninCheckResult.md)\>
 
-Defined in: [src/auth.tsx:134](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L134)
+Defined in: [src/auth.tsx:136](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L136)
 
 Subscribe to the signed-in status of a user.
 
