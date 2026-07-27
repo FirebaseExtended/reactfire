@@ -29,6 +29,9 @@ export function useStorageTask<T = unknown>(task: UploadTask, ref: StorageRefere
  */
 export function useStorageDownloadURL<T = string>(ref: StorageReference, options?: ReactFireOptions<T>): ObservableStatus<string | T> {
   const observableId = `storage:downloadUrl:${ref.toString()}`;
+  // Wrap in `defer` so the download URL request is created lazily on subscription
+  // rather than eagerly on every render (which fires a discarded request each time,
+  // and an unhandled rejection when the object is missing).
   const observable$ = defer(() => getDownloadURL(ref));
 
   return useObservable(observableId, observable$, options);

@@ -12,6 +12,12 @@ console.log(`ReactFire v${version}`);
 
 const externals = [
   'react',
+  // Externalize the useSyncExternalStore shim so the consumer's bundler resolves it.
+  // Bundling this CJS module into the ESM output makes rolldown emit a dynamic require()
+  // that throws ("dynamic usage of require is not supported") when a reactfire data hook
+  // loads client-side in a Next.js App Router (strict ESM) context. Externalizing keeps
+  // the shim's React 16/17 fallback intact while removing the require from our dist.
+  'use-sync-external-store/shim',
   'firebase',
   'firebase/app',
   'firebase/firestore',
