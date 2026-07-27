@@ -2,7 +2,9 @@ import '@testing-library/jest-dom/extend-expect';
 import { act, cleanup, render, renderHook, waitFor } from '@testing-library/react';
 import * as React from 'react';
 import { of, Subject, BehaviorSubject, throwError } from 'rxjs';
-import { useObservable } from '../src/index';
+import { useObservable, FirebaseAppProvider } from '../src/index';
+import { initializeApp } from 'firebase/app';
+import { baseConfig } from './appConfig';
 
 describe('useObservable', () => {
   afterEach(cleanup);
@@ -124,9 +126,45 @@ describe('useObservable', () => {
 
       act(() => observable$.next('val'));
       expect(result.current.isComplete).toEqual(false);
-      
+
       act(() => observable$.complete());
       await waitFor(() => expect(result.current.isComplete).toEqual(true));
+    });
+
+    it('surfaces errors via status in non-suspense mode', async () => {
+      const error = new Error('I am an error');
+      const observable$ = throwError(error);
+
+      const { result } = renderHook(() => useObservable('test-error-non-suspense', observable$, { suspense: false }));
+
+      await waitFor(() => expect(result.current.status).toEqual('error'));
+      expect(result.current.error).toEqual(error);
+    });
+
+    it('surfaces errors via status when no suspense option is provided', async () => {
+      const error = new Error('default mode error');
+      const observable$ = throwError(error);
+
+      const { result } = renderHook(() => useObservable('test-error-default-mode', observable$));
+
+      await waitFor(() => expect(result.current.status).toEqual('error'));
+      expect(result.current.error).toEqual(error);
+    });
+
+    it('retains last emitted data when observable errors after emitting', async () => {
+      const subject$ = new Subject<string>();
+      const error = new Error('late error');
+
+      const { result } = renderHook(() => useObservable('test-late-error', subject$, { suspense: false }));
+
+      act(() => subject$.next('good value'));
+      await waitFor(() => expect(result.current.status).toEqual('success'));
+      expect(result.current.data).toEqual('good value');
+
+      act(() => subject$.error(error));
+      await waitFor(() => expect(result.current.status).toEqual('error'));
+      expect(result.current.error).toEqual(error);
+      expect(result.current.data).toEqual('good value');
     });
   });
 
@@ -327,6 +365,30 @@ describe('useObservable', () => {
 
       // if useObservable doesn't re-emit, the value here will still be "Jeff"
       expect(refreshedComp).toHaveTextContent('James');
+    });
+    it('throws an error via FirebaseAppProvider suspense context path', () => {
+      const spy = vi.spyOn(console, 'error');
+      spy.mockImplementation(() => {});
+
+      const onError = (e: ErrorEvent) => e.preventDefault();
+      window.addEventListener('error', onError);
+
+      const app = initializeApp(baseConfig, 'suspense-context-test');
+      const error = new Error('context-path error');
+      const observable$ = throwError(error);
+
+      const wrapper = ({ children }: { children: React.ReactNode }) => (
+        <FirebaseAppProvider firebaseApp={app} suspense={true}>
+          {children}
+        </FirebaseAppProvider>
+      );
+
+      expect(() => renderHook(() => useObservable('test-context-suspense-error', observable$), { wrapper })).toThrow(
+        expect.objectContaining({ message: 'context-path error' })
+      );
+
+      spy.mockRestore();
+      window.removeEventListener('error', onError);
     });
   });
 });
