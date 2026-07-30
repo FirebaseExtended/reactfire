@@ -46,6 +46,68 @@ jobs:
             publish.sh
             unpack.sh
           retention-days: 1
+  verify-package:
+    runs-on: ubuntu-latest
+    needs: build
+    name: Verify package
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - name: Setup node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24'
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci
+      - name: 'Download Artifacts'
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      # Unpacking makes the repo root the shipped package, which is what the
+      # next two steps need: publint takes a directory, and size-limit reads
+      # dist/, which is gitignored and so absent from a fresh checkout.
+      - name: Expand Artifact
+        run: |
+          chmod +x reactfire-${{ github.run_id }}/unpack.sh
+          ./reactfire-${{ github.run_id }}/unpack.sh
+      # --strict because publint exits 0 on warnings, and the manifest problems
+      # worth gating on (a missing types condition, for one) are warnings.
+      - name: Lint package
+        run: npm run lint:package
+      # Points at the tarball rather than re-packing, so it checks the exact
+      # bytes that ship. .attw.json ignores internal-resolution-error, because
+      # the emitted .d.ts use extensionless relative imports, which node16
+      # resolution rejects. That is a real pre-existing bug with its own fix;
+      # ignoring the one rule keeps every other resolution check enforcing.
+      - name: Lint types
+        run: npm run lint:types -- reactfire-${{ github.run_id }}/reactfire.tgz
+      - name: Bundle size
+        run: npm run size
+  verify-loads:
+    runs-on: ubuntu-latest
+    needs: build
+    name: Verify package loads (React ${{ matrix.react }})
+    strategy:
+      matrix:
+        react: ['18', '19']
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - name: Setup node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24'
+      - name: 'Download Artifacts'
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      # Installs the packed tarball into a throwaway project with real react and
+      # firebase, then actually loads both entry points. No npm ci: the script
+      # builds its own dependency tree, which is why it is a separate job.
+      - name: Entry-point load test
+        run: node scripts/entry-load.mjs reactfire-${{ github.run_id }}/reactfire.tgz --react ${{ matrix.react }}
   test:
     runs-on: ubuntu-latest
     needs: build
@@ -116,7 +178,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     name: Publish (NPM)
-    needs: test
+    needs: [test, verify-package, verify-loads]
     if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'release' }}
     steps:
       - name: Setup node

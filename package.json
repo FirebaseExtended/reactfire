@@ -5,8 +5,14 @@
   "main": "dist/index.umd.cjs",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.umd.cjs"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.umd.cjs"
+      }
     }
   },
   "typings": "dist/index.d.ts",
@@ -19,7 +25,8 @@
   },
   "scripts": {
     "start": "firebase emulators:exec --project=rxfire-525a3 \"vitest --ui\"",
-    "build": "tsc && vite build && npm run docs",
+    "build": "tsc && vite build && npm run build:types-cjs && npm run docs",
+    "build:types-cjs": "node -e \"require('fs').copyFileSync('dist/index.d.ts','dist/index.d.cts')\"",
     "test": "firebase emulators:exec --project=rxfire-525a3 \"vitest\"",
     "test:firestore": "firebase emulators:exec --only firestore --ui --project=rxfire-525a3 \"vitest firestore\"",
     "test:database": "firebase emulators:exec --only database --project=rxfire-525a3 \"vitest database\"",
@@ -28,10 +35,14 @@
     "test:storage": "firebase emulators:exec --only storage --project=rxfire-525a3 \"vitest storage\"",
     "test:useObservable": "vitest useObservable",
     "test:firebaseApp": "vitest firebaseApp",
-    "format": "prettier src test vite.config.ts -w",
-    "lint": "eslint src/* test/* vite.config.ts",
+    "test:loads": "vitest entry-load",
+    "format": "prettier src test scripts vite.config.ts -w",
+    "lint": "eslint src/* test/* scripts/* vite.config.ts",
     "size": "size-limit",
     "analyze": "size-limit --why",
+    "loads": "node scripts/entry-load.mjs",
+    "lint:package": "publint --strict",
+    "lint:types": "attw",
     "docs": "typedoc --options typedoc.json && markdown-toc -i docs/use.md",
     "docs:fork": "typedoc --options typedoc.json --gitRemote upstream && markdown-toc -i docs/use.md"
   },
@@ -60,17 +71,19 @@
   },
   "homepage": "https://firebaseopensource.com/projects/firebaseextended/reactfire/",
   "module": "./dist/index.js",
+  "sideEffects": false,
   "size-limit": [
     {
-      "path": "dist/reactfire.cjs.production.min.js",
-      "limit": "10 KB"
+      "path": "dist/index.js",
+      "limit": "18 KB"
     },
     {
-      "path": "dist/reactfire.esm.js",
-      "limit": "10 KB"
+      "path": "dist/index.umd.cjs",
+      "limit": "16 KB"
     }
   ],
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
     "@rollup/plugin-typescript": "^12.3.0",
     "@size-limit/preset-small-lib": "^8.2.6",
     "@testing-library/jest-dom": "^5.16.5",
@@ -95,6 +108,7 @@
     "jsdom": "^22.1.0",
     "markdown-toc": "^1.2.0",
     "prettier": "^3.8.4",
+    "publint": "^0.3.22",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-test-renderer": "^18.2.0",

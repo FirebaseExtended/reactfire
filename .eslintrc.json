@@ -23,6 +23,22 @@
         "@typescript-eslint",
         "no-only-tests"
     ],
+    "overrides": [
+        {
+            "files": ["**/*.mjs"],
+            "env": {
+                "browser": false,
+                "node": true
+            },
+            "globals": {
+                "describe": "readonly",
+                "it": "readonly",
+                "expect": "readonly",
+                "beforeEach": "readonly",
+                "afterEach": "readonly"
+            }
+        }
+    ],
     "rules": {
         "no-only-tests/no-only-tests": "error",
         "@typescript-eslint/no-explicit-any": "warn",
