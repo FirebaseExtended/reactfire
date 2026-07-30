@@ -42,7 +42,9 @@
     "lint:package": "publint --strict",
     "lint:types": "attw",
     "docs": "typedoc --options typedoc.json && markdown-toc -i docs/use.md",
-    "docs:fork": "typedoc --options typedoc.json --gitRemote upstream && markdown-toc -i docs/use.md"
+    "docs:fork": "typedoc --options typedoc.json --gitRemote upstream && markdown-toc -i docs/use.md",
+    "api:report": "api-extractor run --local",
+    "api:check": "api-extractor run"
   },
   "peerDependencies": {
     "firebase": "^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0 || next",
@@ -82,6 +84,7 @@
   ],
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
+    "@microsoft/api-extractor": "^7.58.12",
     "@rollup/plugin-typescript": "^12.3.0",
     "@size-limit/preset-small-lib": "^8.2.6",
     "@testing-library/jest-dom": "^5.16.5",

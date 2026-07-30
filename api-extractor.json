@@ -1,0 +1,35 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
+
+  // Runs against the emitted declarations, not src, so what is reported is what
+  // consumers actually resolve.
+  "mainEntryPointFilePath": "<projectFolder>/dist/index.d.ts",
+
+  "compiler": {
+    "tsconfigFilePath": "<projectFolder>/tsconfig.json"
+  },
+
+  // The committed report is the whole point: a change to the public type surface
+  // shows up as a diff in review, and CI fails when the report is out of date.
+  // Generated, never hand-edited.
+  "apiReport": {
+    "enabled": true,
+    "reportFolder": "<projectFolder>/etc/",
+    "reportFileName": "reactfire.api.md"
+  },
+
+  "docModel": { "enabled": false },
+  "dtsRollup": { "enabled": false },
+  "tsdocMetadata": { "enabled": false },
+
+  "messages": {
+    // Missing release tags are not interesting here; the repo does not use them.
+    "extractorMessageReporting": {
+      "ae-missing-release-tag": { "logLevel": "none" },
+      "ae-forgotten-export": { "logLevel": "warning" }
+    },
+    "tsdocMessageReporting": {
+      "default": { "logLevel": "none" }
+    }
+  }
+}
