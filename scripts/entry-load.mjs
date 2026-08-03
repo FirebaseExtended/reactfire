@@ -40,9 +40,20 @@ export const DEFAULT_REACT_VERSIONS = ['18', '19'];
 export const FIREBASE_RANGE = '^11.10.0';
 
 // A load that resolves but exports nothing is still a broken package, and an
-// empty or partial build would otherwise pass. These are load-bearing entry
-// points from different submodules, so a missing re-export shows up here.
-export const EXPECTED_EXPORTS = ['useFirestoreDocData', 'useUser', 'FirebaseAppProvider', 'useObservable'];
+// empty or partial build would otherwise pass. One canary per submodule that
+// index.ts re-exports, so a drop confined to any single one shows up here.
+export const EXPECTED_EXPORTS = [
+  'useUser', // ./auth
+  'useDatabaseObject', // ./database
+  'FirebaseAppProvider', // ./firebaseApp
+  'useFirestoreDocData', // ./firestore
+  'useCallableFunctionResponse', // ./functions
+  'SuspenseWithPerf', // ./performance
+  'useRemoteConfigValue', // ./remote-config
+  'useStorageDownloadURL', // ./storage
+  'useObservable', // ./useObservable
+  'AuthSdkContext', // ./sdk
+];
 
 export const PACKAGE_NAME = 'reactfire';
 
