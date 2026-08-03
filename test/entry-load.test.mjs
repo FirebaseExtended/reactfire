@@ -1,7 +1,8 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { collectFailures, describeResult, loadWithReact, parseProbeOutput } from '../scripts/entry-load.mjs';
+import { execFileSync } from 'node:child_process';
+import { EXPECTED_EXPORTS, collectFailures, describeResult, loadWithReact, parseProbeOutput, probeSource } from '../scripts/entry-load.mjs';
 
 /**
  * These tests pin the failure detection, not the fixture's shape. `publint` and
@@ -117,5 +118,45 @@ describe('loadWithReact', () => {
     const { run } = runner({ esm: '{"ok":false,"reason":"missing-exports","missing":["useUser"]}' });
     const result = loadWithReact('/tmp/reactfire.tgz', '18', { run, root: dir });
     expect(collectFailures([{ react: '18', ...result }])).toHaveLength(1);
+  });
+});
+
+/**
+ * The tests above drive the runner with canned output, so none of them execute
+ * the missing-export filter the probe actually ships. A green CI run does not
+ * either: the filter only reports, so breaking it makes every load pass. These
+ * run the generated source against a stand-in module instead of a mock.
+ */
+describe('probeSource', () => {
+  let dir;
+
+  beforeEach(() => {
+    dir = fs.mkdtempSync(path.join(os.tmpdir(), 'reactfire-probe-'));
+  });
+
+  afterEach(() => {
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
+
+  // The probe resolves its target by specifier, so a relative path stands in
+  // for the installed package without needing a fixture install.
+  function runProbe(exports) {
+    fs.writeFileSync(path.join(dir, 'stand-in.mjs'), `export const ${exports.join(' = 1;\nexport const ')} = 1;\n`);
+    fs.writeFileSync(path.join(dir, 'probe.mjs'), probeSource('esm', { name: './stand-in.mjs' }));
+    return parseProbeOutput(execFileSync(process.execPath, [path.join(dir, 'probe.mjs')], { encoding: 'utf8' }));
+  }
+
+  it('passes when every canary is exported', () => {
+    const result = runProbe(EXPECTED_EXPORTS);
+    expect(result.ok).toBe(true);
+  });
+
+  // One dropped submodule is the case the widened canary list exists for, and
+  // the case a broken filter would wave through.
+  it('names the missing canary when one submodule is dropped', () => {
+    const result = runProbe(EXPECTED_EXPORTS.filter((name) => name !== 'useStorageDownloadURL'));
+    expect(result.ok).toBe(false);
+    expect(result.reason).toBe('missing-exports');
+    expect(result.missing).toEqual(['useStorageDownloadURL']);
   });
 });

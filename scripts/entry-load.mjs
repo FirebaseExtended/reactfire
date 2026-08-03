@@ -37,6 +37,12 @@ export const DEFAULT_REACT_VERSIONS = ['18', '19'];
 // Held to the major the repo develops against rather than "latest", so the
 // fixture is deterministic and stays inside the declared peer range
 // (^9 || ^10 || ^11 || ^12).
+//
+// Keep this in step with the `firebase` devDependency in package.json. It
+// matches today, and nothing enforces that: when the repo moves to firebase 12
+// this fixture keeps loading the package against 11 and stays green, so the
+// major the probe actually exercises drifts away from the one CI develops
+// against without any signal.
 export const FIREBASE_RANGE = '^11.10.0';
 
 // A load that resolves but exports nothing is still a broken package, and an
