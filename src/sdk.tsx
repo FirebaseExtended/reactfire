@@ -9,11 +9,11 @@ import type { Functions } from 'firebase/functions';
 import type { FirebasePerformance } from 'firebase/performance';
 import type { FirebaseStorage } from 'firebase/storage';
 import type { RemoteConfig } from 'firebase/remote-config';
-import { useFirebaseApp } from './firebaseApp';
+import { useFirebaseApp } from './firebaseApp.js';
 import { FirebaseApp } from 'firebase/app';
-import { ObservableStatus, useObservable } from './useObservable';
+import { ObservableStatus, useObservable } from './useObservable.js';
 import { from } from 'rxjs';
-import { ReactFireOptions } from '.';
+import { ReactFireOptions } from './index.js';
 
 export const AppCheckSdkContext = React.createContext<AppCheck | undefined>(undefined);
 export const AuthSdkContext = React.createContext<Auth | undefined>(undefined);

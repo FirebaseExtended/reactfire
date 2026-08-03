@@ -1,6 +1,6 @@
 import { collectionData, doc, docData, fromRef } from 'rxfire/firestore';
-import { ReactFireOptions, useObservable, checkIdField, ReactFireGlobals } from './';
-import { preloadObservable, ObservableStatus } from './useObservable';
+import { ReactFireOptions, useObservable, checkIdField, ReactFireGlobals } from './index.js';
+import { preloadObservable, ObservableStatus } from './useObservable.js';
 import { first } from 'rxjs/operators';
 
 import { Query as FirestoreQuery, QuerySnapshot, DocumentReference, queryEqual, DocumentData, DocumentSnapshot } from 'firebase/firestore';

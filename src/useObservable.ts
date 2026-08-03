@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useSyncExternalStore } from 'use-sync-external-store/shim';
 import { Observable } from 'rxjs';
-import { SuspenseSubject } from './SuspenseSubject';
-import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp';
-import { ReactFireGlobals, ReactFireOptions } from './';
+import { SuspenseSubject } from './SuspenseSubject.js';
+import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp.js';
+import { ReactFireGlobals, ReactFireOptions } from './index.js';
 
 const DEFAULT_TIMEOUT = 30_000;
 
