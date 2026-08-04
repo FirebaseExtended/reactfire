@@ -76,10 +76,8 @@ jobs:
       - name: Lint package
         run: npm run lint:package
       # Points at the tarball rather than re-packing, so it checks the exact
-      # bytes that ship. .attw.json ignores internal-resolution-error, because
-      # the emitted .d.ts use extensionless relative imports, which node16
-      # resolution rejects. That is a real pre-existing bug with its own fix;
-      # ignoring the one rule keeps every other resolution check enforcing.
+      # bytes that ship. No ignore rules: all four resolution modes pass on
+      # their own since #770 gave the emitted .d.ts explicit .js extensions.
       - name: Lint types
         run: npm run lint:types -- reactfire-${{ github.run_id }}/reactfire.tgz
       - name: Bundle size

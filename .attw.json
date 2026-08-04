@@ -1,4 +1,0 @@
-{
-  "$schema": "https://cdn.jsdelivr.net/npm/@arethetypeswrong/cli@0.18.5/config-schema.json",
-  "ignoreRules": ["internal-resolution-error"]
-}
