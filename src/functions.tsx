@@ -1,7 +1,7 @@
 import { httpsCallable as rxHttpsCallable } from 'rxfire/functions';
 import { defer } from 'rxjs';
-import { ReactFireOptions, useObservable, ObservableStatus } from './';
-import { useFunctions } from '.';
+import { ReactFireOptions, useObservable, ObservableStatus } from './index.js';
+import { useFunctions } from './index.js';
 
 import type { HttpsCallableOptions } from 'firebase/functions';
 

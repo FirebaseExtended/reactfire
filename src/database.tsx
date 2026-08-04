@@ -1,5 +1,5 @@
 import { list, object, QueryChange, listVal, objectVal } from 'rxfire/database';
-import { ReactFireOptions, useObservable, checkIdField, ObservableStatus, ReactFireGlobals } from './';
+import { ReactFireOptions, useObservable, checkIdField, ObservableStatus, ReactFireGlobals } from './index.js';
 
 import type { Query as DatabaseQuery, DatabaseReference } from 'firebase/database';
 

@@ -1,4 +1,4 @@
-import { SuspenseSubject } from './SuspenseSubject';
+import { SuspenseSubject } from './SuspenseSubject.js';
 
 import type { Query as FirestoreQuery } from 'firebase/firestore';
 import type { Query as DatabaseQuery } from 'firebase/database';
@@ -48,13 +48,13 @@ export function checkIdField(options: ReactFireOptions) {
   return checkOptions(options, 'idField');
 }
 
-export * from './auth';
-export * from './database';
-export * from './firebaseApp';
-export * from './firestore';
-export * from './functions';
-export * from './performance';
-export * from './remote-config';
-export * from './storage';
-export * from './useObservable';
-export * from './sdk';
+export * from './auth.js';
+export * from './database.js';
+export * from './firebaseApp.js';
+export * from './firestore.js';
+export * from './functions.js';
+export * from './performance.js';
+export * from './remote-config.js';
+export * from './storage.js';
+export * from './useObservable.js';
+export * from './sdk.js';

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { user } from 'rxfire/auth';
-import { preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus, ReactFireError } from './';
+import { preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus, ReactFireError } from './index.js';
 import { from, of, defer } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp';
+import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp.js';
 
 import type { Auth, User, IdTokenResult } from 'firebase/auth';
 type Claims = IdTokenResult['claims'];

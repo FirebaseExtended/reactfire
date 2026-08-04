@@ -1,6 +1,6 @@
 import { empty, Observable, Subject, Subscriber, Subscription } from 'rxjs';
 import { catchError, shareReplay, tap } from 'rxjs/operators';
-import { ObservableStatus } from './useObservable';
+import { ObservableStatus } from './useObservable.js';
 
 export class SuspenseSubject<T> extends Subject<T> {
   private _value: T | undefined;

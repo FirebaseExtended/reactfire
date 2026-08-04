@@ -1,5 +1,5 @@
-import { useRemoteConfig } from './';
-import { useObservable, ObservableStatus } from './useObservable';
+import { useRemoteConfig } from './index.js';
+import { useObservable, ObservableStatus } from './useObservable.js';
 import { getValue, getString, getBoolean, getNumber, getAll, AllParameters } from 'rxfire/remote-config';
 import { Observable } from 'rxjs';
 
