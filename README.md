@@ -13,7 +13,7 @@ Firebase.
 
 ## Platform support
 
-ReactFire is designed for **web React apps** and wraps the [Firebase Web SDK](https://firebase.google.com/docs/web/setup). It is not compatible with React Native or Expo. For React Native projects, use [react-native-firebase](https://rnfirebase.io/) instead.
+ReactFire is designed for **web React apps** and wraps the [Firebase JavaScript SDK](https://firebase.google.com/docs/web/setup). It is not compatible with React Native or Expo. For React Native projects, use [react-native-firebase](https://rnfirebase.io/) instead.
 
 ## Install
 
