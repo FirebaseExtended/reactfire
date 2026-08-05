@@ -1,8 +1,9 @@
 import '@testing-library/jest-dom/extend-expect';
 import { act, cleanup, render, renderHook, waitFor } from '@testing-library/react';
 import * as React from 'react';
+import { renderToString } from 'react-dom/server';
 import { of, Subject, BehaviorSubject, throwError } from 'rxjs';
-import { useObservable } from '../src/index';
+import { useObservable, ReactFireOptions } from '../src/index';
 
 describe('useObservable', () => {
   afterEach(cleanup);
@@ -327,6 +328,61 @@ describe('useObservable', () => {
 
       // if useObservable doesn't re-emit, the value here will still be "Jeff"
       expect(refreshedComp).toHaveTextContent('James');
+    });
+  });
+
+  describe('Server rendering', () => {
+    // Renders `status` and `data` so the assertions read the snapshot React actually used,
+    // rather than a value the test computed for itself.
+    const Probe = ({ observableId, observable$, config }: { observableId: string; observable$: Subject<any>; config?: ReactFireOptions }) => {
+      const { status, data } = useObservable(observableId, observable$, { suspense: false, ...config });
+      // A single interpolated child, because adjacent JSX text nodes render with `<!-- -->`
+      // separators between them and the assertions below match on the plain string.
+      return <div>{`${status}:${String(data)}`}</div>;
+    };
+
+    it('renders on the server instead of throwing', () => {
+      const observable$: Subject<any> = new Subject();
+
+      // Without a getServerSnapshot, React throws "Missing getServerSnapshot, which is
+      // required for server-rendered content" and the whole subtree falls back to client
+      // rendering. This is the #748 regression test: delete the third argument to
+      // useSyncExternalStore and this assertion fails.
+      expect(() => renderToString(<Probe observableId="ssr-renders" observable$={observable$} />)).not.toThrow();
+    });
+
+    it('reports loading on the server when there is no initialData', () => {
+      const observable$: Subject<any> = new Subject();
+
+      const html = renderToString(<Probe observableId="ssr-loading" observable$={observable$} />);
+
+      expect(html).toContain('loading:undefined');
+    });
+
+    it('reports initialData on the server when it is provided', () => {
+      const observable$: Subject<any> = new Subject();
+
+      const html = renderToString(<Probe observableId="ssr-initial-data" observable$={observable$} config={{ initialData: 'seeded' }} />);
+
+      expect(html).toContain('success:seeded');
+    });
+
+    it('does not leak a cached value from another request into the server snapshot', async () => {
+      // `preloadedObservables` lives on `globalThis` and is keyed only by observableId, so on
+      // a server every concurrent request shares it. A getServerSnapshot that read
+      // `observable.immutableStatus` would render whatever the previous request left behind.
+      // Here the first render stands in for that earlier request.
+      const observable$: Subject<any> = new Subject();
+      const observableId = 'ssr-no-cross-request-leak';
+
+      const { result } = renderHook(() => useObservable(observableId, observable$, { suspense: false }));
+      act(() => observable$.next('first-request-secret'));
+      await waitFor(() => expect(result.current.data).toEqual('first-request-secret'));
+
+      const html = renderToString(<Probe observableId={observableId} observable$={observable$} />);
+
+      expect(html).not.toContain('first-request-secret');
+      expect(html).toContain('loading:undefined');
     });
   });
 });
