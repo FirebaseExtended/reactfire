@@ -104,6 +104,6 @@ This is **off by default**. Opt in with the `suspense` prop on `FirebaseAppProvi
 <FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={true}>
 ```
 
-`<SuspenseWithPerf />` does the same and also instruments load times with [Performance Monitoring](https://firebase.google.com/docs/perf-mon).
+`<SuspenseWithPerf />` does the same and also measures how long the fallback was shown, using the browser's [User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/Performance_API/User_timing).
 
 See [example/withSuspense](https://github.com/FirebaseExtended/reactfire/tree/main/example/withSuspense) for full samples.
