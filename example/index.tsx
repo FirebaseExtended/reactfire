@@ -2,13 +2,12 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 /**
- * Use this instead of NonConcurrentModeApp to see a ReactFire demo with Suspense/Concurrent mode enabled
+ * This demo renders without Suspense. To see the Suspense version instead, uncomment the
+ * import below and the render block at the bottom of this file.
  *
- * You'll need to use an experimental build of React to use Concurrent mode
- * https://reactjs.org/docs/concurrent-mode-adoption.html#installation
+ * Suspense is off by default in ReactFire and is opted into with the `suspense` prop on
+ * `FirebaseAppProvider`. See the Suspense section of the README.
  */
-// import {} from 'react/experimental'  // make TS aware of experimental features
-// import {} from 'react-dom/experimental' // make TS aware of experimental features
 // import { App as ConcurrentModeApp } from './withSuspense/App';
 import { App as NonConcurrentModeApp } from './withoutSuspense/App';
 import './index.css';
@@ -37,7 +36,7 @@ ReactDOM.render(
 );
 
 /**
- * FOR CONCURRENT MODE
+ * FOR THE SUSPENSE VERSION
  */
 // ReactDOM.createRoot(rootElement).render(
 //   <FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={true}>
