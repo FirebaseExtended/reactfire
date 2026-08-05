@@ -1,0 +1,187 @@
+# Measures the `test/firestore.test.tsx` flake rate (#776) in CI rather than locally.
+#
+# Every measurement of this flake so far has been on a laptop, where the failure looks
+# like a plain `waitFor` timeout. In CI it comes with a gRPC framing desync
+# (`RESOURCE_EXHAUSTED: Received message larger than max`), which may mean the two are
+# not the same bug. This runs both `@grpc/grpc-js` arms on both Node versions under CI
+# conditions so the comparison is made where the failure actually happens.
+#
+# Manual only. It never runs on a push, a PR or a schedule, so it costs nothing until
+# someone asks for it.
+name: Firestore flake probe
+
+on:
+  workflow_dispatch:
+    inputs:
+      iterations:
+        description: "Test runs per arm (each is a full emulator start/stop, roughly 25s)"
+        required: false
+        default: "20"
+      node_versions:
+        description: "JSON array of Node majors to probe"
+        required: false
+        default: '["22", "24"]'
+      arms:
+        description: "JSON array of grpc-js arms: baseline, override, or both"
+        required: false
+        default: '["baseline", "override"]'
+
+# Least privilege. This workflow reads the repo and writes nothing back.
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        node: ${{ fromJSON(inputs.node_versions) }}
+        arm: ${{ fromJSON(inputs.arms) }}
+      fail-fast: false
+    name: Probe Node ${{ matrix.node }} / ${{ matrix.arm }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Setup node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: ${{ matrix.node }}
+          check-latest: true
+          cache: 'npm'
+
+      - name: Setup Java
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Firebase emulator cache
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ~/.cache/firebase/emulators
+          key: firebase_emulators
+
+      - name: Install deps
+        run: npm ci
+
+      # `npm pkg set` mangles keys containing a slash, so edit package.json directly.
+      # `npm install` (not `npm ci`) is required here because applying an override
+      # necessarily changes the lockfile.
+      - name: Apply the grpc-js override
+        if: ${{ matrix.arm == 'override' }}
+        run: |
+          node -e '
+            const fs = require("fs");
+            const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+            pkg.overrides = { ...pkg.overrides, "@grpc/grpc-js": "^1.14.0" };
+            fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2) + "\n");
+          '
+          npm install --no-audit --no-fund
+
+      - name: Record the resolved grpc-js version
+        run: |
+          RESOLVED="$(node -p "require('@grpc/grpc-js/package.json').version")"
+          echo "resolved_grpc=$RESOLVED" >> "$GITHUB_ENV"
+          echo "Resolved @grpc/grpc-js: $RESOLVED"
+
+      # Inputs and matrix values are passed through `env` rather than interpolated into
+      # the script body, so nothing from the dispatch form can be executed as shell.
+      - name: Run the probe
+        env:
+          ITERATIONS: ${{ inputs.iterations }}
+          ARM: ${{ matrix.arm }}
+          NODE_MAJOR: ${{ matrix.node }}
+        run: |
+          set -uo pipefail
+
+          # Guard against a non-numeric or absurd `iterations` before it reaches the loop.
+          case "$ITERATIONS" in
+            ''|*[!0-9]*) echo "iterations must be a positive integer, got '$ITERATIONS'"; exit 1 ;;
+          esac
+          if [ "$ITERATIONS" -lt 1 ] || [ "$ITERATIONS" -gt 200 ]; then
+            echo "iterations must be between 1 and 200, got '$ITERATIONS'"
+            exit 1
+          fi
+
+          pass=0
+          flake=0
+          infra=0
+          grpc_err=0
+          mkdir -p probe-logs
+
+          for i in $(seq 1 "$ITERATIONS"); do
+            log="probe-logs/run-$i.log"
+
+            # A fresh emulator per iteration, matching how `npm test` runs in CI. Reusing
+            # one emulator across iterations would measure a different thing.
+            set +e
+            npx firebase emulators:exec --only firestore --project=rxfire-525a3 \
+              "npx vitest run firestore" > "$log" 2>&1
+            rc=$?
+            set -e
+
+            if grep -q "RESOURCE_EXHAUSTED: Received message larger than max" "$log"; then
+              grpc_err=$((grpc_err + 1))
+            fi
+
+            if [ "$rc" -eq 0 ]; then
+              pass=$((pass + 1))
+              echo "run $i: PASS"
+            elif grep -q "expected 'loading' to deeply equal 'success'" "$log"; then
+              # The #776 signature specifically, rather than "the job went red".
+              flake=$((flake + 1))
+              echo "run $i: FLAKE (rc=$rc)"
+            else
+              # Emulator start failures and the like. Counted separately because folding
+              # them in previously inflated a local flake-rate estimate by ~50%.
+              infra=$((infra + 1))
+              echo "run $i: INFRA FAILURE (rc=$rc), excluded from the rate"
+              tail -20 "$log"
+            fi
+          done
+
+          counted=$((pass + flake))
+          if [ "$counted" -gt 0 ]; then
+            rate="$(node -e "process.stdout.write(((${flake}/${counted})*100).toFixed(1))")"
+          else
+            rate="n/a"
+          fi
+
+          {
+            echo "### Node ${NODE_MAJOR} / ${ARM} (@grpc/grpc-js ${resolved_grpc})"
+            echo ""
+            echo "| Outcome | Count |"
+            echo "| --- | --- |"
+            echo "| Pass | ${pass} |"
+            echo "| Flake (#776 signature) | ${flake} |"
+            echo "| Infra failure (excluded) | ${infra} |"
+            echo "| Runs showing RESOURCE_EXHAUSTED | ${grpc_err} |"
+            echo ""
+            echo "**Flake rate: ${rate}% of ${counted} counted runs.**"
+            echo ""
+            if [ "$infra" -gt 0 ]; then
+              echo "> ${infra} run(s) failed for reasons other than the #776 assertion and are excluded from the rate."
+              echo ""
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          echo "arm=${ARM} node=${NODE_MAJOR} pass=${pass} flake=${flake} infra=${infra} grpc_err=${grpc_err} rate=${rate}%"
+
+          # The probe reports; it does not fail. A red job here would mean the probe
+          # broke, not that the flake reproduced.
+          if [ "$counted" -eq 0 ]; then
+            echo "Every run failed for infrastructure reasons; the probe measured nothing."
+            exit 1
+          fi
+
+      - name: Upload probe logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: probe-logs-node${{ matrix.node }}-${{ matrix.arm }}
+          path: probe-logs/
+          retention-days: 7
