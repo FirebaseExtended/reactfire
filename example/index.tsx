@@ -2,8 +2,12 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 /**
- * This demo renders without Suspense. To see the Suspense version instead, uncomment the
- * import below and the render block at the bottom of this file.
+ * This demo renders without Suspense. The Suspense version is the commented-out import
+ * below plus the render block at the bottom of this file.
+ *
+ * That path does not run as checked in: it needs react and react-dom on 18 or later, which
+ * this example is not yet on, and the `ReactDOM.render` call below has to be replaced
+ * rather than left alongside it. See #781 for the details.
  *
  * Suspense is off by default in ReactFire and is opted into with the `suspense` prop on
  * `FirebaseAppProvider`. See the Suspense section of the README.
