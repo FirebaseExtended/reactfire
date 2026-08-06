@@ -74,10 +74,8 @@ describe('Authentication', () => {
   });
 
   afterAll(() => {
-    afterAll(() => {
-      // @ts-expect-error console.info is mocked in beforeAll
-      console.info.mockRestore();
-    });
+    // @ts-expect-error console.info is mocked in beforeAll
+    console.info.mockRestore();
   });
 
   test('double check - emulator is running', async () => {
