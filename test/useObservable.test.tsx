@@ -384,5 +384,23 @@ describe('useObservable', () => {
       expect(html).not.toContain('first-request-secret');
       expect(html).toContain('loading:undefined');
     });
+
+    it('prefers the callers initialData over a value already in the shared cache', async () => {
+      // The branch above that reads `initialData` is only reachable when the cache ALREADY
+      // holds a value for this id: otherwise the overlay in `useObservable` sets status,
+      // data and hasEmitted itself and the server snapshot never decides anything. So seed
+      // the cache first, exactly as the leak test does, and only then pass `initialData`.
+      const observable$: Subject<any> = new Subject();
+      const observableId = 'ssr-initial-data-beats-cache';
+
+      const { result } = renderHook(() => useObservable(observableId, observable$, { suspense: false }));
+      act(() => observable$.next('another-requests-value'));
+      await waitFor(() => expect(result.current.data).toEqual('another-requests-value'));
+
+      const html = renderToString(<Probe observableId={observableId} observable$={observable$} config={{ initialData: 'my-own-data' }} />);
+
+      expect(html).toContain('success:my-own-data');
+      expect(html).not.toContain('another-requests-value');
+    });
   });
 });
