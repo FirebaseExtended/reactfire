@@ -1,0 +1,281 @@
+# Measures the `test/firestore.test.tsx` flake rate (#776) in CI rather than locally.
+#
+# Every measurement of this flake so far has been on a laptop, where the failure looks
+# like a plain `waitFor` timeout. In CI it comes with a gRPC framing desync
+# (`RESOURCE_EXHAUSTED: Received message larger than max`), which may mean the two are
+# not the same bug. This runs both `@grpc/grpc-js` arms on both Node versions under CI
+# conditions so the comparison is made where the failure actually happens.
+#
+# Both arms run inside a single job, sequentially on the same runner. They are
+# deliberately NOT a matrix dimension: the whole premise is that the machine matters,
+# so splitting the arms across two runners would reintroduce the variable being tested.
+#
+# Manual only. It never runs on a push, a PR or a schedule, so it costs nothing until
+# someone asks for it.
+name: Firestore flake probe
+
+on:
+  workflow_dispatch:
+    inputs:
+      iterations:
+        description: "Test runs per arm (each is a full emulator start/stop, roughly 25s)"
+        required: false
+        default: "30"
+      node_versions:
+        description: "JSON array of Node majors to probe"
+        required: false
+        default: '["22", "24"]'
+      arms:
+        description: "JSON array of grpc-js arms: baseline, override, or both"
+        required: false
+        default: '["baseline", "override"]'
+
+# Least privilege. This workflow reads the repo and writes nothing back.
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        node: ${{ fromJSON(inputs.node_versions) }}
+      fail-fast: false
+    name: Probe Node ${{ matrix.node }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Setup node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: ${{ matrix.node }}
+          check-latest: true
+          cache: 'npm'
+
+      - name: Setup Java
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Firebase emulator cache
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ~/.cache/firebase/emulators
+          key: firebase_emulators
+
+      - name: Install deps
+        run: npm ci
+
+      # Inputs and matrix values are passed through `env` rather than interpolated into
+      # the script body, so nothing from the dispatch form can be executed as shell.
+      #
+      # Counts are appended to `probe-counts.tsv` as each arm finishes, and the summary
+      # is rendered by a separate `always()` step. If the job hits its timeout partway
+      # through, whatever was measured before the wall still gets reported.
+      - name: Run the probe
+        env:
+          ITERATIONS: ${{ inputs.iterations }}
+          ARMS: ${{ inputs.arms }}
+          NODE_MAJOR: ${{ matrix.node }}
+        run: |
+          set -uo pipefail
+
+          # Guard against a non-numeric or absurd `iterations` before it reaches the loop.
+          case "$ITERATIONS" in
+            ''|*[!0-9]*) echo "iterations must be a positive integer, got '$ITERATIONS'"; exit 1 ;;
+          esac
+          if [ "$ITERATIONS" -lt 1 ] || [ "$ITERATIONS" -gt 200 ]; then
+            echo "iterations must be between 1 and 200, got '$ITERATIONS'"
+            exit 1
+          fi
+
+          # Validate the arm list rather than trusting the dispatch form, and normalize
+          # it to a space-separated list. Order is forced baseline-then-override because
+          # applying the override mutates node_modules for everything after it.
+          ARM_LIST="$(node -e '
+            const arms = JSON.parse(process.env.ARMS);
+            if (!Array.isArray(arms) || arms.length === 0) throw new Error("arms must be a non-empty JSON array");
+            const allowed = ["baseline", "override"];
+            for (const a of arms) if (!allowed.includes(a)) throw new Error("unknown arm: " + a);
+            process.stdout.write(allowed.filter((a) => arms.includes(a)).join(" "));
+          ')" || exit 1
+
+          mkdir -p probe-logs
+          : > probe-counts.tsv
+          : > probe-unmatched.txt
+
+          for arm in $ARM_LIST; do
+            echo "::group::Arm: $arm"
+
+            # `npm pkg set` mangles keys containing a slash, so edit package.json directly.
+            # `npm install` (not `npm ci`) is required here because applying an override
+            # necessarily changes the lockfile.
+            if [ "$arm" = "override" ]; then
+              node -e '
+                const fs = require("fs");
+                const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+                pkg.overrides = { ...pkg.overrides, "@grpc/grpc-js": "^1.14.0" };
+                fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2) + "\n");
+              '
+              npm install --no-audit --no-fund
+            fi
+
+            resolved="$(node -p "require('@grpc/grpc-js/package.json').version")"
+            echo "Arm $arm resolved @grpc/grpc-js: $resolved"
+
+            pass=0
+            flake=0
+            infra=0
+            hang=0
+            grpc_err=0
+            flake_with_grpc=0
+
+            for i in $(seq 1 "$ITERATIONS"); do
+              log="probe-logs/$arm-run-$i.log"
+
+              # A fresh emulator per iteration, matching how `npm test` runs in CI. Reusing
+              # one emulator across iterations would measure a different thing.
+              npx firebase emulators:exec --only firestore --project=rxfire-525a3 \
+                "npx vitest run firestore" > "$log" 2>&1
+              rc=$?
+
+              saw_grpc=0
+              if grep -q "RESOURCE_EXHAUSTED: Received message larger than max" "$log"; then
+                grpc_err=$((grpc_err + 1))
+                saw_grpc=1
+              fi
+
+              if [ "$rc" -eq 0 ]; then
+                pass=$((pass + 1))
+                echo "run $i: PASS"
+              elif grep -q "expected 'loading' to deeply equal 'success'" "$log"; then
+                # The #776 signature specifically, rather than "the job went red".
+                flake=$((flake + 1))
+                # Whether the gRPC desync and the #776 assertion co-occur is the whole
+                # question, so count the overlap rather than two independent totals.
+                if [ "$saw_grpc" -eq 1 ]; then
+                  flake_with_grpc=$((flake_with_grpc + 1))
+                fi
+                echo "run $i: FLAKE (rc=$rc)"
+              elif grep -qE "Test timed out in [0-9]+ms|Hook timed out in [0-9]+ms" "$log"; then
+                # #776 also reports a ~120s hang. A hang produces no assertion line, so
+                # without this bucket it would land in `infra` and vanish from the rate.
+                hang=$((hang + 1))
+                echo "run $i: HANG (rc=$rc)"
+              else
+                # Emulator start failures and the like. Counted separately because folding
+                # them in previously inflated a local flake-rate estimate by ~50%.
+                infra=$((infra + 1))
+                echo "run $i: INFRA FAILURE (rc=$rc), excluded from the rate"
+                # The flake match is a literal vitest assertion string. If vitest ever
+                # rewords it, every real flake would quietly become an infra failure, so
+                # surface the assertion line of anything unrecognized instead of hiding it.
+                if line="$(grep -m1 -E "AssertionError|expected .* to " "$log")"; then
+                  printf '%s run %s: %s\n' "$arm" "$i" "$line" >> probe-unmatched.txt
+                fi
+                tail -20 "$log"
+              fi
+            done
+
+            printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+              "$NODE_MAJOR" "$arm" "$resolved" \
+              "$pass" "$flake" "$infra" "$hang" "$grpc_err" "$flake_with_grpc" \
+              >> probe-counts.tsv
+
+            echo "arm=$arm node=$NODE_MAJOR pass=$pass flake=$flake infra=$infra hang=$hang grpc_err=$grpc_err overlap=$flake_with_grpc"
+            echo "::endgroup::"
+          done
+
+      # Rendered separately, and on `always()`, so a job killed by `timeout-minutes`
+      # still reports every arm that finished before the wall.
+      - name: Summarize
+        if: ${{ always() }}
+        env:
+          NODE_MAJOR: ${{ matrix.node }}
+        run: |
+          set -uo pipefail
+
+          if [ ! -s probe-counts.tsv ]; then
+            echo "No arm completed; nothing to summarize." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          while IFS=$'\t' read -r node arm resolved pass flake infra hang grpc_err overlap; do
+            counted=$((pass + flake))
+            if [ "$counted" -gt 0 ]; then
+              # `< /dev/null` so the subshell cannot consume the loop's stdin.
+              rate="$(node -e "process.stdout.write(((${flake}/${counted})*100).toFixed(1))" < /dev/null)"
+            else
+              rate="n/a"
+            fi
+
+            {
+              echo "### Node ${node} / ${arm} (@grpc/grpc-js ${resolved})"
+              echo ""
+              echo "| Outcome | Count |"
+              echo "| --- | --- |"
+              echo "| Pass | ${pass} |"
+              echo "| Flake (#776 signature) | ${flake} |"
+              echo "| ...of which also showed RESOURCE_EXHAUSTED | ${overlap} |"
+              echo "| Hang (test timeout, no assertion) | ${hang} |"
+              echo "| Infra failure (excluded) | ${infra} |"
+              echo "| Runs showing RESOURCE_EXHAUSTED | ${grpc_err} |"
+              echo ""
+              echo "**Flake rate: ${rate}% of ${counted} counted runs.**"
+              echo ""
+              if [ "$hang" -gt 0 ] || [ "$infra" -gt 0 ]; then
+                echo "> ${hang} hang(s) and ${infra} infra failure(s) are excluded from the rate."
+                echo ""
+              fi
+            } >> "$GITHUB_STEP_SUMMARY"
+          done < probe-counts.tsv
+
+          {
+            echo "---"
+            echo ""
+            echo "**A clean table here is not a verdict on CI.** This probe runs one emulator"
+            echo "and one test file; \`npm run test\` in CI starts five emulators and runs the"
+            echo "whole suite with parallel workers. \`RESOURCE_EXHAUSTED\` has never appeared in"
+            echo "a firestore-only run, so this configuration may reproduce the local failure"
+            echo "while never reaching the CI one."
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ -s probe-unmatched.txt ]; then
+            {
+              echo "### ⚠️ Unrecognized failures"
+              echo ""
+              echo "These runs failed with an assertion the classifier does not know, so they"
+              echo "were counted as infra. If vitest reworded the #776 message, the flake counts"
+              echo "above are wrong and the pattern needs updating."
+              echo ""
+              echo '```'
+              cat probe-unmatched.txt
+              echo '```'
+              echo ""
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          # The probe reports; it does not fail. A red job here would mean the probe
+          # broke, not that the flake reproduced.
+          total_counted="$(awk -F'\t' '{ s += $4 + $5 } END { print s + 0 }' probe-counts.tsv)"
+          if [ "$total_counted" -eq 0 ]; then
+            echo "Every run failed for infrastructure reasons; the probe measured nothing."
+            exit 1
+          fi
+
+      - name: Upload probe logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: probe-logs-node${{ matrix.node }}
+          path: |
+            probe-logs/
+            probe-counts.tsv
+            probe-unmatched.txt
+          retention-days: 7
