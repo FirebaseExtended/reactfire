@@ -10,6 +10,12 @@
 # deliberately NOT a matrix dimension: the whole premise is that the machine matters,
 # so splitting the arms across two runners would reintroduce the variable being tested.
 #
+# WORKLOAD. The first run of this probe (2026-08-07) came back 120/120 clean in
+# `firestore-only` mode, with zero `RESOURCE_EXHAUSTED`. That configuration runs one
+# emulator and one test file, while the failures in #776 come from `npm run test`: five
+# emulators and the whole suite. So the isolated suite does not reproduce either failure
+# and cannot serve as a control. `full-suite` runs the actual CI workload instead.
+#
 # Manual only. It never runs on a push, a PR or a schedule, so it costs nothing until
 # someone asks for it.
 name: Firestore flake probe
@@ -17,8 +23,16 @@ name: Firestore flake probe
 on:
   workflow_dispatch:
     inputs:
+      workload:
+        description: "Which workload to run each iteration"
+        required: false
+        type: choice
+        default: "full-suite"
+        options:
+          - "full-suite"
+          - "firestore-only"
       iterations:
-        description: "Test runs per arm (each is a full emulator start/stop, roughly 25s)"
+        description: "Test runs per arm (full-suite ~23s each, firestore-only ~8s each)"
         required: false
         default: "30"
       node_versions:
@@ -37,7 +51,20 @@ permissions:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    # Sized 2026-08-07 on the `Run tests` step of the real CI job (not the whole job,
+    # which is ~57s including install and setup).
+    #
+    # ⚠️ Do NOT size this on a single figure. Across recent CI runs that step lands
+    # anywhere from 20 to 31 seconds, and a timeout cares about the slow tail, not the
+    # median. At 31s the 200 cap wants ~207 minutes, which a flat-23s estimate (~153)
+    # would have put comfortably inside 180. And if #776's reported ~120s hang ever
+    # reproduces, those iterations cost far more than any of this.
+    #
+    # The default 30 per arm is ~28-38 minutes full-suite and is safe under any reading.
+    # This ceiling exists for the 200 cap, so it is set past the pessimistic figure
+    # rather than the average one. The `always()` summary step means a run that does hit
+    # the wall still reports the arms that finished.
+    timeout-minutes: 240
     strategy:
       matrix:
         node: ${{ fromJSON(inputs.node_versions) }}
@@ -71,6 +98,14 @@ jobs:
       - name: Install deps
         run: npm ci
 
+      # The full suite starts the functions emulator, which will not come up without
+      # these. `test.yaml` does the same thing before `npm run test`. Skipped in
+      # firestore-only mode, where no functions emulator is started.
+      - name: Install deps for functions
+        if: ${{ inputs.workload == 'full-suite' }}
+        run: npm install --no-audit --no-fund
+        working-directory: ./functions
+
       # Inputs and matrix values are passed through `env` rather than interpolated into
       # the script body, so nothing from the dispatch form can be executed as shell.
       #
@@ -81,8 +116,15 @@ jobs:
         env:
           ITERATIONS: ${{ inputs.iterations }}
           ARMS: ${{ inputs.arms }}
+          WORKLOAD: ${{ inputs.workload }}
           NODE_MAJOR: ${{ matrix.node }}
         run: |
+          # ⚠️ errexit is ON here even though nothing below turns it on: GitHub runs an
+          # undeclared `run:` step as `bash -e {0}`, and `set -uo pipefail` does not
+          # disable it. Every command that is ALLOWED to fail therefore has to say so.
+          # Getting this wrong means the step dies on the first failing iteration and
+          # the probe can only ever report a clean table, which is the one failure mode
+          # that makes the whole workflow useless. See the loop below.
           set -uo pipefail
 
           # Guard against a non-numeric or absurd `iterations` before it reaches the loop.
@@ -93,6 +135,25 @@ jobs:
             echo "iterations must be between 1 and 200, got '$ITERATIONS'"
             exit 1
           fi
+
+          # `full-suite` reproduces what `npm run test` does in CI: every emulator in
+          # firebase.json, every test file. `firestore-only` is the narrower original,
+          # kept because it isolates the Firestore client and is ~3x faster per run.
+          case "$WORKLOAD" in
+            full-suite)
+              EMULATOR_ARGS=""
+              VITEST_ARGS=""
+              ;;
+            firestore-only)
+              EMULATOR_ARGS="--only firestore"
+              VITEST_ARGS="firestore"
+              ;;
+            *)
+              echo "workload must be full-suite or firestore-only, got '$WORKLOAD'"
+              exit 1
+              ;;
+          esac
+          echo "Workload: $WORKLOAD"
 
           # Validate the arm list rather than trusting the dispatch form, and normalize
           # it to a space-separated list. Order is forced baseline-then-override because
@@ -138,11 +199,22 @@ jobs:
             for i in $(seq 1 "$ITERATIONS"); do
               log="probe-logs/$arm-run-$i.log"
 
-              # A fresh emulator per iteration, matching how `npm test` runs in CI. Reusing
-              # one emulator across iterations would measure a different thing.
-              npx firebase emulators:exec --only firestore --project=rxfire-525a3 \
-                "npx vitest run firestore" > "$log" 2>&1
+              # A fresh emulator start per iteration, matching how `npm test` runs in CI.
+              # Reusing one emulator across iterations would measure a different thing.
+              # Unquoted on purpose: both are either empty or a fixed literal set above,
+              # never user input.
+              #
+              # ⚠️ `set +e` is LOAD-BEARING, do not remove it. This command failing is the
+              # entire point of the probe, but the step runs under `bash -e`, so without
+              # this the first flake kills the step before `rc` is even read: no
+              # classification, no tally for the arm, and an empty or half-written
+              # probe-counts.tsv. It was removed once on the reasoning that the script
+              # never sets `-e` itself, which is true and irrelevant.
+              set +e
+              npx firebase emulators:exec $EMULATOR_ARGS --project=rxfire-525a3 \
+                "npx vitest run $VITEST_ARGS" > "$log" 2>&1
               rc=$?
+              set -e
 
               saw_grpc=0
               if grep -q "RESOURCE_EXHAUSTED: Received message larger than max" "$log"; then
@@ -150,11 +222,41 @@ jobs:
                 saw_grpc=1
               fi
 
+              # ⚠️ EVERY QUESTION BELOW IS SCOPED TO FIRESTORE'S OWN OUTPUT, and it has to
+              # be. In firestore-only mode anything in the log was necessarily about #776.
+              # In full-suite mode that is false: `expected 'loading' to deeply equal
+              # 'success'` is just what vitest prints when a data hook's status assertion
+              # fails, and it appears in 6 of the 9 test files, 40 times over. An unscoped
+              # search counts a slow storage upload or a functions failure as a #776 flake.
+              #
+              # In a vitest log the FAIL line names the file and the assertion or timeout
+              # sits on the NEXT line, verified against #781's real overnight failure, so
+              # -A1 is the correct window. Captured into a variable rather than piped into
+              # `grep -q`, because an early-exiting `grep -q` can SIGPIPE its producer and
+              # `pipefail` would turn that 141 into a silent "no match".
+              fs_fails="$(grep -A1 -E "FAIL.*test/firestore\.test\.tsx" "$log" || true)"
+
               if [ "$rc" -eq 0 ]; then
                 pass=$((pass + 1))
                 echo "run $i: PASS"
-              elif grep -q "expected 'loading' to deeply equal 'success'" "$log"; then
-                # The #776 signature specifically, rather than "the job went red".
+              elif grep -qE "FAIL.*test/firestore\.test\.tsx.*double check - emulator is running" "$log"; then
+                # `test/{auth,firestore,database}.test.tsx` each open with an emulator
+                # health check. If FIRESTORE's fails, its emulator did not come up and no
+                # firestore result this iteration means anything, so the run is void.
+                #
+                # ⚠️ Scoped to firestore deliberately. An unscoped check let ANY emulator's
+                # health failure outrank a real firestore flake in the same run, filing it
+                # as infra and dropping it from the rate. A non-firestore health failure
+                # now falls through to the final `else`, where it is still excluded but is
+                # recorded in probe-unmatched.txt instead of being silently miscounted.
+                #
+                # This must precede the hang check either way: a health check fails BY
+                # timing out, so it would otherwise read as the #776 120s hang.
+                infra=$((infra + 1))
+                echo "run $i: INFRA FAILURE (rc=$rc), firestore emulator health check failed, excluded from the rate"
+                tail -20 "$log"
+              elif grep -q "expected 'loading' to deeply equal 'success'" <<< "$fs_fails"; then
+                # The #776 signature, in firestore's output specifically.
                 flake=$((flake + 1))
                 # Whether the gRPC desync and the #776 assertion co-occur is the whole
                 # question, so count the overlap rather than two independent totals.
@@ -162,20 +264,24 @@ jobs:
                   flake_with_grpc=$((flake_with_grpc + 1))
                 fi
                 echo "run $i: FLAKE (rc=$rc)"
-              elif grep -qE "Test timed out in [0-9]+ms|Hook timed out in [0-9]+ms" "$log"; then
+              elif grep -qE "Test timed out in [0-9]+ms|Hook timed out in [0-9]+ms" <<< "$fs_fails"; then
                 # #776 also reports a ~120s hang. A hang produces no assertion line, so
                 # without this bucket it would land in `infra` and vanish from the rate.
+                # Scoped like the flake check: a timeout in any other test file is not
+                # the #776 hang and must not be presented as one.
                 hang=$((hang + 1))
                 echo "run $i: HANG (rc=$rc)"
               else
-                # Emulator start failures and the like. Counted separately because folding
-                # them in previously inflated a local flake-rate estimate by ~50%.
+                # Everything else: emulator start failures, a non-firestore health check,
+                # a failure in another test file. Counted separately because folding them
+                # in previously inflated a local flake-rate estimate by ~50%.
                 infra=$((infra + 1))
                 echo "run $i: INFRA FAILURE (rc=$rc), excluded from the rate"
-                # The flake match is a literal vitest assertion string. If vitest ever
-                # rewords it, every real flake would quietly become an infra failure, so
-                # surface the assertion line of anything unrecognized instead of hiding it.
-                if line="$(grep -m1 -E "AssertionError|expected .* to " "$log")"; then
+                # Two ways to land here that must not be silent: vitest rewording the #776
+                # assertion (which would turn every real flake into an infra failure), and
+                # a genuine failure in another test file. Record the first FAIL line from
+                # anywhere in the log, not just firestore's, so both are visible.
+                if line="$(grep -m1 -E "FAIL |AssertionError|expected .* to " "$log")"; then
                   printf '%s run %s: %s\n' "$arm" "$i" "$line" >> probe-unmatched.txt
                 fi
                 tail -20 "$log"
@@ -197,6 +303,7 @@ jobs:
         if: ${{ always() }}
         env:
           NODE_MAJOR: ${{ matrix.node }}
+          WORKLOAD: ${{ inputs.workload }}
         run: |
           set -uo pipefail
 
@@ -215,7 +322,7 @@ jobs:
             fi
 
             {
-              echo "### Node ${node} / ${arm} (@grpc/grpc-js ${resolved})"
+              echo "### Node ${node} / ${arm} / ${WORKLOAD} (@grpc/grpc-js ${resolved})"
               echo ""
               echo "| Outcome | Count |"
               echo "| --- | --- |"
@@ -238,11 +345,18 @@ jobs:
           {
             echo "---"
             echo ""
-            echo "**A clean table here is not a verdict on CI.** This probe runs one emulator"
-            echo "and one test file; \`npm run test\` in CI starts five emulators and runs the"
-            echo "whole suite with parallel workers. \`RESOURCE_EXHAUSTED\` has never appeared in"
-            echo "a firestore-only run, so this configuration may reproduce the local failure"
-            echo "while never reaching the CI one."
+            if [ "$WORKLOAD" = "firestore-only" ]; then
+              echo "⚠️ **A clean table here is not a verdict on CI.** This ran one emulator and"
+              echo "one test file; \`npm run test\` in CI starts five emulators and runs the whole"
+              echo "suite with parallel workers. The 2026-08-07 run of this mode came back 120/120"
+              echo "clean with zero \`RESOURCE_EXHAUSTED\`, so this configuration is not known to"
+              echo "reproduce either the local or the CI failure. Prefer \`full-suite\`."
+            else
+              echo "This ran the same workload as CI: every emulator in \`firebase.json\` and the"
+              echo "whole test suite, one fresh emulator start per iteration. A failure in any"
+              echo "test file counts, but only the #776 assertion signature counts toward the"
+              echo "flake rate; anything else is reported separately and listed below."
+            fi
             echo ""
           } >> "$GITHUB_STEP_SUMMARY"
 
