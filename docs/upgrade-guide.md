@@ -2,6 +2,32 @@
 
 ReactFire v5 contains breaking changes. This section lists them as they land; add an entry here in any PR that changes public behavior.
 
+## `AuthCheck` and `ClaimsCheck` removed
+
+Both components were deprecated in v4 (May 2021) in favor of the `useSigninCheck` hook, which shipped in the same release. They have been removed in v5.
+
+They only ever worked with `<FirebaseAppProvider suspense={true}>`, and in non-suspense mode they logged a deprecation warning and rendered anyway. If you used them without suspense, you have been seeing that warning.
+
+**If you use either component**, replace it with `useSigninCheck`:
+
+```tsx
+// Before
+<AuthCheck fallback={<SignInForm />} requiredClaims={{ admin: true }}>
+  <AdminPage />
+</AuthCheck>
+
+// After
+const { status, data: signInCheckResult } = useSigninCheck({ requiredClaims: { admin: true } });
+
+if (status === 'loading') return <LoadingSpinner />;
+
+return signInCheckResult.signedIn && signInCheckResult.hasRequiredClaims ? <AdminPage /> : <SignInForm />;
+```
+
+`useSigninCheck` also gives you the failed-claim details through `signInCheckResult.errors`, which the components never exposed, and it works in both suspense and non-suspense mode.
+
+The exported `AuthCheckProps` and `ClaimsCheckProps` types are gone with them. **`ClaimCheckErrors` remains**, since it is part of the `useSigninCheck` result shape.
+
 ## Error handling behavior change
 
 Previously, errors from any reactfire hook were thrown unconditionally, making `status: 'error'` unreachable in practice. In v5, error handling depends on the mode:

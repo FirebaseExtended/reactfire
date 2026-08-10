@@ -8,7 +8,7 @@
 
 > **useUser**\<`T`\>(`options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`User` \| `null`\>
 
-Defined in: [src/auth.tsx:22](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L22)
+Defined in: [src/auth.tsx:20](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L20)
 
 Subscribe to Firebase auth state changes, including token refresh
 
