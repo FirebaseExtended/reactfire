@@ -16,6 +16,10 @@
 # emulators and the whole suite. So the isolated suite does not reproduce either failure
 # and cannot serve as a control. `full-suite` runs the actual CI workload instead.
 #
+# WHAT IT MEASURES NOW (2026-08-10). The grpc-js override was tested and does not fix the
+# flake, so the open question is timing: whether the iterations that fail are the ones
+# where the emulators were slow. Each iteration records its health-check durations.
+#
 # Manual only. It never runs on a push, a PR or a schedule, so it costs nothing until
 # someone asks for it.
 name: Firestore flake probe
@@ -42,7 +46,9 @@ on:
       arms:
         description: "JSON array of grpc-js arms: baseline, override, or both"
         required: false
-        default: '["baseline", "override"]'
+        # Baseline alone by default since 2026-08-10: the override was measured and does
+        # not fix the flake (#776). Kept as an option rather than deleted.
+        default: '["baseline"]'
 
 # Least privilege. This workflow reads the repo and writes nothing back.
 permissions:
@@ -169,6 +175,7 @@ jobs:
           mkdir -p probe-logs
           : > probe-counts.tsv
           : > probe-unmatched.txt
+          : > probe-iterations.tsv
 
           for arm in $ARM_LIST; do
             echo "::group::Arm: $arm"
@@ -198,6 +205,7 @@ jobs:
 
             for i in $(seq 1 "$ITERATIONS"); do
               log="probe-logs/$arm-run-$i.log"
+              json="probe-logs/$arm-run-$i.json"
 
               # A fresh emulator start per iteration, matching how `npm test` runs in CI.
               # Reusing one emulator across iterations would measure a different thing.
@@ -210,11 +218,49 @@ jobs:
               # classification, no tally for the arm, and an empty or half-written
               # probe-counts.tsv. It was removed once on the reasoning that the script
               # never sets `-e` itself, which is true and irrelevant.
+              # ⚠️ The json reporter is what makes the timing usable; do not read durations
+              # out of the human log instead. The default reporter prints a per-test line
+              # only above its 300ms slow threshold, pass or fail, so the log drops auth
+              # entirely and censors the fast end of firestore and database. A comparison
+              # across outcomes needs every iteration, not the slow ones.
               set +e
               npx firebase emulators:exec $EMULATOR_ARGS --project=rxfire-525a3 \
-                "npx vitest run $VITEST_ARGS" > "$log" 2>&1
+                "npx vitest run $VITEST_ARGS --reporter=default --reporter=json --outputFile.json=$json" > "$log" 2>&1
               rc=$?
               set -e
+
+              # Health-check duration per emulator, in ms: firestore, auth, database. All
+              # three so a slow firestore round trip can be told apart from a slow runner.
+              #
+              # ⚠️ Scoped by FILE, not by test title. All three files open with a test named
+              # `double check - emulator is running`, so matching the title alone records
+              # whichever one vitest emitted first.
+              #
+              # `na` when the json is missing or unparseable, and for auth and database in
+              # firestore-only mode. Never read it as a fast run.
+              health_line="$(node -e '
+                const fs = require("fs");
+                const p = process.argv[1];
+                const files = ["test/firestore.test.tsx", "test/auth.test.tsx", "test/database.test.tsx"];
+                const out = files.map(() => "na");
+                if (!fs.existsSync(p)) { process.stdout.write(out.join("\t")); process.exit(0); }
+                let report;
+                try { report = JSON.parse(fs.readFileSync(p, "utf8")); }
+                catch { process.stdout.write(out.join("\t")); process.exit(0); }
+                for (const file of report.testResults || []) {
+                  const idx = files.findIndex((f) => String(file.name || "").includes(f));
+                  if (idx === -1) continue;
+                  for (const a of file.assertionResults || []) {
+                    if (a.title === "double check - emulator is running" && typeof a.duration === "number") {
+                      out[idx] = String(Math.round(a.duration));
+                      break;
+                    }
+                  }
+                }
+                process.stdout.write(out.join("\t"));
+              ' "$json" 2>/dev/null || true)"
+              [ -n "$health_line" ] || health_line="$(printf 'na\tna\tna')"
+              IFS=$'\t' read -r health_ms health_auth health_db <<< "$health_line"
 
               saw_grpc=0
               if grep -q "RESOURCE_EXHAUSTED: Received message larger than max" "$log"; then
@@ -238,7 +284,8 @@ jobs:
 
               if [ "$rc" -eq 0 ]; then
                 pass=$((pass + 1))
-                echo "run $i: PASS"
+                outcome=pass
+                echo "run $i: PASS (firestore health check ${health_ms}ms)"
               elif grep -qE "FAIL.*test/firestore\.test\.tsx.*double check - emulator is running" "$log"; then
                 # `test/{auth,firestore,database}.test.tsx` each open with an emulator
                 # health check. If FIRESTORE's fails, its emulator did not come up and no
@@ -253,6 +300,7 @@ jobs:
                 # This must precede the hang check either way: a health check fails BY
                 # timing out, so it would otherwise read as the #776 120s hang.
                 infra=$((infra + 1))
+                outcome=infra
                 echo "run $i: INFRA FAILURE (rc=$rc), firestore emulator health check failed, excluded from the rate"
                 tail -20 "$log"
               elif grep -q "expected 'loading' to deeply equal 'success'" <<< "$fs_fails"; then
@@ -263,19 +311,22 @@ jobs:
                 if [ "$saw_grpc" -eq 1 ]; then
                   flake_with_grpc=$((flake_with_grpc + 1))
                 fi
-                echo "run $i: FLAKE (rc=$rc)"
+                outcome=flake
+                echo "run $i: FLAKE (rc=$rc, firestore health check ${health_ms}ms)"
               elif grep -qE "Test timed out in [0-9]+ms|Hook timed out in [0-9]+ms" <<< "$fs_fails"; then
                 # #776 also reports a ~120s hang. A hang produces no assertion line, so
                 # without this bucket it would land in `infra` and vanish from the rate.
                 # Scoped like the flake check: a timeout in any other test file is not
                 # the #776 hang and must not be presented as one.
                 hang=$((hang + 1))
-                echo "run $i: HANG (rc=$rc)"
+                outcome=hang
+                echo "run $i: HANG (rc=$rc, firestore health check ${health_ms}ms)"
               else
                 # Everything else: emulator start failures, a non-firestore health check,
                 # a failure in another test file. Counted separately because folding them
                 # in previously inflated a local flake-rate estimate by ~50%.
                 infra=$((infra + 1))
+                outcome=infra
                 echo "run $i: INFRA FAILURE (rc=$rc), excluded from the rate"
                 # Two ways to land here that must not be silent: vitest rewording the #776
                 # assertion (which would turn every real flake into an infra failure), and
@@ -286,6 +337,14 @@ jobs:
                 fi
                 tail -20 "$log"
               fi
+
+              # One row per iteration, so the health-check duration can be compared across
+              # outcomes rather than only totalled. The per-arm counts below stay as they
+              # were; this is additive.
+              printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+                "$NODE_MAJOR" "$arm" "$i" "$outcome" \
+                "$health_ms" "$health_auth" "$health_db" "$saw_grpc" \
+                >> probe-iterations.tsv
             done
 
             printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
@@ -360,6 +419,65 @@ jobs:
             echo ""
           } >> "$GITHUB_STEP_SUMMARY"
 
+          # Firestore's health check is a bare `addDoc` round trip and every `waitFor` in
+          # test/firestore.test.tsx uses the 1000ms default, so a slow round trip would
+          # explain the failures. Compares distributions, not flake events: a run yields
+          # few flakes but records a duration every iteration. It describes; overlapping
+          # ranges are a real answer, not a failed one.
+          if [ -s probe-iterations.tsv ]; then
+            {
+              echo "### Firestore emulator health check, by outcome"
+              echo ""
+              node -e '
+                const fs = require("fs");
+                const rows = fs.readFileSync("probe-iterations.tsv", "utf8").trim().split("\n").filter(Boolean)
+                  .map((l) => l.split("\t"))
+                  .map(([node, arm, i, outcome, fsMs, authMs, dbMs, grpc]) => ({ arm, outcome, fsMs, authMs, dbMs }));
+                // Even n takes the mean of the two middle values. Taking the upper made
+                // the median and max cells print the same number at n = 2, and the flake
+                // row is where n is smallest.
+                const median = (a) => {
+                  const m = a.length >> 1;
+                  return a.length % 2 ? a[m] : Math.round((a[m - 1] + a[m]) / 2);
+                };
+                // Each cell carries its own n: the row count includes iterations that
+                // recorded no duration, so a row of 5 can rest on 2 measurements.
+                const series = (rs, key) => {
+                  const a = rs.map((r) => Number(r[key])).filter((n) => Number.isFinite(n)).sort((x, y) => x - y);
+                  return a.length ? `${median(a)} / ${a[a.length - 1]} (n=${a.length})` : "-";
+                };
+                // One table per arm. Pooling them would put baseline and override into one
+                // distribution while the counts tables above stay per-arm.
+                const arms = [...new Set(rows.map((r) => r.arm))];
+                for (const arm of arms) {
+                  const armRows = rows.filter((r) => r.arm === arm);
+                  if (arms.length > 1) { console.log(`Arm: ${arm}`); console.log(""); }
+                  console.log("Median / max, in ms, with the count of iterations that recorded one.");
+                  console.log("");
+                  console.log("| Outcome | runs | firestore | auth | database |");
+                  console.log("| --- | --- | --- | --- | --- |");
+                  for (const name of ["pass", "flake", "hang", "infra"]) {
+                    const rs = armRows.filter((r) => r.outcome === name);
+                    if (!rs.length) continue;
+                    console.log(`| ${name} | ${rs.length} | ${series(rs, "fsMs")} | ${series(rs, "authMs")} | ${series(rs, "dbMs")} |`);
+                  }
+                  console.log("");
+                  const missing = armRows.filter((r) => !Number.isFinite(Number(r.fsMs)))
+                    .reduce((m, r) => m.set(r.outcome, (m.get(r.outcome) || 0) + 1), new Map());
+                  if (missing.size) {
+                    const parts = [...missing].map(([outcome, n]) => `${n} ${outcome}`).join(", ");
+                    console.log(`> No firestore duration recorded for ${parts}, usually because the emulator never came up.`);
+                    console.log("");
+                  }
+                }
+                console.log("> Read the columns against each other. Firestore slow while auth and database");
+                console.log("> stay flat points at the Firestore client or its stream; all three rising");
+                console.log("> together points at runner-wide contention instead, which is a different bug.");
+              ' || echo "(could not summarize durations)"
+              echo ""
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
           if [ -s probe-unmatched.txt ]; then
             {
               echo "### ⚠️ Unrecognized failures"
@@ -392,4 +510,5 @@ jobs:
             probe-logs/
             probe-counts.tsv
             probe-unmatched.txt
+            probe-iterations.tsv
           retention-days: 7
