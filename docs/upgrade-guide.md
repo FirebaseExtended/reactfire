@@ -6,7 +6,7 @@ ReactFire v5 contains breaking changes. This section lists them as they land; ad
 
 Both components were deprecated in v4 (May 2021) in favor of the `useSigninCheck` hook, which shipped in the same release. They have been removed in v5.
 
-They only ever worked with `<FirebaseAppProvider suspense={true}>`, and in non-suspense mode they logged a deprecation warning and rendered anyway. If you used them without suspense, you have been seeing that warning.
+`ClaimsCheck`, and `AuthCheck` with `requiredClaims`, only ever worked with `<FirebaseAppProvider suspense={true}>`. In non-suspense mode they threw `Error: ClaimsCheck must be run in Suspense mode` as soon as a signed-in user reached the claims check. `AuthCheck` without `requiredClaims` did work in non-suspense mode. Both `AuthCheck` shapes logged a deprecation warning first, but `ClaimsCheck` on its own threw before reaching its warning, so you may have seen no warning at all.
 
 **If you use either component**, replace it with `useSigninCheck`:
 
@@ -17,9 +17,10 @@ They only ever worked with `<FirebaseAppProvider suspense={true}>`, and in non-s
 </AuthCheck>
 
 // After
-const { status, data: signInCheckResult } = useSigninCheck({ requiredClaims: { admin: true } });
+const { status, data: signInCheckResult, error } = useSigninCheck({ requiredClaims: { admin: true } });
 
 if (status === 'loading') return <LoadingSpinner />;
+if (status === 'error') return <ErrorPage error={error} />;
 
 return signInCheckResult.signedIn && signInCheckResult.hasRequiredClaims ? <AdminPage /> : <SignInForm />;
 ```

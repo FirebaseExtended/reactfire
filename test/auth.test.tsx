@@ -29,12 +29,13 @@ describe('Authentication', () => {
   );
 
   // Stands in for the removed <AuthCheck>: renders children when signed in and a fallback
-  // when not. Kept in suspense mode behind a Suspense boundary so the tests that used
-  // AuthCheckWrapper still exercise the same path.
+  // when not. Built on useUser, which is what AuthCheck itself used before delegating to
+  // ClaimsCheck, so the tests in describe('useUser') keep exercising useUser. These tests
+  // never passed requiredClaims, so the claims path is not part of what they covered.
   const SigninGate = ({ children }: { children?: any }) => {
-    const { data: signinResult } = useSigninCheck();
+    const { data: user } = useUser();
 
-    if (signinResult?.signedIn !== true) {
+    if (!user) {
       return <h1 data-testid="signed-out">not signed in</h1>;
     }
 
