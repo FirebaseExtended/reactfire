@@ -1,0 +1,24 @@
+// Rules for this demo's data model. NOT the rules the local emulator loads:
+// the repo root's firebase.json points at the root firestore.rules, which is
+// open by design because reactfire's own test suite depends on it. Deploy these
+// to whichever project the demo runs against.
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /recipes/{recipeId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+
+      // Signed-in users may only ever add or remove their own uid from likedBy.
+      allow update: if request.auth != null
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likedBy'])
+                    && request.resource.data.likedBy.toSet().difference(resource.data.likedBy.toSet())
+                       in [[].toSet(), [request.auth.uid].toSet()]
+                    && resource.data.likedBy.toSet().difference(request.resource.data.likedBy.toSet())
+                       in [[].toSet(), [request.auth.uid].toSet()];
+
+      allow delete: if false;
+    }
+  }
+}
