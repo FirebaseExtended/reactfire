@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom/extend-expect';
 import { act, cleanup, render, renderHook, waitFor } from '@testing-library/react';
 import * as React from 'react';
-import { renderToString } from 'react-dom/server';
+import { Writable } from 'node:stream';
+import { renderToString, renderToPipeableStream } from 'react-dom/server';
 import { of, Subject, BehaviorSubject, throwError } from 'rxjs';
 import { useObservable, ReactFireOptions } from '../src/index';
 
@@ -345,6 +346,37 @@ describe('useObservable', () => {
       // The #748 regression test: delete the third argument to useSyncExternalStore and
       // this fails with "Missing getServerSnapshot".
       expect(() => renderToString(<Probe observableId="ssr-renders" observable$={observable$} />)).not.toThrow();
+    });
+
+    // The App Router streams rather than calling renderToString, and streaming surfaces
+    // failures the synchronous renderer does not, so the fix is checked against both.
+    it('renders on the server under the streaming renderer', async () => {
+      const observable$: Subject<any> = new Subject();
+      let error: unknown;
+
+      const html = await new Promise<string>((resolve, reject) => {
+        const chunks: string[] = [];
+        const sink = new Writable({
+          write(chunk, _encoding, callback) {
+            chunks.push(chunk.toString());
+            callback();
+          }
+        });
+        sink.on('finish', () => resolve(chunks.join('')));
+        sink.on('error', reject);
+
+        const stream = renderToPipeableStream(<Probe observableId="ssr-streaming" observable$={observable$} />, {
+          onError(e) {
+            error = e;
+          },
+          onAllReady() {
+            stream.pipe(sink);
+          }
+        });
+      });
+
+      expect(error).toBeUndefined();
+      expect(html).toContain('loading:undefined');
     });
 
     it('reports loading on the server when there is no initialData', () => {
