@@ -332,22 +332,18 @@ describe('useObservable', () => {
   });
 
   describe('Server rendering', () => {
-    // Renders `status` and `data` so the assertions read the snapshot React actually used,
-    // rather than a value the test computed for itself.
+    // Renders `status` and `data` so assertions read the snapshot React actually used.
     const Probe = ({ observableId, observable$, config }: { observableId: string; observable$: Subject<any>; config?: ReactFireOptions }) => {
       const { status, data } = useObservable(observableId, observable$, { suspense: false, ...config });
-      // A single interpolated child, because adjacent JSX text nodes render with `<!-- -->`
-      // separators between them and the assertions below match on the plain string.
+      // One interpolated child: adjacent JSX text nodes render with `<!-- -->` between them.
       return <div>{`${status}:${String(data)}`}</div>;
     };
 
     it('renders on the server instead of throwing', () => {
       const observable$: Subject<any> = new Subject();
 
-      // Without a getServerSnapshot, React throws "Missing getServerSnapshot, which is
-      // required for server-rendered content" and the whole subtree falls back to client
-      // rendering. This is the #748 regression test: delete the third argument to
-      // useSyncExternalStore and this assertion fails.
+      // The #748 regression test: delete the third argument to useSyncExternalStore and
+      // this fails with "Missing getServerSnapshot".
       expect(() => renderToString(<Probe observableId="ssr-renders" observable$={observable$} />)).not.toThrow();
     });
 
@@ -368,10 +364,8 @@ describe('useObservable', () => {
     });
 
     it('does not leak a cached value from another request into the server snapshot', async () => {
-      // `preloadedObservables` lives on `globalThis` and is keyed only by observableId, so on
-      // a server every concurrent request shares it. A getServerSnapshot that read
-      // `observable.immutableStatus` would render whatever the previous request left behind.
-      // Here the first render stands in for that earlier request.
+      // `preloadedObservables` is on `globalThis`, keyed only by observableId, so concurrent
+      // server requests share it. The first render below stands in for an earlier request.
       const observable$: Subject<any> = new Subject();
       const observableId = 'ssr-no-cross-request-leak';
 
@@ -386,10 +380,8 @@ describe('useObservable', () => {
     });
 
     it('prefers the callers initialData over a value already in the shared cache', async () => {
-      // The branch above that reads `initialData` is only reachable when the cache ALREADY
-      // holds a value for this id: otherwise the overlay in `useObservable` sets status,
-      // data and hasEmitted itself and the server snapshot never decides anything. So seed
-      // the cache first, exactly as the leak test does, and only then pass `initialData`.
+      // The `initialData` branch is only reachable when the cache already holds a value for
+      // this id; otherwise `useObservable`'s overlay decides and the snapshot never does.
       const observable$: Subject<any> = new Subject();
       const observableId = 'ssr-initial-data-beats-cache';
 

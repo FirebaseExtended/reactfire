@@ -104,31 +104,11 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
     return observable.immutableStatus;
   }, [observable]);
 
-  // `useSyncExternalStore` requires a third argument when the tree is rendered on a
-  // server or hydrated; without it React throws "Missing getServerSnapshot, which is
-  // required for server-rendered content" and the surrounding subtree falls back to
-  // client rendering.
-  //
-  // This applies on React 18 and up. Below that, `use-sync-external-store/shim` ignores the
-  // third argument on the server as well as the client, so both shapes render identically
-  // and nothing here regresses. It also does nothing for it.
-  //
-  // This deliberately does NOT return `observable.immutableStatus` the way `getSnapshot`
-  // does. `preloadedObservables` is a `globalThis` cache keyed only by `observableId`, so
-  // on a server it is shared by every concurrent request. Seeding the server snapshot from
-  // it would let one request render data another request fetched for the same path.
-  //
-  // So no field below carries data across requests: `status`, `hasEmitted` and `data` come
-  // from `config`, which is the caller's own input on this render. `firstValuePromise` does
-  // read the shared `observable`, but it is a `Promise<void>` that resolves without a value,
-  // so it discloses nothing. It is not optional on `ObservableStatus`, and the
-  // `as ObservableStatus<T>` cast below means neither `tsc` nor the tests would notice if it
-  // were dropped: a caller doing `status.firstValuePromise.then(...)` on the server would
-  // just throw.
-  //
-  // The result is memoized per component instance because React compares the value it
-  // returns across renders, and a fresh object each time is what triggers the
-  // "The result of getServerSnapshot should be cached" error.
+  // Reads only `config`, never `observable.immutableStatus`: `preloadedObservables` is a
+  // `globalThis` cache keyed only by `observableId`, so a server shares it across concurrent
+  // requests, and seeding from it would render one request's data into another's HTML.
+  // The `as` cast below hides a missing `firstValuePromise` from `tsc` and the tests.
+  // Held in a ref because React requires a stable value across renders.
   const serverSnapshotRef = React.useRef<ObservableStatus<T> | undefined>(undefined);
   const getServerSnapshot = React.useCallback<() => ObservableStatus<T>>(() => {
     if (serverSnapshotRef.current === undefined) {
@@ -145,10 +125,8 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
     }
 
     return serverSnapshotRef.current;
-    // `config.initialData` and `config.startWithValue` are read above but deliberately left
-    // out of the dependency array. Callers routinely pass a fresh `config` literal on every
-    // render, so including them would rebuild this callback constantly, and the ref means
-    // the value is computed once per component instance regardless.
+    // Callers pass a fresh `config` literal each render, so the fields read above are kept
+    // out of the deps; the ref computes the value once per instance anyway.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [observable, hasInitialData]);
 
