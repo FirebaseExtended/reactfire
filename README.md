@@ -10,6 +10,7 @@ Firebase.
   auth state, realtime data, and all other Firebase SDK events. Plus, they automatically unsubscribe when your component unmounts.
 - **Access Firebase libraries from any component** - Need the Firestore SDK? `useFirestore`. Remote Config? `useRemoteConfig`.
 - **Safely configure Firebase libraries** - Libraries like Firestore and Remote Config require settings like `enablePersistence` to be set before any data fetches are made. This can be tough to support in React's world of re-renders. ReactFire gives you `useInitFirestore` and `useInitRemoteConfig` hooks that guarantee they're set before anything else.
+- **Optional `<Suspense>` support** - Hand loading states to React instead of checking a status yourself. Off by default, opt in with the `suspense` prop. See [Suspense](#suspense) below.
 
 ## Platform support
 
@@ -93,19 +94,16 @@ render(
 
 This repository is maintained by Googlers but is not a supported Firebase product. Issues here are answered by maintainers and other community members on GitHub on a best-effort basis.
 
-### Extra Experimental [concurrent mode](https://reactjs.org/docs/concurrent-mode-suspense.html) features
+## Suspense
 
-These features are marked as *extra experimental* because they use experimental React features that [will not be stable until sometime after React 18 is released](https://github.com/reactwg/react-18/discussions/47#:~:text=Likely%20after%20React%2018.0%3A%20Suspense%20for%20Data%20Fetching).
+ReactFire's hooks can throw promises for [`<Suspense>`](https://react.dev/reference/react/Suspense) to catch, so React handles loading states for you instead of you checking `status` on each result.
 
-- **Loading states handled by `<Suspense>`** - ReactFire's hooks throw promises
-  that Suspense can catch. Let React
-  [handle loading states for you](https://reactjs.org/docs/concurrent-mode-suspense.html).
-- **Automatically instrument your `Suspense` load times** - Need to automatically instrument your `Suspense` load times with [RUM](https://firebase.google.com/docs/perf-mon)? Use `<SuspenseWithPerf />`.
-
-Enable concurrent mode features by following the [concurrent mode setup guide](https://reactjs.org/docs/concurrent-mode-adoption.html#installation) and then setting the `suspense` prop in `FirebaseAppProvider`:
+This is **off by default**. Opt in with the `suspense` prop on `FirebaseAppProvider`:
 
 ```jsx
 <FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={true}>
 ```
 
-See concurrent mode code samples in [example/withSuspense](https://github.com/FirebaseExtended/reactfire/tree/main/example/withSuspense)
+`<SuspenseWithPerf />` does the same and also measures how long the fallback was shown, using the browser's [User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/Performance_API/User_timing).
+
+See [example/withSuspense](https://github.com/FirebaseExtended/reactfire/tree/main/example/withSuspense) for full samples.
