@@ -22,6 +22,9 @@ ui-debug.log
 # npm pack artifacts
 reactfire-*.tgz
 reactfire.tgz
+# ...except the demo's pinned build, which is its reactfire dependency.
+# Regenerate with `npx tsc && npx vite build && npm pack` at the commit in the filename.
+!recipe-demo/reactfire-*.tgz
 package/
 publish.sh
 unpack.sh

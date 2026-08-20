@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import '@picocss/pico/css/pico.min.css';
-import { SessionProvider } from '@/lib/session-context';
+import { Providers } from '@/lib/providers';
 import { SessionNav } from '@/components/SessionNav';
 
 export const metadata: Metadata = {
@@ -13,7 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <SessionProvider>
+        <Providers>
           <header className="container">
             <nav>
               <ul>
@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </nav>
           </header>
           <main className="container">{children}</main>
-        </SessionProvider>
+        </Providers>
       </body>
     </html>
   );

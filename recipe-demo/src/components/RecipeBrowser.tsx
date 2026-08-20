@@ -1,13 +1,18 @@
 'use client';
 
 import { useState } from 'react';
+import { useFirestoreCollectionData } from 'reactfire';
 import { RecipeList } from './RecipeList';
-import { useRecipes } from '@/lib/use-recipes';
+import { recipeQuery } from '@/lib/recipes';
 import { CUISINES, type Cuisine, type Recipe } from '@/lib/types';
 
 export function RecipeBrowser({ initialRecipes }: { initialRecipes: Recipe[] }) {
   const [cuisine, setCuisine] = useState<Cuisine | 'all'>('all');
-  const { recipes, status, error } = useRecipes(cuisine, initialRecipes);
+  const { data, status } = useFirestoreCollectionData(recipeQuery(cuisine), {
+    idField: 'id',
+    initialData: initialRecipes,
+  });
+  const recipes = data as Recipe[];
 
   return (
     <>
@@ -23,11 +28,7 @@ export function RecipeBrowser({ initialRecipes }: { initialRecipes: Recipe[] }) 
         </select>
       </label>
 
-      {error ? (
-        <article aria-invalid="true">Could not load recipes: {error.message}</article>
-      ) : (
-        <RecipeList recipes={recipes} loading={status === 'loading'} />
-      )}
+      <RecipeList recipes={recipes} loading={status === 'loading'} />
     </>
   );
 }

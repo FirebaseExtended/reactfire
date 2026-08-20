@@ -2,26 +2,27 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, type ReactNode } from 'react';
-import { useSession } from '@/lib/session-context';
+import { useSigninCheck } from 'reactfire';
 
 export function RequireAuth({ children }: { children: ReactNode }) {
-  const { user, status } = useSession();
+  const { status, data: signinResult } = useSigninCheck();
+  const signedIn = signinResult?.signedIn ?? false;
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    // Waiting for 'ready' is what stops a signed-in user being bounced to
-    // /signin on every hard reload, before onAuthStateChanged has fired.
-    if (status === 'ready' && !user) {
+    // Waiting for 'success' is what stops a signed-in user being bounced to
+    // /signin on every hard reload, before the auth state has resolved.
+    if (status === 'success' && !signedIn) {
       router.replace(`/signin?next=${encodeURIComponent(pathname)}`);
     }
-  }, [status, user, router, pathname]);
+  }, [status, signedIn, router, pathname]);
 
   if (status === 'loading') {
     return <article aria-busy="true">Checking your session</article>;
   }
 
-  if (!user) {
+  if (!signedIn) {
     return null;
   }
 
