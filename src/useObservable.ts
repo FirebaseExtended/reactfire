@@ -107,7 +107,8 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
   // Reads only `config`, never `observable.immutableStatus`: `preloadedObservables` is a
   // `globalThis` cache keyed only by `observableId`, so a server shares it across concurrent
   // requests, and seeding from it would render one request's data into another's HTML.
-  // The `as` cast below hides a missing `firstValuePromise` from `tsc` and the tests.
+  // React 18 and up only: below that the shim's server path ignores this function and returns
+  // `getSnapshot()`, so the cached value still reaches the markup there.
   // Held in a ref because React requires a stable value across renders.
   const serverSnapshotRef = React.useRef<ObservableStatus<T> | undefined>(undefined);
   const getServerSnapshot = React.useCallback<() => ObservableStatus<T>>(() => {
@@ -121,7 +122,7 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
         data: initialDataValue,
         error: undefined,
         firstValuePromise: observable.firstEmission
-      } as ObservableStatus<T>;
+      };
     }
 
     return serverSnapshotRef.current;
