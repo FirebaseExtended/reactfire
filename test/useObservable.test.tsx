@@ -1,8 +1,10 @@
 import '@testing-library/jest-dom/extend-expect';
 import { act, cleanup, render, renderHook, waitFor } from '@testing-library/react';
 import * as React from 'react';
+import { Writable } from 'node:stream';
+import { renderToString, renderToPipeableStream } from 'react-dom/server';
 import { of, Subject, BehaviorSubject, throwError } from 'rxjs';
-import { useObservable } from '../src/index';
+import { useObservable, ReactFireOptions } from '../src/index';
 
 describe('useObservable', () => {
   afterEach(cleanup);
@@ -327,6 +329,102 @@ describe('useObservable', () => {
 
       // if useObservable doesn't re-emit, the value here will still be "Jeff"
       expect(refreshedComp).toHaveTextContent('James');
+    });
+  });
+
+  describe('Server rendering', () => {
+    // Renders `status` and `data` so assertions read the snapshot React actually used.
+    const Probe = ({ observableId, observable$, config }: { observableId: string; observable$: Subject<any>; config?: ReactFireOptions }) => {
+      const { status, data } = useObservable(observableId, observable$, { suspense: false, ...config });
+      // One interpolated child: adjacent JSX text nodes render with `<!-- -->` between them.
+      return <div>{`${status}:${String(data)}`}</div>;
+    };
+
+    it('renders on the server instead of throwing', () => {
+      const observable$: Subject<any> = new Subject();
+
+      // The #748 regression test: delete the third argument to useSyncExternalStore and
+      // this fails with "Missing getServerSnapshot".
+      expect(() => renderToString(<Probe observableId="ssr-renders" observable$={observable$} />)).not.toThrow();
+    });
+
+    // The App Router streams rather than calling renderToString, and streaming surfaces
+    // failures the synchronous renderer does not, so the fix is checked against both.
+    it('renders on the server under the streaming renderer', async () => {
+      const observable$: Subject<any> = new Subject();
+      let error: unknown;
+
+      const html = await new Promise<string>((resolve, reject) => {
+        const chunks: string[] = [];
+        const sink = new Writable({
+          write(chunk, _encoding, callback) {
+            chunks.push(chunk.toString());
+            callback();
+          }
+        });
+        sink.on('finish', () => resolve(chunks.join('')));
+        sink.on('error', reject);
+
+        const stream = renderToPipeableStream(<Probe observableId="ssr-streaming" observable$={observable$} />, {
+          onError(caughtError) {
+            error = caughtError;
+          },
+          onAllReady() {
+            stream.pipe(sink);
+          }
+        });
+      });
+
+      expect(error).toBeUndefined();
+      expect(html).toContain('loading:undefined');
+    });
+
+    it('reports loading on the server when there is no initialData', () => {
+      const observable$: Subject<any> = new Subject();
+
+      const html = renderToString(<Probe observableId="ssr-loading" observable$={observable$} />);
+
+      expect(html).toContain('loading:undefined');
+    });
+
+    it('reports initialData on the server when it is provided', () => {
+      const observable$: Subject<any> = new Subject();
+
+      const html = renderToString(<Probe observableId="ssr-initial-data" observable$={observable$} config={{ initialData: 'seeded' }} />);
+
+      expect(html).toContain('success:seeded');
+    });
+
+    it('does not leak a cached value from another request into the server snapshot', async () => {
+      // `preloadedObservables` is on `globalThis`, keyed only by observableId, so concurrent
+      // server requests share it. The first render below stands in for an earlier request.
+      const observable$: Subject<any> = new Subject();
+      const observableId = 'ssr-no-cross-request-leak';
+
+      const { result } = renderHook(() => useObservable(observableId, observable$, { suspense: false }));
+      act(() => observable$.next('first-request-secret'));
+      await waitFor(() => expect(result.current.data).toEqual('first-request-secret'));
+
+      const html = renderToString(<Probe observableId={observableId} observable$={observable$} />);
+
+      expect(html).not.toContain('first-request-secret');
+      expect(html).toContain('loading:undefined');
+    });
+
+    it('prefers the callers initialData over a value already in the shared cache', async () => {
+      // The `initialData` branch is only reachable when the cache already holds a value for
+      // this id; otherwise `useObservable`'s overlay decides and the snapshot never does.
+      const observable$: Subject<any> = new Subject();
+      const observableId = 'ssr-initial-data-beats-cache';
+
+      const { result } = renderHook(() => useObservable(observableId, observable$, { suspense: false }));
+      act(() => observable$.next('another-requests-value'));
+      await waitFor(() => expect(result.current.data).toEqual('another-requests-value'));
+
+      const html = renderToString(<Probe observableId={observableId} observable$={observable$} config={{ initialData: 'my-own-data' }} />);
+
+      expect(html).toContain('success:my-own-data');
+      expect(html).not.toContain('another-requests-value');
     });
   });
 });
