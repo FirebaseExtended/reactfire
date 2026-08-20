@@ -366,8 +366,8 @@ describe('useObservable', () => {
         sink.on('error', reject);
 
         const stream = renderToPipeableStream(<Probe observableId="ssr-streaming" observable$={observable$} />, {
-          onError(e) {
-            error = e;
+          onError(caughtError) {
+            error = caughtError;
           },
           onAllReady() {
             stream.pipe(sink);
