@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, Component, ErrorInfo, ReactNode } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo, Component, ErrorInfo, ReactNode } from 'react';
 import { 
   onAuthStateChanged, 
   User 
@@ -25,6 +25,7 @@ import {
   signIn, 
   logOut 
 } from './firebase';
+import { useFirestoreCollectionData } from 'reactfire';
 import { 
   Recipe, 
   Household, 
@@ -413,6 +414,25 @@ const STOCK_RECIPES: Partial<Recipe>[] = [
 
 // --- Main App ---
 
+// ReactFire hooks cannot be called conditionally, and this query only exists
+// once a user is signed in, so the subscription lives in a child that is
+// mounted only then.
+function HouseholdsFeed({ uid, onData }: { uid: string; onData: (households: Household[]) => void }) {
+  const householdsQuery = useMemo(
+    () => query(collection(db, 'households'), where(`members.${uid}`, 'in', ['admin', 'member', 'viewer'])),
+    [uid],
+  );
+  const { status, data } = useFirestoreCollectionData(householdsQuery, { idField: 'id' });
+
+  useEffect(() => {
+    if (status === 'success') {
+      onData(data as unknown as Household[]);
+    }
+  }, [status, data, onData]);
+
+  return null;
+}
+
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -537,31 +557,33 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
-  // Fetch Households
+  // Moved out of the snapshot callback, unchanged: keep the current selection
+  // if it still exists, otherwise fall back to the first household. Wrapped in
+  // useCallback with no dependencies because a fresh identity each render
+  // would re-run HouseholdsFeed's effect in a loop.
+  const handleHouseholds = useCallback((h: Household[]) => {
+    setHouseholds(h);
+    setHouseholdsLoading(false);
+    if (h.length > 0) {
+      setSelectedHousehold(prev => {
+        if (!prev) return h[0];
+        const updated = h.find(hh => hh.id === prev.id);
+        return updated || h[0];
+      });
+    } else {
+      setSelectedHousehold(null);
+    }
+  }, []);
+
   useEffect(() => {
     if (!user) {
+      // Matches the original bail-out exactly: loading cleared, the stale
+      // household list deliberately NOT cleared.
       setHouseholdsLoading(false);
-      return;
+    } else {
+      // The original set loading true on each user change before subscribing.
+      setHouseholdsLoading(true);
     }
-    setHouseholdsLoading(true);
-    const q = query(collection(db, 'households'), where(`members.${user.uid}`, 'in', ['admin', 'member', 'viewer']));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const h = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Household));
-      setHouseholds(h);
-      setHouseholdsLoading(false);
-      if (h.length > 0) {
-        setSelectedHousehold(prev => {
-          if (!prev) return h[0];
-          const updated = h.find(hh => hh.id === prev.id);
-          return updated || h[0];
-        });
-      } else {
-        setSelectedHousehold(null);
-      }
-    }, (error) => {
-      handleFirestoreError(error, OperationType.LIST, 'households');
-    });
-    return () => unsubscribe();
   }, [user]);
 
   // Fetch Recipes
@@ -804,11 +826,17 @@ export default function App() {
     return matchesSearch && matchesCategory;
   });
 
+  // The feeds must be mounted in every branch a signed-in user can reach
+  // (this spinner, onboarding, and the main screen), because App renders
+  // mutually exclusive screens and an unmounted hook is a dead subscription.
   if (loading || (user && householdsLoading)) {
     return (
-      <div className="h-screen flex items-center justify-center bg-stone-50">
-        <Loader2 className="w-8 h-8 animate-spin text-stone-400" />
-      </div>
+      <>
+        {user && <HouseholdsFeed uid={user.uid} onData={handleHouseholds} />}
+        <div className="h-screen flex items-center justify-center bg-stone-50">
+          <Loader2 className="w-8 h-8 animate-spin text-stone-400" />
+        </div>
+      </>
     );
   }
 
@@ -837,6 +865,8 @@ export default function App() {
 
   if (households.length === 0) {
     return (
+      <>
+      {user && <HouseholdsFeed uid={user.uid} onData={handleHouseholds} />}
       <div className="min-h-screen bg-[#f5f5f0] flex flex-col items-center justify-center p-6 font-serif">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -873,11 +903,13 @@ export default function App() {
           </button>
         </motion.div>
       </div>
+      </>
     );
   }
 
   return (
     <ErrorBoundary>
+      {user && <HouseholdsFeed uid={user.uid} onData={handleHouseholds} />}
       <div className="min-h-screen bg-[#f5f5f0] dark:bg-stone-950 text-stone-800 dark:text-stone-200 font-sans pb-24 transition-colors duration-300">
       <div id="main-content">
       {/* Header */}
