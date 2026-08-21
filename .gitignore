@@ -19,9 +19,10 @@ firestore-debug.log
 firebase-debug.log
 ui-debug.log
 
-# npm pack artifacts
+# npm pack artifacts. The demo folder's pinned build is deliberately tracked.
 reactfire-*.tgz
 reactfire.tgz
+!ai-studio-demo/reactfire-*.tgz
 package/
 publish.sh
 unpack.sh
