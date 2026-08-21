@@ -6,7 +6,7 @@
 
 # Interface: SignInCheckOptionsClaimsObject
 
-Defined in: [src/auth.tsx:89](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L89)
+Defined in: [src/auth.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L74)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [src/auth.tsx:89](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **forceRefresh?**: `boolean`
 
-Defined in: [src/auth.tsx:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L86)
+Defined in: [src/auth.tsx:71](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L71)
 
 #### Inherited from
 
@@ -54,7 +54,7 @@ Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob
 
 > **requiredClaims**: `ParsedToken`
 
-Defined in: [src/auth.tsx:90](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L90)
+Defined in: [src/auth.tsx:75](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L75)
 
 ***
 

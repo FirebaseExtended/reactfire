@@ -5,7 +5,6 @@ import { NEVER } from 'rxjs';
 import { preloadObservable } from '../src/useObservable';
 import {
   FirebaseAppProvider,
-  AuthCheck,
   AuthProvider,
   useUser,
   useSigninCheck,
@@ -29,11 +28,25 @@ describe('Authentication', () => {
     </FirebaseAppProvider>
   );
 
-  const AuthCheckWrapper = (props?: { children?: any }) => (
+  // Stands in for the removed <AuthCheck>: renders children when signed in and a fallback
+  // when not. Built on useUser, which is what AuthCheck itself used before delegating to
+  // ClaimsCheck, so the tests in describe('useUser') keep exercising useUser. These tests
+  // never passed requiredClaims, so the claims path is not part of what they covered.
+  const SigninGate = ({ children }: { children?: any }) => {
+    const { data: user } = useUser();
+
+    if (!user) {
+      return <h1 data-testid="signed-out">not signed in</h1>;
+    }
+
+    return <>{children ?? <h1 data-testid="signed-in">signed in</h1>}</>;
+  };
+
+  const SigninGateWrapper = (props?: { children?: any }) => (
     <FirebaseAppProvider firebaseApp={app} suspense={true}>
       <AuthProvider sdk={getAuth(app)}>
         <React.Suspense fallback={'loading'}>
-          <AuthCheck fallback={<h1 data-testid="signed-out">not signed in</h1>}>{props?.children || <h1 data-testid="signed-in">signed in</h1>}</AuthCheck>
+          <SigninGate>{props?.children}</SigninGate>
         </React.Suspense>
       </AuthProvider>
     </FirebaseAppProvider>
@@ -62,10 +75,8 @@ describe('Authentication', () => {
   });
 
   afterAll(() => {
-    afterAll(() => {
-      // @ts-expect-error console.info is mocked in beforeAll
-      console.info.mockRestore();
-    });
+    // @ts-expect-error console.info is mocked in beforeAll
+    console.info.mockRestore();
   });
 
   test('double check - emulator is running', async () => {
@@ -83,56 +94,6 @@ describe('Authentication', () => {
 
   afterEach(async () => {
     cleanup();
-  });
-
-  describe('AuthCheck', () => {
-    it('can find firebase Auth from Context', async () => {
-      const { getByTestId } = render(<AuthCheckWrapper />);
-
-      await waitFor(() => expect(getByTestId('signed-out')).toBeInTheDocument());
-    });
-
-    it('renders the fallback if a user is not signed in', async () => {
-      const { getByTestId } = render(<AuthCheckWrapper />);
-
-      await waitFor(() => expect(getByTestId('signed-out')).toBeInTheDocument());
-
-      await act(async () => {
-        await signIn();
-      });
-
-      await waitFor(() => expect(getByTestId('signed-in')).toBeInTheDocument());
-    });
-
-    it('renders children if a user is logged in', async () => {
-      await act(async () => {
-        await signIn();
-      });
-
-      const { getByTestId } = render(<AuthCheckWrapper />);
-
-      await waitFor(() => expect(getByTestId('signed-in')).toBeInTheDocument());
-    });
-
-    it('can switch between logged in and logged out', async () => {
-      const { getByTestId } = render(<AuthCheckWrapper />);
-
-      await waitFor(() => expect(getByTestId('signed-out')).toBeInTheDocument());
-
-      await act(async () => {
-        await signIn();
-      });
-
-      await waitFor(() => expect(getByTestId('signed-in')).toBeInTheDocument());
-
-      await act(async () => {
-        await signOut(getAuth(app));
-      });
-
-      await waitFor(() => expect(getByTestId('signed-out')).toBeInTheDocument());
-    });
-
-    test.todo('checks requiredClaims');
   });
 
   describe('useSigninCheck()', () => {
@@ -282,24 +243,30 @@ describe('Authentication', () => {
   });
 
   describe('useUser', () => {
-    it('always returns a user if inside an <AuthCheck> component', async () => {
-      // Since this is wrapped in an AuthCheck component and we never sign in, this should never get rendered
+    it('returns a user inside a signed-in gate', async () => {
+      // The <AuthCheck> version of this test was vacuous: `beforeEach` signs out, so the
+      // gate rendered its fallback, UserDetails never mounted, and neither expectation ran.
+      // Signing in first and awaiting the gated testid is what makes it real.
+      await act(async () => {
+        await signIn();
+      });
+
       const UserDetails = () => {
         const { data: user } = useUser();
 
         expect(user).not.toBeNull();
         expect(user).toBeDefined();
 
-        return <h1>Hello</h1>;
+        return <h1 data-testid="in">Hello</h1>;
       };
 
-      render(
-        <>
-          <AuthCheckWrapper>
-            <UserDetails />
-          </AuthCheckWrapper>
-        </>
+      const { findByTestId } = render(
+        <SigninGateWrapper>
+          <UserDetails />
+        </SigninGateWrapper>
       );
+
+      await findByTestId('in');
     });
 
     it('returns the same value as getAuth(app).currentUser', async () => {
@@ -366,7 +333,7 @@ describe('Authentication', () => {
       // a component that conditionally renders its child based on props
       const ConditionalRenderer = ({ renderChildren }: { renderChildren: boolean }) => {
         if (renderChildren) {
-          return <AuthCheckWrapper />;
+          return <SigninGateWrapper />;
         } else {
           return <span data-testid="no-children">Filler</span>;
         }

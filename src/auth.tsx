@@ -1,9 +1,7 @@
-import * as React from 'react';
 import { user } from 'rxfire/auth';
 import { preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus, ReactFireError } from './index.js';
 import { from, of, defer } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp.js';
 
 import type { Auth, User, IdTokenResult } from 'firebase/auth';
 type Claims = IdTokenResult['claims'];
@@ -49,19 +47,6 @@ export function useIdTokenResult(user: User, forceRefresh = false, options?: Rea
   const observable$ = defer(() => from(user.getIdTokenResult(forceRefresh)));
 
   return useObservable(observableId, observable$, options);
-}
-
-export interface AuthCheckProps {
-  fallback: React.ReactNode;
-  children: React.ReactNode;
-  requiredClaims?: Object;
-}
-
-export interface ClaimsCheckProps {
-  user: User;
-  fallback: React.ReactNode;
-  children: React.ReactNode;
-  requiredClaims: { [key: string]: any };
 }
 
 export interface ClaimCheckErrors {
@@ -203,78 +188,4 @@ function getClaimsObjectValidator(requiredClaims: Claims): ClaimsValidator {
       errors,
     };
   };
-}
-
-/**
- * @deprecated Use `useSigninCheck` instead
- *
- * Conditionally render children based on [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims).
- *
- * Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
- */
-export function ClaimsCheck({ user, fallback, children, requiredClaims }: ClaimsCheckProps) {
-  const { data, status, error } = useIdTokenResult(user, false);
-  
-  if (status === 'loading') {
-    throw new Error('ClaimsCheck must be run in Suspense mode');
-  } else if (status === 'error') {
-    throw error
-  }
-
-  const { claims } = data;
-  const missingClaims: { [key: string]: { expected: string; actual: string | undefined } } = {};
-
-  const suspenseMode = useSuspenseEnabledFromConfigAndContext();
-  if (!suspenseMode) {
-    console.warn(
-      'ClaimsCheck is deprecated and only works when ReactFire is in experimental Suspense Mode. Use useSigninCheck or set suspense={true} in FirebaseAppProvider if you want to use this component.'
-    );
-  }
-
-  if (requiredClaims) {
-    Object.keys(requiredClaims).forEach((claim) => {
-      if (requiredClaims[claim] !== claims[claim]) {
-        missingClaims[claim] = {
-          expected: requiredClaims[claim],
-          actual: claims[claim]?.toString(),
-        };
-      }
-    });
-  }
-
-  if (Object.keys(missingClaims).length === 0) {
-    return <>{children}</>;
-  } else {
-    return <>{fallback}</>;
-  }
-}
-
-/**
- * @deprecated Use `useSigninCheck` instead
- *
- * Conditionally render children based on signed-in status and [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims).
- *
- * Meant for Concurrent mode only (`<FirebaseAppProvider suspense=true />`). [More detail](https://github.com/FirebaseExtended/reactfire/issues/325#issuecomment-827654376).
- */
-export function AuthCheck({ fallback, children, requiredClaims }: AuthCheckProps): React.ReactElement {
-  const { data: user } = useUser<User>();
-
-  const suspenseMode = useSuspenseEnabledFromConfigAndContext();
-  if (!suspenseMode) {
-    console.warn(
-      'AuthCheck is deprecated and only works when ReactFire is in experimental Suspense Mode. Use useSigninCheck or set suspense={true} in FirebaseAppProvider if you want to use this component.'
-    );
-  }
-
-  if (user) {
-    return requiredClaims ? (
-      <ClaimsCheck user={user} fallback={fallback} requiredClaims={requiredClaims}>
-        {children}
-      </ClaimsCheck>
-    ) : (
-      <>{children}</>
-    );
-  } else {
-    return <>{fallback}</>;
-  }
 }

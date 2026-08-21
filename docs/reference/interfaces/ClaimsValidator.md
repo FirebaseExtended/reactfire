@@ -6,11 +6,11 @@
 
 # Interface: ClaimsValidator()
 
-Defined in: [src/auth.tsx:93](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L93)
+Defined in: [src/auth.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L78)
 
 > **ClaimsValidator**(`claims`): `object`
 
-Defined in: [src/auth.tsx:94](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L94)
+Defined in: [src/auth.tsx:79](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L79)
 
 ## Parameters
 
