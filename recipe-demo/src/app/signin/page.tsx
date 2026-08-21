@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState } from 'react';
+import { safeNext } from '@/lib/safe-next';
 import { signIn } from '@/lib/session';
 
 function SignInForm() {
@@ -18,7 +19,7 @@ function SignInForm() {
     setError(undefined);
     try {
       await signIn(email, password);
-      router.replace(searchParams.get('next') ?? '/');
+      router.replace(safeNext(searchParams.get('next'), window.location.origin));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
