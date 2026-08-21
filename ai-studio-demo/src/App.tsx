@@ -7,7 +7,6 @@ import {
   collection, 
   query, 
   where, 
-  onSnapshot, 
   addDoc, 
   updateDoc, 
   deleteDoc, 
@@ -433,6 +432,24 @@ function HouseholdsFeed({ uid, onData }: { uid: string; onData: (households: Hou
   return null;
 }
 
+// Same constraint as HouseholdsFeed: no query exists until a household is
+// selected, and a hook cannot opt out of running.
+function RecipesFeed({ householdId, onData }: { householdId: string; onData: (recipes: Recipe[]) => void }) {
+  const recipesQuery = useMemo(
+    () => query(collection(db, 'recipes'), where('householdId', '==', householdId)),
+    [householdId],
+  );
+  const { status, data } = useFirestoreCollectionData(recipesQuery, { idField: 'id' });
+
+  useEffect(() => {
+    if (status === 'success') {
+      onData(data as unknown as Recipe[]);
+    }
+  }, [status, data, onData]);
+
+  return null;
+}
+
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -586,25 +603,22 @@ export default function App() {
     }
   }, [user]);
 
-  // Fetch Recipes
+  // Moved out of the snapshot callback, comparator unchanged. Sorts a copy:
+  // the original sorted a fresh array from snapshot.docs.map, and sorting
+  // ReactFire's data in place would mutate its cached value.
+  const handleRecipes = useCallback((fetchedRecipes: Recipe[]) => {
+    const sorted = [...fetchedRecipes].sort((a, b) => {
+      const timeA = a.createdAt?.toMillis?.() || Date.now();
+      const timeB = b.createdAt?.toMillis?.() || Date.now();
+      return timeB - timeA;
+    });
+    setRecipes(sorted);
+  }, []);
+
   useEffect(() => {
     if (!user || !selectedHousehold) {
       setRecipes([]);
-      return;
     }
-    const q = query(collection(db, 'recipes'), where('householdId', '==', selectedHousehold.id));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const fetchedRecipes = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Recipe));
-      fetchedRecipes.sort((a, b) => {
-        const timeA = a.createdAt?.toMillis?.() || Date.now();
-        const timeB = b.createdAt?.toMillis?.() || Date.now();
-        return timeB - timeA;
-      });
-      setRecipes(fetchedRecipes);
-    }, (error) => {
-      handleFirestoreError(error, OperationType.LIST, 'recipes');
-    });
-    return () => unsubscribe();
   }, [user, selectedHousehold]);
 
   const handleCreateHousehold = async (name: string) => {
@@ -833,6 +847,9 @@ export default function App() {
     return (
       <>
         {user && <HouseholdsFeed uid={user.uid} onData={handleHouseholds} />}
+        {user && selectedHousehold && (
+          <RecipesFeed householdId={selectedHousehold.id} onData={handleRecipes} />
+        )}
         <div className="h-screen flex items-center justify-center bg-stone-50">
           <Loader2 className="w-8 h-8 animate-spin text-stone-400" />
         </div>
@@ -867,6 +884,9 @@ export default function App() {
     return (
       <>
       {user && <HouseholdsFeed uid={user.uid} onData={handleHouseholds} />}
+      {user && selectedHousehold && (
+        <RecipesFeed householdId={selectedHousehold.id} onData={handleRecipes} />
+      )}
       <div className="min-h-screen bg-[#f5f5f0] flex flex-col items-center justify-center p-6 font-serif">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -910,6 +930,9 @@ export default function App() {
   return (
     <ErrorBoundary>
       {user && <HouseholdsFeed uid={user.uid} onData={handleHouseholds} />}
+      {user && selectedHousehold && (
+        <RecipesFeed householdId={selectedHousehold.id} onData={handleRecipes} />
+      )}
       <div className="min-h-screen bg-[#f5f5f0] dark:bg-stone-950 text-stone-800 dark:text-stone-200 font-sans pb-24 transition-colors duration-300">
       <div id="main-content">
       {/* Header */}
