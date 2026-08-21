@@ -5,22 +5,23 @@ import { useEffect, useRef, useState } from 'react';
 import { recipeQuery, toRecipes } from './recipes';
 import type { Cuisine, Recipe } from './types';
 
-export type FeedStatus = 'hydrated' | 'live' | 'loading' | 'error';
+export type FeedStatus = 'loading' | 'ready' | 'error';
 
 /**
  * Takes over from the server-rendered list: seeds with what the server already
  * fetched, then switches to a live subscription without a loading flash.
  */
 export function useRecipes(cuisine: Cuisine | 'all', initialRecipes: Recipe[]) {
-  const renderedCuisine = useRef(cuisine);
+  // Which filter the current `recipes` describe. It starts as the cuisine the
+  // server rendered and moves on with every snapshot, so switching away and
+  // back still shows loading rather than the previous filter's list.
+  const loadedCuisine = useRef(cuisine);
   const [recipes, setRecipes] = useState<Recipe[]>(initialRecipes);
-  const [status, setStatus] = useState<FeedStatus>('hydrated');
+  const [status, setStatus] = useState<FeedStatus>('ready');
   const [error, setError] = useState<Error | undefined>();
 
   useEffect(() => {
-    // The server data only describes the cuisine the page was rendered for, so
-    // any other filter starts from nothing until the first snapshot lands.
-    if (cuisine !== renderedCuisine.current) {
+    if (cuisine !== loadedCuisine.current) {
       setStatus('loading');
     }
 
@@ -28,7 +29,8 @@ export function useRecipes(cuisine: Cuisine | 'all', initialRecipes: Recipe[]) {
       recipeQuery(cuisine),
       (snapshot) => {
         setRecipes(toRecipes(snapshot));
-        setStatus('live');
+        loadedCuisine.current = cuisine;
+        setStatus('ready');
         setError(undefined);
       },
       (err) => {
