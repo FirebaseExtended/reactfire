@@ -8,11 +8,30 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /recipes/{recipeId} {
       allow read: if true;
-      allow create: if request.auth != null;
+
+      // The list is server-rendered, so one document missing an array field
+      // fails the whole homepage rather than one card. The shape is enforced
+      // here because `toRecipes` casts to Recipe without checking.
+      allow create: if request.auth != null
+                    && request.resource.data.keys().hasOnly(
+                         ['title', 'cuisine', 'ingredients', 'steps', 'likedBy', 'createdAt'])
+                    && request.resource.data.keys().hasAll(
+                         ['title', 'cuisine', 'ingredients', 'steps', 'likedBy', 'createdAt'])
+                    && request.resource.data.title is string
+                    && request.resource.data.cuisine in
+                         ['Italian', 'Japanese', 'Mexican', 'Indian', 'French']
+                    && request.resource.data.ingredients is list
+                    && request.resource.data.steps is list
+                    && request.resource.data.createdAt is timestamp
+                    && request.resource.data.likedBy == [];
 
       // Signed-in users may only ever add or remove their own uid from likedBy.
+      // The set difference is blind to duplicates, so the size check is what
+      // stops a uid being written many times to inflate the count.
       allow update: if request.auth != null
                     && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likedBy'])
+                    && request.resource.data.likedBy.size() ==
+                       request.resource.data.likedBy.toSet().size()
                     && request.resource.data.likedBy.toSet().difference(resource.data.likedBy.toSet())
                        in [[].toSet(), [request.auth.uid].toSet()]
                     && resource.data.likedBy.toSet().difference(request.resource.data.likedBy.toSet())
