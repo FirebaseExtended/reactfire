@@ -8,10 +8,13 @@ import { CUISINES, type Cuisine, type Recipe } from '@/lib/types';
 
 export function RecipeBrowser({ initialRecipes }: { initialRecipes: Recipe[] }) {
   const [cuisine, setCuisine] = useState<Cuisine | 'all'>('all');
-  const { data, status } = useFirestoreCollectionData(recipeQuery(cuisine), {
-    idField: 'id',
-    initialData: initialRecipes,
-  });
+  // The server list is unfiltered, so it is only a valid seed for the unfiltered query.
+  // The key's presence is what counts: useObservable tests hasOwnProperty('initialData'),
+  // so passing it as undefined would report success with no data rather than loading.
+  const { data, status } = useFirestoreCollectionData(
+    recipeQuery(cuisine),
+    cuisine === 'all' ? { idField: 'id', initialData: initialRecipes } : { idField: 'id' },
+  );
   const recipes = data as Recipe[];
 
   return (
