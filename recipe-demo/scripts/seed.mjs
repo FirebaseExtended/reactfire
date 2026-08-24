@@ -1,6 +1,7 @@
 // Seeds the emulator (default) or a real project with a demo user and recipes.
-// Idempotent: deterministic document ids plus setDoc, so re-running overwrites
-// rather than duplicating.
+// Not idempotent: setDoc over an existing document is an update, so re-running
+// recomputes createdAt and resets likedBy to []. It also writes unauthenticated,
+// which firestore.rules rejects; it only works against the emulator's open rules.
 import { initializeApp } from 'firebase/app';
 import { connectFirestoreEmulator, doc, getFirestore, setDoc } from 'firebase/firestore';
 
