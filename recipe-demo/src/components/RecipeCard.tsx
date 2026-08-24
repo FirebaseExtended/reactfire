@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import { useUser } from 'reactfire';
 import { toggleLike } from '@/lib/recipes';
-import { useSession } from '@/lib/session-context';
 import type { Recipe } from '@/lib/types';
 
 export function RecipeCard({ recipe }: { recipe: Recipe }) {
-  const { user } = useSession();
+  const { data: user } = useUser();
   const [pending, setPending] = useState(false);
   const liked = user ? recipe.likedBy.includes(user.uid) : false;
 

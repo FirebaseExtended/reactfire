@@ -15,7 +15,8 @@
     "firebase": "^12.17.1",
     "next": "^16.3.1",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "reactfire": "4.2.6-exp.ac3ccf9"
   },
   "devDependencies": {
     "@types/node": "^24.3.0",

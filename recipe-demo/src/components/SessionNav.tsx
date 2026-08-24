@@ -1,11 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+import { useUser } from 'reactfire';
 import { logOut } from '@/lib/session';
-import { useSession } from '@/lib/session-context';
 
 export function SessionNav() {
-  const { user, status } = useSession();
+  const { data: user, status } = useUser();
 
   if (status === 'loading') {
     return (
