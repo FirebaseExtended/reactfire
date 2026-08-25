@@ -425,7 +425,7 @@ function HouseholdsFeed({ uid, onData }: { uid: string; onData: (households: Hou
 
   useEffect(() => {
     if (status === 'success') {
-      onData(data as unknown as Household[]);
+      onData(data as Household[]);
     }
   }, [status, data, onData]);
 
@@ -443,7 +443,7 @@ function RecipesFeed({ householdId, onData }: { householdId: string; onData: (re
 
   useEffect(() => {
     if (status === 'success') {
-      onData(data as unknown as Recipe[]);
+      onData(data as Recipe[]);
     }
   }, [status, data, onData]);
 
@@ -575,9 +575,7 @@ export default function App() {
   }, []);
 
   // Moved out of the snapshot callback, unchanged: keep the current selection
-  // if it still exists, otherwise fall back to the first household. Wrapped in
-  // useCallback with no dependencies because a fresh identity each render
-  // would re-run HouseholdsFeed's effect in a loop.
+  // if it still exists, otherwise fall back to the first household.
   const handleHouseholds = useCallback((h: Household[]) => {
     setHouseholds(h);
     setHouseholdsLoading(false);
@@ -606,6 +604,10 @@ export default function App() {
   // Moved out of the snapshot callback, comparator unchanged. Sorts a copy:
   // the original sorted a fresh array from snapshot.docs.map, and sorting
   // ReactFire's data in place would mutate its cached value.
+  // useCallback is load-bearing HERE and not on handleHouseholds: this one
+  // allocates a fresh array every call, so setRecipes re-renders every time,
+  // and a fresh identity each render re-runs RecipesFeed's effect in a loop.
+  // Measured unmemoized: thousands of runs in five seconds and still climbing.
   const handleRecipes = useCallback((fetchedRecipes: Recipe[]) => {
     const sorted = [...fetchedRecipes].sort((a, b) => {
       const timeA = a.createdAt?.toMillis?.() || Date.now();
