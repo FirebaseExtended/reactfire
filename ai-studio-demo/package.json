@@ -24,6 +24,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^10.1.0",
+    "reactfire": "4.2.6-exp.ac3ccf9",
     "tailwind-merge": "^3.4.1",
     "vite": "^6.2.0"
   },

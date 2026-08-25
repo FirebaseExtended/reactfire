@@ -15,6 +15,13 @@ View your app in AI Studio: https://ai.studio/apps/bundled/heirloom_recipes
 
 1. Install dependencies:
    `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
+2. Copy `.env.example` to `.env.local`. Vite only loads `.env.local`, so the
+   example file on its own has no effect.
+3. Set `GEMINI_API_KEY` in `.env.local` to your Gemini API key.
+4. Leave `VITE_USE_EMULATORS=true` to run against the local Firebase emulators,
+   which is what this branch is set up for. Start them from the repository root
+   with `firebase emulators:start` before running the app. Setting it to `false`
+   points the app at the real project named in `src/firebaseConfig.ts`, which
+   needs credentials this branch does not carry.
+5. Run the app:
    `npm run dev`
