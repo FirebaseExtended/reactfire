@@ -26,7 +26,7 @@ Get a firestore document and don't subscribe to changes
 
 ### options?
 
-[`ReactFireOptions`](../interfaces/ReactFireOptions.md)\<`T`\>
+[`ReactFireOptions`](../interfaces/ReactFireOptions.md)\<`DocumentSnapshot`\<`T`, `DocumentData`\>\>
 
 ## Returns
 
