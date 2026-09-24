@@ -12,7 +12,7 @@ describe('Realtime Database (RTDB)', () => {
   const database = getDatabase(app);
   connectDatabaseEmulator(database, 'localhost', 9000);
 
-  const Provider: React.FunctionComponent<{ children: React.ReactElement }> = ({ children }) => (
+  const Provider: React.FunctionComponent<{ children: React.ReactNode }> = ({ children }) => (
     <FirebaseAppProvider firebaseApp={app}>
       <DatabaseProvider sdk={database}>{children}</DatabaseProvider>
     </FirebaseAppProvider>
