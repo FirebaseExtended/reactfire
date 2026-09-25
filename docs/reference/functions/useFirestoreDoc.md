@@ -28,7 +28,7 @@ You can preload data for this hook by calling `preloadFirestoreDoc`
 
 ### options?
 
-[`ReactFireOptions`](../interfaces/ReactFireOptions.md)\<`T`\>
+[`ReactFireOptions`](../interfaces/ReactFireOptions.md)\<`DocumentSnapshot`\<`T`, `DocumentData`\>\>
 
 ## Returns
 

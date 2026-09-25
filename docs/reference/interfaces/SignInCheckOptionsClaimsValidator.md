@@ -40,7 +40,7 @@ Defined in: [src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob
 
 ### initialData?
 
-> `optional` **initialData?**: `any`
+> `optional` **initialData?**: [`SigninCheckResult`](../type-aliases/SigninCheckResult.md)
 
 Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L26)
 
@@ -52,7 +52,7 @@ Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob
 
 ### ~~startWithValue?~~
 
-> `optional` **startWithValue?**: `any`
+> `optional` **startWithValue?**: [`SigninCheckResult`](../type-aliases/SigninCheckResult.md)
 
 Defined in: [src/index.ts:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L30)
 
