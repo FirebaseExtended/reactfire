@@ -26,7 +26,7 @@ Subscribe to a Firestore collection
 
 ### options?
 
-[`ReactFireOptions`](../interfaces/ReactFireOptions.md)\<`T`[]\>
+[`ReactFireOptions`](../interfaces/ReactFireOptions.md)\<`QuerySnapshot`\<`T`, `DocumentData`\>\>
 
 ## Returns
 
