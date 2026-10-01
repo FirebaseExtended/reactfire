@@ -29,3 +29,6 @@ unpack.sh
 example/.parcel-cache/
 .firebaserc
 stats.html
+
+# sub-package lockfile (not published, consumers generate their own)
+src/nextjs/package-lock.json
