@@ -1,0 +1,143 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: {userId}
+    // Fields:
+    //   - displayName: string (required)
+    //   - photoURL: string (optional)
+    //
+    // Collection: households
+    // Document ID: {householdId}
+    // Fields:
+    //   - name: string (required)
+    //   - ownerId: string (required)
+    //   - members: map (required) - { [userId]: role }
+    //
+    // Collection: recipes
+    // Document ID: {recipeId}
+    // Fields:
+    //   - title: string (required)
+    //   - ingredients: list (required)
+    //   - instructions: list (required)
+    //   - category: string (required)
+    //   - rating: number (optional)
+    //   - authorId: string (required)
+    //   - householdId: string (required)
+    //   - sourceUrl: string (optional)
+    //   - imageUrl: string (optional)
+    //   - createdAt: timestamp (required)
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "sodoom@google.com" && request.auth.token.email_verified == true));
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Check if user is a member of a household using the household document data
+    function isMemberOf(householdData) {
+      return isAuthenticated() && 
+             householdData.members.get(request.auth.uid, 'none') in ['admin', 'member', 'viewer'];
+    }
+
+    // Check if user is a member of a household by fetching the document
+    function isMemberOfId(householdId) {
+      return isAuthenticated() && 
+             isMemberOf(get(/databases/$(database)/documents/households/$(householdId)).data);
+    }
+
+    function getHouseholdRole(householdId) {
+      return get(/databases/$(database)/documents/households/$(householdId)).data.members.get(request.auth.uid, 'none');
+    }
+
+    function isHouseholdAdmin(householdId) {
+      let household = get(/databases/$(database)/documents/households/$(householdId)).data;
+      return isAuthenticated() && 
+             (household.members.get(request.auth.uid, 'none') == 'admin' || household.ownerId == request.auth.uid);
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+    function isValidRecipe(data) {
+      return hasRequiredFields(['title', 'ingredients', 'instructions', 'authorId', 'householdId', 'createdAt']) &&
+             data.title is string && data.title.size() > 0 && data.title.size() < 200 &&
+             data.ingredients is list && data.ingredients.size() > 0 &&
+             data.instructions is list && data.instructions.size() > 0 &&
+             data.createdAt is timestamp;
+    }
+
+    function isValidHousehold(data) {
+      return hasRequiredFields(['name', 'ownerId', 'members']) &&
+             data.name is string && data.name.size() > 0 && data.name.size() < 100 &&
+             data.members is map &&
+             (!('createdAt' in data) || data.createdAt is timestamp);
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId) || isAdmin();
+    }
+
+    match /households/{householdId} {
+      allow read: if isMemberOf(resource.data) || isAdmin();
+      allow create: if isAuthenticated() && 
+                      (request.resource.data.ownerId == request.auth.uid || isAdmin()) &&
+                      request.resource.data.members[request.auth.uid] == 'admin' &&
+                      isValidHousehold(request.resource.data);
+      allow update: if (isHouseholdAdmin(householdId) || isAdmin()) && 
+                      request.resource.data.ownerId == resource.data.ownerId &&
+                      isValidHousehold(request.resource.data);
+      allow delete: if (isAuthenticated() && resource.data.ownerId == request.auth.uid) || isAdmin();
+    }
+
+    match /recipes/{recipeId} {
+      allow read: if isAdmin() || (isAuthenticated() && 
+                    (resource.data.authorId == request.auth.uid || 
+                     get(/databases/$(database)/documents/households/$(resource.data.householdId)).data.members.get(request.auth.uid, 'none') in ['admin', 'member', 'viewer']));
+      allow create: if isAuthenticated() && 
+                      (isMemberOfId(request.resource.data.householdId) || isAdmin()) && 
+                      (getHouseholdRole(request.resource.data.householdId) in ['admin', 'member'] || isAdmin()) &&
+                      (request.resource.data.authorId == request.auth.uid || isAdmin()) &&
+                      isValidRecipe(request.resource.data);
+      allow update: if isAuthenticated() && 
+                      (isMemberOfId(resource.data.householdId) || isAdmin()) && 
+                      (getHouseholdRole(resource.data.householdId) in ['admin', 'member'] || resource.data.authorId == request.auth.uid || isAdmin()) &&
+                      request.resource.data.authorId == resource.data.authorId &&
+                      request.resource.data.householdId == resource.data.householdId &&
+                      request.resource.data.createdAt == resource.data.createdAt &&
+                      isValidRecipe(request.resource.data);
+      allow delete: if isAdmin() || (isAuthenticated() && 
+                      (isHouseholdAdmin(resource.data.householdId) || resource.data.authorId == request.auth.uid));
+    }
+  }
+}
