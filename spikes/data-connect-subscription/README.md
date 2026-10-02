@@ -58,13 +58,23 @@ Mutation controls, with `tsc`'s exit captured directly rather than after a pipe:
 | `onNext: (res: number)` | exit 2, `TS2769` |
 | `notAny: IsAny<D> = true` | exit 2, `TS2322` |
 | `src: DataSource = 'BOGUS'` | exit 2, `TS2322` |
-| **Remove `unsubscribe()` from the cleanup** | **exit 0** |
+| Remove the `unsubscribe()` call alone | exit 2, `TS6133` |
+| **Remove the call and the `const unsubscribe =` binding** | **exit 0** |
 
-**The last row is the one worth knowing.** Deleting the teardown typechecks
-clean, so "compiles under `strict`" says nothing about whether the lifecycle is
-right, and the lifecycle is the entire point of the hook. The teardown, the
-liveness guard and the re-subscribe key are backed by review only. That is the
-other reason this is a branch rather than a number in a doc.
+**Corrected 2026-10-02, Armando's catch on the PR.** The last two rows were
+previously one row reading "Remove `unsubscribe()` from the cleanup: exit 0".
+That is wrong: `noUnusedLocals` catches the orphaned binding, so deleting the
+call alone fails. Exit 0 needs the binding deleted too. Re-run at `5df2d1b`
+confirms all three states.
+
+**The point survives in the second form, and it is the one worth knowing.** A
+teardown removed properly typechecks clean, so "compiles under `strict`" says
+nothing about whether the lifecycle is right, and the lifecycle is the entire
+point of the hook. ⚠️ **It also makes the original claim weaker than stated:
+`noUnusedLocals` does catch the single most likely way someone breaks this by
+accident.** The teardown, the liveness guard and the re-subscribe key are still
+backed by review rather than by the compiler, which is the other reason this is a
+branch rather than a number in a doc.
 
 ## Known limits
 
