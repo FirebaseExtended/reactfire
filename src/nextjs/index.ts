@@ -1,0 +1,730 @@
+import { NextResponse, NextRequest } from "next/server";
+import { LRUCache } from "lru-cache";
+import {
+  createRemoteJWKSet,
+  createLocalJWKSet,
+  jwtVerify,
+  JWTPayload,
+  JWTHeaderParameters,
+  decodeJwt,
+  decodeProtectedHeader,
+  JSONWebKeySet,
+} from "jose";
+// getDefaultAppConfig is an internal @firebase/util export with no public stability guarantee.
+import { getDefaultAppConfig } from "@firebase/util";
+import type { FirebaseOptions } from "firebase/app";
+
+
+export type FirebaseJWTPayload = JWTPayload & {
+  email?: string;
+  email_verified?: boolean;
+  picture?: string;
+  name?: string;
+  user_id?: string;
+  firebase?: { tenant?: string; [key: string]: unknown };
+  [key: string]: unknown;
+};
+
+/**
+ * Cache abstraction used by this middleware.
+ *
+ * If you want to use a Redis client (ioredis, node-redis, Upstash, etc.) you
+ * must wrap it in an adapter that maps this interface to the client's own API.
+ * The options object uses lowercase `ex` / `nx` keys, which do NOT match the
+ * native signatures of ioredis or node-redis v4; pass them through with the
+ * appropriate translation in your adapter's `set()` implementation.
+ */
+export interface CacheProvider {
+  get<T = unknown>(key: string): Promise<T | null | undefined> | T | null | undefined;
+  set(
+    key: string,
+    value: any,
+    options?: { ex?: number; ttl?: number; nx?: boolean },
+  ): Promise<any> | any;
+  setex?(key: string, seconds: number, value: any): Promise<any> | any;
+  del?(key: string): Promise<any> | any;
+}
+
+export class MemoryCacheProvider implements CacheProvider {
+  private cache = new LRUCache<string, any>({ max: 1000 });
+
+  get<T = unknown>(key: string): T | null {
+    return (this.cache.get(key) as T) ?? null;
+  }
+
+  set(key: string, value: any, options?: { ex?: number; ttl?: number; nx?: boolean }): any {
+    if (options?.nx && this.cache.has(key)) return null;
+    const ttlSeconds = options?.ex ?? (options?.ttl ? Math.floor(options.ttl / 1000) : undefined);
+    // Treat 0 as "do not cache" (e.g. a max-age=0 from a server response).
+    const ttlMs = ttlSeconds !== undefined && ttlSeconds > 0 ? ttlSeconds * 1000 : undefined;
+    this.cache.set(key, value, { ttl: ttlMs });
+    return "OK";
+  }
+
+  setex(key: string, seconds: number, value: any): any {
+    return this.set(key, value, { ex: seconds });
+  }
+
+  del(key: string): any {
+    this.cache.delete(key);
+  }
+}
+
+const defaultMemoryCache = new MemoryCacheProvider();
+
+async function cacheGet<T>(cache: CacheProvider, key: string): Promise<T | null> {
+  try {
+    const val = await cache.get<T>(key);
+    return val ?? null;
+  } catch (e) {
+    console.error(`Cache get failed for key "${key}":`, e);
+    return null;
+  }
+}
+
+async function cacheSetEx(
+  cache: CacheProvider,
+  key: string,
+  ttlSeconds: number,
+  value: any,
+): Promise<void> {
+  try {
+    if (typeof cache.setex === "function") {
+      await cache.setex(key, ttlSeconds, value);
+    } else {
+      await cache.set(key, value, { ex: ttlSeconds });
+    }
+  } catch (e) {
+    console.error(`Cache set failed for key "${key}":`, e);
+  }
+}
+
+async function cacheSetNx(
+  cache: CacheProvider,
+  key: string,
+  ttlSeconds: number,
+  value: any,
+): Promise<boolean> {
+  try {
+    const res = await cache.set(key, value, { nx: true, ex: ttlSeconds });
+    return !!res;
+  } catch (e) {
+    console.error(`Cache setnx failed for key "${key}":`, e);
+    return false;
+  }
+}
+
+async function cacheDelete(cache: CacheProvider, key: string): Promise<void> {
+  try {
+    if (typeof cache.del === "function") {
+      await cache.del(key);
+    }
+  } catch (e) {
+    console.error(`Cache delete failed for key "${key}":`, e);
+  }
+}
+
+const MAX_MAX_AGE = 34560000; // 400 days, https://developer.chrome.com/blog/cookie-max-age-expires
+const MAX_JWKS_MAX_AGE = 86400; // 1 day; caps a server-supplied Cache-Control max-age so JWKS caching can't outlive key rotation
+
+const FIREBASE_AUTH_JWKS_URL =
+  "https://www.googleapis.com/robot/v1/metadata/jwk/securetoken@system.gserviceaccount.com";
+
+let _remoteJWKSet: ReturnType<typeof createRemoteJWKSet> | null = null;
+function getRemoteJWKSet() {
+  if (!_remoteJWKSet) {
+    _remoteJWKSet = createRemoteJWKSet(new URL(FIREBASE_AUTH_JWKS_URL), { timeoutDuration: 10000 });
+  }
+  return _remoteJWKSet;
+}
+
+async function getFirebaseAuthJwks(
+  cache: CacheProvider = defaultMemoryCache,
+  forceFetch: boolean = false,
+) {
+  if (cache === defaultMemoryCache && !forceFetch) {
+    return getRemoteJWKSet();
+  }
+
+  if (!forceFetch) {
+    const cachedJwks = await cacheGet<JSONWebKeySet>(cache, "firebase:jwks");
+    if (cachedJwks) {
+      return createLocalJWKSet(cachedJwks);
+    }
+  }
+
+  try {
+    const response = await fetch(FIREBASE_AUTH_JWKS_URL);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+    const cacheControl = response.headers.get("cache-control");
+    let maxAge = 21600; // default 6 hours
+    if (cacheControl) {
+      const match = cacheControl.match(/max-age=(\d+)/);
+      if (match) maxAge = Math.min(parseInt(match[1], 10), MAX_JWKS_MAX_AGE);
+    }
+
+    const jwks = (await response.json()) as JSONWebKeySet;
+    if (maxAge > 0) {
+      await cacheSetEx(cache, "firebase:jwks", maxAge, jwks);
+    }
+    return createLocalJWKSet(jwks);
+  } catch (e) {
+    console.error("Failed to fetch Firebase JWKS:", e);
+    // Fallback to remote JWKS set if fetch or parse fails entirely
+    return getRemoteJWKSet();
+  }
+}
+
+// `_AuthEmulatorRefreshToken` is an undocumented internal Firebase emulator property.
+// It could break if the emulator changes its refresh token format.
+export function isEmulatorRefreshToken(refreshToken: string): boolean {
+  try {
+    const decoded = decodeURIComponent(refreshToken);
+    const base64 = decoded.replace(/-/g, "+").replace(/_/g, "/");
+    const payload = JSON.parse(atob(base64));
+    return !!payload["_AuthEmulatorRefreshToken"];
+  } catch (e) {
+    return false;
+  }
+}
+
+export async function verifyFirebaseIdToken(
+  idToken: string,
+  projectId: string,
+  tenantId?: string,
+  cache: CacheProvider = defaultMemoryCache,
+): Promise<[FirebaseJWTPayload | undefined, isEmulatedCredential: boolean, refreshable: boolean]> {
+  let isEmulatedCredential = false;
+  let jwtPayload;
+  let jwtHeader;
+  let refreshable = true;
+  try {
+    jwtHeader = decodeProtectedHeader(idToken) as JWTHeaderParameters;
+    jwtPayload = decodeJwt(idToken) as FirebaseJWTPayload;
+  } catch (e) {
+    console.error("verifyFirebaseIdToken failed to parse token:", e);
+    refreshable = false;
+  }
+
+  if (
+    jwtHeader?.typ !== "JWT" ||
+    jwtPayload?.iss !== `https://securetoken.google.com/${projectId}` ||
+    jwtPayload?.aud !== projectId ||
+    jwtPayload?.firebase?.tenant !== tenantId
+  ) {
+    console.error("JWT Validation Mismatch", { jwtHeader, jwtPayload, projectId, tenantId });
+    jwtPayload = undefined;
+    refreshable = false;
+  }
+  if (jwtHeader?.alg === "none") {
+    isEmulatedCredential = true;
+  } else if (jwtHeader?.alg !== "RS256") {
+    jwtPayload = undefined;
+    refreshable = false;
+  }
+
+  if (jwtPayload) {
+    const muchEpochWow = Math.floor(+new Date() / 1000);
+    if (jwtPayload.exp !== undefined && jwtPayload.exp > muchEpochWow) {
+      if (isEmulatedCredential) {
+        return [jwtPayload, isEmulatedCredential, true];
+      } else {
+        const cachedPayload = await cacheGet<FirebaseJWTPayload>(cache, `jwt:${idToken}`);
+        if (cachedPayload) {
+          return [cachedPayload, isEmulatedCredential, true];
+        }
+
+        try {
+          let jwks = await getFirebaseAuthJwks(cache);
+          try {
+            await jwtVerify(idToken, jwks);
+          } catch (verifyErr: any) {
+            // If the signing key wasn't found (rotation), attempt to fetch fresh keys once.
+            // Rate-limited via cache SET NX to prevent DOS via crafted JWTs with unknown kid values.
+            // Native jose `cooldownDuration` is 30 seconds. This avoids the 5-minute DOS loophole.
+            if (verifyErr?.code === "ERR_JWKS_NO_MATCHING_KEY") {
+              const acquired = await cacheSetNx(cache, "firebase:jwks_eviction_lock", 30, "1");
+              if (acquired) {
+                try {
+                  // Fetch fresh keys directly, skipping cache read
+                  jwks = await getFirebaseAuthJwks(cache, true);
+                  await jwtVerify(idToken, jwks);
+                } finally {
+                  await cacheDelete(cache, "firebase:jwks_eviction_lock");
+                }
+              } else {
+                throw verifyErr;
+              }
+            } else {
+              throw verifyErr;
+            }
+          }
+          const ttlMs = jwtPayload.exp * 1000 - Date.now();
+          const ttlSeconds = Math.floor(ttlMs / 1000);
+          if (ttlSeconds > 0) {
+            await cacheSetEx(cache, `jwt:${idToken}`, ttlSeconds, jwtPayload);
+          }
+          return [jwtPayload, isEmulatedCredential, true];
+        } catch (e) {
+          console.error("JWT Verification failed:", e);
+          refreshable = false;
+        }
+      }
+    }
+  }
+
+  return [undefined, isEmulatedCredential, refreshable];
+}
+
+interface TokenResponse {
+  refresh_token?: string;
+  id_token?: string;
+  [key: string]: any;
+}
+
+interface SignInResponse {
+  refreshToken?: string;
+  idToken?: string;
+  [key: string]: any;
+}
+
+type RunMiddlewareOptions = {
+  apiKey: string;
+  projectId: string;
+  emulatorHost: string | undefined;
+  tenantId: string | undefined;
+  authDomain: string | undefined;
+  cache?: CacheProvider;
+};
+type RunMiddlewareResponse =
+  | [NextResponse]
+  | [undefined, (response: NextResponse) => NextResponse, FirebaseJWTPayload | undefined];
+export async function runMiddleware(
+  appName: string,
+  options: RunMiddlewareOptions,
+  request: NextRequest,
+): Promise<RunMiddlewareResponse> {
+  const cache = options.cache || defaultMemoryCache;
+  // Host auth widgets and Firebase reserved URLs
+  if (request.nextUrl.pathname.startsWith("/__/") && options.authDomain) {
+    const newURL = new URL(request.nextUrl);
+    newURL.host = options.authDomain;
+    newURL.port = "";
+    return [NextResponse.rewrite(newURL)];
+  }
+
+  // Firebase JS SDK treats all http:// requests as dev-mode since cookie persistence requires secure context to function
+  const isDevMode = request.nextUrl.protocol === "http:";
+  const userAgent = request.headers.get("User-Agent");
+  const isSafari = userAgent?.includes("Safari") && !userAgent?.includes("Chrome");
+
+  // Safari does not consider cookies on localhost secure
+  const useInsecureCookies = isDevMode && isSafari;
+
+  // Need two different cookie names as Chrome doesn't allow __HOST- on localhost
+  const ID_TOKEN_COOKIE_NAME = isDevMode
+    ? `__dev_FIREBASE_${appName}`
+    : `__HOST-FIREBASE_${appName}`;
+  const REFRESH_TOKEN_COOKIE_NAME = isDevMode
+    ? `__dev_FIREBASEID_${appName}`
+    : `__HOST-FIREBASEID_${appName}`;
+  // CHIPS (Partitioned cookies) requires SameSite=None; Secure. When running
+  // on localhost with insecure cookies we fall back to SameSite=Lax (no partitioning).
+  const sameSite = useInsecureCookies ? ("lax" as const) : ("none" as const);
+  const ID_TOKEN_COOKIE = {
+    path: "/" as const,
+    secure: !useInsecureCookies,
+    httpOnly: false as const,
+    sameSite,
+    partitioned: !useInsecureCookies,
+    name: ID_TOKEN_COOKIE_NAME,
+    maxAge: MAX_MAX_AGE,
+    priority: "high" as const,
+  };
+  const REFRESH_TOKEN_COOKIE = {
+    ...ID_TOKEN_COOKIE,
+    httpOnly: true,
+    name: REFRESH_TOKEN_COOKIE_NAME,
+  } as const;
+
+  if (request.nextUrl.pathname === "/__cookies__") {
+    const targetAppName = request.nextUrl.searchParams.get("appName") || "[DEFAULT]";
+    if (targetAppName !== appName) {
+      return [undefined, (res: NextResponse) => res, undefined];
+    }
+
+    const method = request.method;
+
+    // CSRF guard: reject cross-origin state-changing requests.
+    // Browsers send the Origin header on cross-origin requests; same-origin
+    // requests from the Firebase JS SDK either omit Origin (safe) or send the
+    // correct same-site value.
+    if (method === "POST" || method === "DELETE") {
+      const origin = request.headers.get("origin");
+      if (origin && origin !== request.nextUrl.origin) {
+        return [new NextResponse("Cross-origin request denied", { status: 403 })];
+      }
+    }
+
+    if (method === "DELETE") {
+      const response = new NextResponse("");
+      response.cookies.delete({ ...ID_TOKEN_COOKIE, maxAge: 0 });
+      response.cookies.delete({ ...REFRESH_TOKEN_COOKIE, maxAge: 0 });
+      return [response];
+    }
+
+    const headers = Object.fromEntries(
+      [
+        "referrer",
+        "referrer-policy",
+        "content-type",
+        "X-Firebase-Client",
+        "X-Firebase-gmpid",
+        "X-Firebase-AppCheck",
+        "X-Firebase-Locale",
+        "X-Client-Version",
+      ]
+        .filter((header) => request.headers.has(header))
+        .map((header) => [header, request.headers.get(header)!]),
+    );
+
+    const finalTargetParam = request.nextUrl.searchParams.get("finalTarget");
+    if (!finalTargetParam) {
+      return [new NextResponse("Missing finalTarget parameter", { status: 400 })];
+    }
+    let url: URL;
+    try {
+      url = new URL(finalTargetParam);
+    } catch {
+      return [new NextResponse("Invalid finalTarget parameter", { status: 400 })];
+    }
+
+    let body: ReadableStream<any> | string | null = request.body;
+
+    if (options.emulatorHost) {
+      if (url.host !== options.emulatorHost) {
+        return [new NextResponse("Proxy target does not match configured emulator host", { status: 400 })];
+      }
+    } else {
+      if (
+        url.host !== "securetoken.googleapis.com" &&
+        url.host !== "identitytoolkit.googleapis.com"
+      ) {
+        return [new NextResponse("Unauthorized proxy target host", { status: 400 })];
+      }
+    }
+
+    const isTokenRequest = !!url.pathname.match(/^(\/securetoken\.googleapis\.com)?\/v1\/token/);
+    const isSignInRequest = !!url.pathname.match(
+      /^(\/identitytoolkit\.googleapis\.com)?\/(v1|v2)\/accounts:/,
+    );
+
+    if (!isTokenRequest && !isSignInRequest)
+      return [new NextResponse("Unsupported request type", { status: 400 })];
+
+    if (isTokenRequest) {
+      body = await request.text();
+      const bodyParams = new URLSearchParams(body!.trim());
+      if (bodyParams.has("refresh_token")) {
+        const refreshToken = request.cookies.get({ ...REFRESH_TOKEN_COOKIE, value: "" })?.value;
+        if (refreshToken) {
+          bodyParams.set("refresh_token", refreshToken);
+          body = bodyParams.toString();
+        }
+      }
+    } else if (isSignInRequest) {
+      // Materialize body to a string so we never pass a ReadableStream to fetch,
+      // which is rejected by Vercel Edge and stricter undici configurations.
+      body = await request.text();
+    }
+
+    const response = await fetch(url, { method, body, headers });
+
+    let json: TokenResponse | SignInResponse;
+    try {
+      json = (await response.json()) as TokenResponse | SignInResponse;
+    } catch {
+      console.error("Proxy response was not JSON:", response.status, response.statusText);
+      return [new NextResponse("Bad gateway: non-JSON response from Firebase", { status: 502 })];
+    }
+    const status = response.status;
+    const statusText = response.statusText;
+    if (!response.ok) {
+      const nextResponse = NextResponse.json(json, { status, statusText });
+      return [nextResponse];
+    }
+    // The Firebase JS SDK freaks out if the idToken disappears on it, e.g, the cookie expired
+    // it manually calls logout... which nukes everything before we have a chance to refresh!
+    // So set the maxAge to the default (chrome max) of 400 days
+    const idToken = json.idToken || json.id_token;
+    const refreshToken = json.refreshToken || json.refresh_token;
+
+    if ("refreshToken" in json && json.refreshToken) {
+      json.refreshToken = "REDACTED";
+    }
+    if ("refresh_token" in json && json.refresh_token) {
+      json.refresh_token = "REDACTED";
+    }
+
+    const currentIdToken = request.cookies.get({ ...ID_TOKEN_COOKIE, value: "" })?.value;
+    const nextResponse = NextResponse.json(json, { status, statusText });
+    if (idToken && currentIdToken !== idToken)
+      nextResponse.cookies.set({ ...ID_TOKEN_COOKIE, value: idToken });
+    if (refreshToken) nextResponse.cookies.set({ ...REFRESH_TOKEN_COOKIE, value: refreshToken });
+    return [nextResponse];
+  }
+
+  const logout = (): RunMiddlewareResponse => {
+    const decorateNextResponse = (response: NextResponse) => {
+      if (request.cookies.get(ID_TOKEN_COOKIE_NAME))
+        response.cookies.delete({ ...ID_TOKEN_COOKIE, maxAge: 0 });
+      if (request.cookies.get(REFRESH_TOKEN_COOKIE_NAME))
+        response.cookies.delete({ ...REFRESH_TOKEN_COOKIE, maxAge: 0 });
+      return response;
+    };
+    return [undefined, decorateNextResponse, undefined];
+  };
+
+  let authIdToken = request.cookies.get({ ...ID_TOKEN_COOKIE, value: "" })?.value;
+  const refresh_token = request.cookies.get({ ...REFRESH_TOKEN_COOKIE, value: "" })?.value;
+
+  if (authIdToken === "") {
+    console.error("logout sentinel detected");
+    return logout();
+  }
+
+  let [jwtPayload, isEmulatedCredential, refreshable] = authIdToken
+    ? await verifyFirebaseIdToken(authIdToken, options.projectId, options.tenantId, cache)
+    : [undefined, false, true];
+
+  if (jwtPayload) {
+    if (isEmulatedCredential && !options.emulatorHost) {
+      return logout();
+    }
+    return [undefined, (it) => it, jwtPayload];
+  }
+
+  if (!refresh_token || !refreshable) {
+    return logout();
+  }
+
+  // Check if the refresh token is from the emulator.
+  // This relies on an internal property `_AuthEmulatorRefreshToken` which is subject to change,
+  // but we handle potential parsing errors gracefully.
+  // Fixed: Ensure isEmulatedCredential remains true if already true, or is updated if false.
+  isEmulatedCredential = isEmulatedCredential || isEmulatorRefreshToken(refresh_token);
+
+  if (isEmulatedCredential && !options.emulatorHost) {
+    return logout();
+  }
+
+  if (isEmulatedCredential && options.emulatorHost) {
+    const emulatorHostname = options.emulatorHost.split(":")[0];
+    if (emulatorHostname !== "localhost" && emulatorHostname !== "127.0.0.1" && emulatorHostname !== "::1") {
+      console.error("Emulator host must be localhost or loopback:", emulatorHostname);
+      return logout();
+    }
+  }
+
+  const refreshUrl = new URL(
+    isEmulatedCredential ? `http://${options.emulatorHost}` : `https://securetoken.googleapis.com`,
+  );
+  refreshUrl.pathname = [isEmulatedCredential && "securetoken.googleapis.com", "v1/token"]
+    .filter(Boolean)
+    .join("/");
+  refreshUrl.searchParams.set("key", options.apiKey);
+  const body = new URLSearchParams({ grant_type: "refresh_token", refresh_token });
+  let refreshResponse;
+  try {
+    refreshResponse = await fetch(refreshUrl, {
+      method: "POST",
+      body,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+  } catch (e) {
+    console.error("Refresh token request failed.", e);
+    return logout();
+  }
+  if (!refreshResponse.ok) {
+    console.error(refreshUrl.origin + refreshUrl.pathname, refreshResponse.status, refreshResponse.statusText);
+    return logout();
+  }
+  let json: TokenResponse;
+  try {
+    json = (await refreshResponse.json()) as TokenResponse;
+  } catch {
+    console.error("Refresh response was not JSON:", refreshResponse.status, refreshResponse.statusText);
+    return logout();
+  }
+  const newRefreshToken = json.refresh_token;
+  const newIdToken = json.id_token;
+  if (!newIdToken) {
+    console.error("Missing id_token in refresh response");
+    return logout();
+  }
+  // Full signature + claims verification on the refreshed token. Caching is
+  // handled inside verifyFirebaseIdToken, so no separate cacheSetEx needed.
+  const [verifiedNewPayload, newIsEmulatedCredential] = await verifyFirebaseIdToken(
+    newIdToken,
+    options.projectId,
+    options.tenantId,
+    cache,
+  );
+  if (!verifiedNewPayload) {
+    console.error("Refreshed token failed verification");
+    return logout();
+  }
+  if (newIsEmulatedCredential && !options.emulatorHost) {
+    console.error("Refreshed token is an unsigned emulator credential outside of emulator mode");
+    return logout();
+  }
+  jwtPayload = verifiedNewPayload;
+  const decorateNextResponse = (response: NextResponse) => {
+    if (newIdToken) response.cookies.set({ ...ID_TOKEN_COOKIE, value: newIdToken });
+    if (newRefreshToken) response.cookies.set({ ...REFRESH_TOKEN_COOKIE, value: newRefreshToken });
+    return response;
+  };
+  return [undefined, decorateNextResponse, jwtPayload];
+}
+
+export type Config = {
+  emulator?: boolean | string;
+  tenantId?: string;
+  options?: FirebaseOptions;
+  appName?: string;
+  cache?: CacheProvider;
+};
+
+type Resolvable<T> = Promise<T> | T;
+// composeMiddleware always sets defaultUser from a verified Firebase JWT, so
+// expose the richer type to consumers (firebase.tenant, email_verified, etc.).
+type Innie = (
+  request: NextRequest,
+  defaultUser: FirebaseJWTPayload | undefined,
+  allUsers: Record<string, FirebaseJWTPayload>,
+) => Resolvable<NextResponse | void>;
+
+export type NormalizedConfig = {
+  appName: string;
+  firebaseOptions: FirebaseOptions;
+  emulatorHost?: string;
+  tenantId?: string;
+  cache: CacheProvider;
+};
+
+export const normalizeConfig = (
+  config: Config,
+  defaultAppOptions: FirebaseOptions | undefined,
+): NormalizedConfig => {
+  if (!config.options && !defaultAppOptions) {
+    throw new Error("Could not find Firebase configuration");
+  }
+  const normalizedConfig: NormalizedConfig = {
+    appName: config.appName || "[DEFAULT]",
+    firebaseOptions: config.options || defaultAppOptions!,
+    tenantId: config.tenantId,
+    cache: config.cache || defaultMemoryCache,
+  };
+  if (typeof config.emulator === "string") {
+    normalizedConfig.emulatorHost = config.emulator;
+  } else if (config.emulator === true) {
+    // Explicit opt-in only: reading FIREBASE_AUTH_EMULATOR_HOST when emulator
+    // is not explicitly requested would accept alg:none tokens if that env var
+    // ever leaked into a production environment.
+    normalizedConfig.emulatorHost = process.env.FIREBASE_AUTH_EMULATOR_HOST;
+  }
+  return normalizedConfig;
+};
+
+export const composeMiddleware =
+  (
+    innie: Innie,
+    configProvider?:
+      | Resolvable<Config | Config[]>
+      | ((request: NextRequest) => Resolvable<Config | Config[]>),
+  ) =>
+  async (request: NextRequest) => {
+    const rawConfig = await Promise.resolve(
+      typeof configProvider === "function" ? configProvider(request) : configProvider,
+    );
+    const defaultAppName = (!Array.isArray(rawConfig) && rawConfig?.appName) || "[DEFAULT]";
+    const defaultAppOptions = getDefaultAppConfig() as FirebaseOptions | undefined;
+    const normalizedConfigurations = await Promise.all(
+      (Array.isArray(rawConfig) ? rawConfig : [rawConfig])
+        .filter((it) => !!it)
+        .map(async (config) => {
+          return normalizeConfig(config, defaultAppOptions);
+        }),
+    );
+    if (defaultAppOptions && !normalizedConfigurations.find((it) => it.appName === "[DEFAULT]")) {
+      normalizedConfigurations.push({
+        appName: "[DEFAULT]",
+        firebaseOptions: defaultAppOptions,
+        cache: defaultMemoryCache,
+      });
+    }
+    if (!normalizedConfigurations.length) throw new Error("composeMiddleware requires at least one configuration. Pass a Config object or array of Config objects.");
+
+    let defaultUser: FirebaseJWTPayload | undefined = undefined;
+    const allUsers: Record<string, FirebaseJWTPayload> = {};
+    const decorators: Array<(response: NextResponse) => NextResponse> = [];
+    let finalResponse: NextResponse | undefined | void = undefined;
+
+    const results = await Promise.all(
+      normalizedConfigurations.map(async (config) => {
+        const { appName, tenantId, emulatorHost, firebaseOptions, cache } = config;
+        const { apiKey, projectId, authDomain } = firebaseOptions;
+        if (!apiKey) throw new Error("apiKey must be defined.");
+        if (!projectId) throw new Error("projectId must be defined");
+        const options = { apiKey, projectId, emulatorHost, tenantId, authDomain, cache };
+        const result = await runMiddleware(appName, options, request);
+        return { appName, result };
+      }),
+    );
+
+    for (const { appName, result } of results) {
+      const [response, decorateResponse, idTokenPayload] = result;
+      if (idTokenPayload) allUsers[appName] = idTokenPayload;
+      if (idTokenPayload && appName === defaultAppName) defaultUser = idTokenPayload;
+      if (response) {
+        if (finalResponse) {
+          console.warn(
+            `firebase-cookie-middleware: app "${appName}" returned a direct response but an earlier app already claimed the response. The earlier response takes precedence.`,
+          );
+        } else {
+          finalResponse = response;
+        }
+      }
+      if (decorateResponse) decorators.push(decorateResponse);
+    }
+    if (!finalResponse)
+      finalResponse = await Promise.resolve(innie(request, defaultUser, allUsers));
+    return decorators.reduce(
+      (prev, current) => current(prev),
+      finalResponse || NextResponse.next(),
+    );
+  };
+
+// Zero-config convenience export. Works only when a Firebase app has been
+// initialized before the middleware runs (e.g. via getApps() in firebase.ts).
+// If no Firebase config is discoverable the request passes through with a
+// console warning rather than throwing a 500.
+const _safeDefaultMiddleware = async (request: NextRequest): Promise<NextResponse> => {
+  const defaultAppOptions = getDefaultAppConfig() as FirebaseOptions | undefined;
+  if (!defaultAppOptions) {
+    console.warn(
+      "firebase-cookie-middleware: no Firebase config found; pass a Config to composeMiddleware.",
+    );
+    return NextResponse.next();
+  }
+  return composeMiddleware(() => {})(request);
+};
+
+// Next.js 16+: proxy.ts expects a named `proxy` export.
+export const proxy = _safeDefaultMiddleware;
+// Next.js 15 and earlier: middleware.ts expects a named `middleware` export.
+// @deprecated Use proxy in Next.js 16+.
+export const middleware = _safeDefaultMiddleware;
