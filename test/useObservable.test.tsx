@@ -3,7 +3,7 @@ import { act, cleanup, render, renderHook, waitFor } from '@testing-library/reac
 import * as React from 'react';
 import { Writable } from 'node:stream';
 import { renderToString, renderToPipeableStream } from 'react-dom/server';
-import { Observable, of, Subject, BehaviorSubject, throwError } from 'rxjs';
+import { of, Subject, BehaviorSubject, throwError } from 'rxjs';
 import { useObservable, ReactFireOptions } from '../src/index';
 
 describe('useObservable', () => {
@@ -460,13 +460,6 @@ describe('useObservable', () => {
     it('evicts an errored cache entry so a subsequent mount with the same observableId recovers', async () => {
       const observableId = `error-evict-${Math.random()}`;
       let shouldFail = true;
-      const source$ = new Observable<string>((subscriber) => {
-        if (shouldFail) {
-          subscriber.error(new Error('permission-denied'));
-        } else {
-          subscriber.next('recovered');
-        }
-      });
 
       class Boundary extends React.Component<{ children: React.ReactNode }, { error: Error | null }> {
         state: { error: Error | null } = { error: null };
@@ -482,6 +475,7 @@ describe('useObservable', () => {
       }
 
       const Obs = () => {
+        const source$ = shouldFail ? throwError(() => new Error('permission-denied')) : of('recovered');
         const { data, status } = useObservable(observableId, source$);
         return <div data-testid="val">{status === 'success' ? data : 'loading'}</div>;
       };
@@ -506,6 +500,35 @@ describe('useObservable', () => {
       );
 
       await waitFor(() => expect(second.getByTestId('val')).toHaveTextContent('recovered'));
+      second.unmount();
+    });
+
+    it('evicts a cache entry when an error arrives after unmount during the release grace window (#485)', async () => {
+      const observableId = `error-after-unmount-${Math.random()}`;
+      const firstStream$ = new BehaviorSubject<string>('initial-user-doc');
+      const secondStream$ = new BehaviorSubject<string>('reauthenticated-user-doc');
+      let currentStream$ = firstStream$;
+
+      const Obs = () => {
+        const { data, status } = useObservable(observableId, currentStream$);
+        return <div data-testid="val">{status === 'success' ? data : 'loading'}</div>;
+      };
+
+      const first = render(<Obs />);
+      await waitFor(() => expect(first.getByTestId('val')).toHaveTextContent('initial-user-doc'));
+
+      // Unmount first (e.g. route leaves protected view on sign-out), then emit permission-denied
+      // while the 1s release grace window is still active.
+      first.unmount();
+      act(() => {
+        firstStream$.error(new Error('permission-denied-after-unmount'));
+      });
+
+      await new Promise((r) => setTimeout(r, 1100));
+      currentStream$ = secondStream$;
+
+      const second = render(<Obs />);
+      await waitFor(() => expect(second.getByTestId('val')).toHaveTextContent('reauthenticated-user-doc'));
       second.unmount();
     });
   });
