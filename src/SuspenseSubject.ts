@@ -1,6 +1,10 @@
-import { empty, Observable, Subject, Subscriber, Subscription } from 'rxjs';
-import { catchError, shareReplay, tap } from 'rxjs/operators';
+import { empty, Observable, ReplaySubject, Subject, Subscriber, Subscription, timer } from 'rxjs';
+import { catchError, share, tap } from 'rxjs/operators';
 import { ObservableStatus } from './useObservable.js';
+
+// Grace period before a zero-subscriber stream detaches its Firebase listener and evicts its cache entry.
+// A 1-second window lets React StrictMode double-mounts and immediate route transitions reuse the active listener.
+const RELEASE_DELAY_MS = 1000;
 
 export class SuspenseSubject<T> extends Subject<T> {
   private _value: T | undefined;
@@ -18,7 +22,12 @@ export class SuspenseSubject<T> extends Subject<T> {
   // @ts-expect-error: TODO: double check to see if this is an RXJS thing or if we should listen to TS
   private _resolveFirstEmission: () => void;
 
-  constructor(innerObservable: Observable<T>, private _timeoutWindow: number, private _suspenseEnabled: boolean) {
+  constructor(
+    innerObservable: Observable<T>,
+    private _timeoutWindow: number,
+    _suspenseEnabled: boolean,
+    onEvict: () => void = () => {}
+  ) {
     super();
     this._firstEmission = new Promise<void>((resolve) => (this._resolveFirstEmission = resolve));
 
@@ -42,6 +51,8 @@ export class SuspenseSubject<T> extends Subject<T> {
           this._error = e;
           this._resolveFirstEmission();
           this._updateImmutableStatus();
+          // Evict the errored entry after the current render reads it so a remount or ErrorBoundary retry starts fresh (#742, #485).
+          setTimeout(onEvict, RELEASE_DELAY_MS);
         },
         complete: () => {
           this._isComplete = true;
@@ -49,19 +60,32 @@ export class SuspenseSubject<T> extends Subject<T> {
         }
       }),
       catchError(() => empty()),
-      shareReplay(1)
+      // Multicast one underlying Firebase listener across all subscribers:
+      // - `connector`: cache and replay the most recent emission to new subscribers on mount.
+      // - `resetOnError`: tear down the source subscription when the stream errors.
+      // - `resetOnComplete`: keep the final value cached when a one-shot stream (`first()`) completes.
+      // - `resetOnRefCountZero`: unsubscribe from Firebase and evict the cache entry once no subscribers remain for `RELEASE_DELAY_MS`.
+      share({
+        connector: () => new ReplaySubject<T>(1),
+        resetOnError: true,
+        resetOnComplete: false,
+        resetOnRefCountZero: () => timer(RELEASE_DELAY_MS).pipe(tap(onEvict)),
+      })
     );
     // warm up the observable
     this._warmupSubscription = this._innerObservable.subscribe();
 
-    // set a timeout for resetting the cache, subscriptions will cancel the timeout
-    // and reschedule again on unsubscribe
-    if (this._suspenseEnabled) {
-      // Noop if suspense is enabled
-      this._timeoutHandler = setTimeout(() => {}, this._timeoutWindow);
-    } else {
-      this._timeoutHandler = setTimeout(this._reset.bind(this), this._timeoutWindow);
-    }
+    // Release the warm-up subscription if no component subscribes within `_timeoutWindow` after the first emission settles.
+    // Do not release while the first emission is still pending: a suspended component is waiting on `firstEmission`, and
+    // React will not retry the render and call `_subscribe` until that promise resolves (#525).
+    const releaseWarmupWhenSettled = () => {
+      if (this._hasValue || this._error) {
+        this._warmupSubscription.unsubscribe();
+      } else {
+        this._timeoutHandler = setTimeout(releaseWarmupWhenSettled, this._timeoutWindow);
+      }
+    };
+    this._timeoutHandler = setTimeout(releaseWarmupWhenSettled, this._timeoutWindow);
   }
 
   get hasValue(): boolean {
@@ -108,23 +132,13 @@ export class SuspenseSubject<T> extends Subject<T> {
     this._updateImmutableStatus();
   }
 
-  private _reset() {
-    // seems to be undefined in tests?
-    if (this._warmupSubscription) {
-      this._warmupSubscription.unsubscribe();
-    }
-    this._hasValue = false;
-    this._value = undefined;
-    this._error = undefined;
-    this._firstEmission = new Promise<void>((resolve) => (this._resolveFirstEmission = resolve));
-    this._updateImmutableStatus();
-  }
-
   _subscribe(subscriber: Subscriber<T>): Subscription {
     if (this._timeoutHandler) {
       clearTimeout(this._timeoutHandler);
     }
     this._innerSubscriber = this._innerObservable.subscribe(subscriber);
+    // Hand off ownership of the shared source from the warm-up subscription to the real subscriber.
+    this._warmupSubscription.unsubscribe();
     return this._innerSubscriber;
   }
 

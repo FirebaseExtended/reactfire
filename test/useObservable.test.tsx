@@ -3,7 +3,7 @@ import { act, cleanup, render, renderHook, waitFor } from '@testing-library/reac
 import * as React from 'react';
 import { Writable } from 'node:stream';
 import { renderToString, renderToPipeableStream } from 'react-dom/server';
-import { of, Subject, BehaviorSubject, throwError } from 'rxjs';
+import { Observable, of, Subject, BehaviorSubject, throwError } from 'rxjs';
 import { useObservable, ReactFireOptions } from '../src/index';
 
 describe('useObservable', () => {
@@ -425,6 +425,88 @@ describe('useObservable', () => {
 
       expect(html).toContain('success:my-own-data');
       expect(html).not.toContain('another-requests-value');
+    });
+  });
+
+  describe('Subscription lifecycle & error eviction', () => {
+    it('releases the underlying source subscription after unmount', async () => {
+      for (const suspense of [false, true]) {
+        const subject$ = new Subject<number>();
+        const observableId = `sub-release-${suspense}-${Math.random()}`;
+
+        const Obs = () => {
+          const { data } = useObservable(observableId, subject$, { suspense });
+          return <div data-testid="obs">{String(data)}</div>;
+        };
+
+        const { unmount, getByTestId } = render(
+          <React.Suspense fallback={<div data-testid="fb">loading</div>}>
+            <Obs />
+          </React.Suspense>
+        );
+
+        await act(async () => {
+          subject$.next(42);
+        });
+
+        await waitFor(() => expect(getByTestId('obs')).toHaveTextContent('42'));
+        expect(subject$.observed).toBe(true);
+
+        unmount();
+        await waitFor(() => expect(subject$.observed).toBe(false), { timeout: 2500 });
+      }
+    });
+
+    it('evicts an errored cache entry so a subsequent mount with the same observableId recovers', async () => {
+      const observableId = `error-evict-${Math.random()}`;
+      let shouldFail = true;
+      const source$ = new Observable<string>((subscriber) => {
+        if (shouldFail) {
+          subscriber.error(new Error('permission-denied'));
+        } else {
+          subscriber.next('recovered');
+        }
+      });
+
+      class Boundary extends React.Component<{ children: React.ReactNode }, { error: Error | null }> {
+        state: { error: Error | null } = { error: null };
+        static getDerivedStateFromError(error: Error) {
+          return { error };
+        }
+        render() {
+          if (this.state.error) {
+            return <div data-testid="err">{this.state.error.message}</div>;
+          }
+          return this.props.children;
+        }
+      }
+
+      const Obs = () => {
+        const { data, status } = useObservable(observableId, source$);
+        return <div data-testid="val">{status === 'success' ? data : 'loading'}</div>;
+      };
+
+      const first = render(
+        <Boundary>
+          <Obs />
+        </Boundary>
+      );
+
+      await waitFor(() => expect(first.getByTestId('err')).toHaveTextContent('permission-denied'));
+      first.unmount();
+
+      // Wait for the 1s error eviction window to clear the errored entry from preloadedObservables
+      await new Promise((r) => setTimeout(r, 1100));
+      shouldFail = false;
+
+      const second = render(
+        <Boundary>
+          <Obs />
+        </Boundary>
+      );
+
+      await waitFor(() => expect(second.getByTestId('val')).toHaveTextContent('recovered'));
+      second.unmount();
     });
   });
 });
