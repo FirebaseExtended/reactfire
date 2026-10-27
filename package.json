@@ -10,6 +10,7 @@
     }
   },
   "typings": "dist/index.d.ts",
+  "sideEffects": false,
   "files": [
     "dist",
     "src"
