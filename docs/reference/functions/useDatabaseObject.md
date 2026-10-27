@@ -8,7 +8,7 @@
 
 > **useDatabaseObject**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<[`QueryChange`](../interfaces/QueryChange.md) \| `T`\>
 
-Defined in: [src/database.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L74)
+Defined in: [src/database.tsx:54](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L54)
 
 Subscribe to a Realtime Database object
 

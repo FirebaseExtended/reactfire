@@ -8,7 +8,7 @@
 
 > `const` **useInitFunctions**: `InitSdkHook`\<`Functions`\>
 
-Defined in: [src/sdk.tsx:162](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L162)
+Defined in: [src/sdk.tsx:149](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L149)
 
 ## Deprecated
 

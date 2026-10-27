@@ -8,7 +8,7 @@
 
 > **useAnalytics**(): `Analytics`
 
-Defined in: [src/sdk.tsx:132](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L132)
+Defined in: [src/sdk.tsx:119](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L119)
 
 ## Returns
 

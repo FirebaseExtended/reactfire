@@ -8,7 +8,7 @@
 
 > **useRemoteConfigValue**(`key`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`Value`\>
 
-Defined in: [src/remote-config.tsx:100](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config.tsx#L100)
+Defined in: [src/remote-config.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config.tsx#L78)
 
 Accepts a key and optionally a Remote Config instance. Returns a
 Remote Config Value.

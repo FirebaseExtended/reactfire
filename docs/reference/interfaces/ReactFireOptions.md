@@ -6,7 +6,7 @@
 
 # Interface: ReactFireOptions\<T\>
 
-Defined in: [src/useFirebaseStream.ts:32](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L32)
+Defined in: [src/useFirebaseStream.ts:47](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L47)
 
 ## Extended by
 
@@ -24,7 +24,7 @@ Defined in: [src/useFirebaseStream.ts:32](https://github.com/FirebaseExtended/re
 
 > `optional` **idField?**: `string`
 
-Defined in: [src/useFirebaseStream.ts:36](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L36)
+Defined in: [src/useFirebaseStream.ts:51](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L51)
 
 #### Deprecated
 
@@ -36,7 +36,7 @@ Defined in: [src/useFirebaseStream.ts:36](https://github.com/FirebaseExtended/re
 
 > `optional` **includeMetadataChanges?**: `boolean`
 
-Defined in: [src/useFirebaseStream.ts:53](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L53)
+Defined in: [src/useFirebaseStream.ts:68](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L68)
 
 Emit when snapshot metadata (`hasPendingWrites`, `fromCache`) changes (`useFirestoreDoc` / `useFirestoreCollection`).
 
@@ -46,7 +46,7 @@ Emit when snapshot metadata (`hasPendingWrites`, `fromCache`) changes (`useFires
 
 > `optional` **initialData?**: `any`
 
-Defined in: [src/useFirebaseStream.ts:37](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L37)
+Defined in: [src/useFirebaseStream.ts:52](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L52)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/useFirebaseStream.ts:37](https://github.com/FirebaseExtended/re
 
 > `optional` **once?**: `boolean`
 
-Defined in: [src/useFirebaseStream.ts:49](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L49)
+Defined in: [src/useFirebaseStream.ts:64](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L64)
 
 Resolve the initial read once and do not keep a real-time listener open (`useFirestoreDoc` / `useFirestoreCollection`).
 
@@ -64,7 +64,7 @@ Resolve the initial read once and do not keep a real-time listener open (`useFir
 
 > `optional` **startWithValue?**: `any`
 
-Defined in: [src/useFirebaseStream.ts:41](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L41)
+Defined in: [src/useFirebaseStream.ts:56](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L56)
 
 #### Deprecated
 
@@ -76,7 +76,7 @@ use `initialData` instead
 
 > `optional` **suspense?**: `boolean`
 
-Defined in: [src/useFirebaseStream.ts:45](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L45)
+Defined in: [src/useFirebaseStream.ts:60](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L60)
 
 #### Deprecated
 

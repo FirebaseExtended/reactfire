@@ -8,7 +8,7 @@
 
 > **useFirestoreDocDataOnce**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T` \| `undefined`\>
 
-Defined in: [src/firestore.tsx:229](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L229)
+Defined in: [src/firestore.tsx:216](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L216)
 
 Get a Firestore document, unwrap the document into a plain object, and don't subscribe to changes
 

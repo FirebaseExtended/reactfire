@@ -1,12 +1,13 @@
 import {
-  InstrumentedPromise,
+  InFlightRead,
   ObservableStatus,
   ReactFireOptions,
   checkIdField,
+  createInFlightCache,
   hasInitialDataOption,
-  instrumentPromise,
-  useMappedObservableStatus,
+  listenUntilReleased,
   useFirebaseStream,
+  useMappedObservableStatus,
 } from './useFirebaseStream.js';
 
 import {
@@ -18,65 +19,36 @@ import {
   DocumentData,
   DocumentSnapshot,
   getDocFromCache,
+  getDocsFromCache,
   onSnapshot,
 } from 'firebase/firestore';
 
-const IN_FLIGHT_EVICT_MS = 30_000;
-const inFlightDocPromises = new Map<string, InstrumentedPromise<DocumentSnapshot<any>>>();
+const ignore = () => undefined;
 
-function getOrStartInFlightDoc<T = DocumentData>(
-  key: string,
-  factory: () => Promise<DocumentSnapshot<T>>
-): InstrumentedPromise<DocumentSnapshot<T>> {
-  let promise = inFlightDocPromises.get(key) as InstrumentedPromise<DocumentSnapshot<T>> | undefined;
-  if (!promise) {
-    promise = instrumentPromise(factory());
-    inFlightDocPromises.set(key, promise);
-    const cleanup = () =>
-      setTimeout(() => {
-        if (inFlightDocPromises.get(key) === promise) {
-          inFlightDocPromises.delete(key);
-        }
-      }, IN_FLIGHT_EVICT_MS);
-    promise.then(cleanup, cleanup);
-  }
-  return promise;
+function preloadDoc<T = DocumentData>(ref: DocumentReference<T>): InFlightRead<DocumentSnapshot<T>> {
+  return listenUntilReleased<DocumentSnapshot<T>>((onNext, onError) => {
+    const unsubscribe = onSnapshot(ref, onNext, onError);
+    getDocFromCache(ref).then(onNext, ignore);
+    return unsubscribe;
+  });
 }
 
-function fetchDocOnce<T = DocumentData>(ref: DocumentReference<T>): Promise<DocumentSnapshot<T>> {
-  return getDocFromCache(ref).catch(
-    () =>
-      new Promise<DocumentSnapshot<T>>((resolve, reject) => {
-        let settled = false;
-        const unsubscribe = onSnapshot(
-          ref,
-          (snap) => {
-            if (!settled) {
-              settled = true;
-              unsubscribe?.();
-              resolve(snap);
-            }
-          },
-          (err) => {
-            if (!settled) {
-              settled = true;
-              unsubscribe?.();
-              reject(err);
-            }
-          }
-        );
-        if (settled) {
-          unsubscribe();
-        }
-      })
-  );
+function preloadCollection<T = DocumentData>(query: FirestoreQuery<T>): InFlightRead<QuerySnapshot<T>> {
+  return listenUntilReleased<QuerySnapshot<T>>((onNext, onError) => {
+    const unsubscribe = onSnapshot(query, onNext, onError);
+    getDocsFromCache(query).then((snap) => {
+      if (!snap.empty) {
+        onNext(snap);
+      }
+    }, ignore);
+    return unsubscribe;
+  });
 }
 
-function fetchCollectionOnce<T = DocumentData>(query: FirestoreQuery<T>): Promise<QuerySnapshot<T>> {
-  return new Promise<QuerySnapshot<T>>((resolve, reject) => {
+function listenOnce<S>(start: (onNext: (snap: S) => void, onError: (err: Error) => void) => () => void): Promise<S> {
+  return new Promise<S>((resolve, reject) => {
     let settled = false;
-    const unsubscribe = onSnapshot(
-      query,
+    const unsubscribe = start(
       (snap) => {
         if (!settled) {
           settled = true;
@@ -98,6 +70,21 @@ function fetchCollectionOnce<T = DocumentData>(query: FirestoreQuery<T>): Promis
   });
 }
 
+function fetchDocOnce<T = DocumentData>(ref: DocumentReference<T>): Promise<DocumentSnapshot<T>> {
+  return getDocFromCache(ref).catch(() => listenOnce<DocumentSnapshot<T>>((onNext, onError) => onSnapshot(ref, onNext, onError)));
+}
+
+function fetchCollectionOnce<T = DocumentData>(query: FirestoreQuery<T>): Promise<QuerySnapshot<T>> {
+  return listenOnce<QuerySnapshot<T>>((onNext, onError) => onSnapshot(query, onNext, onError));
+}
+
+// Keyed by the reference/query itself (`refEqual` / `queryEqual` compare the Firestore instance, path, and converter),
+// so the same path in another database, or read through another converter, never shares an initial read.
+const docCache = createInFlightCache<DocumentReference<any>, DocumentSnapshot<any>>(refEqual);
+const docOnceCache = createInFlightCache<DocumentReference<any>, DocumentSnapshot<any>>(refEqual);
+const collectionCache = createInFlightCache<FirestoreQuery<any>, QuerySnapshot<any>>(queryEqual);
+const collectionOnceCache = createInFlightCache<FirestoreQuery<any>, QuerySnapshot<any>>(queryEqual);
+
 /**
  * Preload a subscription to a Firestore document reference.
  *
@@ -107,8 +94,7 @@ function fetchCollectionOnce<T = DocumentData>(query: FirestoreQuery<T>): Promis
  */
 export async function preloadFirestoreDoc(refProvider: () => Promise<DocumentReference>) {
   const ref = await refProvider();
-  const key = `firestore:doc:${ref.firestore.app.name}:${ref.path}`;
-  return getOrStartInFlightDoc(key, () => fetchDocOnce(ref));
+  return docCache.handle(ref, () => preloadDoc(ref)).getOrStart();
 }
 
 /**
@@ -122,26 +108,27 @@ export function useFirestoreDoc<T = DocumentData>(
 ): ObservableStatus<DocumentSnapshot<T>> {
   const once = Boolean(options?.once);
   const includeMetadataChanges = options?.includeMetadataChanges;
-  const docKey = `firestore:${once ? 'docOnce' : 'doc'}:${ref.firestore.app.name}:${ref.path}`;
 
   return useFirebaseStream<DocumentReference<T>, DocumentSnapshot<T>>({
     ref,
     isEqual: refEqual,
-    peekInFlight: () => inFlightDocPromises.get(docKey) as InstrumentedPromise<DocumentSnapshot<T>> | undefined,
-    getOrStartInFlight: () => getOrStartInFlightDoc(docKey, () => fetchDocOnce(ref)),
-    clearInFlight: (expectedPromise) => {
-      if (!expectedPromise || inFlightDocPromises.get(docKey) === expectedPromise) {
-        inFlightDocPromises.delete(docKey);
-      }
-    },
+    deps: [once, includeMetadataChanges],
+    inFlight: (once ? docOnceCache : docCache).handle(ref, () => (once ? fetchDocOnce(ref) : preloadDoc(ref))),
     subscribe: (onNext, onError, inFlightPromise) => {
       if (once) {
+        let active = true;
         const reqPromise = inFlightPromise ?? fetchDocOnce(ref);
         reqPromise.then(
-          (snap) => onNext(snap, true),
-          (error: unknown) => onError(error)
+          (snap) => {
+            if (active) onNext(snap, true);
+          },
+          (error: unknown) => {
+            if (active) onError(error);
+          }
         );
-        return () => {};
+        return () => {
+          active = false;
+        };
       }
 
       let active = true;
@@ -236,40 +223,6 @@ export function useFirestoreDocDataOnce<T = unknown>(
   return useMappedObservableStatus(docStatus, (snap) => snapToData(snap, idField), idField ?? '', options);
 }
 
-const inFlightCollectionEntries: Array<{ query: FirestoreQuery<any>; promise: InstrumentedPromise<QuerySnapshot<any>> }> = [];
-
-function getOrStartInFlightCollection<T = DocumentData>(
-  query: FirestoreQuery<T>,
-  factory: () => Promise<QuerySnapshot<T>>
-): InstrumentedPromise<QuerySnapshot<T>> {
-  const existing = inFlightCollectionEntries.find((entry) => queryEqual(entry.query, query));
-  if (existing) {
-    return existing.promise as InstrumentedPromise<QuerySnapshot<T>>;
-  }
-  const promise = instrumentPromise(factory());
-  const entry = { query, promise };
-  inFlightCollectionEntries.push(entry);
-  const cleanup = () =>
-    setTimeout(() => {
-      const idx = inFlightCollectionEntries.indexOf(entry);
-      if (idx > -1) inFlightCollectionEntries.splice(idx, 1);
-    }, IN_FLIGHT_EVICT_MS);
-  promise.then(cleanup, cleanup);
-  return promise;
-}
-
-function removeInFlightCollection<T = DocumentData>(
-  query: FirestoreQuery<T>,
-  expectedPromise?: InstrumentedPromise<QuerySnapshot<T>>
-) {
-  const idx = inFlightCollectionEntries.findIndex(
-    (entry) => queryEqual(entry.query, query) && (!expectedPromise || entry.promise === expectedPromise)
-  );
-  if (idx > -1) {
-    inFlightCollectionEntries.splice(idx, 1);
-  }
-}
-
 /**
  * Subscribe to a Firestore collection
  */
@@ -283,20 +236,25 @@ export function useFirestoreCollection<T = DocumentData>(
   return useFirebaseStream<FirestoreQuery<T>, QuerySnapshot<T>>({
     ref: query,
     isEqual: queryEqual,
-    peekInFlight: () =>
-      inFlightCollectionEntries.find((entry) => queryEqual(entry.query, query))?.promise as
-        | InstrumentedPromise<QuerySnapshot<T>>
-        | undefined,
-    getOrStartInFlight: () => getOrStartInFlightCollection(query, () => fetchCollectionOnce(query)),
-    clearInFlight: (expectedPromise) => removeInFlightCollection(query, expectedPromise),
+    deps: [once, includeMetadataChanges],
+    inFlight: (once ? collectionOnceCache : collectionCache).handle(query, () =>
+      once ? fetchCollectionOnce(query) : preloadCollection(query)
+    ),
     subscribe: (onNext, onError, inFlightPromise) => {
       if (once) {
+        let active = true;
         const reqPromise = inFlightPromise ?? fetchCollectionOnce(query);
         reqPromise.then(
-          (snap) => onNext(snap, true),
-          (error: unknown) => onError(error)
+          (snap) => {
+            if (active) onNext(snap, true);
+          },
+          (error: unknown) => {
+            if (active) onError(error);
+          }
         );
-        return () => {};
+        return () => {
+          active = false;
+        };
       }
 
       let active = true;

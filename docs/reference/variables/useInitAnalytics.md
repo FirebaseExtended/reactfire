@@ -8,7 +8,7 @@
 
 > `const` **useInitAnalytics**: `InitSdkHook`\<`Analytics`\>
 
-Defined in: [src/sdk.tsx:156](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L156)
+Defined in: [src/sdk.tsx:143](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L143)
 
 ## Deprecated
 

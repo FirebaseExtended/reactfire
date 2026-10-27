@@ -3,6 +3,21 @@ import { registerVersion } from 'firebase/app';
 import { useSuspenseEnabledFromConfigAndContext, version } from './firebaseApp.js';
 
 /**
+ * Report the React and ReactFire versions to the Firebase SDK so they show up
+ * in Firebase usage telemetry. `registerVersion` is idempotent and order-independent inside
+ * `@firebase/app`, so it is safe to call before or after `initializeApp`; we still only call it once.
+ */
+let versionRegistered = false;
+export function registerReactFireVersion(): void {
+  if (versionRegistered) {
+    return;
+  }
+  versionRegistered = true;
+  registerVersion('react', React.version || 'unknown');
+  registerVersion('reactfire', version || 'unknown');
+}
+
+/**
  * A thenable compatible with React 19's `React.use()` while remaining structurally valid
  * under `@types/react` 16, 17, 18, and 19.
  */
@@ -163,11 +178,12 @@ export function createFulfilledUsable<T>(value: T): InstrumentedPromise<T> {
   return p;
 }
 
-export function unwrapOrSuspend<T>(promise: InstrumentedPromise<T>): T {
+export function unwrapOrSuspend<T>(promise: InstrumentedPromise<T>, onRejected?: (failed: InstrumentedPromise<T>) => void): T {
   if (promise.status === 'fulfilled') {
     return promise.value as T;
   }
   if (promise.status === 'rejected') {
+    onRejected?.(promise);
     throw promise.reason;
   }
   throw promise;
@@ -190,6 +206,148 @@ export function attachUsable<T>(
     },
   });
   return target as ObservableStatus<T>;
+}
+
+/**
+ * The initial read for a single stream key. Shared by every component rendering the same
+ * reference so that concurrent renders, `<StrictMode>` double-mounts, and Suspense retries all see the
+ * exact same promise instance.
+ */
+export interface InFlightHandle<T> {
+  peek(): InstrumentedPromise<T> | undefined;
+  getOrStart(): InstrumentedPromise<T>;
+  /** Called once a committed component's live subscription is attached; hands the read off to it. */
+  clear(promise?: InstrumentedPromise<T>): void;
+}
+
+/**
+ * An initial read that may keep a resource warm after it resolves, e.g. the listener that produced the first
+ * snapshot. `release` runs once the live subscription has taken over (or the read is abandoned), so the
+ * listener stays attached until then and the SDK never drops and re-downloads the data in between.
+ */
+export interface InFlightRead<T> {
+  promise: Promise<T>;
+  release?: () => void;
+}
+
+export interface InFlightCache<K, T> {
+  handle(key: K, start: () => Promise<T> | InFlightRead<T>): InFlightHandle<T>;
+  /** Drop every entry so the next render starts fresh reads. */
+  clearAll(): void;
+}
+
+interface InFlightEntry<K, T> {
+  key: K;
+  promise: InstrumentedPromise<T>;
+  release: () => void;
+}
+
+const allInFlightCaches = new Set<InFlightCache<unknown, unknown>>();
+
+/**
+ * Forget every in-flight initial read, across all caches. Called by the Auth hooks when the signed-in user changes,
+ * so a read that was started for the previous user (and never committed) can't be served to the next render.
+ */
+export function clearAllInFlight(): void {
+  allInFlightCaches.forEach((cache) => cache.clearAll());
+}
+
+function isPromise<T>(value: Promise<T> | InFlightRead<T>): value is Promise<T> {
+  return typeof (value as Promise<T>).then === 'function';
+}
+
+/**
+ * Creates a module-level cache of in-flight initial reads keyed by `K`.
+ *
+ * Entries are handed off (and their `release` called) when a committed component's live subscription has attached,
+ * or evicted `evictAfterMs` after settling if no component ever commits (an abandoned render).
+ */
+export function createInFlightCache<K, T>(isEqual: (a: K, b: K) => boolean = Object.is, evictAfterMs = 300): InFlightCache<K, T> {
+  const entries: Array<InFlightEntry<K, T>> = [];
+  const find = (key: K) => entries.find((entry) => isEqual(entry.key, key));
+  const detach = (entry: InFlightEntry<K, T>) => {
+    const idx = entries.indexOf(entry);
+    if (idx > -1) {
+      entries.splice(idx, 1);
+    }
+    // Never cut a pending read short: a component may still be suspended on it, and React only retries once it settles.
+    if (entry.promise.status === 'pending') {
+      entry.promise.then(entry.release, entry.release);
+    } else {
+      entry.release();
+    }
+  };
+
+  const cache: InFlightCache<K, T> = {
+    handle(key, start) {
+      return {
+        peek: () => find(key)?.promise,
+        getOrStart: () => {
+          const existing = find(key);
+          if (existing) {
+            return existing.promise;
+          }
+          const started = start();
+          const read = isPromise(started) ? { promise: started } : started;
+          let released = false;
+          const entry: InFlightEntry<K, T> = {
+            key,
+            promise: instrumentPromise(read.promise),
+            release: () => {
+              if (!released) {
+                released = true;
+                read.release?.();
+              }
+            },
+          };
+          entries.push(entry);
+          const evict = () =>
+            setTimeout(() => {
+              if (entries.includes(entry)) {
+                detach(entry);
+              }
+            }, evictAfterMs);
+          entry.promise.then(evict, evict);
+          return entry.promise;
+        },
+        clear: (promise) => {
+          const existing = find(key);
+          // A still-pending read may have other components suspended on it (e.g. a non-Suspense sibling committed
+          // first); leave it for them and let eviction hand it off once it settles.
+          if (existing && (!promise || existing.promise === promise) && existing.promise.status !== 'pending') {
+            detach(existing);
+          }
+        },
+      };
+    },
+    clearAll: () => {
+      [...entries].forEach(detach);
+    },
+  };
+  allInFlightCaches.add(cache as InFlightCache<unknown, unknown>);
+  return cache;
+}
+
+/**
+ * Starts a listener whose first emission resolves the returned promise, and keeps it attached until `release` is
+ * called. Firestore and Realtime Database drop cached data as soon as the last listener detaches, so detaching the
+ * preload listener before the component's live listener attaches would download everything twice.
+ */
+export function listenUntilReleased<S>(listen: (onNext: (value: S) => void, onError: (error: Error) => void) => () => void): InFlightRead<S> {
+  let unsubscribe: (() => void) | undefined;
+  let released = false;
+  const promise = new Promise<S>((resolve, reject) => {
+    unsubscribe = listen(resolve, reject);
+  });
+  return {
+    promise,
+    release: () => {
+      if (!released) {
+        released = true;
+        unsubscribe?.();
+      }
+    },
+  };
 }
 
 export function hasInitialDataOption(options?: ReactFireOptions<any>): boolean {
@@ -323,9 +481,9 @@ export function useMappedObservableStatus<S, T>(
 export interface FirebaseStreamConfig<Ref, T> {
   ref: Ref;
   isEqual?: (a: Ref, b: Ref) => boolean;
-  peekInFlight: () => InstrumentedPromise<T> | undefined;
-  getOrStartInFlight: () => InstrumentedPromise<T>;
-  clearInFlight: (promise?: InstrumentedPromise<T>) => void;
+  /** Options that change what `subscribe` does (e.g. `once`, `includeMetadataChanges`); changing one re-subscribes. */
+  deps?: React.DependencyList;
+  inFlight: InFlightHandle<T>;
   subscribe: (
     onNext: (value: T, isComplete?: boolean) => void,
     onError: (error: unknown) => void,
@@ -337,15 +495,13 @@ export interface FirebaseStreamConfig<Ref, T> {
 }
 
 export function useFirebaseStream<Ref, T>(config: FirebaseStreamConfig<Ref, T>): ObservableStatus<T> {
-  registerVersion('react', React.version || 'unknown');
-  registerVersion('reactfire', version);
+  registerReactFireVersion();
 
   const {
     ref,
     isEqual = Object.is,
-    peekInFlight,
-    getOrStartInFlight,
-    clearInFlight,
+    deps = [],
+    inFlight,
     subscribe,
     options,
     getSyncInitialValue,
@@ -366,9 +522,9 @@ export function useFirebaseStream<Ref, T>(config: FirebaseStreamConfig<Ref, T>):
   const reqRef = React.useRef<{ ref: Ref; promise: InstrumentedPromise<T> } | null>(null);
   if (!hasInitialData) {
     const existingForRef =
-      reqRef.current && isEqual(reqRef.current.ref, ref) ? reqRef.current.promise : peekInFlight();
+      reqRef.current && isEqual(reqRef.current.ref, ref) ? reqRef.current.promise : inFlight.peek();
     if (suspenseEnabled && (!syncInit?.hasValue || existingForRef)) {
-      reqRef.current = { ref, promise: existingForRef ?? getOrStartInFlight() };
+      reqRef.current = { ref, promise: existingForRef ?? inFlight.getOrStart() };
     } else if (!syncInit?.hasValue && existingForRef) {
       reqRef.current = { ref, promise: existingForRef };
     } else {
@@ -382,7 +538,9 @@ export function useFirebaseStream<Ref, T>(config: FirebaseStreamConfig<Ref, T>):
 
   const preloadedValue =
     suspenseEnabled && !hasInitialData && reqPromise
-      ? unwrapOrSuspend(reqPromise)
+      ? unwrapOrSuspend(reqPromise, (failed) => {
+          setTimeout(() => inFlight.clear(failed), 0);
+        })
       : reqPromise?.status === 'fulfilled'
         ? (reqPromise.value as T)
         : undefined;
@@ -450,10 +608,6 @@ export function useFirebaseStream<Ref, T>(config: FirebaseStreamConfig<Ref, T>):
       );
     }
 
-    setTimeout(() => {
-      clearInFlight(currentPromise);
-    }, 0);
-
     const unsubscribe = subscribe(
       (nextValue, isComplete = defaultIsComplete) => {
         if (active) {
@@ -484,11 +638,19 @@ export function useFirebaseStream<Ref, T>(config: FirebaseStreamConfig<Ref, T>):
       currentPromise
     );
 
+    if (currentPromise) {
+      setTimeout(() => {
+        inFlight.clear(currentPromise);
+      }, 0);
+    }
+
     return () => {
       active = false;
       unsubscribe();
     };
-  }, [canonicalRef]);
+    // `canonicalRef` only changes when `isEqual` says the reference changed; `deps` are the options `subscribe` reads.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canonicalRef, ...deps]);
 
   const isCurrent = isEqual(state.ref, ref);
   const hasStreamValue = (isCurrent && state.hasValue) || Boolean(syncInit?.hasValue) || preloadedReady;
@@ -516,6 +678,12 @@ export function useFirebaseStream<Ref, T>(config: FirebaseStreamConfig<Ref, T>):
   }
 
   const getUsable = (): ReactFireUsable<T> => {
+    if (reqPromise?.status === 'rejected') {
+      const failed = reqPromise;
+      setTimeout(() => inFlight.clear(failed), 0);
+      return failed;
+    }
+
     if (hasResolved) {
       if (
         !usableRef.current ||
@@ -532,7 +700,7 @@ export function useFirebaseStream<Ref, T>(config: FirebaseStreamConfig<Ref, T>):
     }
 
     if (!reqRef.current || !isEqual(reqRef.current.ref, ref)) {
-      reqRef.current = { ref, promise: getOrStartInFlight() };
+      reqRef.current = { ref, promise: inFlight.getOrStart() };
     }
     usableRef.current = reqRef.current;
     return reqRef.current.promise;

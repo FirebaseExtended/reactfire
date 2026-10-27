@@ -8,7 +8,7 @@
 
 > `const` **useInitRemoteConfig**: `InitSdkHook`\<`RemoteConfig`\>
 
-Defined in: [src/sdk.tsx:167](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L167)
+Defined in: [src/sdk.tsx:154](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L154)
 
 ## Deprecated
 

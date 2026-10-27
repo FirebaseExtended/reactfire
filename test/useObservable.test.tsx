@@ -427,4 +427,34 @@ describe('useObservable', () => {
       expect(html).not.toContain('another-requests-value');
     });
   });
+
+  describe('Subscription lifecycle', () => {
+    it('releases the underlying source subscription after unmount', async () => {
+      for (const suspense of [false, true]) {
+        const subject$ = new Subject<number>();
+        const observableId = `sub-release-${suspense}-${Math.random()}`;
+
+        const Obs = () => {
+          const { data } = useObservable(observableId, subject$, { suspense });
+          return <div data-testid="obs">{String(data)}</div>;
+        };
+
+        const { unmount, getByTestId } = render(
+          <React.Suspense fallback={<div data-testid="fb">loading</div>}>
+            <Obs />
+          </React.Suspense>
+        );
+
+        await act(async () => {
+          subject$.next(42);
+        });
+
+        await waitFor(() => expect(getByTestId('obs')).toHaveTextContent('42'));
+        expect(subject$.observed).toBe(true);
+
+        unmount();
+        expect(subject$.observed).toBe(false);
+      }
+    });
+  });
 });

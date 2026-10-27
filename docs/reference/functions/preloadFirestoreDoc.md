@@ -6,9 +6,9 @@
 
 # ~~Function: preloadFirestoreDoc()~~
 
-> **preloadFirestoreDoc**(`refProvider`): `Promise`\<`DocumentSnapshot`\<`DocumentData`, `DocumentData`\>\>
+> **preloadFirestoreDoc**(`refProvider`): `Promise`\<`DocumentSnapshot`\<`any`, `DocumentData`\>\>
 
-Defined in: [src/firestore.tsx:108](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L108)
+Defined in: [src/firestore.tsx:95](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L95)
 
 Preload a subscription to a Firestore document reference.
 
@@ -22,7 +22,7 @@ Use this to warm up `useFirestoreDoc` for a specific document
 
 ## Returns
 
-`Promise`\<`DocumentSnapshot`\<`DocumentData`, `DocumentData`\>\>
+`Promise`\<`DocumentSnapshot`\<`any`, `DocumentData`\>\>
 
 ## Deprecated
 

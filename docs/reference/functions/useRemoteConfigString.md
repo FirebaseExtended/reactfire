@@ -8,7 +8,7 @@
 
 > **useRemoteConfigString**(`key`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`string`\>
 
-Defined in: [src/remote-config.tsx:110](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config.tsx#L110)
+Defined in: [src/remote-config.tsx:88](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config.tsx#L88)
 
 Convience method similar to useRemoteConfigValue. Returns a `string` from a Remote Config parameter.
 

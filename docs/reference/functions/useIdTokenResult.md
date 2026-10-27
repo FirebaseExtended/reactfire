@@ -10,7 +10,7 @@
 
 > **useIdTokenResult**(`user`, `forceRefresh?`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`IdTokenResult`\>
 
-Defined in: [src/auth.tsx:173](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L173)
+Defined in: [src/auth.tsx:170](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L170)
 
 ### Parameters
 
@@ -34,7 +34,7 @@ Defined in: [src/auth.tsx:173](https://github.com/FirebaseExtended/reactfire/blo
 
 > **useIdTokenResult**(`auth`, `forceRefresh?`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`IdTokenResult` \| `null`\>
 
-Defined in: [src/auth.tsx:178](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L178)
+Defined in: [src/auth.tsx:175](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L175)
 
 ### Parameters
 

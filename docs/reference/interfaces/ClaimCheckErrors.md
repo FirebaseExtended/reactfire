@@ -6,7 +6,7 @@
 
 # ~~Interface: ClaimCheckErrors~~
 
-Defined in: [src/auth.tsx:284](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L284)
+Defined in: [src/auth.tsx:275](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L275)
 
 ## Deprecated
 

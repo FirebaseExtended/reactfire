@@ -8,7 +8,7 @@
 
 > **AuthCheck**(`__namedParameters`): `ReactElement`
 
-Defined in: [src/auth.tsx:638](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L638)
+Defined in: [src/auth.tsx:633](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L633)
 
 Conditionally render children based on signed-in status and [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims).
 

@@ -1,12 +1,13 @@
 import {
-  InstrumentedPromise,
+  InFlightRead,
   ObservableStatus,
   ReactFireOptions,
   checkIdField,
+  createInFlightCache,
   hasInitialDataOption,
-  instrumentPromise,
-  useMappedObservableStatus,
+  listenUntilReleased,
   useFirebaseStream,
+  useMappedObservableStatus,
 } from './useFirebaseStream.js';
 import { onValue, Query as DatabaseQuery, DatabaseReference, DataSnapshot } from 'firebase/database';
 
@@ -30,40 +31,19 @@ export interface QueryChange {
   event: ListenEvent;
 }
 
-function createInitialObjectPromise(ref: DatabaseReference): Promise<QueryChange> {
-  return new Promise<QueryChange>((resolve, reject) => {
+function preloadObject(ref: DatabaseReference): InFlightRead<QueryChange> {
+  return listenUntilReleased<QueryChange>((onNext, onError) =>
     onValue(
       ref,
       (snapshot) => {
-        resolve({ snapshot, prevKey: undefined, event: ListenEvent.value });
+        onNext({ snapshot, prevKey: undefined, event: ListenEvent.value });
       },
-      (err) => {
-        reject(err);
-      },
-      { onlyOnce: true }
-    );
-  });
+      onError
+    )
+  );
 }
 
-const IN_FLIGHT_EVICT_MS = 30_000;
-const inFlightObjectPromises = new Map<string, InstrumentedPromise<QueryChange>>();
-
-function getOrStartInFlightObject(ref: DatabaseReference): InstrumentedPromise<QueryChange> {
-  const key = ref.toString();
-  let promise = inFlightObjectPromises.get(key);
-  if (!promise) {
-    promise = instrumentPromise(createInitialObjectPromise(ref));
-    inFlightObjectPromises.set(key, promise);
-    const cleanup = () =>
-      setTimeout(() => {
-        if (inFlightObjectPromises.get(key) === promise) {
-          inFlightObjectPromises.delete(key);
-        }
-      }, IN_FLIGHT_EVICT_MS);
-    promise.then(cleanup, cleanup);
-  }
-  return promise;
-}
+const objectCache = createInFlightCache<DatabaseReference, QueryChange>((a, b) => a.isEqual(b));
 
 /**
  * Subscribe to a Realtime Database object
@@ -75,18 +55,10 @@ export function useDatabaseObject<T = unknown>(
   ref: DatabaseReference,
   options?: ReactFireOptions<T>
 ): ObservableStatus<QueryChange | T> {
-  const key = ref.toString();
-
   return useFirebaseStream<DatabaseReference, QueryChange | T>({
     ref,
     isEqual: (a, b) => a.isEqual(b),
-    peekInFlight: () => inFlightObjectPromises.get(key),
-    getOrStartInFlight: () => getOrStartInFlightObject(ref),
-    clearInFlight: (expectedPromise) => {
-      if (!expectedPromise || inFlightObjectPromises.get(key) === expectedPromise) {
-        inFlightObjectPromises.delete(key);
-      }
-    },
+    inFlight: objectCache.handle(ref, () => preloadObject(ref)),
     subscribe: (onNext, onError) => {
       return onValue(
         ref,
@@ -144,54 +116,19 @@ function snapshotToChanges(snapshot: DataSnapshot): QueryChange[] {
   return changes;
 }
 
-function createInitialListPromise(ref: DatabaseReference | DatabaseQuery): Promise<QueryChange[]> {
-  return new Promise<QueryChange[]>((resolve, reject) => {
+function preloadList(ref: DatabaseReference | DatabaseQuery): InFlightRead<QueryChange[]> {
+  return listenUntilReleased<QueryChange[]>((onNext, onError) =>
     onValue(
       ref,
       (snapshot) => {
-        resolve(snapshotToChanges(snapshot));
+        onNext(snapshotToChanges(snapshot));
       },
-      (err) => {
-        reject(err);
-      },
-      { onlyOnce: true }
-    );
-  });
-}
-
-const inFlightListEntries: Array<{
-  ref: DatabaseReference | DatabaseQuery;
-  promise: InstrumentedPromise<QueryChange[]>;
-}> = [];
-
-function getOrStartInFlightList(ref: DatabaseReference | DatabaseQuery): InstrumentedPromise<QueryChange[]> {
-  const existing = inFlightListEntries.find((entry) => entry.ref.isEqual(ref));
-  if (existing) {
-    return existing.promise;
-  }
-  const promise = instrumentPromise(createInitialListPromise(ref));
-  const entry = { ref, promise };
-  inFlightListEntries.push(entry);
-  const cleanup = () =>
-    setTimeout(() => {
-      const idx = inFlightListEntries.indexOf(entry);
-      if (idx > -1) inFlightListEntries.splice(idx, 1);
-    }, IN_FLIGHT_EVICT_MS);
-  promise.then(cleanup, cleanup);
-  return promise;
-}
-
-function removeInFlightList(
-  ref: DatabaseReference | DatabaseQuery,
-  expectedPromise?: InstrumentedPromise<QueryChange[]>
-) {
-  const idx = inFlightListEntries.findIndex(
-    (entry) => entry.ref.isEqual(ref) && (!expectedPromise || entry.promise === expectedPromise)
+      onError
+    )
   );
-  if (idx > -1) {
-    inFlightListEntries.splice(idx, 1);
-  }
 }
+
+const listCache = createInFlightCache<DatabaseReference | DatabaseQuery, QueryChange[]>((a, b) => a.isEqual(b));
 
 /**
  * Subscribe to a Realtime Database list
@@ -206,10 +143,7 @@ export function useDatabaseList<T = { [key: string]: unknown }>(
   return useFirebaseStream<DatabaseReference | DatabaseQuery, QueryChange[] | T[]>({
     ref,
     isEqual: (a, b) => a.isEqual(b),
-    peekInFlight: () => inFlightListEntries.find((entry) => entry.ref.isEqual(ref))?.promise,
-    getOrStartInFlight: () => getOrStartInFlightList(ref),
-    clearInFlight: (expectedPromise) =>
-      removeInFlightList(ref, expectedPromise as InstrumentedPromise<QueryChange[]> | undefined),
+    inFlight: listCache.handle(ref, () => preloadList(ref)),
     subscribe: (onNext, onError) => {
       return onValue(
         ref,

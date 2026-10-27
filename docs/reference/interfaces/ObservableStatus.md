@@ -6,7 +6,7 @@
 
 # Interface: ObservableStatus\<T\>
 
-Defined in: [src/useFirebaseStream.ts:82](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L82)
+Defined in: [src/useFirebaseStream.ts:97](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L97)
 
 ## Type Parameters
 
@@ -20,7 +20,7 @@ Defined in: [src/useFirebaseStream.ts:82](https://github.com/FirebaseExtended/re
 
 > **data**: `T`
 
-Defined in: [src/useFirebaseStream.ts:112](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L112)
+Defined in: [src/useFirebaseStream.ts:127](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L127)
 
 The most recent value.
 
@@ -32,7 +32,7 @@ If `initialData` is passed in, the first value of `data` will be the value provi
 
 > **error**: `Error` \| `undefined`
 
-Defined in: [src/useFirebaseStream.ts:116](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L116)
+Defined in: [src/useFirebaseStream.ts:131](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L131)
 
 Any error that may have occurred in the underlying observable
 
@@ -42,7 +42,7 @@ Any error that may have occurred in the underlying observable
 
 > `readonly` **experimental\_usable**: [`ReactFireUsable`](../type-aliases/ReactFireUsable.md)\<`T`\>
 
-Defined in: [src/useFirebaseStream.ts:138](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L138)
+Defined in: [src/useFirebaseStream.ts:153](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L153)
 
 A React 19 `Usable<T>` that can be passed directly into `React.use()`
 (`const data = use(useFirestoreDoc(ref).experimental_usable)`).
@@ -56,7 +56,7 @@ unwraps the latest live value on all subsequent renders without re-suspending.
 
 > **firstValuePromise**: `Promise`\<`void`\>
 
-Defined in: [src/useFirebaseStream.ts:122](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L122)
+Defined in: [src/useFirebaseStream.ts:137](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L137)
 
 Promise that resolves after first emit from observable
 
@@ -70,7 +70,7 @@ Pass `.experimental_usable` (or `.usable`) to `React.use()` instead. Will be rem
 
 > **hasEmitted**: `boolean`
 
-Defined in: [src/useFirebaseStream.ts:100](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L100)
+Defined in: [src/useFirebaseStream.ts:115](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L115)
 
 Indicates whether the hook has emitted a value at some point
 
@@ -86,7 +86,7 @@ Check `status === 'success'` or pass `.experimental_usable` to `React.use()` ins
 
 > **isComplete**: `boolean`
 
-Defined in: [src/useFirebaseStream.ts:106](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L106)
+Defined in: [src/useFirebaseStream.ts:121](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L121)
 
 If this is `true`, the hook will be emitting no further items.
 
@@ -100,7 +100,7 @@ Will be removed in v5.0.0.
 
 > **status**: `"loading"` \| `"error"` \| `"success"`
 
-Defined in: [src/useFirebaseStream.ts:92](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L92)
+Defined in: [src/useFirebaseStream.ts:107](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L107)
 
 The loading status.
 
@@ -116,7 +116,7 @@ If `initialData` is passed in, this will skip `loading` and go straight to `succ
 
 > `readonly` **usable**: [`ReactFireUsable`](../type-aliases/ReactFireUsable.md)\<`T`\>
 
-Defined in: [src/useFirebaseStream.ts:130](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L130)
+Defined in: [src/useFirebaseStream.ts:145](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L145)
 
 A React 19 `Usable<T>` that can be passed directly into `React.use()`
 (`const data = use(useFirestoreDoc(ref).usable)`).

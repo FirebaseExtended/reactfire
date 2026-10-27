@@ -8,7 +8,7 @@
 
 > **useFirestoreDocOnce**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`DocumentSnapshot`\<`T`, `DocumentData`\>\>
 
-Defined in: [src/firestore.tsx:180](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L180)
+Defined in: [src/firestore.tsx:167](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L167)
 
 Get a firestore document and don't subscribe to changes
 

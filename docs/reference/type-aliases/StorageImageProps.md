@@ -8,7 +8,7 @@
 
 > **StorageImageProps** = `object`
 
-Defined in: [src/storage.tsx:165](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L165)
+Defined in: [src/storage.tsx:136](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L136)
 
 ## Deprecated
 
@@ -20,7 +20,7 @@ Use `useStorageDownloadURL(ref)` with a standard `<img />` element instead. Will
 
 > `optional` **placeHolder?**: `React.ReactNode`
 
-Defined in: [src/storage.tsx:169](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L169)
+Defined in: [src/storage.tsx:140](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L140)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/storage.tsx:169](https://github.com/FirebaseExtended/reactfire/
 
 > `optional` **storage?**: `FirebaseStorage`
 
-Defined in: [src/storage.tsx:167](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L167)
+Defined in: [src/storage.tsx:138](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L138)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/storage.tsx:167](https://github.com/FirebaseExtended/reactfire/
 
 > **storagePath**: `string`
 
-Defined in: [src/storage.tsx:166](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L166)
+Defined in: [src/storage.tsx:137](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L137)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [src/storage.tsx:166](https://github.com/FirebaseExtended/reactfire/
 
 > `optional` **suspense?**: `boolean`
 
-Defined in: [src/storage.tsx:168](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L168)
+Defined in: [src/storage.tsx:139](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L139)

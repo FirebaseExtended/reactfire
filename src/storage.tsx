@@ -1,56 +1,46 @@
 import * as React from 'react';
 import { useStorage } from './sdk.js';
 import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp.js';
-import { InstrumentedPromise, ObservableStatus, ReactFireOptions, instrumentPromise, useFirebaseStream } from './useFirebaseStream.js';
+import { ObservableStatus, ReactFireOptions, createInFlightCache, useFirebaseStream } from './useFirebaseStream.js';
 import { getDownloadURL, ref } from 'firebase/storage';
 
 import type { UploadTask, UploadTaskSnapshot, StorageReference, FirebaseStorage } from 'firebase/storage';
 
-const IN_FLIGHT_EVICT_MS = 5_000;
-const inFlightStorageTasks = new WeakMap<UploadTask, InstrumentedPromise<UploadTaskSnapshot>>();
+const storageTaskCache = createInFlightCache<UploadTask, UploadTaskSnapshot>();
 
-function getOrStartStorageTask(task: UploadTask): InstrumentedPromise<UploadTaskSnapshot> {
-  let promise = inFlightStorageTasks.get(task);
-  if (!promise) {
-    promise = instrumentPromise(
-      new Promise<UploadTaskSnapshot>((resolve, reject) => {
-        let settled = false;
-        const timer = setTimeout(() => {
-          if (!settled) {
-            settled = true;
-            unsub?.();
-            resolve(task.snapshot);
-          }
-        }, 0);
-        const unsub = task.on(
-          'state_changed',
-          (snap) => {
-            if (!settled) {
-              settled = true;
-              clearTimeout(timer);
-              unsub?.();
-              resolve(snap);
-            }
-          },
-          (err) => {
-            if (!settled) {
-              settled = true;
-              clearTimeout(timer);
-              unsub?.();
-              reject(err);
-            }
-          }
-        );
-        if (settled) {
-          unsub();
+function fetchStorageTaskOnce(task: UploadTask): Promise<UploadTaskSnapshot> {
+  return new Promise<UploadTaskSnapshot>((resolve, reject) => {
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (!settled) {
+        settled = true;
+        unsub?.();
+        resolve(task.snapshot);
+      }
+    }, 0);
+    const unsub = task.on(
+      'state_changed',
+      (snap) => {
+        if (!settled) {
+          settled = true;
+          clearTimeout(timer);
+          unsub?.();
+          resolve(snap);
         }
-      })
+      },
+      (err) => {
+        if (!settled) {
+          settled = true;
+          clearTimeout(timer);
+          unsub?.();
+          reject(err);
+        }
+      }
     );
-    inFlightStorageTasks.set(task, promise);
-    const cleanup = () => setTimeout(() => inFlightStorageTasks.delete(task), IN_FLIGHT_EVICT_MS);
-    promise.then(cleanup, cleanup);
-  }
-  return promise;
+    if (settled) {
+      unsub();
+    }
+  });
 }
 
 /**
@@ -71,9 +61,7 @@ export function useStorageTask<T = unknown>(
   return useFirebaseStream<{ task: UploadTask; key: string }, UploadTaskSnapshot | T>({
     ref: { task, key: taskKey },
     isEqual: (a, b) => a.task === b.task && a.key === b.key,
-    peekInFlight: () => inFlightStorageTasks.get(task),
-    getOrStartInFlight: () => getOrStartStorageTask(task),
-    clearInFlight: () => inFlightStorageTasks.delete(task),
+    inFlight: storageTaskCache.handle(task, () => fetchStorageTaskOnce(task)),
     subscribe: (onNext, onError) => {
       let emitted = false;
       let completed = false;
@@ -112,23 +100,12 @@ export function useStorageTask<T = unknown>(
   });
 }
 
-const inFlightDownloadUrls = new Map<string, InstrumentedPromise<string>>();
-
-function getOrStartDownloadUrl(key: string, storageRef: StorageReference): InstrumentedPromise<string> {
-  let promise = inFlightDownloadUrls.get(key);
-  if (!promise) {
-    promise = instrumentPromise(getDownloadURL(storageRef));
-    inFlightDownloadUrls.set(key, promise);
-    const cleanup = () => setTimeout(() => inFlightDownloadUrls.delete(key), IN_FLIGHT_EVICT_MS);
-    promise.then(cleanup, cleanup);
-  }
-  return promise;
-}
+const downloadUrlCache = createInFlightCache<string, string>();
 
 /**
  * Subscribe to a storage ref's download URL
  *
- * @param ref - reference to the blob you want to download
+ * @param storageRef - reference to the blob you want to download
  * @param options
  */
 export function useStorageDownloadURL<T = string>(
@@ -139,13 +116,7 @@ export function useStorageDownloadURL<T = string>(
 
   return useFirebaseStream<string, string | T>({
     ref: urlKey,
-    peekInFlight: () => inFlightDownloadUrls.get(urlKey),
-    getOrStartInFlight: () => getOrStartDownloadUrl(urlKey, storageRef),
-    clearInFlight: (expectedPromise) => {
-      if (!expectedPromise || inFlightDownloadUrls.get(urlKey) === expectedPromise) {
-        inFlightDownloadUrls.delete(urlKey);
-      }
-    },
+    inFlight: downloadUrlCache.handle(urlKey, () => getDownloadURL(storageRef)),
     subscribe: (onNext, onError, inFlightPromise) => {
       const reqPromise = (inFlightPromise as Promise<string> | undefined) ?? getDownloadURL(storageRef);
       reqPromise.then(

@@ -69,9 +69,12 @@ export default defineConfig({
     },
     rollupOptions: {
       external: externals,
-      output: {
-        globals: { react: 'React' },
-      },
+      output: [
+        // One ES module per source file, so `"sideEffects": false` lets bundlers drop the products an app doesn't use
+        // (and their `firebase/*` imports) instead of pulling every Firebase SDK in through a single index.js.
+        { format: 'es', preserveModules: true, preserveModulesRoot: 'src', entryFileNames: '[name].js' },
+        { format: 'umd', name: 'ReactFire', entryFileNames: 'index.umd.cjs', globals: { react: 'React' } },
+      ],
     },
     sourcemap: true,
   },

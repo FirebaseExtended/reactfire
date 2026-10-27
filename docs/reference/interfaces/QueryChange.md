@@ -6,7 +6,7 @@
 
 # ~~Interface: QueryChange~~
 
-Defined in: [src/database.tsx:27](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L27)
+Defined in: [src/database.tsx:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L28)
 
 ## Deprecated
 
@@ -18,7 +18,7 @@ Legacy rxfire change wrapper. In v5.0.0, `useDatabaseObject` returns `DataSnapsh
 
 > **event**: [`ListenEvent`](../enumerations/ListenEvent.md)
 
-Defined in: [src/database.tsx:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L30)
+Defined in: [src/database.tsx:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L31)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [src/database.tsx:30](https://github.com/FirebaseExtended/reactfire/
 
 > **prevKey**: `string` \| `null` \| `undefined`
 
-Defined in: [src/database.tsx:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L29)
+Defined in: [src/database.tsx:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L30)
 
 ***
 
@@ -34,4 +34,4 @@ Defined in: [src/database.tsx:29](https://github.com/FirebaseExtended/reactfire/
 
 > **snapshot**: `DataSnapshot`
 
-Defined in: [src/database.tsx:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L28)
+Defined in: [src/database.tsx:29](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L29)

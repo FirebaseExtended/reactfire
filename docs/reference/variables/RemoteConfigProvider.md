@@ -8,7 +8,7 @@
 
 > `const` **RemoteConfigProvider**: (`props`) => `ReactElement`
 
-Defined in: [src/sdk.tsx:125](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L125)
+Defined in: [src/sdk.tsx:112](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L112)
 
 ## Parameters
 

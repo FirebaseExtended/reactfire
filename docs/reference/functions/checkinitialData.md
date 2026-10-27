@@ -8,7 +8,7 @@
 
 > **checkinitialData**(`options`): `any`
 
-Defined in: [src/useFirebaseStream.ts:71](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L71)
+Defined in: [src/useFirebaseStream.ts:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L86)
 
 ## Parameters
 

@@ -8,7 +8,7 @@
 
 > **useRemoteConfigAll**(`key`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<[`AllParameters`](../type-aliases/AllParameters.md)\>
 
-Defined in: [src/remote-config.tsx:140](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config.tsx#L140)
+Defined in: [src/remote-config.tsx:118](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config.tsx#L118)
 
 Convience method similar to useRemoteConfigValue. Returns allRemote Config parameters.
 

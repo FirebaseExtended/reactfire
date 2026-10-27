@@ -9,7 +9,9 @@ import {
   ReactFireOptions,
   ReactFireUsable,
   attachUsable,
+  clearAllInFlight,
   createFulfilledUsable,
+  createInFlightCache,
   getInitialDataOption,
   hasInitialDataOption,
   instrumentPromise,
@@ -21,69 +23,61 @@ import type { Auth, User, IdTokenResult } from 'firebase/auth';
 type Claims = IdTokenResult['claims'];
 
 const authReadyWeakMap = new WeakMap<Auth, InstrumentedPromise<User | null>>();
+const lastUidByAuth = new WeakMap<Auth, string | null | undefined>();
+
+function noteUserForAuth(auth: Auth, user: User | null): void {
+  const nextUid = user?.uid ?? null;
+  const prevUid = lastUidByAuth.get(auth);
+  if (prevUid !== undefined && prevUid !== nextUid) {
+    clearAllInFlight();
+  }
+  lastUidByAuth.set(auth, nextUid);
+}
 
 function getAuthReady(auth: Auth): InstrumentedPromise<User | null> {
   let promise = authReadyWeakMap.get(auth);
   if (!promise) {
     if ((auth as { _isInitialized?: boolean })._isInitialized || auth.currentUser) {
+      noteUserForAuth(auth, auth.currentUser);
       promise = createFulfilledUsable(auth.currentUser);
     } else {
-      promise = instrumentPromise(auth.authStateReady().then(() => auth.currentUser));
+      promise = instrumentPromise(
+        auth.authStateReady().then(() => {
+          noteUserForAuth(auth, auth.currentUser);
+          return auth.currentUser;
+        })
+      );
     }
     authReadyWeakMap.set(auth, promise);
   } else if (promise.status === 'fulfilled' && promise.value !== auth.currentUser) {
+    noteUserForAuth(auth, auth.currentUser);
     promise = createFulfilledUsable(auth.currentUser);
     authReadyWeakMap.set(auth, promise);
   }
   return promise;
 }
 
-const IN_FLIGHT_EVICT_MS = 30_000;
-const inFlightTokenPromises = new WeakMap<User, Map<boolean, InstrumentedPromise<IdTokenResult>>>();
-const inFlightAuthTokenPromises = new WeakMap<Auth, Map<boolean, InstrumentedPromise<IdTokenResult | null>>>();
-
-function getOrStartTokenPromise(user: User, forceRefresh: boolean): InstrumentedPromise<IdTokenResult> {
-  let byRefresh = inFlightTokenPromises.get(user);
-  if (!byRefresh) {
-    byRefresh = new Map();
-    inFlightTokenPromises.set(user, byRefresh);
-  }
-  let promise = byRefresh.get(forceRefresh);
-  if (!promise) {
-    promise = instrumentPromise(user.getIdTokenResult(forceRefresh));
-    byRefresh.set(forceRefresh, promise);
-    const cleanup = () =>
-      setTimeout(() => {
-        if (byRefresh?.get(forceRefresh) === promise) {
-          byRefresh.delete(forceRefresh);
-        }
-      }, IN_FLIGHT_EVICT_MS);
-    promise.then(cleanup, cleanup);
-  }
-  return promise;
+interface UserTokenKey {
+  user: User;
+  forceRefresh: boolean;
 }
 
-function getOrStartAuthTokenPromise(auth: Auth, forceRefresh: boolean): InstrumentedPromise<IdTokenResult | null> {
-  let byRefresh = inFlightAuthTokenPromises.get(auth);
-  if (!byRefresh) {
-    byRefresh = new Map();
-    inFlightAuthTokenPromises.set(auth, byRefresh);
-  }
-  let promise = byRefresh.get(forceRefresh);
-  if (!promise) {
-    promise = instrumentPromise(
-      getAuthReady(auth).then((user) => (user ? user.getIdTokenResult(forceRefresh) : null))
-    );
-    byRefresh.set(forceRefresh, promise);
-    const cleanup = () =>
-      setTimeout(() => {
-        if (byRefresh?.get(forceRefresh) === promise) {
-          byRefresh.delete(forceRefresh);
-        }
-      }, IN_FLIGHT_EVICT_MS);
-    promise.then(cleanup, cleanup);
-  }
-  return promise;
+interface AuthTokenKey {
+  auth: Auth;
+  uid: string | null;
+  forceRefresh: boolean;
+}
+
+const userTokenCache = createInFlightCache<UserTokenKey, IdTokenResult>(
+  (a, b) => a.user === b.user && a.forceRefresh === b.forceRefresh
+);
+
+const authTokenCache = createInFlightCache<AuthTokenKey, IdTokenResult | null>(
+  (a, b) => a.auth === b.auth && a.uid === b.uid && a.forceRefresh === b.forceRefresh
+);
+
+function getOrStartTokenPromise(user: User, forceRefresh: boolean): InstrumentedPromise<IdTokenResult> {
+  return userTokenCache.handle({ user, forceRefresh }, () => user.getIdTokenResult(forceRefresh)).getOrStart();
 }
 
 function isAuthInstance(val: unknown): val is Auth {
@@ -122,9 +116,11 @@ export function useUser<T = unknown>(
 
   return useFirebaseStream<Auth, User | null>({
     ref: auth,
-    peekInFlight: () => authReadyWeakMap.get(auth),
-    getOrStartInFlight: () => getAuthReady(auth),
-    clearInFlight: () => {},
+    inFlight: {
+      peek: () => authReadyWeakMap.get(auth),
+      getOrStart: () => getAuthReady(auth),
+      clear: () => {},
+    },
     getSyncInitialValue: () => {
       const isReady = Boolean(auth.currentUser) || authReady.status === 'fulfilled';
       return isReady
@@ -150,6 +146,7 @@ export function useUser<T = unknown>(
       const unsubscribe = onIdTokenChanged(
         auth,
         (nextUser) => {
+          noteUserForAuth(auth, nextUser);
           if (active) {
             onNext(nextUser, false);
           }
@@ -190,52 +187,44 @@ export function useIdTokenResult(
   }
 
   const isAuth = isAuthInstance(userOrAuth);
+  const uid = isAuth ? (userOrAuth.currentUser?.uid ?? null) : userOrAuth.uid;
 
-  return useFirebaseStream<{ target: User | Auth; forceRefresh: boolean }, any>({
-    ref: { target: userOrAuth, forceRefresh },
-    isEqual: (a, b) => a.target === b.target && a.forceRefresh === b.forceRefresh,
-    peekInFlight: () =>
-      isAuth
-        ? inFlightAuthTokenPromises.get(userOrAuth)?.get(forceRefresh)
-        : inFlightTokenPromises.get(userOrAuth)?.get(forceRefresh),
-    getOrStartInFlight: () =>
-      isAuth
-        ? getOrStartAuthTokenPromise(userOrAuth, forceRefresh)
-        : getOrStartTokenPromise(userOrAuth, forceRefresh),
-    clearInFlight: (expectedPromise) => {
-      if (isAuth) {
-        const byRefresh = inFlightAuthTokenPromises.get(userOrAuth);
-        if (byRefresh && (!expectedPromise || byRefresh.get(forceRefresh) === expectedPromise)) {
-          byRefresh.delete(forceRefresh);
-        }
-      } else {
-        const byRefresh = inFlightTokenPromises.get(userOrAuth);
-        if (byRefresh && (!expectedPromise || byRefresh.get(forceRefresh) === expectedPromise)) {
-          byRefresh.delete(forceRefresh);
-        }
-      }
-    },
+  return useFirebaseStream<{ target: User | Auth; uid: string | null; forceRefresh: boolean }, any>({
+    ref: { target: userOrAuth, uid, forceRefresh },
+    isEqual: (a, b) => a.target === b.target && a.uid === b.uid && a.forceRefresh === b.forceRefresh,
+    inFlight: isAuth
+      ? authTokenCache.handle({ auth: userOrAuth, uid, forceRefresh }, () =>
+          getAuthReady(userOrAuth).then((user) => (user ? user.getIdTokenResult(forceRefresh) : null))
+        )
+      : userTokenCache.handle({ user: userOrAuth, forceRefresh }, () => userOrAuth.getIdTokenResult(forceRefresh)),
     subscribe: (onNext, onError, inFlightPromise) => {
       if (isAuth) {
         let active = true;
         let lastUser: User | null = null;
+        let seq = 0;
         const unsubscribe = onIdTokenChanged(
           userOrAuth,
           (nextUser) => {
+            noteUserForAuth(userOrAuth, nextUser);
+            const currentSeq = ++seq;
             if (!active) return;
             if (!nextUser) {
               lastUser = null;
               onNext(null, false);
               return;
             }
-            const shouldForce = nextUser !== lastUser && forceRefresh;
+            const isNewUser = nextUser !== lastUser;
             lastUser = nextUser;
-            getOrStartTokenPromise(nextUser, shouldForce).then(
+            const tokenPromise =
+              currentSeq === 1 && inFlightPromise && nextUser.uid === uid
+                ? (inFlightPromise as Promise<IdTokenResult>)
+                : nextUser.getIdTokenResult(isNewUser && forceRefresh);
+            tokenPromise.then(
               (res) => {
-                if (active) onNext(res, false);
+                if (active && currentSeq === seq) onNext(res, false);
               },
               (err) => {
-                if (active) onError(err);
+                if (active && currentSeq === seq) onError(err);
               }
             );
           },
@@ -249,7 +238,9 @@ export function useIdTokenResult(
         };
       }
 
-      const tokenPromise = (inFlightPromise as InstrumentedPromise<IdTokenResult> | undefined) ?? getOrStartTokenPromise(userOrAuth, forceRefresh);
+      const tokenPromise =
+        (inFlightPromise as InstrumentedPromise<IdTokenResult> | undefined) ??
+        getOrStartTokenPromise(userOrAuth, forceRefresh);
       tokenPromise.then(
         (result) => onNext(result, true),
         (error: Error) => onError(error)
@@ -379,15 +370,18 @@ export function useSigninCheck(
 
   const tokenReqRef = React.useRef<{ user: User; forceRefresh: boolean; promise: InstrumentedPromise<IdTokenResult> } | null>(null);
   if (!hasInitialData && currentUser && needsClaimsCheck) {
+    const tokenHandle = userTokenCache.handle({ user: currentUser, forceRefresh }, () =>
+      currentUser.getIdTokenResult(forceRefresh)
+    );
     const existingTokenPromise =
       tokenReqRef.current && tokenReqRef.current.user === currentUser && tokenReqRef.current.forceRefresh === forceRefresh
         ? tokenReqRef.current.promise
-        : inFlightTokenPromises.get(currentUser)?.get(forceRefresh);
+        : tokenHandle.peek();
     if (suspenseEnabled) {
       tokenReqRef.current = {
         user: currentUser,
         forceRefresh,
-        promise: existingTokenPromise ?? getOrStartTokenPromise(currentUser, forceRefresh),
+        promise: existingTokenPromise ?? tokenHandle.getOrStart(),
       };
     } else if (existingTokenPromise) {
       tokenReqRef.current = {
@@ -407,16 +401,16 @@ export function useSigninCheck(
       return;
     }
     let cancelled = false;
+    const tokenHandle = userTokenCache.handle({ user: currentUser, forceRefresh }, () =>
+      currentUser.getIdTokenResult(forceRefresh)
+    );
     const tokenPromise =
       tokenReqRef.current && tokenReqRef.current.user === currentUser && tokenReqRef.current.forceRefresh === forceRefresh
         ? tokenReqRef.current.promise
-        : getOrStartTokenPromise(currentUser, forceRefresh);
+        : tokenHandle.getOrStart();
 
     setTimeout(() => {
-      const byRefresh = inFlightTokenPromises.get(currentUser);
-      if (byRefresh?.get(forceRefresh) === tokenPromise) {
-        byRefresh.delete(forceRefresh);
-      }
+      tokenHandle.clear(tokenPromise);
     }, 0);
 
     tokenPromise.then(
@@ -453,7 +447,7 @@ export function useSigninCheck(
       if (statusObj.status === 'success') {
         if (!derived) {
           derived = createFulfilledUsable(statusObj.data);
-          byKey.set(keyOrCacheKey(cacheKey), derived);
+          byKey.set(cacheKey, derived);
         } else if (derived.status === 'pending') {
           derived.status = 'fulfilled';
           derived.value = statusObj.data;
@@ -522,7 +516,12 @@ export function useSigninCheck(
   }
 
   if (suspenseEnabled && !hasInitialData && tokenReqRef.current) {
-    const idTokenResult = unwrapOrSuspend(tokenReqRef.current.promise);
+    const tokenHandle = userTokenCache.handle({ user: currentUser, forceRefresh }, () =>
+      currentUser.getIdTokenResult(forceRefresh)
+    );
+    const idTokenResult = unwrapOrSuspend(tokenReqRef.current.promise, (failed) => {
+      setTimeout(() => tokenHandle.clear(failed), 0);
+    });
     return makeStatus({
       status: 'success',
       hasEmitted: true,
@@ -563,10 +562,6 @@ export function useSigninCheck(
     error: undefined,
     firstValuePromise,
   });
-}
-
-function keyOrCacheKey(key: string): string {
-  return key;
 }
 
 function getClaimsObjectValidator(requiredClaims: Claims): ClaimsValidator {

@@ -8,7 +8,7 @@
 
 > `const` **AnalyticsProvider**: (`props`) => `ReactElement`
 
-Defined in: [src/sdk.tsx:113](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L113)
+Defined in: [src/sdk.tsx:100](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L100)
 
 ## Parameters
 

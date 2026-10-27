@@ -8,7 +8,7 @@
 
 > `const` **useInitStorage**: `InitSdkHook`\<`FirebaseStorage`\>
 
-Defined in: [src/sdk.tsx:170](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L170)
+Defined in: [src/sdk.tsx:157](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L157)
 
 ## Deprecated
 

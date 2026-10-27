@@ -8,7 +8,7 @@
 
 > `const` **useInitAppCheck**: `InitSdkHook`\<`AppCheck`\>
 
-Defined in: [src/sdk.tsx:152](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L152)
+Defined in: [src/sdk.tsx:139](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L139)
 
 ## Deprecated
 

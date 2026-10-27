@@ -17,7 +17,7 @@ import { baseConfig } from './appConfig';
 import { randomString } from './test-utils';
 
 import { addDoc, collection, doc, getFirestore, query, setDoc, connectFirestoreEmulator, where } from 'firebase/firestore';
-import type { DocumentReference } from 'firebase/firestore';
+import type { DocumentReference, FirestoreDataConverter } from 'firebase/firestore';
 
 describe('Firestore', () => {
   const app = initializeApp(baseConfig, 'firestore-test-suite');
@@ -521,6 +521,39 @@ describe('Firestore', () => {
 
       expect(docResult.current.data.data()).toEqual({ a: 'first' });
       expect(colResult.current.data.docs).toHaveLength(1);
+    });
+
+    it('separates in-flight Suspense cache entries for the same document path with and without a converter', async () => {
+      const colRef = collection(db, randomString());
+      const rawRef = doc(colRef, 'shared');
+      await setDoc(rawRef, { v: 7 });
+
+      const converter: FirestoreDataConverter<{ converted: boolean; v: number }> = {
+        toFirestore: (d) => ({ v: d.v }),
+        fromFirestore: (snap) => ({ converted: true, v: (snap.data() as { v: number }).v }),
+      };
+      const convertedRef = rawRef.withConverter(converter);
+
+      const RawDoc = () => {
+        const { data } = useFirestoreDocData(rawRef, { suspense: true });
+        return <div data-testid="raw">{JSON.stringify(data)}</div>;
+      };
+      const ConvertedDoc = () => {
+        const { data } = useFirestoreDocData(convertedRef, { suspense: true });
+        return <div data-testid="conv">{JSON.stringify(data)}</div>;
+      };
+
+      const { getByTestId } = render(
+        <Provider>
+          <React.Suspense fallback={<div data-testid="fb">loading</div>}>
+            <RawDoc />
+            <ConvertedDoc />
+          </React.Suspense>
+        </Provider>
+      );
+
+      await waitFor(() => expect(getByTestId('conv')).toBeInTheDocument());
+      expect(JSON.parse(getByTestId('conv').textContent || '{}').converted).toBe(true);
     });
   });
 });

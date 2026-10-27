@@ -8,7 +8,7 @@
 
 > `const` **StorageProvider**: (`props`) => `ReactElement`
 
-Defined in: [src/sdk.tsx:123](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L123)
+Defined in: [src/sdk.tsx:110](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L110)
 
 ## Parameters
 

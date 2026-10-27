@@ -8,7 +8,7 @@
 
 > **useDatabaseListData**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T`[] \| `null`\>
 
-Defined in: [src/database.tsx:233](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L233)
+Defined in: [src/database.tsx:167](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L167)
 
 Subscribe to a Realtime Database list and unwrap the snapshots into an array.
 

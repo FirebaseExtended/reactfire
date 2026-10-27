@@ -6,7 +6,7 @@
 
 # ~~Interface: ClaimsCheckProps~~
 
-Defined in: [src/auth.tsx:274](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L274)
+Defined in: [src/auth.tsx:265](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L265)
 
 ## Deprecated
 
@@ -18,7 +18,7 @@ Use `<AuthCheck requiredClaims={...}>` or `useIdTokenResult(auth)` instead. Will
 
 > **children**: `ReactNode`
 
-Defined in: [src/auth.tsx:277](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L277)
+Defined in: [src/auth.tsx:268](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L268)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [src/auth.tsx:277](https://github.com/FirebaseExtended/reactfire/blo
 
 > **fallback**: `ReactNode`
 
-Defined in: [src/auth.tsx:276](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L276)
+Defined in: [src/auth.tsx:267](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L267)
 
 ***
 
@@ -34,7 +34,7 @@ Defined in: [src/auth.tsx:276](https://github.com/FirebaseExtended/reactfire/blo
 
 > **requiredClaims**: `object`
 
-Defined in: [src/auth.tsx:278](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L278)
+Defined in: [src/auth.tsx:269](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L269)
 
 #### Index Signature
 
@@ -46,4 +46,4 @@ Defined in: [src/auth.tsx:278](https://github.com/FirebaseExtended/reactfire/blo
 
 > **user**: `User`
 
-Defined in: [src/auth.tsx:275](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L275)
+Defined in: [src/auth.tsx:266](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L266)

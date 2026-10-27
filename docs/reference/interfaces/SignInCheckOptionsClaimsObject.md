@@ -6,7 +6,7 @@
 
 # ~~Interface: SignInCheckOptionsClaimsObject~~
 
-Defined in: [src/auth.tsx:315](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L315)
+Defined in: [src/auth.tsx:306](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L306)
 
 ## Deprecated
 
@@ -22,7 +22,7 @@ Will be removed in v5.0.0 along with `useSigninCheck`.
 
 > `optional` **forceRefresh?**: `boolean`
 
-Defined in: [src/auth.tsx:309](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L309)
+Defined in: [src/auth.tsx:300](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L300)
 
 #### Inherited from
 
@@ -34,7 +34,7 @@ Defined in: [src/auth.tsx:309](https://github.com/FirebaseExtended/reactfire/blo
 
 > `optional` **idField?**: `string`
 
-Defined in: [src/useFirebaseStream.ts:36](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L36)
+Defined in: [src/useFirebaseStream.ts:51](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L51)
 
 #### Deprecated
 
@@ -50,7 +50,7 @@ Defined in: [src/useFirebaseStream.ts:36](https://github.com/FirebaseExtended/re
 
 > `optional` **includeMetadataChanges?**: `boolean`
 
-Defined in: [src/useFirebaseStream.ts:53](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L53)
+Defined in: [src/useFirebaseStream.ts:68](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L68)
 
 Emit when snapshot metadata (`hasPendingWrites`, `fromCache`) changes (`useFirestoreDoc` / `useFirestoreCollection`).
 
@@ -64,7 +64,7 @@ Emit when snapshot metadata (`hasPendingWrites`, `fromCache`) changes (`useFires
 
 > `optional` **initialData?**: `any`
 
-Defined in: [src/useFirebaseStream.ts:37](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L37)
+Defined in: [src/useFirebaseStream.ts:52](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L52)
 
 #### Inherited from
 
@@ -76,7 +76,7 @@ Defined in: [src/useFirebaseStream.ts:37](https://github.com/FirebaseExtended/re
 
 > `optional` **once?**: `boolean`
 
-Defined in: [src/useFirebaseStream.ts:49](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L49)
+Defined in: [src/useFirebaseStream.ts:64](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L64)
 
 Resolve the initial read once and do not keep a real-time listener open (`useFirestoreDoc` / `useFirestoreCollection`).
 
@@ -90,7 +90,7 @@ Resolve the initial read once and do not keep a real-time listener open (`useFir
 
 > **requiredClaims**: `ParsedToken`
 
-Defined in: [src/auth.tsx:316](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L316)
+Defined in: [src/auth.tsx:307](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L307)
 
 ***
 
@@ -98,7 +98,7 @@ Defined in: [src/auth.tsx:316](https://github.com/FirebaseExtended/reactfire/blo
 
 > `optional` **startWithValue?**: `any`
 
-Defined in: [src/useFirebaseStream.ts:41](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L41)
+Defined in: [src/useFirebaseStream.ts:56](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L56)
 
 #### Deprecated
 
@@ -114,7 +114,7 @@ use `initialData` instead
 
 > `optional` **suspense?**: `boolean`
 
-Defined in: [src/useFirebaseStream.ts:45](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L45)
+Defined in: [src/useFirebaseStream.ts:60](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L60)
 
 #### Deprecated
 

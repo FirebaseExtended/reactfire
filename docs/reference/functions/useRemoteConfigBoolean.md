@@ -8,7 +8,7 @@
 
 > **useRemoteConfigBoolean**(`key`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`boolean`\>
 
-Defined in: [src/remote-config.tsx:130](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config.tsx#L130)
+Defined in: [src/remote-config.tsx:108](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config.tsx#L108)
 
 Convience method similar to useRemoteConfigValue. Returns a `boolean` from a Remote Config parameter.
 

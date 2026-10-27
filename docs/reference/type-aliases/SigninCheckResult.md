@@ -8,7 +8,7 @@
 
 > **SigninCheckResult** = \{ `errors`: \{ \}; `hasRequiredClaims`: `false`; `signedIn`: `false`; `user`: `null`; \} \| \{ `errors`: [`ClaimCheckErrors`](../interfaces/ClaimCheckErrors.md); `hasRequiredClaims`: `boolean`; `signedIn`: `true`; `user`: `User`; \}
 
-Defined in: [src/auth.tsx:291](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L291)
+Defined in: [src/auth.tsx:282](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L282)
 
 ## Deprecated
 

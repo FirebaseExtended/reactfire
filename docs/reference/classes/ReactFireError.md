@@ -6,7 +6,7 @@
 
 # ~~Class: ReactFireError~~
 
-Defined in: [src/useFirebaseStream.ts:20](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L20)
+Defined in: [src/useFirebaseStream.ts:35](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L35)
 
 ## Deprecated
 
@@ -22,7 +22,7 @@ Error class used only by the deprecated `useSigninCheck` hook. Will be removed i
 
 > **new ReactFireError**(`code`, `message`, `customData?`): `ReactFireError`
 
-Defined in: [src/useFirebaseStream.ts:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L23)
+Defined in: [src/useFirebaseStream.ts:38](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L38)
 
 #### Parameters
 
@@ -64,7 +64,7 @@ Defined in: node\_modules/typescript/lib/lib.es2022.error.d.ts:24
 
 > `readonly` **code**: `string`
 
-Defined in: [src/useFirebaseStream.ts:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L23)
+Defined in: [src/useFirebaseStream.ts:38](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L38)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [src/useFirebaseStream.ts:23](https://github.com/FirebaseExtended/re
 
 > `optional` **customData?**: `Record`\<`string`, `unknown`\>
 
-Defined in: [src/useFirebaseStream.ts:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L23)
+Defined in: [src/useFirebaseStream.ts:38](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L38)
 
 ***
 
@@ -92,7 +92,7 @@ Defined in: node\_modules/typescript/lib/lib.es5.d.ts:1075
 
 > `readonly` **name**: `"ReactFireError"` = `'ReactFireError'`
 
-Defined in: [src/useFirebaseStream.ts:21](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L21)
+Defined in: [src/useFirebaseStream.ts:36](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L36)
 
 #### Overrides
 

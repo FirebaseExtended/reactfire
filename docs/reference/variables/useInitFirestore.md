@@ -8,7 +8,7 @@
 
 > `const` **useInitFirestore**: `InitSdkHook`\<`Firestore`\>
 
-Defined in: [src/sdk.tsx:160](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L160)
+Defined in: [src/sdk.tsx:147](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L147)
 
 ## Deprecated
 

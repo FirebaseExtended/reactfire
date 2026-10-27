@@ -8,7 +8,7 @@
 
 > **ReactFireUsable**\<`T`\> = `Promise`\<`T`\>
 
-Defined in: [src/useFirebaseStream.ts:9](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L9)
+Defined in: [src/useFirebaseStream.ts:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L24)
 
 A thenable compatible with React 19's `React.use()` while remaining structurally valid
 under `@types/react` 16, 17, 18, and 19.

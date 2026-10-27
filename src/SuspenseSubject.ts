@@ -59,7 +59,8 @@ export class SuspenseSubject<T> extends Subject<T> {
         },
       }),
       catchError(() => empty()),
-      shareReplay(1)
+      // `refCount: true` detaches the source (the Firestore/RTDB listener) when the last subscriber leaves.
+      shareReplay({ bufferSize: 1, refCount: true })
     );
     // warm up the observable
     this._warmupSubscription = this._innerObservable.subscribe();
@@ -144,6 +145,10 @@ export class SuspenseSubject<T> extends Subject<T> {
       clearTimeout(this._timeoutHandler);
     }
     this._innerSubscriber = this._innerObservable.subscribe(subscriber);
+    // A real subscriber now keeps the source alive; drop the warm-up subscription so unmounting releases it.
+    if (this._warmupSubscription) {
+      this._warmupSubscription.unsubscribe();
+    }
     return this._innerSubscriber;
   }
 

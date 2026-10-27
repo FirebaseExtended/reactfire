@@ -6,7 +6,7 @@
 
 # ~~Interface: ClaimsValidator()~~
 
-Defined in: [src/auth.tsx:322](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L322)
+Defined in: [src/auth.tsx:313](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L313)
 
 ## Deprecated
 
@@ -14,7 +14,7 @@ Will be removed in v5.0.0 along with `useSigninCheck`.
 
 > **ClaimsValidator**(`claims`): `object`
 
-Defined in: [src/auth.tsx:323](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L323)
+Defined in: [src/auth.tsx:314](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L314)
 
 ## Parameters
 

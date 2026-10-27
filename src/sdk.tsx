@@ -11,7 +11,7 @@ import type { FirebaseStorage } from 'firebase/storage';
 import type { RemoteConfig } from 'firebase/remote-config';
 import { useFirebaseApp } from './firebaseApp.js';
 import { FirebaseApp } from 'firebase/app';
-import { InstrumentedPromise, ObservableStatus, ReactFireOptions, instrumentPromise, useFirebaseStream } from './useFirebaseStream.js';
+import { ObservableStatus, ReactFireOptions, createInFlightCache, useFirebaseStream } from './useFirebaseStream.js';
 
 /** @deprecated Pass Firebase SDK instances or references directly instead of using Context Providers. Will be removed in v5.0.0. */
 export const AppCheckSdkContext = React.createContext<AppCheck | undefined>(undefined);
@@ -56,7 +56,7 @@ function useSdk<Sdk extends FirebaseSdks>(SdkContext: React.Context<Sdk | undefi
   return sdk;
 }
 
-const inFlightInitSdk = new Map<string, InstrumentedPromise<any>>();
+const initSdkCache = createInFlightCache<string, any>();
 
 function useInitSdk<Sdk extends FirebaseSdks>(
   sdkName: string,
@@ -74,26 +74,13 @@ function useInitSdk<Sdk extends FirebaseSdks>(
   }
 
   const key = `firebase-sdk:${sdkName}:${firebaseApp.name}`;
-  const getOrStart = () => {
-    let p = inFlightInitSdk.get(key) as InstrumentedPromise<Sdk> | undefined;
-    if (!p) {
-      p = instrumentPromise(sdkInitializer(firebaseApp));
-      inFlightInitSdk.set(key, p);
-    }
-    return p;
-  };
+  const inFlight = initSdkCache.handle(key, () => sdkInitializer(firebaseApp));
 
   return useFirebaseStream<string, Sdk>({
     ref: key,
-    peekInFlight: () => inFlightInitSdk.get(key) as InstrumentedPromise<Sdk> | undefined,
-    getOrStartInFlight: getOrStart,
-    clearInFlight: (expected) => {
-      if (!expected || inFlightInitSdk.get(key) === expected) {
-        inFlightInitSdk.delete(key);
-      }
-    },
+    inFlight,
     subscribe: (onNext, onError, inFlightPromise) => {
-      const p = inFlightPromise ?? getOrStart();
+      const p = inFlightPromise ?? inFlight.getOrStart();
       p.then(
         (sdk) => onNext(sdk, true),
         (err) => onError(err)

@@ -10,7 +10,7 @@
 
 > **useUser**\<`T`\>(`options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`User` \| `null`\>
 
-Defined in: [src/auth.tsx:108](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L108)
+Defined in: [src/auth.tsx:102](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L102)
 
 Subscribe to Firebase auth state changes, including token refresh
 
@@ -34,7 +34,7 @@ Subscribe to Firebase auth state changes, including token refresh
 
 > **useUser**\<`T`\>(`auth`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`User` \| `null`\>
 
-Defined in: [src/auth.tsx:109](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L109)
+Defined in: [src/auth.tsx:103](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L103)
 
 Subscribe to Firebase auth state changes, including token refresh
 

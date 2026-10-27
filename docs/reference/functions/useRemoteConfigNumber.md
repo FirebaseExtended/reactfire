@@ -8,7 +8,7 @@
 
 > **useRemoteConfigNumber**(`key`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`number`\>
 
-Defined in: [src/remote-config.tsx:120](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config.tsx#L120)
+Defined in: [src/remote-config.tsx:98](https://github.com/FirebaseExtended/reactfire/blob/main/src/remote-config.tsx#L98)
 
 Convience method similar to useRemoteConfigValue. Returns a `number` from a Remote Config parameter.
 

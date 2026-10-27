@@ -8,7 +8,7 @@
 
 > **useFirestore**(): `Firestore`
 
-Defined in: [src/sdk.tsx:136](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L136)
+Defined in: [src/sdk.tsx:123](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L123)
 
 ## Returns
 

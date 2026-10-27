@@ -8,7 +8,7 @@
 
 > **checkIdField**(`options`): `any`
 
-Defined in: [src/useFirebaseStream.ts:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L78)
+Defined in: [src/useFirebaseStream.ts:93](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L93)
 
 ## Parameters
 

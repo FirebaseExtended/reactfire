@@ -8,7 +8,7 @@
 
 > **useRemoteConfig**(): `RemoteConfig`
 
-Defined in: [src/sdk.tsx:144](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L144)
+Defined in: [src/sdk.tsx:131](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L131)
 
 ## Returns
 

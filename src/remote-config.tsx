@@ -1,5 +1,5 @@
 import { useRemoteConfig } from './sdk.js';
-import { InstrumentedPromise, ObservableStatus, instrumentPromise, useFirebaseStream } from './useFirebaseStream.js';
+import { ObservableStatus, createInFlightCache, useFirebaseStream } from './useFirebaseStream.js';
 import {
   ensureInitialized,
   getValue,
@@ -21,30 +21,9 @@ export type AllParameters = {
 type Getter<T> = (remoteConfig: RemoteConfig, key: string) => T;
 
 const initializedRemoteConfigs = new WeakSet<RemoteConfig>();
-const inFlightRemoteConfigValues = new WeakMap<RemoteConfig, Map<string, InstrumentedPromise<any>>>();
-
-function getOrStartRemoteConfigValue<T>(
-  remoteConfig: RemoteConfig,
-  key: string,
-  getter: Getter<T>
-): InstrumentedPromise<T> {
-  let byKey = inFlightRemoteConfigValues.get(remoteConfig);
-  if (!byKey) {
-    byKey = new Map();
-    inFlightRemoteConfigValues.set(remoteConfig, byKey);
-  }
-  let promise = byKey.get(key) as InstrumentedPromise<T> | undefined;
-  if (!promise) {
-    promise = instrumentPromise(
-      ensureInitialized(remoteConfig).then(() => {
-        initializedRemoteConfigs.add(remoteConfig);
-        return getter(remoteConfig, key);
-      })
-    );
-    byKey.set(key, promise);
-  }
-  return promise;
-}
+const remoteConfigCache = createInFlightCache<{ remoteConfig: RemoteConfig; key: string }, any>(
+  (a, b) => a.remoteConfig === b.remoteConfig && a.key === b.key
+);
 
 /**
  * Helper function to construct type safe functions. Since Remote Config has
@@ -56,18 +35,17 @@ function getOrStartRemoteConfigValue<T>(
  */
 function useRemoteConfigValue_INTERNAL<T>(key: string, getter: Getter<T>): ObservableStatus<T> {
   const remoteConfig = useRemoteConfig();
+  const ref = { remoteConfig, key };
 
   return useFirebaseStream<{ remoteConfig: RemoteConfig; key: string }, T>({
-    ref: { remoteConfig, key },
+    ref,
     isEqual: (a, b) => a.remoteConfig === b.remoteConfig && a.key === b.key,
-    peekInFlight: () => inFlightRemoteConfigValues.get(remoteConfig)?.get(key),
-    getOrStartInFlight: () => getOrStartRemoteConfigValue(remoteConfig, key, getter),
-    clearInFlight: (expectedPromise) => {
-      const byKey = inFlightRemoteConfigValues.get(remoteConfig);
-      if (byKey && (!expectedPromise || byKey.get(key) === expectedPromise)) {
-        byKey.delete(key);
-      }
-    },
+    inFlight: remoteConfigCache.handle(ref, () =>
+      ensureInitialized(remoteConfig).then(() => {
+        initializedRemoteConfigs.add(remoteConfig);
+        return getter(remoteConfig, key);
+      })
+    ),
     getSyncInitialValue: () =>
       initializedRemoteConfigs.has(remoteConfig)
         ? { hasValue: true, value: getter(remoteConfig, key), isComplete: true }

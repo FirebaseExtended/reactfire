@@ -8,7 +8,7 @@
 
 > **checkOptions**(`options`, `field`): `any`
 
-Defined in: [src/useFirebaseStream.ts:59](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L59)
+Defined in: [src/useFirebaseStream.ts:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L74)
 
 ## Parameters
 
