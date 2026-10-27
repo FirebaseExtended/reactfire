@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { useSyncExternalStore } from 'use-sync-external-store/shim';
+import { registerVersion } from 'firebase/app';
 import { Observable } from 'rxjs';
 import { SuspenseSubject } from './SuspenseSubject.js';
-import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp.js';
+import { useSuspenseEnabledFromConfigAndContext, version } from './firebaseApp.js';
 import { ReactFireGlobals, ReactFireOptions } from './index.js';
 
 const DEFAULT_TIMEOUT = 30_000;
@@ -68,6 +69,10 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
   if (!observableId) {
     throw new Error('cannot call useObservable without an observableId');
   }
+
+  const reactVersion = React.version || 'unknown';
+  registerVersion('react', reactVersion);
+  registerVersion('reactfire', version);
 
   const suspenseEnabled = useSuspenseEnabledFromConfigAndContext(config.suspense);
 

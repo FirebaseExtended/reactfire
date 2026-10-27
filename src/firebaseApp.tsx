@@ -27,6 +27,10 @@ export function FirebaseAppProvider(props: React.PropsWithChildren<FirebaseAppPr
   const { firebaseConfig, appName, suspense } = props;
 
   const firebaseApp: FirebaseApp = React.useMemo(() => {
+    const reactVersion = React.version || 'unknown';
+    registerVersion('react', reactVersion);
+    registerVersion('reactfire', version);
+
     if (props.firebaseApp) {
       return props.firebaseApp;
     }
@@ -45,9 +49,6 @@ export function FirebaseAppProvider(props: React.PropsWithChildren<FirebaseAppPr
         throw new Error('No firebaseConfig provided');
       }
 
-      const reactVersion = React.version || 'unknown';
-      registerVersion('react', reactVersion);
-      registerVersion('reactfire', version);
       return initializeApp(firebaseConfig, appName);
     }
   }, [props.firebaseApp, firebaseConfig, appName]);

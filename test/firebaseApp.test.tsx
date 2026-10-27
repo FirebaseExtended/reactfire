@@ -1,14 +1,31 @@
 import { cleanup, render, waitFor, renderHook } from '@testing-library/react';
-import { initializeApp, deleteApp, getApps } from 'firebase/app';
+import * as firebaseAppModule from 'firebase/app';
+import { initializeApp, deleteApp, getApps, FirebaseApp } from 'firebase/app';
 import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
 import { useFirebaseApp, FirebaseAppProvider, version } from '../src/index';
 import pkg from '../package.json';
 
+const _components = (firebaseAppModule as unknown as { _components: Map<string, unknown> })._components;
+
+interface AppWithContainer extends FirebaseApp {
+  container: {
+    getProvider(name: 'platform-logger'): {
+      getImmediate(): { getPlatformInfoString(): string };
+    };
+  };
+}
+
+function getPlatformInfo(app = getApps()[0]): string {
+  return (app as AppWithContainer).container.getProvider('platform-logger').getImmediate().getPlatformInfoString();
+}
+
 afterEach(() => {
   cleanup();
 
   getApps().forEach(deleteApp);
+  _components.delete('react-version');
+  _components.delete('reactfire-version');
 });
 
 const DEFAULT_APP_CONFIG = { appId: '12345' };
@@ -98,5 +115,47 @@ describe('useFirebaseApp', () => {
 describe('reactfire version', () => {
   it(`should match version ${pkg.version}`, () => {
     expect(pkg.version).toEqual(version);
+  });
+
+  it('registers react and reactfire versions when initializing an app via firebaseConfig', () => {
+    expect(_components.has('react-version')).toBe(false);
+    expect(_components.has('reactfire-version')).toBe(false);
+
+    render(<FirebaseAppProvider firebaseConfig={DEFAULT_APP_CONFIG} />);
+
+    const info = getPlatformInfo();
+    expect(info).toContain(`react/${React.version}`);
+    expect(info).toContain(`reactfire/${version}`);
+  });
+
+  it('registers react and reactfire versions when passed an existing firebaseApp prop', () => {
+    const app = initializeApp(DEFAULT_APP_CONFIG, 'test');
+    expect(getPlatformInfo(app)).not.toContain(`reactfire/${version}`);
+
+    render(<FirebaseAppProvider firebaseApp={app} />);
+
+    const info = getPlatformInfo(app);
+    expect(info).toContain(`react/${React.version}`);
+    expect(info).toContain(`reactfire/${version}`);
+  });
+
+  it('registers react and reactfire versions when reusing an already-initialized app via firebaseConfig', () => {
+    const app = initializeApp(DEFAULT_APP_CONFIG);
+    expect(getPlatformInfo(app)).not.toContain(`reactfire/${version}`);
+
+    render(<FirebaseAppProvider firebaseConfig={DEFAULT_APP_CONFIG} />);
+
+    const info = getPlatformInfo(app);
+    expect(info).toContain(`react/${React.version}`);
+    expect(info).toContain(`reactfire/${version}`);
+  });
+
+  it('registers versions idempotently across multiple FirebaseAppProvider renders', () => {
+    const { rerender } = render(<FirebaseAppProvider firebaseConfig={DEFAULT_APP_CONFIG} />);
+    rerender(<FirebaseAppProvider firebaseApp={getApps()[0]} />);
+
+    const tokens = getPlatformInfo().split(' ');
+    expect(tokens.filter((t) => t === `react/${React.version}`)).toHaveLength(1);
+    expect(tokens.filter((t) => t === `reactfire/${version}`)).toHaveLength(1);
   });
 });
