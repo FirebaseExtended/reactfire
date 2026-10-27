@@ -4,12 +4,16 @@
 
 [ReactFire reference docs](../README.md) / usePerformance
 
-# Function: usePerformance()
+# ~~Function: usePerformance()~~
 
 > **usePerformance**(): `FirebasePerformance`
 
-Defined in: [src/sdk.tsx:88](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L88)
+Defined in: [src/sdk.tsx:140](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L140)
 
 ## Returns
 
 `FirebasePerformance`
+
+## Deprecated
+
+Initialize Performance at module scope (`getPerformance(app)`) instead of reading from Context. Will be removed in v5.0.0.

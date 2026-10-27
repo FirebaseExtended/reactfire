@@ -1,13 +1,34 @@
-import { httpsCallable as rxHttpsCallable } from 'rxfire/functions';
-import { defer } from 'rxjs';
-import { ReactFireOptions, useObservable, ObservableStatus } from './index.js';
-import { useFunctions } from './index.js';
+import { httpsCallable } from 'firebase/functions';
+import { useFunctions } from './sdk.js';
+import { InstrumentedPromise, ObservableStatus, ReactFireOptions, instrumentPromise, useFirebaseStream } from './useFirebaseStream.js';
 
-import type { HttpsCallableOptions } from 'firebase/functions';
+import type { Functions, HttpsCallableOptions } from 'firebase/functions';
+
+const IN_FLIGHT_EVICT_MS = 5_000;
+const inFlightCallablePromises = new Map<string, InstrumentedPromise<any>>();
+
+function getOrStartCallable<RequestData, ResponseData>(
+  functions: Functions,
+  functionName: string,
+  callKey: string,
+  data?: RequestData,
+  httpsCallableOptions?: HttpsCallableOptions
+): InstrumentedPromise<ResponseData> {
+  let promise = inFlightCallablePromises.get(callKey) as InstrumentedPromise<ResponseData> | undefined;
+  if (!promise) {
+    const callable = httpsCallable<RequestData, ResponseData>(functions, functionName, httpsCallableOptions);
+    promise = instrumentPromise(callable(data).then((result) => result.data));
+    inFlightCallablePromises.set(callKey, promise);
+    const cleanup = () => setTimeout(() => inFlightCallablePromises.delete(callKey), IN_FLIGHT_EVICT_MS);
+    promise.then(cleanup, cleanup);
+  }
+  return promise;
+}
 
 /**
  * Calls a callable function.
  *
+ * @deprecated Call `httpsCallable(functions, functionName)` directly (e.g. inside React 19 `useActionState` or an event handler). Will be removed in v5.0.0.
  * @param functionName - The name of the function to call
  * @param options
  */
@@ -19,11 +40,41 @@ export function useCallableFunctionResponse<RequestData, ResponseData>(
   }
 ): ObservableStatus<ResponseData> {
   const functions = useFunctions();
-  const observableId = `functions:callableResponse:${functionName}:${JSON.stringify(options?.data)}:${JSON.stringify(options?.httpsCallableOptions)}`;
-  const obsFactory = rxHttpsCallable<RequestData, ResponseData>(functions, functionName, options?.httpsCallableOptions);
-  // Wrap in `defer` so the function is invoked lazily on subscription rather than
-  // on every render (each render otherwise calls the cloud function and discards it).
-  const observable$ = defer(() => obsFactory(options?.data));
+  const callKey = `functions:callableResponse:${functions.app.name}:${functionName}:${JSON.stringify(options?.data)}:${JSON.stringify(options?.httpsCallableOptions)}`;
 
-  return useObservable(observableId, observable$, options);
+  return useFirebaseStream<{ functions: Functions; key: string }, ResponseData>({
+    ref: { functions, key: callKey },
+    isEqual: (a, b) => a.functions === b.functions && a.key === b.key,
+    peekInFlight: () => inFlightCallablePromises.get(callKey) as InstrumentedPromise<ResponseData> | undefined,
+    getOrStartInFlight: () =>
+      getOrStartCallable<RequestData, ResponseData>(
+        functions,
+        functionName,
+        callKey,
+        options?.data,
+        options?.httpsCallableOptions
+      ),
+    clearInFlight: (expectedPromise) => {
+      if (!expectedPromise || inFlightCallablePromises.get(callKey) === expectedPromise) {
+        inFlightCallablePromises.delete(callKey);
+      }
+    },
+    subscribe: (onNext, onError, inFlightPromise) => {
+      const reqPromise =
+        inFlightPromise ??
+        httpsCallable<RequestData, ResponseData>(
+          functions,
+          functionName,
+          options?.httpsCallableOptions
+        )(options?.data).then((result) => result.data);
+
+      reqPromise.then(
+        (value) => onNext(value, true),
+        (error: unknown) => onError(error)
+      );
+      return () => {};
+    },
+    options,
+    defaultIsComplete: true,
+  });
 }

@@ -407,4 +407,95 @@ describe('Authentication', () => {
       expect(getIdTokenResult).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('React 19 .usable / .experimental_usable with React.use()', () => {
+    const use =
+      (React as unknown as { use?: <T>(usable: Promise<T>) => T }).use ??
+      function usePolyfill<T>(usable: Promise<T> & { status?: string; value?: T; reason?: unknown }): T {
+        if (usable.status === 'fulfilled') return usable.value as T;
+        if (usable.status === 'rejected') throw usable.reason;
+        throw usable;
+      };
+
+    it('unwraps user with use(useUser().usable) and updates live on signIn and signOut', async () => {
+      const UserBadge = () => {
+        const user = use(useUser().experimental_usable);
+        return <div data-testid="usable-user">{user ? 'logged-in' : 'logged-out'}</div>;
+      };
+
+      const { getByTestId } = render(
+        <Provider>
+          <React.Suspense fallback={<div data-testid="fallback">Loading...</div>}>
+            <UserBadge />
+          </React.Suspense>
+        </Provider>
+      );
+
+      await waitFor(() => expect(getByTestId('usable-user')).toHaveTextContent('logged-out'));
+
+      await act(async () => {
+        await signIn();
+      });
+
+      await waitFor(() => expect(getByTestId('usable-user')).toHaveTextContent('logged-in'));
+
+      await act(async () => {
+        await getAuth(app).signOut();
+      });
+
+      await waitFor(() => expect(getByTestId('usable-user')).toHaveTextContent('logged-out'));
+    });
+
+    it('unwraps sign-in status with use(useSigninCheck().usable) without uncached promise warnings', async () => {
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      const SigninBadge = () => {
+        const check = use(useSigninCheck().usable);
+        return <div data-testid="usable-signin">{check.signedIn ? 'in' : 'out'}</div>;
+      };
+
+      const { getByTestId } = render(
+        <Provider>
+          <React.Suspense fallback={<div data-testid="fallback">Loading...</div>}>
+            <SigninBadge />
+          </React.Suspense>
+        </Provider>
+      );
+
+      await waitFor(() => expect(getByTestId('usable-signin')).toHaveTextContent('out'));
+
+      await act(async () => {
+        await signIn();
+      });
+
+      await waitFor(() => expect(getByTestId('usable-signin')).toHaveTextContent('in'));
+
+      const uncachedWarnings = errorSpy.mock.calls.filter((args) =>
+        String(args[0] ?? '').includes('uncached promise')
+      );
+      expect(uncachedWarnings).toHaveLength(0);
+      errorSpy.mockRestore();
+    });
+
+    it('supports passing auth instance directly to useUser(auth) and useIdTokenResult(auth)', async () => {
+      const authInstance = getAuth(app);
+      await authInstance.signOut();
+
+      const { result: userResult } = renderHook(() => useUser(authInstance));
+      const { result: tokenResult } = renderHook(() => useIdTokenResult(authInstance));
+
+      await waitFor(() => expect(userResult.current.status).toEqual('success'));
+      await waitFor(() => expect(tokenResult.current.status).toEqual('success'));
+      expect(userResult.current.data).toBeNull();
+      expect(tokenResult.current.data).toBeNull();
+
+      await act(async () => {
+        await signIn();
+      });
+
+      await waitFor(() => expect(userResult.current.data).not.toBeNull());
+      await waitFor(() => expect(tokenResult.current.data).not.toBeNull());
+      expect(tokenResult.current.data?.token).toBeDefined();
+    });
+  });
 });

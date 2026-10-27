@@ -1,5 +1,6 @@
 {
   "version": "4.2.6",
+  "sideEffects": false,
   "license": "MIT",
   "type": "module",
   "main": "dist/index.umd.cjs",
@@ -107,7 +108,6 @@
     "vitest": "^4.1.9"
   },
   "dependencies": {
-    "rxfire": "^6.1.0",
     "rxjs": "^6.6.3 || ^7.0.1",
     "use-sync-external-store": "^1.2.0"
   },

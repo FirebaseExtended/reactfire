@@ -4,12 +4,16 @@
 
 [ReactFire reference docs](../README.md) / useFirestore
 
-# Function: useFirestore()
+# ~~Function: useFirestore()~~
 
 > **useFirestore**(): `Firestore`
 
-Defined in: [src/sdk.tsx:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L86)
+Defined in: [src/sdk.tsx:136](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L136)
 
 ## Returns
 
 `Firestore`
+
+## Deprecated
+
+Initialize Firestore at module scope (`getFirestore(app)`) instead of reading from Context. Will be removed in v5.0.0.

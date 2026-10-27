@@ -4,11 +4,11 @@
 
 [ReactFire reference docs](../README.md) / checkIdField
 
-# Function: checkIdField()
+# ~~Function: checkIdField()~~
 
 > **checkIdField**(`options`): `any`
 
-Defined in: [src/index.ts:47](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L47)
+Defined in: [src/useFirebaseStream.ts:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L78)
 
 ## Parameters
 
@@ -19,3 +19,7 @@ Defined in: [src/index.ts:47](https://github.com/FirebaseExtended/reactfire/blob
 ## Returns
 
 `any`
+
+## Deprecated
+
+Internal option helper. Will be removed in v5.0.0.

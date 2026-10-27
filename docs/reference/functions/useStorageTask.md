@@ -4,11 +4,11 @@
 
 [ReactFire reference docs](../README.md) / useStorageTask
 
-# Function: useStorageTask()
+# ~~Function: useStorageTask()~~
 
-> **useStorageTask**\<`T`\>(`task`, `ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T` \| `UploadTaskSnapshot`\>
+> **useStorageTask**\<`T`\>(`task`, `ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`UploadTaskSnapshot` \| `T`\>
 
-Defined in: [src/storage.tsx:17](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L17)
+Defined in: [src/storage.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L64)
 
 Subscribe to the progress of a storage task
 
@@ -38,4 +38,8 @@ reference to the blob the task is acting on
 
 ## Returns
 
-[`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T` \| `UploadTaskSnapshot`\>
+[`ObservableStatus`](../interfaces/ObservableStatus.md)\<`UploadTaskSnapshot` \| `T`\>
+
+## Deprecated
+
+Track `uploadBytesResumable` progress inside your upload handler or action instead. Will be removed in v5.0.0.

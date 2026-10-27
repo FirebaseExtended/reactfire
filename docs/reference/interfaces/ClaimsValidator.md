@@ -4,13 +4,17 @@
 
 [ReactFire reference docs](../README.md) / ClaimsValidator
 
-# Interface: ClaimsValidator()
+# ~~Interface: ClaimsValidator()~~
 
-Defined in: [src/auth.tsx:93](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L93)
+Defined in: [src/auth.tsx:322](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L322)
+
+## Deprecated
+
+Will be removed in v5.0.0 along with `useSigninCheck`.
 
 > **ClaimsValidator**(`claims`): `object`
 
-Defined in: [src/auth.tsx:94](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L94)
+Defined in: [src/auth.tsx:323](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L323)
 
 ## Parameters
 
@@ -22,10 +26,14 @@ Defined in: [src/auth.tsx:94](https://github.com/FirebaseExtended/reactfire/blob
 
 `object`
 
-### errors
+### ~~errors~~
 
 > **errors**: \{ \} \| [`ClaimCheckErrors`](ClaimCheckErrors.md)
 
-### hasRequiredClaims
+### ~~hasRequiredClaims~~
 
 > **hasRequiredClaims**: `boolean`
+
+## Deprecated
+
+Will be removed in v5.0.0 along with `useSigninCheck`.

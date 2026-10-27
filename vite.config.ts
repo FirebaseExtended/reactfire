@@ -18,6 +18,8 @@ const externals = [
   // loads client-side in a Next.js App Router (strict ESM) context. Externalizing keeps
   // the shim's React 16/17 fallback intact while removing the require from our dist.
   'use-sync-external-store/shim',
+  'rxjs',
+  'rxjs/operators',
   'firebase',
   'firebase/app',
   'firebase/firestore',

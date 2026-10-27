@@ -4,11 +4,11 @@
 
 [ReactFire reference docs](../README.md) / checkinitialData
 
-# Function: checkinitialData()
+# ~~Function: checkinitialData()~~
 
 > **checkinitialData**(`options`): `any`
 
-Defined in: [src/index.ts:43](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L43)
+Defined in: [src/useFirebaseStream.ts:71](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L71)
 
 ## Parameters
 
@@ -19,3 +19,7 @@ Defined in: [src/index.ts:43](https://github.com/FirebaseExtended/reactfire/blob
 ## Returns
 
 `any`
+
+## Deprecated
+
+Internal option helper. Will be removed in v5.0.0.

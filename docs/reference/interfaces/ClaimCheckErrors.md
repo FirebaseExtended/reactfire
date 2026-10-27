@@ -4,9 +4,13 @@
 
 [ReactFire reference docs](../README.md) / ClaimCheckErrors
 
-# Interface: ClaimCheckErrors
+# ~~Interface: ClaimCheckErrors~~
 
-Defined in: [src/auth.tsx:67](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L67)
+Defined in: [src/auth.tsx:284](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L284)
+
+## Deprecated
+
+Will be removed in v5.0.0 along with `useSigninCheck`.
 
 ## Indexable
 

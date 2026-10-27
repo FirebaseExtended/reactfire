@@ -4,11 +4,11 @@
 
 [ReactFire reference docs](../README.md) / useFirestoreDocOnce
 
-# Function: useFirestoreDocOnce()
+# ~~Function: useFirestoreDocOnce()~~
 
 > **useFirestoreDocOnce**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`DocumentSnapshot`\<`T`, `DocumentData`\>\>
 
-Defined in: [src/firestore.tsx:52](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L52)
+Defined in: [src/firestore.tsx:180](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L180)
 
 Get a firestore document and don't subscribe to changes
 
@@ -31,3 +31,7 @@ Get a firestore document and don't subscribe to changes
 ## Returns
 
 [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`DocumentSnapshot`\<`T`, `DocumentData`\>\>
+
+## Deprecated
+
+Pass `{ once: true }` to `useFirestoreDoc(ref, { once: true })` instead. Will be removed in v5.0.0.

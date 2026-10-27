@@ -1,12 +1,16 @@
 import { empty, Observable, Subject, Subscriber, Subscription } from 'rxjs';
 import { catchError, shareReplay, tap } from 'rxjs/operators';
-import { ObservableStatus } from './useObservable.js';
+import { attachUsable, createFulfilledUsable, instrumentPromise } from './useFirebaseStream.js';
+import type { ObservableStatus } from './useFirebaseStream.js';
 
+/**
+ * @deprecated RxJS integration (`SuspenseSubject`, `useObservable`, `preloadObservable`) is deprecated and will be removed in v5.0.0.
+ */
 export class SuspenseSubject<T> extends Subject<T> {
   private _value: T | undefined;
   private _hasValue = false;
   private _timeoutHandler: ReturnType<typeof setTimeout>;
-  private _firstEmission: Promise<void>;
+  private _firstEmission: Promise<void> & { status?: 'pending' | 'fulfilled' | 'rejected'; value?: void; reason?: any };
   private _error: any = undefined;
   private _innerObservable: Observable<T>;
   private _warmupSubscription: Subscription;
@@ -21,15 +25,19 @@ export class SuspenseSubject<T> extends Subject<T> {
   constructor(innerObservable: Observable<T>, private _timeoutWindow: number, private _suspenseEnabled: boolean) {
     super();
     this._firstEmission = new Promise<void>((resolve) => (this._resolveFirstEmission = resolve));
+    this._firstEmission.status = 'pending';
 
-    this._immutableStatus = {
-      status: 'loading',
-      hasEmitted: false,
-      isComplete: false,
-      data: undefined,
-      error: undefined,
-      firstValuePromise: this._firstEmission
-    } as ObservableStatus<T>;
+    this._immutableStatus = attachUsable(
+      {
+        status: 'loading',
+        hasEmitted: false,
+        isComplete: false,
+        data: undefined as unknown as T,
+        error: undefined,
+        firstValuePromise: this._firstEmission,
+      },
+      () => instrumentPromise(this._firstEmission.then(() => this.value))
+    );
 
     this._innerObservable = innerObservable.pipe(
       tap({
@@ -40,13 +48,15 @@ export class SuspenseSubject<T> extends Subject<T> {
           // save the error, so that we can raise on subscription or .value
           // resolve the promise, so suspense tries again
           this._error = e;
+          this._firstEmission.status = 'fulfilled';
+          this._firstEmission.value = undefined;
           this._resolveFirstEmission();
           this._updateImmutableStatus();
         },
         complete: () => {
           this._isComplete = true;
           this._updateImmutableStatus();
-        }
+        },
       }),
       catchError(() => empty()),
       shareReplay(1)
@@ -91,19 +101,27 @@ export class SuspenseSubject<T> extends Subject<T> {
     // Cast required because `data` is internally `T | undefined` while a value is
     // still in flight, whereas ObservableStatus exposes `data: T` to consumers.
     // The relationships between the status fields are verified in tests instead.
-    this._immutableStatus = {
-      status: this._error ? 'error' : (this._hasValue ? 'success' : 'loading'),
-      hasEmitted: this._hasValue,
-      isComplete: this._isComplete,
-      data: this._value,
-      error: this._error,
-      firstValuePromise: this._firstEmission
-    } as ObservableStatus<T>;
+    this._immutableStatus = attachUsable(
+      {
+        status: this._error ? 'error' : this._hasValue ? 'success' : 'loading',
+        hasEmitted: this._hasValue,
+        isComplete: this._isComplete,
+        data: this._value as T,
+        error: this._error,
+        firstValuePromise: this._firstEmission,
+      },
+      () =>
+        this._hasValue
+          ? createFulfilledUsable(this._value as T)
+          : instrumentPromise(this._firstEmission.then(() => this.value))
+    );
   }
 
   private _next(value: T) {
     this._hasValue = true;
     this._value = value;
+    this._firstEmission.status = 'fulfilled';
+    this._firstEmission.value = undefined;
     this._resolveFirstEmission();
     this._updateImmutableStatus();
   }
@@ -117,6 +135,7 @@ export class SuspenseSubject<T> extends Subject<T> {
     this._value = undefined;
     this._error = undefined;
     this._firstEmission = new Promise<void>((resolve) => (this._resolveFirstEmission = resolve));
+    this._firstEmission.status = 'pending';
     this._updateImmutableStatus();
   }
 

@@ -6,7 +6,7 @@
 
 # Interface: SuspensePerfProps
 
-Defined in: [src/performance.tsx:3](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L3)
+Defined in: [src/performance.tsx:6](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L6)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/performance.tsx:3](https://github.com/FirebaseExtended/reactfir
 
 > **children**: `ReactNode`
 
-Defined in: [src/performance.tsx:4](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L4)
+Defined in: [src/performance.tsx:7](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L7)
 
 ***
 
@@ -22,7 +22,17 @@ Defined in: [src/performance.tsx:4](https://github.com/FirebaseExtended/reactfir
 
 > **fallback**: `ReactNode`
 
-Defined in: [src/performance.tsx:6](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L6)
+Defined in: [src/performance.tsx:9](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L9)
+
+***
+
+### perf?
+
+> `optional` **perf?**: `FirebasePerformance`
+
+Defined in: [src/performance.tsx:13](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L13)
+
+Optional Firebase Performance Monitoring instance to record the trace with.
 
 ***
 
@@ -30,4 +40,4 @@ Defined in: [src/performance.tsx:6](https://github.com/FirebaseExtended/reactfir
 
 > **traceId**: `string`
 
-Defined in: [src/performance.tsx:5](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L5)
+Defined in: [src/performance.tsx:8](https://github.com/FirebaseExtended/reactfire/blob/main/src/performance.tsx#L8)

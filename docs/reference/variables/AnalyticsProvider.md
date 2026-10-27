@@ -4,11 +4,11 @@
 
 [ReactFire reference docs](../README.md) / AnalyticsProvider
 
-# Variable: AnalyticsProvider
+# ~~Variable: AnalyticsProvider~~
 
 > `const` **AnalyticsProvider**: (`props`) => `ReactElement`
 
-Defined in: [src/sdk.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L74)
+Defined in: [src/sdk.tsx:113](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L113)
 
 ## Parameters
 
@@ -19,3 +19,7 @@ Defined in: [src/sdk.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/
 ## Returns
 
 `ReactElement`
+
+## Deprecated
+
+Pass Firebase SDK instances directly instead of using Context Providers. Will be removed in v5.0.0.

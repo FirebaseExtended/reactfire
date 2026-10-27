@@ -6,9 +6,9 @@
 
 # Function: useDatabaseObject()
 
-> **useDatabaseObject**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T` \| `QueryChange`\>
+> **useDatabaseObject**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<[`QueryChange`](../interfaces/QueryChange.md) \| `T`\>
 
-Defined in: [src/database.tsx:27](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L27)
+Defined in: [src/database.tsx:74](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L74)
 
 Subscribe to a Realtime Database object
 
@@ -32,4 +32,4 @@ Reference to the DB object you want to listen to
 
 ## Returns
 
-[`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T` \| `QueryChange`\>
+[`ObservableStatus`](../interfaces/ObservableStatus.md)\<[`QueryChange`](../interfaces/QueryChange.md) \| `T`\>

@@ -1,11 +1,50 @@
-import { useRemoteConfig } from './index.js';
-import { useObservable, ObservableStatus } from './useObservable.js';
-import { getValue, getString, getBoolean, getNumber, getAll, AllParameters } from 'rxfire/remote-config';
-import { Observable } from 'rxjs';
+import { useRemoteConfig } from './sdk.js';
+import { InstrumentedPromise, ObservableStatus, instrumentPromise, useFirebaseStream } from './useFirebaseStream.js';
+import {
+  ensureInitialized,
+  getValue,
+  getString,
+  getBoolean,
+  getNumber,
+  getAll,
+  RemoteConfig,
+  Value as RemoteConfigValue,
+} from 'firebase/remote-config';
 
-import type { RemoteConfig, Value as RemoteConfigValue } from 'firebase/remote-config';
+/**
+ * @deprecated Use `getAll(remoteConfig)` from `firebase/remote-config` directly. Will be removed in v5.0.0.
+ */
+export type AllParameters = {
+  [key: string]: RemoteConfigValue;
+};
 
-type Getter$<T> = (remoteConfig: RemoteConfig, key: string) => Observable<T>;
+type Getter<T> = (remoteConfig: RemoteConfig, key: string) => T;
+
+const initializedRemoteConfigs = new WeakSet<RemoteConfig>();
+const inFlightRemoteConfigValues = new WeakMap<RemoteConfig, Map<string, InstrumentedPromise<any>>>();
+
+function getOrStartRemoteConfigValue<T>(
+  remoteConfig: RemoteConfig,
+  key: string,
+  getter: Getter<T>
+): InstrumentedPromise<T> {
+  let byKey = inFlightRemoteConfigValues.get(remoteConfig);
+  if (!byKey) {
+    byKey = new Map();
+    inFlightRemoteConfigValues.set(remoteConfig, byKey);
+  }
+  let promise = byKey.get(key) as InstrumentedPromise<T> | undefined;
+  if (!promise) {
+    promise = instrumentPromise(
+      ensureInitialized(remoteConfig).then(() => {
+        initializedRemoteConfigs.add(remoteConfig);
+        return getter(remoteConfig, key);
+      })
+    );
+    byKey.set(key, promise);
+  }
+  return promise;
+}
 
 /**
  * Helper function to construct type safe functions. Since Remote Config has
@@ -15,20 +54,47 @@ type Getter$<T> = (remoteConfig: RemoteConfig, key: string) => Observable<T>;
  * @param getter
  * @param remoteConfig
  */
-function useRemoteConfigValue_INTERNAL<T>(key: string, getter: Getter$<T>): ObservableStatus<T> {
+function useRemoteConfigValue_INTERNAL<T>(key: string, getter: Getter<T>): ObservableStatus<T> {
   const remoteConfig = useRemoteConfig();
 
-  const appName = remoteConfig.app.name;
-  const $value = getter(remoteConfig, key);
-
-  const observableId = `remoteConfig:${key}:${getter.name}:${appName}`;
-  return useObservable<T>(observableId, $value);
+  return useFirebaseStream<{ remoteConfig: RemoteConfig; key: string }, T>({
+    ref: { remoteConfig, key },
+    isEqual: (a, b) => a.remoteConfig === b.remoteConfig && a.key === b.key,
+    peekInFlight: () => inFlightRemoteConfigValues.get(remoteConfig)?.get(key),
+    getOrStartInFlight: () => getOrStartRemoteConfigValue(remoteConfig, key, getter),
+    clearInFlight: (expectedPromise) => {
+      const byKey = inFlightRemoteConfigValues.get(remoteConfig);
+      if (byKey && (!expectedPromise || byKey.get(key) === expectedPromise)) {
+        byKey.delete(key);
+      }
+    },
+    getSyncInitialValue: () =>
+      initializedRemoteConfigs.has(remoteConfig)
+        ? { hasValue: true, value: getter(remoteConfig, key), isComplete: true }
+        : { hasValue: false, value: undefined as unknown as T },
+    subscribe: (onNext, onError) => {
+      if (initializedRemoteConfigs.has(remoteConfig)) {
+        onNext(getter(remoteConfig, key), true);
+        return () => {};
+      }
+      ensureInitialized(remoteConfig).then(
+        () => {
+          initializedRemoteConfigs.add(remoteConfig);
+          onNext(getter(remoteConfig, key), true);
+        },
+        (err) => onError(err)
+      );
+      return () => {};
+    },
+    defaultIsComplete: true,
+  });
 }
 
 /**
  * Accepts a key and optionally a Remote Config instance. Returns a
  * Remote Config Value.
  *
+ * @deprecated Call `fetchAndActivate(remoteConfig)` and synchronous getters (`getValue(remoteConfig, key)`) from `firebase/remote-config` directly. Will be removed in v5.0.0.
  * @param key The parameter key in Remote Config
  */
 export function useRemoteConfigValue(key: string): ObservableStatus<RemoteConfigValue> {
@@ -37,6 +103,8 @@ export function useRemoteConfigValue(key: string): ObservableStatus<RemoteConfig
 
 /**
  * Convience method similar to useRemoteConfigValue. Returns a `string` from a Remote Config parameter.
+ *
+ * @deprecated Call `fetchAndActivate(remoteConfig)` and `getString(remoteConfig, key)` from `firebase/remote-config` directly. Will be removed in v5.0.0.
  * @param key The parameter key in Remote Config
  */
 export function useRemoteConfigString(key: string): ObservableStatus<string> {
@@ -45,6 +113,8 @@ export function useRemoteConfigString(key: string): ObservableStatus<string> {
 
 /**
  * Convience method similar to useRemoteConfigValue. Returns a `number` from a Remote Config parameter.
+ *
+ * @deprecated Call `fetchAndActivate(remoteConfig)` and `getNumber(remoteConfig, key)` from `firebase/remote-config` directly. Will be removed in v5.0.0.
  * @param key The parameter key in Remote Config
  */
 export function useRemoteConfigNumber(key: string): ObservableStatus<number> {
@@ -53,6 +123,8 @@ export function useRemoteConfigNumber(key: string): ObservableStatus<number> {
 
 /**
  * Convience method similar to useRemoteConfigValue. Returns a `boolean` from a Remote Config parameter.
+ *
+ * @deprecated Call `fetchAndActivate(remoteConfig)` and `getBoolean(remoteConfig, key)` from `firebase/remote-config` directly. Will be removed in v5.0.0.
  * @param key The parameter key in Remote Config
  */
 export function useRemoteConfigBoolean(key: string): ObservableStatus<boolean> {
@@ -61,8 +133,10 @@ export function useRemoteConfigBoolean(key: string): ObservableStatus<boolean> {
 
 /**
  * Convience method similar to useRemoteConfigValue. Returns allRemote Config parameters.
+ *
+ * @deprecated Call `fetchAndActivate(remoteConfig)` and `getAll(remoteConfig)` from `firebase/remote-config` directly. Will be removed in v5.0.0.
  * @param key The parameter key in Remote Config
  */
 export function useRemoteConfigAll(key: string): ObservableStatus<AllParameters> {
-  return useRemoteConfigValue_INTERNAL<AllParameters>(key, getAll);
+  return useRemoteConfigValue_INTERNAL<AllParameters>(key, (rc) => getAll(rc));
 }

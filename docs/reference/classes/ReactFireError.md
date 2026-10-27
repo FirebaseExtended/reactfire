@@ -4,9 +4,13 @@
 
 [ReactFire reference docs](../README.md) / ReactFireError
 
-# Class: ReactFireError
+# ~~Class: ReactFireError~~
 
-Defined in: [src/index.ts:12](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L12)
+Defined in: [src/useFirebaseStream.ts:20](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L20)
+
+## Deprecated
+
+Error class used only by the deprecated `useSigninCheck` hook. Will be removed in v5.0.0.
 
 ## Extends
 
@@ -18,7 +22,7 @@ Defined in: [src/index.ts:12](https://github.com/FirebaseExtended/reactfire/blob
 
 > **new ReactFireError**(`code`, `message`, `customData?`): `ReactFireError`
 
-Defined in: [src/index.ts:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L15)
+Defined in: [src/useFirebaseStream.ts:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L23)
 
 #### Parameters
 
@@ -44,7 +48,7 @@ Defined in: [src/index.ts:15](https://github.com/FirebaseExtended/reactfire/blob
 
 ## Properties
 
-### cause?
+### ~~cause?~~
 
 > `optional` **cause?**: `unknown`
 
@@ -56,23 +60,23 @@ Defined in: node\_modules/typescript/lib/lib.es2022.error.d.ts:24
 
 ***
 
-### code
+### ~~code~~
 
 > `readonly` **code**: `string`
 
-Defined in: [src/index.ts:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L15)
+Defined in: [src/useFirebaseStream.ts:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L23)
 
 ***
 
-### customData?
+### ~~customData?~~
 
 > `optional` **customData?**: `Record`\<`string`, `unknown`\>
 
-Defined in: [src/index.ts:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L15)
+Defined in: [src/useFirebaseStream.ts:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L23)
 
 ***
 
-### message
+### ~~message~~
 
 > **message**: `string`
 
@@ -84,11 +88,11 @@ Defined in: node\_modules/typescript/lib/lib.es5.d.ts:1075
 
 ***
 
-### name
+### ~~name~~
 
 > `readonly` **name**: `"ReactFireError"` = `'ReactFireError'`
 
-Defined in: [src/index.ts:13](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L13)
+Defined in: [src/useFirebaseStream.ts:21](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L21)
 
 #### Overrides
 
@@ -96,7 +100,7 @@ Defined in: [src/index.ts:13](https://github.com/FirebaseExtended/reactfire/blob
 
 ***
 
-### stack?
+### ~~stack?~~
 
 > `optional` **stack?**: `string`
 
@@ -108,7 +112,7 @@ Defined in: node\_modules/typescript/lib/lib.es5.d.ts:1076
 
 ## Methods
 
-### isError()
+### ~~isError()~~
 
 > `static` **isError**(`error`): `error is Error`
 

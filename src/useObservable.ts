@@ -1,23 +1,34 @@
 import * as React from 'react';
+import { registerVersion } from 'firebase/app';
 import { useSyncExternalStore } from 'use-sync-external-store/shim';
 import { Observable } from 'rxjs';
 import { SuspenseSubject } from './SuspenseSubject.js';
-import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp.js';
-import { ReactFireGlobals, ReactFireOptions } from './index.js';
+import { useSuspenseEnabledFromConfigAndContext, version } from './firebaseApp.js';
+import { attachUsable, createFulfilledUsable } from './useFirebaseStream.js';
+import type { ObservableStatus, ReactFireOptions, ReactFireUsable } from './useFirebaseStream.js';
+import type { ReactFireGlobals } from './index.js';
+
+export type { ObservableStatus, ReactFireUsable };
 
 const DEFAULT_TIMEOUT = 30_000;
 
-// Since we're side-effect free, we need to ensure our observable cache is global
-const preloadedObservables: Map<string, SuspenseSubject<any>> = (globalThis as any as ReactFireGlobals)._reactFirePreloadedObservables || new Map();
-
-if (!(globalThis as any as ReactFireGlobals)._reactFirePreloadedObservables) {
-  (globalThis as any as ReactFireGlobals)._reactFirePreloadedObservables = preloadedObservables;
+function getPreloadedObservables(): Map<string, SuspenseSubject<any>> {
+  const globals = globalThis as unknown as ReactFireGlobals;
+  if (!globals._reactFirePreloadedObservables) {
+    globals._reactFirePreloadedObservables = new Map();
+  }
+  return globals._reactFirePreloadedObservables;
 }
 
-// Starts listening to an Observable.
-// Call this once you know you're going to render a
-// child that will consume the observable
+/**
+ * Starts listening to an Observable.
+ * Call this once you know you're going to render a
+ * child that will consume the observable.
+ *
+ * @deprecated RxJS integration (`preloadObservable`, `useObservable`, `SuspenseSubject`) is deprecated and will be removed in v5.0.0.
+ */
 export function preloadObservable<T>(source: Observable<T>, id: string, suspenseEnabled = false) {
+  const preloadedObservables = getPreloadedObservables();
   if (preloadedObservables.has(id)) {
     return preloadedObservables.get(id) as SuspenseSubject<T>;
   } else {
@@ -27,47 +38,18 @@ export function preloadObservable<T>(source: Observable<T>, id: string, suspense
   }
 }
 
-export interface ObservableStatus<T> {
-  /**
-   * The loading status.
-   *
-   * - `loading`: Waiting for the first value from an observable
-   * - `error`: Something went wrong. Check `ObservableStatus.error` for more details
-   * - `success`: The hook has emitted at least one value
-   *
-   * If `initialData` is passed in, this will skip `loading` and go straight to `success`.
-   */
-  status: 'loading' | 'error' | 'success';
-  /**
-   * Indicates whether the hook has emitted a value at some point
-   *
-   * If `initialData` is passed in, this will be `true`.
-   */
-  hasEmitted: boolean; // has received at least one value
-  /**
-   * If this is `true`, the hook will be emitting no further items.
-   */
-  isComplete: boolean;
-  /**
-   * The most recent value.
-   *
-   * If `initialData` is passed in, the first value of `data` will be the valuea provided in `initialData` **UNLESS** the underlying observable is ready, in which case it will skip `initialData`.
-   */
-  data: T;
-  /**
-   * Any error that may have occurred in the underlying observable
-   */
-  error: Error | undefined;
-  /**
-   * Promise that resolves after first emit from observable
-   */
-  firstValuePromise: Promise<void>;
-}
-
+/**
+ * Subscribe to an RxJS `Observable`.
+ *
+ * @deprecated RxJS integration (`useObservable`, `preloadObservable`, `SuspenseSubject`) is deprecated and will be removed in v5.0.0.
+ */
 export function useObservable<T = unknown>(observableId: string, source: Observable<T>, config: ReactFireOptions = {}): ObservableStatus<T> {
   if (!observableId) {
     throw new Error('cannot call useObservable without an observableId');
   }
+
+  registerVersion('react', React.version || 'unknown');
+  registerVersion('reactfire', version);
 
   const suspenseEnabled = useSuspenseEnabledFromConfigAndContext(config.suspense);
 
@@ -81,7 +63,8 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
     throw observable.firstEmission;
   }
 
-  const subscribe = React.useCallback((onStoreChange: () => void) => {
+  const subscribe = React.useCallback(
+    (onStoreChange: () => void) => {
       const subscription = observable.subscribe({
         next: () => {
           onStoreChange();
@@ -97,8 +80,10 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
 
       return () => {
         subscription.unsubscribe();
-      }
-  }, [observable])
+      };
+    },
+    [observable]
+  );
 
   const getSnapshot = React.useCallback<() => ObservableStatus<T>>(() => {
     return observable.immutableStatus;
@@ -115,14 +100,17 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
     if (serverSnapshotRef.current === undefined) {
       const initialDataValue = config?.initialData ?? config?.startWithValue;
 
-      serverSnapshotRef.current = {
-        status: hasInitialData ? 'success' : 'loading',
-        hasEmitted: hasInitialData,
-        isComplete: false,
-        data: initialDataValue,
-        error: undefined,
-        firstValuePromise: observable.firstEmission
-      };
+      serverSnapshotRef.current = attachUsable(
+        {
+          status: hasInitialData ? 'success' : 'loading',
+          hasEmitted: hasInitialData,
+          isComplete: false,
+          data: initialDataValue,
+          error: undefined,
+          firstValuePromise: observable.firstEmission,
+        },
+        () => createFulfilledUsable(initialDataValue)
+      );
     }
 
     return serverSnapshotRef.current;
@@ -145,12 +133,15 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
       throw update.error;
     }
 
-    return {
-      ...update,
-      data: initialDataValue,
-      status: 'success',
-      hasEmitted: true,
-    } as ObservableStatus<T>;
+    return attachUsable(
+      {
+        ...update,
+        data: initialDataValue,
+        status: 'success',
+        hasEmitted: true,
+      },
+      () => createFulfilledUsable(initialDataValue)
+    );
   }
 
   // throw an error if there is an error

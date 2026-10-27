@@ -4,11 +4,11 @@
 
 [ReactFire reference docs](../README.md) / StorageImage
 
-# Function: StorageImage()
+# ~~Function: StorageImage()~~
 
 > **StorageImage**(`props`): `Element`
 
-Defined in: [src/storage.tsx:82](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L82)
+Defined in: [src/storage.tsx:214](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L214)
 
 ## Parameters
 
@@ -19,3 +19,7 @@ Defined in: [src/storage.tsx:82](https://github.com/FirebaseExtended/reactfire/b
 ## Returns
 
 `Element`
+
+## Deprecated
+
+Use `useStorageDownloadURL(ref)` with a standard `<img />` element instead. Will be removed in v5.0.0.

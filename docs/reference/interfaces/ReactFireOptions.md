@@ -6,7 +6,7 @@
 
 # Interface: ReactFireOptions\<T\>
 
-Defined in: [src/index.ts:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L24)
+Defined in: [src/useFirebaseStream.ts:32](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L32)
 
 ## Extended by
 
@@ -20,11 +20,25 @@ Defined in: [src/index.ts:24](https://github.com/FirebaseExtended/reactfire/blob
 
 ## Properties
 
-### idField?
+### ~~idField?~~
 
 > `optional` **idField?**: `string`
 
-Defined in: [src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L25)
+Defined in: [src/useFirebaseStream.ts:36](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L36)
+
+#### Deprecated
+
+`*Data` hooks and `idField` are deprecated and will be removed in v5.0.0. Use snapshot hooks (`useFirestoreDoc`, `useFirestoreCollection`, `useDatabaseObject`, `useDatabaseList`) and read `doc.id` or `child.key` directly.
+
+***
+
+### includeMetadataChanges?
+
+> `optional` **includeMetadataChanges?**: `boolean`
+
+Defined in: [src/useFirebaseStream.ts:53](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L53)
+
+Emit when snapshot metadata (`hasPendingWrites`, `fromCache`) changes (`useFirestoreDoc` / `useFirestoreCollection`).
 
 ***
 
@@ -32,7 +46,17 @@ Defined in: [src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **initialData?**: `any`
 
-Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L26)
+Defined in: [src/useFirebaseStream.ts:37](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L37)
+
+***
+
+### once?
+
+> `optional` **once?**: `boolean`
+
+Defined in: [src/useFirebaseStream.ts:49](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L49)
+
+Resolve the initial read once and do not keep a real-time listener open (`useFirestoreDoc` / `useFirestoreCollection`).
 
 ***
 
@@ -40,16 +64,20 @@ Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **startWithValue?**: `any`
 
-Defined in: [src/index.ts:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L30)
+Defined in: [src/useFirebaseStream.ts:41](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L41)
 
 #### Deprecated
 
-use initialData instead
+use `initialData` instead
 
 ***
 
-### suspense?
+### ~~suspense?~~
 
 > `optional` **suspense?**: `boolean`
 
-Defined in: [src/index.ts:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L31)
+Defined in: [src/useFirebaseStream.ts:45](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L45)
+
+#### Deprecated
+
+Pass `hook().experimental_usable` (or `hook().usable`) to `React.use()` instead of setting `suspense: true`.

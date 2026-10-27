@@ -4,9 +4,13 @@
 
 [ReactFire reference docs](../README.md) / SignInCheckOptionsClaimsObject
 
-# Interface: SignInCheckOptionsClaimsObject
+# ~~Interface: SignInCheckOptionsClaimsObject~~
 
-Defined in: [src/auth.tsx:89](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L89)
+Defined in: [src/auth.tsx:315](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L315)
+
+## Deprecated
+
+Will be removed in v5.0.0 along with `useSigninCheck`.
 
 ## Extends
 
@@ -14,11 +18,11 @@ Defined in: [src/auth.tsx:89](https://github.com/FirebaseExtended/reactfire/blob
 
 ## Properties
 
-### forceRefresh?
+### ~~forceRefresh?~~
 
 > `optional` **forceRefresh?**: `boolean`
 
-Defined in: [src/auth.tsx:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L86)
+Defined in: [src/auth.tsx:309](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L309)
 
 #### Inherited from
 
@@ -26,11 +30,15 @@ Defined in: [src/auth.tsx:86](https://github.com/FirebaseExtended/reactfire/blob
 
 ***
 
-### idField?
+### ~~idField?~~
 
 > `optional` **idField?**: `string`
 
-Defined in: [src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L25)
+Defined in: [src/useFirebaseStream.ts:36](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L36)
+
+#### Deprecated
+
+`*Data` hooks and `idField` are deprecated and will be removed in v5.0.0. Use snapshot hooks (`useFirestoreDoc`, `useFirestoreCollection`, `useDatabaseObject`, `useDatabaseList`) and read `doc.id` or `child.key` directly.
 
 #### Inherited from
 
@@ -38,11 +46,25 @@ Defined in: [src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob
 
 ***
 
-### initialData?
+### ~~includeMetadataChanges?~~
+
+> `optional` **includeMetadataChanges?**: `boolean`
+
+Defined in: [src/useFirebaseStream.ts:53](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L53)
+
+Emit when snapshot metadata (`hasPendingWrites`, `fromCache`) changes (`useFirestoreDoc` / `useFirestoreCollection`).
+
+#### Inherited from
+
+[`SignInCheckOptionsBasic`](SignInCheckOptionsBasic.md).[`includeMetadataChanges`](SignInCheckOptionsBasic.md#includemetadatachanges)
+
+***
+
+### ~~initialData?~~
 
 > `optional` **initialData?**: `any`
 
-Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L26)
+Defined in: [src/useFirebaseStream.ts:37](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L37)
 
 #### Inherited from
 
@@ -50,11 +72,25 @@ Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob
 
 ***
 
-### requiredClaims
+### ~~once?~~
+
+> `optional` **once?**: `boolean`
+
+Defined in: [src/useFirebaseStream.ts:49](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L49)
+
+Resolve the initial read once and do not keep a real-time listener open (`useFirestoreDoc` / `useFirestoreCollection`).
+
+#### Inherited from
+
+[`SignInCheckOptionsBasic`](SignInCheckOptionsBasic.md).[`once`](SignInCheckOptionsBasic.md#once)
+
+***
+
+### ~~requiredClaims~~
 
 > **requiredClaims**: `ParsedToken`
 
-Defined in: [src/auth.tsx:90](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L90)
+Defined in: [src/auth.tsx:316](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L316)
 
 ***
 
@@ -62,11 +98,11 @@ Defined in: [src/auth.tsx:90](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **startWithValue?**: `any`
 
-Defined in: [src/index.ts:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L30)
+Defined in: [src/useFirebaseStream.ts:41](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L41)
 
 #### Deprecated
 
-use initialData instead
+use `initialData` instead
 
 #### Inherited from
 
@@ -74,11 +110,15 @@ use initialData instead
 
 ***
 
-### suspense?
+### ~~suspense?~~
 
 > `optional` **suspense?**: `boolean`
 
-Defined in: [src/index.ts:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L31)
+Defined in: [src/useFirebaseStream.ts:45](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L45)
+
+#### Deprecated
+
+Pass `hook().experimental_usable` (or `hook().usable`) to `React.use()` instead of setting `suspense: true`.
 
 #### Inherited from
 

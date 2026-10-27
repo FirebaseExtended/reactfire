@@ -4,40 +4,44 @@
 
 [ReactFire reference docs](../README.md) / StorageImageProps
 
-# Type Alias: StorageImageProps
+# ~~Type Alias: StorageImageProps~~
 
 > **StorageImageProps** = `object`
 
-Defined in: [src/storage.tsx:40](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L40)
+Defined in: [src/storage.tsx:165](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L165)
+
+## Deprecated
+
+Use `useStorageDownloadURL(ref)` with a standard `<img />` element instead. Will be removed in v5.0.0.
 
 ## Properties
 
-### placeHolder?
+### ~~placeHolder?~~
 
 > `optional` **placeHolder?**: `React.ReactNode`
 
-Defined in: [src/storage.tsx:44](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L44)
+Defined in: [src/storage.tsx:169](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L169)
 
 ***
 
-### storage?
+### ~~storage?~~
 
 > `optional` **storage?**: `FirebaseStorage`
 
-Defined in: [src/storage.tsx:42](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L42)
+Defined in: [src/storage.tsx:167](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L167)
 
 ***
 
-### storagePath
+### ~~storagePath~~
 
 > **storagePath**: `string`
 
-Defined in: [src/storage.tsx:41](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L41)
+Defined in: [src/storage.tsx:166](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L166)
 
 ***
 
-### suspense?
+### ~~suspense?~~
 
 > `optional` **suspense?**: `boolean`
 
-Defined in: [src/storage.tsx:43](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L43)
+Defined in: [src/storage.tsx:168](https://github.com/FirebaseExtended/reactfire/blob/main/src/storage.tsx#L168)

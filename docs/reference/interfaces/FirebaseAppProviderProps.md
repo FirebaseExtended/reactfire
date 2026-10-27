@@ -4,38 +4,46 @@
 
 [ReactFire reference docs](../README.md) / FirebaseAppProviderProps
 
-# Interface: FirebaseAppProviderProps
-
-Defined in: [src/firebaseApp.tsx:14](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L14)
-
-## Properties
-
-### appName?
-
-> `optional` **appName?**: `string`
+# ~~Interface: FirebaseAppProviderProps~~
 
 Defined in: [src/firebaseApp.tsx:17](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L17)
 
+## Deprecated
+
+`<FirebaseAppProvider>` is deprecated and will be removed in v5.0.0. Initialize your Firebase app at module scope (`export const app = initializeApp(config)`) and pass SDK instances or references directly to ReactFire hooks.
+
+## Properties
+
+### ~~appName?~~
+
+> `optional` **appName?**: `string`
+
+Defined in: [src/firebaseApp.tsx:20](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L20)
+
 ***
 
-### firebaseApp?
+### ~~firebaseApp?~~
 
 > `optional` **firebaseApp?**: `FirebaseApp`
 
-Defined in: [src/firebaseApp.tsx:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L15)
+Defined in: [src/firebaseApp.tsx:18](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L18)
 
 ***
 
-### firebaseConfig?
+### ~~firebaseConfig?~~
 
 > `optional` **firebaseConfig?**: `FirebaseOptions`
 
-Defined in: [src/firebaseApp.tsx:16](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L16)
+Defined in: [src/firebaseApp.tsx:19](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L19)
 
 ***
 
-### suspense?
+### ~~suspense?~~
 
 > `optional` **suspense?**: `boolean`
 
-Defined in: [src/firebaseApp.tsx:18](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L18)
+Defined in: [src/firebaseApp.tsx:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L24)
+
+#### Deprecated
+
+Pass `hook().experimental_usable` (or `hook().usable`) to `React.use()` instead of setting `suspense={true}`.

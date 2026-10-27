@@ -1,4 +1,4 @@
-import { renderHook, act, cleanup, waitFor } from '@testing-library/react';
+import { render, renderHook, act, cleanup, waitFor } from '@testing-library/react';
 
 import * as React from 'react';
 import '@testing-library/jest-dom/extend-expect';
@@ -351,6 +351,176 @@ describe('Firestore', () => {
       await waitFor(() => expect(result.current.status).toEqual('success'));
 
       expect(result.current.data).toEqual([mockData]);
+    });
+  });
+
+  describe('React 19 .usable / .experimental_usable with React.use()', () => {
+    const use =
+      (React as unknown as { use?: <T>(usable: Promise<T>) => T }).use ??
+      function usePolyfill<T>(usable: Promise<T> & { status?: string; value?: T; reason?: unknown }): T {
+        if (usable.status === 'fulfilled') return usable.value as T;
+        if (usable.status === 'rejected') throw usable.reason;
+        throw usable;
+      };
+
+    it('suspends on initial load with use(useFirestoreDoc(ref).usable) and updates live without re-suspending', async () => {
+      const ref = doc(collection(db, randomString()), randomString());
+      await setDoc(ref, { a: 'initial' });
+
+      const errorSpy = vi.spyOn(console, 'error');
+      let fallbackMounts = 0;
+
+      const Fallback = () => {
+        React.useEffect(() => {
+          fallbackMounts++;
+        }, []);
+        return <div data-testid="fallback">Loading...</div>;
+      };
+
+      const DocView = () => {
+        const snap = use(useFirestoreDoc(ref).experimental_usable);
+        return <div data-testid="doc-value">{snap.data()?.a}</div>;
+      };
+
+      let rendered!: ReturnType<typeof render>;
+      await act(async () => {
+        rendered = render(
+          <Provider>
+            <React.Suspense fallback={<Fallback />}>
+              <DocView />
+            </React.Suspense>
+          </Provider>
+        );
+      });
+      const { getByTestId, queryByTestId } = rendered;
+
+      await waitFor(() => expect(getByTestId('doc-value')).toHaveTextContent('initial'));
+      expect(queryByTestId('fallback')).toBeNull();
+      const initialFallbackMounts = fallbackMounts;
+
+      await act(() => setDoc(ref, { a: 'updated-live' }));
+
+      await waitFor(() => expect(getByTestId('doc-value')).toHaveTextContent('updated-live'));
+      expect(fallbackMounts).toEqual(initialFallbackMounts);
+
+      const uncachedWarnings = errorSpy.mock.calls.filter((args) =>
+        String(args[0] ?? '').includes('uncached promise')
+      );
+      expect(uncachedWarnings).toHaveLength(0);
+      errorSpy.mockRestore();
+    });
+
+    it('unwraps data with use(useFirestoreDocData(ref).usable) and updates live', async () => {
+      const ref = doc(collection(db, randomString()), 'my-doc-id') as DocumentReference<{ title: string; id?: string }>;
+      await setDoc(ref, { title: 'first' });
+
+      const DocDataView = () => {
+        const data = use(useFirestoreDocData(ref, { idField: 'id' }).usable);
+        return <div data-testid="doc-data">{`${data?.id}:${data?.title}`}</div>;
+      };
+
+      let rendered!: ReturnType<typeof render>;
+      await act(async () => {
+        rendered = render(
+          <Provider>
+            <React.Suspense fallback={<div data-testid="fallback">Loading...</div>}>
+              <DocDataView />
+            </React.Suspense>
+          </Provider>
+        );
+      });
+      const { getByTestId } = rendered;
+
+      await waitFor(() => expect(getByTestId('doc-data')).toHaveTextContent('my-doc-id:first'));
+
+      await act(() => setDoc(ref, { title: 'second' }));
+
+      await waitFor(() => expect(getByTestId('doc-data')).toHaveTextContent('my-doc-id:second'));
+    });
+
+    it('suspends and updates live with use(useFirestoreCollectionData(colRef).usable)', async () => {
+      const colRef = collection(db, randomString());
+      await addDoc(colRef, { name: 'one' });
+
+      const ColView = () => {
+        const items = use(useFirestoreCollectionData(colRef).usable) as Array<{ name: string }>;
+        return <div data-testid="col-items">{items.map((i) => i.name).join(',')}</div>;
+      };
+
+      let rendered!: ReturnType<typeof render>;
+      await act(async () => {
+        rendered = render(
+          <Provider>
+            <React.Suspense fallback={<div data-testid="fallback">Loading...</div>}>
+              <ColView />
+            </React.Suspense>
+          </Provider>
+        );
+      });
+      const { getByTestId } = rendered;
+
+      await waitFor(() => expect(getByTestId('col-items')).toHaveTextContent('one'));
+
+      await act(() => addDoc(colRef, { name: 'two' }));
+
+      await waitFor(() => expect(getByTestId('col-items')).toHaveTextContent(/one.*two|two.*one/));
+    });
+
+    it('preserves === array identity across unrelated re-renders in useFirestoreCollectionData', async () => {
+      const colRef = collection(db, randomString());
+      await addDoc(colRef, { name: 'stable' });
+
+      const seenArrays: Array<unknown> = [];
+      let triggerRerender!: () => void;
+
+      const ColStabilityView = () => {
+        const [, setTick] = React.useState(0);
+        triggerRerender = () => setTick((t) => t + 1);
+        const { status, data } = useFirestoreCollectionData(colRef);
+        if (status === 'success') {
+          seenArrays.push(data);
+        }
+        return <div data-testid="col-stable">{status === 'success' ? data.length : 'loading'}</div>;
+      };
+
+      const { getByTestId } = render(
+        <Provider>
+          <ColStabilityView />
+        </Provider>
+      );
+
+      await waitFor(() => expect(getByTestId('col-stable')).toHaveTextContent('1'));
+      expect(seenArrays.length).toBeGreaterThanOrEqual(1);
+      const firstArray = seenArrays[seenArrays.length - 1];
+
+      await act(async () => {
+        triggerRerender();
+      });
+
+      const secondArray = seenArrays[seenArrays.length - 1];
+      expect(secondArray).toBe(firstArray);
+    });
+
+    it('supports { once: true } option on useFirestoreDoc and useFirestoreCollection', async () => {
+      const colRef = collection(db, randomString());
+      const docRef = doc(colRef, randomString());
+      await setDoc(docRef, { a: 'first' });
+
+      const { result: docResult } = renderHook(() => useFirestoreDoc(docRef, { once: true }), { wrapper: Provider });
+      const { result: colResult } = renderHook(() => useFirestoreCollection(colRef, { once: true }), { wrapper: Provider });
+
+      await waitFor(() => expect(docResult.current.status).toEqual('success'));
+      await waitFor(() => expect(colResult.current.status).toEqual('success'));
+      expect(docResult.current.isComplete).toEqual(true);
+      expect(colResult.current.isComplete).toEqual(true);
+      expect(docResult.current.data.data()).toEqual({ a: 'first' });
+      expect(colResult.current.data.docs).toHaveLength(1);
+
+      await act(() => setDoc(docRef, { a: 'second' }));
+      await act(() => addDoc(colRef, { a: 'third' }));
+
+      expect(docResult.current.data.data()).toEqual({ a: 'first' });
+      expect(colResult.current.data.docs).toHaveLength(1);
     });
   });
 });

@@ -6,9 +6,9 @@
 
 # Function: useDatabaseList()
 
-> **useDatabaseList**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T`[] \| `QueryChange`[]\>
+> **useDatabaseList**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<[`QueryChange`](../interfaces/QueryChange.md)[] \| `T`[]\>
 
-Defined in: [src/database.tsx:48](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L48)
+Defined in: [src/database.tsx:202](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L202)
 
 Subscribe to a Realtime Database list
 
@@ -22,7 +22,7 @@ Subscribe to a Realtime Database list
 
 ### ref
 
-`Query` \| `DatabaseReference`
+`DatabaseReference` \| `Query`
 
 Reference to the DB List you want to listen to
 
@@ -32,4 +32,4 @@ Reference to the DB List you want to listen to
 
 ## Returns
 
-[`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T`[] \| `QueryChange`[]\>
+[`ObservableStatus`](../interfaces/ObservableStatus.md)\<[`QueryChange`](../interfaces/QueryChange.md)[] \| `T`[]\>

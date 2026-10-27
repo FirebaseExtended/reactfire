@@ -4,33 +4,37 @@
 
 [ReactFire reference docs](../README.md) / ClaimsCheckProps
 
-# Interface: ClaimsCheckProps
+# ~~Interface: ClaimsCheckProps~~
 
-Defined in: [src/auth.tsx:60](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L60)
+Defined in: [src/auth.tsx:274](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L274)
+
+## Deprecated
+
+Use `<AuthCheck requiredClaims={...}>` or `useIdTokenResult(auth)` instead. Will be removed in v5.0.0.
 
 ## Properties
 
-### children
+### ~~children~~
 
 > **children**: `ReactNode`
 
-Defined in: [src/auth.tsx:63](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L63)
+Defined in: [src/auth.tsx:277](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L277)
 
 ***
 
-### fallback
+### ~~fallback~~
 
 > **fallback**: `ReactNode`
 
-Defined in: [src/auth.tsx:62](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L62)
+Defined in: [src/auth.tsx:276](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L276)
 
 ***
 
-### requiredClaims
+### ~~requiredClaims~~
 
 > **requiredClaims**: `object`
 
-Defined in: [src/auth.tsx:64](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L64)
+Defined in: [src/auth.tsx:278](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L278)
 
 #### Index Signature
 
@@ -38,8 +42,8 @@ Defined in: [src/auth.tsx:64](https://github.com/FirebaseExtended/reactfire/blob
 
 ***
 
-### user
+### ~~user~~
 
 > **user**: `User`
 
-Defined in: [src/auth.tsx:61](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L61)
+Defined in: [src/auth.tsx:275](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L275)

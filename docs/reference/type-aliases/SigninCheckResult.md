@@ -4,8 +4,12 @@
 
 [ReactFire reference docs](../README.md) / SigninCheckResult
 
-# Type Alias: SigninCheckResult
+# ~~Type Alias: SigninCheckResult~~
 
 > **SigninCheckResult** = \{ `errors`: \{ \}; `hasRequiredClaims`: `false`; `signedIn`: `false`; `user`: `null`; \} \| \{ `errors`: [`ClaimCheckErrors`](../interfaces/ClaimCheckErrors.md); `hasRequiredClaims`: `boolean`; `signedIn`: `true`; `user`: `User`; \}
 
-Defined in: [src/auth.tsx:71](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L71)
+Defined in: [src/auth.tsx:291](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L291)
+
+## Deprecated
+
+Will be removed in v5.0.0 along with `useSigninCheck`.

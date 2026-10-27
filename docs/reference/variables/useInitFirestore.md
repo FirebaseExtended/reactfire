@@ -4,8 +4,12 @@
 
 [ReactFire reference docs](../README.md) / useInitFirestore
 
-# Variable: useInitFirestore
+# ~~Variable: useInitFirestore~~
 
 > `const` **useInitFirestore**: `InitSdkHook`\<`Firestore`\>
 
-Defined in: [src/sdk.tsx:101](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L101)
+Defined in: [src/sdk.tsx:160](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L160)
+
+## Deprecated
+
+Initialize Firebase SDKs at module scope (`initializeFirestore`) instead of `useInit*`. Will be removed in v5.0.0.

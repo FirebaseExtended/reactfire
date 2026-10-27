@@ -13,6 +13,14 @@ const createTrace = vi.fn(() => ({
   stop: traceEnd,
 }));
 
+vi.mock('firebase/performance', async () => {
+  const actual = await vi.importActual<typeof import('firebase/performance')>('firebase/performance');
+  return {
+    ...actual,
+    trace: () => createTrace(),
+  };
+});
+
 const mockPerf = vi.fn(() => {
   return { trace: createTrace };
 }) as any as () => FirebasePerformance;
@@ -145,5 +153,40 @@ describe('SuspenseWithPerf', () => {
     expect(mark).toHaveBeenCalledTimes(2);
     expect(measure).toHaveBeenCalledTimes(1);
     expect(measure).toHaveBeenCalledWith('test lifecycle', '_test lifecycleStart[0]', '_test lifecycleEnd[0]');
+  });
+
+  it('records a Firebase Performance trace when perf prop is provided', async () => {
+    const o$ = new Subject();
+    let shouldThrow = true;
+
+    const promise = new Promise((resolve) => {
+      o$.subscribe(() => {
+        shouldThrow = false;
+        resolve(true);
+      });
+    });
+
+    const Comp = () => {
+      if (shouldThrow) {
+        throw promise;
+      }
+      return <h1 data-testid="child">Actual</h1>;
+    };
+
+    const perfInstance = { app: mockFirebase } as unknown as FirebasePerformance;
+
+    const { getByTestId } = render(
+      <SuspenseWithPerf perf={perfInstance} fallback={<h1 data-testid="fallback">Fallback</h1>} traceId="fb-perf-trace">
+        <Comp />
+      </SuspenseWithPerf>
+    );
+
+    expect(getByTestId('fallback')).toBeInTheDocument();
+    expect(traceStart).toHaveBeenCalledTimes(1);
+    expect(traceEnd).toHaveBeenCalledTimes(0);
+
+    act(() => o$.next('a'));
+    await waitFor(() => getByTestId('child'));
+    expect(traceEnd).toHaveBeenCalledTimes(1);
   });
 });

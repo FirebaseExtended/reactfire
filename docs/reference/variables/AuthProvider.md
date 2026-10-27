@@ -4,11 +4,11 @@
 
 [ReactFire reference docs](../README.md) / AuthProvider
 
-# Variable: AuthProvider
+# ~~Variable: AuthProvider~~
 
 > `const` **AuthProvider**: (`props`) => `ReactElement`
 
-Defined in: [src/sdk.tsx:73](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L73)
+Defined in: [src/sdk.tsx:111](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L111)
 
 ## Parameters
 
@@ -19,3 +19,7 @@ Defined in: [src/sdk.tsx:73](https://github.com/FirebaseExtended/reactfire/blob/
 ## Returns
 
 `ReactElement`
+
+## Deprecated
+
+Pass `auth` directly to `useUser(auth)`, `useIdTokenResult(auth)`, or `<AuthCheck auth={auth}>`. Will be removed in v5.0.0.

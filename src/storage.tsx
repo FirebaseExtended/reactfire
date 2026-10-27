@@ -1,24 +1,128 @@
 import * as React from 'react';
-import { getDownloadURL, fromTask } from 'rxfire/storage';
-import { defer } from 'rxjs';
-import { ReactFireOptions, useObservable, ObservableStatus, useStorage } from './index.js';
+import { useStorage } from './sdk.js';
 import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp.js';
-import { ref } from 'firebase/storage';
+import { InstrumentedPromise, ObservableStatus, ReactFireOptions, instrumentPromise, useFirebaseStream } from './useFirebaseStream.js';
+import { getDownloadURL, ref } from 'firebase/storage';
 
 import type { UploadTask, UploadTaskSnapshot, StorageReference, FirebaseStorage } from 'firebase/storage';
+
+const IN_FLIGHT_EVICT_MS = 5_000;
+const inFlightStorageTasks = new WeakMap<UploadTask, InstrumentedPromise<UploadTaskSnapshot>>();
+
+function getOrStartStorageTask(task: UploadTask): InstrumentedPromise<UploadTaskSnapshot> {
+  let promise = inFlightStorageTasks.get(task);
+  if (!promise) {
+    promise = instrumentPromise(
+      new Promise<UploadTaskSnapshot>((resolve, reject) => {
+        let settled = false;
+        const timer = setTimeout(() => {
+          if (!settled) {
+            settled = true;
+            unsub?.();
+            resolve(task.snapshot);
+          }
+        }, 0);
+        const unsub = task.on(
+          'state_changed',
+          (snap) => {
+            if (!settled) {
+              settled = true;
+              clearTimeout(timer);
+              unsub?.();
+              resolve(snap);
+            }
+          },
+          (err) => {
+            if (!settled) {
+              settled = true;
+              clearTimeout(timer);
+              unsub?.();
+              reject(err);
+            }
+          }
+        );
+        if (settled) {
+          unsub();
+        }
+      })
+    );
+    inFlightStorageTasks.set(task, promise);
+    const cleanup = () => setTimeout(() => inFlightStorageTasks.delete(task), IN_FLIGHT_EVICT_MS);
+    promise.then(cleanup, cleanup);
+  }
+  return promise;
+}
 
 /**
  * Subscribe to the progress of a storage task
  *
+ * @deprecated Track `uploadBytesResumable` progress inside your upload handler or action instead. Will be removed in v5.0.0.
  * @param task - the task you want to listen to
  * @param ref - reference to the blob the task is acting on
  * @param options
  */
-export function useStorageTask<T = unknown>(task: UploadTask, ref: StorageReference, options?: ReactFireOptions<T>): ObservableStatus<UploadTaskSnapshot | T> {
-  const observableId = `storage:task:${ref.toString()}`;
-  const observable$ = fromTask(task);
+export function useStorageTask<T = unknown>(
+  task: UploadTask,
+  ref: StorageReference,
+  options?: ReactFireOptions<T>
+): ObservableStatus<UploadTaskSnapshot | T> {
+  const taskKey = `storage:task:${ref.toString()}`;
 
-  return useObservable(observableId, observable$, options);
+  return useFirebaseStream<{ task: UploadTask; key: string }, UploadTaskSnapshot | T>({
+    ref: { task, key: taskKey },
+    isEqual: (a, b) => a.task === b.task && a.key === b.key,
+    peekInFlight: () => inFlightStorageTasks.get(task),
+    getOrStartInFlight: () => getOrStartStorageTask(task),
+    clearInFlight: () => inFlightStorageTasks.delete(task),
+    subscribe: (onNext, onError) => {
+      let emitted = false;
+      let completed = false;
+      const initialTimer = setTimeout(() => {
+        if (!emitted) {
+          emitted = true;
+          onNext(task.snapshot, completed);
+        }
+      }, 0);
+
+      const unsubscribe = task.on(
+        'state_changed',
+        (snap) => {
+          emitted = true;
+          clearTimeout(initialTimer);
+          onNext(snap, completed);
+        },
+        (error: unknown) => {
+          clearTimeout(initialTimer);
+          onError(error);
+        },
+        () => {
+          emitted = true;
+          completed = true;
+          clearTimeout(initialTimer);
+          onNext(task.snapshot, true);
+        }
+      );
+
+      return () => {
+        clearTimeout(initialTimer);
+        unsubscribe();
+      };
+    },
+    options,
+  });
+}
+
+const inFlightDownloadUrls = new Map<string, InstrumentedPromise<string>>();
+
+function getOrStartDownloadUrl(key: string, storageRef: StorageReference): InstrumentedPromise<string> {
+  let promise = inFlightDownloadUrls.get(key);
+  if (!promise) {
+    promise = instrumentPromise(getDownloadURL(storageRef));
+    inFlightDownloadUrls.set(key, promise);
+    const cleanup = () => setTimeout(() => inFlightDownloadUrls.delete(key), IN_FLIGHT_EVICT_MS);
+    promise.then(cleanup, cleanup);
+  }
+  return promise;
 }
 
 /**
@@ -27,16 +131,37 @@ export function useStorageTask<T = unknown>(task: UploadTask, ref: StorageRefere
  * @param ref - reference to the blob you want to download
  * @param options
  */
-export function useStorageDownloadURL<T = string>(ref: StorageReference, options?: ReactFireOptions<T>): ObservableStatus<string | T> {
-  const observableId = `storage:downloadUrl:${ref.toString()}`;
-  // Wrap in `defer` so the download URL request is created lazily on subscription
-  // rather than eagerly on every render (which fires a discarded request each time,
-  // and an unhandled rejection when the object is missing).
-  const observable$ = defer(() => getDownloadURL(ref));
+export function useStorageDownloadURL<T = string>(
+  storageRef: StorageReference,
+  options?: ReactFireOptions<T>
+): ObservableStatus<string | T> {
+  const urlKey = `storage:downloadUrl:${storageRef.toString()}`;
 
-  return useObservable(observableId, observable$, options);
+  return useFirebaseStream<string, string | T>({
+    ref: urlKey,
+    peekInFlight: () => inFlightDownloadUrls.get(urlKey),
+    getOrStartInFlight: () => getOrStartDownloadUrl(urlKey, storageRef),
+    clearInFlight: (expectedPromise) => {
+      if (!expectedPromise || inFlightDownloadUrls.get(urlKey) === expectedPromise) {
+        inFlightDownloadUrls.delete(urlKey);
+      }
+    },
+    subscribe: (onNext, onError, inFlightPromise) => {
+      const reqPromise = (inFlightPromise as Promise<string> | undefined) ?? getDownloadURL(storageRef);
+      reqPromise.then(
+        (url) => onNext(url, true),
+        (error: unknown) => onError(error)
+      );
+      return () => {};
+    },
+    options,
+    defaultIsComplete: true,
+  });
 }
 
+/**
+ * @deprecated Use `useStorageDownloadURL(ref)` with a standard `<img />` element instead. Will be removed in v5.0.0.
+ */
 export type StorageImageProps = {
   storagePath: string;
   storage?: FirebaseStorage;
@@ -44,7 +169,9 @@ export type StorageImageProps = {
   placeHolder?: React.ReactNode;
 };
 
-function StorageFromContext(props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>) {
+function StorageFromContext(
+  props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>
+) {
   const storage = useStorage();
 
   props = { ...props, storage };
@@ -52,7 +179,9 @@ function StorageFromContext(props: StorageImageProps & React.DetailedHTMLProps<R
   return <INTERNALStorageImage {...props} />;
 }
 
-function INTERNALStorageImage(props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>): React.ReactNode {
+function INTERNALStorageImage(
+  props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>
+): React.ReactNode {
   const { storage, storagePath, suspense, placeHolder, ...imgProps } = props;
 
   const reactfireOptions: ReactFireOptions<string> = {
@@ -79,7 +208,12 @@ function INTERNALStorageImage(props: StorageImageProps & React.DetailedHTMLProps
   }
 }
 
-export function StorageImage(props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>) {
+/**
+ * @deprecated Use `useStorageDownloadURL(ref)` with a standard `<img />` element instead. Will be removed in v5.0.0.
+ */
+export function StorageImage(
+  props: StorageImageProps & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>
+) {
   const { storage } = props;
 
   if (storage) {

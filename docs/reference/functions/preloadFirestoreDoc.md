@@ -4,11 +4,11 @@
 
 [ReactFire reference docs](../README.md) / preloadFirestoreDoc
 
-# Function: preloadFirestoreDoc()
+# ~~Function: preloadFirestoreDoc()~~
 
-> **preloadFirestoreDoc**(`refProvider`): `Promise`\<`SuspenseSubject`\<`DocumentSnapshot`\<`DocumentData`, `DocumentData`\>\>\>
+> **preloadFirestoreDoc**(`refProvider`): `Promise`\<`DocumentSnapshot`\<`DocumentData`, `DocumentData`\>\>
 
-Defined in: [src/firestore.tsx:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L28)
+Defined in: [src/firestore.tsx:108](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L108)
 
 Preload a subscription to a Firestore document reference.
 
@@ -22,4 +22,8 @@ Use this to warm up `useFirestoreDoc` for a specific document
 
 ## Returns
 
-`Promise`\<`SuspenseSubject`\<`DocumentSnapshot`\<`DocumentData`, `DocumentData`\>\>\>
+`Promise`\<`DocumentSnapshot`\<`DocumentData`, `DocumentData`\>\>
+
+## Deprecated
+
+Unwrap `useFirestoreDoc(ref).experimental_usable` with `React.use()` instead. Will be removed in v5.0.0.

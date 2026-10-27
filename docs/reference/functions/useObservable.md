@@ -4,11 +4,13 @@
 
 [ReactFire reference docs](../README.md) / useObservable
 
-# Function: useObservable()
+# ~~Function: useObservable()~~
 
 > **useObservable**\<`T`\>(`observableId`, `source`, `config?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T`\>
 
-Defined in: [src/useObservable.ts:67](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L67)
+Defined in: [src/useObservable.ts:46](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L46)
+
+Subscribe to an RxJS `Observable`.
 
 ## Type Parameters
 
@@ -33,3 +35,7 @@ Defined in: [src/useObservable.ts:67](https://github.com/FirebaseExtended/reactf
 ## Returns
 
 [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T`\>
+
+## Deprecated
+
+RxJS integration (`useObservable`, `preloadObservable`, `SuspenseSubject`) is deprecated and will be removed in v5.0.0.

@@ -4,11 +4,11 @@
 
 [ReactFire reference docs](../README.md) / useCallableFunctionResponse
 
-# Function: useCallableFunctionResponse()
+# ~~Function: useCallableFunctionResponse()~~
 
 > **useCallableFunctionResponse**\<`RequestData`, `ResponseData`\>(`functionName`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`ResponseData`\>
 
-Defined in: [src/functions.tsx:14](https://github.com/FirebaseExtended/reactfire/blob/main/src/functions.tsx#L14)
+Defined in: [src/functions.tsx:35](https://github.com/FirebaseExtended/reactfire/blob/main/src/functions.tsx#L35)
 
 Calls a callable function.
 
@@ -37,3 +37,7 @@ The name of the function to call
 ## Returns
 
 [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`ResponseData`\>
+
+## Deprecated
+
+Call `httpsCallable(functions, functionName)` directly (e.g. inside React 19 `useActionState` or an event handler). Will be removed in v5.0.0.

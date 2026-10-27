@@ -4,11 +4,11 @@
 
 [ReactFire reference docs](../README.md) / checkOptions
 
-# Function: checkOptions()
+# ~~Function: checkOptions()~~
 
 > **checkOptions**(`options`, `field`): `any`
 
-Defined in: [src/index.ts:34](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L34)
+Defined in: [src/useFirebaseStream.ts:59](https://github.com/FirebaseExtended/reactfire/blob/main/src/useFirebaseStream.ts#L59)
 
 ## Parameters
 
@@ -23,3 +23,7 @@ Defined in: [src/index.ts:34](https://github.com/FirebaseExtended/reactfire/blob
 ## Returns
 
 `any`
+
+## Deprecated
+
+Internal option helper. Will be removed in v5.0.0.

@@ -6,24 +6,50 @@
 
 # Function: useIdTokenResult()
 
+## Call Signature
+
 > **useIdTokenResult**(`user`, `forceRefresh?`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`IdTokenResult`\>
 
-Defined in: [src/auth.tsx:41](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L41)
+Defined in: [src/auth.tsx:173](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L173)
 
-## Parameters
+### Parameters
 
-### user
+#### user
 
 `User`
 
-### forceRefresh?
+#### forceRefresh?
 
-`boolean` = `false`
+`boolean`
 
-### options?
+#### options?
 
 [`ReactFireOptions`](../interfaces/ReactFireOptions.md)\<`IdTokenResult`\>
 
-## Returns
+### Returns
 
 [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`IdTokenResult`\>
+
+## Call Signature
+
+> **useIdTokenResult**(`auth`, `forceRefresh?`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`IdTokenResult` \| `null`\>
+
+Defined in: [src/auth.tsx:178](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L178)
+
+### Parameters
+
+#### auth
+
+`Auth`
+
+#### forceRefresh?
+
+`boolean`
+
+#### options?
+
+[`ReactFireOptions`](../interfaces/ReactFireOptions.md)\<`IdTokenResult` \| `null`\>
+
+### Returns
+
+[`ObservableStatus`](../interfaces/ObservableStatus.md)\<`IdTokenResult` \| `null`\>

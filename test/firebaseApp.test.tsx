@@ -1,12 +1,23 @@
 import { cleanup, render, waitFor, renderHook } from '@testing-library/react';
+import * as firebaseAppModule from 'firebase/app';
 import { initializeApp, deleteApp, getApps } from 'firebase/app';
 import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
-import { useFirebaseApp, FirebaseAppProvider, version } from '../src/index';
+import { Subject } from 'rxjs';
+import { useFirebaseApp, FirebaseAppProvider, useObservable, version } from '../src/index';
 import pkg from '../package.json';
+
+vi.mock('firebase/app', async () => {
+  const actual = await vi.importActual<typeof import('firebase/app')>('firebase/app');
+  return {
+    ...actual,
+    registerVersion: vi.fn(actual.registerVersion),
+  };
+});
 
 afterEach(() => {
   cleanup();
+  vi.clearAllMocks();
 
   getApps().forEach(deleteApp);
 });
@@ -29,6 +40,26 @@ describe('FirebaseAppProvider', () => {
     render(<FirebaseAppProvider firebaseApp={app} />);
 
     expect(getApps()).toHaveLength(1);
+    expect(firebaseAppModule.registerVersion).toHaveBeenCalledWith('react', React.version || 'unknown');
+    expect(firebaseAppModule.registerVersion).toHaveBeenCalledWith('reactfire', version);
+  });
+
+  it('Registers react and reactfire versions even if the app was already initialized', () => {
+    initializeApp(DEFAULT_APP_CONFIG);
+    vi.clearAllMocks();
+
+    render(<FirebaseAppProvider firebaseConfig={DEFAULT_APP_CONFIG} />);
+
+    expect(firebaseAppModule.registerVersion).toHaveBeenCalledWith('react', React.version || 'unknown');
+    expect(firebaseAppModule.registerVersion).toHaveBeenCalledWith('reactfire', version);
+  });
+
+  it('Registers react and reactfire versions when useObservable is called', () => {
+    const subject = new Subject<string>();
+    renderHook(() => useObservable('register-version-test', subject, { initialData: 'hello' }));
+
+    expect(firebaseAppModule.registerVersion).toHaveBeenCalledWith('react', React.version || 'unknown');
+    expect(firebaseAppModule.registerVersion).toHaveBeenCalledWith('reactfire', version);
   });
 });
 

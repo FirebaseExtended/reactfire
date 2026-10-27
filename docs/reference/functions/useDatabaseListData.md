@@ -4,11 +4,13 @@
 
 [ReactFire reference docs](../README.md) / useDatabaseListData
 
-# Function: useDatabaseListData()
+# ~~Function: useDatabaseListData()~~
 
 > **useDatabaseListData**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T`[] \| `null`\>
 
-Defined in: [src/database.tsx:58](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L58)
+Defined in: [src/database.tsx:233](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L233)
+
+Subscribe to a Realtime Database list and unwrap the snapshots into an array.
 
 ## Type Parameters
 
@@ -20,7 +22,7 @@ Defined in: [src/database.tsx:58](https://github.com/FirebaseExtended/reactfire/
 
 ### ref
 
-`Query` \| `DatabaseReference`
+`DatabaseReference` \| `Query`
 
 ### options?
 
@@ -29,3 +31,7 @@ Defined in: [src/database.tsx:58](https://github.com/FirebaseExtended/reactfire/
 ## Returns
 
 [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T`[] \| `null`\>
+
+## Deprecated
+
+Use `useDatabaseList` and read `child.val()` / `child.key` directly. Will be removed in v5.0.0.

@@ -8,7 +8,7 @@
 
 > **useFirestoreDoc**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`DocumentSnapshot`\<`T`, `DocumentData`\>\>
 
-Defined in: [src/firestore.tsx:42](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L42)
+Defined in: [src/firestore.tsx:119](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L119)
 
 Subscribe to Firestore Document changes
 

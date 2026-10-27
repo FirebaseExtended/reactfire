@@ -4,8 +4,12 @@
 
 [ReactFire reference docs](../README.md) / DatabaseSdkContext
 
-# Variable: DatabaseSdkContext
+# ~~Variable: DatabaseSdkContext~~
 
 > `const` **DatabaseSdkContext**: `Context`\<`Database` \| `undefined`\>
 
-Defined in: [src/sdk.tsx:21](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L21)
+Defined in: [src/sdk.tsx:23](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L23)
+
+## Deprecated
+
+Pass Realtime Database references directly to `useDatabaseObject` / `useDatabaseList`. Will be removed in v5.0.0.

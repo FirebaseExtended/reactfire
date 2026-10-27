@@ -8,7 +8,7 @@
 
 > **ClaimsCheck**(`__namedParameters`): `Element`
 
-Defined in: [src/auth.tsx:215](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L215)
+Defined in: [src/auth.tsx:598](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L598)
 
 ## Parameters
 
@@ -22,7 +22,7 @@ Defined in: [src/auth.tsx:215](https://github.com/FirebaseExtended/reactfire/blo
 
 ## Deprecated
 
-Use `useSigninCheck` instead
+Use `<AuthCheck requiredClaims={...}>` instead. Will be removed in v5.0.0.
 
 Conditionally render children based on [custom claims](https://firebase.google.com/docs/auth/admin/custom-claims).
 

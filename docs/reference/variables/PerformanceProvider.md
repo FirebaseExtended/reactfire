@@ -4,11 +4,11 @@
 
 [ReactFire reference docs](../README.md) / PerformanceProvider
 
-# Variable: PerformanceProvider
+# ~~Variable: PerformanceProvider~~
 
 > `const` **PerformanceProvider**: (`props`) => `ReactElement`
 
-Defined in: [src/sdk.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L78)
+Defined in: [src/sdk.tsx:121](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L121)
 
 ## Parameters
 
@@ -19,3 +19,7 @@ Defined in: [src/sdk.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/
 ## Returns
 
 `ReactElement`
+
+## Deprecated
+
+Pass `perf` directly to `<SuspenseWithPerf perf={perf}>`. Will be removed in v5.0.0.

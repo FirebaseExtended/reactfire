@@ -4,11 +4,11 @@
 
 [ReactFire reference docs](../README.md) / StorageProvider
 
-# Variable: StorageProvider
+# ~~Variable: StorageProvider~~
 
 > `const` **StorageProvider**: (`props`) => `ReactElement`
 
-Defined in: [src/sdk.tsx:79](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L79)
+Defined in: [src/sdk.tsx:123](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L123)
 
 ## Parameters
 
@@ -19,3 +19,7 @@ Defined in: [src/sdk.tsx:79](https://github.com/FirebaseExtended/reactfire/blob/
 ## Returns
 
 `ReactElement`
+
+## Deprecated
+
+Pass Storage references directly to `useStorageDownloadURL`. Will be removed in v5.0.0.

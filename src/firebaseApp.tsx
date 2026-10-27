@@ -11,10 +11,16 @@ const DEFAULT_APP_NAME = '[DEFAULT]';
 const FirebaseAppContext = React.createContext<FirebaseApp | undefined>(undefined);
 const SuspenseEnabledContext = React.createContext<boolean>(false);
 
+/**
+ * @deprecated `<FirebaseAppProvider>` is deprecated and will be removed in v5.0.0. Initialize your Firebase app at module scope (`export const app = initializeApp(config)`) and pass SDK instances or references directly to ReactFire hooks.
+ */
 export interface FirebaseAppProviderProps {
   firebaseApp?: FirebaseApp;
   firebaseConfig?: FirebaseOptions;
   appName?: string;
+  /**
+   * @deprecated Pass `hook().experimental_usable` (or `hook().usable`) to `React.use()` instead of setting `suspense={true}`.
+   */
   suspense?: boolean;
 }
 
@@ -23,10 +29,17 @@ export const version = process.env.REACTFIRE_VERSION as string;
 
 const shallowEq = (a: { [key: string]: any }, b: { [key: string]: any }) => a === b || [...Object.keys(a), ...Object.keys(b)].every((key) => a[key] === b[key]);
 
+/**
+ * @deprecated `<FirebaseAppProvider>` is deprecated and will be removed in v5.0.0. Initialize your Firebase app at module scope (`export const app = initializeApp(config)`) and pass SDK instances or references directly to ReactFire hooks.
+ */
 export function FirebaseAppProvider(props: React.PropsWithChildren<FirebaseAppProviderProps>) {
   const { firebaseConfig, appName, suspense } = props;
 
   const firebaseApp: FirebaseApp = React.useMemo(() => {
+    const reactVersion = React.version || 'unknown';
+    registerVersion('react', reactVersion);
+    registerVersion('reactfire', version);
+
     if (props.firebaseApp) {
       return props.firebaseApp;
     }
@@ -45,9 +58,6 @@ export function FirebaseAppProvider(props: React.PropsWithChildren<FirebaseAppPr
         throw new Error('No firebaseConfig provided');
       }
 
-      const reactVersion = React.version || 'unknown';
-      registerVersion('react', reactVersion);
-      registerVersion('reactfire', version);
       return initializeApp(firebaseConfig, appName);
     }
   }, [props.firebaseApp, firebaseConfig, appName]);
@@ -59,6 +69,9 @@ export function FirebaseAppProvider(props: React.PropsWithChildren<FirebaseAppPr
   );
 }
 
+/**
+ * @deprecated Pass `hook().experimental_usable` (or `hook().usable`) to `React.use()` instead of using context-based Suspense mode. Will be removed in v5.0.0.
+ */
 export function useIsSuspenseEnabled(): boolean {
   const suspense = React.useContext(SuspenseEnabledContext);
 
@@ -66,6 +79,9 @@ export function useIsSuspenseEnabled(): boolean {
   return suspense ?? false;
 }
 
+/**
+ * @deprecated Pass `hook().experimental_usable` (or `hook().usable`) to `React.use()` instead of using context-based Suspense mode. Will be removed in v5.0.0.
+ */
 export function useSuspenseEnabledFromConfigAndContext(suspenseFromConfig?: boolean): boolean {
   const suspenseFromContext = React.useContext(SuspenseEnabledContext);
 
@@ -77,6 +93,9 @@ export function useSuspenseEnabledFromConfigAndContext(suspenseFromConfig?: bool
   return suspenseFromContext;
 }
 
+/**
+ * @deprecated `useFirebaseApp` is deprecated and will be removed in v5.0.0. Import your `firebaseApp` directly from the module where you called `initializeApp(config)`.
+ */
 export function useFirebaseApp() {
   const firebaseApp = React.useContext(FirebaseAppContext);
   if (!firebaseApp) {

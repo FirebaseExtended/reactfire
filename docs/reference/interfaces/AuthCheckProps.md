@@ -6,15 +6,23 @@
 
 # Interface: AuthCheckProps
 
-Defined in: [src/auth.tsx:54](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L54)
+Defined in: [src/auth.tsx:264](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L264)
 
 ## Properties
+
+### auth?
+
+> `optional` **auth?**: `Auth`
+
+Defined in: [src/auth.tsx:265](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L265)
+
+***
 
 ### children
 
 > **children**: `ReactNode`
 
-Defined in: [src/auth.tsx:56](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L56)
+Defined in: [src/auth.tsx:267](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L267)
 
 ***
 
@@ -22,7 +30,7 @@ Defined in: [src/auth.tsx:56](https://github.com/FirebaseExtended/reactfire/blob
 
 > **fallback**: `ReactNode`
 
-Defined in: [src/auth.tsx:55](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L55)
+Defined in: [src/auth.tsx:266](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L266)
 
 ***
 
@@ -30,4 +38,4 @@ Defined in: [src/auth.tsx:55](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **requiredClaims?**: `Object`
 
-Defined in: [src/auth.tsx:57](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L57)
+Defined in: [src/auth.tsx:268](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L268)

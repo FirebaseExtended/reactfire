@@ -4,11 +4,11 @@
 
 [ReactFire reference docs](../README.md) / DatabaseProvider
 
-# Variable: DatabaseProvider
+# ~~Variable: DatabaseProvider~~
 
 > `const` **DatabaseProvider**: (`props`) => `ReactElement`
 
-Defined in: [src/sdk.tsx:75](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L75)
+Defined in: [src/sdk.tsx:115](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L115)
 
 ## Parameters
 
@@ -19,3 +19,7 @@ Defined in: [src/sdk.tsx:75](https://github.com/FirebaseExtended/reactfire/blob/
 ## Returns
 
 `ReactElement`
+
+## Deprecated
+
+Pass Realtime Database references directly to `useDatabaseObject` / `useDatabaseList`. Will be removed in v5.0.0.

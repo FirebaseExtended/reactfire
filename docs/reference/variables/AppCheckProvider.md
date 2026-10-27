@@ -4,11 +4,11 @@
 
 [ReactFire reference docs](../README.md) / AppCheckProvider
 
-# Variable: AppCheckProvider
+# ~~Variable: AppCheckProvider~~
 
 > `const` **AppCheckProvider**: (`props`) => `ReactElement`
 
-Defined in: [src/sdk.tsx:72](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L72)
+Defined in: [src/sdk.tsx:109](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L109)
 
 ## Parameters
 
@@ -19,3 +19,7 @@ Defined in: [src/sdk.tsx:72](https://github.com/FirebaseExtended/reactfire/blob/
 ## Returns
 
 `ReactElement`
+
+## Deprecated
+
+Pass Firebase SDK instances directly instead of using Context Providers. Will be removed in v5.0.0.
