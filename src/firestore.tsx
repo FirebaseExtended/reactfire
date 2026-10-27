@@ -3,7 +3,7 @@ import { ReactFireOptions, useObservable, checkIdField, ReactFireGlobals } from 
 import { preloadObservable, ObservableStatus } from './useObservable.js';
 import { first } from 'rxjs/operators';
 
-import { Query as FirestoreQuery, QuerySnapshot, DocumentReference, queryEqual, refEqual, DocumentData, DocumentSnapshot } from 'firebase/firestore';
+import { Query as FirestoreQuery, QuerySnapshot, DocumentReference, queryEqual, DocumentData, DocumentSnapshot } from 'firebase/firestore';
 
 // Since we're side-effect free, we need to ensure our observableId cache is global
 const cachedQueries: Array<FirestoreQuery<any>> = (globalThis as any as ReactFireGlobals)._reactFireFirestoreQueryCache || [];
@@ -101,12 +101,24 @@ export function useFirestoreCollectionData<T = DocumentData>(query: FirestoreQue
   return useObservable(observableId, observable$, options);
 }
 
-const cachedDocRefs: Array<DocumentReference<any>> = [];
+// Small ids for Firestore instances (one per app and database), so refs to the same path in another database get
+// their own cache entry without scanning every ref seen so far. Kept on globalThis, like the query cache, so duplicate
+// copies of ReactFire hand out the same ids. Converters are keyed by presence, not identity: a converter object
+// created during render would otherwise change the key on every render.
+const docKeyIds: { ids: WeakMap<object, number>; next: number } = ((globalThis as any)._reactFireFirestoreDocKeyIds ??= {
+  ids: new WeakMap(),
+  next: 0,
+});
+
+function idFor(target: object): number {
+  let id = docKeyIds.ids.get(target);
+  if (id === undefined) {
+    id = docKeyIds.next++;
+    docKeyIds.ids.set(target, id);
+  }
+  return id;
+}
 
 function getUniqueIdForFirestoreDoc<T = DocumentData>(ref: DocumentReference<T>) {
-  const index = cachedDocRefs.findIndex((cachedRef) => refEqual(cachedRef, ref));
-  if (index > -1) {
-    return index;
-  }
-  return cachedDocRefs.push(ref) - 1;
+  return `${idFor(ref.firestore)}:${ref.converter ? 'converter' : 'raw'}:${ref.path}`;
 }

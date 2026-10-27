@@ -385,5 +385,81 @@ describe('Firestore', () => {
       await waitFor(() => expect(getByTestId('conv')).toBeInTheDocument());
       expect(JSON.parse(getByTestId('conv').textContent || '{}').converted).toBe(true);
     });
+
+    it('resolves when a converter object is created inline during render', async () => {
+      const colRef = collection(db, randomString());
+      await setDoc(doc(colRef, 'inline'), { name: 'alice' });
+
+      const makeConverter = (): FirestoreDataConverter<{ name: string }> => ({
+        toFirestore: (p) => p,
+        fromFirestore: (snap) => ({ name: String(snap.get('name')) }),
+      });
+
+      let statusRenders = 0;
+      const StatusProfile = () => {
+        statusRenders++;
+        const { status, data } = useFirestoreDocData(doc(colRef, 'inline').withConverter(makeConverter()));
+        return <div data-testid="status-out">{status === 'success' ? data?.name : 'loading'}</div>;
+      };
+
+      let suspenseRenders = 0;
+      const SuspenseProfile = () => {
+        suspenseRenders++;
+        const { data } = useFirestoreDocData(doc(colRef, 'inline').withConverter(makeConverter()), { suspense: true });
+        return <div data-testid="suspense-out">{data?.name}</div>;
+      };
+
+      const { getByTestId } = render(
+        <Provider>
+          <StatusProfile />
+          <React.Suspense fallback={<div data-testid="suspense-fb">fallback</div>}>
+            <SuspenseProfile />
+          </React.Suspense>
+        </Provider>
+      );
+
+      await waitFor(() => expect(getByTestId('status-out')).toHaveTextContent('alice'));
+      await waitFor(() => expect(getByTestId('suspense-out')).toHaveTextContent('alice'));
+      expect(statusRenders).toBeLessThan(10);
+      expect(suspenseRenders).toBeLessThan(10);
+    });
+
+    it('never shares a cache entry for different documents across two module instances', async () => {
+      const colRef = collection(db, randomString());
+      const x = doc(colRef, 'x');
+      const y = doc(colRef, 'y');
+      await setDoc(x, { v: 'x' });
+      await setDoc(y, { v: 'y' });
+
+      const copyA = await import('../src/index');
+      vi.resetModules();
+      const copyB = await import('../src/index');
+      expect(copyA.useFirestoreDocData).not.toBe(copyB.useFirestoreDocData);
+
+      const A = () => {
+        const { data } = copyA.useFirestoreDocData(x);
+        return <span data-testid="dual-a">{String((data as { v?: string })?.v)}</span>;
+      };
+      const B = () => {
+        const { data } = copyB.useFirestoreDocData(y);
+        return <span data-testid="dual-b">{String((data as { v?: string })?.v)}</span>;
+      };
+
+      const { getByTestId } = render(
+        <copyA.FirebaseAppProvider firebaseApp={app}>
+          <copyA.FirestoreProvider sdk={db}>
+            <A />
+          </copyA.FirestoreProvider>
+          <copyB.FirebaseAppProvider firebaseApp={app}>
+            <copyB.FirestoreProvider sdk={db}>
+              <B />
+            </copyB.FirestoreProvider>
+          </copyB.FirebaseAppProvider>
+        </copyA.FirebaseAppProvider>
+      );
+
+      await waitFor(() => expect(getByTestId('dual-a')).toHaveTextContent('x'));
+      await waitFor(() => expect(getByTestId('dual-b')).toHaveTextContent('y'));
+    });
   });
 });
