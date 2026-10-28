@@ -16,6 +16,7 @@ export class SuspenseSubject<T> extends Subject<T> {
   private _warmupSubscription: Subscription;
   private _immutableStatus: ObservableStatus<T>;
   private _isComplete = false;
+  private _subscriberCount = 0;
 
   // @ts-expect-error: TODO: double check to see if this is an RXJS thing or if we should listen to TS
   private _innerSubscriber: Subscription;
@@ -26,7 +27,7 @@ export class SuspenseSubject<T> extends Subject<T> {
     innerObservable: Observable<T>,
     private _timeoutWindow: number,
     _suspenseEnabled: boolean,
-    onEvict: () => void = () => {}
+    private _onEvict: () => void = () => {}
   ) {
     super();
     this._firstEmission = new Promise<void>((resolve) => (this._resolveFirstEmission = resolve));
@@ -51,9 +52,15 @@ export class SuspenseSubject<T> extends Subject<T> {
           this._error = e;
           this._resolveFirstEmission();
           this._updateImmutableStatus();
-          // Evict the errored entry after the current render reads it so a remount or ErrorBoundary retry starts fresh (#742, #485).
-          // `catchError(() => EMPTY)` below converts errors into completions before `share` sees them, so this timer alone evicts errored entries.
-          setTimeout(onEvict, RELEASE_DELAY_MS);
+          // If all subscribers have already unmounted (such as a listener rejected after sign-out during the release grace window),
+          // evict immediately so a fast re-sign-in never reads the stale error (#485).
+          // Otherwise, keep the entry for `RELEASE_DELAY_MS` so a suspended or active render can read and throw it (#742).
+          // `catchError(() => EMPTY)` below converts errors into completions before `share` sees them, so `tap.error` and unmount handle eviction.
+          if (this._subscriberCount === 0 && this._warmupSubscription?.closed) {
+            this._onEvict();
+          } else {
+            setTimeout(this._onEvict, RELEASE_DELAY_MS);
+          }
         },
         complete: () => {
           this._isComplete = true;
@@ -72,7 +79,7 @@ export class SuspenseSubject<T> extends Subject<T> {
         connector: () => new ReplaySubject<T>(1),
         resetOnError: true,
         resetOnComplete: false,
-        resetOnRefCountZero: () => timer(RELEASE_DELAY_MS).pipe(tap(onEvict)),
+        resetOnRefCountZero: () => timer(RELEASE_DELAY_MS).pipe(tap(this._onEvict)),
       })
     );
     // warm up the observable
@@ -80,12 +87,12 @@ export class SuspenseSubject<T> extends Subject<T> {
 
     // Release the warm-up subscription if no component subscribes within `_timeoutWindow` after the first emission settles.
     // Wait until the first emission settles so a suspended component can resolve `firstEmission`, re-render, and call `_subscribe` (#525).
-    // If the stream already completed during warm-up (`first()`), `share` skips `resetOnRefCountZero`, so call `onEvict` directly (#790).
+    // If the stream already completed during warm-up (`first()`), `share` skips `resetOnRefCountZero`, so call `_onEvict` directly (#790).
     const releaseWarmupWhenSettled = () => {
       if (this._hasValue || this._error) {
         this._warmupSubscription.unsubscribe();
         if (this._isComplete) {
-          onEvict();
+          this._onEvict();
         }
       } else {
         this._timeoutHandler = setTimeout(releaseWarmupWhenSettled, this._timeoutWindow);
@@ -139,10 +146,25 @@ export class SuspenseSubject<T> extends Subject<T> {
     if (this._timeoutHandler) {
       clearTimeout(this._timeoutHandler);
     }
-    this._innerSubscriber = this._innerObservable.subscribe(subscriber);
+    this._subscriberCount++;
+    this._innerSubscriber = this._innerObservable.subscribe({
+      next: (v) => subscriber.next(v),
+      error: (e) => subscriber.error(e),
+      complete: () => {
+        // Notify `useObservable` (`onStoreChange`) without calling `subscriber.complete()`,
+        // because `subscriber.complete()` auto-unsubscribes `subscriber` before React unmounts.
+        subscriber.next(this._value as T);
+      },
+    });
     // Hand off ownership of the shared source from the warm-up subscription to the real subscriber.
     this._warmupSubscription.unsubscribe();
-    return this._innerSubscriber;
+    return new Subscription(() => {
+      this._innerSubscriber.unsubscribe();
+      this._subscriberCount--;
+      if (this._subscriberCount === 0 && this._error) {
+        this._onEvict();
+      }
+    });
   }
 
   get ourError() {

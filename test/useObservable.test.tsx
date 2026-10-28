@@ -518,13 +518,12 @@ describe('useObservable', () => {
       await waitFor(() => expect(first.getByTestId('val')).toHaveTextContent('initial-user-doc'));
 
       // Unmount first (e.g. route leaves protected view on sign-out), then emit permission-denied
-      // while the 1s release grace window is still active.
+      // while the 1s release grace window is still active, and remount immediately without waiting 1s.
       first.unmount();
       act(() => {
         firstStream$.error(new Error('permission-denied-after-unmount'));
       });
 
-      await new Promise((r) => setTimeout(r, 1100));
       currentStream$ = secondStream$;
 
       const second = render(<Obs />);
