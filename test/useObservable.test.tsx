@@ -531,5 +531,88 @@ describe('useObservable', () => {
       await waitFor(() => expect(second.getByTestId('val')).toHaveTextContent('reauthenticated-user-doc'));
       second.unmount();
     });
+
+    it('reuses the active subscription when remounting within the 1s release grace window', async () => {
+      const observableId = `grace-window-${Math.random()}`;
+      let subscribeCount = 0;
+      const base$ = new BehaviorSubject<string>('cached-val');
+      const counted$ = base$.lift({
+        call(subscriber, source) {
+          subscribeCount++;
+          return source.subscribe(subscriber);
+        }
+      });
+
+      const Obs = () => {
+        const { data } = useObservable(observableId, counted$);
+        return <div data-testid="val">{String(data)}</div>;
+      };
+
+      const first = render(<Obs />);
+      await waitFor(() => expect(first.getByTestId('val')).toHaveTextContent('cached-val'));
+      expect(subscribeCount).toBe(1);
+      first.unmount();
+
+      // Remount after 200ms (inside the 1000ms grace window); must reuse the active subscription.
+      await new Promise((r) => setTimeout(r, 200));
+      const second = render(<Obs />);
+      await waitFor(() => expect(second.getByTestId('val')).toHaveTextContent('cached-val'));
+      expect(subscribeCount).toBe(1);
+      second.unmount();
+
+      // After the 1000ms grace window expires, the next mount subscribes fresh.
+      await new Promise((r) => setTimeout(r, 1100));
+      const third = render(<Obs />);
+      await waitFor(() => expect(third.getByTestId('val')).toHaveTextContent('cached-val'));
+      expect(subscribeCount).toBe(2);
+      third.unmount();
+    });
+
+    it('releases an unconsumed warm-up subscription only after the first emission settles (#525, #790)', async () => {
+      const { SuspenseSubject } = await import('../src/SuspenseSubject');
+      const source$ = new Subject<string>();
+      let evicted = false;
+      new SuspenseSubject(source$, 50, true, () => {
+        evicted = true;
+      });
+
+      // After the first 50ms window, the first emission is still pending, so warm-up stays subscribed (#525).
+      await new Promise((r) => setTimeout(r, 80));
+      expect(source$.observed).toBe(true);
+
+      // Settle and complete the stream without any subscriber mounting (e.g. SSR or unused preload).
+      source$.next('settled');
+      source$.complete();
+
+      // On the next 50ms check, releaseWarmupWhenSettled unsubscribes warm-up and evicts the completed entry (#790).
+      await waitFor(() => expect(evicted).toBe(true), { timeout: 500 });
+      expect(source$.observed).toBe(false);
+    });
+
+    it('preserves a newer cache entry when a late subscriber on an evicted subject unsubscribes', async () => {
+      const { preloadObservable } = await import('../src/useObservable');
+      const observableId = `identity-guard-${Math.random()}`;
+
+      const firstSubject = preloadObservable(new BehaviorSubject('first'), observableId);
+      const initialSub = firstSubject.subscribe();
+      initialSub.unsubscribe();
+
+      // Wait for firstSubject to be evicted from preloadedObservables.
+      await new Promise((r) => setTimeout(r, 1100));
+
+      // Register a new subject under the same observableId and keep a subscriber active.
+      const secondSubject = preloadObservable(new BehaviorSubject('second'), observableId);
+      expect(secondSubject).not.toBe(firstSubject);
+      const activeSub = secondSubject.subscribe();
+
+      // A late caller holding the evicted firstSubject subscribes and unsubscribes, re-arming firstSubject's eviction timer.
+      const lateSub = firstSubject.subscribe();
+      lateSub.unsubscribe();
+      await new Promise((r) => setTimeout(r, 1100));
+
+      // The identity guard in onEvict must keep secondSubject in the cache.
+      expect(preloadObservable(new BehaviorSubject('third'), observableId)).toBe(secondSubject);
+      activeSub.unsubscribe();
+    });
   });
 });

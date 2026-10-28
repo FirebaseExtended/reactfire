@@ -1,4 +1,4 @@
-import { empty, Observable, ReplaySubject, Subject, Subscriber, Subscription, timer } from 'rxjs';
+import { EMPTY, Observable, ReplaySubject, Subject, Subscriber, Subscription, timer } from 'rxjs';
 import { catchError, share, tap } from 'rxjs/operators';
 import { ObservableStatus } from './useObservable.js';
 
@@ -52,6 +52,7 @@ export class SuspenseSubject<T> extends Subject<T> {
           this._resolveFirstEmission();
           this._updateImmutableStatus();
           // Evict the errored entry after the current render reads it so a remount or ErrorBoundary retry starts fresh (#742, #485).
+          // `catchError(() => EMPTY)` below converts errors into completions before `share` sees them, so this timer alone evicts errored entries.
           setTimeout(onEvict, RELEASE_DELAY_MS);
         },
         complete: () => {
@@ -59,12 +60,14 @@ export class SuspenseSubject<T> extends Subject<T> {
           this._updateImmutableStatus();
         }
       }),
-      catchError(() => empty()),
-      // Multicast one underlying Firebase listener across all subscribers:
-      // - `connector`: cache and replay the most recent emission to new subscribers on mount.
-      // - `resetOnError`: tear down the source subscription when the stream errors.
-      // - `resetOnComplete`: keep the final value cached when a one-shot stream (`first()`) completes.
-      // - `resetOnRefCountZero`: unsubscribe from Firebase and evict the cache entry once no subscribers remain for `RELEASE_DELAY_MS`.
+      catchError(() => EMPTY),
+      // Multicast one Firebase listener across all subscribers:
+      // - `connector`: replay the latest emission to new subscribers on mount.
+      // - `resetOnError`: tear down the source subscription on error (upstream `catchError` converts errors to completions first).
+      // - `resetOnComplete`: keep the final value cached when a one-shot stream (`first()` in `*Once` hooks) completes,
+      //   because RxJS auto-closes the subscriber on completion while the component remains mounted; evicting on completion
+      //   would cause mounted `*Once` components to re-fetch on subsequent renders.
+      // - `resetOnRefCountZero`: detach the Firebase listener and evict the cache entry after `RELEASE_DELAY_MS` with zero subscribers.
       share({
         connector: () => new ReplaySubject<T>(1),
         resetOnError: true,
@@ -76,11 +79,14 @@ export class SuspenseSubject<T> extends Subject<T> {
     this._warmupSubscription = this._innerObservable.subscribe();
 
     // Release the warm-up subscription if no component subscribes within `_timeoutWindow` after the first emission settles.
-    // Do not release while the first emission is still pending: a suspended component is waiting on `firstEmission`, and
-    // React will not retry the render and call `_subscribe` until that promise resolves (#525).
+    // Wait until the first emission settles so a suspended component can resolve `firstEmission`, re-render, and call `_subscribe` (#525).
+    // If the stream already completed during warm-up (`first()`), `share` skips `resetOnRefCountZero`, so call `onEvict` directly (#790).
     const releaseWarmupWhenSettled = () => {
       if (this._hasValue || this._error) {
         this._warmupSubscription.unsubscribe();
+        if (this._isComplete) {
+          onEvict();
+        }
       } else {
         this._timeoutHandler = setTimeout(releaseWarmupWhenSettled, this._timeoutWindow);
       }
@@ -96,9 +102,6 @@ export class SuspenseSubject<T> extends Subject<T> {
   }
 
   get value(): T {
-    // TODO figure out how to reset the cache here, if I _reset() here before throwing
-    // it doesn't seem to work.
-    // As it is now, this will burn the cache entry until the timeout fires.
     if (this._error) {
       throw this._error;
     } else if (!this.hasValue) {
