@@ -8,4 +8,4 @@
 
 > `const` **version**: `string`
 
-Defined in: [src/firebaseApp.tsx:22](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L22)
+Defined in: [src/telemetry.ts:8](https://github.com/FirebaseExtended/reactfire/blob/main/src/telemetry.ts#L8)

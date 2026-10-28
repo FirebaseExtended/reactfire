@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { SuspenseSubject } from './SuspenseSubject.js';
 import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp.js';
 import { ReactFireGlobals, ReactFireOptions } from './index.js';
+import { registerReactFireVersion } from './telemetry.js';
 
 const DEFAULT_TIMEOUT = 30_000;
 
@@ -68,6 +69,8 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
   if (!observableId) {
     throw new Error('cannot call useObservable without an observableId');
   }
+
+  registerReactFireVersion();
 
   const suspenseEnabled = useSuspenseEnabledFromConfigAndContext(config.suspense);
 
