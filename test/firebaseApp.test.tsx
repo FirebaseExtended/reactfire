@@ -139,6 +139,24 @@ describe('reactfire version', () => {
     expect(info).toContain(`reactfire/${version}`);
   });
 
+  it('never throws when firebase/app fails to register versions', async () => {
+    const registerVersion = vi.fn(() => {
+      throw new Error('registerVersion failed');
+    });
+    vi.resetModules();
+    vi.doMock('firebase/app', () => ({ _components: new Map(), registerVersion }));
+
+    try {
+      // Importing runs the module-level registration, which must not throw either.
+      const { registerReactFireVersion } = await import('../src/telemetry');
+      expect(() => registerReactFireVersion()).not.toThrow();
+      expect(registerVersion).toHaveBeenCalled();
+    } finally {
+      vi.doUnmock('firebase/app');
+      vi.resetModules();
+    }
+  });
+
   it('registers react and reactfire versions when initializing an app via firebaseConfig', () => {
     expect(_components.has('react-version')).toBe(false);
     expect(_components.has('reactfire-version')).toBe(false);
