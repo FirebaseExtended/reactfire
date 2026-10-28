@@ -509,12 +509,26 @@ describe('useObservable', () => {
       const secondStream$ = new BehaviorSubject<string>('reauthenticated-user-doc');
       let currentStream$ = firstStream$;
 
+      class Boundary extends React.Component<{ children: React.ReactNode }, { error: Error | null }> {
+        state: { error: Error | null } = { error: null };
+        static getDerivedStateFromError(error: Error) {
+          return { error };
+        }
+        render() {
+          return this.state.error ? <div data-testid="err">{this.state.error.message}</div> : this.props.children;
+        }
+      }
+
       const Obs = () => {
         const { data, status } = useObservable(observableId, currentStream$);
         return <div data-testid="val">{status === 'success' ? data : 'loading'}</div>;
       };
 
-      const first = render(<Obs />);
+      const first = render(
+        <Boundary>
+          <Obs />
+        </Boundary>
+      );
       await waitFor(() => expect(first.getByTestId('val')).toHaveTextContent('initial-user-doc'));
 
       // Unmount first (e.g. route leaves protected view on sign-out), then emit permission-denied
@@ -526,9 +540,52 @@ describe('useObservable', () => {
 
       currentStream$ = secondStream$;
 
-      const second = render(<Obs />);
-      await waitFor(() => expect(second.getByTestId('val')).toHaveTextContent('reauthenticated-user-doc'));
+      const second = render(
+        <Boundary>
+          <Obs />
+        </Boundary>
+      );
+      await waitFor(() => expect(second.queryByTestId('val')).toHaveTextContent('reauthenticated-user-doc'));
       second.unmount();
+    });
+
+    it('keeps updating the remaining subscriber when another subscriber of the same observableId unmounts, and releases the source after both unmount', async () => {
+      const subject$ = new BehaviorSubject<string>('a');
+      const observableId = `shared-subscriber-update-${Math.random()}`;
+
+      const Obs = ({ testId }: { testId: string }) => {
+        const { data } = useObservable(observableId, subject$);
+        return <div data-testid={testId}>{String(data)}</div>;
+      };
+
+      const first = render(<Obs testId="one" />);
+      const second = render(<Obs testId="two" />);
+      await waitFor(() => expect(second.getByTestId('two')).toHaveTextContent('a'));
+
+      first.unmount();
+      act(() => subject$.next('b'));
+      await waitFor(() => expect(second.getByTestId('two')).toHaveTextContent('b'), { timeout: 1000 });
+
+      second.unmount();
+      await waitFor(() => expect(subject$.observed).toBe(false), { timeout: 2500 });
+    });
+
+    it('detaches the source after two subscribers of the same observableId unmount', async () => {
+      const subject$ = new BehaviorSubject<string>('a');
+      const observableId = `shared-subscriber-release-${Math.random()}`;
+
+      const Obs = ({ testId }: { testId: string }) => {
+        const { data } = useObservable(observableId, subject$);
+        return <div data-testid={testId}>{String(data)}</div>;
+      };
+
+      const first = render(<Obs testId="one" />);
+      const second = render(<Obs testId="two" />);
+      await waitFor(() => expect(second.getByTestId('two')).toHaveTextContent('a'));
+
+      first.unmount();
+      second.unmount();
+      await waitFor(() => expect(subject$.observed).toBe(false), { timeout: 3000 });
     });
 
     it('reuses the active subscription when remounting within the 1s release grace window', async () => {

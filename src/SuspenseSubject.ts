@@ -4,7 +4,11 @@ import { ObservableStatus } from './useObservable.js';
 
 // Grace period before a zero-subscriber stream detaches its Firebase listener and evicts its cache entry.
 // A 1-second window lets React StrictMode double-mounts and immediate route transitions reuse the active listener.
-const RELEASE_DELAY_MS = 1000;
+const LISTENER_RELEASE_DELAY_MS = 1000;
+
+// Fallback retention window for an error that arrives during an initial Suspense load before a component subscribes,
+// giving React time to retry the suspended render and throw the error to an Error Boundary.
+const FIRST_LOAD_ERROR_EVICT_DELAY_MS = 1000;
 
 export class SuspenseSubject<T> extends Subject<T> {
   private _value: T | undefined;
@@ -54,12 +58,12 @@ export class SuspenseSubject<T> extends Subject<T> {
           this._updateImmutableStatus();
           // If all subscribers have already unmounted (such as a listener rejected after sign-out during the release grace window),
           // evict immediately so a fast re-sign-in never reads the stale error (#485).
-          // Otherwise, keep the entry for `RELEASE_DELAY_MS` so a suspended or active render can read and throw it (#742).
+          // Otherwise, keep the entry for `FIRST_LOAD_ERROR_EVICT_DELAY_MS` so a suspended first load or active render can read and throw it (#742).
           // `catchError(() => EMPTY)` below converts errors into completions before `share` sees them, so `tap.error` and unmount handle eviction.
           if (this._subscriberCount === 0 && this._warmupSubscription?.closed) {
             this._onEvict();
           } else {
-            setTimeout(this._onEvict, RELEASE_DELAY_MS);
+            setTimeout(this._onEvict, FIRST_LOAD_ERROR_EVICT_DELAY_MS);
           }
         },
         complete: () => {
@@ -74,12 +78,12 @@ export class SuspenseSubject<T> extends Subject<T> {
       // - `resetOnComplete`: keep the final value cached when a one-shot stream (`first()` in `*Once` hooks) completes,
       //   because RxJS auto-closes the subscriber on completion while the component remains mounted; evicting on completion
       //   would cause mounted `*Once` components to re-fetch on subsequent renders.
-      // - `resetOnRefCountZero`: detach the Firebase listener and evict the cache entry after `RELEASE_DELAY_MS` with zero subscribers.
+      // - `resetOnRefCountZero`: detach the Firebase listener and evict the cache entry after `LISTENER_RELEASE_DELAY_MS` with zero subscribers.
       share({
         connector: () => new ReplaySubject<T>(1),
         resetOnError: true,
         resetOnComplete: false,
-        resetOnRefCountZero: () => timer(RELEASE_DELAY_MS).pipe(tap(this._onEvict)),
+        resetOnRefCountZero: () => timer(LISTENER_RELEASE_DELAY_MS).pipe(tap(this._onEvict)),
       })
     );
     // warm up the observable
@@ -147,19 +151,25 @@ export class SuspenseSubject<T> extends Subject<T> {
       clearTimeout(this._timeoutHandler);
     }
     this._subscriberCount++;
-    this._innerSubscriber = this._innerObservable.subscribe({
+    const innerSubscription = this._innerObservable.subscribe({
       next: (v) => subscriber.next(v),
       error: (e) => subscriber.error(e),
       complete: () => {
-        // Notify `useObservable` (`onStoreChange`) without calling `subscriber.complete()`,
-        // because `subscriber.complete()` auto-unsubscribes `subscriber` before React unmounts.
-        subscriber.next(this._value as T);
+        if (this._error) {
+          // `catchError(() => EMPTY)` converts upstream errors into completions.
+          // Notify `useObservable` (`onStoreChange`) without calling `subscriber.complete()`,
+          // because `subscriber.complete()` auto-unsubscribes `subscriber` before React unmounts.
+          subscriber.next(this._value as T);
+        } else {
+          subscriber.complete();
+        }
       },
     });
     // Hand off ownership of the shared source from the warm-up subscription to the real subscriber.
     this._warmupSubscription.unsubscribe();
+    this._innerSubscriber = innerSubscription;
     return new Subscription(() => {
-      this._innerSubscriber.unsubscribe();
+      innerSubscription.unsubscribe();
       this._subscriberCount--;
       if (this._subscriberCount === 0 && this._error) {
         this._onEvict();
