@@ -117,6 +117,21 @@ describe('reactfire version', () => {
     expect(pkg.version).toEqual(version);
   });
 
+  it('registers react and reactfire versions at module import time before any component renders', async () => {
+    _components.delete('react-version');
+    _components.delete('reactfire-version');
+    expect(_components.has('react-version')).toBe(false);
+    expect(_components.has('reactfire-version')).toBe(false);
+
+    vi.resetModules();
+    await import('../src/telemetry');
+
+    const app = initializeApp(DEFAULT_APP_CONFIG, 'module-load-test');
+    const info = getPlatformInfo(app);
+    expect(info).toContain(`react/${React.version}`);
+    expect(info).toContain(`reactfire/${version}`);
+  });
+
   it('registers react and reactfire versions when initializing an app via firebaseConfig', () => {
     expect(_components.has('react-version')).toBe(false);
     expect(_components.has('reactfire-version')).toBe(false);

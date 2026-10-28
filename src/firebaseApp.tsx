@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { getApps, initializeApp, registerVersion } from 'firebase/app';
+import { getApps, initializeApp } from 'firebase/app';
+import { registerReactFireVersion, version } from './telemetry.js';
 
 import type { FirebaseApp, FirebaseOptions } from 'firebase/app';
 
-declare const process: { env: Record<string, string | undefined> };
+export { version };
 
 // INVESTIGATE I don't like magic strings, can we have export this in js-sdk?
 const DEFAULT_APP_NAME = '[DEFAULT]';
@@ -18,18 +19,13 @@ export interface FirebaseAppProviderProps {
   suspense?: boolean;
 }
 
-// REACTFIRE_VERSION is automatically pulled in from `package.json` by Vite
-export const version = process.env.REACTFIRE_VERSION as string;
-
 const shallowEq = (a: { [key: string]: any }, b: { [key: string]: any }) => a === b || [...Object.keys(a), ...Object.keys(b)].every((key) => a[key] === b[key]);
 
 export function FirebaseAppProvider(props: React.PropsWithChildren<FirebaseAppProviderProps>) {
   const { firebaseConfig, appName, suspense } = props;
 
   const firebaseApp: FirebaseApp = React.useMemo(() => {
-    const reactVersion = React.version || 'unknown';
-    registerVersion('react', reactVersion);
-    registerVersion('reactfire', version);
+    registerReactFireVersion();
 
     if (props.firebaseApp) {
       return props.firebaseApp;
