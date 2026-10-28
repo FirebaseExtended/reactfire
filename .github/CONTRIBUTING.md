@@ -83,6 +83,6 @@ set up.
 1. run `npm run build` to confirm that the source builds
 2. run `npm run test` to confirm that tests pass
 3. run `npm run lint` to confirm that code meets our style guide
-    > If the lint check fails, run `npm run lint --fix` to automatically fix any issues. 
+    > If the lint check fails, run `npm run lint -- --fix` to automatically fix any issues. 
 5. run `npm run docs` to rebuild the reference docs
     > If you've forked the repo, run `npm run docs:fork` instead. This will ensure the reference docs link to the firebaseextended/reactfire repository.
