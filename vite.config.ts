@@ -18,6 +18,16 @@ const externals = [
   // loads client-side in a Next.js App Router (strict ESM) context. Externalizing keeps
   // the shim's React 16/17 fallback intact while removing the require from our dist.
   'use-sync-external-store/shim',
+  // Declared dependencies: let the consumer's bundler resolve (and dedupe/tree-shake) them instead of inlining a copy.
+  'rxjs',
+  'rxjs/operators',
+  'rxfire/auth',
+  'rxfire/database',
+  'rxfire/firestore',
+  'rxfire/functions',
+  'rxfire/performance',
+  'rxfire/remote-config',
+  'rxfire/storage',
   'firebase',
   'firebase/app',
   'firebase/firestore',
@@ -67,9 +77,22 @@ export default defineConfig({
     },
     rollupOptions: {
       external: externals,
-      output: {
-        globals: { react: 'React' },
-      },
+      output: [
+        // Emit one ES module per source file so `"sideEffects": false` lets bundlers drop unused products
+        // (and their `firebase/*` imports) instead of pulling every Firebase SDK in through a single index.js.
+        {
+          format: 'es',
+          preserveModules: true,
+          preserveModulesRoot: 'src',
+          entryFileNames: '[name].js',
+        },
+        {
+          format: 'umd',
+          name: 'ReactFire',
+          entryFileNames: 'index.umd.cjs',
+          globals: { react: 'React' },
+        },
+      ],
     },
     sourcemap: true,
   },
