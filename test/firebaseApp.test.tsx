@@ -20,6 +20,13 @@ function getPlatformInfo(app = getApps()[0]): string {
   return (app as AppWithContainer).container.getProvider('platform-logger').getImmediate().getPlatformInfoString();
 }
 
+// reactfire registers versions at import time, so start every test from a clean slate
+// instead of relying on a previous test's afterEach.
+beforeEach(() => {
+  _components.delete('react-version');
+  _components.delete('reactfire-version');
+});
+
 afterEach(() => {
   cleanup();
 

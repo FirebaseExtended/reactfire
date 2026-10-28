@@ -27,9 +27,8 @@ describe('useObservable', () => {
   });
 
   it('registers react and reactfire versions with firebase/app idempotently without debug log spam', () => {
-    // Module import already registered both versions; clear them to test useObservable registration directly.
-    expect(_components.has('react-version')).toBe(true);
-    expect(_components.has('reactfire-version')).toBe(true);
+    // Clear any import-time registration so this exercises useObservable's call directly
+    // (import-time registration is covered in firebaseApp.test.tsx).
     _components.delete('react-version');
     _components.delete('reactfire-version');
 
