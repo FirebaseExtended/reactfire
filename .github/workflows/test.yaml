@@ -109,6 +109,8 @@ jobs:
           cache: 'npm'
       - name: Install deps
         run: npm ci
+      - name: Lint
+        run: npm run lint
       # Only the 19 leg swaps the runtime; the 18 leg runs the lockfile's React
       # as-is. --no-save keeps the lockfile out of the diff. Note this differs
       # from the type-check job, which installs on both legs and also installs

@@ -1,0 +1,151 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "vitest"],
+  // Rules are listed explicitly instead of enabling oxlint's categories, so upgrading oxlint
+  // doesn't change what gets enforced.
+  "categories": {
+    "correctness": "off"
+  },
+  "options": {
+    // Type-aware rules (run by oxlint-tsgolint) use the nearest tsconfig.json for each file.
+    // test/tsconfig.json exists so that test files are checked with the test compiler settings.
+    "typeAware": true
+  },
+  "rules": {
+    // ESLint recommended, minus the rules that TypeScript already checks
+    "for-direction": "error",
+    "no-async-promise-executor": "error",
+    "no-case-declarations": "error",
+    "no-compare-neg-zero": "error",
+    "no-cond-assign": "error",
+    "no-constant-binary-expression": "error",
+    "no-constant-condition": "error",
+    "no-control-regex": "error",
+    "no-debugger": "error",
+    "no-delete-var": "error",
+    "no-dupe-else-if": "error",
+    "no-duplicate-case": "error",
+    "no-empty": "error",
+    "no-empty-character-class": "error",
+    "no-empty-pattern": "error",
+    "no-empty-static-block": "error",
+    "no-ex-assign": "error",
+    "no-extra-boolean-cast": "error",
+    "no-fallthrough": "error",
+    "no-global-assign": "error",
+    "no-invalid-regexp": "error",
+    "no-irregular-whitespace": "error",
+    "no-loss-of-precision": "error",
+    "no-misleading-character-class": "error",
+    "no-nonoctal-decimal-escape": "error",
+    "no-prototype-builtins": "warn",
+    "no-regex-spaces": "error",
+    "no-self-assign": "error",
+    "no-shadow-restricted-names": "error",
+    "no-sparse-arrays": "error",
+    "no-unassigned-vars": "error",
+    "no-unexpected-multiline": "error",
+    "no-unsafe-finally": "error",
+    "no-unsafe-optional-chaining": "error",
+    "no-unused-labels": "error",
+    "no-unused-private-class-members": "error",
+    "no-useless-backreference": "error",
+    "no-useless-catch": "error",
+    "no-useless-escape": "error",
+    "preserve-caught-error": "error",
+    "require-yield": "error",
+    "use-isnan": "error",
+    "valid-typeof": "error",
+    "no-var": "error",
+    "prefer-const": "warn",
+    "prefer-rest-params": "error",
+    "prefer-spread": "error",
+
+    // typescript-eslint recommended
+    "no-array-constructor": "error",
+    "no-empty-function": "warn",
+    "no-unused-expressions": "error",
+    "no-unused-vars": "error",
+    "typescript/ban-ts-comment": "error",
+    "typescript/no-duplicate-enum-values": "error",
+    "typescript/no-empty-object-type": "warn",
+    "typescript/no-explicit-any": "warn",
+    "typescript/no-extra-non-null-assertion": "error",
+    "typescript/no-inferrable-types": "warn",
+    "typescript/no-misused-new": "error",
+    "typescript/no-namespace": "error",
+    "typescript/no-non-null-asserted-optional-chain": "error",
+    "typescript/no-require-imports": "error",
+    "typescript/no-this-alias": "error",
+    "typescript/no-unnecessary-type-constraint": "error",
+    "typescript/no-unsafe-declaration-merging": "error",
+    "typescript/no-unsafe-function-type": "warn",
+    "typescript/no-wrapper-object-types": "warn",
+    "typescript/prefer-as-const": "error",
+    "typescript/prefer-namespace-keyword": "error",
+    "typescript/triple-slash-reference": "error",
+
+    // typescript-eslint recommended-type-checked (type-aware)
+    "typescript/await-thenable": "error",
+    "typescript/no-array-delete": "error",
+    "typescript/no-base-to-string": "error",
+    "typescript/no-duplicate-type-constituents": "error",
+    "typescript/no-floating-promises": "error",
+    "typescript/no-for-in-array": "error",
+    "typescript/no-implied-eval": "error",
+    "typescript/no-misused-promises": "error",
+    "typescript/no-unsafe-enum-comparison": "error",
+    "typescript/no-unsafe-unary-minus": "error",
+    // Suspense works by throwing promises
+    "typescript/only-throw-error": ["error", { "allow": [{ "from": "lib", "name": "Promise" }] }],
+    "typescript/prefer-promise-reject-errors": "error",
+    "typescript/restrict-plus-operands": "error",
+    "typescript/unbound-method": "error",
+    // These have existing findings. Change them to "error" once those are cleaned up.
+    "typescript/no-redundant-type-constituents": "warn",
+    "typescript/no-unnecessary-type-assertion": "warn",
+    "typescript/restrict-template-expressions": "warn",
+    // Not in recommended-type-checked. Replaces react/no-deprecated by flagging anything marked
+    // @deprecated in its type definitions (React, Firebase, RxJS, ...).
+    "typescript/no-deprecated": "warn",
+    // Intentionally left off: the no-unsafe-* rules (they flag every use of the `any` values that
+    // no-explicit-any already allows as a warning) and require-await (stylistic).
+
+    // eslint-plugin-react recommended (JSX uses the classic runtime, see "jsx" in tsconfig.json)
+    "react/display-name": "error",
+    "react/jsx-key": "error",
+    "react/jsx-no-comment-textnodes": "error",
+    "react/jsx-no-duplicate-props": "error",
+    "react/jsx-no-target-blank": "error",
+    "react/jsx-no-undef": "error",
+    "react/no-children-prop": "error",
+    "react/no-danger-with-children": "error",
+    "react/no-direct-mutation-state": "error",
+    "react/no-find-dom-node": "error",
+    "react/no-is-mounted": "error",
+    "react/no-render-return-value": "error",
+    "react/no-string-refs": "error",
+    "react/no-unescaped-entities": "warn",
+    "react/no-unknown-property": "error",
+    "react/react-in-jsx-scope": "error",
+
+    // eslint-plugin-react-hooks recommended, including the React Compiler rules
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "warn",
+    "react/static-components": "error",
+    "react/use-memo": "error",
+    "react/preserve-manual-memoization": "error",
+    "react/incompatible-library": "warn",
+    "react/immutability": "error",
+    "react/globals": "error",
+    "react/refs": "error",
+    "react/set-state-in-effect": "error",
+    "react/error-boundaries": "error",
+    "react/purity": "error",
+    "react/set-state-in-render": "error",
+    "react/unsupported-syntax": "warn",
+
+    // Tests
+    "vitest/no-focused-tests": "error"
+  }
+}

@@ -131,7 +131,7 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
     return serverSnapshotRef.current;
     // Callers pass a fresh `config` literal each render, so the fields read above are kept
     // out of the deps; the ref computes the value once per instance anyway.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [observable, hasInitialData]);
 
   const update = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);

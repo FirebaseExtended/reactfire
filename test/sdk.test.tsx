@@ -7,8 +7,8 @@ import { baseConfig } from './appConfig';
 import { randomString } from './test-utils';
 
 describe('Sdk management', () => {
-  afterEach(() => {
-    getApps().forEach(deleteApp);
+  afterEach(async () => {
+    await Promise.all(getApps().map((app) => deleteApp(app)));
   });
 
   describe('SdkProvider', () => {

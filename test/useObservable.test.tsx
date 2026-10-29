@@ -19,9 +19,9 @@ interface AppWithContainer extends FirebaseApp {
 }
 
 describe('useObservable', () => {
-  afterEach(() => {
+  afterEach(async () => {
     cleanup();
-    getApps().forEach(deleteApp);
+    await Promise.all(getApps().map((app) => deleteApp(app)));
     _components.delete('react-version');
     _components.delete('reactfire-version');
   });
