@@ -106,11 +106,7 @@
     "vite": "^8.0.16",
     "vitest": "^4.1.9"
   },
-  "dependencies": {
-    "rxfire": "^6.1.0",
-    "rxjs": "^6.6.3 || ^7.0.1",
-    "use-sync-external-store": "^1.2.0"
-  },
+  "dependencies": {},
   "allowScripts": {
     "@firebase/util@1.12.1": true,
     "esbuild@0.18.20": true,

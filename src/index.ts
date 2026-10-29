@@ -1,60 +1,52 @@
-import { SuspenseSubject } from './SuspenseSubject.js';
+export {
+  errorStatus,
+  idleStatus,
+  loadingStatus,
+  successStatus,
+  useStableRef,
+  type ErrorListenResult,
+  type IdleListenResult,
+  type IdleObservableStatus,
+  type InitialDataObservableStatus,
+  type ListenOptions,
+  type ListenResult,
+  type LoadingListenResult,
+  type ObservableStatus,
+  type SeededListenResult,
+  type SuccessListenResult,
+} from './core.js';
 
-import type { Query as FirestoreQuery } from 'firebase/firestore';
-import type { Query as DatabaseQuery } from 'firebase/database';
+export {
+  useIdTokenResult,
+  useUser,
+  type IdTokenResultOptions,
+} from './auth.js';
 
-export type ReactFireGlobals = {
-  _reactFireDatabaseCachedQueries: Array<DatabaseQuery>;
-  _reactFireFirestoreQueryCache: Array<FirestoreQuery>;
-  _reactFirePreloadedObservables: Map<string, SuspenseSubject<any>>;
-};
+export {
+  useFirestoreCollection,
+  useFirestoreDoc,
+  useFirestoreSerializedDoc,
+  useFirestoreSerializedQuery,
+  type FirestoreOptions,
+  type SerializedOptions,
+} from './firestore.js';
 
-export class ReactFireError extends Error {
-  readonly name = 'ReactFireError';
+export {
+  useDatabaseList,
+  useDatabaseObject,
+  type DatabaseOptions,
+} from './database.js';
 
-  constructor(readonly code: string, message: string, public customData?: Record<string, unknown>) {
-    super(message);
+export {
+  useStorageDownloadURL,
+  useStorageTask,
+} from './storage.js';
 
-    // Fix For ES5
-    // https://github.com/Microsoft/TypeScript-wiki/blob/master/Breaking-Changes.md#extending-built-ins-like-error-array-and-map-may-no-longer-work
-    Object.setPrototypeOf(this, ReactFireError.prototype);
-  }
-}
+export {
+  useCallableFunctionResponse,
+  type CallableFunctionOptions,
+} from './functions.js';
 
-export interface ReactFireOptions<T = unknown> {
-  idField?: string;
-  initialData?: T | any;
-  /**
-   * @deprecated use initialData instead
-   */
-  startWithValue?: T | any;
-  suspense?: boolean;
-}
-
-export function checkOptions(options: ReactFireOptions, field: string) {
-  // make sure the field passed in is a valid key of ReactFire Options
-  if (field === 'idField' || field === 'initialData' || field === 'suspense') {
-    return options ? (options[field] as ReactFireOptions['idField'] | ReactFireOptions['initialData'] | ReactFireOptions['suspense']) : undefined;
-  }
-
-  throw new Error(`Field "${field}" is not a valid key in ReactFireOptions`);
-}
-
-export function checkinitialData(options: ReactFireOptions) {
-  return checkOptions(options, 'initialData');
-}
-
-export function checkIdField(options: ReactFireOptions) {
-  return checkOptions(options, 'idField');
-}
-
-export * from './auth.js';
-export * from './database.js';
-export * from './firebaseApp.js';
-export * from './firestore.js';
-export * from './functions.js';
-export * from './performance.js';
-export * from './remote-config.js';
-export * from './storage.js';
-export * from './useObservable.js';
-export * from './sdk.js';
+export {
+  useRemoteConfigValue,
+} from './remote-config.js';
