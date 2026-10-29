@@ -52,8 +52,14 @@ jobs:
     strategy:
       matrix:
         node: ["22", "24"]
+        react: ["18", "19"]
       fail-fast: false
-    name: Test Node.js ${{ matrix.node }} (Ubuntu)
+    # The React 18 legs keep the original job names on purpose: `main`'s required
+    # status checks reference them, so renaming would block every PR there until
+    # an admin updated the contexts. Only the non-18 legs get a suffix, which
+    # also means a React 19 failure does not gate a merge while 19 support is
+    # still being built. Add the contexts when we want it to.
+    name: Test Node.js ${{ matrix.node }}${{ matrix.react != '18' && format(' / React {0}', matrix.react) || '' }} (Ubuntu)
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
@@ -67,6 +73,14 @@ jobs:
           cache: 'npm'
       - name: Install deps
         run: npm ci
+      # Only the 19 leg swaps the runtime; the 18 leg runs the lockfile's React
+      # as-is. --no-save keeps the lockfile out of the diff. Note this differs
+      # from the type-check job, which installs on both legs and also installs
+      # the types, so the 18 legs of the two jobs cover different React 18
+      # patch versions.
+      - name: Install React ${{ matrix.react }}
+        if: matrix.react == '19'
+        run: npm install --no-save react@${{ matrix.react }} react-dom@${{ matrix.react }}
       - name: Setup Java
         uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
         with:
@@ -86,6 +100,23 @@ jobs:
         run: |
           chmod +x reactfire-${{ github.run_id }}/unpack.sh
           ./reactfire-${{ github.run_id }}/unpack.sh
+      # Without this the matrix is decorative: the only behavioural difference
+      # between the legs is one skipped test, so a 19 leg silently running 18
+      # would pass. Runs after the artifact overlay so it covers everything
+      # that could disturb the install.
+      - name: Confirm React ${{ matrix.react }} is what will run
+        env:
+          WANT_REACT: ${{ matrix.react }}
+        run: |
+          node -e '
+            const want = process.env.WANT_REACT;
+            const got = require("react/package.json").version;
+            if (!got.startsWith(want + ".")) {
+              console.error(`expected React ${want}, got ${got}`);
+              process.exit(1);
+            }
+            console.log(`React ${got} confirmed for matrix leg ${want}`);
+          '
       - name: Run tests
         run: npm run test
   type-check:
