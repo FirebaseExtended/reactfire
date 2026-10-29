@@ -30,6 +30,22 @@ describe('Firestore', () => {
     </FirebaseAppProvider>
   );
 
+  // The Firestore emulator intermittently corrupts a Listen frame
+  // (firebase/firebase-tools#8654, unresolved upstream). The SDK reads it as
+  // RESOURCE_EXHAUSTED and parks the stream on a 60s maximum backoff, but a
+  // reconnect is not what rescues these tests: the same failure drives the
+  // client to OnlineState.Offline after ONLINE_STATE_TIMEOUT_MS (10s), and an
+  // offline client raises the pending snapshot from the local cache, empty
+  // cache included. These two tests assert that a document is absent, which is
+  // what the empty cache reports, so they go green at ~10s with no server
+  // involved. They are the only two whose first snapshot cannot be served from
+  // local data. The budget is a ceiling, not a delay, since `waitFor` polls.
+  // Remove when #8654 is fixed upstream. See #776.
+  const WAIT_FOR_OFFLINE_FALLBACK = 120_000;
+  // vitest enforces its own per-test ceiling, so each test below gets more than
+  // the sum of the budgets under it; otherwise only the first `waitFor` could
+  // ever spend what it is given.
+
   afterEach(async () => {
     cleanup();
 
@@ -108,11 +124,11 @@ describe('Firestore', () => {
 
       const { result } = renderHook(() => useFirestoreDocData<any>(ref, { idField: 'id' }), { wrapper: Provider });
 
-      await waitFor(() => expect(result.current.status).toEqual('success'));
+      await waitFor(() => expect(result.current.status).toEqual('success'), { timeout: WAIT_FOR_OFFLINE_FALLBACK });
 
       expect(result.current.status).toEqual('success');
       expect(result.current.data).toBeUndefined();
-    });
+    }, 150_000);
 
     it('goes back into a loading state if you swap the query', async () => {
       const mockData = { a: 'hello' };
@@ -177,17 +193,20 @@ describe('Firestore', () => {
       const { result: subscribeResult } = renderHook(() => useFirestoreDoc(ref), { wrapper: Provider });
       const { result: onceResult } = renderHook(() => useFirestoreDocOnce(ref), { wrapper: Provider });
 
-      await waitFor(() => expect(subscribeResult.current.status).toEqual('success'));
-      await waitFor(() => expect(onceResult.current.status).toEqual('success'));
+      await waitFor(() => expect(subscribeResult.current.status).toEqual('success'), { timeout: WAIT_FOR_OFFLINE_FALLBACK });
+      await waitFor(() => expect(onceResult.current.status).toEqual('success'), { timeout: WAIT_FOR_OFFLINE_FALLBACK });
 
       expect(onceResult.current.data.exists()).toEqual(false);
 
       await act(() => setDoc(ref, { a: 'test' }));
 
+      // No budget: this waits on the client's own write, which is raised from
+      // the local cache before the acknowledgement returns (measured at 8ms
+      // with the client offline).
       await waitFor(() => expect(subscribeResult.current.data.exists()).toEqual(true));
 
       expect(onceResult.current.data.exists()).toEqual(false);
-    });
+    }, 270_000);
   });
 
   describe('useFirestoreDocDataOnce', () => {

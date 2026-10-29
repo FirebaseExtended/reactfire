@@ -45,7 +45,7 @@
     "docs:fork": "typedoc --options typedoc.json --gitRemote upstream && markdown-toc -i docs/use.md"
   },
   "peerDependencies": {
-    "firebase": "^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0 || next",
+    "firebase": "^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0 || next",
     "react": ">=16 || experimental"
   },
   "husky": {
@@ -84,8 +84,9 @@
     "@arethetypeswrong/cli": "^0.18.5",
     "@rollup/plugin-typescript": "^12.3.0",
     "@size-limit/preset-small-lib": "^8.2.6",
+    "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^14.0.0",
+    "@testing-library/react": "^16.3.2",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@types/use-sync-external-store": "^0.0.3",
@@ -98,7 +99,7 @@
     "eslint-plugin-no-only-tests": "^3.1.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "firebase": "^11.10.0",
+    "firebase": "^13.1.0",
     "firebase-tools": "^15.22.3",
     "globalthis": "^1.0.3",
     "husky": "^8.0.3",
@@ -119,7 +120,7 @@
     "vitest": "^4.1.9"
   },
   "dependencies": {
-    "rxfire": "^6.1.0",
+    "rxfire": "^6.3.0",
     "rxjs": "^6.6.3 || ^7.0.1",
     "use-sync-external-store": "^1.2.0"
   },

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { SuspenseSubject } from './SuspenseSubject.js';
 import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp.js';
 import { ReactFireGlobals, ReactFireOptions } from './index.js';
+import { registerReactFireVersion } from './telemetry.js';
 
 const DEFAULT_TIMEOUT = 30_000;
 
@@ -69,6 +70,8 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
     throw new Error('cannot call useObservable without an observableId');
   }
 
+  registerReactFireVersion();
+
   const suspenseEnabled = useSuspenseEnabledFromConfigAndContext(config.suspense);
 
   // Register the observable with the cache
@@ -104,7 +107,34 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
     return observable.immutableStatus;
   }, [observable]);
 
-  const update = useSyncExternalStore(subscribe, getSnapshot);
+  // Reads only `config`, never `observable.immutableStatus`: `preloadedObservables` is a
+  // `globalThis` cache keyed only by `observableId`, so a server shares it across concurrent
+  // requests, and seeding from it would render one request's data into another's HTML.
+  // React 18 and up only: below that the shim's server path ignores this function and returns
+  // `getSnapshot()`, so the cached value still reaches the markup there.
+  // Held in a ref because React requires a stable value across renders.
+  const serverSnapshotRef = React.useRef<ObservableStatus<T> | undefined>(undefined);
+  const getServerSnapshot = React.useCallback<() => ObservableStatus<T>>(() => {
+    if (serverSnapshotRef.current === undefined) {
+      const initialDataValue = config?.initialData ?? config?.startWithValue;
+
+      serverSnapshotRef.current = {
+        status: hasInitialData ? 'success' : 'loading',
+        hasEmitted: hasInitialData,
+        isComplete: false,
+        data: initialDataValue,
+        error: undefined,
+        firstValuePromise: observable.firstEmission
+      };
+    }
+
+    return serverSnapshotRef.current;
+    // Callers pass a fresh `config` literal each render, so the fields read above are kept
+    // out of the deps; the ref computes the value once per instance anyway.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [observable, hasInitialData]);
+
+  const update = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   // Return a new object with initialData overlaid rather than mutating the shared
   // _immutableStatus reference, which is the same object across all components
