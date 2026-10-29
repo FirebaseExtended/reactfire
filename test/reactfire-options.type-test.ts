@@ -1,8 +1,8 @@
 /**
  * Type-level regression tests for ReactFireOptions<T> generic constraints.
- * Checked by `tsc --noEmit` in CI. No runtime behavior — not bundled.
+ * Checked by `tsc --noEmit -p tsconfig.test.json` in CI. No runtime behavior.
  */
-import type { ReactFireOptions } from './index';
+import type { ReactFireOptions } from '../src/index';
 
 // ---- initialData must match T ----
 
@@ -25,22 +25,27 @@ void _wrongStartWithValue;
 // only value you can actually have) stops compiling.
 
 import type { DocumentReference, DocumentSnapshot, Query, QuerySnapshot } from 'firebase/firestore';
-import type { useFirestoreCollection, useFirestoreDoc, useFirestoreDocData } from './firestore';
+import type { useFirestoreCollection, useFirestoreDoc, useFirestoreDocData, useFirestoreDocOnce } from '../src/firestore';
 
 declare const ref: DocumentReference<{ a: string }>;
 declare const query: Query<{ a: string }>;
 declare const snap: DocumentSnapshot<{ a: string }>;
 declare const querySnap: QuerySnapshot<{ a: string }>;
 declare const docHook: typeof useFirestoreDoc;
+declare const docOnceHook: typeof useFirestoreDocOnce;
 declare const collectionHook: typeof useFirestoreCollection;
 declare const dataHook: typeof useFirestoreDocData;
 
 void (() => docHook(ref, { initialData: snap }));
+void (() => docOnceHook(ref, { initialData: snap }));
 void (() => collectionHook(query, { initialData: querySnap }));
 void (() => dataHook(ref, { initialData: { a: 'x' } }));
 
 // @ts-expect-error a snapshot hook must not accept the unwrapped data type
 void (() => docHook(ref, { initialData: { a: 'x' } }));
+
+// @ts-expect-error a snapshot hook must not accept the unwrapped data type
+void (() => docOnceHook(ref, { initialData: { a: 'x' } }));
 
 // @ts-expect-error a data hook must not accept a snapshot
 void (() => dataHook(ref, { initialData: snap }));
