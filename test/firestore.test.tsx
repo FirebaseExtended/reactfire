@@ -1,4 +1,4 @@
-import { renderHook, act, cleanup, waitFor } from '@testing-library/react';
+import { render, renderHook, act, cleanup, waitFor } from '@testing-library/react';
 
 import * as React from 'react';
 import '@testing-library/jest-dom/extend-expect';
@@ -17,12 +17,16 @@ import { baseConfig } from './appConfig';
 import { randomString } from './test-utils';
 
 import { addDoc, collection, doc, getFirestore, query, setDoc, connectFirestoreEmulator, where } from 'firebase/firestore';
-import type { DocumentReference } from 'firebase/firestore';
+import type { DocumentReference, FirestoreDataConverter } from 'firebase/firestore';
 
 describe('Firestore', () => {
   const app = initializeApp(baseConfig, 'firestore-test-suite');
   const db = getFirestore(app);
   connectFirestoreEmulator(db, 'localhost', 8085);
+  const secondDb = getFirestore(app, 'second-db');
+  connectFirestoreEmulator(secondDb, 'localhost', 8085);
+  const thirdDb = getFirestore(app, 'third-db');
+  connectFirestoreEmulator(thirdDb, 'localhost', 8085);
 
   const Provider = ({ children }: { children: React.ReactNode }) => (
     <FirebaseAppProvider firebaseApp={app}>
@@ -51,7 +55,9 @@ describe('Firestore', () => {
 
     // clear all Firestore emulator data
     // do this AFTER cleaning up hooks, otherwise they'll re-emit values
-    await fetch(`http://localhost:8085/emulator/v1/projects/rxfire-525a3/databases/(default)/documents`, { method: 'DELETE' });
+    for (const database of ['(default)', 'second-db', 'third-db']) {
+      await fetch(`http://localhost:8085/emulator/v1/projects/rxfire-525a3/databases/${database}/documents`, { method: 'DELETE' });
+    }
   });
 
   test('double check - emulator is running', async () => {
@@ -351,6 +357,174 @@ describe('Firestore', () => {
       await waitFor(() => expect(result.current.status).toEqual('success'));
 
       expect(result.current.data).toEqual([mockData]);
+    });
+
+    it('separates cache entries for the same document path with and without a converter', async () => {
+      const colRef = collection(db, randomString());
+      const rawRef = doc(colRef, 'shared');
+      await setDoc(rawRef, { v: 7 });
+
+      const converter: FirestoreDataConverter<{ converted: boolean; v: number }> = {
+        toFirestore: (d) => ({ v: d.v }),
+        fromFirestore: (snap) => ({ converted: true, v: (snap.data() as { v: number }).v }),
+      };
+      const convertedRef = rawRef.withConverter(converter);
+
+      const RawDoc = () => {
+        const { data } = useFirestoreDocData(rawRef, { suspense: true });
+        return <div data-testid="raw">{JSON.stringify(data)}</div>;
+      };
+      const ConvertedDoc = () => {
+        const { data } = useFirestoreDocData(convertedRef, { suspense: true });
+        return <div data-testid="conv">{JSON.stringify(data)}</div>;
+      };
+
+      const { getByTestId } = render(
+        <Provider>
+          <React.Suspense fallback={<div data-testid="fb">loading</div>}>
+            <RawDoc />
+            <ConvertedDoc />
+          </React.Suspense>
+        </Provider>
+      );
+
+      await waitFor(() => expect(getByTestId('conv')).toBeInTheDocument());
+      expect(JSON.parse(getByTestId('conv').textContent || '{}').converted).toBe(true);
+    });
+
+    it('resolves when a converter object is created inline during render', async () => {
+      const colRef = collection(db, randomString());
+      await setDoc(doc(colRef, 'inline'), { name: 'alice' });
+
+      const makeConverter = (): FirestoreDataConverter<{ name: string }> => ({
+        toFirestore: (p) => p,
+        fromFirestore: (snap) => ({ name: String(snap.get('name')) }),
+      });
+
+      let statusRenders = 0;
+      const StatusProfile = () => {
+        statusRenders++;
+        const { status, data } = useFirestoreDocData(doc(colRef, 'inline').withConverter(makeConverter()));
+        return <div data-testid="status-out">{status === 'success' ? data?.name : 'loading'}</div>;
+      };
+
+      let suspenseRenders = 0;
+      const SuspenseProfile = () => {
+        suspenseRenders++;
+        const { data } = useFirestoreDocData(doc(colRef, 'inline').withConverter(makeConverter()), { suspense: true });
+        return <div data-testid="suspense-out">{data?.name}</div>;
+      };
+
+      const { getByTestId } = render(
+        <Provider>
+          <StatusProfile />
+          <React.Suspense fallback={<div data-testid="suspense-fb">fallback</div>}>
+            <SuspenseProfile />
+          </React.Suspense>
+        </Provider>
+      );
+
+      await waitFor(() => expect(getByTestId('status-out')).toHaveTextContent('alice'));
+      await waitFor(() => expect(getByTestId('suspense-out')).toHaveTextContent('alice'));
+      expect(statusRenders).toBeLessThan(10);
+      expect(suspenseRenders).toBeLessThan(10);
+    });
+
+    it('never shares a cache entry for different documents across two module instances', async () => {
+      const colRef = collection(db, randomString());
+      const x = doc(colRef, 'x');
+      const y = doc(colRef, 'y');
+      await setDoc(x, { v: 'x' });
+      await setDoc(y, { v: 'y' });
+
+      const copyA = await import('../src/index');
+      vi.resetModules();
+      const copyB = await import('../src/index');
+      expect(copyA.useFirestoreDocData).not.toBe(copyB.useFirestoreDocData);
+
+      const A = () => {
+        const { data } = copyA.useFirestoreDocData(x);
+        return <span data-testid="dual-a">{String((data as { v?: string })?.v)}</span>;
+      };
+      const B = () => {
+        const { data } = copyB.useFirestoreDocData(y);
+        return <span data-testid="dual-b">{String((data as { v?: string })?.v)}</span>;
+      };
+
+      const { getByTestId } = render(
+        <copyA.FirebaseAppProvider firebaseApp={app}>
+          <copyA.FirestoreProvider sdk={db}>
+            <A />
+          </copyA.FirestoreProvider>
+          <copyB.FirebaseAppProvider firebaseApp={app}>
+            <copyB.FirestoreProvider sdk={db}>
+              <B />
+            </copyB.FirestoreProvider>
+          </copyB.FirebaseAppProvider>
+        </copyA.FirebaseAppProvider>
+      );
+
+      await waitFor(() => expect(getByTestId('dual-a')).toHaveTextContent('x'));
+      await waitFor(() => expect(getByTestId('dual-b')).toHaveTextContent('y'));
+    });
+
+    it('separates cache entries for the same document path in two databases on one app', async () => {
+      const path = `${randomString()}/shared`;
+      await setDoc(doc(db, path), { v: 'default' });
+      await setDoc(doc(secondDb, path), { v: 'second' });
+
+      const DefaultDoc = () => {
+        const { data } = useFirestoreDocData(doc(db, path));
+        return <span data-testid="db-default">{String((data as { v?: string })?.v)}</span>;
+      };
+      const SecondDoc = () => {
+        const { data } = useFirestoreDocData(doc(secondDb, path));
+        return <span data-testid="db-second">{String((data as { v?: string })?.v)}</span>;
+      };
+
+      const { getByTestId } = render(
+        <Provider>
+          <DefaultDoc />
+          <SecondDoc />
+        </Provider>
+      );
+
+      await waitFor(() => expect(getByTestId('db-default')).toHaveTextContent('default'));
+      await waitFor(() => expect(getByTestId('db-second')).toHaveTextContent('second'));
+    });
+
+    it('separates cache entries for the same path in two databases across two module instances', async () => {
+      // Both copies are freshly imported, so if the id table were module-local each would give its first database
+      // id 0 and the two keys would collide.
+      const path = `${randomString()}/shared`;
+      await setDoc(doc(db, path), { v: 'default' });
+      await setDoc(doc(thirdDb, path), { v: 'third' });
+
+      vi.resetModules();
+      const copyA = await import('../src/index');
+      vi.resetModules();
+      const copyB = await import('../src/index');
+
+      const A = () => {
+        const { data } = copyA.useFirestoreDocData(doc(db, path));
+        return <span data-testid="copies-default">{String((data as { v?: string })?.v)}</span>;
+      };
+      const B = () => {
+        const { data } = copyB.useFirestoreDocData(doc(thirdDb, path));
+        return <span data-testid="copies-third">{String((data as { v?: string })?.v)}</span>;
+      };
+
+      const { getByTestId } = render(
+        <copyA.FirebaseAppProvider firebaseApp={app}>
+          <A />
+          <copyB.FirebaseAppProvider firebaseApp={app}>
+            <B />
+          </copyB.FirebaseAppProvider>
+        </copyA.FirebaseAppProvider>
+      );
+
+      await waitFor(() => expect(getByTestId('copies-default')).toHaveTextContent('default'));
+      await waitFor(() => expect(getByTestId('copies-third')).toHaveTextContent('third'));
     });
   });
 });

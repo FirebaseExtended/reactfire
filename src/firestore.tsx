@@ -31,7 +31,7 @@ export async function preloadFirestoreDoc(refProvider: () => Promise<DocumentRef
 }
 
 function getDocObservableId<T = DocumentData>(ref: DocumentReference<T>) {
-  return `firestore:doc:${ref.firestore.app.name}:${ref.path}`;
+  return `firestore:doc:${getUniqueIdForFirestoreDoc(ref)}`;
 }
 
 /**
@@ -50,7 +50,7 @@ export function useFirestoreDoc<T = DocumentData>(ref: DocumentReference<T>, opt
  * Get a firestore document and don't subscribe to changes
  */
 export function useFirestoreDocOnce<T = DocumentData>(ref: DocumentReference<T>, options?: ReactFireOptions<T>): ObservableStatus<DocumentSnapshot<T>> {
-  const observableId = `firestore:docOnce:${ref.firestore.app.name}:${ref.path}`;
+  const observableId = `firestore:docOnce:${getUniqueIdForFirestoreDoc(ref)}`;
   const observable$ = doc(ref).pipe(first());
 
   return useObservable(observableId, observable$, options);
@@ -62,7 +62,7 @@ export function useFirestoreDocOnce<T = DocumentData>(ref: DocumentReference<T>,
 export function useFirestoreDocData<T = unknown>(ref: DocumentReference<T>, options?: ReactFireOptions<T>): ObservableStatus<T | undefined> {
   const idField = options ? checkIdField(options) : undefined;
 
-  const observableId = `firestore:docData:${ref.firestore.app.name}:${ref.path}:idField=${JSON.stringify(idField)}`;
+  const observableId = `firestore:docData:${getUniqueIdForFirestoreDoc(ref)}:idField=${JSON.stringify(idField)}`;
   const observable = docData(ref, { idField });
 
   return useObservable(observableId, observable, options) as ObservableStatus<T>;
@@ -74,7 +74,7 @@ export function useFirestoreDocData<T = unknown>(ref: DocumentReference<T>, opti
 export function useFirestoreDocDataOnce<T = unknown>(ref: DocumentReference<T>, options?: ReactFireOptions<T>): ObservableStatus<T | undefined> {
   const idField = options ? checkIdField(options) : undefined;
 
-  const observableId = `firestore:docDataOnce:${ref.firestore.app.name}:${ref.path}:idField=${JSON.stringify(idField)}`;
+  const observableId = `firestore:docDataOnce:${getUniqueIdForFirestoreDoc(ref)}:idField=${JSON.stringify(idField)}`;
   const observable$ = docData(ref, { idField }).pipe(first());
 
   return useObservable(observableId, observable$, options) as ObservableStatus<T>;
@@ -99,4 +99,26 @@ export function useFirestoreCollectionData<T = DocumentData>(query: FirestoreQue
   const observable$ = collectionData(query, { idField });
 
   return useObservable(observableId, observable$, options);
+}
+
+// Small ids for Firestore instances (one per app and database), so refs to the same path in another database get
+// their own cache entry without scanning every ref seen so far. Kept on globalThis, like the query cache, so duplicate
+// copies of ReactFire hand out the same ids. Converters are keyed by presence, not identity: a converter object
+// created during render would otherwise change the key on every render.
+const docKeyIds: { ids: WeakMap<object, number>; next: number } = ((globalThis as any)._reactFireFirestoreDocKeyIds ??= {
+  ids: new WeakMap(),
+  next: 0,
+});
+
+function idFor(target: object): number {
+  let id = docKeyIds.ids.get(target);
+  if (id === undefined) {
+    id = docKeyIds.next++;
+    docKeyIds.ids.set(target, id);
+  }
+  return id;
+}
+
+function getUniqueIdForFirestoreDoc<T = DocumentData>(ref: DocumentReference<T>) {
+  return `${idFor(ref.firestore)}:${ref.converter ? 'converter' : 'raw'}:${ref.path}`;
 }
