@@ -122,7 +122,7 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
         status: hasInitialData ? 'success' : 'loading',
         hasEmitted: hasInitialData,
         isComplete: false,
-        data: initialDataValue,
+        data: initialDataValue as T,
         error: undefined,
         firstValuePromise: observable.firstEmission
       };
