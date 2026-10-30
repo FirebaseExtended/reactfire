@@ -23,6 +23,10 @@ describe('Firestore', () => {
   const app = initializeApp(baseConfig, 'firestore-test-suite');
   const db = getFirestore(app);
   connectFirestoreEmulator(db, 'localhost', 8085);
+  const secondDb = getFirestore(app, 'second-db');
+  connectFirestoreEmulator(secondDb, 'localhost', 8085);
+  const thirdDb = getFirestore(app, 'third-db');
+  connectFirestoreEmulator(thirdDb, 'localhost', 8085);
 
   const Provider = ({ children }: { children: React.ReactNode }) => (
     <FirebaseAppProvider firebaseApp={app}>
@@ -51,7 +55,9 @@ describe('Firestore', () => {
 
     // clear all Firestore emulator data
     // do this AFTER cleaning up hooks, otherwise they'll re-emit values
-    await fetch(`http://localhost:8085/emulator/v1/projects/rxfire-525a3/databases/(default)/documents`, { method: 'DELETE' });
+    for (const database of ['(default)', 'second-db', 'third-db']) {
+      await fetch(`http://localhost:8085/emulator/v1/projects/rxfire-525a3/databases/${database}/documents`, { method: 'DELETE' });
+    }
   });
 
   test('double check - emulator is running', async () => {
@@ -460,6 +466,65 @@ describe('Firestore', () => {
 
       await waitFor(() => expect(getByTestId('dual-a')).toHaveTextContent('x'));
       await waitFor(() => expect(getByTestId('dual-b')).toHaveTextContent('y'));
+    });
+
+    it('separates cache entries for the same document path in two databases on one app', async () => {
+      const path = `${randomString()}/shared`;
+      await setDoc(doc(db, path), { v: 'default' });
+      await setDoc(doc(secondDb, path), { v: 'second' });
+
+      const DefaultDoc = () => {
+        const { data } = useFirestoreDocData(doc(db, path));
+        return <span data-testid="db-default">{String((data as { v?: string })?.v)}</span>;
+      };
+      const SecondDoc = () => {
+        const { data } = useFirestoreDocData(doc(secondDb, path));
+        return <span data-testid="db-second">{String((data as { v?: string })?.v)}</span>;
+      };
+
+      const { getByTestId } = render(
+        <Provider>
+          <DefaultDoc />
+          <SecondDoc />
+        </Provider>
+      );
+
+      await waitFor(() => expect(getByTestId('db-default')).toHaveTextContent('default'));
+      await waitFor(() => expect(getByTestId('db-second')).toHaveTextContent('second'));
+    });
+
+    it('separates cache entries for the same path in two databases across two module instances', async () => {
+      // Both copies are freshly imported, so if the id table were module-local each would give its first database
+      // id 0 and the two keys would collide.
+      const path = `${randomString()}/shared`;
+      await setDoc(doc(db, path), { v: 'default' });
+      await setDoc(doc(thirdDb, path), { v: 'third' });
+
+      vi.resetModules();
+      const copyA = await import('../src/index');
+      vi.resetModules();
+      const copyB = await import('../src/index');
+
+      const A = () => {
+        const { data } = copyA.useFirestoreDocData(doc(db, path));
+        return <span data-testid="copies-default">{String((data as { v?: string })?.v)}</span>;
+      };
+      const B = () => {
+        const { data } = copyB.useFirestoreDocData(doc(thirdDb, path));
+        return <span data-testid="copies-third">{String((data as { v?: string })?.v)}</span>;
+      };
+
+      const { getByTestId } = render(
+        <copyA.FirebaseAppProvider firebaseApp={app}>
+          <A />
+          <copyB.FirebaseAppProvider firebaseApp={app}>
+            <B />
+          </copyB.FirebaseAppProvider>
+        </copyA.FirebaseAppProvider>
+      );
+
+      await waitFor(() => expect(getByTestId('copies-default')).toHaveTextContent('default'));
+      await waitFor(() => expect(getByTestId('copies-third')).toHaveTextContent('third'));
     });
   });
 });
