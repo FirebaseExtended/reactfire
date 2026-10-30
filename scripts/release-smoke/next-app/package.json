@@ -1,0 +1,5 @@
+{
+  "name": "release-smoke-next",
+  "private": true,
+  "scripts": { "build": "next build", "serve": "next start -p 4174" }
+}

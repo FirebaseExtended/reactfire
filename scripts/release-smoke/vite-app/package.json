@@ -1,0 +1,6 @@
+{
+  "name": "release-smoke-vite",
+  "private": true,
+  "type": "module",
+  "scripts": { "build": "vite build", "serve": "vite preview --port 4173 --strictPort" }
+}
