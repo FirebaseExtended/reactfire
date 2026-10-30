@@ -7,6 +7,7 @@ Thank you for contributing to the Firebase community!
 - [Have a feature request?](#feature)
 - [Want to submit a pull request?](#submit)
 - [Need to get set up locally?](#local-setup)
+- [Publishing a release (maintainers)](#publish)
 
 ## <a name="question"></a>Have a usage question?
 
@@ -86,3 +87,29 @@ set up.
     > If the lint check fails, run `npm run lint -- --fix` to automatically fix any issues. 
 5. run `npm run docs` to rebuild the reference docs
     > If you've forked the repo, run `npm run docs:fork` instead. This will ensure the reference docs link to the firebaseextended/reactfire repository.
+
+## <a name="publish"></a>Publishing a release (maintainers)
+
+CI publishes to npm. Every push to `main` publishes `<version>-exp.<short sha>` under the `exp` dist-tag, and publishing a GitHub release publishes the tagged version. Releasing is therefore: bump, smoke-test the exact build, tag.
+
+1. **Confirm `main` is green.** CI on `main` already runs the test suite against React 18 and 19, `publint`, `attw` and the bundle-size check.
+    ```bash
+    gh run list --workflow test.yaml --branch main --limit 1
+    ```
+2. **Bump the version** in `package.json` and `package-lock.json` with one commit on `main` named after the version (for example `4.3.1`):
+    ```bash
+    npm version 4.3.1 --no-git-tag-version
+    ```
+    Breaking changes need a major bump. CI publishes the bump commit as `4.3.1-exp.<short sha>`.
+3. **Smoke-test that build in a browser.** The tests and package lints never load the built package in a bundler: 4.2.4 shipped with green tests, and `publint` and `attw` report the same output for it as for working versions, but it crashed on import in browsers (#759). Wait for `npm view reactfire dist-tags.exp` to show the bump commit's short sha, then, in a scratch directory outside the repo:
+    - Create a minimal Vite React app and a minimal Next.js App Router app, and install `reactfire@<exp version>` and `firebase` into each.
+    - In each, render a hook, for example `useSigninCheck` inside `FirebaseAppProvider` and `AuthProvider` (in Next.js, from a `'use client'` component).
+    - Production-build and serve each (`vite build && vite preview`, `next build && next start`), open the page, and confirm the hook renders and the browser console shows no errors.
+
+    Do not tag if either app fails to build or render.
+4. **Publish a GitHub release** targeting `main`, with tag `v<version>` (for example `v4.3.1`). A tag without a hyphen publishes to `latest`; a tag with one (`v5.0.0-rc.1`) publishes to `next`.
+5. **Verify.** The release run should succeed, `latest` should show the new version, and the published version should pass the step 3 smoke test:
+    ```bash
+    gh run list --workflow test.yaml --event release --limit 1
+    npm view reactfire dist-tags
+    ```
