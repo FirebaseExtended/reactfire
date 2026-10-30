@@ -1,6 +1,0 @@
-node_modules/
-package-lock.json
-dist/
-.next/
-next-env.d.ts
-*.log

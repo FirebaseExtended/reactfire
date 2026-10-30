@@ -101,16 +101,15 @@ CI publishes to npm. Every push to `main` publishes `<version>-exp.<short sha>` 
     npm version 4.3.1 --no-git-tag-version
     ```
     Breaking changes need a major bump. CI publishes the bump commit as `4.3.1-exp.<short sha>`.
-3. **Smoke-test that build in a browser.** Wait for the `exp` dist-tag to show the bump commit's short sha, then render it:
-    ```bash
-    npm view reactfire dist-tags.exp
-    scripts/release-smoke/run.sh 4.3.1-exp.<short sha>
-    ```
-    This installs the package into a Vite app and a Next.js App Router app, production-builds both, renders a hook in headless Chromium and fails on any page error, console error or failed request. It must end with `PASS`. It catches failures that only appear in a bundler or browser: 4.2.4 shipped with green tests, and `publint` and `attw` report the same output for it as for working versions, but it crashed on import in browsers (#759). This script fails on 4.2.4. Do not tag if it fails.
+3. **Smoke-test that build in a browser.** The tests and package lints never load the built package in a bundler: 4.2.4 shipped with green tests, and `publint` and `attw` report the same output for it as for working versions, but it crashed on import in browsers (#759). Wait for `npm view reactfire dist-tags.exp` to show the bump commit's short sha, then, in a scratch directory outside the repo:
+    - Create a minimal Vite React app and a minimal Next.js App Router app, and install `reactfire@<exp version>` and `firebase` into each.
+    - In each, render a hook, for example `useSigninCheck` inside `FirebaseAppProvider` and `AuthProvider` (in Next.js, from a `'use client'` component).
+    - Production-build and serve each (`vite build && vite preview`, `next build && next start`), open the page, and confirm the hook renders and the browser console shows no errors.
+
+    Do not tag if either app fails to build or render.
 4. **Publish a GitHub release** targeting `main`, with tag `v<version>` (for example `v4.3.1`). A tag without a hyphen publishes to `latest`; a tag with one (`v5.0.0-rc.1`) publishes to `next`.
-5. **Verify.** The release run should succeed, `latest` should show the new version, and the published package should pass the same smoke test:
+5. **Verify.** The release run should succeed, `latest` should show the new version, and the published version should pass the step 3 smoke test:
     ```bash
     gh run list --workflow test.yaml --event release --limit 1
     npm view reactfire dist-tags
-    scripts/release-smoke/run.sh 4.3.1
     ```
