@@ -99,15 +99,23 @@ CI publishes to npm. Every push to `main` publishes `<version>-exp.<short sha>` 
 2. **Bump the version** in `package.json` and `package-lock.json` with one commit on `main` named after the version (for example `4.3.1`):
     ```bash
     npm version 4.3.1 --no-git-tag-version
+    git commit -am "4.3.1"
+    git push upstream main
     ```
-    Breaking changes need a major bump. CI publishes the bump commit as `4.3.1-exp.<short sha>`.
+    `main` requires an approved PR, and only repo admins can bypass that, so pushing straight to `main` works for admins only. Everyone else lands the same commit through a PR. Breaking changes need a major bump. CI publishes the bump commit as `4.3.1-exp.<short sha>`.
 3. **Smoke-test that build in a browser.** The tests and package lints never load the built package in a bundler: 4.2.4 shipped with green tests, and `publint` and `attw` report the same output for it as for working versions, but it crashed on import in browsers (#759). Wait for `npm view reactfire dist-tags.exp` to show the bump commit's short sha, then, in a scratch directory outside the repo:
     - Create a minimal Vite React app and a minimal Next.js App Router app, and install `reactfire@<exp version>` and `firebase` into each.
     - In each, render a hook, for example `useSigninCheck` inside `FirebaseAppProvider` and `AuthProvider` (in Next.js, from a `'use client'` component).
     - Production-build and serve each (`vite build && vite preview`, `next build && next start`), open the page, and confirm the hook renders and the browser console shows no errors.
+    - From the same scratch directory, check that bare Node can load the package as ESM (#846) and CJS, and that both report the exp version:
+        ```bash
+        node -e "import('reactfire').then(m => console.log('ESM:', m.version)); console.log('CJS:', require('reactfire').version)"
+        ```
 
-    Do not tag if either app fails to build or render.
-4. **Publish a GitHub release** targeting `main`, with tag `v<version>` (for example `v4.3.1`). A tag without a hyphen publishes to `latest`; a tag with one (`v5.0.0-rc.1`) publishes to `next`.
+    Do not tag if either app fails to build or render, or if either Node line errors or prints the wrong version.
+4. **Publish a GitHub release** with tag `v<version>` (for example `v4.3.1`), targeting the bump commit's SHA rather than `main`, so a PR that merges during step 3 is not tagged by mistake. A tag without a hyphen publishes to `latest`; a tag with one (`v5.0.0-rc.1`) publishes to `next`.
+
+    GitHub's generated release notes include Dependabot bumps to `/example`, `/functions` and `devDependencies`, none of which ship in the package. Remove them before publishing.
 5. **Verify.** The release run should succeed, `latest` should show the new version, and the published version should pass the step 3 smoke test:
     ```bash
     gh run list --workflow test.yaml --event release --limit 1
