@@ -1,5 +1,6 @@
 import { collectionData, doc, docData, fromRef } from 'rxfire/firestore';
-import { ReactFireOptions, useObservable, checkIdField, ReactFireGlobals } from './index.js';
+import { ReactFireOptions, useObservable, ReactFireGlobals } from './index.js';
+import { checkIdField } from './utils.js';
 import { preloadObservable, ObservableStatus } from './useObservable.js';
 import { first } from 'rxjs/operators';
 
