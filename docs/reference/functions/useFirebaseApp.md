@@ -8,7 +8,7 @@
 
 > **useFirebaseApp**(): `FirebaseApp`
 
-Defined in: [src/firebaseApp.tsx:80](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L80)
+Defined in: [src/firebaseApp.tsx:77](https://github.com/FirebaseExtended/reactfire/blob/main/src/firebaseApp.tsx#L77)
 
 ## Returns
 

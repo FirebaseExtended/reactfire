@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import fetch from 'cross-fetch';
-const dns = require('node:dns');
+import * as dns from 'node:dns';
 
 // polyfill for older versions of node
 global.fetch = fetch;

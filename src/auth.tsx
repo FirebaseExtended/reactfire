@@ -218,6 +218,7 @@ export function ClaimsCheck({ user, fallback, children, requiredClaims }: Claims
   if (status === 'loading') {
     throw new Error('ClaimsCheck must be run in Suspense mode');
   } else if (status === 'error') {
+    // oxlint-disable-next-line typescript/only-throw-error -- `error` is always set when status is 'error'
     throw error
   }
 

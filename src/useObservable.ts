@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { SuspenseSubject } from './SuspenseSubject.js';
 import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp.js';
 import { ReactFireGlobals, ReactFireOptions } from './index.js';
+import { registerReactFireVersion } from './telemetry.js';
 
 const DEFAULT_TIMEOUT = 30_000;
 
@@ -69,6 +70,8 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
     throw new Error('cannot call useObservable without an observableId');
   }
 
+  registerReactFireVersion();
+
   const suspenseEnabled = useSuspenseEnabledFromConfigAndContext(config.suspense);
 
   // Register the observable with the cache
@@ -128,7 +131,7 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
     return serverSnapshotRef.current;
     // Callers pass a fresh `config` literal each render, so the fields read above are kept
     // out of the deps; the ref computes the value once per instance anyway.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [observable, hasInitialData]);
 
   const update = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);

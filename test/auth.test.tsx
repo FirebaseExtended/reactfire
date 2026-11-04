@@ -345,6 +345,7 @@ describe('Authentication', () => {
       const UserComponent = () => {
         const { data: user, status } = useUser();
         if (capturedFirstRender === undefined) {
+          // oxlint-disable-next-line react/globals -- recording the first render is what this test checks
           capturedFirstRender = { user, status };
         }
         return <span data-testid="user-output">{String(status)}</span>;
