@@ -1,4 +1,4 @@
-import { EMPTY, Observable, ReplaySubject, Subject, Subscriber, Subscription, timer } from 'rxjs';
+import { EMPTY, from, Observable, ReplaySubject, Subject, Subscriber, Subscription, timer } from 'rxjs';
 import { catchError, share, tap } from 'rxjs/operators';
 import { ObservableStatus } from './useObservable.js';
 
@@ -30,7 +30,7 @@ export class SuspenseSubject<T> extends Subject<T> {
   constructor(
     innerObservable: Observable<T>,
     private _timeoutWindow: number,
-    _suspenseEnabled: boolean,
+    private _suspenseEnabled: boolean,
     private _onEvict: () => void = () => {}
   ) {
     super();
@@ -45,7 +45,9 @@ export class SuspenseSubject<T> extends Subject<T> {
       firstValuePromise: this._firstEmission
     } as ObservableStatus<T>;
 
-    this._innerObservable = innerObservable.pipe(
+    // An Observable from another rxjs copy (an app on rxjs 6) cannot be torn down by these rxjs 7
+    // operators; `from` re-wraps it through `Symbol.observable` so unsubscribe reaches the source.
+    this._innerObservable = (innerObservable instanceof Observable ? innerObservable : from(innerObservable)).pipe(
       tap({
         next: (v) => {
           this._next(v);
@@ -60,9 +62,11 @@ export class SuspenseSubject<T> extends Subject<T> {
           // evict immediately so a fast re-sign-in never reads the stale error (#485).
           // Otherwise, keep the entry for `FIRST_LOAD_ERROR_EVICT_DELAY_MS` so a suspended first load or active render can read and throw it (#742).
           // `catchError(() => EMPTY)` below converts errors into completions before `share` sees them, so `tap.error` and unmount handle eviction.
+          // In Suspense mode the error is kept, as in earlier releases: React may retry the suspended
+          // render after any delay, and an evicted entry would suspend again instead of reaching the boundary.
           if (this._subscriberCount === 0 && this._warmupSubscription?.closed) {
             this._onEvict();
-          } else {
+          } else if (!this._suspenseEnabled) {
             setTimeout(this._onEvict, FIRST_LOAD_ERROR_EVICT_DELAY_MS);
           }
         },
