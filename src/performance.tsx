@@ -27,5 +27,8 @@ export function SuspenseWithPerf({ children, traceId, fallback }: SuspensePerfPr
     return <>{fallback}</>;
   };
 
+  // TODO: `Fallback` is a new component type on every render, so React remounts it (re-running its
+  // effect and recording an extra measure) if SuspenseWithPerf re-renders while suspended.
+  // oxlint-disable-next-line react/static-components
   return <React.Suspense fallback={<Fallback />}>{children}</React.Suspense>;
 }

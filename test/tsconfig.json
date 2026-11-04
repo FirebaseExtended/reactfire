@@ -1,0 +1,5 @@
+{
+  // Tools that use the nearest tsconfig.json for each file (oxlint's type-aware rules, editors)
+  // need this to apply the test settings in tsconfig.test.json to the test files.
+  "extends": "../tsconfig.test.json"
+}
