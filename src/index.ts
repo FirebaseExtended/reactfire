@@ -7,6 +7,7 @@ export type ReactFireGlobals = {
   _reactFireDatabaseCachedQueries: Array<DatabaseQuery>;
   _reactFireFirestoreQueryCache: Array<FirestoreQuery>;
   _reactFirePreloadedObservables: Map<string, SuspenseSubject<any>>;
+  _reactFireInitializedSdks: WeakMap<object, Map<string, Promise<unknown>>>;
 };
 
 export class ReactFireError extends Error {
