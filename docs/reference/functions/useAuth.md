@@ -8,7 +8,7 @@
 
 > **useAuth**(): `Auth`
 
-Defined in: [src/sdk.tsx:83](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L83)
+Defined in: [src/sdk.tsx:99](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L99)
 
 ## Returns
 

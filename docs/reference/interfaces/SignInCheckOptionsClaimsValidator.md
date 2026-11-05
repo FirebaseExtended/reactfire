@@ -30,7 +30,7 @@ Defined in: [src/auth.tsx:86](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **idField?**: `string`
 
-Defined in: [src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L25)
+Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L26)
 
 #### Inherited from
 
@@ -42,7 +42,7 @@ Defined in: [src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **initialData?**: `any`
 
-Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L26)
+Defined in: [src/index.ts:27](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L27)
 
 #### Inherited from
 
@@ -54,7 +54,7 @@ Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **startWithValue?**: `any`
 
-Defined in: [src/index.ts:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L30)
+Defined in: [src/index.ts:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L31)
 
 #### Deprecated
 
@@ -70,7 +70,7 @@ use initialData instead
 
 > `optional` **suspense?**: `boolean`
 
-Defined in: [src/index.ts:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L31)
+Defined in: [src/index.ts:32](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L32)
 
 #### Inherited from
 

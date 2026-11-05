@@ -8,7 +8,7 @@
 
 > `const` **FunctionsProvider**: (`props`) => `ReactElement`
 
-Defined in: [src/sdk.tsx:77](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L77)
+Defined in: [src/sdk.tsx:93](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L93)
 
 ## Parameters
 
