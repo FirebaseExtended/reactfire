@@ -67,7 +67,12 @@ export class SuspenseSubject<T> extends Subject<T> {
           if (this._subscriberCount === 0 && this._warmupSubscription?.closed) {
             this._onEvict();
           } else if (!this._suspenseEnabled) {
-            setTimeout(this._onEvict, FIRST_LOAD_ERROR_EVICT_DELAY_MS);
+            // Re-check when the timer fires: a Suspense hook may read this entry after the error arrives.
+            setTimeout(() => {
+              if (!this._suspenseEnabled) {
+                this._onEvict();
+              }
+            }, FIRST_LOAD_ERROR_EVICT_DELAY_MS);
           }
         },
         complete: () => {
@@ -107,6 +112,12 @@ export class SuspenseSubject<T> extends Subject<T> {
       }
     };
     this._timeoutHandler = setTimeout(releaseWarmupWhenSettled, this._timeoutWindow);
+  }
+
+  // An entry created with Suspense off (by a preload helper, which cannot read the Suspense context)
+  // switches to the Suspense error policy once a Suspense hook reads it. It never switches back.
+  enableSuspense() {
+    this._suspenseEnabled = true;
   }
 
   get hasValue(): boolean {
