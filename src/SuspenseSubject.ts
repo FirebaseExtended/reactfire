@@ -6,8 +6,7 @@ import { ObservableStatus } from './useObservable.js';
 // A 1-second window lets React StrictMode double-mounts and immediate route transitions reuse the active listener.
 const LISTENER_RELEASE_DELAY_MS = 1000;
 
-// Fallback retention window for an error that arrives during an initial Suspense load before a component subscribes,
-// giving React time to retry the suspended render and throw the error to an Error Boundary.
+// How long a first-load error stays cached in non-suspense mode, so the render that hit it can throw it to a boundary.
 const FIRST_LOAD_ERROR_EVICT_DELAY_MS = 1000;
 
 export class SuspenseSubject<T> extends Subject<T> {
@@ -59,12 +58,8 @@ export class SuspenseSubject<T> extends Subject<T> {
           this._error = e;
           this._resolveFirstEmission();
           this._updateImmutableStatus();
-          // If all subscribers have already unmounted (such as a listener rejected after sign-out during the release grace window),
-          // evict immediately so a fast re-sign-in never reads the stale error (#485).
-          // Otherwise, keep the entry for `FIRST_LOAD_ERROR_EVICT_DELAY_MS` so a suspended first load or active render can read and throw it (#742).
-          // `catchError(() => EMPTY)` below converts errors into completions before `share` sees them, so `tap.error` and unmount handle eviction.
-          // In Suspense mode the error is kept, as in earlier releases: React may retry the suspended
-          // render after any delay, and an evicted entry would suspend again instead of reaching the boundary.
+          // #485: nobody is left to read the error, so evict now.
+          // #742: non-suspense evicts after a delay so the next mount retries; Suspense keeps it, since React may retry a suspended render after any delay.
           if (this._subscriberCount === 0 && this._warmupSubscription?.closed) {
             this._onEvict();
           } else if (!this._suspenseEnabled) {
@@ -82,13 +77,7 @@ export class SuspenseSubject<T> extends Subject<T> {
         }
       }),
       catchError(() => EMPTY),
-      // Multicast one Firebase listener across all subscribers:
-      // - `connector`: replay the latest emission to new subscribers on mount.
-      // - `resetOnError`: tear down the source subscription on error (upstream `catchError` converts errors to completions first).
-      // - `resetOnComplete`: keep the final value cached when a one-shot stream (`first()` in `*Once` hooks) completes,
-      //   because RxJS auto-closes the subscriber on completion while the component remains mounted; evicting on completion
-      //   would cause mounted `*Once` components to re-fetch on subsequent renders.
-      // - `resetOnRefCountZero`: detach the Firebase listener and evict the cache entry after `LISTENER_RELEASE_DELAY_MS` with zero subscribers.
+      // `resetOnComplete: false` keeps a completed one-shot (`*Once`) value cached; resetting would make a mounted component re-fetch.
       share({
         connector: () => new ReplaySubject<T>(1),
         resetOnError: true,
@@ -105,9 +94,8 @@ export class SuspenseSubject<T> extends Subject<T> {
     // warm up the observable
     this._warmupSubscription = this._innerObservable.subscribe();
 
-    // Release the warm-up subscription if no component subscribes within `_timeoutWindow` after the first emission settles.
-    // Waiting for the first emission lets a suspended component resolve `firstEmission`, re-render, and call `_subscribe` (#525).
-    // If the stream already completed during warm-up (`first()`), `share` skips `resetOnRefCountZero`, so call `_onEvict` directly (#790).
+    // Release the warm-up `_timeoutWindow` after the first emission, giving a suspended component time to subscribe (#525).
+    // A stream that completed during warm-up skips `resetOnRefCountZero`, so evict it here (#790).
     this._warmupRelease = from(this._firstEmission)
       .pipe(delay(this._timeoutWindow))
       .subscribe(() => {
@@ -145,9 +133,7 @@ export class SuspenseSubject<T> extends Subject<T> {
   }
 
   private _updateImmutableStatus() {
-    // Cast required because `data` is internally `T | undefined` while a value is
-    // still in flight, whereas ObservableStatus exposes `data: T` to consumers.
-    // The relationships between the status fields are verified in tests instead.
+    // `data` is `T | undefined` until the first value; ObservableStatus exposes `T`.
     this._immutableStatus = {
       status: this._error ? 'error' : (this._hasValue ? 'success' : 'loading'),
       hasEmitted: this._hasValue,
@@ -166,7 +152,7 @@ export class SuspenseSubject<T> extends Subject<T> {
   }
 
   _subscribe(subscriber: Subscriber<T>): Subscription {
-    // A mounted subscriber owns the source from here on, so the pending warm-up release must not fire (it would evict a mounted one-shot entry).
+    // A mounted subscriber owns the source now; the warm-up release would evict a mounted one-shot entry.
     this._warmupRelease.unsubscribe();
     if (!this._error && !this._isComplete) {
       this._onReregister();
