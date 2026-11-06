@@ -672,7 +672,7 @@ describe('useObservable', () => {
       let evicted = false;
       new SuspenseSubject(source$, 50, true, () => {
         evicted = true;
-      });
+      }, () => {});
 
       // After the 50ms window plus the 1s release grace, the first emission is still pending, so warm-up must still hold the source (#525).
       await new Promise((resolve) => setTimeout(resolve, 1100));
@@ -754,11 +754,11 @@ describe('useObservable', () => {
       let evictedWithoutSuspense = false;
       new SuspenseSubject(failAfter50ms(), 30_000, false, () => {
         evictedWithoutSuspense = true;
-      });
+      }, () => {});
       let evictedWithSuspense = false;
       new SuspenseSubject(failAfter50ms(), 30_000, true, () => {
         evictedWithSuspense = true;
-      });
+      }, () => {});
 
       await new Promise((resolve) => setTimeout(resolve, 1300));
       expect(evictedWithoutSuspense).toBe(true);
@@ -823,7 +823,7 @@ describe('useObservable', () => {
       let evicted = false;
       const subject = new SuspenseSubject(of('doc'), 50, false, () => {
         evicted = true;
-      });
+      }, () => {});
       const subscription = subject.subscribe();
       await new Promise((resolve) => setTimeout(resolve, 150));
       expect(evicted).toBe(false);

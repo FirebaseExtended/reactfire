@@ -21,17 +21,14 @@ export class SuspenseSubject<T> extends Subject<T> {
   private _isComplete = false;
   private _subscriberCount = 0;
 
-  // @ts-expect-error: TODO: double check to see if this is an RXJS thing or if we should listen to TS
-  private _innerSubscriber: Subscription;
-  // @ts-expect-error: TODO: double check to see if this is an RXJS thing or if we should listen to TS
-  private _resolveFirstEmission: () => void;
+  private _resolveFirstEmission!: () => void;
 
   constructor(
     innerObservable: Observable<T>,
     private _timeoutWindow: number,
     private _suspenseEnabled: boolean,
-    private _onEvict: () => void = () => {},
-    private _onReregister: () => void = () => {}
+    private _onEvict: () => void,
+    private _onReregister: () => void
   ) {
     super();
     this._firstEmission = new Promise<void>((resolve) => (this._resolveFirstEmission = resolve));
@@ -45,17 +42,16 @@ export class SuspenseSubject<T> extends Subject<T> {
       firstValuePromise: this._firstEmission
     } as ObservableStatus<T>;
 
-    // An Observable from another rxjs copy (an app on rxjs 6) cannot be torn down by these rxjs 7
-    // operators; `from` re-wraps it through `Symbol.observable` so unsubscribe reaches the source.
-    this._innerObservable = (innerObservable instanceof Observable ? innerObservable : from(innerObservable)).pipe(
+    // `from` re-wraps an Observable from another rxjs copy (rxjs 6 apps) so unsubscribe reaches the source.
+    this._innerObservable = from(innerObservable).pipe(
       tap({
-        next: (v) => {
-          this._next(v);
+        next: (value) => {
+          this._next(value);
         },
-        error: (e) => {
+        error: (error) => {
           // save the error, so that we can raise on subscription or .value
           // resolve the promise, so suspense tries again
-          this._error = e;
+          this._error = error;
           this._resolveFirstEmission();
           this._updateImmutableStatus();
           // #485: nobody is left to read the error, so evict now.
@@ -80,7 +76,6 @@ export class SuspenseSubject<T> extends Subject<T> {
       // `resetOnComplete: false` keeps a completed one-shot (`*Once`) value cached; resetting would make a mounted component re-fetch.
       share({
         connector: () => new ReplaySubject<T>(1),
-        resetOnError: true,
         resetOnComplete: false,
         resetOnRefCountZero: () =>
           timer(LISTENER_RELEASE_DELAY_MS).pipe(
@@ -159,8 +154,8 @@ export class SuspenseSubject<T> extends Subject<T> {
     }
     this._subscriberCount++;
     const innerSubscription = this._innerObservable.subscribe({
-      next: (v) => subscriber.next(v),
-      error: (e) => subscriber.error(e),
+      next: (value) => subscriber.next(value),
+      error: (error) => subscriber.error(error),
       complete: () => {
         if (this._error) {
           // `catchError(() => EMPTY)` converts upstream errors into completions.
@@ -174,7 +169,6 @@ export class SuspenseSubject<T> extends Subject<T> {
     });
     // Hand off ownership of the shared source from the warm-up subscription to the real subscriber.
     this._warmupSubscription.unsubscribe();
-    this._innerSubscriber = innerSubscription;
     return new Subscription(() => {
       innerSubscription.unsubscribe();
       this._subscriberCount--;
