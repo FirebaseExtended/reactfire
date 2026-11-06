@@ -63,13 +63,27 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'ReactFire',
-      fileName: 'index',
     },
     rollupOptions: {
       external: externals,
-      output: {
-        globals: { react: 'React' },
-      },
+      output: [
+        // Emit one ES module per source file so `"sideEffects": false` lets bundlers drop unused products
+        // (and their `firebase/*` imports) instead of pulling every Firebase SDK in through a single index.js.
+        {
+          format: 'es',
+          preserveModules: true,
+          preserveModulesRoot: 'src',
+          // Bundled dependencies must not land under a folder named node_modules: Node stops its package.json
+          // scope lookup at that name, so the files would lose this package's "type": "module".
+          entryFileNames: chunk => `${chunk.name.replace(/^node_modules\//, 'vendor/')}.js`,
+        },
+        {
+          format: 'umd',
+          name: 'ReactFire',
+          entryFileNames: 'index.umd.cjs',
+          globals: { react: 'React' },
+        },
+      ],
     },
     sourcemap: true,
   },

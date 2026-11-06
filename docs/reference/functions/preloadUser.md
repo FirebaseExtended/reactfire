@@ -8,7 +8,7 @@
 
 > **preloadUser**(`authResolver`): `Promise`\<`User` \| `null` \| `undefined`\>
 
-Defined in: [src/auth.tsx:11](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L11)
+Defined in: [src/auth.tsx:12](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L12)
 
 ## Parameters
 
