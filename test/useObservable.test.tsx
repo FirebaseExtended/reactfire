@@ -5,7 +5,7 @@ import { Writable } from 'node:stream';
 import { renderToString, renderToPipeableStream } from 'react-dom/server';
 import * as firebaseAppModule from 'firebase/app';
 import { initializeApp, deleteApp, getApps, FirebaseApp, setLogLevel } from 'firebase/app';
-import { defer, of, Subject, BehaviorSubject, throwError, timer } from 'rxjs';
+import { defer, of, Observable, Subject, BehaviorSubject, throwError, timer } from 'rxjs';
 import { first, mergeMap } from 'rxjs/operators';
 import { useObservable, ReactFireOptions, version } from '../src/index';
 
@@ -693,6 +693,45 @@ describe('useObservable', () => {
       // The identity guard in onEvict must keep secondSubject in the cache.
       expect(preloadObservable(new BehaviorSubject('third'), observableId)).toBe(secondSubject);
       activeSub.unsubscribe();
+    });
+
+    it('re-registers an evicted entry when a late subscriber attaches, so the next read reuses its listener', async () => {
+      const { preloadObservable } = await import('../src/useObservable');
+      const observableId = `reregister-${Math.random()}`;
+      let subscribeCount = 0;
+      const source$ = defer(() => {
+        subscribeCount++;
+        return new BehaviorSubject('value');
+      });
+
+      const subject = preloadObservable(source$, observableId);
+      subject.subscribe().unsubscribe();
+
+      // The release evicts the entry, but a render that read it earlier still holds the subject.
+      await new Promise((resolve) => setTimeout(resolve, 1100));
+
+      // That render's effect subscribes late; the next read must reuse this entry, not open a second listener.
+      const lateSub = subject.subscribe();
+      expect(preloadObservable(source$, observableId)).toBe(subject);
+      expect(subscribeCount).toBe(2);
+      lateSub.unsubscribe();
+    });
+
+    it.each<[string, number, () => Observable<string>]>([
+      ['an errored', 0, () => throwError(() => new Error('permission-denied'))],
+      ['a completed', 0, () => of('doc')],
+      ['a live (control)', 1, () => new BehaviorSubject('value')],
+    ])('late subscribe on %s entry re-registers it %i time(s)', async (_label, expectedReregisters, makeSource) => {
+      const { SuspenseSubject } = await import('../src/SuspenseSubject');
+      let reregisters = 0;
+      const subject = new SuspenseSubject(makeSource(), 50, false, () => {}, () => {
+        reregisters++;
+      });
+
+      // Re-registering an errored entry would bring a stale error back on the next sign-in; a completed one would never leave.
+      const lateSub = subject.subscribe({ error: () => {} });
+      expect(reregisters).toBe(expectedReregisters);
+      lateSub.unsubscribe();
     });
 
     it('keeps the source attached while a consumer is suspended on a still-loading entry after an earlier subscriber unmounted', async () => {
