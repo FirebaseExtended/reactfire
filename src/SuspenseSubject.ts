@@ -180,7 +180,7 @@ export class SuspenseSubject<T> extends Subject<T> {
           // `catchError(() => EMPTY)` converts upstream errors into completions.
           // Notify `useObservable` (`onStoreChange`) without calling `subscriber.complete()`,
           // because `subscriber.complete()` auto-unsubscribes `subscriber` before React unmounts.
-          subscriber.next(this._value as T);
+          subscriber.next(this._value);
         } else {
           subscriber.complete();
         }
