@@ -79,4 +79,43 @@ describe('useInit* initializer', () => {
       consoleError.mockRestore();
     }
   }, 45_000);
+
+  it('runs again on the next mount after the initializer rejects', async () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      const app = initializeApp(baseConfig, `init-retry-${Math.random()}`);
+      let calls = 0;
+      const initializer = async () => {
+        calls++;
+        if (calls === 1) {
+          throw new Error('network down');
+        }
+        return { app } as unknown as Firestore;
+      };
+
+      const Init = () => {
+        const { status } = useInitFirestore(initializer);
+        return status === 'success' ? <div data-testid="ready">ready</div> : null;
+      };
+      const tree = (
+        <FirebaseAppProvider firebaseApp={app}>
+          <Boundary>
+            <Init />
+          </Boundary>
+        </FirebaseAppProvider>
+      );
+
+      const first = render(tree);
+      await waitFor(() => expect(first.getByTestId('err')).toHaveTextContent('network down'));
+      first.unmount();
+      // Past the 1s error eviction, so the next mount builds a new cache entry.
+      await new Promise((resolve) => setTimeout(resolve, 1_500));
+
+      const second = render(tree);
+      await waitFor(() => expect(second.getByTestId('ready')).toBeInTheDocument());
+      expect(calls).toBe(2);
+    } finally {
+      consoleError.mockRestore();
+    }
+  }, 15_000);
 });

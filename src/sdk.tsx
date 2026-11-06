@@ -77,9 +77,19 @@ function useInitSdk<Sdk extends FirebaseSdks>(
       initializedSdks.set(firebaseApp, sdks);
     }
     if (!sdks.has(sdkName)) {
-      sdks.set(sdkName, sdkInitializer(firebaseApp));
+      const cache = sdks;
+      const initializing = sdkInitializer(firebaseApp);
+      // A rejected initializer must not stay cached, or no later mount can retry it.
+      initializing.catch(() => {
+        if (cache.get(sdkName) === initializing) {
+          cache.delete(sdkName);
+        }
+      });
+      cache.set(sdkName, initializing);
     }
     return sdks.get(sdkName) as Promise<Sdk>;
+    // Cached per app and SDK name, so a new `sdkInitializer` identity on re-render must not re-run it.
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [firebaseApp]);
 
   return useObservable<Sdk>(`firebase-sdk:${sdkName}:${firebaseApp.name}`, from(initializeSdk), options);
