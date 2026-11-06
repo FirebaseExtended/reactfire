@@ -28,6 +28,14 @@ Defined in: [src/index.ts:8](https://github.com/FirebaseExtended/reactfire/blob/
 
 ***
 
+### \_reactFireInitializedSdks
+
+> **\_reactFireInitializedSdks**: `WeakMap`\<`object`, `Map`\<`string`, `Promise`\<`unknown`\>\>\>
+
+Defined in: [src/index.ts:10](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L10)
+
+***
+
 ### \_reactFirePreloadedObservables
 
 > **\_reactFirePreloadedObservables**: `Map`\<`string`, `SuspenseSubject`\<`any`\>\>

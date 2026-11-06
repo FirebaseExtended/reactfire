@@ -8,4 +8,4 @@
 
 > `const` **StorageSdkContext**: `Context`\<`FirebaseStorage` \| `undefined`\>
 
-Defined in: [src/sdk.tsx:24](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L24)
+Defined in: [src/sdk.tsx:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L30)

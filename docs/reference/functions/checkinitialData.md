@@ -8,7 +8,7 @@
 
 > **checkinitialData**(`options`): `any`
 
-Defined in: [src/index.ts:43](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L43)
+Defined in: [src/index.ts:44](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L44)
 
 ## Parameters
 

@@ -8,7 +8,7 @@
 
 > `const` **AuthProvider**: (`props`) => `ReactElement`
 
-Defined in: [src/sdk.tsx:73](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L73)
+Defined in: [src/sdk.tsx:99](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L99)
 
 ## Parameters
 
