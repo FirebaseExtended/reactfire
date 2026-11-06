@@ -1,5 +1,5 @@
-import { EMPTY, from, Observable, ReplaySubject, Subject, Subscriber, Subscription, timer } from 'rxjs';
-import { catchError, share, tap } from 'rxjs/operators';
+import { EMPTY, from, Observable, of, ReplaySubject, Subject, Subscriber, Subscription, timer } from 'rxjs';
+import { catchError, delay, mergeMap, share, tap } from 'rxjs/operators';
 import { ObservableStatus } from './useObservable.js';
 
 // Grace period before a zero-subscriber stream detaches its Firebase listener and evicts its cache entry.
@@ -13,7 +13,7 @@ const FIRST_LOAD_ERROR_EVICT_DELAY_MS = 1000;
 export class SuspenseSubject<T> extends Subject<T> {
   private _value: T | undefined;
   private _hasValue = false;
-  private _timeoutHandler: ReturnType<typeof setTimeout>;
+  private _warmupRelease: Subscription;
   private _firstEmission: Promise<void>;
   private _error: any = undefined;
   private _innerObservable: Observable<T>;
@@ -31,7 +31,8 @@ export class SuspenseSubject<T> extends Subject<T> {
     innerObservable: Observable<T>,
     private _timeoutWindow: number,
     private _suspenseEnabled: boolean,
-    private _onEvict: () => void = () => {}
+    private _onEvict: () => void = () => {},
+    private _onReregister: () => void = () => {}
   ) {
     super();
     this._firstEmission = new Promise<void>((resolve) => (this._resolveFirstEmission = resolve));
@@ -92,26 +93,29 @@ export class SuspenseSubject<T> extends Subject<T> {
         connector: () => new ReplaySubject<T>(1),
         resetOnError: true,
         resetOnComplete: false,
-        resetOnRefCountZero: () => timer(LISTENER_RELEASE_DELAY_MS).pipe(tap(this._onEvict)),
+        resetOnRefCountZero: () =>
+          timer(LISTENER_RELEASE_DELAY_MS).pipe(
+            // A suspended render holds no subscription, so never tear down before the first emission settles,
+            // then give that render one more grace period to subscribe.
+            mergeMap(() => (this._hasValue || this._error ? of(undefined) : from(this._firstEmission).pipe(delay(LISTENER_RELEASE_DELAY_MS)))),
+            tap(this._onEvict)
+          ),
       })
     );
     // warm up the observable
     this._warmupSubscription = this._innerObservable.subscribe();
 
     // Release the warm-up subscription if no component subscribes within `_timeoutWindow` after the first emission settles.
-    // Wait until the first emission settles so a suspended component can resolve `firstEmission`, re-render, and call `_subscribe` (#525).
+    // Waiting for the first emission lets a suspended component resolve `firstEmission`, re-render, and call `_subscribe` (#525).
     // If the stream already completed during warm-up (`first()`), `share` skips `resetOnRefCountZero`, so call `_onEvict` directly (#790).
-    const releaseWarmupWhenSettled = () => {
-      if (this._hasValue || this._error) {
+    this._warmupRelease = from(this._firstEmission)
+      .pipe(delay(this._timeoutWindow))
+      .subscribe(() => {
         this._warmupSubscription.unsubscribe();
         if (this._isComplete) {
           this._onEvict();
         }
-      } else {
-        this._timeoutHandler = setTimeout(releaseWarmupWhenSettled, this._timeoutWindow);
-      }
-    };
-    this._timeoutHandler = setTimeout(releaseWarmupWhenSettled, this._timeoutWindow);
+      });
   }
 
   // An entry created with Suspense off (by a preload helper, which cannot read the Suspense context)
@@ -162,8 +166,10 @@ export class SuspenseSubject<T> extends Subject<T> {
   }
 
   _subscribe(subscriber: Subscriber<T>): Subscription {
-    if (this._timeoutHandler) {
-      clearTimeout(this._timeoutHandler);
+    // A mounted subscriber owns the source from here on, so the pending warm-up release must not fire (it would evict a mounted one-shot entry).
+    this._warmupRelease.unsubscribe();
+    if (!this._error && !this._isComplete) {
+      this._onReregister();
     }
     this._subscriberCount++;
     const innerSubscription = this._innerObservable.subscribe({

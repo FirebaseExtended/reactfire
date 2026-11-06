@@ -26,7 +26,17 @@ export function preloadObservable<T>(source: Observable<T>, id: string, suspense
     }
     return existing;
   } else {
-    const observable: SuspenseSubject<T> = new SuspenseSubject(source, DEFAULT_TIMEOUT, suspenseEnabled, () => preloadedObservables.get(id) === observable && preloadedObservables.delete(id));
+    const observable: SuspenseSubject<T> = new SuspenseSubject(
+      source,
+      DEFAULT_TIMEOUT,
+      suspenseEnabled,
+      () => preloadedObservables.get(id) === observable && preloadedObservables.delete(id),
+      () => {
+        if (!preloadedObservables.has(id)) {
+          preloadedObservables.set(id, observable);
+        }
+      }
+    );
     preloadedObservables.set(id, observable);
     return observable;
   }
