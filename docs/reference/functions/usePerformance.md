@@ -8,7 +8,7 @@
 
 > **usePerformance**(): `FirebasePerformance`
 
-Defined in: [src/sdk.tsx:104](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L104)
+Defined in: [src/sdk.tsx:114](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L114)
 
 ## Returns
 

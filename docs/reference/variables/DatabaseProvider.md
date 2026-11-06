@@ -8,7 +8,7 @@
 
 > `const` **DatabaseProvider**: (`props`) => `ReactElement`
 
-Defined in: [src/sdk.tsx:91](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L91)
+Defined in: [src/sdk.tsx:101](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L101)
 
 ## Parameters
 

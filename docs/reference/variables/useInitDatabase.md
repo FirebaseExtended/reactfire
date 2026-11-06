@@ -8,4 +8,4 @@
 
 > `const` **useInitDatabase**: `InitSdkHook`\<`Database`\>
 
-Defined in: [src/sdk.tsx:116](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L116)
+Defined in: [src/sdk.tsx:126](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L126)

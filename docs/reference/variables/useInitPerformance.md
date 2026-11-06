@@ -8,4 +8,4 @@
 
 > `const` **useInitPerformance**: `InitSdkHook`\<`FirebasePerformance`\>
 
-Defined in: [src/sdk.tsx:119](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L119)
+Defined in: [src/sdk.tsx:129](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L129)

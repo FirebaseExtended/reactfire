@@ -8,7 +8,7 @@
 
 > **useStorage**(): `FirebaseStorage`
 
-Defined in: [src/sdk.tsx:105](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L105)
+Defined in: [src/sdk.tsx:115](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L115)
 
 ## Returns
 

@@ -8,4 +8,4 @@
 
 > `const` **useInitAuth**: `InitSdkHook`\<`Auth`\>
 
-Defined in: [src/sdk.tsx:114](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L114)
+Defined in: [src/sdk.tsx:124](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L124)

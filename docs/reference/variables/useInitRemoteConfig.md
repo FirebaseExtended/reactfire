@@ -8,4 +8,4 @@
 
 > `const` **useInitRemoteConfig**: `InitSdkHook`\<`RemoteConfig`\>
 
-Defined in: [src/sdk.tsx:121](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L121)
+Defined in: [src/sdk.tsx:131](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L131)
