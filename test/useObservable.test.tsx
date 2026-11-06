@@ -5,10 +5,21 @@ import { Writable } from 'node:stream';
 import { renderToString, renderToPipeableStream } from 'react-dom/server';
 import * as firebaseAppModule from 'firebase/app';
 import { initializeApp, deleteApp, getApps, FirebaseApp, setLogLevel } from 'firebase/app';
-import { of, Subject, BehaviorSubject, throwError } from 'rxjs';
+import { defer, of, Subject, BehaviorSubject, throwError, timer } from 'rxjs';
+import { first, mergeMap } from 'rxjs/operators';
 import { useObservable, ReactFireOptions, version } from '../src/index';
 
 const _components = (firebaseAppModule as unknown as { _components: Map<string, unknown> })._components;
+
+class Boundary extends React.Component<{ children: React.ReactNode }, { error: Error | null }> {
+  state: { error: Error | null } = { error: null };
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
+  render() {
+    return this.state.error ? <div data-testid="err">{this.state.error.message}</div> : this.props.children;
+  }
+}
 
 interface AppWithContainer extends FirebaseApp {
   container: {
@@ -517,19 +528,6 @@ describe('useObservable', () => {
       const observableId = `error-evict-${Math.random()}`;
       let shouldFail = true;
 
-      class Boundary extends React.Component<{ children: React.ReactNode }, { error: Error | null }> {
-        state: { error: Error | null } = { error: null };
-        static getDerivedStateFromError(error: Error) {
-          return { error };
-        }
-        render() {
-          if (this.state.error) {
-            return <div data-testid="err">{this.state.error.message}</div>;
-          }
-          return this.props.children;
-        }
-      }
-
       const Obs = () => {
         const source$ = shouldFail ? throwError(() => new Error('permission-denied')) : of('recovered');
         const { data, status } = useObservable(observableId, source$);
@@ -564,16 +562,6 @@ describe('useObservable', () => {
       const firstStream$ = new BehaviorSubject<string>('initial-user-doc');
       const secondStream$ = new BehaviorSubject<string>('reauthenticated-user-doc');
       let currentStream$ = firstStream$;
-
-      class Boundary extends React.Component<{ children: React.ReactNode }, { error: Error | null }> {
-        state: { error: Error | null } = { error: null };
-        static getDerivedStateFromError(error: Error) {
-          return { error };
-        }
-        render() {
-          return this.state.error ? <div data-testid="err">{this.state.error.message}</div> : this.props.children;
-        }
-      }
 
       const Obs = () => {
         const { data, status } = useObservable(observableId, currentStream$);
@@ -648,11 +636,9 @@ describe('useObservable', () => {
       const observableId = `grace-window-${Math.random()}`;
       let subscribeCount = 0;
       const base$ = new BehaviorSubject<string>('cached-val');
-      const counted$ = base$.lift({
-        call(subscriber, source) {
-          subscribeCount++;
-          return source.subscribe(subscriber);
-        }
+      const counted$ = defer(() => {
+        subscribeCount++;
+        return base$;
       });
 
       const Obs = () => {
@@ -688,8 +674,8 @@ describe('useObservable', () => {
         evicted = true;
       });
 
-      // After the first 50ms window, the first emission is still pending, so warm-up stays subscribed (#525).
-      await new Promise((r) => setTimeout(r, 80));
+      // After the 50ms window plus the 1s release grace, the first emission is still pending, so warm-up must still hold the source (#525).
+      await new Promise((resolve) => setTimeout(resolve, 1100));
       expect(source$.observed).toBe(true);
 
       // Settle and complete the stream without any subscriber mounting (e.g. SSR or unused preload).
@@ -725,6 +711,123 @@ describe('useObservable', () => {
       // The identity guard in onEvict must keep secondSubject in the cache.
       expect(preloadObservable(new BehaviorSubject('third'), observableId)).toBe(secondSubject);
       activeSub.unsubscribe();
+    });
+
+    it('keeps the source attached while a consumer is suspended on a still-loading entry after an earlier subscriber unmounted', async () => {
+      const observableId = `suspended-consumer-${Math.random()}`;
+      const source$ = new Subject<string>();
+
+      const NonSuspense = () => {
+        const { status } = useObservable(observableId, source$);
+        return <div data-testid="a">{status}</div>;
+      };
+      const Suspended = () => {
+        const { data } = useObservable(observableId, source$, { suspense: true });
+        return <div data-testid="b">{data}</div>;
+      };
+
+      const firstMount = render(<NonSuspense />);
+      await waitFor(() => expect(firstMount.getByTestId('a')).toHaveTextContent('loading'));
+      firstMount.unmount();
+
+      // Inside the 1s release grace window, a Suspense consumer of the same id mounts and suspends on firstEmission.
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      const secondMount = render(
+        <React.Suspense fallback={<div data-testid="fb">fallback</div>}>
+          <Suspended />
+        </React.Suspense>
+      );
+      expect(secondMount.getByTestId('fb')).toBeInTheDocument();
+
+      // The grace window expires before the first value arrives. The source must still be attached.
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+      act(() => source$.next('arrived'));
+
+      await waitFor(() => expect(secondMount.getByTestId('b')).toHaveTextContent('arrived'), { timeout: 2000 });
+      secondMount.unmount();
+    }, 10000);
+
+    it('evicts a first-load error after 1s in non-suspense mode only', async () => {
+      const { SuspenseSubject } = await import('../src/SuspenseSubject');
+      const failAfter50ms = () => timer(50).pipe(mergeMap(() => throwError(() => new Error('permission-denied'))));
+
+      let evictedWithoutSuspense = false;
+      new SuspenseSubject(failAfter50ms(), 30_000, false, () => {
+        evictedWithoutSuspense = true;
+      });
+      let evictedWithSuspense = false;
+      new SuspenseSubject(failAfter50ms(), 30_000, true, () => {
+        evictedWithSuspense = true;
+      });
+
+      await new Promise((resolve) => setTimeout(resolve, 1300));
+      expect(evictedWithoutSuspense).toBe(true);
+      expect(evictedWithSuspense).toBe(false);
+    });
+
+    it('evicts an errored entry when its last Suspense subscriber unmounts, so a remount reads fresh', async () => {
+      const observableId = `suspense-error-remount-${Math.random()}`;
+      let stream$ = new BehaviorSubject<string>('doc-v1');
+      const Obs = () => {
+        const { data } = useObservable(observableId, stream$, { suspense: true });
+        return <div data-testid="val">{data}</div>;
+      };
+      const firstMount = render(
+        <Boundary>
+          <React.Suspense fallback={<div data-testid="fb">fallback</div>}>
+            <Obs />
+          </React.Suspense>
+        </Boundary>
+      );
+      await waitFor(() => expect(firstMount.getByTestId('val')).toHaveTextContent('doc-v1'));
+      act(() => stream$.error(new Error('permission-denied')));
+      await waitFor(() => expect(firstMount.getByTestId('err')).toHaveTextContent('permission-denied'));
+      firstMount.unmount();
+
+      stream$ = new BehaviorSubject<string>('doc-v2');
+      const secondMount = render(
+        <Boundary>
+          <React.Suspense fallback={<div data-testid="fb">fallback</div>}>
+            <Obs />
+          </React.Suspense>
+        </Boundary>
+      );
+      await waitFor(() => expect(secondMount.getByTestId('val')).toHaveTextContent('doc-v2'));
+      secondMount.unmount();
+    });
+
+    it('serves a completed one-shot entry to a remount from the cache without re-subscribing the source', async () => {
+      const observableId = `once-cache-${Math.random()}`;
+      let sourceSubscriptions = 0;
+      const once$ = defer(() => {
+        sourceSubscriptions++;
+        return of('doc');
+      }).pipe(first());
+      const Obs = () => {
+        const { data } = useObservable(observableId, once$);
+        return <div data-testid="val">{data}</div>;
+      };
+
+      const firstMount = render(<Obs />);
+      await waitFor(() => expect(firstMount.getByTestId('val')).toHaveTextContent('doc'));
+      firstMount.unmount();
+      const secondMount = render(<Obs />);
+      await waitFor(() => expect(secondMount.getByTestId('val')).toHaveTextContent('doc'));
+      secondMount.unmount();
+
+      expect(sourceSubscriptions).toBe(1);
+    });
+
+    it('does not evict a mounted one-shot entry when the warm-up release fires', async () => {
+      const { SuspenseSubject } = await import('../src/SuspenseSubject');
+      let evicted = false;
+      const subject = new SuspenseSubject(of('doc'), 50, false, () => {
+        evicted = true;
+      });
+      const subscription = subject.subscribe();
+      await new Promise((resolve) => setTimeout(resolve, 150));
+      expect(evicted).toBe(false);
+      subscription.unsubscribe();
     });
   });
 });
