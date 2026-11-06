@@ -74,7 +74,9 @@ export default defineConfig({
           format: 'es',
           preserveModules: true,
           preserveModulesRoot: 'src',
-          entryFileNames: '[name].js',
+          // Bundled dependencies must not land under a folder named node_modules: Node stops its package.json
+          // scope lookup at that name, so the files would lose this package's "type": "module".
+          entryFileNames: chunk => `${chunk.name.replace(/^node_modules\//, 'vendor/')}.js`,
         },
         {
           format: 'umd',
