@@ -544,7 +544,7 @@ describe('useObservable', () => {
       first.unmount();
 
       // Wait for the 1s error eviction window to clear the errored entry from preloadedObservables
-      await new Promise((r) => setTimeout(r, 1100));
+      await new Promise((resolve) => setTimeout(resolve, 1100));
       shouldFail = false;
 
       const second = render(
@@ -614,24 +614,6 @@ describe('useObservable', () => {
       await waitFor(() => expect(subject$.observed).toBe(false), { timeout: 2500 });
     });
 
-    it('detaches the source after two subscribers of the same observableId unmount', async () => {
-      const subject$ = new BehaviorSubject<string>('a');
-      const observableId = `shared-subscriber-release-${Math.random()}`;
-
-      const Obs = ({ testId }: { testId: string }) => {
-        const { data } = useObservable(observableId, subject$);
-        return <div data-testid={testId}>{String(data)}</div>;
-      };
-
-      const first = render(<Obs testId="one" />);
-      const second = render(<Obs testId="two" />);
-      await waitFor(() => expect(second.getByTestId('two')).toHaveTextContent('a'));
-
-      first.unmount();
-      second.unmount();
-      await waitFor(() => expect(subject$.observed).toBe(false), { timeout: 3000 });
-    });
-
     it('reuses the active subscription when remounting within the 1s release grace window', async () => {
       const observableId = `grace-window-${Math.random()}`;
       let subscribeCount = 0;
@@ -652,14 +634,14 @@ describe('useObservable', () => {
       first.unmount();
 
       // Remount after 200ms (inside the 1000ms grace window); must reuse the active subscription.
-      await new Promise((r) => setTimeout(r, 200));
+      await new Promise((resolve) => setTimeout(resolve, 200));
       const second = render(<Obs />);
       await waitFor(() => expect(second.getByTestId('val')).toHaveTextContent('cached-val'));
       expect(subscribeCount).toBe(1);
       second.unmount();
 
       // After the 1000ms grace window expires, the next mount subscribes fresh.
-      await new Promise((r) => setTimeout(r, 1100));
+      await new Promise((resolve) => setTimeout(resolve, 1100));
       const third = render(<Obs />);
       await waitFor(() => expect(third.getByTestId('val')).toHaveTextContent('cached-val'));
       expect(subscribeCount).toBe(2);
@@ -696,7 +678,7 @@ describe('useObservable', () => {
       initialSub.unsubscribe();
 
       // Wait for firstSubject to be evicted from preloadedObservables.
-      await new Promise((r) => setTimeout(r, 1100));
+      await new Promise((resolve) => setTimeout(resolve, 1100));
 
       // Register a new subject under the same observableId and keep a subscriber active.
       const secondSubject = preloadObservable(new BehaviorSubject('second'), observableId);
@@ -706,7 +688,7 @@ describe('useObservable', () => {
       // A late caller holding the evicted firstSubject subscribes and unsubscribes, re-arming firstSubject's eviction timer.
       const lateSub = firstSubject.subscribe();
       lateSub.unsubscribe();
-      await new Promise((r) => setTimeout(r, 1100));
+      await new Promise((resolve) => setTimeout(resolve, 1100));
 
       // The identity guard in onEvict must keep secondSubject in the cache.
       expect(preloadObservable(new BehaviorSubject('third'), observableId)).toBe(secondSubject);

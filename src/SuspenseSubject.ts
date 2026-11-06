@@ -155,7 +155,6 @@ export class SuspenseSubject<T> extends Subject<T> {
     this._subscriberCount++;
     const innerSubscription = this._innerObservable.subscribe({
       next: (value) => subscriber.next(value),
-      error: (error) => subscriber.error(error),
       complete: () => {
         if (this._error) {
           // `catchError(() => EMPTY)` converts upstream errors into completions.

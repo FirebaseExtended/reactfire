@@ -48,7 +48,7 @@ describe('SuspenseSubject error-to-completion branch', () => {
 
       await waitFor(() => expect(getByTestId('err')).toHaveTextContent('permission-denied'));
       // Give a resubscribe loop time to show itself.
-      await new Promise((r) => setTimeout(r, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
       expect(subscriptions).toBe(1);
     } finally {
       consoleError.mockRestore();
