@@ -63,7 +63,6 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'ReactFire',
-      fileName: 'index',
     },
     rollupOptions: {
       external: externals,

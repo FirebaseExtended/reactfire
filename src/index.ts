@@ -1,3 +1,5 @@
+// Types and re-exports only. A runtime value defined here and imported by a product module brings back the
+// import of ./index.js that made Turbopack bundle every Firebase product.
 import { SuspenseSubject } from './SuspenseSubject.js';
 
 import type { Query as FirestoreQuery } from 'firebase/firestore';
