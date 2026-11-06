@@ -8,7 +8,7 @@
 
 > **checkIdField**(`options`): `any`
 
-Defined in: [src/index.ts:47](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L47)
+Defined in: [src/utils.ts:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/utils.ts#L28)
 
 ## Parameters
 

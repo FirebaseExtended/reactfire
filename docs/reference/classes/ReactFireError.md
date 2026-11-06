@@ -6,7 +6,7 @@
 
 # Class: ReactFireError
 
-Defined in: [src/index.ts:12](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L12)
+Defined in: [src/utils.ts:3](https://github.com/FirebaseExtended/reactfire/blob/main/src/utils.ts#L3)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [src/index.ts:12](https://github.com/FirebaseExtended/reactfire/blob
 
 > **new ReactFireError**(`code`, `message`, `customData?`): `ReactFireError`
 
-Defined in: [src/index.ts:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L15)
+Defined in: [src/utils.ts:6](https://github.com/FirebaseExtended/reactfire/blob/main/src/utils.ts#L6)
 
 #### Parameters
 
@@ -60,7 +60,7 @@ Defined in: node\_modules/typescript/lib/lib.es2022.error.d.ts:24
 
 > `readonly` **code**: `string`
 
-Defined in: [src/index.ts:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L15)
+Defined in: [src/utils.ts:6](https://github.com/FirebaseExtended/reactfire/blob/main/src/utils.ts#L6)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/index.ts:15](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **customData?**: `Record`\<`string`, `unknown`\>
 
-Defined in: [src/index.ts:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L15)
+Defined in: [src/utils.ts:6](https://github.com/FirebaseExtended/reactfire/blob/main/src/utils.ts#L6)
 
 ***
 
@@ -88,7 +88,7 @@ Defined in: node\_modules/typescript/lib/lib.es5.d.ts:1075
 
 > `readonly` **name**: `"ReactFireError"` = `'ReactFireError'`
 
-Defined in: [src/index.ts:13](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L13)
+Defined in: [src/utils.ts:4](https://github.com/FirebaseExtended/reactfire/blob/main/src/utils.ts#L4)
 
 #### Overrides
 

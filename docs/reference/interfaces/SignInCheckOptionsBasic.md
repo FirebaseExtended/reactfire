@@ -6,7 +6,7 @@
 
 # Interface: SignInCheckOptionsBasic
 
-Defined in: [src/auth.tsx:85](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L85)
+Defined in: [src/auth.tsx:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L86)
 
 ## Extends
 
@@ -23,7 +23,7 @@ Defined in: [src/auth.tsx:85](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **forceRefresh?**: `boolean`
 
-Defined in: [src/auth.tsx:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L86)
+Defined in: [src/auth.tsx:87](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L87)
 
 ***
 
@@ -31,7 +31,7 @@ Defined in: [src/auth.tsx:86](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **idField?**: `string`
 
-Defined in: [src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L25)
+Defined in: [src/index.ts:13](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L13)
 
 #### Inherited from
 
@@ -43,7 +43,7 @@ Defined in: [src/index.ts:25](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **initialData?**: `any`
 
-Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L26)
+Defined in: [src/index.ts:14](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L14)
 
 #### Inherited from
 
@@ -55,7 +55,7 @@ Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **startWithValue?**: `any`
 
-Defined in: [src/index.ts:30](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L30)
+Defined in: [src/index.ts:18](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L18)
 
 #### Deprecated
 
@@ -71,7 +71,7 @@ use initialData instead
 
 > `optional` **suspense?**: `boolean`
 
-Defined in: [src/index.ts:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L31)
+Defined in: [src/index.ts:19](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L19)
 
 #### Inherited from
 

@@ -8,7 +8,7 @@
 
 > **useDatabaseListData**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T`[] \| `null`\>
 
-Defined in: [src/database.tsx:58](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L58)
+Defined in: [src/database.tsx:59](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L59)
 
 ## Type Parameters
 
