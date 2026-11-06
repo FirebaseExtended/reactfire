@@ -8,7 +8,7 @@
 
 > **useObservable**\<`T`\>(`observableId`, `source`, `config?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T`\>
 
-Defined in: [src/useObservable.ts:72](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L72)
+Defined in: [src/useObservable.ts:82](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L82)
 
 ## Type Parameters
 

@@ -6,7 +6,7 @@
 
 # Interface: ObservableStatus\<T\>
 
-Defined in: [src/useObservable.ts:35](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L35)
+Defined in: [src/useObservable.ts:45](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L45)
 
 ## Type Parameters
 
@@ -20,7 +20,7 @@ Defined in: [src/useObservable.ts:35](https://github.com/FirebaseExtended/reactf
 
 > **data**: `T`
 
-Defined in: [src/useObservable.ts:61](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L61)
+Defined in: [src/useObservable.ts:71](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L71)
 
 The most recent value.
 
@@ -32,7 +32,7 @@ If `initialData` is passed in, the first value of `data` will be the valuea prov
 
 > **error**: `Error` \| `undefined`
 
-Defined in: [src/useObservable.ts:65](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L65)
+Defined in: [src/useObservable.ts:75](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L75)
 
 Any error that may have occurred in the underlying observable
 
@@ -42,7 +42,7 @@ Any error that may have occurred in the underlying observable
 
 > **firstValuePromise**: `Promise`\<`void`\>
 
-Defined in: [src/useObservable.ts:69](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L69)
+Defined in: [src/useObservable.ts:79](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L79)
 
 Promise that resolves after first emit from observable
 
@@ -52,7 +52,7 @@ Promise that resolves after first emit from observable
 
 > **hasEmitted**: `boolean`
 
-Defined in: [src/useObservable.ts:51](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L51)
+Defined in: [src/useObservable.ts:61](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L61)
 
 Indicates whether the hook has emitted a value at some point
 
@@ -64,7 +64,7 @@ If `initialData` is passed in, this will be `true`.
 
 > **isComplete**: `boolean`
 
-Defined in: [src/useObservable.ts:55](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L55)
+Defined in: [src/useObservable.ts:65](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L65)
 
 If this is `true`, the hook will be emitting no further items.
 
@@ -74,7 +74,7 @@ If this is `true`, the hook will be emitting no further items.
 
 > **status**: `"error"` \| `"loading"` \| `"success"`
 
-Defined in: [src/useObservable.ts:45](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L45)
+Defined in: [src/useObservable.ts:55](https://github.com/FirebaseExtended/reactfire/blob/main/src/useObservable.ts#L55)
 
 The loading status.
 
