@@ -32,7 +32,7 @@ Defined in: [src/index.ts:10](https://github.com/FirebaseExtended/reactfire/blob
 
 > **\_reactFireInitializedSdks**: `WeakMap`\<`object`, `Map`\<`string`, `Promise`\<`unknown`\>\>\>
 
-Defined in: [src/index.ts:10](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L10)
+Defined in: [src/index.ts:12](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L12)
 
 ***
 
