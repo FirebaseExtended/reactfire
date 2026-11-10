@@ -8,7 +8,7 @@
 
 > `const` **PerformanceProvider**: (`props`) => `ReactElement`
 
-Defined in: [src/sdk.tsx:78](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L78)
+Defined in: [src/sdk.tsx:104](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L104)
 
 ## Parameters
 

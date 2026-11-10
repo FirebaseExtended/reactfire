@@ -8,4 +8,4 @@
 
 > `const` **FirestoreSdkContext**: `Context`\<`Firestore` \| `undefined`\>
 
-Defined in: [src/sdk.tsx:22](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L22)
+Defined in: [src/sdk.tsx:28](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L28)

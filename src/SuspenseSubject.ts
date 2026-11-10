@@ -1,24 +1,35 @@
-import { empty, Observable, Subject, Subscriber, Subscription } from 'rxjs';
-import { catchError, shareReplay, tap } from 'rxjs/operators';
+import { EMPTY, from, Observable, of, ReplaySubject, Subject, Subscriber, Subscription, timer } from 'rxjs';
+import { catchError, delay, mergeMap, share, tap } from 'rxjs/operators';
 import { ObservableStatus } from './useObservable.js';
+
+// Grace period before a zero-subscriber stream detaches its Firebase listener and evicts its cache entry.
+// A 1-second window lets React StrictMode double-mounts and immediate route transitions reuse the active listener.
+const LISTENER_RELEASE_DELAY_MS = 1000;
+
+// How long a first-load error stays cached in non-suspense mode, so the render that hit it can throw it to a boundary.
+const FIRST_LOAD_ERROR_EVICT_DELAY_MS = 1000;
 
 export class SuspenseSubject<T> extends Subject<T> {
   private _value: T | undefined;
   private _hasValue = false;
-  private _timeoutHandler: ReturnType<typeof setTimeout>;
+  private _warmupRelease: Subscription;
   private _firstEmission: Promise<void>;
   private _error: any = undefined;
   private _innerObservable: Observable<T>;
   private _warmupSubscription: Subscription;
   private _immutableStatus: ObservableStatus<T>;
   private _isComplete = false;
+  private _subscriberCount = 0;
 
-  // @ts-expect-error: TODO: double check to see if this is an RXJS thing or if we should listen to TS
-  private _innerSubscriber: Subscription;
-  // @ts-expect-error: TODO: double check to see if this is an RXJS thing or if we should listen to TS
-  private _resolveFirstEmission: () => void;
+  private _resolveFirstEmission!: () => void;
 
-  constructor(innerObservable: Observable<T>, private _timeoutWindow: number, private _suspenseEnabled: boolean) {
+  constructor(
+    innerObservable: Observable<T>,
+    private _timeoutWindow: number,
+    private _suspenseEnabled: boolean,
+    private _onEvict: () => void,
+    private _onReregister: () => void
+  ) {
     super();
     this._firstEmission = new Promise<void>((resolve) => (this._resolveFirstEmission = resolve));
 
@@ -31,37 +42,69 @@ export class SuspenseSubject<T> extends Subject<T> {
       firstValuePromise: this._firstEmission
     } as ObservableStatus<T>;
 
-    this._innerObservable = innerObservable.pipe(
+    // `from` re-wraps an Observable from another rxjs copy (rxjs 6 apps) so unsubscribe reaches the source.
+    this._innerObservable = from(innerObservable).pipe(
       tap({
-        next: (v) => {
-          this._next(v);
+        next: (value) => {
+          this._next(value);
         },
-        error: (e) => {
+        error: (error) => {
           // save the error, so that we can raise on subscription or .value
           // resolve the promise, so suspense tries again
-          this._error = e;
+          this._error = error;
           this._resolveFirstEmission();
           this._updateImmutableStatus();
+          // #485: nobody is left to read the error, so evict now.
+          // #742: non-suspense evicts after a delay so the next mount retries; Suspense keeps it, since React may retry a suspended render after any delay.
+          if (this._subscriberCount === 0 && this._warmupSubscription?.closed) {
+            this._onEvict();
+          } else if (!this._suspenseEnabled) {
+            // Re-check when the timer fires: a Suspense hook may read this entry after the error arrives.
+            setTimeout(() => {
+              if (!this._suspenseEnabled) {
+                this._onEvict();
+              }
+            }, FIRST_LOAD_ERROR_EVICT_DELAY_MS);
+          }
         },
         complete: () => {
           this._isComplete = true;
           this._updateImmutableStatus();
         }
       }),
-      catchError(() => empty()),
-      shareReplay(1)
+      catchError(() => EMPTY),
+      // `resetOnComplete: false` keeps a completed one-shot (`*Once`) value cached; resetting would make a mounted component re-fetch.
+      share({
+        connector: () => new ReplaySubject<T>(1),
+        resetOnComplete: false,
+        resetOnRefCountZero: () =>
+          timer(LISTENER_RELEASE_DELAY_MS).pipe(
+            // A suspended render holds no subscription, so never tear down before the first emission settles,
+            // then give that render one more grace period to subscribe.
+            mergeMap(() => (this._hasValue || this._error ? of(undefined) : from(this._firstEmission).pipe(delay(LISTENER_RELEASE_DELAY_MS)))),
+            tap(this._onEvict)
+          ),
+      })
     );
     // warm up the observable
     this._warmupSubscription = this._innerObservable.subscribe();
 
-    // set a timeout for resetting the cache, subscriptions will cancel the timeout
-    // and reschedule again on unsubscribe
-    if (this._suspenseEnabled) {
-      // Noop if suspense is enabled
-      this._timeoutHandler = setTimeout(() => {}, this._timeoutWindow);
-    } else {
-      this._timeoutHandler = setTimeout(this._reset.bind(this), this._timeoutWindow);
-    }
+    // Release the warm-up `_timeoutWindow` after the first emission, giving a suspended component time to subscribe (#525).
+    // A stream that completed during warm-up skips `resetOnRefCountZero`, so evict it here (#790).
+    this._warmupRelease = from(this._firstEmission)
+      .pipe(delay(this._timeoutWindow))
+      .subscribe(() => {
+        this._warmupSubscription.unsubscribe();
+        if (this._isComplete) {
+          this._onEvict();
+        }
+      });
+  }
+
+  // An entry created with Suspense off (by a preload helper, which cannot read the Suspense context)
+  // switches to the Suspense error policy once a Suspense hook reads it. It never switches back.
+  enableSuspense() {
+    this._suspenseEnabled = true;
   }
 
   get hasValue(): boolean {
@@ -72,9 +115,6 @@ export class SuspenseSubject<T> extends Subject<T> {
   }
 
   get value(): T {
-    // TODO figure out how to reset the cache here, if I _reset() here before throwing
-    // it doesn't seem to work.
-    // As it is now, this will burn the cache entry until the timeout fires.
     if (this._error) {
       throw this._error;
     } else if (!this.hasValue) {
@@ -88,9 +128,7 @@ export class SuspenseSubject<T> extends Subject<T> {
   }
 
   private _updateImmutableStatus() {
-    // Cast required because `data` is internally `T | undefined` while a value is
-    // still in flight, whereas ObservableStatus exposes `data: T` to consumers.
-    // The relationships between the status fields are verified in tests instead.
+    // `data` is `T | undefined` until the first value; ObservableStatus exposes `T`.
     this._immutableStatus = {
       status: this._error ? 'error' : (this._hasValue ? 'success' : 'loading'),
       hasEmitted: this._hasValue,
@@ -108,24 +146,35 @@ export class SuspenseSubject<T> extends Subject<T> {
     this._updateImmutableStatus();
   }
 
-  private _reset() {
-    // seems to be undefined in tests?
-    if (this._warmupSubscription) {
-      this._warmupSubscription.unsubscribe();
-    }
-    this._hasValue = false;
-    this._value = undefined;
-    this._error = undefined;
-    this._firstEmission = new Promise<void>((resolve) => (this._resolveFirstEmission = resolve));
-    this._updateImmutableStatus();
-  }
-
   _subscribe(subscriber: Subscriber<T>): Subscription {
-    if (this._timeoutHandler) {
-      clearTimeout(this._timeoutHandler);
+    // A mounted subscriber owns the source now; the warm-up release would evict a mounted one-shot entry.
+    this._warmupRelease.unsubscribe();
+    if (!this._error && !this._isComplete) {
+      this._onReregister();
     }
-    this._innerSubscriber = this._innerObservable.subscribe(subscriber);
-    return this._innerSubscriber;
+    this._subscriberCount++;
+    const innerSubscription = this._innerObservable.subscribe({
+      next: (value) => subscriber.next(value),
+      complete: () => {
+        if (this._error) {
+          // `catchError(() => EMPTY)` converts upstream errors into completions.
+          // Notify `useObservable` (`onStoreChange`) without calling `subscriber.complete()`,
+          // because `subscriber.complete()` auto-unsubscribes `subscriber` before React unmounts.
+          subscriber.next(this._value);
+        } else {
+          subscriber.complete();
+        }
+      },
+    });
+    // Hand off ownership of the shared source from the warm-up subscription to the real subscriber.
+    this._warmupSubscription.unsubscribe();
+    return new Subscription(() => {
+      innerSubscription.unsubscribe();
+      this._subscriberCount--;
+      if (this._subscriberCount === 0 && this._error) {
+        this._onEvict();
+      }
+    });
   }
 
   get ourError() {
