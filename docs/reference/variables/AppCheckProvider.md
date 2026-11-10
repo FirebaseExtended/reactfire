@@ -8,7 +8,7 @@
 
 > `const` **AppCheckProvider**: (`props`) => `ReactElement`
 
-Defined in: [src/sdk.tsx:72](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L72)
+Defined in: [src/sdk.tsx:98](https://github.com/FirebaseExtended/reactfire/blob/main/src/sdk.tsx#L98)
 
 ## Parameters
 

@@ -13,7 +13,13 @@ import { useFirebaseApp } from './firebaseApp.js';
 import { FirebaseApp } from 'firebase/app';
 import { ObservableStatus, useObservable } from './useObservable.js';
 import { from } from 'rxjs';
-import { ReactFireOptions } from './index.js';
+import { ReactFireGlobals, ReactFireOptions } from './index.js';
+
+// Initializers run once per app and SDK, independent of the observable cache, which can evict a completed entry.
+const initializedSdks: WeakMap<object, Map<string, Promise<unknown>>> = (globalThis as any as ReactFireGlobals)._reactFireInitializedSdks || new WeakMap();
+if (!(globalThis as any as ReactFireGlobals)._reactFireInitializedSdks) {
+  (globalThis as any as ReactFireGlobals)._reactFireInitializedSdks = initializedSdks;
+}
 
 export const AppCheckSdkContext = React.createContext<AppCheck | undefined>(undefined);
 export const AuthSdkContext = React.createContext<Auth | undefined>(undefined);
@@ -64,7 +70,27 @@ function useInitSdk<Sdk extends FirebaseSdks>(
     throw new Error(`Cannot initialize SDK ${sdkName} because it already exists in Context`);
   }
 
-  const initializeSdk = React.useMemo(() => sdkInitializer(firebaseApp), [firebaseApp]);
+  const initializeSdk = React.useMemo(() => {
+    let sdks = initializedSdks.get(firebaseApp);
+    if (!sdks) {
+      sdks = new Map();
+      initializedSdks.set(firebaseApp, sdks);
+    }
+    if (!sdks.has(sdkName)) {
+      const cache = sdks;
+      const initializing = sdkInitializer(firebaseApp);
+      // A rejected initializer must not stay cached, or no later mount can retry it.
+      initializing.catch(() => {
+        if (cache.get(sdkName) === initializing) {
+          cache.delete(sdkName);
+        }
+      });
+      cache.set(sdkName, initializing);
+    }
+    return sdks.get(sdkName) as Promise<Sdk>;
+    // Cached per app and SDK name, so a new `sdkInitializer` identity on re-render must not re-run it.
+    // oxlint-disable-next-line react/exhaustive-deps
+  }, [firebaseApp]);
 
   return useObservable<Sdk>(`firebase-sdk:${sdkName}:${firebaseApp.name}`, from(initializeSdk), options);
 }
