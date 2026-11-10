@@ -8,7 +8,7 @@
 
 > **checkOptions**(`options`, `field`): `any`
 
-Defined in: [src/index.ts:35](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L35)
+Defined in: [src/utils.ts:15](https://github.com/FirebaseExtended/reactfire/blob/main/src/utils.ts#L15)
 
 ## Parameters
 

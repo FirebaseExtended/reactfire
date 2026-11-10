@@ -6,7 +6,7 @@
 
 # Interface: SignInCheckOptionsClaimsValidator
 
-Defined in: [src/auth.tsx:100](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L100)
+Defined in: [src/auth.tsx:101](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L101)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [src/auth.tsx:100](https://github.com/FirebaseExtended/reactfire/blo
 
 > `optional` **forceRefresh?**: `boolean`
 
-Defined in: [src/auth.tsx:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L86)
+Defined in: [src/auth.tsx:87](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L87)
 
 #### Inherited from
 
@@ -30,7 +30,7 @@ Defined in: [src/auth.tsx:86](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **idField?**: `string`
 
-Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L26)
+Defined in: [src/index.ts:16](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L16)
 
 #### Inherited from
 
@@ -42,7 +42,7 @@ Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **initialData?**: `any`
 
-Defined in: [src/index.ts:27](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L27)
+Defined in: [src/index.ts:17](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L17)
 
 #### Inherited from
 
@@ -54,7 +54,7 @@ Defined in: [src/index.ts:27](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **startWithValue?**: `any`
 
-Defined in: [src/index.ts:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L31)
+Defined in: [src/index.ts:21](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L21)
 
 #### Deprecated
 
@@ -70,7 +70,7 @@ use initialData instead
 
 > `optional` **suspense?**: `boolean`
 
-Defined in: [src/index.ts:32](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L32)
+Defined in: [src/index.ts:22](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L22)
 
 #### Inherited from
 
@@ -82,4 +82,4 @@ Defined in: [src/index.ts:32](https://github.com/FirebaseExtended/reactfire/blob
 
 > **validateCustomClaims**: [`ClaimsValidator`](ClaimsValidator.md)
 
-Defined in: [src/auth.tsx:101](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L101)
+Defined in: [src/auth.tsx:102](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L102)

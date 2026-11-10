@@ -8,7 +8,7 @@
 
 > **useDatabaseObjectData**\<`T`\>(`ref`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`T`\>
 
-Defined in: [src/database.tsx:34](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L34)
+Defined in: [src/database.tsx:35](https://github.com/FirebaseExtended/reactfire/blob/main/src/database.tsx#L35)
 
 ## Type Parameters
 

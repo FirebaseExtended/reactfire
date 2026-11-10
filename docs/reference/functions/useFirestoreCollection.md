@@ -8,7 +8,7 @@
 
 > **useFirestoreCollection**\<`T`\>(`query`, `options?`): [`ObservableStatus`](../interfaces/ObservableStatus.md)\<`QuerySnapshot`\<`T`, `DocumentData`\>\>
 
-Defined in: [src/firestore.tsx:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L86)
+Defined in: [src/firestore.tsx:87](https://github.com/FirebaseExtended/reactfire/blob/main/src/firestore.tsx#L87)
 
 Subscribe to a Firestore collection
 

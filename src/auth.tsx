@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { user } from 'rxfire/auth';
-import { preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus, ReactFireError } from './index.js';
+import { preloadObservable, ReactFireOptions, useAuth, useObservable, ObservableStatus } from './index.js';
+import { ReactFireError } from './utils.js';
 import { from, of, defer } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { useSuspenseEnabledFromConfigAndContext } from './firebaseApp.js';

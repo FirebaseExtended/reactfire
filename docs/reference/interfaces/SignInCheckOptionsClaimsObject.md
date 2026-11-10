@@ -6,7 +6,7 @@
 
 # Interface: SignInCheckOptionsClaimsObject
 
-Defined in: [src/auth.tsx:89](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L89)
+Defined in: [src/auth.tsx:90](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L90)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [src/auth.tsx:89](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **forceRefresh?**: `boolean`
 
-Defined in: [src/auth.tsx:86](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L86)
+Defined in: [src/auth.tsx:87](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L87)
 
 #### Inherited from
 
@@ -30,7 +30,7 @@ Defined in: [src/auth.tsx:86](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **idField?**: `string`
 
-Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L26)
+Defined in: [src/index.ts:16](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L16)
 
 #### Inherited from
 
@@ -42,7 +42,7 @@ Defined in: [src/index.ts:26](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **initialData?**: `any`
 
-Defined in: [src/index.ts:27](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L27)
+Defined in: [src/index.ts:17](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L17)
 
 #### Inherited from
 
@@ -54,7 +54,7 @@ Defined in: [src/index.ts:27](https://github.com/FirebaseExtended/reactfire/blob
 
 > **requiredClaims**: `ParsedToken`
 
-Defined in: [src/auth.tsx:90](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L90)
+Defined in: [src/auth.tsx:91](https://github.com/FirebaseExtended/reactfire/blob/main/src/auth.tsx#L91)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/auth.tsx:90](https://github.com/FirebaseExtended/reactfire/blob
 
 > `optional` **startWithValue?**: `any`
 
-Defined in: [src/index.ts:31](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L31)
+Defined in: [src/index.ts:21](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L21)
 
 #### Deprecated
 
@@ -78,7 +78,7 @@ use initialData instead
 
 > `optional` **suspense?**: `boolean`
 
-Defined in: [src/index.ts:32](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L32)
+Defined in: [src/index.ts:22](https://github.com/FirebaseExtended/reactfire/blob/main/src/index.ts#L22)
 
 #### Inherited from
 
