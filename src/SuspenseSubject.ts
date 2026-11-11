@@ -148,16 +148,16 @@ export class SuspenseSubject<T> extends Subject<T> {
 
   _subscribe(subscriber: Subscriber<T>): Subscription {
     // `catchError(() => EMPTY)` converts upstream errors into completions, so a direct subscriber completes on error.
-    return this._attach((value) => subscriber.next(value), () => subscriber.complete());
+    return this._attach((value) => subscriber.next(value), () => subscriber.complete(), false);
   }
 
-  // For `useObservable`. Completing a `Subscriber` auto-unsubscribes it, which on error would evict the entry
-  // while the hook is still mounted, so this reports every change through `onStoreChange` and never completes.
+  // For `useObservable`. Completing a `Subscriber` auto-unsubscribes it while the hook is still mounted,
+  // so this reports every change through `onStoreChange` and never completes.
   _subscribeToStore(onStoreChange: () => void): Subscription {
-    return this._attach(onStoreChange, onStoreChange);
+    return this._attach(onStoreChange, onStoreChange, true);
   }
 
-  private _attach(next: (value: T) => void, complete: () => void): Subscription {
+  private _attach(next: (value: T) => void, complete: () => void, evictErroredEntryOnUnsubscribe: boolean): Subscription {
     // A mounted subscriber owns the source now; the warm-up release would evict a mounted one-shot entry.
     this._warmupRelease.unsubscribe();
     if (!this._error && !this._isComplete) {
@@ -170,7 +170,8 @@ export class SuspenseSubject<T> extends Subject<T> {
     return new Subscription(() => {
       innerSubscription.unsubscribe();
       this._subscriberCount--;
-      if (this._subscriberCount === 0 && this._error) {
+      // A direct subscriber is unsubscribed when it completes on error, while a suspended render may still need the entry.
+      if (evictErroredEntryOnUnsubscribe && this._subscriberCount === 0 && this._error) {
         this._onEvict();
       }
     });
