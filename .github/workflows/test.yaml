@@ -80,6 +80,10 @@ jobs:
       # their own since #770 gave the emitted .d.ts explicit .js extensions.
       - name: Lint types
         run: npm run lint:types -- reactfire-${{ github.run_id }}/reactfire.tgz
+      # attw resolves the `require` types but does not type-check them, so it
+      # passed while every relative import in index.d.cts failed with TS1479 (#850).
+      - name: Type-check from CommonJS
+        run: npm run lint:types-cjs -- reactfire-${{ github.run_id }}/reactfire.tgz
       - name: Bundle size
         run: npm run size
   test:
