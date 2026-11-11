@@ -41,7 +41,6 @@
     "analyze": "size-limit --why",
     "lint:package": "publint --strict",
     "lint:types": "attw",
-    "lint:types-cjs": "node scripts/check-cjs-types.mjs",
     "docs": "typedoc --options typedoc.json && markdown-toc -i docs/use.md",
     "docs:fork": "typedoc --options typedoc.json --gitRemote upstream && markdown-toc -i docs/use.md"
   },
