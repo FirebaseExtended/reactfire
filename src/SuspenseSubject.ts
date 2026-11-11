@@ -147,25 +147,24 @@ export class SuspenseSubject<T> extends Subject<T> {
   }
 
   _subscribe(subscriber: Subscriber<T>): Subscription {
+    // `catchError(() => EMPTY)` converts upstream errors into completions, so a direct subscriber completes on error.
+    return this._attach((value) => subscriber.next(value), () => subscriber.complete());
+  }
+
+  // For `useObservable`. Completing a `Subscriber` auto-unsubscribes it, which on error would evict the entry
+  // while the hook is still mounted, so this reports every change through `onStoreChange` and never completes.
+  _subscribeToStore(onStoreChange: () => void): Subscription {
+    return this._attach(onStoreChange, onStoreChange);
+  }
+
+  private _attach(next: (value: T) => void, complete: () => void): Subscription {
     // A mounted subscriber owns the source now; the warm-up release would evict a mounted one-shot entry.
     this._warmupRelease.unsubscribe();
     if (!this._error && !this._isComplete) {
       this._onReregister();
     }
     this._subscriberCount++;
-    const innerSubscription = this._innerObservable.subscribe({
-      next: (value) => subscriber.next(value),
-      complete: () => {
-        if (this._error) {
-          // `catchError(() => EMPTY)` converts upstream errors into completions.
-          // Notify `useObservable` (`onStoreChange`) without calling `subscriber.complete()`,
-          // because `subscriber.complete()` auto-unsubscribes `subscriber` before React unmounts.
-          subscriber.next(this._value);
-        } else {
-          subscriber.complete();
-        }
-      },
-    });
+    const innerSubscription = this._innerObservable.subscribe({ next, complete });
     // Hand off ownership of the shared source from the warm-up subscription to the real subscriber.
     this._warmupSubscription.unsubscribe();
     return new Subscription(() => {

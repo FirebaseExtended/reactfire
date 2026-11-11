@@ -99,18 +99,7 @@ export function useObservable<T = unknown>(observableId: string, source: Observa
   }
 
   const subscribe = React.useCallback((onStoreChange: () => void) => {
-      const subscription = observable.subscribe({
-        next: () => {
-          onStoreChange();
-        },
-        error: (e) => {
-          onStoreChange();
-          throw e;
-        },
-        complete: () => {
-          onStoreChange();
-        },
-      });
+      const subscription = observable._subscribeToStore(onStoreChange);
 
       return () => {
         subscription.unsubscribe();

@@ -1,9 +1,9 @@
 import '@testing-library/jest-dom/extend-expect';
 import { cleanup, render, waitFor } from '@testing-library/react';
 import * as React from 'react';
-import { Observable, timer, throwError } from 'rxjs';
+import { EmptyError, lastValueFrom, Observable, timer, throwError } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-import { useObservable } from '../src/index';
+import { preloadObservable, useObservable } from '../src/index';
 
 // Guards the `if (this._error)` branch in SuspenseSubject._subscribe's `complete` handler.
 // `catchError(() => EMPTY)` turns a source error into a completion; that branch turns it back into
@@ -54,4 +54,26 @@ describe('SuspenseSubject error-to-completion branch', () => {
       consoleError.mockRestore();
     }
   }, 10000);
+
+  // That branch is for `useObservable` only. A direct subscriber of a `preload*` result completes, as in 4.3.0.
+  it('completes a direct subscriber of a preloaded observable when the source errors', async () => {
+    const source$ = timer(50).pipe(mergeMap(() => throwError(() => new Error('permission-denied'))));
+    const preloaded$ = preloadObservable(source$, `error-branch-direct-${Math.random()}`);
+
+    const events: string[] = [];
+    const observer = {
+      next: (value: unknown) => events.push(`next:${String(value)}`),
+      error: () => events.push('error'),
+      complete: () => events.push('complete'),
+    };
+
+    preloaded$.subscribe(observer);
+    await waitFor(() => expect(events).toEqual(['complete']));
+
+    // A subscriber that arrives after the error completes too.
+    events.length = 0;
+    preloaded$.subscribe(observer);
+    expect(events).toEqual(['complete']);
+    await expect(lastValueFrom(preloaded$)).rejects.toBeInstanceOf(EmptyError);
+  });
 });
