@@ -6,8 +6,8 @@ import { mergeMap } from 'rxjs/operators';
 import { preloadObservable, useObservable } from '../src/index';
 
 // `catchError(() => EMPTY)` turns a source error into a completion. `_subscribeToStore` reports it to
-// `useObservable` without completing, because completing auto-unsubscribes the mounted subscriber and a
-// mounted hook with `initialData` then resubscribes in a loop. `_subscribe` completes a direct subscriber.
+// `useObservable` without completing, because completing unsubscribes the still-mounted hook, and its
+// unmount then no longer evicts the errored entry. `_subscribe` completes a direct subscriber.
 describe('SuspenseSubject source errors', () => {
   afterEach(() => cleanup());
 
