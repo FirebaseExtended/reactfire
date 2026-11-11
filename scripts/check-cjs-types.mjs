@@ -1,6 +1,6 @@
 // Type-checks a CommonJS consumer (`module: node16`, `skipLibCheck: false`) against a packed reactfire tarball.
-// attw passes even when this fails (#850). Only errors in reactfire's files or the fixture count: with
-// `skipLibCheck: false` the check also reports errors inside firebase's and @types' own declarations.
+// Only errors in reactfire's files or the fixture count: `skipLibCheck: false` also reports errors inside
+// dependencies' own declarations, which reactfire cannot fix.
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, rmSync } from 'node:fs';
 import { createRequire } from 'node:module';
