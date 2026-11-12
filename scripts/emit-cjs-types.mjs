@@ -6,9 +6,10 @@ import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const dir = 'dist';
-const relativeSpecifier = /(\bfrom\s*|\bimport\s*\(\s*)(['"])(\.{1,2}\/[^'"]*)\2/g;
+// `from` covers `import ... from` and `export ... from`; the bare `import '...'` form covers side-effect imports.
+const relativeSpecifier = /(\bfrom\s*|\bimport\s*\(\s*|\bimport\s+)(['"])(\.{1,2}\/[^'"]*)\2/g;
 
-for (const file of readdirSync(dir).filter((f) => f.endsWith('.d.ts'))) {
+for (const file of readdirSync(dir, { recursive: true }).filter((f) => f.endsWith('.d.ts'))) {
   const source = readFileSync(join(dir, file), 'utf8');
   const cjs = source.replace(relativeSpecifier, (_, keyword, quote, specifier) => {
     if (!specifier.endsWith('.js')) {
