@@ -1,0 +1,50 @@
+{
+  "entities": {
+    "Recipe": {
+      "title": "Recipe",
+      "description": "A culinary recipe with ingredients and instructions.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Name of the dish" },
+        "ingredients": { "type": "array", "items": { "type": "string" }, "description": "List of ingredients" },
+        "instructions": { "type": "array", "items": { "type": "string" }, "description": "Step-by-step instructions" },
+        "category": { "type": "string", "enum": ["Breakfast", "Lunch", "Dinner", "Dessert", "Snack", "Drink", "Other"], "description": "Recipe category" },
+        "rating": { "type": "number", "description": "User rating from 1 to 5" },
+        "authorId": { "type": "string", "description": "UID of the user who created the recipe" },
+        "householdId": { "type": "string", "description": "ID of the household this recipe belongs to" },
+        "sourceUrl": { "type": "string", "description": "Original URL if imported" },
+        "imageUrl": { "type": "string", "description": "URL of the recipe image" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the recipe was added" }
+      },
+      "required": ["title", "ingredients", "instructions", "authorId", "householdId", "createdAt"]
+    },
+    "Household": {
+      "title": "Household",
+      "description": "A group of users sharing recipes.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Name of the household" },
+        "ownerId": { "type": "string", "description": "UID of the household owner" },
+        "members": { 
+          "type": "object", 
+          "description": "Map of user UIDs to their roles (e.g., 'admin', 'member', 'viewer')" 
+        }
+      },
+      "required": ["name", "ownerId", "members"]
+    },
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Publicly visible user information.",
+      "type": "object",
+      "properties": {
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/recipes/{recipeId}": { "schema": "Recipe", "description": "Collection of all recipes" },
+    "/households/{householdId}": { "schema": "Household", "description": "Collection of households" },
+    "/users/{userId}": { "schema": "UserProfile", "description": "Public user profiles" }
+  }
+}
